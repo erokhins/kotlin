@@ -31,7 +31,6 @@ import org.jetbrains.jet.lang.psi.JetParameter;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.calls.model.ResolvedCall;
 import org.jetbrains.jet.lang.types.JetType;
-import org.jetbrains.jet.lexer.JetTokens;
 import org.jetbrains.k2js.translate.context.Namer;
 import org.jetbrains.k2js.translate.context.TranslationContext;
 import org.jetbrains.k2js.translate.general.AbstractTranslator;
@@ -60,14 +59,14 @@ public final class ClassInitializerTranslator extends AbstractTranslator {
     }
 
     @NotNull
-    public JsFunction generateInitializeMethod() {
+    public JsLiteral generateInitializeMethod() {
         //TODO: it's inconsistent that we have scope for class and function for constructor, currently have problems implementing better way
         ConstructorDescriptor primaryConstructor = getConstructor(bindingContext(), classDeclaration);
         JsFunction result = context().getFunctionObject(primaryConstructor);
         //NOTE: while we translate constructor parameters we also add property initializer statements
         // for properties declared as constructor parameters
         result.getParameters().addAll(translatePrimaryConstructorParameters());
-        mayBeAddCallToSuperMethod(result);
+        boolean isDefaultSuperCall = mayBeAddCallToSuperMethod(result);
         new InitializerVisitor(initializerStatements).traverseContainer(classDeclaration, context());
 
         List<JsStatement> statements = result.getBody().getStatements();
@@ -81,7 +80,11 @@ public final class ClassInitializerTranslator extends AbstractTranslator {
             }
         }
 
-        return result;
+        if (isDefaultSuperCall && statements.size() == 1) {
+            return JsLiteral.NULL;
+        } else {
+            return result;
+        }
     }
 
     @NotNull
@@ -97,17 +100,14 @@ public final class ClassInitializerTranslator extends AbstractTranslator {
         return new JsNew(reference, arguments);
     }
 
-    private void mayBeAddCallToSuperMethod(JsFunction initializer) {
-        if (classDeclaration.hasModifier(JetTokens.ENUM_KEYWORD)) {
-            addCallToSuperMethod(Collections.<JsExpression>emptyList(), initializer);
-            return;
-        }
-        if (hasAncestorClass(bindingContext(), classDeclaration)) {
-            JetDelegatorToSuperCall superCall = getSuperCall();
-            if (superCall == null) {
-                return;
-            }
+    private boolean mayBeAddCallToSuperMethod(JsFunction initializer) {
+        JetDelegatorToSuperCall superCall = getSuperCall();
+        if (hasAncestorClass(bindingContext(), classDeclaration) && superCall != null) {
             addCallToSuperMethod(translateArguments(superCall), initializer);
+            return false;
+        } else {
+            addCallToSuperMethod(Collections.<JsExpression>emptyList(), initializer);
+            return true;
         }
     }
 

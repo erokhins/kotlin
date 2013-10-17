@@ -186,9 +186,41 @@ var Kotlin = {};
         return object;
     }
 
+    function initClassObjectAndFixBaseInitializer(baseClass) {
+        var object = baseClass.object;
+        Object.defineProperty(this, "baseInitializer", {value: baseClass});
+        Object.defineProperty(this, "object", {value: null, configurable: true});
+        if (this.object_initializer$ != null) {
+            return class_object.call(this);
+        } else {
+            return null;
+        }
+    }
+
+    function addBaseInitializerAndClassObject(constr, baseClass) {
+        if (baseClass == null) {
+            baseClass = emptyFunction();
+        }
+        var initFunction = initClassObjectAndFixBaseInitializer.bind(constr, baseClass);
+        Object.defineProperty(constr, "baseInitializer", {
+            get: function() {
+                initFunction();
+                return baseClass;
+            },
+            configurable: true
+        });
+        Object.defineProperty(constr, "object", {get: initFunction, configurable: true});
+    }
+
+    function createDefaultConstructor() {
+        return function $fun() {
+            $fun.baseInitializer.call(this);
+        }
+    }
+
     Kotlin.createClassNow = function (bases, constructor, properties, staticProperties) {
         if (constructor == null) {
-            constructor = emptyFunction();
+            constructor = createDefaultConstructor();
         }
         copyProperties(constructor, staticProperties);
 
@@ -205,13 +237,9 @@ var Kotlin = {};
         copyProperties(prototypeObj, metadata.functions);
         prototypeObj.constructor = constructor;
 
-        if (metadata.baseClass != null) {
-            constructor.baseInitializer = metadata.baseClass;
-        }
-
         constructor.$metadata$ = metadata;
         constructor.prototype = prototypeObj;
-        Object.defineProperty(constructor, "object", {get: class_object, configurable: true});
+        addBaseInitializerAndClassObject(constructor, metadata.baseClass);
         return constructor;
     };
 

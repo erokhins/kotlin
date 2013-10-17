@@ -161,8 +161,8 @@ public final class ClassTranslator extends AbstractTranslator {
 
         invocationArguments.add(getSuperclassReferences(declarationContext));
         if (!isTrait()) {
-            JsFunction initializer = new ClassInitializerTranslator(classDeclaration, declarationContext).generateInitializeMethod();
-            invocationArguments.add(initializer.getBody().getStatements().isEmpty() ? JsLiteral.NULL : initializer);
+            JsLiteral initializer = new ClassInitializerTranslator(classDeclaration, declarationContext).generateInitializeMethod();
+            invocationArguments.add(initializer);
         }
 
         translatePropertiesAsConstructorParameters(declarationContext, properties);
