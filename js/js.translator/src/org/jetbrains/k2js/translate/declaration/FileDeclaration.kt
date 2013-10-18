@@ -32,12 +32,19 @@ import com.google.dart.compiler.backend.js.ast.JsFunction
 import org.jetbrains.k2js.translate.utils.BindingUtils.*
 import org.jetbrains.k2js.translate.initializer.InitializerUtils.*
 import org.jetbrains.jet.lang.descriptors.PropertyDescriptor
+import com.google.dart.compiler.backend.js.ast.JsName
+import org.jetbrains.jet.lang.descriptors.MemberDescriptor
+import org.jetbrains.k2js.translate.general.AbstractTranslator
+import org.jetbrains.jet.lang.psi.JetFile
+import com.intellij.util.SmartList
 
 class FileDeclarationVisitor(val context: TranslationContext) : DeclarationBodyVisitor() {
     private val initializer = JsAstUtils.createFunctionWithEmptyBody(context.scope())
     private val initializerContext = context.contextWithScope(initializer)
     private val initializerStatements = initializer.getBody()!!.getStatements()!!
     private val initializerVisitor = InitializerVisitor(initializerStatements)
+
+    val publicApi : MutableList<JsName> = SmartList<JsName>();
 
     fun computeInitializer(): JsFunction? {
         if (initializerStatements.isEmpty()) {
@@ -47,16 +54,25 @@ class FileDeclarationVisitor(val context: TranslationContext) : DeclarationBodyV
         }
     }
 
+    fun addIfPublicApi(descriptor: MemberDescriptor) {
+        if (descriptor.getVisibility().isPublicAPI()) {
+            publicApi.add(context.getNameForDescriptor(descriptor));
+        }
+    }
+
     public override fun visitClass(expression: JetClass, context: TranslationContext?): Void? {
         val classDescriptor = getClassDescriptor(context!!.bindingContext(), expression)
         val value = ClassTranslator(expression, context).translate()
         val entry = JsPropertyInitializer(context.getNameForDescriptor(classDescriptor).makeRef()!!, value)
         result.add(entry)
+
+        addIfPublicApi(classDescriptor)
         return null
     }
 
     public override fun visitObjectDeclaration(declaration: JetObjectDeclaration, context: TranslationContext?): Void? {
         InitializerUtils.generateObjectInitializer(declaration, initializerStatements, context!!)
+        addIfPublicApi(getClassDescriptor(context.bindingContext(), declaration))
         return null
     }
 
@@ -75,6 +91,7 @@ class FileDeclarationVisitor(val context: TranslationContext) : DeclarationBodyV
         if (delegate != null)
             initializerStatements.add(delegate)
 
+        addIfPublicApi(getPropertyDescriptor(context.bindingContext(), expression))
         return null
     }
 
