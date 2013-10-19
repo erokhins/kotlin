@@ -37,6 +37,61 @@ import org.jetbrains.jet.lang.descriptors.MemberDescriptor
 import org.jetbrains.k2js.translate.general.AbstractTranslator
 import org.jetbrains.jet.lang.psi.JetFile
 import com.intellij.util.SmartList
+import com.google.dart.compiler.backend.js.ast.JsVisitor
+import com.google.dart.compiler.backend.js.ast.JsNode
+import com.google.dart.compiler.backend.js.ast.JsEmpty
+import com.google.dart.compiler.backend.js.ast.JsBlock
+import org.jetbrains.jet.lang.descriptors.NamespaceDescriptor
+import org.jetbrains.jet.lang.resolve.BindingContext
+import com.google.dart.compiler.backend.js.ast.JsObjectLiteral
+import com.google.dart.compiler.backend.js.ast.JsExpression
+import org.jetbrains.k2js.translate.LabelGenerator
+import com.intellij.openapi.util.Trinity
+import com.intellij.openapi.util.NotNullLazyValue
+import org.jetbrains.k2js.translate.expression.LiteralFunctionTranslator
+import org.jetbrains.k2js.translate.utils.BindingUtils
+import org.jetbrains.k2js.translate.utils.AnnotationsUtils
+import com.google.dart.compiler.backend.js.ast.JsScope
+import org.jetbrains.k2js.translate.utils.TranslationUtils
+
+
+class TranslatedFile(val name: JsName, val qualifier: JsNameRef, val fileStatement: JsStatement, val publicProperties: List<JsName>)
+
+class FileTranslator private (val file: JetFile, val context: TranslationContext, val descriptor: NamespaceDescriptor) : AbstractTranslator(context) {
+    class object {
+        fun translateFile(file: JetFile, context: TranslationContext) : TranslatedFile {
+            val descriptor = context.bindingContext().get(BindingContext.FILE_TO_NAMESPACE, file)!!
+            return FileTranslator(file, context, descriptor).translate()
+        }
+    }
+
+    private val objectLiteral: JsObjectLiteral = JsObjectLiteral(true);
+    private val visitor = FileDeclarationVisitor(context)
+
+    private val definitionPlace = object : NotNullLazyValue<Trinity<List<JsPropertyInitializer>, LabelGenerator, JsExpression>>() {
+        override fun compute(): Trinity<List<JsPropertyInitializer>, LabelGenerator, JsExpression> {
+            LiteralFunctionTranslator.createPlace(objectLiteral.getPropertyInitializers()!!, context.getQualifiedReference(descriptor));
+        }
+    }
+
+    private fun createFileStatement(): JsStatement {
+        throw UnsupportedOperationException()
+    }
+
+    fun translate(): TranslatedFile {
+        context.literalFunctionTranslator().setDefinitionPlace(definitionPlace)
+            for (declaration in file.getDeclarations()) {
+                if (!AnnotationsUtils.isPredefinedObject(BindingUtils.getDescriptorForElement(bindingContext(), declaration))) {
+                    declaration.accept(visitor, context)
+                }
+            }
+        context.literalFunctionTranslator().setDefinitionPlace(null)
+        val fullQualifer = context.getQualifiedReference(descriptor)
+        val fileName = context.scope().declareName(TranslationUtils.getMangledName(file))!!
+        return TranslatedFile(fileName, fullQualifer, createFileStatement(), visitor.publicApi)
+    }
+}
+
 
 class FileDeclarationVisitor(val context: TranslationContext) : DeclarationBodyVisitor() {
     private val initializer = JsAstUtils.createFunctionWithEmptyBody(context.scope())
