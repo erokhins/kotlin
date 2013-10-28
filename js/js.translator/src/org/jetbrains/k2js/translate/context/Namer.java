@@ -156,6 +156,8 @@ public final class Namer {
     @NotNull
     private final JsExpression definePackage;
     @NotNull
+    private final JsExpression addPackagePart;
+    @NotNull
     private final JsExpression defineRootPackage;
     @NotNull
     private final JsName objectName;
@@ -177,6 +179,7 @@ public final class Namer {
         traitName = kotlinScope.declareName(TRAIT_OBJECT_NAME);
 
         definePackage = kotlin("definePackage");
+        addPackagePart = kotlin("addPackagePart");
         defineRootPackage = kotlin("defineRootPackage");
 
         callGetProperty = kotlin("callGetter");
@@ -209,6 +212,11 @@ public final class Namer {
     @NotNull
     public JsExpression packageDefinitionMethodReference() {
         return definePackage;
+    }
+
+    @NotNull
+    public JsExpression getAddPackagePart() {
+        return addPackagePart;
     }
 
     @NotNull

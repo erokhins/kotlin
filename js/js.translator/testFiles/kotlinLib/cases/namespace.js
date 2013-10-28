@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-var foo = Kotlin.defineRootPackage(null, {
+var _ = {};
+Kotlin.addPackagePart(_,"foo", null, {
     box: function () {
         return !false;
     }
  });
 
 function test() {
-    return foo.box()
+    return _.foo.box()
 }

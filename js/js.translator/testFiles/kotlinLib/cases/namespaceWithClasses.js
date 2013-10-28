@@ -50,7 +50,7 @@
         return (new foo.C).get_order() === 'ABC' && (new foo.B).get_order() === 'AB' && (new foo.A).get_order() === 'A';
     };
 
-    var foo = Kotlin.defineRootPackage(null, items);
+    var foo = items;
 }
 
 function test() {

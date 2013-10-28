@@ -38,7 +38,7 @@ public final class NamespaceDeclarationTranslator extends AbstractTranslator {
             new LinkedHashMap<NamespaceDescriptor, NamespaceTranslator>();
 
     public static List<JsStatement> translateFiles(@NotNull Collection<JetFile> files, @NotNull TranslationContext context) {
-        return new NamespaceDeclarationTranslator(files, context).translate();
+        return new NamespaceDeclarationTranslator(files, context).newTranslate();
     }
 
     private NamespaceDeclarationTranslator(@NotNull Iterable<JetFile> files, @NotNull TranslationContext context) {
@@ -46,6 +46,19 @@ public final class NamespaceDeclarationTranslator extends AbstractTranslator {
 
         this.files = files;
     }
+
+    @NotNull
+    private List<JsStatement> newTranslate() {
+        List<JsStatement> fileDeclarationStatements = new ArrayList<JsStatement>();
+        JsName rootName = context().scope().declareName(Namer.getRootNamespaceName());
+        JsVar rootVar = new JsVar(rootName, new JsObjectLiteral());
+        fileDeclarationStatements.add(new JsVars(rootVar));
+        for (JetFile file : files) {
+            fileDeclarationStatements.add(FileTranslator.object$.translateFile(file, context()));
+        }
+        return fileDeclarationStatements;
+    }
+
 
     @NotNull
     private List<JsStatement> translate() {

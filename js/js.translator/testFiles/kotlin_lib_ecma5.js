@@ -344,70 +344,76 @@ var Kotlin = {};
 
 ////////////////////////////////// packages & modules //////////////////////////////
 
-    function createPackageGetter(instance, initializer) {
-        return function () {
-            if (initializer !== null) {
-                var tmp = initializer;
-                initializer = null;
-                tmp.call(instance);
+    function getPackageObject(packageName, rootPackageObject) {
+        if (packageName == null || packageName.length == 0) {
+            return rootPackageObject;
+        }
+        var packages = packageName.split('.');
+        var currentPackage = rootPackageObject;
+        for (var i = 0; i < packages.length; i++) {
+            var name = packages[i];
+            if (typeof currentPackage[name] == "undefined") {
+                currentPackage[name] = {};
             }
-
-            return instance;
-        };
+            currentPackage = currentPackage[name];
+        }
+        return currentPackage
     }
 
-    function createDefinition(members) {
-        var definition = {};
+    function copyDefinition(members, packageObj, fileObject, fileInitFun) {
         if (members == null) {
-            return definition;
+            return;
         }
         for (var p in members) {
             if (members.hasOwnProperty(p)) {
-                if ((typeof members[p]) === "function") {
-                    if (members[p].type === Kotlin.TYPE.INIT_FUN) {
-                        members[p].className = p;
-                        Object.defineProperty(definition, p, {
-                          get: members[p],
-                          configurable: true
-                        });
-                    } else {
-                        definition[p] = members[p];
-                    }
+                if (members[p] != null && members[p].type === Kotlin.TYPE.INIT_FUN) { // p is class/trait
+                    members[p].className = p;
+                    Object.defineProperty(packageObj, p, {
+                        get: members[p],
+                        configurable: true
+                    });
                 } else {
-                    Object.defineProperty(definition, p, members[p]);
+                    Object.defineProperty(packageObj, p, {get: fileInitFun.bind(null, p), configurable: true});
+                    if (members[p] != null) {
+                        fileObject[p] = members[p];
+                    } else {
+                        fileObject[p] = {value: void 0, writable: true};
+                    }
                 }
             }
         }
-        return definition;
     }
 
-    Kotlin.definePackage = function (initializer, members) {
-        var definition = createDefinition(members);
-        if (initializer === null) {
-            return {value: definition};
+    function createFileInitFun(packageObject, fileObject, initializer) {
+        return function(propertyName) {
+            for (var p in fileObject) {
+                if (fileObject.hasOwnProperty(p)) {
+                    if (typeof fileObject[p] === "function") {
+                        Object.defineProperty(packageObject, p, {value: fileObject[p]});
+                    } else {
+                        Object.defineProperty(packageObject, p, fileObject[p]);
+                    }
+                }
+            }
+            initializer.call(packageObject);
+            return packageObject[propertyName];
         }
-        else {
-            var getter = createPackageGetter(definition, initializer);
-            return {get: getter};
+    }
+
+    Kotlin.addPackagePart = function (rootPackageObject, packageName, initializer, members) {
+        if (initializer == null) {
+            initializer = emptyFunction();
         }
+        var packageObject = getPackageObject(packageName, rootPackageObject);
+        var fileObject = {};
+        var fileInitFun = createFileInitFun(packageObject, fileObject, initializer);
+        copyDefinition(members, packageObject, fileObject, fileInitFun);
     };
-
-    Kotlin.defineRootPackage = function (initializer, members) {
-        var definition = createDefinition(members);
-
-        if (initializer === null) {
-            definition.$initializer$ = emptyFunction();
-        } else {
-            definition.$initializer$ = initializer;
-        }
-        return definition;
-      };
 
     Kotlin.defineModule = function (id, declaration) {
         if (id in Kotlin.modules) {
             throw new Error("Module " + id + " is already defined");
         }
-        declaration.$initializer$.call(declaration); // TODO: temporary hack
         Object.defineProperty(Kotlin.modules, id, {value: declaration});
     };
 

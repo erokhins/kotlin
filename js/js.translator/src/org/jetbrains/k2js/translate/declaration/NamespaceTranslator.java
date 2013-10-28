@@ -53,7 +53,7 @@ final class NamespaceTranslator extends AbstractTranslator {
 
         this.descriptor = descriptor;
 
-        visitor = new FileDeclarationVisitor(context());
+        visitor = new FileDeclarationVisitor(context(), new SmartList<JsPropertyInitializer>());
 
         definitionPlace = new NotNullLazyValue<Trinity<List<JsPropertyInitializer>, LabelGenerator, JsExpression>>() {
             @Override
