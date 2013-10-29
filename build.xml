@@ -31,7 +31,6 @@
         <fileset dir="${basedir}/dependencies" includes="jline.jar"/>
         <fileset dir="${basedir}/dependencies" includes="jansi.jar"/>
         <fileset dir="${basedir}/dependencies" includes="cli-parser-1.1.1.jar"/>
-        <fileset dir="${basedir}/js/js.translator/lib" includes="*.jar"/>
     </path>
 
     <typedef resource="org/jetbrains/jet/buildtools/ant/antlib.xml" classpath="${bootstrap.compiler.home}/lib/kotlin-ant.jar"/>
@@ -69,6 +68,7 @@
         <include name="compiler/jet.as.java.psi/src"/>
 
         <include name="js/js.translator/src"/>
+        <include name="js/dart.ast/src"/>
     </dirset>
 
     <property name="idea.out" value="${basedir}/out/production"/>
@@ -87,6 +87,7 @@
         <include name="jet.as.java.psi/**"/>
 
         <include name="js.translator/**"/>
+        <include name="dart.ast/**"/>
     </patternset>
 
     <path id="compilerSources.path">
@@ -271,7 +272,6 @@
               <zipgroupfileset dir="${basedir}/ideaSDK/lib" includes="jna-utils.jar"/>
               <zipgroupfileset dir="${basedir}/ideaSDK/lib" includes="oromatcher.jar"/>
               <zipgroupfileset dir="${basedir}/ideaSDK/lib" includes="protobuf-2.5.0.jar"/>
-              <zipgroupfileset dir="${basedir}/js/js.translator/lib" includes="*.jar"/>
               <zipgroupfileset dir="${basedir}/dependencies" includes="jline.jar"/>
               <zipgroupfileset dir="${basedir}/dependencies" includes="cli-parser-1.1.1.jar"/>
 
