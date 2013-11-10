@@ -64,7 +64,7 @@ final class NamespaceTranslator extends AbstractTranslator {
                     defineInvocation = createDefinitionPlace(null, descriptorToDefineInvocation);
                 }
 
-                return createPlace(defineInvocation.getMembers(), context().getQualifiedReference(descriptor));
+                return createPlace(defineInvocation.getMembers(), context().getQualifiedReference(descriptor), context().scope());
             }
         };
     }

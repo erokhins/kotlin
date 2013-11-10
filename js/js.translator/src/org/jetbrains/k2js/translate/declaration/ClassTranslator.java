@@ -130,7 +130,7 @@ public final class ClassTranslator extends AbstractTranslator {
                         @Override
                         @NotNull
                         public Trinity<List<JsPropertyInitializer>, LabelGenerator, JsExpression> compute() {
-                            return createPlace(properties, context().getThisObject(descriptor));
+                            return createPlace(properties, context().getThisObject(descriptor), context().scope());
                         }
                     });
         }
@@ -141,7 +141,7 @@ public final class ClassTranslator extends AbstractTranslator {
                         @Override
                         @NotNull
                         public Trinity<List<JsPropertyInitializer>, LabelGenerator, JsExpression> compute() {
-                            return createPlace(staticProperties, qualifiedReference);
+                            return createPlace(staticProperties, qualifiedReference, context().scope());
                         }
                     });
         }

@@ -16,15 +16,24 @@
 
 package org.jetbrains.k2js.translate;
 
+import com.google.dart.compiler.backend.js.ast.JsName;
+import com.google.dart.compiler.backend.js.ast.JsScope;
+
 public final class LabelGenerator {
     private int nameCounter;
     private final char prefix;
+    private final JsScope jsScope;
 
-    public LabelGenerator(char prefix) {
+    public LabelGenerator(char prefix, JsScope jsScope) {
         this.prefix = prefix;
+        this.jsScope = jsScope;
     }
 
     public String generate() {
         return prefix + Integer.toString(nameCounter++, 36);
+    }
+
+    public JsName getFreshName(String suggestName) {
+        return jsScope.declareFreshName(suggestName);
     }
 }

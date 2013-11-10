@@ -41,6 +41,7 @@ import java.util.List;
 
 import static org.jetbrains.k2js.translate.utils.FunctionBodyTranslator.translateFunctionBody;
 import static org.jetbrains.k2js.translate.utils.JsDescriptorUtils.getExpectedReceiverDescriptor;
+import static org.jetbrains.k2js.translate.utils.JsDescriptorUtils.getNameForNestedClassOrObject;
 
 public class LiteralFunctionTranslator extends AbstractTranslator {
     private final Stack<NotNullLazyValue<Trinity<List<JsPropertyInitializer>, LabelGenerator, JsExpression>>> definitionPlaces =
@@ -54,8 +55,9 @@ public class LiteralFunctionTranslator extends AbstractTranslator {
     }
 
     public static Trinity<List<JsPropertyInitializer>, LabelGenerator, JsExpression> createPlace(@NotNull List<JsPropertyInitializer> list,
-            @NotNull JsExpression reference) {
-        return Trinity.create(list, new LabelGenerator('f'), reference);
+            @NotNull JsExpression reference,
+            @NotNull JsScope jsScope) {
+        return Trinity.create(list, new LabelGenerator('f', jsScope), reference);
     }
 
     public void setFileDefinitionPlace(NotNullLazyValue<Trinity<List<JsPropertyInitializer>, LabelGenerator, JsExpression>> fileDefinitionPlace) {
@@ -145,9 +147,13 @@ public class LiteralFunctionTranslator extends AbstractTranslator {
         return nameRef;
     }
 
-    private JsNameRef createReference(@NotNull JsInvocation classInvocation, @NotNull ClassDescriptor objectDescriptor) {
+    private JsNameRef createReference(
+            @NotNull JsInvocation classInvocation,
+            @NotNull ClassDescriptor objectDescriptor
+    ) {
         Trinity<List<JsPropertyInitializer>, LabelGenerator, JsExpression> place = fileDefinitionPlace.getValue();
-        JsNameRef nameRef = new JsNameRef(place.second.generate(), place.third); // TODO
+        String suggestName = getNameForNestedClassOrObject(objectDescriptor);
+        JsNameRef nameRef = new JsNameRef(place.second.getFreshName(suggestName), place.third); // TODO: check
         place.first.add(new JsPropertyInitializer(nameRef, classInvocation));
         return nameRef;
     }

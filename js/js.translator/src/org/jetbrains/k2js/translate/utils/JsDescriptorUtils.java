@@ -120,6 +120,24 @@ public final class JsDescriptorUtils {
         return null;
     }
 
+    @NotNull
+    public static String getNameForNestedClassOrObject(@NotNull ClassDescriptor descriptor) {
+        StringBuilder name = new StringBuilder();
+
+        if (descriptor.getName().isSpecial()) {
+            name.append("anonym");
+        } else {
+            name.append(descriptor.getName().getIdentifier());
+        }
+        DeclarationDescriptor containing = descriptor.getContainingDeclaration();
+        while (containing != null && !(containing instanceof NamespaceDescriptor)) {
+            if (!containing.getName().isSpecial())
+                name.insert(0, "$").insert(0, containing.getName().getIdentifier());
+            containing = containing.getContainingDeclaration();
+        }
+        return name.insert(0, "$").toString();
+    }
+
     @Nullable
     public static FunctionDescriptor getOverriddenDescriptor(@NotNull FunctionDescriptor functionDescriptor) {
         Set<? extends FunctionDescriptor> overriddenDescriptors = functionDescriptor.getOverriddenDescriptors();
