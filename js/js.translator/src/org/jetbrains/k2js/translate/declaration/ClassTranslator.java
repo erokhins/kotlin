@@ -25,7 +25,6 @@ import org.jetbrains.jet.lang.descriptors.ClassDescriptor;
 import org.jetbrains.jet.lang.descriptors.ClassKind;
 import org.jetbrains.jet.lang.descriptors.PropertyDescriptor;
 import org.jetbrains.jet.lang.psi.JetClassOrObject;
-import org.jetbrains.jet.lang.psi.JetObjectDeclaration;
 import org.jetbrains.jet.lang.psi.JetParameter;
 import org.jetbrains.jet.lang.types.JetType;
 import org.jetbrains.jet.lang.types.TypeConstructor;
@@ -58,20 +57,8 @@ public final class ClassTranslator extends AbstractTranslator {
     private final ClassDescriptor descriptor;
 
     @NotNull
-    public static JsInvocation generateClassCreation(@NotNull JetClassOrObject classDeclaration, @NotNull TranslationContext context) {
-        return new ClassTranslator(classDeclaration, context).translate();
-    }
-
-    @NotNull
-    public static JsInvocation generateClassCreation(@NotNull JetClassOrObject classDeclaration,
-            @NotNull ClassDescriptor descriptor,
-            @NotNull TranslationContext context) {
-        return new ClassTranslator(classDeclaration, descriptor, context).translate();
-    }
-
-    @NotNull
     public static JsExpression generateObjectLiteral(
-            @NotNull JetObjectDeclaration objectDeclaration,
+            @NotNull JetClassOrObject objectDeclaration,
             @NotNull TranslationContext context
     ) {
         return new ClassTranslator(objectDeclaration, context).translateObjectLiteralExpression();
@@ -79,7 +66,7 @@ public final class ClassTranslator extends AbstractTranslator {
 
     @NotNull
     public static JsExpression generateObjectLiteral(
-            @NotNull JetObjectDeclaration objectDeclaration,
+            @NotNull JetClassOrObject objectDeclaration,
             @NotNull ClassDescriptor descriptor,
             @NotNull TranslationContext context
     ) {
@@ -106,10 +93,10 @@ public final class ClassTranslator extends AbstractTranslator {
     @NotNull
     private JsExpression translateObjectLiteralExpression() {
         ClassDescriptor containingClass = getContainingClass(descriptor);
-        if (containingClass == null) {
-            return translate(context());
-        }
-        return context().literalFunctionTranslator().translate(containingClass, context(), classDeclaration, descriptor, this);
+        //if (containingClass == null) {
+        //    return translate(context());                   //
+        //}
+        return context().literalFunctionTranslator().translateObject(containingClass, context(), classDeclaration, descriptor, this);
     }
 
     @NotNull

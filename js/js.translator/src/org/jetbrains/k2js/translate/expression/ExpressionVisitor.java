@@ -476,7 +476,7 @@ public final class ExpressionVisitor extends TranslatorVisitor<JsNode> {
         JetObjectDeclarationName objectDeclarationName = getObjectDeclarationName(expression);
         DeclarationDescriptor descriptor = getDescriptorForElement(context.bindingContext(), objectDeclarationName);
         JsName propertyName = context.getNameForDescriptor(descriptor);
-        JsExpression value = ClassTranslator.generateClassCreation(expression, context);
+        JsExpression value = ClassTranslator.generateObjectLiteral(expression, context);
         return newVar(propertyName, value).source(expression);
     }
 }

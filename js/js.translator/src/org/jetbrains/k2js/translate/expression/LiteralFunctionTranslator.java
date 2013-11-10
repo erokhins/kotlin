@@ -26,7 +26,6 @@ import org.jetbrains.jet.lang.descriptors.ClassDescriptor;
 import org.jetbrains.jet.lang.descriptors.ConstructorDescriptor;
 import org.jetbrains.jet.lang.descriptors.DeclarationDescriptor;
 import org.jetbrains.jet.lang.descriptors.FunctionDescriptor;
-import org.jetbrains.jet.lang.psi.JetClassBody;
 import org.jetbrains.jet.lang.psi.JetClassOrObject;
 import org.jetbrains.jet.lang.psi.JetDeclarationWithBody;
 import org.jetbrains.jet.lang.resolve.DescriptorUtils;
@@ -48,6 +47,8 @@ public class LiteralFunctionTranslator extends AbstractTranslator {
             new Stack<NotNullLazyValue<Trinity<List<JsPropertyInitializer>, LabelGenerator, JsExpression>>>();
     private NotNullLazyValue<Trinity<List<JsPropertyInitializer>, LabelGenerator, JsExpression>> definitionPlace;
 
+    private NotNullLazyValue<Trinity<List<JsPropertyInitializer>, LabelGenerator, JsExpression>> fileDefinitionPlace;
+
     public LiteralFunctionTranslator(@NotNull TranslationContext context) {
         super(context);
     }
@@ -55,6 +56,11 @@ public class LiteralFunctionTranslator extends AbstractTranslator {
     public static Trinity<List<JsPropertyInitializer>, LabelGenerator, JsExpression> createPlace(@NotNull List<JsPropertyInitializer> list,
             @NotNull JsExpression reference) {
         return Trinity.create(list, new LabelGenerator('f'), reference);
+    }
+
+    public void setFileDefinitionPlace(NotNullLazyValue<Trinity<List<JsPropertyInitializer>, LabelGenerator, JsExpression>> fileDefinitionPlace) {
+        setDefinitionPlace(fileDefinitionPlace);
+        this.fileDefinitionPlace = definitionPlace;
     }
 
     public void setDefinitionPlace(@Nullable NotNullLazyValue<Trinity<List<JsPropertyInitializer>, LabelGenerator, JsExpression>> place) {
@@ -139,6 +145,13 @@ public class LiteralFunctionTranslator extends AbstractTranslator {
         return nameRef;
     }
 
+    private JsNameRef createReference(@NotNull JsInvocation classInvocation, @NotNull ClassDescriptor objectDescriptor) {
+        Trinity<List<JsPropertyInitializer>, LabelGenerator, JsExpression> place = fileDefinitionPlace.getValue();
+        JsNameRef nameRef = new JsNameRef(place.second.generate(), place.third); // TODO
+        place.first.add(new JsPropertyInitializer(nameRef, classInvocation));
+        return nameRef;
+    }
+
     private static void addRegularParameters(
             @NotNull FunctionDescriptor descriptor,
             @NotNull JsFunction fun,
@@ -155,22 +168,42 @@ public class LiteralFunctionTranslator extends AbstractTranslator {
         return new JsFunction(context().scope(), new JsBlock());
     }
 
-    public JsExpression translate(
-            @NotNull ClassDescriptor outerClass,
+    @NotNull
+    private TranslationContext getNormalizeTranslationContext(@Nullable ClassDescriptor outerClass,
+            @NotNull TranslationContext outerClassContext) {
+        if (outerClass == null) {
+            return outerClassContext;
+        }
+        JsNameRef outerClassRef = context().getQualifiedReference(outerClass);
+        if (!outerClass.getKind().isObject()) {
+            outerClassRef = Namer.getClassObjectAccessor(outerClassRef); // TODO: fix hack (this is static access)
+        }
+        return outerClassContext.innerContextWithThisAliased(outerClass, outerClassRef);
+    }
+
+    public JsExpression translateObject(
+            @Nullable ClassDescriptor outerClass,
             @NotNull TranslationContext outerClassContext,
-            @NotNull JetClassOrObject declaration,
-            @NotNull ClassDescriptor descriptor,
+            @NotNull JetClassOrObject objectDeclaration,
+            @NotNull ClassDescriptor objectDescriptor,
             @NotNull ClassTranslator classTranslator
     ) {
-        JsFunction fun = createFunction();
-        JsNameRef outerClassRef = fun.getScope().declareName(Namer.OUTER_CLASS_NAME).makeRef();
-        UsageTracker usageTracker = new UsageTracker(descriptor, outerClassContext.usageTracker(), outerClass);
-        AliasingContext aliasingContext = outerClassContext.aliasingContext().inner(outerClass, outerClassRef);
-        TranslationContext funContext = outerClassContext.newFunctionBody(fun, aliasingContext, usageTracker);
+        JsInvocation classInvocation = classTranslator.translate(getNormalizeTranslationContext(outerClass, outerClassContext));
+        JsNameRef classRef = createReference(classInvocation, objectDescriptor);
+        return new JsNew(classRef);
 
-        fun.getBody().getStatements().add(new JsReturn(classTranslator.translate(funContext)));
-        JetClassBody body = declaration.getBody();
-        assert body != null;
-        return new InnerObjectTranslator(funContext, fun).translate(createReference(fun), usageTracker.isUsed() ? outerClassRef : null);
+        //
+        //JsFunction fun = createFunction();
+        //JsNameRef outerClassRef;
+        ////outerClassRef = fun.getScope().declareName(Namer.OUTER_CLASS_NAME).makeRef();
+        //outerClassRef = context().getQualifiedReference(outerClass);
+        //UsageTracker usageTracker = new UsageTracker(objectDescriptor, outerClassContext.usageTracker(), outerClass);
+        //AliasingContext aliasingContext = outerClassContext.aliasingContext().inner(outerClass, outerClassRef);
+        //TranslationContext funContext = outerClassContext.newFunctionBody(fun, aliasingContext, usageTracker);
+        //
+        //fun.getBody().getStatements().add(new JsReturn(classTranslator.translate(funContext)));
+        //JetClassBody body = objectDeclaration.getBody();
+        //assert body != null;
+        //return new InnerObjectTranslator(funContext, fun).translate(createReference(fun), null);
     }
 }

@@ -70,13 +70,13 @@ final class NamespaceTranslator extends AbstractTranslator {
     }
 
     public void translate(JetFile file) {
-        context().literalFunctionTranslator().setDefinitionPlace(definitionPlace);
+        context().literalFunctionTranslator().setFileDefinitionPlace(definitionPlace);
         for (JetDeclaration declaration : file.getDeclarations()) {
             if (!AnnotationsUtils.isPredefinedObject(BindingUtils.getDescriptorForElement(bindingContext(), declaration))) {
                 declaration.accept(visitor, context());
             }
         }
-        context().literalFunctionTranslator().setDefinitionPlace(null);
+        context().literalFunctionTranslator().setFileDefinitionPlace(null);
     }
 
     private DefineInvocation createDefinitionPlace(

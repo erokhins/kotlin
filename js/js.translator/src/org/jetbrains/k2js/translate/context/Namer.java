@@ -34,12 +34,10 @@ public final class Namer {
     public static final String KOTLIN_LOWER_NAME = KOTLIN_NAME.toLowerCase();
 
     public static final String CALLEE_NAME = "$fun";
-    public static final String OUTER_CLASS_NAME = "$outer";
 
     private static final String CALL_FUNCTION = "call";
     private static final String CLASS_OBJECT_NAME = "createClass";
     private static final String TRAIT_OBJECT_NAME = "createTrait";
-    private static final String OBJECT_OBJECT_NAME = "createObject";
     private static final String ENUM_ENTRIES_NAME = "createEnumEntries";
     private static final String SETTER_PREFIX = "set_";
     private static final String GETTER_PREFIX = "get_";
@@ -101,7 +99,7 @@ public final class Namer {
     }
 
     @NotNull
-    public static JsExpression getClassObjectAccessor(@NotNull JsExpression referenceToClass) {
+    public static JsNameRef getClassObjectAccessor(@NotNull JsExpression referenceToClass) {
         return new JsNameRef(CLASS_OBJECT_GETTER, referenceToClass);
     }
 
@@ -158,8 +156,6 @@ public final class Namer {
     @NotNull
     private final JsExpression defineRootPackage;
     @NotNull
-    private final JsName objectName;
-    @NotNull
     private final JsName enumEntriesName;
     @NotNull
     private final JsExpression undefinedExpression;
@@ -184,7 +180,6 @@ public final class Namer {
 
         className = kotlinScope.declareName(CLASS_OBJECT_NAME);
         enumEntriesName = kotlinScope.declareName(ENUM_ENTRIES_NAME);
-        objectName = kotlinScope.declareName(OBJECT_OBJECT_NAME);
 
         isTypeName = kotlinScope.declareName("isType");
 
@@ -214,11 +209,6 @@ public final class Namer {
     @NotNull
     public JsExpression rootPackageDefinitionMethodReference() {
         return defineRootPackage;
-    }
-
-    @NotNull
-    public JsExpression objectCreationMethodReference() {
-        return kotlin(objectName);
     }
 
     @NotNull
@@ -271,11 +261,6 @@ public final class Namer {
         switch (descriptor.getKind()) {
             case TRAIT:
                 return new JsInvocation(traitCreationMethodReference(), arguments);
-
-            case OBJECT:
-            case CLASS_OBJECT:
-            case ENUM_ENTRY:
-                return new JsInvocation(objectCreationMethodReference(), arguments);
 
             default:
                 return new JsInvocation(classCreationMethodReference(), arguments);
