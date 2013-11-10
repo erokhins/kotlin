@@ -75,9 +75,9 @@ public final class Translation {
 
     @NotNull
     public static JsNode translateExpression(@NotNull JetExpression expression, @NotNull TranslationContext context) {
-        JsName aliasForExpression = context.aliasingContext().getAliasForExpression(expression);
+        JsExpression aliasForExpression = context.getAliasForExpression(expression);
         if (aliasForExpression != null) {
-            return aliasForExpression.makeRef();
+            return aliasForExpression;
         }
         DangerousData data = collect(expression, context);
         if (data.shouldBeTranslated()) {

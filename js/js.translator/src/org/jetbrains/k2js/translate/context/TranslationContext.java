@@ -23,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.descriptors.CallableDescriptor;
 import org.jetbrains.jet.lang.descriptors.DeclarationDescriptor;
 import org.jetbrains.jet.lang.psi.JetExpression;
+import org.jetbrains.jet.lang.psi.JetReferenceExpression;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.k2js.translate.expression.LiteralFunctionTranslator;
 import org.jetbrains.k2js.translate.intrinsic.Intrinsics;
@@ -127,6 +128,13 @@ public class TranslationContext {
     @NotNull
     public TranslationContext innerContextWithThisAliased(@NotNull DeclarationDescriptor correspondingDescriptor, @NotNull JsNameRef alias) {
         return new TranslationContext(this, aliasingContext.inner(correspondingDescriptor, alias));
+    }
+
+    @NotNull
+    public TranslationContext innerContextWithThisAliased(@NotNull DeclarationDescriptor correspondingDescriptor,
+            @NotNull JsNameRef alias,
+            @NotNull UsageTracker usageTracker) {
+        return new TranslationContext(staticContext, dynamicContext, aliasingContext.inner(correspondingDescriptor, alias), usageTracker);
     }
 
     @NotNull
@@ -251,9 +259,25 @@ public class TranslationContext {
     }
 
     @Nullable
+    public JsExpression getAliasForExpression(@NotNull JetExpression expression) {
+        JsName jsName = aliasingContext.getAliasForExpression(expression);
+        if (jsName != null) {
+            return jsName.makeRef();
+        }
+        if (expression instanceof JetReferenceExpression && usageTracker != null) {
+            return usageTracker.getAliasForExpression((JetReferenceExpression) expression, bindingContext());
+        }
+        return null;
+    }
+
+    @Nullable
     public JsExpression getAliasForDescriptor(@NotNull DeclarationDescriptor descriptor) {
         if (usageTracker != null) {
             usageTracker.triggerUsed(descriptor);
+            JsExpression alias = usageTracker.getAliasForDescriptor(descriptor);
+            if (alias != null) {
+                return alias;
+            }
         }
         return aliasingContext.getAliasForDescriptor(descriptor);
     }
