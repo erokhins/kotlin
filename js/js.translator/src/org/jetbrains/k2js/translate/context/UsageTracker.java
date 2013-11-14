@@ -16,6 +16,7 @@
 
 package org.jetbrains.k2js.translate.context;
 
+import com.google.dart.compiler.backend.js.ast.JsExpression;
 import com.intellij.util.Consumer;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.OrderedSet;
@@ -23,16 +24,22 @@ import gnu.trove.THashSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jet.lang.descriptors.*;
+import org.jetbrains.jet.lang.psi.JetReferenceExpression;
+import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.k2js.translate.utils.JsDescriptorUtils;
 
 import java.util.List;
 import java.util.Set;
+
+import static org.jetbrains.k2js.translate.utils.BindingUtils.getDescriptorForReferenceExpression;
 
 public final class UsageTracker {
     @Nullable
     private final ClassDescriptor trackedClassDescriptor;
     @NotNull
     private final MemberDescriptor memberDescriptor;
+    @Nullable
+    private final DescriptorAliasConsumer descriptorAliasConsumer;
 
     @Nullable
     private List<UsageTracker> children;
@@ -42,9 +49,13 @@ public final class UsageTracker {
     private Set<CallableDescriptor> capturedVariables;
     private ClassDescriptor outerClassDescriptor;
 
-    public UsageTracker(@NotNull MemberDescriptor memberDescriptor, @Nullable UsageTracker parent, @Nullable ClassDescriptor trackedClassDescriptor) {
+    public UsageTracker(@NotNull MemberDescriptor memberDescriptor,
+            @Nullable UsageTracker parent,
+            @Nullable ClassDescriptor trackedClassDescriptor,
+            @Nullable DescriptorAliasConsumer descriptorAliasConsumer) {
         this.memberDescriptor = memberDescriptor;
         this.trackedClassDescriptor = trackedClassDescriptor;
+        this.descriptorAliasConsumer = descriptorAliasConsumer;
         if (parent != null) {
             parent.addChild(this);
         }
@@ -68,11 +79,39 @@ public final class UsageTracker {
         capturedVariables.add(descriptor);
     }
 
+    @Nullable
+    public JsExpression getAliasForExpression(@NotNull JetReferenceExpression expression, @NotNull BindingContext bindingContext) {
+        DeclarationDescriptor descriptor = getDescriptorForReferenceExpression(bindingContext, expression);
+        triggerUsed(descriptor);
+        if (aliasNotExist(descriptor)) {
+            return null;
+        } else {
+            return descriptorAliasConsumer.getAliasForDescriptor((CallableDescriptor) descriptor);
+        }
+    }
+
+    private boolean aliasNotExist(DeclarationDescriptor descriptor) {
+        return capturedVariables == null ||
+            !(descriptor instanceof CallableDescriptor) ||
+            !capturedVariables.contains(descriptor) ||
+            descriptorAliasConsumer == null;
+    }
+
+    @Nullable
+    public JsExpression getAliasForDescriptor(@NotNull DeclarationDescriptor descriptor) {
+        if (aliasNotExist(descriptor)) {
+            return null;
+        } else {
+            return descriptorAliasConsumer.getAliasForDescriptor((CallableDescriptor) descriptor);
+        }
+    }
+
     public void triggerUsed(DeclarationDescriptor descriptor) {
         if ((descriptor instanceof PropertyDescriptor || descriptor instanceof PropertyAccessorDescriptor)) {
             checkOuterClass(descriptor);
         }
-        else if (descriptor instanceof VariableDescriptor) {
+
+        if (descriptor instanceof VariableDescriptor) {
             VariableDescriptor variableDescriptor = (VariableDescriptor) descriptor;
             if ((capturedVariables == null || !capturedVariables.contains(variableDescriptor)) &&
                 !isAncestor(memberDescriptor, variableDescriptor)) {
@@ -178,5 +217,11 @@ public final class UsageTracker {
             descriptor = descriptor.getContainingDeclaration();
         }
         return false;
+    }
+
+    public interface DescriptorAliasConsumer {
+        @Nullable
+        JsExpression getAliasForDescriptor(@NotNull CallableDescriptor descriptor);
+
     }
 }

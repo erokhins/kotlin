@@ -1,27 +1,15 @@
 package foo.bar
 
-trait T {
-    class object {
-        val a = 1
-    }
+class Point(val x: Int, val y: Int)
+
+fun box(): String {
+    val answer = apply(Point(3, 5), { Point.(scalar: Int) : Point ->
+        Point(x * scalar, y * scalar)
+    })
+
+    return if (answer.x == 6 && answer.y == 10) "OK" else "FAIL"
 }
 
-class A : T {
-    val a = 3
-    class object {
-        val a = 2
-    }
-}
-
-fun foo(): Int = 4
-
-public fun box(): String {
-    if (T.a != 1) return "T.a != 1, it: ${T.a}"
-    if (A.a != 2) return "A.a != 2, it: ${A.a}"
-    if (A().a != 3) return "A().a != 3, it: ${A().a}"
-    if (foo() != 4) return "foo() != 4, it: ${foo()}"
-    A()
-    A.a
-    foo()
-    return  "OK"
+fun apply(arg: Point, f: Point.(scalar: Int) -> Point): Point {
+    return arg.f(2)
 }

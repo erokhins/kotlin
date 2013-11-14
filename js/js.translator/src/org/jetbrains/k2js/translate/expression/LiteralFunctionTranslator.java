@@ -19,15 +19,14 @@ package org.jetbrains.k2js.translate.expression;
 import com.google.dart.compiler.backend.js.ast.*;
 import com.intellij.openapi.util.NotNullLazyValue;
 import com.intellij.openapi.util.Trinity;
+import com.intellij.util.Consumer;
 import com.intellij.util.containers.Stack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.jet.lang.descriptors.ClassDescriptor;
-import org.jetbrains.jet.lang.descriptors.ConstructorDescriptor;
-import org.jetbrains.jet.lang.descriptors.DeclarationDescriptor;
-import org.jetbrains.jet.lang.descriptors.FunctionDescriptor;
+import org.jetbrains.jet.lang.descriptors.*;
 import org.jetbrains.jet.lang.psi.JetClassOrObject;
 import org.jetbrains.jet.lang.psi.JetDeclarationWithBody;
+import org.jetbrains.jet.lang.psi.JetReferenceExpression;
 import org.jetbrains.jet.lang.resolve.DescriptorUtils;
 import org.jetbrains.k2js.translate.LabelGenerator;
 import org.jetbrains.k2js.translate.context.AliasingContext;
@@ -36,10 +35,17 @@ import org.jetbrains.k2js.translate.context.TranslationContext;
 import org.jetbrains.k2js.translate.context.UsageTracker;
 import org.jetbrains.k2js.translate.declaration.ClassTranslator;
 import org.jetbrains.k2js.translate.general.AbstractTranslator;
+import org.jetbrains.k2js.translate.reference.CallBuilder;
+import org.jetbrains.k2js.translate.utils.JsAstUtils;
 
+import java.util.Collections;
 import java.util.List;
 
+import static org.jetbrains.k2js.translate.reference.AccessTranslationUtils.translateAsGet;
+import static org.jetbrains.k2js.translate.reference.ReferenceTranslator.getAccessTranslator;
+import static org.jetbrains.k2js.translate.reference.ReferenceTranslator.translateAsLocalNameReference;
 import static org.jetbrains.k2js.translate.utils.FunctionBodyTranslator.translateFunctionBody;
+import static org.jetbrains.k2js.translate.utils.JsAstUtils.assignment;
 import static org.jetbrains.k2js.translate.utils.JsDescriptorUtils.getExpectedReceiverDescriptor;
 import static org.jetbrains.k2js.translate.utils.JsDescriptorUtils.getNameForNestedClassOrObject;
 
@@ -110,7 +116,7 @@ public class LiteralFunctionTranslator extends AbstractTranslator {
         }
 
         funContext = outerContext.newFunctionBody(fun, aliasingContext,
-                                                  new UsageTracker(descriptor, outerContext.usageTracker(), outerClass));
+                                                  new UsageTracker(descriptor, outerContext.usageTracker(), outerClass, null));
 
         fun.getBody().getStatements().addAll(translateFunctionBody(descriptor, declaration, funContext).getStatements());
 
@@ -176,7 +182,8 @@ public class LiteralFunctionTranslator extends AbstractTranslator {
 
     @NotNull
     private TranslationContext getNormalizeTranslationContext(@Nullable ClassDescriptor outerClass,
-            @NotNull TranslationContext outerClassContext) {
+            @NotNull TranslationContext outerClassContext,
+            @NotNull UsageTracker usageTracker) {
         if (outerClass == null) {
             return outerClassContext;
         }
@@ -184,18 +191,70 @@ public class LiteralFunctionTranslator extends AbstractTranslator {
         if (!outerClass.getKind().isObject()) {
             outerClassRef = Namer.getClassObjectAccessor(outerClassRef); // TODO: fix hack (this is static access)
         }
-        return outerClassContext.innerContextWithThisAliased(outerClass, outerClassRef);
+        return outerClassContext.innerContextWithThisAliased(outerClass, outerClassRef, usageTracker);
+    }
+
+    //TODO: fix this
+    private static void fixObjectClassInitializer(@NotNull JsInvocation classInvocation, @NotNull TranslationContext normalizeContext) {
+        JsExpression initializer = classInvocation.getArguments().get(1);
+        JsFunction initFun;
+        if (initializer == JsLiteral.NULL) {
+            initFun = JsAstUtils.createFunctionWithEmptyBody(normalizeContext.scope());
+            classInvocation.getArguments().set(1, initFun);
+        } else {
+            assert initializer instanceof JsFunction;
+            initFun = (JsFunction) initializer;
+        }
+        JsName outerJsName = initFun.getScope().declareName("$outer");
+        initFun.getParameters().add(new JsParameter(outerJsName));
+        initFun.getBody().getStatements().add(0, assignment(new JsNameRef("$outer", JsLiteral.THIS), outerJsName.makeRef()).makeStmt());
+    }
+
+    private static JsExpression translateAsGet1(@NotNull CallableDescriptor descriptor, @NotNull TranslationContext translationContext) {
+        JsExpression jsExpression;
+        jsExpression = translationContext.getAliasForDescriptor(descriptor);
+        if (jsExpression != null) {
+            return jsExpression;
+        }
+        jsExpression = CallBuilder.build(translationContext).descriptor(descriptor).translate();
+        assert jsExpression instanceof JsInvocation;
+        return ((JsInvocation) jsExpression).getQualifier();
     }
 
     public JsExpression translateObject(
             @Nullable ClassDescriptor outerClass,
-            @NotNull TranslationContext outerClassContext,
+            @NotNull final TranslationContext outerClassContext,
             @NotNull JetClassOrObject objectDeclaration,
             @NotNull ClassDescriptor objectDescriptor,
             @NotNull ClassTranslator classTranslator
     ) {
-        JsInvocation classInvocation = classTranslator.translate(getNormalizeTranslationContext(outerClass, outerClassContext));
+        JsObjectLiteral captured = new JsObjectLiteral(true);
+        final List<JsPropertyInitializer> capturedProperties = captured.getPropertyInitializers();
+        UsageTracker usageTracker = new UsageTracker(objectDescriptor, outerClassContext.usageTracker(), outerClass, new UsageTracker.DescriptorAliasConsumer() {
+            @Nullable
+            @Override
+            public JsExpression getAliasForDescriptor(@NotNull CallableDescriptor descriptor) {
+                JsName jsName = outerClassContext.getNameForDescriptor(descriptor);
+                capturedProperties.add(new JsPropertyInitializer(jsName.makeRef(), translateAsGet1(descriptor, outerClassContext)));
+                return new JsNameRef(jsName, new JsNameRef("$outer", JsLiteral.THIS));
+            }
+
+            @Nullable
+            public JsExpression getAliasForExpression(@NotNull JetReferenceExpression expression, @NotNull CallableDescriptor descriptor) {
+                JsName jsName = outerClassContext.getNameForDescriptor(descriptor);
+                capturedProperties.add(new JsPropertyInitializer(jsName.makeRef(), translateAsGet(expression, outerClassContext)));
+                return new JsNameRef(jsName, new JsNameRef("$outer", JsLiteral.THIS));
+            }
+        });
+        TranslationContext normalizeContext = getNormalizeTranslationContext(outerClass, outerClassContext, usageTracker);
+        JsInvocation classInvocation = classTranslator.translate(normalizeContext);
         JsNameRef classRef = createReference(classInvocation, objectDescriptor);
+
+        if (!capturedProperties.isEmpty()) {
+            fixObjectClassInitializer(classInvocation, normalizeContext);
+            return new JsNew(classRef, Collections.<JsExpression>singletonList(captured));
+        }
+
         return new JsNew(classRef);
 
         //
