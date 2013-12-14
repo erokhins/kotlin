@@ -25,6 +25,8 @@ import org.jetbrains.jet.lang.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.k2js.translate.utils.JsDescriptorUtils.getDeclarationDescriptorForReceiver
 import org.jetbrains.jet.lang.resolve.calls.tasks.ExplicitReceiverKind.*
 import org.jetbrains.k2js.translate.utils.AnnotationsUtils
+import org.jetbrains.jet.lang.psi.JetSuperExpression
+import org.jetbrains.jet.lang.resolve.scopes.receivers.ExpressionReceiver
 
 
 open class BaseCallInfo(
@@ -43,6 +45,12 @@ open class BaseCallInfo(
     fun isSafeCall(): Boolean = nullableReceiverForSafeCall != null
     fun isNative(): Boolean = AnnotationsUtils.isNativeObject(callableDescriptor)
 
+    fun isSuperInvocation() : Boolean {
+        val thisObject = resolvedCall.getThisObject()
+        return thisObject is ExpressionReceiver && ((thisObject as ExpressionReceiver)).getExpression() is JetSuperExpression
+    }
+
+    // TODO: toString for debug
 }
 
 class BaseFunctionCallInfo(
@@ -101,6 +109,9 @@ private fun TranslationContext.mainGetCallInfo(resolvedCall: ResolvedCall<out Ca
     return BaseCallInfo(this, resolvedCall, getThisObject(), getReceiverObject(), getNullableReceiverForSafeCall())
 }
 
+fun ResolvedCall<out CallableDescriptor>.expectedReceivers(): Boolean {
+    return this.getExplicitReceiverKind() != NO_EXPLICIT_RECEIVER
+}
 
 fun TranslationContext.getCallInfo(resolvedCall: ResolvedCall<out CallableDescriptor>, receiver: JsExpression?): BaseCallInfo {
     return mainGetCallInfo(resolvedCall, receiver, null)
