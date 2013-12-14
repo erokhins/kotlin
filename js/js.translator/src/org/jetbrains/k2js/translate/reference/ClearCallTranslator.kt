@@ -23,23 +23,28 @@ import com.google.dart.compiler.backend.js.ast.JsExpression
 import org.jetbrains.jet.lang.descriptors.VariableDescriptor
 import org.jetbrains.jet.lang.resolve.calls.model.VariableAsFunctionResolvedCall
 import org.jetbrains.k2js.translate.context.TranslationContext
+import java.util.ArrayList
+import org.jetbrains.k2js.facade.exceptions.UnsupportedFeatureException
 
+
+val functionCallCases = CallCaseDispatcher<FunctionCallCase, FunctionCallInfo>()
+val variableAccessCases = CallCaseDispatcher<VariableAccessCase, VariableAccessInfo>()
 
 fun TranslationContext.buildCall(resolvedCall: ResolvedCall<out FunctionDescriptor>, receiver: JsExpression? = null): JsExpression {
     return buildCall(resolvedCall, receiver, null)
 }
 
 fun TranslationContext.buildGet(resolvedCall: ResolvedCall<out VariableDescriptor>, receiver: JsExpression? = null): JsExpression {
-    throw UnsupportedOperationException()
+    val variableAccessInfo = VariableAccessInfo(getCallInfo(resolvedCall, receiver), null);
+    return variableAccessCases.translate(variableAccessInfo)
 }
 
 fun TranslationContext.buildSet(resolvedCall: ResolvedCall<out VariableDescriptor>, setTo: JsExpression, receiver: JsExpression? = null): JsExpression {
-    throw UnsupportedOperationException()
+    val variableAccessInfo = VariableAccessInfo(getCallInfo(resolvedCall, receiver), setTo);
+    return variableAccessCases.translate(variableAccessInfo)
 }
 
-
-
-private fun TranslationContext.buildCall(resolvedCall: ResolvedCall<out FunctionDescriptor>, receiver1: JsExpression? = null, receiver2: JsExpression? = null): JsExpression {
+private fun TranslationContext.buildCall(resolvedCall: ResolvedCall<out FunctionDescriptor>, receiver1: JsExpression?, receiver2: JsExpression?): JsExpression {
     if (resolvedCall is VariableAsFunctionResolvedCall) {
         assert(receiver2 == null, "receiver2 for VariableAsFunctionResolvedCall must be null") // TODO: add debug info
         val variableCall = resolvedCall.getVariableCall()
@@ -52,33 +57,80 @@ private fun TranslationContext.buildCall(resolvedCall: ResolvedCall<out Function
         }
     }
 
-    throw UnsupportedOperationException()
+    val functionCallInfo = getCallInfo(resolvedCall, receiver1, receiver2)
+    return functionCallCases.translate(functionCallInfo)
 }
 
 
-open class FunctionCallBuilderAdapter(val callInfo: BaseFunctionCallInfo) {
+trait CallCase<I : BaseCallInfo> {
+    val callInfo: I
 
-    fun unsupported() : Exception {
+    protected fun unsupported(message: String = "") : Exception {
         val stackTrace = Thread.currentThread().getStackTrace()
         val methodName = stackTrace.get(stackTrace.lastIndex - 1).getMethodName()
         val caseName = javaClass.getName()
-        return UnsupportedOperationException("this case unsopported: $methodName; $caseName; $callInfo")
+        return UnsupportedOperationException("this case unsopported: $message [$methodName; $caseName; $callInfo]")
     }
 
-    open fun noReceivers(): JsExpression {
+    protected fun I.noReceivers(): JsExpression {
         throw unsupported()
     }
 
-    open fun thisObject(): JsExpression {
+    protected fun I.thisObject(): JsExpression {
         throw unsupported()
     }
 
-    open fun receiverArgument(): JsExpression {
+    protected fun I.receiverArgument(): JsExpression {
         throw unsupported()
     }
 
-    open fun bothReceivers(): JsExpression {
+    protected fun I.bothReceivers(): JsExpression {
         throw unsupported()
     }
 
+    final fun translate(): JsExpression {
+        return if (callInfo.thisObject == null) {
+            if (callInfo.receiverObject == null)
+                callInfo.noReceivers()
+            else
+                callInfo.receiverArgument()
+        } else {
+            if (callInfo.receiverObject == null)
+                callInfo.thisObject()
+            else
+                callInfo.bothReceivers()
+        }
+    }
 }
+
+open class FunctionCallCase(override val callInfo: FunctionCallInfo) : CallCase<FunctionCallInfo>
+open class VariableAccessCase(override val callInfo: VariableAccessInfo) : CallCase<VariableAccessInfo>
+
+class CallCaseDispatcher<C : CallCase<I>, I : BaseCallInfo> {
+    private val cases: MutableList<CanBeApplyCase<I>> = ArrayList()
+
+    private class CanBeApplyCase<I : BaseCallInfo>(val apply: (I) -> JsExpression?)
+
+    fun addCase(caseConstructor: (I) -> C, canApply: (I) -> Boolean) {
+        cases.add(CanBeApplyCase{
+            if (canApply(it)) {
+                caseConstructor(it).translate()
+            }
+            null
+        })
+    }
+
+    fun addCase(canApply: (I) -> Boolean, caseConstructor: (I) -> C) {
+        addCase(caseConstructor, canApply)
+    }
+
+    fun translate(callInfo: I): JsExpression {
+        for (case in cases) {
+            val result = case.apply(callInfo)
+            if (result != null)
+                return result
+        }
+        throw UnsupportedOperationException("This case of call unsopported. CallInfo: $callInfo")
+    }
+}
+

@@ -53,10 +53,26 @@ open class BaseCallInfo(
     // TODO: toString for debug
 }
 
-class BaseFunctionCallInfo(
-        callInfo: BaseCallInfo,
-        val argumentsInfo: CallArgumentTranslator.ArgumentsInfo
-) : BaseCallInfo(callInfo.context, callInfo.resolvedCall, callInfo.thisObject, callInfo.receiverObject, callInfo.nullableReceiverForSafeCall)
+private open class CallInfoWrapper(callInfo: BaseCallInfo) :
+    BaseCallInfo(callInfo.context, callInfo.resolvedCall, callInfo.thisObject, callInfo.receiverObject, callInfo.nullableReceiverForSafeCall)
+
+// if setTo == null, it is get access
+class VariableAccessInfo(callInfo: BaseCallInfo, private val setTo: JsExpression? = null): CallInfoWrapper(callInfo) {
+    fun isGetAccess(): Boolean = setTo == null
+
+    fun getSetToExpression(): JsExpression {
+        if (isGetAccess()) {
+            throw IllegalStateException("This is get, setTo is null. callInfo: $this")
+        }
+        return setTo!!
+    }
+}
+
+class FunctionCallInfo(callInfo: BaseCallInfo, val argumentsInfo: CallArgumentTranslator.ArgumentsInfo) : CallInfoWrapper(callInfo) {
+    fun hasSpreadOperator() : Boolean {
+        return argumentsInfo.isHasSpreadOperator()
+    }
+}
 
 private fun TranslationContext.getThisObject(receiverValue: ReceiverValue): JsExpression {
     assert(receiverValue.exists(), "receiverValue must be exist here")
@@ -117,13 +133,18 @@ fun TranslationContext.getCallInfo(resolvedCall: ResolvedCall<out CallableDescri
     return mainGetCallInfo(resolvedCall, receiver, null)
 }
 
-fun TranslationContext.getCallInfo(resolvedCall: ResolvedCall<out FunctionDescriptor>, receiver: JsExpression?): BaseFunctionCallInfo {
+fun TranslationContext.getCallInfo(resolvedCall: ResolvedCall<out FunctionDescriptor>, receiver: JsExpression?): FunctionCallInfo {
     return getCallInfo(resolvedCall, receiver, null);
 }
 
 // two receiver need only for FunctionCall in VariableAsFunctionResolvedCall
-fun TranslationContext.getCallInfo(resolvedCall: ResolvedCall<out FunctionDescriptor>, receiver1: JsExpression?, receiver2: JsExpression?): BaseFunctionCallInfo {
+fun TranslationContext.getCallInfo(resolvedCall: ResolvedCall<out FunctionDescriptor>, receiver1: JsExpression?, receiver2: JsExpression?): FunctionCallInfo {
     val callInfo = mainGetCallInfo(resolvedCall, receiver1, receiver2)
-    val argumentsInfo = CallArgumentTranslator.translate(resolvedCall, receiver1, this)
-    return BaseFunctionCallInfo(callInfo, argumentsInfo)
+
+    val receiverForArgsTranslator = if (resolvedCall.getExplicitReceiverKind() == BOTH_RECEIVERS) // TODO: remove this hack
+        receiver2
+    else
+        receiver1
+    val argumentsInfo = CallArgumentTranslator.translate(resolvedCall, receiverForArgsTranslator, this)
+    return FunctionCallInfo(callInfo, argumentsInfo)
 }
