@@ -62,7 +62,7 @@ open class FunctionCallBuilderAdapter(val callInfo: BaseFunctionCallInfo) {
         val stackTrace = Thread.currentThread().getStackTrace()
         val methodName = stackTrace.get(stackTrace.lastIndex - 1).getMethodName()
         val caseName = javaClass.getName()
-        return UnsupportedOperationException("this case unsopported: $methodName, $caseName, $callInfo")
+        return UnsupportedOperationException("this case unsopported: $methodName; $caseName; $callInfo")
     }
 
     open fun noReceivers(): JsExpression {
