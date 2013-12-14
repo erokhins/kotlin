@@ -25,9 +25,10 @@ import org.jetbrains.jet.lang.resolve.calls.model.VariableAsFunctionResolvedCall
 import org.jetbrains.k2js.translate.context.TranslationContext
 import java.util.ArrayList
 import org.jetbrains.k2js.facade.exceptions.UnsupportedFeatureException
+import org.jetbrains.jet.lang.resolve.calls.tasks.ExplicitReceiverKind.*
 
 
-val functionCallCases = CallCaseDispatcher<FunctionCallCase, FunctionCallInfo>()
+val functionCallCases: CallCaseDispatcher<FunctionCallCase, FunctionCallInfo> = createFunctionCases()
 val variableAccessCases = CallCaseDispatcher<VariableAccessCase, VariableAccessInfo>()
 
 fun TranslationContext.buildCall(resolvedCall: ResolvedCall<out FunctionDescriptor>, receiver: JsExpression? = null): JsExpression {
@@ -111,6 +112,10 @@ class CallCaseDispatcher<C : CallCase<I>, I : BaseCallInfo> {
 
     private class CanBeApplyCase<I : BaseCallInfo>(val apply: (I) -> JsExpression?)
 
+    fun addCase(canBeApplyCase: (I) -> JsExpression?) {
+        cases.add(CanBeApplyCase(canBeApplyCase))
+    }
+
     fun addCase(caseConstructor: (I) -> C, canApply: (I) -> Boolean) {
         cases.add(CanBeApplyCase{
             if (canApply(it)) {
@@ -134,3 +139,25 @@ class CallCaseDispatcher<C : CallCase<I>, I : BaseCallInfo> {
     }
 }
 
+trait DelegateIntrinsic<I : BaseCallInfo> : CallCase<I> {
+    fun I.getReceiver(): JsExpression? {
+        return when (resolvedCall.getExplicitReceiverKind()) {
+            THIS_OBJECT -> thisObject
+            RECEIVER_ARGUMENT, BOTH_RECEIVERS -> receiverObject
+            else -> null
+        }
+    }
+
+    fun I.getDescriptor(): CallableDescriptor
+    fun I.getArgs(): List<JsExpression>
+
+    fun I.intrinsic(): JsExpression? {
+        val callType = if (resolvedCall.isSafeCall()) CallType.SAFE else CallType.NORMAL
+        val translator = CallTranslator(getReceiver(), null, getArgs(), resolvedCall, getDescriptor(), callType, context)
+        return translator.intrinsicInvocation()
+    }
+
+    fun intrinsic(): JsExpression? {
+        return callInfo.intrinsic()
+    }
+}
