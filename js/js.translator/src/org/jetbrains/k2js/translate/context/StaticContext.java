@@ -176,6 +176,7 @@ public final class StaticContext {
                              packageFqName.isRoot() ? null : getQualifierForParentPackage(packageFqName.parent()));
     }
 
+    // TODO: usage tracker
     @NotNull
     public JsName getNameForDescriptor(@NotNull DeclarationDescriptor descriptor) {
         JsName name = names.get(descriptor.getOriginal());
@@ -532,13 +533,13 @@ public final class StaticContext {
     private static class QualifierIsNullGenerator extends Generator<Boolean> {
 
         private QualifierIsNullGenerator() {
-            Rule<Boolean> propertiesHaveNoQualifiers = new Rule<Boolean>() {
+            Rule<Boolean> propertiesInClassHaveNoQualifiers = new Rule<Boolean>() {
                 @Override
                 public Boolean apply(@NotNull DeclarationDescriptor descriptor) {
-                    if (!(descriptor instanceof PropertyDescriptor)) {
-                        return null;
+                    if ((descriptor instanceof PropertyDescriptor) && descriptor.getContainingDeclaration() instanceof ClassDescriptor) {
+                        return true;
                     }
-                    return true;
+                    return null;
                 }
             };
             //TODO: hack!
@@ -551,7 +552,7 @@ public final class StaticContext {
                     return true;
                 }
             };
-            addRule(propertiesHaveNoQualifiers);
+            addRule(propertiesInClassHaveNoQualifiers);
             addRule(nativeObjectsHaveNoQualifiers);
         }
     }
