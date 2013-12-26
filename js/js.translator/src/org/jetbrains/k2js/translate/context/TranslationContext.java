@@ -131,7 +131,7 @@ public class TranslationContext {
     }
 
     @NotNull
-    public TranslationContext innerContextWithAliasesForExpressions(@NotNull Map<JetExpression, JsName> aliases) {
+    public TranslationContext innerContextWithAliasesForExpressions(@NotNull Map<JetExpression, JsExpression> aliases) {
         return new TranslationContext(this, aliasingContext.withExpressionsAliased(aliases));
     }
 
