@@ -72,11 +72,9 @@ public class FunctionTest extends AbstractExpressionTest {
         fooBoxTest();
     }
 
-
     public void testFunctionLiteralAsLastParameter() throws Exception {
         fooBoxTest();
     }
-
 
     public void testNamedArguments() throws Exception {
         fooBoxTest();
