@@ -168,7 +168,6 @@ public class TranslationContext {
 
     @NotNull
     public JsName getNameForDescriptor(@NotNull DeclarationDescriptor descriptor) {
-        descriptorUsedInThisContext(descriptor); // TODO drop this
         return staticContext.getNameForDescriptor(descriptor);
     }
 
@@ -184,7 +183,6 @@ public class TranslationContext {
 
     @NotNull
     public JsNameRef getQualifiedReference(@NotNull DeclarationDescriptor descriptor) {
-        descriptorUsedInThisContext(descriptor); // TODO drop this
         return staticContext.getQualifiedReference(descriptor);
     }
 
