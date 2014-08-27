@@ -26,6 +26,7 @@ import org.jetbrains.jet.lang.diagnostics.Errors;
 import org.jetbrains.jet.lang.psi.JetExpression;
 import org.jetbrains.jet.lang.psi.JetSimpleNameExpression;
 import org.jetbrains.jet.lang.psi.JetTypeConstraint;
+import org.jetbrains.jet.lang.resolve.varianceChecker.VarianceConflictDiagnostic;
 import org.jetbrains.jet.lang.types.JetType;
 import org.jetbrains.jet.lexer.JetKeywordToken;
 import org.jetbrains.jet.lexer.JetModifierKeywordToken;
@@ -380,6 +381,20 @@ public class DefaultErrorMessages {
                 "Automatic cast to ''{0}'' is impossible, because ''{1}'' could have changed since the is-check", RENDER_TYPE, STRING);
 
         MAP.put(VARIANCE_ON_TYPE_PARAMETER_OF_FUNCTION_OR_PROPERTY, "Variance annotations are only allowed for type parameters of classes and traits");
+        MAP.put(TYPE_PARAMETER_VARIANCE_CONFLICT, "Type parameter {0} declared as ''{1}'' but occurs in ''{2}'' position in type {3}",
+                new MultiRenderer<VarianceConflictDiagnostic>() {
+                    @NotNull
+                    @Override
+                    public String[] render(@NotNull VarianceConflictDiagnostic object) {
+                        return new String[]{
+                            RENDER_TYPE.render(object.getTypeParameter()),
+                            object.getDeclarationPosition(),
+                            object.getUseSidePosition(),
+                            RENDER_TYPE.render(object.getContainingType())
+                        };
+                    }
+                });
+
         MAP.put(REDUNDANT_PROJECTION, "Projection is redundant: the corresponding type parameter of {0} has the same variance", NAME);
         MAP.put(CONFLICTING_PROJECTION, "Projection is conflicting with variance of the corresponding type parameter of {0}. Remove the projection or replace it with ''*''", NAME);
 
