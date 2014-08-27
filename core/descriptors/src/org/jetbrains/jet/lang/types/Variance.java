@@ -16,6 +16,8 @@
 
 package org.jetbrains.jet.lang.types;
 
+import org.jetbrains.annotations.NotNull;
+
 public enum Variance {
     INVARIANT("", true, true, 0),
     IN_VARIANCE("in", true, false, -1),
@@ -26,11 +28,16 @@ public enum Variance {
     private final boolean allowsOutPosition;
     private final int superpositionFactor;
 
-    Variance(String label, boolean allowsInPosition, boolean allowsOutPosition, int superpositionFactor) {
+    Variance(@NotNull String label, boolean allowsInPosition, boolean allowsOutPosition, int superpositionFactor) {
         this.label = label;
         this.allowsInPosition = allowsInPosition;
         this.allowsOutPosition = allowsOutPosition;
         this.superpositionFactor = superpositionFactor;
+    }
+
+    @NotNull
+    public String getLabel() {
+        return label;
     }
 
     public boolean allowsInPosition() {
@@ -41,6 +48,7 @@ public enum Variance {
         return allowsOutPosition;
     }
 
+    @NotNull
     public Variance superpose(Variance other) {
         int r = this.superpositionFactor * other.superpositionFactor;
         switch (r) {
@@ -51,6 +59,7 @@ public enum Variance {
         throw new IllegalStateException();
     }
 
+    @NotNull
     public Variance opposite() {
         switch (this) {
             case INVARIANT:
@@ -63,6 +72,7 @@ public enum Variance {
         throw new IllegalStateException("Impossible variance: " + this);
     }
 
+    @NotNull
     @Override
     public String toString() {
         return label;
