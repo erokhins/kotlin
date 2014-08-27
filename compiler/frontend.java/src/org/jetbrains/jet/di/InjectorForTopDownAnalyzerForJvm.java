@@ -68,6 +68,7 @@ import org.jetbrains.jet.lang.resolve.OverloadResolver;
 import org.jetbrains.jet.lang.resolve.OverrideResolver;
 import org.jetbrains.jet.lang.resolve.TypeHierarchyResolver;
 import org.jetbrains.jet.lang.resolve.ScriptHeaderResolver;
+import org.jetbrains.jet.lang.resolve.varianceChecker.VarianceChecker;
 import org.jetbrains.jet.lang.resolve.java.lazy.LazyJavaPackageFragmentProvider;
 import org.jetbrains.jet.lang.resolve.java.lazy.GlobalJavaResolverContext;
 import org.jetbrains.jet.lang.resolve.kotlin.DeserializedDescriptorResolver;
@@ -134,6 +135,7 @@ public class InjectorForTopDownAnalyzerForJvm implements InjectorForTopDownAnaly
     private final OverrideResolver overrideResolver;
     private final TypeHierarchyResolver typeHierarchyResolver;
     private final ScriptHeaderResolver scriptHeaderResolver;
+    private final VarianceChecker varianceChecker;
     private final LazyJavaPackageFragmentProvider lazyJavaPackageFragmentProvider;
     private final GlobalJavaResolverContext globalJavaResolverContext;
     private final DeserializedDescriptorResolver deserializedDescriptorResolver;
@@ -206,6 +208,7 @@ public class InjectorForTopDownAnalyzerForJvm implements InjectorForTopDownAnaly
         this.overrideResolver = new OverrideResolver();
         this.typeHierarchyResolver = new TypeHierarchyResolver();
         this.scriptHeaderResolver = new ScriptHeaderResolver();
+        this.varianceChecker = new VarianceChecker(bindingTrace);
         this.descriptorLoadersStorage = new DescriptorLoadersStorage(storageManager);
 
         this.topDownAnalyzer.setAdditionalCheckerProvider(additionalCheckerProvider);
@@ -219,6 +222,7 @@ public class InjectorForTopDownAnalyzerForJvm implements InjectorForTopDownAnaly
         this.topDownAnalyzer.setProject(project);
         this.topDownAnalyzer.setTrace(bindingTrace);
         this.topDownAnalyzer.setTypeHierarchyResolver(typeHierarchyResolver);
+        this.topDownAnalyzer.setVarianceChecker(varianceChecker);
 
         this.lazyTopDownAnalyzer.setBodyResolver(bodyResolver);
         this.lazyTopDownAnalyzer.setDeclarationResolver(declarationResolver);
@@ -226,6 +230,7 @@ public class InjectorForTopDownAnalyzerForJvm implements InjectorForTopDownAnaly
         this.lazyTopDownAnalyzer.setOverloadResolver(overloadResolver);
         this.lazyTopDownAnalyzer.setOverrideResolver(overrideResolver);
         this.lazyTopDownAnalyzer.setTrace(bindingTrace);
+        this.lazyTopDownAnalyzer.setVarianceChecker(varianceChecker);
 
         javaClassFinder.setProject(project);
         javaClassFinder.setScope(globalSearchScope);
