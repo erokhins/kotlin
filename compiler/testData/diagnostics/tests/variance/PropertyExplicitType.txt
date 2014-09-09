@@ -1,0 +1,44 @@
+package
+
+internal fun </*0*/ T> getT(): T
+
+internal trait In</*0*/ in T> {
+    public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+    public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+}
+
+internal trait Inv</*0*/ T> {
+    public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+    public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+}
+
+internal trait Out</*0*/ out T> {
+    public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+    public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+}
+
+internal trait Test</*0*/ in I, /*1*/ out O, /*2*/ P> {
+    internal abstract val neOk1: I
+    internal abstract val neOk2: In<O>
+    internal abstract val neOk3: In<In<I>>
+    internal abstract val neOk4: Inv<I>
+    internal abstract val neOk5: Inv<O>
+    internal abstract var neOk6: O
+    internal abstract var neOk7: In<I>
+    internal abstract var neOk8: In<In<O>>
+    internal abstract var neOk9: Out<O>
+    internal abstract val ok1: O
+    internal abstract val ok2: In<I>
+    internal abstract val ok3: In<In<O>>
+    internal abstract val ok4: Inv<P>
+    internal abstract val ok5: P
+    internal abstract val ok6: Out<O>
+    internal abstract var ok7: P
+    internal abstract var ok8: Out<In<P>>
+    public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+    public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+}

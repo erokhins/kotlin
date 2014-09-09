@@ -1,0 +1,41 @@
+package
+
+internal fun </*0*/ T> getT(): T
+
+internal trait In</*0*/ in T> {
+    public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+    public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+}
+
+internal trait Inv</*0*/ T> {
+    public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+    public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+}
+
+internal trait Out</*0*/ out T> {
+    public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+    public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+}
+
+internal final class Test</*0*/ in I, /*1*/ out O, /*2*/ P> {
+    public constructor Test</*0*/ in I, /*1*/ out O, /*2*/ P>()
+    public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+    internal final fun neOk1(): I
+    internal final fun neOk2(): In<O>
+    internal final fun neOk3(): In<In<I>>
+    internal final fun neOk4(): Inv<I>
+    internal final fun neOk5(): Inv<O>
+    internal final fun ok1(): O
+    internal final fun ok2(): In<I>
+    internal final fun ok3(): In<In<O>>
+    internal final fun ok4(): Inv<P>
+    internal final fun ok5(): P
+    internal final fun ok6(): Out<O>
+    internal final fun ok7(): P
+    internal final fun ok8(): Out<In<P>>
+    public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+}

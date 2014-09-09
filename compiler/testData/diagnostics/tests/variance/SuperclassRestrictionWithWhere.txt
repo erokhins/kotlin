@@ -1,0 +1,46 @@
+package
+
+internal fun </*0*/ T> getT(): T
+
+internal trait In</*0*/ in T> {
+    public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+    public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+}
+
+internal trait Inv</*0*/ T> {
+    public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+    public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+}
+
+internal trait Out</*0*/ out T> {
+    public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+    public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+}
+
+internal trait Test2</*0*/ in I, /*1*/ out O, /*2*/ P> {
+    internal abstract var </*0*/ X : I> Ok10: P
+    internal abstract var </*0*/ X : In<O>> Ok11: P
+    internal abstract var </*0*/ X : In<In<I>>> Ok12: P
+    internal abstract var </*0*/ X : Out<I>> Ok13: P
+    internal abstract val </*0*/ X : O> neOk1: P
+    internal abstract val </*0*/ X : In<I>> neOk2: P
+    internal abstract val </*0*/ X : In<In<O>>> neOk3: P
+    internal abstract val </*0*/ X : Inv<I>> neOk4: P
+    internal abstract val </*0*/ X : Inv<O>> neOk5: P
+    internal abstract var </*0*/ X : In<In<O>>> neOk6: P
+    internal abstract val </*0*/ X : I> ok1: P
+    internal abstract val </*0*/ X : In<O>> ok2: P
+    internal abstract val </*0*/ X : In<In<I>>> ok3: P
+    internal abstract val </*0*/ X : Inv<P>> ok4: P
+    internal abstract val </*0*/ X : P> ok5: P
+    internal abstract val </*0*/ X : Out<I>> ok6: P
+    internal abstract var </*0*/ X : Out<Out<I>>> ok7: P
+    internal abstract var </*0*/ X : Out<In<O>>> ok8: P
+    internal abstract var </*0*/ X : Out<In<P>>> ok9: P
+    public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+    public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+}

@@ -1,0 +1,37 @@
+package
+
+package k {
+
+    internal trait In</*0*/ in T> {
+        public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+        public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+        public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+    }
+
+    internal trait Inv</*0*/ T> {
+        public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+        public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+        public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+    }
+
+    internal trait Multi</*0*/ in I, /*1*/ out O, /*2*/ P> {
+        public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+        public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+        public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+    }
+
+    internal trait Out</*0*/ out T> {
+        public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+        public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+        public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+    }
+
+    internal trait Test</*0*/ in I, /*1*/ in I1, /*2*/ out O, /*3*/ out O1, /*4*/ P, /*5*/ P1> {
+        internal abstract val complexType: k.Multi<k.In<I>, k.Out<k.Multi<O, I, I1>>, O1>
+        internal abstract val conflictProjection: k.Multi<O, k.Multi<O, in k.In<O>, k.In<I1>>, O1>
+        public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+        public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+        internal abstract fun severalParams(/*0*/ a: O, /*1*/ b: O1, /*2*/ c: k.In<I>, /*3*/ d: k.Multi<I, O, I1>): k.Multi<O, I, O1>
+        public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+    }
+}
