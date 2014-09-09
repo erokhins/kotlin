@@ -437,6 +437,11 @@ public class Renderers {
         };
     }
 
+    public interface MultiRenderer<T> {
+        @NotNull
+        String[] render(@NotNull T object);
+    }
+
     @NotNull
     private static String renderDebugMessage(String message, InferenceErrorData inferenceErrorData) {
         StringBuilder result = new StringBuilder();
