@@ -17,7 +17,9 @@
 package org.jetbrains.jet.checkers;
 
 import com.google.common.collect.Lists;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiFile;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.jet.ConfigurationKind;
 import org.jetbrains.jet.JetLiteFixture;
@@ -27,8 +29,10 @@ import org.jetbrains.jet.lang.psi.JetFile;
 import org.jetbrains.jet.lang.resolve.BindingContext;
 import org.jetbrains.jet.lang.resolve.lazy.JvmResolveUtil;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class CheckerTestUtilTest extends JetLiteFixture {
 
@@ -99,6 +103,38 @@ public class CheckerTestUtilTest extends JetLiteFixture {
         });
     }
 
+    public void testWrongParameters() throws Exception {
+        final DiagnosticData unused = diagnostics.get(2);
+        String unusedDiagnostic = asTextDiagnostic(unused, "i");
+        final CheckerTestUtil.DiagnosedRange range = asDiagnosticRange(unused, unusedDiagnostic);
+        doTest(new TheTest(wrongParameters(unusedDiagnostic, "UNUSED_VARIABLE(a)", unused.startOffset, unused.endOffset)) {
+            @Override
+            protected void makeTestData(List<Diagnostic> diagnostics, List<CheckerTestUtil.DiagnosedRange> diagnosedRanges) {
+                diagnosedRanges.set(unused.rangeIndex, range);
+            }
+        });
+    }
+
+    public void testWrongParameterInMultiRange() throws Exception {
+        final DiagnosticData unresolvedReference = diagnostics.get(6);
+        String unusedDiagnostic = asTextDiagnostic(unresolvedReference, "i");
+        String toManyArguments = asTextDiagnostic(diagnostics.get(7));
+        final CheckerTestUtil.DiagnosedRange range = asDiagnosticRange(unresolvedReference, unusedDiagnostic, toManyArguments);
+        doTest(new TheTest(wrongParameters(unusedDiagnostic, "UNRESOLVED_REFERENCE(xx)", unresolvedReference.startOffset, unresolvedReference.endOffset)) {
+            @Override
+            protected void makeTestData(List<Diagnostic> diagnostics, List<CheckerTestUtil.DiagnosedRange> diagnosedRanges) {
+                diagnosedRanges.set(unresolvedReference.rangeIndex, range);
+            }
+        });
+    }
+
+    public void testAbstractJetDiagnosticsTest() throws Exception {
+        AbstractJetDiagnosticsTest test = new AbstractJetDiagnosticsTest() {
+            {setUp();}
+        };
+        test.doTest(myFullDataPath + File.separatorChar + "test_with_diagnostic.kt");
+    }
+
     private static abstract class TheTest {
         private final String[] expected;
 
@@ -127,23 +163,35 @@ public class CheckerTestUtilTest extends JetLiteFixture {
             List<String> expectedMessages = Lists.newArrayList(expected);
             final List<String> actualMessages = Lists.newArrayList();
 
-            CheckerTestUtil.diagnosticsDiff(diagnosedRanges, diagnostics, new CheckerTestUtil.DiagnosticDiffCallbacks() {
+            Map<Diagnostic, CheckerTestUtil.TextDiagnostic> diagnosticToExpectedDiagnostic = ContainerUtil.newHashMap();
+            CheckerTestUtil.diagnosticsDiff(diagnosticToExpectedDiagnostic, diagnosedRanges, diagnostics,
+                                            new CheckerTestUtil.DiagnosticDiffCallbacks() {
 
                 @Override
-                public void missingDiagnostic(String type, int expectedStart, int expectedEnd) {
-                    actualMessages.add(missing(type, expectedStart, expectedEnd));
+                public void missingDiagnostic(CheckerTestUtil.TextDiagnostic diagnostic, int expectedStart, int expectedEnd) {
+                    actualMessages.add(missing(diagnostic.getName(), expectedStart, expectedEnd));
                 }
 
                 @Override
-                public void unexpectedDiagnostic(String type, int actualStart, int actualEnd) {
-                    actualMessages.add(unexpected(type, actualStart, actualEnd));
+                public void wrongParametersDiagnostic(
+                        CheckerTestUtil.TextDiagnostic expectedDiagnostic,
+                        CheckerTestUtil.TextDiagnostic actualDiagnostic,
+                        int start,
+                        int end
+                ) {
+                    actualMessages.add(wrongParameters(expectedDiagnostic.asString(), actualDiagnostic.asString(), start, end));
+                }
+
+                @Override
+                public void unexpectedDiagnostic(CheckerTestUtil.TextDiagnostic diagnostic, int actualStart, int actualEnd) {
+                    actualMessages.add(unexpected(diagnostic.getName(), actualStart, actualEnd));
                 }
             });
 
             assertEquals(listToString(expectedMessages), listToString(actualMessages));
         }
 
-        private String listToString(List<String> expectedMessages) {
+        private static String listToString(List<String> expectedMessages) {
             StringBuilder stringBuilder = new StringBuilder();
             for (String expectedMessage : expectedMessages) {
                 stringBuilder.append(expectedMessage).append("\n");
@@ -152,6 +200,10 @@ public class CheckerTestUtilTest extends JetLiteFixture {
         }
 
         protected abstract void makeTestData(List<Diagnostic> diagnostics, List<CheckerTestUtil.DiagnosedRange> diagnosedRanges);
+    }
+
+    private static String wrongParameters(String expected, String actual, int start, int end) {
+        return "Wrong parameters " + expected + " != " + actual +" at " + start + " to " + end;
     }
 
     private static String unexpected(String type, int actualStart, int actualEnd) {
@@ -168,6 +220,18 @@ public class CheckerTestUtilTest extends JetLiteFixture {
 
     private static String missing(DiagnosticData data) {
         return missing(data.name, data.startOffset, data.endOffset);
+    }
+
+    private static String asTextDiagnostic(DiagnosticData diagnosticData, String... params) {
+        return diagnosticData.name + "(" + StringUtil.join(params, ", ") + ")";
+    }
+
+    private static CheckerTestUtil.DiagnosedRange asDiagnosticRange(DiagnosticData diagnosticData, String... textDiagnostics) {
+        CheckerTestUtil.DiagnosedRange range = new CheckerTestUtil.DiagnosedRange(diagnosticData.startOffset);
+        range.setEnd(diagnosticData.endOffset);
+        for (String textDiagnostic : textDiagnostics)
+            range.addDiagnostic(textDiagnostic);
+        return range;
     }
 
     private static class DiagnosticData {
