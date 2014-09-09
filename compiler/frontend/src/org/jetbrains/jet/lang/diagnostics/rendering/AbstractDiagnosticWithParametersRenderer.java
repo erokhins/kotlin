@@ -17,19 +17,23 @@
 package org.jetbrains.jet.lang.diagnostics.rendering;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.jet.lang.diagnostics.DiagnosticWithParameters1;
+import org.jetbrains.jet.lang.diagnostics.Diagnostic;
 
-public class DiagnosticWithParametersRenderer<A> extends AbstractDiagnosticWithParametersRenderer<DiagnosticWithParameters1<?,A>> {
-    @NotNull private final Renderers.MultiRenderer<? super A> renderersForA;
+import java.text.MessageFormat;
 
-    public DiagnosticWithParametersRenderer(@NotNull String message, @NotNull Renderers.MultiRenderer<? super A> renderersForA) {
-        super(message);
-        this.renderersForA = renderersForA;
+public abstract class AbstractDiagnosticWithParametersRenderer<D extends Diagnostic> implements DiagnosticRenderer<D> {
+    @NotNull private final MessageFormat messageFormat;
+
+    protected AbstractDiagnosticWithParametersRenderer(@NotNull String message) {
+        messageFormat = new MessageFormat(message);
     }
 
     @NotNull
     @Override
-    public Object[] renderParameters(@NotNull DiagnosticWithParameters1<?, A> diagnostic) {
-        return renderersForA.render(diagnostic.getA());
+    public String render(@NotNull D diagnostic) {
+        return messageFormat.format(renderParameters(diagnostic));
     }
+
+    @NotNull
+    public abstract Object[] renderParameters(@NotNull D diagnostic);
 }
