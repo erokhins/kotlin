@@ -9757,6 +9757,12 @@ public class JetDiagnosticsTestGenerated extends AbstractJetDiagnosticsTest {
                 doTest(fileName);
             }
             
+            @TestMetadata("ExtendRestriction.kt")
+            public void testExtendRestriction() throws Exception {
+                String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/variance/ExtendRestriction.kt");
+                doTest(fileName);
+            }
+            
             @TestMetadata("FunctionExplicitReturnType.kt")
             public void testFunctionExplicitReturnType() throws Exception {
                 String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/variance/FunctionExplicitReturnType.kt");

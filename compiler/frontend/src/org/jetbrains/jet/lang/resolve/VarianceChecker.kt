@@ -38,6 +38,9 @@ import org.jetbrains.jet.lang.descriptors.MemberDescriptor
 import org.jetbrains.jet.lang.descriptors.CallableDescriptor
 import org.jetbrains.jet.lang.resolve.TopDownAnalysisContext
 import org.jetbrains.jet.lang.types.JetType
+import org.jetbrains.jet.lang.descriptors.ClassDescriptorWithResolutionScopes
+import org.jetbrains.jet.lang.psi.JetClassOrObject
+import org.jetbrains.jet.lang.psi.JetClass
 
 
 class VarianceChecker(val trace: BindingTrace) {
@@ -49,8 +52,18 @@ class VarianceChecker(val trace: BindingTrace) {
     fun check(c: TopDownAnalysisContext) {
         checkFunctions(c)
         checkProperties(c)
+        checkClasses(c)
     }
-    
+
+    private fun checkClasses(c: TopDownAnalysisContext) {
+        for (jetClassOrObject in c.getDeclaredClasses()!!.keySet()) {
+            if (jetClassOrObject is JetClass)
+                checkClass(jetClassOrObject)
+        }
+    }
+
+    private fun checkClass(klass: JetClass) = klass.checkVariance(trace)
+
     private fun checkFunctions(c: TopDownAnalysisContext) {
         for (entry in c.getFunctions()!!.entrySet()) {
             checkFunction(entry.key, entry.value)
@@ -83,6 +96,15 @@ class SuperPrivateRecorder(val declaration: JetCallableDeclaration, val descript
     }
 
     private fun record() {} // todo
+}
+
+fun JetClass.checkVariance(trace: BindingTrace) {
+    for (specifier in getDelegationSpecifiers()) {
+        val typeBinding = specifier.getTypeReference()?.createTypeBinding(trace)
+        typeBinding.checkTypePosition(TypePosition.OUT) {
+            trace.report(it)
+        }
+    }
 }
 
 fun JetProperty.checkVariance(propertyDescriptor: PropertyDescriptor, trace: BindingTrace) {
