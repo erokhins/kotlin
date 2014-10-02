@@ -190,7 +190,7 @@ private fun TypeBinding<PsiElement>.checkTypePosition(containingType: JetType, p
         return
     }
 
-    for (bindingArgument in getTypeArgs()) {
+    for (bindingArgument in getArgumentBindings()) {
         val projectionKind = getEffectiveProjectionKind(bindingArgument.typeParameterDescriptor, bindingArgument.typeProjection)
         val newPosition = when (projectionKind) {
             OUT -> position

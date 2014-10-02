@@ -17,6 +17,7 @@
 package org.jetbrains.jet.lang.psi;
 
 import com.intellij.util.ArrayFactory;
+import kotlin.jvm.KotlinSignature;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public interface JetTypeElement extends JetElement {
         }
     };
 
+    @KotlinSignature("fun getTypeArgumentsAsTypes(): List<JetTypeReference?>")
     @NotNull
     List<JetTypeReference> getTypeArgumentsAsTypes();
 }

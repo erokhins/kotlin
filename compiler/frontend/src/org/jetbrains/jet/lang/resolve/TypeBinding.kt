@@ -34,13 +34,13 @@ import org.jetbrains.jet.lexer.JetTokens
 trait TypeBinding<out P : PsiElement> {
     val psiElement: P
     val jetType: JetType
-    fun getTypeArgs(): List<TypeArgumentBinding<P>>
+    fun getArgumentBindings(): List<TypeArgumentBinding<P>>
 }
 
 trait TypeArgumentBinding<out P: PsiElement> {
     val typeProjection: TypeProjection
-    val typeParameterDescriptor: TypeParameterDescriptor
-    val typeBinding: TypeBinding<P>?
+    val typeParameterDescriptor: TypeParameterDescriptor? // for error types
+    val typeBinding: TypeBinding<P>? // -?
 }
 
 fun JetTypeReference.createTypeBinding(trace: BindingTrace): TypeBinding<JetTypeElement>? {
@@ -70,8 +70,8 @@ class TypeArgumentBindingImpl<out P: PsiElement>(
         override val typeBinding: TypeBinding<P>?
 ) : TypeArgumentBinding<P>
 
-class ExplicitTypeBinding(val trace: BindingTrace, override val psiElement: JetTypeElement, override val jetType: JetType) : TypeBinding<JetTypeElement> {
-    val constructor = jetType.getConstructor()
+class ExplicitTypeBinding(private val trace: BindingTrace, override val psiElement: JetTypeElement, override val jetType: JetType) : TypeBinding<JetTypeElement> {
+    val constructor = jetType.getConstructor() // private
     val typeArgsSize = constructor.getParameters().size
     val isErrorBinding: Boolean
     {
@@ -81,13 +81,13 @@ class ExplicitTypeBinding(val trace: BindingTrace, override val psiElement: JetT
     }
 
 
-    override fun getTypeArgs(): List<TypeArgumentBinding<JetTypeElement>> {
+    override fun getArgumentBindings(): List<TypeArgumentBinding<JetTypeElement>> {
         if (isErrorBinding) return listOf()
 
-        return (0..typeArgsSize - 1).lazyMap {
-            val typeProjection = jetType.getArguments().get(it)
-            val typeParameterDescriptor = constructor.getParameters().get(it)
-            val jetTypeElement = psiElement.getTypeArgumentsAsTypes().get(it)?.getTypeElement() // List<JetTypeReference?>
+        return (0..typeArgsSize - 1).lazyMap { // inline
+            val typeProjection = jetType.getArguments()[it]
+            val typeParameterDescriptor = constructor.getParameters()[it]
+            val jetTypeElement = psiElement.getTypeArgumentsAsTypes()[it]?.getTypeElement()
 
             val typeBinding = if (jetTypeElement == null) null else ExplicitTypeBinding(trace, jetTypeElement, typeProjection.getType())
 
@@ -100,7 +100,7 @@ class SillyTypeBinding<out P : PsiElement>(val trace: BindingTrace, override val
     val constructor = jetType.getConstructor()
     val isErrorBinding = jetType.isError() || constructor.getParameters().size != jetType.getArguments().size
 
-    override fun getTypeArgs(): List<TypeArgumentBinding<P>> {
+    override fun getArgumentBindings(): List<TypeArgumentBinding<P>> {
         if (isErrorBinding) return listOf()
 
         return (0..constructor.getParameters().size - 1).lazyMap {
