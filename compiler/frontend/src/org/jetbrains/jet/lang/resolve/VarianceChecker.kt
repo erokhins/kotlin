@@ -48,7 +48,7 @@ class VarianceChecker(val trace: BindingTrace) {
     fun process(c: TopDownAnalysisContext) {
         check(c)
     }
-    
+
     fun check(c: TopDownAnalysisContext) {
         checkFunctions(c)
         checkProperties(c)
@@ -65,10 +65,11 @@ class VarianceChecker(val trace: BindingTrace) {
     private fun checkClass(klass: JetClass) = klass.checkVariance(trace)
 
     private fun checkFunctions(c: TopDownAnalysisContext) {
-        for (entry in c.getFunctions()!!.entrySet()) {
-            checkFunction(entry.key, entry.value)
+        for ((psi, descriptor) in c.getFunctions()!!.entrySet()) {
+            checkFunction(psi, descriptor)
         }
     }
+
     private fun checkFunction(declaration: JetNamedFunction, descriptor: SimpleFunctionDescriptor) = declaration.checkVariance(descriptor, trace)
 
     private fun checkProperties(c: TopDownAnalysisContext) {
@@ -80,7 +81,7 @@ class VarianceChecker(val trace: BindingTrace) {
 }
 
 
-class SuperPrivateRecorder(val declaration: JetCallableDeclaration, val descriptor: CallableDescriptor, val trace: BindingTrace) : Function1<Diagnostic, Unit> {
+class SuperPrivateRecorder(val declaration: JetCallableDeclaration, val descriptor: CallableDescriptor, val trace: BindingTrace): (Diagnostic) -> Unit {
     private val isPrivate = descriptor.getVisibility() == Visibilities.PRIVATE
     private var superPrivate = false
 
@@ -108,8 +109,7 @@ fun JetClass.checkVariance(trace: BindingTrace) {
 }
 
 fun JetProperty.checkVariance(propertyDescriptor: PropertyDescriptor, trace: BindingTrace) {
-    val containerDescriptor = propertyDescriptor.getContainingDeclaration()
-    if (containerDescriptor !is ClassDescriptor) return
+    if (propertyDescriptor.getContainingDeclaration() !is ClassDescriptor) return
 
     val recorder = SuperPrivateRecorder(this, propertyDescriptor, trace)
     checkReceiver(trace, recorder)
@@ -121,8 +121,7 @@ fun JetProperty.checkVariance(propertyDescriptor: PropertyDescriptor, trace: Bin
 }
 
 fun JetNamedFunction.checkVariance(functionDescriptor: SimpleFunctionDescriptor, trace: BindingTrace) {
-    val containerDescriptor = functionDescriptor.getContainingDeclaration()
-    if (containerDescriptor !is ClassDescriptor) return
+    if (functionDescriptor.getContainingDeclaration() !is ClassDescriptor) return
 
     val recorder = SuperPrivateRecorder(this, functionDescriptor, trace)
     checkReceiver(trace, recorder)
@@ -180,32 +179,33 @@ fun TypeBinding<PsiElement>?.checkTypePosition(position: TypePosition, report: (
 }
 
 private fun TypeBinding<PsiElement>.checkTypePosition(containingType: JetType, position: TypePosition, report: (Diagnostic) -> Unit) {
-    val typeDescriptor = jetType.getConstructor().getDeclarationDescriptor()
-    if (typeDescriptor != null && typeDescriptor is TypeParameterDescriptor) {
-        val declarationVariance = typeDescriptor.getVariance()
+    val classifierDescriptor = jetType.getConstructor().getDeclarationDescriptor()
+    if (classifierDescriptor is TypeParameterDescriptor) {
+        val declarationVariance = classifierDescriptor.getVariance()
         if (!position.allowsVariance(declarationVariance)) {
-            val data = VarianceConflictDiagnostic(containingType, jetType, declarationVariance.getLabel(), position.name)
-            report(Errors.TYPE_PARAMETER_VARIANCE_CONFLICT.on(psiElement, data))
+            report(Errors.TYPE_PARAMETER_VARIANCE_CONFLICT.on(
+                    psiElement,
+                    VarianceConflictDiagnosticData(containingType, jetType, declarationVariance.getLabel(), position.name))
+            )
         }
         return
     }
 
-    for (bindingArgument in getArgumentBindings()) {
-        val projectionKind = getEffectiveProjectionKind(bindingArgument.typeParameterDescriptor, bindingArgument.typeProjection)
+    for (argumentBinding in getArgumentBindings()) {
+        val projectionKind = getEffectiveProjectionKind(argumentBinding.typeParameterDescriptor!!, argumentBinding.typeProjection)
         val newPosition = when (projectionKind) {
             OUT -> position
             IN -> position.reverse()
             INV -> TypePosition.INV
-            else -> null // see Errors.CONFLICTING_PROJECTION
+            STAR -> null // see Errors.CONFLICTING_PROJECTION
         }
-        if (newPosition != null)
-            bindingArgument.typeBinding?.checkTypePosition(containingType, newPosition, report)
+        if (newPosition != null) {
+            argumentBinding.typeBinding?.checkTypePosition(containingType, newPosition, report)
+        }
     }
 }
 
-class VarianceConflictDiagnostic(val containingType: JetType,
+class VarianceConflictDiagnosticData(val containingType: JetType,
                          val typeParameter: JetType,
                          val declarationPosition: String,
                          val useSidePosition: String)
-
-private fun MemberDescriptor.isPrivate() = getVisibility() == Visibilities.PRIVATE

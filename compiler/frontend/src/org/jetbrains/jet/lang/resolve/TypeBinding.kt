@@ -60,8 +60,7 @@ fun JetCallableDeclaration.createTypeBindingForReturnType(trace: BindingTrace): 
     val descriptor = trace.get(BindingContext.DECLARATION_TO_DESCRIPTOR, this)
     if (descriptor !is CallableDescriptor) return null;
 
-    val jetType = descriptor.getReturnType()
-    return if(jetType == null) null else SillyTypeBinding(trace, this, jetType)
+    return descriptor.getReturnType()?.let { SimpleTypeBinding(trace, this, it) }
 }
 
 class TypeArgumentBindingImpl<out P: PsiElement>(
@@ -72,12 +71,11 @@ class TypeArgumentBindingImpl<out P: PsiElement>(
 
 class ExplicitTypeBinding(private val trace: BindingTrace, override val psiElement: JetTypeElement, override val jetType: JetType) : TypeBinding<JetTypeElement> {
     val constructor = jetType.getConstructor() // private
-    val typeArgsSize = constructor.getParameters().size
-    val isErrorBinding: Boolean
-    {
+    val typeArgsSize = constructor.getParameters().size // inline
+    val isErrorBinding: Boolean = run {
         val sizeIsEqual = constructor.getParameters().size == jetType.getArguments().size
                         && constructor.getParameters().size == psiElement.getTypeArgumentsAsTypes().size
-        isErrorBinding = jetType.isError() || !sizeIsEqual
+        jetType.isError() || !sizeIsEqual
     }
 
 
@@ -96,7 +94,11 @@ class ExplicitTypeBinding(private val trace: BindingTrace, override val psiEleme
     }
 }
 
-class SillyTypeBinding<out P : PsiElement>(val trace: BindingTrace, override val psiElement: P, override val jetType: JetType): TypeBinding<P> {
+class SimpleTypeBinding<out P : PsiElement>(
+        val trace: BindingTrace,
+        override val psiElement: P,
+        override val jetType: JetType
+): TypeBinding<P> {
     val constructor = jetType.getConstructor()
     val isErrorBinding = jetType.isError() || constructor.getParameters().size != jetType.getArguments().size
 
@@ -107,7 +109,7 @@ class SillyTypeBinding<out P : PsiElement>(val trace: BindingTrace, override val
             val typeProjection = jetType.getArguments().get(it)
             val typeParameterDescriptor = constructor.getParameters().get(it)
 
-            val typeBinding = SillyTypeBinding(trace, psiElement, typeProjection.getType())
+            val typeBinding = SimpleTypeBinding(trace, psiElement, typeProjection.getType())
             TypeArgumentBindingImpl(typeProjection, typeParameterDescriptor, typeBinding)
         }
     }

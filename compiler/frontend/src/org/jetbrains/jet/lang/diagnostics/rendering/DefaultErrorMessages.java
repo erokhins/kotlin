@@ -26,7 +26,7 @@ import org.jetbrains.jet.lang.diagnostics.Errors;
 import org.jetbrains.jet.lang.psi.JetExpression;
 import org.jetbrains.jet.lang.psi.JetSimpleNameExpression;
 import org.jetbrains.jet.lang.psi.JetTypeConstraint;
-import org.jetbrains.jet.lang.resolve.varianceChecker.VarianceConflictDiagnostic;
+import org.jetbrains.jet.lang.resolve.varianceChecker.VarianceConflictDiagnosticData;
 import org.jetbrains.jet.lang.types.JetType;
 import org.jetbrains.jet.lexer.JetKeywordToken;
 import org.jetbrains.jet.lexer.JetModifierKeywordToken;
@@ -382,10 +382,10 @@ public class DefaultErrorMessages {
 
         MAP.put(VARIANCE_ON_TYPE_PARAMETER_OF_FUNCTION_OR_PROPERTY, "Variance annotations are only allowed for type parameters of classes and traits");
         MAP.put(TYPE_PARAMETER_VARIANCE_CONFLICT, "Type parameter {0} declared as ''{1}'' but occurs in ''{2}'' position in type {3}",
-                new MultiRenderer<VarianceConflictDiagnostic>() {
+                new MultiRenderer<VarianceConflictDiagnosticData>() {
                     @NotNull
                     @Override
-                    public String[] render(@NotNull VarianceConflictDiagnostic object) {
+                    public String[] render(@NotNull VarianceConflictDiagnosticData object) {
                         return new String[]{
                             RENDER_TYPE.render(object.getTypeParameter()),
                             object.getDeclarationPosition(),
