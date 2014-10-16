@@ -192,7 +192,7 @@ public class PropertyDescriptorImpl extends VariableDescriptorImpl implements Pr
         if (originalSubstitutor.isEmpty()) {
             return this;
         }
-        return doSubstitute(originalSubstitutor, getContainingDeclaration(), modality, visibility, getOriginal(), true, getKind());
+        return doSubstitute(originalSubstitutor, getContainingDeclaration(), modality, null, getOriginal(), true, getKind());
     }
 
     @Nullable
@@ -200,12 +200,16 @@ public class PropertyDescriptorImpl extends VariableDescriptorImpl implements Pr
             @NotNull TypeSubstitutor originalSubstitutor,
             @NotNull DeclarationDescriptor newOwner,
             @NotNull Modality newModality,
-            @NotNull Visibility newVisibility,
+            @Nullable Visibility newVisibility,
             @Nullable PropertyDescriptor original,
             boolean copyOverrides,
             @NotNull Kind kind
     ) {
-        PropertyDescriptorImpl substitutedDescriptor = createSubstitutedCopy(newOwner, newModality, newVisibility, original, kind);
+        PropertyDescriptorImpl substitutedDescriptor = createSubstitutedCopy(newOwner,
+                                                                             newModality,
+                                                                             newVisibility != null ? newVisibility : visibility,
+                                                                             original,
+                                                                             kind);
 
         List<TypeParameterDescriptor> originalTypeParameters = getTypeParameters();
         List<TypeParameterDescriptor> substitutedTypeParameters = new ArrayList<TypeParameterDescriptor>(originalTypeParameters.size());
@@ -296,7 +300,10 @@ public class PropertyDescriptorImpl extends VariableDescriptorImpl implements Pr
     }
 
     @NotNull
-    private static Visibility convertVisibility(Visibility orig, Visibility candidate) {
+    private static Visibility convertVisibility(@NotNull Visibility orig, @Nullable Visibility candidate) {
+        if (candidate == null)
+            return orig;
+
         if (candidate == Visibilities.INHERITED) {
             return candidate;
         }

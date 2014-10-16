@@ -1443,6 +1443,12 @@ public class JetDiagnosticsTestGenerated extends AbstractJetDiagnosticsTest {
                 doTest(fileName);
             }
 
+            @TestMetadata("invisibleSetter.kt")
+            public void testInvisibleSetter() throws Exception {
+                String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/controlFlowAnalysis/invisibleSetter.kt");
+                doTest(fileName);
+            }
+
             @TestMetadata("kt1001.kt")
             public void testKt1001() throws Exception {
                 String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/controlFlowAnalysis/kt1001.kt");
