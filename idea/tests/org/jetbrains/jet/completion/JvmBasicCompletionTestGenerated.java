@@ -814,6 +814,30 @@ public class JvmBasicCompletionTestGenerated extends AbstractJvmBasicCompletionT
             doTest(fileName);
         }
 
+        @TestMetadata("VisibilityPrivateToThis.kt")
+        public void testVisibilityPrivateToThis() throws Exception {
+            String fileName = JetTestUtils.navigationMetadata("idea/testData/completion/basic/common/VisibilityPrivateToThis.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("VisibilityPrivateToThis2.kt")
+        public void testVisibilityPrivateToThis2() throws Exception {
+            String fileName = JetTestUtils.navigationMetadata("idea/testData/completion/basic/common/VisibilityPrivateToThis2.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("VisibilityPrivateToThis3.kt")
+        public void testVisibilityPrivateToThis3() throws Exception {
+            String fileName = JetTestUtils.navigationMetadata("idea/testData/completion/basic/common/VisibilityPrivateToThis3.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("VisibilityPrivateToThis4.kt")
+        public void testVisibilityPrivateToThis4() throws Exception {
+            String fileName = JetTestUtils.navigationMetadata("idea/testData/completion/basic/common/VisibilityPrivateToThis4.kt");
+            doTest(fileName);
+        }
+
         @TestMetadata("idea/testData/completion/basic/common/extensions")
         @TestDataPath("$PROJECT_ROOT")
         @RunWith(JUnit3RunnerWithInners.class)

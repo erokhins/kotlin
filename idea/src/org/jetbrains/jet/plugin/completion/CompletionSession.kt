@@ -38,6 +38,7 @@ import org.jetbrains.jet.lang.resolve.calls.smartcasts.SmartCastUtils
 import org.jetbrains.jet.lang.resolve.bindingContextUtil.getDataFlowInfo
 import org.jetbrains.jet.utils.addToStdlib.firstIsInstanceOrNull
 import org.jetbrains.jet.lang.psi.psiUtil.getStrictParentOfType
+import org.jetbrains.jet.plugin.completion.isVisible
 
 class CompletionSessionConfiguration(
         val completeNonImportedDeclarations: Boolean,
@@ -103,7 +104,7 @@ abstract class CompletionSessionBase(protected val configuration: CompletionSess
         if (configuration.completeNonAccessibleDeclarations) return true
 
         if (descriptor is DeclarationDescriptorWithVisibility && inDescriptor != null) {
-            return Visibilities.isVisible(descriptor, inDescriptor)
+            return descriptor.isVisible(inDescriptor, bindingContext, jetReference?.expression)
         }
 
         return true

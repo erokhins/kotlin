@@ -31,6 +31,14 @@ import org.jetbrains.jet.plugin.util.IdeDescriptorRenderers
 import com.intellij.codeInsight.completion.PrefixMatcher
 import org.jetbrains.jet.lang.resolve.name.Name
 import com.intellij.codeInsight.lookup.LookupElementPresentation
+import org.jetbrains.jet.lang.descriptors.DeclarationDescriptorWithVisibility
+import org.jetbrains.jet.lang.resolve.BindingContext
+import org.jetbrains.jet.lang.psi.JetSimpleNameExpression
+import org.jetbrains.jet.lang.descriptors.Visibilities
+import org.jetbrains.jet.lang.resolve.scopes.receivers.ReceiverValue
+import org.jetbrains.jet.lang.psi.psiUtil.getReceiverExpression
+import org.jetbrains.jet.lang.resolve.scopes.receivers.ExpressionReceiver
+import org.jetbrains.jet.lang.types.expressions.ExpressionTypingUtils
 
 enum class ItemPriority {
     MULTIPLE_ARGUMENTS_ITEM
@@ -87,4 +95,28 @@ fun LookupElementPresentation.prependTailText(text: String, grayed: Boolean) {
     clearTail()
     appendTailText(text, grayed)
     tails.forEach { appendTailText(it.text, it.isGrayed()) }
+}
+
+fun DeclarationDescriptorWithVisibility.isVisible(from: DeclarationDescriptor, bindingContext: BindingContext? = null, element: JetSimpleNameExpression? = null): Boolean {
+    if (Visibilities.isVisible(ReceiverValue.IRRELEVANT_RECEIVER, this, from)) return true
+    if (bindingContext == null || element == null) return false
+
+    val receiver = element.getReceiverExpression()
+    val type = receiver?.let { bindingContext.get(BindingContext.EXPRESSION_TYPE, it) }
+    val explicitReceiver = type?.let { ExpressionReceiver(receiver, it) }
+
+    if (explicitReceiver != null) {
+        val normalizeReceiver = ExpressionTypingUtils.normalizeReceiverValueForVisibility(explicitReceiver, bindingContext)
+        return Visibilities.isVisible(normalizeReceiver, this, from)
+    }
+
+    val jetScope = bindingContext[BindingContext.RESOLUTION_SCOPE, element]
+    val implicitReceivers = jetScope?.getImplicitReceiversHierarchy()
+    if (implicitReceivers != null) {
+        for (implicitReceiver in implicitReceivers) {
+            val normalizeReceiver = ExpressionTypingUtils.normalizeReceiverValueForVisibility(implicitReceiver.getValue(), bindingContext)
+            if (Visibilities.isVisible(normalizeReceiver, this, from)) return true
+        }
+    }
+    return false
 }
