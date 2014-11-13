@@ -202,9 +202,32 @@ LazyJavaTypeParameterDescriptor@13['E'] {
 }
 
 LazyJavaTypeParameterResolver@120 {
-    resolve(JavaTypeParameterImpl@121['E']) = LazyJavaTypeParameterDescriptor@18['E']
+    resolve(JavaTypeParameterImpl@37['E']) = LazyJavaTypeParameterDescriptor@13['E']
 }
 
-LazyJavaTypeParameterResolver@122 {
-    resolve(JavaTypeParameterImpl@37['E']) = LazyJavaTypeParameterDescriptor@13['E']
+LazyJavaTypeParameterResolver@121 {
+    resolve(JavaTypeParameterImpl@122['E']) = LazyJavaTypeParameterDescriptor@18['E']
+}
+
+ResolutionTaskHolder@123 {
+    <name not found> = ArrayList@124[1] { ResolutionCandidate@125 }
+    <name not found> = ArrayList@126[1] { ResolutionCandidate@125 }
+    <name not found> = EmptyList@107[empty]
+    <name not found> = EmptyList@107[empty]
+    <name not found> = EmptyList@107[empty]
+    <name not found> = EmptyList@107[empty]
+}
+
+ResolutionTaskHolder@127 {
+    <name not found> = ArrayList@128[1] { ResolutionCandidate@129 }
+    <name not found> = ArrayList@130[1] { ResolutionCandidate@129 }
+    <name not found> = EmptyList@107[empty]
+    <name not found> = EmptyList@107[empty]
+    <name not found> = EmptyList@107[empty]
+    <name not found> = EmptyList@107[empty]
+}
+
+ResolutionTaskHolder@131 {
+    <name not found> = ArrayList@132[1] { ResolutionCandidate@133 }
+    <name not found> = ArrayList@134[1] { ResolutionCandidate@133 }
 }

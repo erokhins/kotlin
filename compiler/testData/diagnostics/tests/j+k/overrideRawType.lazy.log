@@ -154,14 +154,14 @@ LazyJavaClassifierType@95['Throwable'] {
 
 LazyJavaClassifierType@98['Throwable'] {
     arguments = ArrayList@99[empty]
-    classifier = JavaClassImpl@93['Throwable']
+    classifier = JavaClassImpl@97['Throwable']
     nullable = 'true': Boolean@65
     typeConstructor = DeserializedClassTypeConstructor@94
 }
 
 LazyJavaClassifierType@100['Throwable'] {
     arguments = ArrayList@101[empty]
-    classifier = JavaClassImpl@97['Throwable']
+    classifier = JavaClassImpl@93['Throwable']
     nullable = 'true': Boolean@65
     typeConstructor = DeserializedClassTypeConstructor@94
 }
@@ -228,4 +228,25 @@ LazyJavaTypeParameterDescriptor@50['T'] {
 
 LazyJavaTypeParameterResolver@143 {
     resolve(JavaTypeParameterImpl@144['T']) = LazyJavaTypeParameterDescriptor@50['T']
+}
+
+ResolutionTaskHolder@145 {
+    <name not found> = ArrayList@146[4] { ResolutionCandidate@147, ResolutionCandidate@148, ResolutionCandidate@149, ... }
+    <name not found> = ArrayList@150[4] { ResolutionCandidate@147, ResolutionCandidate@148, ResolutionCandidate@149, ... }
+    <name not found> = EmptyList@10[empty]
+    <name not found> = EmptyList@10[empty]
+    <name not found> = EmptyList@10[empty]
+    <name not found> = EmptyList@10[empty]
+    <name not found> = EmptyList@10[empty]
+    <name not found> = EmptyList@10[empty]
+    <name not found> = EmptyList@10[empty]
+    <name not found> = EmptyList@10[empty]
+    <name not found> = EmptyList@10[empty]
+    <name not found> = EmptyList@10[empty]
+    <name not found> = EmptyList@10[empty]
+    <name not found> = EmptyList@10[empty]
+    <name not found> = EmptyList@10[empty]
+    <name not found> = EmptyList@10[empty]
+    <name not found> = EmptyList@10[empty]
+    <name not found> = EmptyList@10[empty]
 }

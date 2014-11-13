@@ -153,3 +153,17 @@ LazyJavaTypeParameterResolver@96 {
     resolve(JavaTypeParameterImpl@97['K']) = LazyJavaTypeParameterDescriptor@9['K']
     resolve(JavaTypeParameterImpl@98['V']) = LazyJavaTypeParameterDescriptor@10['V']
 }
+
+ResolutionTaskHolder@99 {
+    <name not found> = ArrayList@100[1] { ResolutionCandidate@101 }
+    <name not found> = ArrayList@102[1] { ResolutionCandidate@101 }
+}
+
+ResolutionTaskHolder@103 {
+    <name not found> = ArrayList@104[4] { ResolutionCandidate@105, ResolutionCandidate@106, ResolutionCandidate@107, ... }
+    <name not found> = ArrayList@108[4] { ResolutionCandidate@105, ResolutionCandidate@106, ResolutionCandidate@107, ... }
+    <name not found> = EmptyList@77[empty]
+    <name not found> = EmptyList@77[empty]
+    <name not found> = EmptyList@77[empty]
+    <name not found> = EmptyList@77[empty]
+}
