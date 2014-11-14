@@ -19,10 +19,10 @@ package org.jetbrains.jet.lang.diagnostics.rendering;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.jet.lang.diagnostics.DiagnosticWithParameters1;
 
-public class DiagnosticWithParametersRenderer<A> extends AbstractDiagnosticWithParametersRenderer<DiagnosticWithParameters1<?,A>> {
+public class DiagnosticWithMultiParametersRenderer<A> extends AbstractDiagnosticWithParametersRenderer<DiagnosticWithParameters1<?,A>> {
     @NotNull private final Renderers.MultiRenderer<? super A> renderersForA;
 
-    public DiagnosticWithParametersRenderer(@NotNull String message, @NotNull Renderers.MultiRenderer<? super A> renderersForA) {
+    public DiagnosticWithMultiParametersRenderer(@NotNull String message, @NotNull Renderers.MultiRenderer<? super A> renderersForA) {
         super(message);
         this.renderersForA = renderersForA;
     }

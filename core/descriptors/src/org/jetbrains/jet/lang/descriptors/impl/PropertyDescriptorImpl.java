@@ -205,11 +205,8 @@ public class PropertyDescriptorImpl extends VariableDescriptorImpl implements Pr
             boolean copyOverrides,
             @NotNull Kind kind
     ) {
-        PropertyDescriptorImpl substitutedDescriptor = createSubstitutedCopy(newOwner,
-                                                                             newModality,
-                                                                             newVisibility != null ? newVisibility : visibility,
-                                                                             original,
-                                                                             kind);
+        PropertyDescriptorImpl substitutedDescriptor = createSubstitutedCopy(
+                newOwner, newModality, newVisibility != null ? newVisibility : visibility, original, kind);
 
         List<TypeParameterDescriptor> originalTypeParameters = getTypeParameters();
         List<TypeParameterDescriptor> substitutedTypeParameters = new ArrayList<TypeParameterDescriptor>(originalTypeParameters.size());
