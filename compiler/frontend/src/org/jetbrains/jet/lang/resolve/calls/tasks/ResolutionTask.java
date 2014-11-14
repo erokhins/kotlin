@@ -97,11 +97,6 @@ public class ResolutionTask<D extends CallableDescriptor, F extends D> extends C
         return lazyCandidates.invoke();
     }
 
-    @NotNull
-    public Function0<Collection<ResolutionCandidate<D>>> getLazyCandidates() {
-        return lazyCandidates;
-    }
-
     public void addResolvedCall(@NotNull MutableResolvedCall<F> resolvedCall) {
         resolvedCalls.add(resolvedCall);
     }
@@ -138,6 +133,10 @@ public class ResolutionTask<D extends CallableDescriptor, F extends D> extends C
                 collectAllCandidates);
         newTask.setCheckingStrategy(checkingStrategy);
         return newTask;
+    }
+
+    public ResolutionTask<D, F> replaceContext(@NotNull BasicCallResolutionContext newContext) {
+        return new ResolutionTask<D, F>(newContext, tracing, lazyCandidates);
     }
 
     public ResolutionTask<D, F> replaceCall(@NotNull Call newCall) {

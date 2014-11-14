@@ -519,7 +519,7 @@ public class CallResolver {
             };
             TemporaryBindingTrace temporaryTrace =
                     TemporaryBindingTrace.create(task.trace, "trace for resolution guarded for extra function literal arguments");
-            ResolutionTask<D, F> newTask = new ResolutionTask<D, F>(task.toBasic(), task.tracing, task.getLazyCandidates()).
+            ResolutionTask<D, F> newTask = task.replaceContext(task.toBasic()).
                     replaceBindingTrace(temporaryTrace).replaceCall(callWithoutFLArgs);
 
             OverloadResolutionResultsImpl<F> resultsWithFunctionLiteralsStripped = performResolution(newTask, callTransformer);
