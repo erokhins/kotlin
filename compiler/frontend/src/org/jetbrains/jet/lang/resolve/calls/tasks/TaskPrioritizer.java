@@ -194,7 +194,8 @@ public class TaskPrioritizer {
     private static <D extends CallableDescriptor, F extends D> void addMemberExtensionCandidates(
             @NotNull final ReceiverValue dispatchReceiver,
             @NotNull final ReceiverValue receiverParameter,
-            @NotNull final CallableDescriptorCollector<D> callableDescriptorCollector, final TaskPrioritizerContext<D, F> c,
+            @NotNull final CallableDescriptorCollector<D> callableDescriptorCollector,
+            @NotNull final TaskPrioritizerContext<D, F> c,
             @NotNull final ExplicitReceiverKind receiverKind
     ) {
         c.result.addCandidates(new Function0<Collection<? extends ResolutionCandidate<D>>>() {
