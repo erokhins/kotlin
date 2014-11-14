@@ -603,11 +603,7 @@ public class CheckerTestUtil {
                 List<String> parameters = ContainerUtil.map(renderParameters, new Function<Object, String>() {
                     @Override
                     public String fun(Object o) {
-                        if (o instanceof String)
-                            return (String) o;
-                        if (o != null)
-                            return o.toString();
-                        return "null";
+                        return o != null ? o.toString() : "null";
                     }
                 });
                 return new TextDiagnostic(diagnosticName, parameters, diagnostic);
