@@ -41,6 +41,7 @@ import org.jetbrains.jet.lang.resolve.name.Name;
 import org.jetbrains.jet.lang.resolve.scopes.JetScope;
 import org.jetbrains.jet.lang.resolve.scopes.WritableScope;
 import org.jetbrains.jet.lang.resolve.scopes.WritableScopeImpl;
+import org.jetbrains.jet.lang.resolve.scopes.receivers.ClassReceiver;
 import org.jetbrains.jet.lang.resolve.scopes.receivers.ExpressionReceiver;
 import org.jetbrains.jet.lang.resolve.scopes.receivers.ReceiverValue;
 import org.jetbrains.jet.lang.types.ErrorUtils;
@@ -69,6 +70,28 @@ public class ExpressionTypingUtils {
     public ExpressionTypingUtils(@NotNull ExpressionTypingServices expressionTypingServices, @NotNull CallResolver resolver) {
         this.expressionTypingServices = expressionTypingServices;
         callResolver = resolver;
+    }
+
+    @NotNull
+    public static ReceiverValue normalizeReceiverValueForVisibility(@NotNull ReceiverValue receiverValue, @NotNull BindingContext trace) {
+        if (receiverValue instanceof ExpressionReceiver) {
+            JetExpression expression = ((ExpressionReceiver) receiverValue).getExpression();
+            JetReferenceExpression referenceExpression = null;
+            if (expression instanceof JetThisExpression) {
+                referenceExpression = ((JetThisExpression) expression).getInstanceReference();
+            }
+            else if (expression instanceof JetThisReferenceExpression) {
+                referenceExpression = (JetReferenceExpression) expression;
+            }
+
+            if (referenceExpression != null) {
+                 DeclarationDescriptor descriptor = trace.get(BindingContext.REFERENCE_TARGET, referenceExpression);
+                if (descriptor instanceof ClassDescriptor) {
+                    return new ClassReceiver((ClassDescriptor) descriptor.getOriginal());
+                }
+            }
+        }
+        return receiverValue;
     }
 
     @Nullable
