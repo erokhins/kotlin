@@ -185,6 +185,9 @@ public open class LazyClassMemberScope(resolveSession: ResolveSession,
             if (descriptor.getKind() != FAKE_OVERRIDE && descriptor.getKind() != DELEGATION) {
                 OverridingUtil.resolveUnknownVisibilityForMember(descriptor, OverrideResolver.createCannotInferVisibilityReporter(trace))
             }
+            if (descriptor.getName().asString() == "bas") {
+                println()
+            }
             VarianceChecker.recordPrivateToThisIfNeeded(trace, descriptor);
         }
     }
