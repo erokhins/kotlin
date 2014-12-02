@@ -46,12 +46,14 @@ import org.jetbrains.jet.lang.psi.JetTypeParameterListOwner
 import org.jetbrains.jet.lang.resolve.BindingContext
 import kotlin.platform.platformStatic
 import org.jetbrains.jet.storage.StorageManager
+import org.jetbrains.jet.lang.descriptors.Visibility
+import org.jetbrains.jet.lang.descriptors.LazyVisibility
 
 class VarianceChecker(private val trace: BindingTrace, private val storageManager: StorageManager) {
 
     fun process(c: TopDownAnalysisContext) {
         for (member in c.getMembers().values()) {
-            recordPrivateToThisIfNeeded(trace, member)
+            recordPrivateToThisIfNeeded(trace, member, storageManager)
         }
 
         check(c)
@@ -88,25 +90,30 @@ class VarianceChecker(private val trace: BindingTrace, private val storageManage
     )
 
     class object {
-        platformStatic fun recordPrivateToThisIfNeeded(trace: BindingTrace, descriptor: CallableMemberDescriptor) {
+        platformStatic fun recordPrivateToThisIfNeeded(trace: BindingTrace, descriptor: CallableMemberDescriptor, storageManager: StorageManager) {
             if (descriptor.getVisibility() != Visibilities.PRIVATE) return
 
             val psiElement = descriptor.getSource().getPsi()
             if (psiElement !is JetCallableDeclaration) return
-
-            if (!checkCallableDeclaration(trace.getBindingContext(), psiElement, descriptor, DiagnosticSink.DO_NOTHING)) {
-                recordPrivateToThis(descriptor)
-            }
+            val lazyVisibility = LazyVisibility(storageManager.createLazyValue {
+                if (!checkCallableDeclaration(trace.getBindingContext(), psiElement, descriptor, DiagnosticSink.DO_NOTHING)) {
+                    Visibilities.PRIVATE_TO_THIS
+                }
+                else {
+                    Visibilities.PRIVATE
+                }
+            })
+            setVisibility(descriptor, lazyVisibility)
         }
 
-        private fun recordPrivateToThis(descriptor: CallableDescriptor) {
+        private fun setVisibility(descriptor: CallableDescriptor, visibility: Visibility) {
             if (descriptor is FunctionDescriptorImpl) {
-                descriptor.setVisibility(Visibilities.PRIVATE_TO_THIS);
+                descriptor.setVisibility(visibility);
             }
             else if (descriptor is PropertyDescriptorImpl) {
-                descriptor.setVisibility(Visibilities.PRIVATE_TO_THIS);
+                descriptor.setVisibility(visibility);
                 for (accessor in descriptor.getAccessors()) {
-                    (accessor as PropertyAccessorDescriptorImpl).setVisibility(Visibilities.PRIVATE_TO_THIS)
+                    (accessor as PropertyAccessorDescriptorImpl).setVisibility(visibility)
                 }
             }
             else {

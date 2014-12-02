@@ -32,10 +32,31 @@ public trait Visibility {
 
     public fun normalize(): Visibility = this
 
-    protected fun isVisible(receiver: ReceiverValue, what: DeclarationDescriptorWithVisibility, from: DeclarationDescriptor): Boolean
+    fun isVisible(receiver: ReceiverValue, what: DeclarationDescriptorWithVisibility, from: DeclarationDescriptor): Boolean
 
     override fun toString() = name
 }
 
 
 abstract class AbstractVisibility(override val name: String, override val isPublicAPI: Boolean): Visibility
+
+class LazyVisibility(private val delegate: NotNullLazyValue<Visibility>) : Visibility {
+    override val isPublicAPI: Boolean
+        get() = delegate().isPublicAPI
+
+    override val name: String
+        get() = delegate().name
+
+    override fun compareTo(other: Visibility): Int? = delegate().compareTo(other)
+
+    override fun normalize() = delegate()
+
+    override fun isVisible(receiver: ReceiverValue, what: DeclarationDescriptorWithVisibility, from: DeclarationDescriptor)
+        = delegate().isVisible(receiver, what, from)
+
+    override fun toString(): String {
+        if (delegate.isComputed()) return delegate().toString()
+
+        return "<Not compiled jet>"
+    }
+}
