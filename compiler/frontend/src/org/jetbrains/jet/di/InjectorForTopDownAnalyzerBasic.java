@@ -166,7 +166,7 @@ public class InjectorForTopDownAnalyzerBasic {
         this.overrideResolver = new OverrideResolver();
         this.typeHierarchyResolver = new TypeHierarchyResolver();
         this.scriptHeaderResolver = new ScriptHeaderResolver();
-        this.varianceChecker = new VarianceChecker(bindingTrace);
+        this.varianceChecker = new VarianceChecker(bindingTrace, storageManager);
 
         this.topDownAnalyzer.setBodyResolver(bodyResolver);
         this.topDownAnalyzer.setDeclarationResolver(declarationResolver);

@@ -45,9 +45,9 @@ import org.jetbrains.jet.lang.descriptors.VariableDescriptor
 import org.jetbrains.jet.lang.psi.JetTypeParameterListOwner
 import org.jetbrains.jet.lang.resolve.BindingContext
 import kotlin.platform.platformStatic
+import org.jetbrains.jet.storage.StorageManager
 
-
-class VarianceChecker(private val trace: BindingTrace) {
+class VarianceChecker(private val trace: BindingTrace, private val storageManager: StorageManager) {
 
     fun process(c: TopDownAnalysisContext) {
         for (member in c.getMembers().values()) {

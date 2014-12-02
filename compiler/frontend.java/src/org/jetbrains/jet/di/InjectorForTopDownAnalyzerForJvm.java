@@ -241,7 +241,7 @@ public class InjectorForTopDownAnalyzerForJvm {
         this.topDownAnalyzer = new TopDownAnalyzer();
         this.typeHierarchyResolver = new TypeHierarchyResolver();
         this.scriptHeaderResolver = new ScriptHeaderResolver();
-        this.varianceChecker = new VarianceChecker(bindingTrace);
+        this.varianceChecker = new VarianceChecker(bindingTrace, storageManager);
 
         this.resolveSession.setAnnotationResolve(annotationResolver);
         this.resolveSession.setDescriptorResolver(descriptorResolver);

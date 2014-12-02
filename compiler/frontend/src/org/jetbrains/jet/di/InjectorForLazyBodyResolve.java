@@ -171,7 +171,7 @@ public class InjectorForLazyBodyResolve {
         this.mutablePackageFragmentProvider = new MutablePackageFragmentProvider(moduleDescriptor);
         this.typeHierarchyResolver = new TypeHierarchyResolver();
         this.scriptHeaderResolver = new ScriptHeaderResolver();
-        this.varianceChecker = new VarianceChecker(bindingTrace);
+        this.varianceChecker = new VarianceChecker(bindingTrace, storageManager);
 
         this.lazyTopDownAnalyzer.setBodyResolver(bodyResolver);
         this.lazyTopDownAnalyzer.setDeclarationResolver(declarationResolver);
