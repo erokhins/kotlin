@@ -1143,7 +1143,7 @@ public class DescriptorResolver {
         boolean definedInClass = DescriptorUtils.getParentOfType(descriptor, ClassDescriptor.class) != null;
         boolean isLocal = DescriptorUtils.isLocal(descriptor);
         Visibility visibility = descriptor.getVisibility();
-        boolean transformNeeded = !isLocal && !visibility.isPublicAPI()
+        boolean transformNeeded = !isLocal && !visibility.getIsPublicAPI()
                                   && !(definedInClass && Visibilities.isPrivate(visibility));
         if (transformNeeded) {
             if (type.getConstructor().getSupertypes().size() == 1) {

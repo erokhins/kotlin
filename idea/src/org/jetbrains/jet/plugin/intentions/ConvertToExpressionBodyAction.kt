@@ -64,7 +64,7 @@ public class ConvertToExpressionBodyAction : PsiElementBaseIntentionAction() {
     private fun canOmitType(declaration: JetCallableDeclaration): Boolean {
         if (declaration.getModifierList()?.hasModifier(JetTokens.OVERRIDE_KEYWORD) ?: false) return true
         val descriptor = declaration.resolveToDescriptor()
-        return !((descriptor as? DeclarationDescriptorWithVisibility)?.getVisibility()?.isPublicAPI() ?: false)
+        return !((descriptor as? DeclarationDescriptorWithVisibility)?.getVisibility()?.isPublicAPI ?: false)
     }
 
     private data class Data(val declaration: JetDeclarationWithBody, val value: JetExpression)

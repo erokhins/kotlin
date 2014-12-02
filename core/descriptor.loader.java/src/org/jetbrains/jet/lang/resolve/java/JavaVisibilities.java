@@ -25,19 +25,24 @@ public class JavaVisibilities {
     private JavaVisibilities() {
     }
 
-    public static final Visibility PACKAGE_VISIBILITY = new Visibility("package", false) {
+    public static final Visibility PACKAGE_VISIBILITY = new AbstractVisibility("package", false) {
         @Override
-        protected boolean isVisible(@NotNull ReceiverValue receiver, @NotNull DeclarationDescriptorWithVisibility what, @NotNull DeclarationDescriptor from) {
+        public boolean isVisible(
+                @NotNull ReceiverValue receiver,
+                @NotNull DeclarationDescriptorWithVisibility what,
+                @NotNull DeclarationDescriptor from
+        ) {
             return areInSamePackage(what, from);
         }
 
         @Override
-        protected Integer compareTo(@NotNull Visibility visibility) {
+        public Integer compareTo(@NotNull Visibility visibility) {
             if (this == visibility) return 0;
             if (Visibilities.isPrivate(visibility)) return 1;
             return -1;
         }
 
+        @NotNull
         @Override
         public String toString() {
             return "public/*package*/";
@@ -50,9 +55,13 @@ public class JavaVisibilities {
         }
     };
 
-    public static final Visibility PROTECTED_STATIC_VISIBILITY = new Visibility("protected_static", false) {
+    public static final Visibility PROTECTED_STATIC_VISIBILITY = new AbstractVisibility("protected_static", false) {
         @Override
-        protected boolean isVisible(@NotNull ReceiverValue receiver, @NotNull DeclarationDescriptorWithVisibility what, @NotNull DeclarationDescriptor from) {
+        public boolean isVisible(
+                @NotNull ReceiverValue receiver,
+                @NotNull DeclarationDescriptorWithVisibility what,
+                @NotNull DeclarationDescriptor from
+        ) {
             if (areInSamePackage(what, from)) {
                 return true;
             }
@@ -70,6 +79,7 @@ public class JavaVisibilities {
             return isVisible(receiver, what, fromClass.getContainingDeclaration());
         }
 
+        @NotNull
         @Override
         public String toString() {
             return "protected/*protected static*/";
@@ -82,9 +92,13 @@ public class JavaVisibilities {
         }
     };
 
-    public static final Visibility PROTECTED_AND_PACKAGE = new Visibility("protected_and_package", false) {
+    public static final Visibility PROTECTED_AND_PACKAGE = new AbstractVisibility("protected_and_package", false) {
         @Override
-        protected boolean isVisible(@NotNull ReceiverValue receiver, @NotNull DeclarationDescriptorWithVisibility what, @NotNull DeclarationDescriptor from) {
+        public boolean isVisible(
+                @NotNull ReceiverValue receiver,
+                @NotNull DeclarationDescriptorWithVisibility what,
+                @NotNull DeclarationDescriptor from
+        ) {
             if (areInSamePackage(what, from)) {
                 return true;
             }
@@ -102,13 +116,14 @@ public class JavaVisibilities {
         }
 
         @Override
-        protected Integer compareTo(@NotNull Visibility visibility) {
+        public Integer compareTo(@NotNull Visibility visibility) {
             if (this == visibility) return 0;
             if (visibility == Visibilities.INTERNAL) return null;
             if (Visibilities.isPrivate(visibility)) return 1;
             return -1;
         }
 
+        @NotNull
         @Override
         public String toString() {
             return "protected/*protected and package*/";

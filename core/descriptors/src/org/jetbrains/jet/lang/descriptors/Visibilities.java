@@ -28,9 +28,13 @@ import java.util.Map;
 import java.util.Set;
 
 public class Visibilities {
-    public static final Visibility PRIVATE = new Visibility("private", false) {
+    public static final Visibility PRIVATE = new AbstractVisibility("private", false) {
         @Override
-        protected boolean isVisible(@NotNull ReceiverValue receiver, @NotNull DeclarationDescriptorWithVisibility what, @NotNull DeclarationDescriptor from) {
+        public boolean isVisible(
+                @NotNull ReceiverValue receiver,
+                @NotNull DeclarationDescriptorWithVisibility what,
+                @NotNull DeclarationDescriptor from
+        ) {
             DeclarationDescriptor parent = what;
             while (parent != null) {
                 parent = parent.getContainingDeclaration();
@@ -60,9 +64,13 @@ public class Visibilities {
 
     public static final Visibility PRIVATE_TO_THIS = PRIVATE;
 
-    public static final Visibility PROTECTED = new Visibility("protected", true) {
+    public static final Visibility PROTECTED = new AbstractVisibility("protected", true) {
         @Override
-        protected boolean isVisible(@NotNull ReceiverValue receiver, @NotNull DeclarationDescriptorWithVisibility what, @NotNull DeclarationDescriptor from) {
+        public boolean isVisible(
+                @NotNull ReceiverValue receiver,
+                @NotNull DeclarationDescriptorWithVisibility what,
+                @NotNull DeclarationDescriptor from
+        ) {
             ClassDescriptor classDescriptor = DescriptorUtils.getParentOfType(what, ClassDescriptor.class);
             if (DescriptorUtils.isClassObject(classDescriptor)) {
                 classDescriptor = DescriptorUtils.getParentOfType(classDescriptor, ClassDescriptor.class);
@@ -78,39 +86,59 @@ public class Visibilities {
         }
     };
 
-    public static final Visibility INTERNAL = new Visibility("internal", false) {
+    public static final Visibility INTERNAL = new AbstractVisibility("internal", false) {
         @Override
-        protected boolean isVisible(@NotNull ReceiverValue receiver, @NotNull DeclarationDescriptorWithVisibility what, @NotNull DeclarationDescriptor from) {
+        public boolean isVisible(
+                @NotNull ReceiverValue receiver,
+                @NotNull DeclarationDescriptorWithVisibility what,
+                @NotNull DeclarationDescriptor from
+        ) {
             //NOTE: supposedly temporarily
             return PUBLIC.isVisible(receiver, what, from);
         }
     };
 
-    public static final Visibility PUBLIC = new Visibility("public", true) {
+    public static final Visibility PUBLIC = new AbstractVisibility("public", true) {
         @Override
-        protected boolean isVisible(@NotNull ReceiverValue receiver, @NotNull DeclarationDescriptorWithVisibility what, @NotNull DeclarationDescriptor from) {
+        public boolean isVisible(
+                @NotNull ReceiverValue receiver,
+                @NotNull DeclarationDescriptorWithVisibility what,
+                @NotNull DeclarationDescriptor from
+        ) {
             return true;
         }
     };
 
-    public static final Visibility LOCAL = new Visibility("local", false) {
+    public static final Visibility LOCAL = new AbstractVisibility("local", false) {
         @Override
-        protected boolean isVisible(@NotNull ReceiverValue receiver, @NotNull DeclarationDescriptorWithVisibility what, @NotNull DeclarationDescriptor from) {
+        public boolean isVisible(
+                @NotNull ReceiverValue receiver,
+                @NotNull DeclarationDescriptorWithVisibility what,
+                @NotNull DeclarationDescriptor from
+        ) {
             throw new IllegalStateException(); //This method shouldn't be invoked for LOCAL visibility
         }
     };
 
-    public static final Visibility INHERITED = new Visibility("inherited", false) {
+    public static final Visibility INHERITED = new AbstractVisibility("inherited", false) {
         @Override
-        protected boolean isVisible(@NotNull ReceiverValue receiver, @NotNull DeclarationDescriptorWithVisibility what, @NotNull DeclarationDescriptor from) {
+        public boolean isVisible(
+                @NotNull ReceiverValue receiver,
+                @NotNull DeclarationDescriptorWithVisibility what,
+                @NotNull DeclarationDescriptor from
+        ) {
             throw new IllegalStateException("Visibility is unknown yet"); //This method shouldn't be invoked for INHERITED visibility
         }
     };
 
     /* Visibility for fake override invisible members (they are created for better error reporting) */
-    public static final Visibility INVISIBLE_FAKE = new Visibility("invisible_fake", false) {
+    public static final Visibility INVISIBLE_FAKE = new AbstractVisibility("invisible_fake", false) {
         @Override
-        protected boolean isVisible(@NotNull ReceiverValue receiver, @NotNull DeclarationDescriptorWithVisibility what, @NotNull DeclarationDescriptor from) {
+        public boolean isVisible(
+                @NotNull ReceiverValue receiver,
+                @NotNull DeclarationDescriptorWithVisibility what,
+                @NotNull DeclarationDescriptor from
+        ) {
             return false;
         }
     };
