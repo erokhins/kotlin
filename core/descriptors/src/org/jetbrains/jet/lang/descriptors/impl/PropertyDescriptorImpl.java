@@ -95,7 +95,7 @@ public class PropertyDescriptorImpl extends VariableDescriptorImpl implements Pr
             @Nullable ReceiverParameterDescriptor dispatchReceiverParameter,
             @Nullable ReceiverParameterDescriptor extensionReceiverParameter
     ) {
-        setOutType(outType);
+        setReturnType(outType);
 
         this.typeParameters = new ArrayList<TypeParameterDescriptor>(typeParameters);
 

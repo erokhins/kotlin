@@ -29,8 +29,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public abstract class VariableDescriptorImpl extends DeclarationDescriptorNonRootImpl implements VariableDescriptor {
-    private JetType outType;
+public abstract class VariableDescriptorImpl extends CallableDescriptorImpl implements VariableDescriptor {
     private NullableLazyValue<CompileTimeConstant<?>> compileTimeInitializer;
 
     public VariableDescriptorImpl(
@@ -41,19 +40,13 @@ public abstract class VariableDescriptorImpl extends DeclarationDescriptorNonRoo
             @NotNull SourceElement source
     ) {
         super(containingDeclaration, annotations, name, source);
-
-        this.outType = outType;
+        setReturnType(outType);
     }
 
     @NotNull
     @Override
     public JetType getType() {
-        return outType;
-    }
-
-    public void setOutType(JetType outType) {
-        assert this.outType == null;
-        this.outType = outType;
+        return returnType;
     }
 
     @Nullable
@@ -72,9 +65,7 @@ public abstract class VariableDescriptorImpl extends DeclarationDescriptorNonRoo
 
     @Override
     @NotNull
-    public VariableDescriptor getOriginal() {
-        return (VariableDescriptor) super.getOriginal();
-    }
+    public abstract VariableDescriptor getOriginal();
 
     @NotNull
     @Override

@@ -57,7 +57,7 @@ public class ValueParameterDescriptorImpl extends VariableDescriptorImpl impleme
     }
 
     public void setType(@NotNull JetType type) {
-        setOutType(type);
+        setReturnType(type);
     }
 
     @Override

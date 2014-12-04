@@ -882,7 +882,7 @@ public class DescriptorResolver {
 
             JetType type =
                     getVariableType(variableDescriptor, scope, variable, dataFlowInfo, false, trace); // For a local variable the type must not be deferred
-            variableDescriptor.setOutType(type);
+            variableDescriptor.setReturnType(type);
             return variableDescriptor;
         }
     }
