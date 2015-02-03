@@ -477,7 +477,7 @@ public class DescriptorResolver {
                                            ? Visibilities.INHERITED
                                            : Visibilities.INTERNAL;
         }
-        else if (containingDescriptor instanceof FunctionDescriptor) {
+        else if (containingDescriptor instanceof FunctionDescriptor || containingDescriptor instanceof PropertyDescriptor) {
             defaultVisibility = Visibilities.LOCAL;
         }
         else {
