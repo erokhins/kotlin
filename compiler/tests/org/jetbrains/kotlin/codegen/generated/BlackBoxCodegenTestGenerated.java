@@ -3678,6 +3678,18 @@ public class BlackBoxCodegenTestGenerated extends AbstractBlackBoxCodegenTest {
             doTest(fileName);
         }
 
+        @TestMetadata("functionExpressionWithName.kt")
+        public void testFunctionExpressionWithName() throws Exception {
+            String fileName = JetTestUtils.navigationMetadata("compiler/testData/codegen/box/functions/functionExpressionWithName.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("functionLiteralExpression.kt")
+        public void testFunctionLiteralExpression() throws Exception {
+            String fileName = JetTestUtils.navigationMetadata("compiler/testData/codegen/box/functions/functionLiteralExpression.kt");
+            doTest(fileName);
+        }
+
         @TestMetadata("functionNtoString.kt")
         public void testFunctionNtoString() throws Exception {
             String fileName = JetTestUtils.navigationMetadata("compiler/testData/codegen/box/functions/functionNtoString.kt");
