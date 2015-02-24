@@ -111,7 +111,7 @@ public class JetTypeMapper {
 
     @NotNull
     public Type mapOwner(@NotNull DeclarationDescriptor descriptor, boolean isInsideModule) {
-        if (isLocalNamedFun(descriptor)) {
+        if (isLocalFunction(descriptor)) {
             return asmTypeForAnonymousClass(bindingContext, (FunctionDescriptor) descriptor);
         }
 
@@ -542,7 +542,7 @@ public class JetTypeMapper {
             }
         }
 
-        Type calleeType = isLocalNamedFun(functionDescriptor) ? owner : null;
+        Type calleeType = isLocalFunction(functionDescriptor) ? owner : null;
 
         Type receiverParameterType;
         ReceiverParameterDescriptor receiverParameter = functionDescriptor.getOriginal().getExtensionReceiverParameter();
@@ -602,7 +602,7 @@ public class JetTypeMapper {
 
             return isAccessor ? "access$" + accessorName : accessorName;
         }
-        else if (descriptor instanceof AnonymousFunctionDescriptor) {
+        else if (isFunctionLiteral(descriptor)) {
             PsiElement element = DescriptorToSourceUtils.callableDescriptorToDeclaration(descriptor);
             if (element instanceof JetFunctionLiteral) {
                 PsiElement expression = element.getParent();
@@ -616,7 +616,7 @@ public class JetTypeMapper {
 
             return "invoke";
         }
-        else if (isLocalFunOrLambda(descriptor)) {
+        else if (isLocalFunction(descriptor) || isFunctionExpression(descriptor)) {
             return "invoke";
         }
         else {
@@ -870,7 +870,7 @@ public class JetTypeMapper {
                 }
                 type = sharedVarType;
             }
-            else if (isLocalNamedFun(variableDescriptor)) {
+            else if (isLocalFunction(variableDescriptor)) {
                 //noinspection CastConflictsWithInstanceof
                 type = asmTypeForAnonymousClass(bindingContext, (FunctionDescriptor) variableDescriptor);
             }

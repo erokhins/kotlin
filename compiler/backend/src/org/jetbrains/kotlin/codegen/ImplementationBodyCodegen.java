@@ -72,7 +72,6 @@ import java.util.*;
 import static org.jetbrains.kotlin.codegen.AsmUtil.*;
 import static org.jetbrains.kotlin.codegen.JvmCodegenUtil.*;
 import static org.jetbrains.kotlin.codegen.binding.CodegenBinding.enumEntryNeedSubclass;
-import static org.jetbrains.kotlin.codegen.binding.CodegenBinding.isLocalNamedFun;
 import static org.jetbrains.kotlin.resolve.DescriptorToSourceUtils.classDescriptorToDeclaration;
 import static org.jetbrains.kotlin.resolve.DescriptorToSourceUtils.descriptorToDeclaration;
 import static org.jetbrains.kotlin.resolve.DescriptorUtils.*;
@@ -1275,7 +1274,7 @@ public class ImplementationBodyCodegen extends ClassBodyCodegen {
                 DeclarationDescriptor descriptor = bindingContext.get(BindingContext.REFERENCE_TARGET, expr);
 
                 DeclarationDescriptor toLookup;
-                if (isLocalNamedFun(descriptor)) {
+                if (isLocalFunction(descriptor)) {
                     toLookup = descriptor;
                 }
                 else if (descriptor instanceof CallableMemberDescriptor) {
