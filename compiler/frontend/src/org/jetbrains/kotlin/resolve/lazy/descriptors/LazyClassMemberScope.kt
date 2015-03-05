@@ -276,10 +276,10 @@ public open class LazyClassMemberScope(
             if (!thisDescriptor.getKind().isSingleton() && !classOrObject.isObjectLiteral()) {
                 assert(classOrObject is JetClass) { "No JetClass for $thisDescriptor" }
                 classOrObject as JetClass
-                val constructor = c.descriptorResolver.resolvePrimaryConstructorDescriptor(
+                val constructor = c.functionDescriptorResolver.resolvePrimaryConstructorDescriptor(
                         thisDescriptor.getScopeForClassHeaderResolution(), thisDescriptor, classOrObject, trace)
                 assert(constructor != null) { "No constructor created for $thisDescriptor" }
-                setDeferredReturnType(constructor)
+                setDeferredReturnType(constructor!!)
                 return constructor
             }
             else {

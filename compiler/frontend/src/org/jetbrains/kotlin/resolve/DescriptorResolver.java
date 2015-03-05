@@ -29,7 +29,6 @@ import org.jetbrains.kotlin.descriptors.*;
 import org.jetbrains.kotlin.descriptors.annotations.Annotations;
 import org.jetbrains.kotlin.descriptors.impl.*;
 import org.jetbrains.kotlin.diagnostics.DiagnosticFactory1;
-import org.jetbrains.kotlin.diagnostics.DiagnosticUtils;
 import org.jetbrains.kotlin.lexer.JetKeywordToken;
 import org.jetbrains.kotlin.lexer.JetModifierKeywordToken;
 import org.jetbrains.kotlin.lexer.JetTokens;
@@ -283,136 +282,6 @@ public class DescriptorResolver {
     }
 
     @NotNull
-    public SimpleFunctionDescriptor resolveFunctionDescriptor(
-            @NotNull DeclarationDescriptor containingDescriptor,
-            @NotNull JetScope scope,
-            @NotNull JetNamedFunction function,
-            @NotNull BindingTrace trace,
-            @NotNull DataFlowInfo dataFlowInfo
-    ) {
-        if (function.getName() == null) {
-            trace.report(FUNCTION_DECLARATION_WITH_NO_NAME.on(function));
-        }
-        SimpleFunctionDescriptorImpl functionDescriptor = SimpleFunctionDescriptorImpl.create(
-                containingDescriptor,
-                annotationResolver.resolveAnnotationsWithArguments(scope, function.getModifierList(), trace),
-                function.getNameAsSafeName(),
-                CallableMemberDescriptor.Kind.DECLARATION,
-                toSourceElement(function)
-        );
-        initializeFunctionDescriptorAndExplicitReturnType(containingDescriptor, scope, function, functionDescriptor, trace);
-        initializeFunctionReturnTypeBasedOnFunctionBody(scope, function, functionDescriptor, trace, dataFlowInfo);
-        BindingContextUtils.recordFunctionDeclarationToDescriptor(trace, function, functionDescriptor);
-        return functionDescriptor;
-    }
-
-    @NotNull
-    public SimpleFunctionDescriptor resolveFunctionExpressionDescriptor(
-            @NotNull DeclarationDescriptor containingDescriptor,
-            @NotNull JetScope scope,
-            @NotNull JetNamedFunction function,
-            @NotNull BindingTrace trace,
-            @NotNull DataFlowInfo dataFlowInfo
-    ) {
-        FunctionExpressionDescriptor functionDescriptor = new FunctionExpressionDescriptor(
-                containingDescriptor,
-                annotationResolver.resolveAnnotationsWithArguments(scope, function.getModifierList(), trace),
-                function.getNameAsSafeName(),
-                CallableMemberDescriptor.Kind.DECLARATION,
-                toSourceElement(function)
-        );
-        initializeFunctionDescriptorAndExplicitReturnType(containingDescriptor, scope, function, functionDescriptor, trace);
-        initializeFunctionReturnTypeBasedOnFunctionBody(scope, function, functionDescriptor, trace, dataFlowInfo);
-        BindingContextUtils.recordFunctionDeclarationToDescriptor(trace, function, functionDescriptor);
-        return functionDescriptor;
-    }
-
-    private void initializeFunctionReturnTypeBasedOnFunctionBody(
-            @NotNull final JetScope scope,
-            @NotNull final JetNamedFunction function,
-            @NotNull final SimpleFunctionDescriptorImpl functionDescriptor,
-            @NotNull final BindingTrace trace,
-            @NotNull final DataFlowInfo dataFlowInfo
-    ) {
-        if (functionDescriptor.getReturnType() != null) return;
-        assert function.getTypeReference() == null : "Return type must be initialized early for function: "
-                                                     + function.getText() + ", at: "
-                                                     + DiagnosticUtils.atLocation(function);
-        JetType returnType;
-        if (function.hasBlockBody()) {
-            returnType = builtIns.getUnitType();
-        }
-        else if (function.hasBody()) {
-            returnType =
-                    DeferredType.createRecursionIntolerant(
-                            storageManager,
-                            trace,
-                            new Function0<JetType>() {
-                                @Override
-                                public JetType invoke() {
-                                    JetType type = expressionTypingServices
-                                            .getBodyExpressionType(trace, scope, dataFlowInfo, function, functionDescriptor);
-                                    return transformAnonymousTypeIfNeeded(functionDescriptor, function, type, trace);
-                                }
-                            });
-        }
-        else {
-            returnType = ErrorUtils.createErrorType("No type, no body");
-        }
-        functionDescriptor.setReturnType(returnType);
-    }
-
-    @NotNull
-    private void initializeFunctionDescriptorAndExplicitReturnType(
-            @NotNull DeclarationDescriptor containingDescriptor,
-            @NotNull JetScope scope,
-            @NotNull JetFunction function,
-            @NotNull SimpleFunctionDescriptorImpl functionDescriptor,
-            @NotNull BindingTrace trace
-    ) {
-
-        WritableScope innerScope = new WritableScopeImpl(scope, functionDescriptor, new TraceBasedRedeclarationHandler(trace),
-                                                         "Function descriptor header scope");
-        innerScope.addLabeledDeclaration(functionDescriptor);
-
-        List<TypeParameterDescriptorImpl> typeParameterDescriptors =
-                resolveTypeParametersForCallableDescriptor(functionDescriptor, innerScope, function.getTypeParameters(), trace);
-        innerScope.changeLockLevel(WritableScope.LockLevel.BOTH);
-        resolveGenericBounds(function, functionDescriptor, innerScope, typeParameterDescriptors, trace);
-
-        JetType receiverType = null;
-        JetTypeReference receiverTypeRef = function.getReceiverTypeReference();
-        if (receiverTypeRef != null) {
-            receiverType = typeResolver.resolveType(innerScope, receiverTypeRef, trace, true);
-        }
-
-        List<ValueParameterDescriptor> valueParameterDescriptors =
-                resolveValueParameters(functionDescriptor, innerScope, function.getValueParameters(), trace);
-
-        innerScope.changeLockLevel(WritableScope.LockLevel.READING);
-
-        JetTypeReference returnTypeRef = function.getTypeReference();
-        JetType returnType = null;
-        if (returnTypeRef != null) {
-            returnType = typeResolver.resolveType(innerScope, returnTypeRef, trace, true);
-        }
-
-        Modality modality = resolveModalityFromModifiers(function, getDefaultModality(containingDescriptor, function.hasBody()));
-        Visibility visibility = resolveVisibilityFromModifiers(function, getDefaultVisibility(function, containingDescriptor));
-        functionDescriptor.initialize(
-                receiverType,
-                getDispatchReceiverParameterIfNeeded(containingDescriptor),
-                typeParameterDescriptors,
-                valueParameterDescriptors,
-                returnType,
-                modality,
-                visibility
-        );
-    }
-
-
-
-    @NotNull
     public static SimpleFunctionDescriptor createComponentFunctionDescriptor(
             int parameterIndex,
             @NotNull PropertyDescriptor property,
@@ -522,42 +391,6 @@ public class DescriptorResolver {
             defaultModality = Modality.FINAL;
         }
         return defaultModality;
-    }
-
-    @NotNull
-    private List<ValueParameterDescriptor> resolveValueParameters(
-            FunctionDescriptor functionDescriptor,
-            WritableScope parameterScope,
-            List<JetParameter> valueParameters,
-            BindingTrace trace
-    ) {
-        List<ValueParameterDescriptor> result = new ArrayList<ValueParameterDescriptor>();
-        for (int i = 0; i < valueParameters.size(); i++) {
-            JetParameter valueParameter = valueParameters.get(i);
-            JetTypeReference typeReference = valueParameter.getTypeReference();
-
-            JetType type;
-            if (typeReference == null) {
-                trace.report(VALUE_PARAMETER_WITH_NO_TYPE_ANNOTATION.on(valueParameter));
-                type = ErrorUtils.createErrorType("Type annotation was missing");
-            }
-            else {
-                type = typeResolver.resolveType(parameterScope, typeReference, trace, true);
-            }
-
-            if (!(functionDescriptor instanceof ConstructorDescriptor)) {
-                checkParameterHasNoValOrVar(trace, valueParameter, VAL_OR_VAR_ON_FUN_PARAMETER);
-                checkParameterHasNoModifier(trace, valueParameter);
-            } else {
-                checkConstructorParameterHasNoModifier(trace, valueParameter);
-            }
-
-            ValueParameterDescriptor valueParameterDescriptor =
-                    resolveValueParameterDescriptor(parameterScope, functionDescriptor, valueParameter, i, type, trace);
-            parameterScope.addVariableDescriptor(valueParameterDescriptor);
-            result.add(valueParameterDescriptor);
-        }
-        return result;
     }
 
     @NotNull
@@ -1153,7 +986,7 @@ public class DescriptorResolver {
     }
 
     @Nullable
-    private static JetType transformAnonymousTypeIfNeeded(
+    /*package*/ static JetType transformAnonymousTypeIfNeeded(
             @NotNull DeclarationDescriptorWithVisibility descriptor,
             @NotNull JetNamedDeclaration declaration,
             @NotNull JetType type,
@@ -1294,53 +1127,6 @@ public class DescriptorResolver {
             getterDescriptor.initialize(propertyDescriptor.getType());
         }
         return getterDescriptor;
-    }
-
-    @NotNull
-    private ConstructorDescriptorImpl createConstructorDescriptor(
-            @NotNull JetScope scope,
-            @NotNull ClassDescriptor classDescriptor,
-            boolean isPrimary,
-            @Nullable JetModifierList modifierList,
-            @NotNull JetDeclaration declarationToTrace,
-            List<TypeParameterDescriptor> typeParameters, @NotNull List<JetParameter> valueParameters, BindingTrace trace
-    ) {
-        ConstructorDescriptorImpl constructorDescriptor = ConstructorDescriptorImpl.create(
-                classDescriptor,
-                annotationResolver.resolveAnnotationsWithoutArguments(scope, modifierList, trace),
-                isPrimary,
-                toSourceElement(declarationToTrace)
-        );
-        trace.record(BindingContext.CONSTRUCTOR, declarationToTrace, constructorDescriptor);
-        WritableScopeImpl parameterScope = new WritableScopeImpl(
-                scope, constructorDescriptor, new TraceBasedRedeclarationHandler(trace), "Scope with value parameters of a constructor");
-        parameterScope.changeLockLevel(WritableScope.LockLevel.BOTH);
-        ConstructorDescriptorImpl constructor = constructorDescriptor.initialize(
-                typeParameters,
-                resolveValueParameters(constructorDescriptor, parameterScope, valueParameters, trace),
-                resolveVisibilityFromModifiers(modifierList, getDefaultConstructorVisibility(classDescriptor))
-        );
-        if (isAnnotationClass(classDescriptor)) {
-            CompileTimeConstantUtils.checkConstructorParametersType(valueParameters, trace);
-        }
-        return constructor;
-    }
-
-    @Nullable
-    public ConstructorDescriptorImpl resolvePrimaryConstructorDescriptor(
-            @NotNull JetScope scope,
-            @NotNull ClassDescriptor classDescriptor,
-            @NotNull JetClass classElement,
-            BindingTrace trace
-    ) {
-        if (classDescriptor.getKind() == ClassKind.ENUM_ENTRY) return null;
-        return createConstructorDescriptor(
-                scope,
-                classDescriptor,
-                true,
-                classElement.getPrimaryConstructorModifierList(),
-                classElement,
-                classDescriptor.getTypeConstructor().getParameters(), classElement.getPrimaryConstructorParameters(), trace);
     }
 
     @NotNull
@@ -1488,16 +1274,6 @@ public class DescriptorResolver {
         ASTNode valOrVarNode = parameter.getValOrVarNode();
         if (valOrVarNode != null) {
             trace.report(diagnosticFactory.on(valOrVarNode.getPsi(), ((JetKeywordToken) valOrVarNode.getElementType())));
-        }
-    }
-
-    private static void checkConstructorParameterHasNoModifier(
-            @NotNull BindingTrace trace,
-            @NotNull JetParameter parameter
-    ) {
-        // If is not a property, then it must have no modifier
-        if (!parameter.hasValOrVarNode()) {
-            checkParameterHasNoModifier(trace, parameter);
         }
     }
 
