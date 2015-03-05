@@ -4573,6 +4573,12 @@ public class JetDiagnosticsTestGenerated extends AbstractJetDiagnosticsTest {
                 doTest(fileName);
             }
 
+            @TestMetadata("InferenceParametersTypes.kt")
+            public void testInferenceParametersTypes() throws Exception {
+                String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/functionAsExpression/InferenceParametersTypes.kt");
+                doTest(fileName);
+            }
+
             @TestMetadata("MissingParameterTypes.kt")
             public void testMissingParameterTypes() throws Exception {
                 String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/functionAsExpression/MissingParameterTypes.kt");
