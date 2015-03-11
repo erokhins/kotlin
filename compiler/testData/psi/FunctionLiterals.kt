@@ -31,4 +31,11 @@ fun foo() {
     {((a: Int = object { fun t() {} }) -> Int).(x: Int) : String -> "" }
     { A.B<String>.(x: Int) -> }
     {((a: Boolean = true) -> Int).(x: Any) : Unit -> }
+
+    {a: b -> f}
+    {a: b, c -> f}
+    {a: b, c: d -> f}
+
+    {a: (Int -> Unit) ->}
+    {[a] a: A -> }
 }
