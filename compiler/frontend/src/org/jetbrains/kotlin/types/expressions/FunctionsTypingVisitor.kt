@@ -126,6 +126,7 @@ public class FunctionsTypingVisitor(facade: ExpressionTypingInternals) : Express
 
         if (JetPsiUtil.isDeprecatedLambdaSyntax(expression)) {
             context.trace.report(DEPRECATED_LAMBDA_SYNTAX.on(expression))
+            println(DiagnosticUtils.atLocation(expression) + ":\n" + expression.getText())
         }
 
         val expectedType = context.expectedType

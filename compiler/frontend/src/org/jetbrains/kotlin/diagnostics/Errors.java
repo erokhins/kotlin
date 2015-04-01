@@ -350,7 +350,7 @@ public interface Errors {
     DiagnosticFactory0<JetParameter> USELESS_VARARG_ON_PARAMETER = DiagnosticFactory0.create(WARNING);
 
     DiagnosticFactory0<JetFunctionLiteralExpression> DEPRECATED_LAMBDA_SYNTAX =
-            DiagnosticFactory0.create(WARNING, FUNCTION_LITERAL_EXPRESSION_DECLARATION);
+            DiagnosticFactory0.create(ERROR, FUNCTION_LITERAL_EXPRESSION_DECLARATION);
 
     // Named parameters
 
