@@ -73,7 +73,7 @@ class LazyImportResolver(
         includeRootPackageClasses: Boolean
 ) {
     private val importedScopesProvider = resolveSession.getStorageManager().createMemoizedFunction {
-        (directive: JetImportDirective) -> ImportDirectiveResolveCache(directive)
+        directive: JetImportDirective -> ImportDirectiveResolveCache(directive)
     }
     private val rootScope = JetModuleUtil.getImportsResolutionScope(resolveSession.getModuleDescriptor(), includeRootPackageClasses)
 

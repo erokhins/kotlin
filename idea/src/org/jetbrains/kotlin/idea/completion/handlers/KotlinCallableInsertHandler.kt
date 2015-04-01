@@ -59,7 +59,7 @@ public abstract class KotlinCallableInsertHandler : BaseDeclarationInsertHandler
     private fun addImport(context : InsertionContext, item : LookupElement) {
         PsiDocumentManager.getInstance(context.getProject()).commitAllDocuments()
 
-        ApplicationManager.getApplication()?.runReadAction { () : Unit ->
+        ApplicationManager.getApplication()?.runReadAction {
             val startOffset = context.getStartOffset()
             val element = context.getFile().findElementAt(startOffset)
 

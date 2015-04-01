@@ -69,7 +69,7 @@ public abstract class AndroidUIXmlProcessor(protected val project: Project) {
             val psiManager = PsiManager.getInstance(project)
             val applicationPackage = resourceManager.androidModuleInfo?.applicationPackage
 
-            val jetFiles = cachedSources.getValue().mapIndexed { (index, text) ->
+            val jetFiles = cachedSources.getValue().mapIndexed { index, text ->
                 val virtualFile = LightVirtualFile(AndroidConst.SYNTHETIC_FILENAME + index + ".kt", text)
                 val jetFile = psiManager.findFile(virtualFile) as JetFile
                 if (applicationPackage != null) {

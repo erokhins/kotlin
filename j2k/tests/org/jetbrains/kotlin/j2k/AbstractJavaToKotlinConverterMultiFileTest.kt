@@ -35,7 +35,7 @@ public abstract class AbstractJavaToKotlinConverterMultiFileTest : AbstractJavaT
         val project = LightPlatformTestCase.getProject()!!
         val psiManager = PsiManager.getInstance(project)
 
-        val javaFiles = File(dirPath).listFiles {(file, name): Boolean -> name.endsWith(".java") }
+        val javaFiles = File(dirPath).listFiles { file, name -> name.endsWith(".java") }
         val psiFiles = ArrayList<PsiJavaFile>()
         for (javaFile: File in javaFiles) {
             val virtualFile = addFile(javaFile, "test")

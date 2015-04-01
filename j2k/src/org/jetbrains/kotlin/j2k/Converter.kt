@@ -377,7 +377,7 @@ class Converter private(
 
             var params = convertParameterList(method.getParameterList())
             val typeParameterList = convertTypeParameterList(method.getTypeParameterList())
-            var body = deferredElement { (codeConverter: CodeConverter) ->
+            var body = deferredElement { codeConverter: CodeConverter ->
                 val body = codeConverter.withMethodReturnType(method.getReturnType()).convertBlock(method.getBody())
                 postProcessBody(body)
             }
