@@ -16,6 +16,8 @@
 
 package org.jetbrains.kotlin.compilerRunner;
 
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.util.text.StringUtilRt;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector;
@@ -31,6 +33,7 @@ import java.util.Collections;
 
 import static org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocation.NO_LOCATION;
 import static org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity.ERROR;
+import static org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity.INFO;
 
 public class CompilerRunnerUtil {
 
@@ -88,7 +91,8 @@ public class CompilerRunnerUtil {
                 Class.forName("org.jetbrains.kotlin.config.Services", true, classLoader),
                 String[].class
         );
-
+        String x = "kotlin compiler arguments(CompilerRunnerUtil): " + StringUtil.join(arguments, " ") + "\n\n";
+        messageCollector.report(INFO, x, NO_LOCATION);
         return exec.invoke(kompiler.newInstance(), out, environment.getServices(), arguments);
     }
 }
