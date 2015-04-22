@@ -26,7 +26,8 @@ val profilingAgents = listOf(
         "org.jetbrains.kotlin.utils.profiling.RunTimeAgent",
         "org.jetbrains.kotlin.utils.profiling.PreloadClassesAgent",
         "org.jetbrains.kotlin.utils.profiling.YourKitProfilerAgent",
-        "org.jetbrains.kotlin.utils.profiling.CounterProfilerAgent"
+        "org.jetbrains.kotlin.utils.profiling.CounterProfilerAgent",
+        "org.jetbrains.kotlin.utils.profiling.CacheCounterProfilerAgent"
 )
 
 val time: String get()= System.currentTimeMillis().toString().reverse().substring(0..3).reverse()
