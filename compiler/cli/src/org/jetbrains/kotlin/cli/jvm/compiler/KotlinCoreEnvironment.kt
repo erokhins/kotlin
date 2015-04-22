@@ -150,6 +150,8 @@ public class KotlinCoreEnvironment private constructor(
         for (registrar in configuration.getList(ComponentRegistrar.PLUGIN_COMPONENT_REGISTRARS)) {
             registrar.registerProjectComponents(project, configuration)
         }
+
+        ProfilingAgent.Runner.runPreloadClasses()
     }
 
     private val applicationEnvironment: CoreApplicationEnvironment

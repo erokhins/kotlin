@@ -65,6 +65,7 @@
         <fileset dir="${dependencies.dir}" includes="jline.jar"/>
         <fileset dir="${dependencies.dir}" includes="cli-parser-1.1.1.jar"/>
         <fileset dir="${basedir}/ideaSDK/jps" includes="jps-model.jar"/>
+        <fileset dir="${user.home}/scripts/yjp-2014-build-14124/lib/" includes="**/*.jar"/>
     </path>
 
     <typedef resource="org/jetbrains/kotlin/ant/antlib.xml" classpath="${bootstrap.compiler.home}/lib/kotlin-ant.jar"/>
@@ -693,6 +694,7 @@
             <class-path>
                 <pathelement path="${output}/classes/builtins"/>
                 <pathelement path="${output}/classes/stdlib"/>
+                <fileset dir="${user.home}/scripts/yjp-2014-build-14124/lib/" includes="**/*.jar"/>
                 <pathelement path="${protobuf-lite.jar}"/>
                 <pathelement path="${javax.inject.jar}"/>
             </class-path>

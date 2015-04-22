@@ -56,6 +56,8 @@ import org.jetbrains.kotlin.resolve.jvm.JvmClassName;
 import org.jetbrains.kotlin.resolve.jvm.TopDownAnalyzerFacadeForJVM;
 import org.jetbrains.kotlin.util.PerformanceCounter;
 import org.jetbrains.kotlin.utils.KotlinPaths;
+import org.jetbrains.kotlin.utils.profiling.RunTimeAgent;
+import profiling.JetCountingVisitor;
 
 import java.io.File;
 import java.net.URL;
@@ -120,7 +122,21 @@ public class KotlinToJVMBytecodeCompiler {
     ) {
         Map<Module, ClassFileFactory> outputFiles = Maps.newHashMap();
 
-        AnalysisResult result = analyze(environment);
+        final KotlinCoreEnvironment finalEnvironment = environment;
+        AnalysisResult result = RunTimeAgent.INSTANCE$.runTaskAndReport("First analyze", new Function0<AnalysisResult>() {
+            @Override
+            public AnalysisResult invoke() {
+                return analyze(finalEnvironment);
+            }
+        });
+        ////DropAnnotationCache.dropCache(environment.getProject());
+        //
+        //RunTimeAgent.INSTANCE$.runTaskAndReport("Second analyze", new Function0<AnalysisResult>() {
+        //    @Override
+        //    public AnalysisResult invoke() {
+        //        return analyze(finalEnvironment);
+        //    }
+        //});
         if (result == null) {
             return false;
         }
@@ -136,6 +152,7 @@ public class KotlinToJVMBytecodeCompiler {
                         }
                     }
             );
+            JetCountingVisitor.INSTANCE$.visitFiles(jetFiles);
             GenerationState generationState =
                     generate(environment, result, jetFiles, module.getModuleName(), new File(module.getOutputDirectory()));
             outputFiles.put(module, generationState.getFactory());

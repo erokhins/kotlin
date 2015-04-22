@@ -32,6 +32,7 @@ messages/**)
 -dontwarn com.intellij.util.SnappyInitializer
 -dontwarn net.sf.cglib.**
 -dontwarn org.objectweb.asm.** # this is ASM3, the old version that we do not use
+-dontwarn com.yourkit.**
 
 -libraryjars '<rtjar>'
 -libraryjars '<jssejar>'

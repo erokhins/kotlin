@@ -69,6 +69,14 @@ public class K2JVMCompilerArguments extends CommonCompilerArguments {
     @Argument(value = "Xreport-perf", description = "Report detailed performance statistics")
     public boolean reportPerf;
 
+    // Profiling options
+    @Argument(value = "preload-classes", description = "Path to the file with list of classes")
+    @ValueDescription("<path>")
+    public String preloadClasses;
+
+    @Argument(value = "your-kit", description = "Enable your kit internal profiling")
+    public boolean yourKit;
+
     @Override
     @NotNull
     public String executableScriptFileName() {

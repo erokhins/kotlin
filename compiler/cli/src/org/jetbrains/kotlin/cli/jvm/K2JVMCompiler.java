@@ -44,6 +44,7 @@ import org.jetbrains.kotlin.util.PerformanceCounter;
 import org.jetbrains.kotlin.utils.KotlinPaths;
 import org.jetbrains.kotlin.utils.KotlinPathsFromHomeDir;
 import org.jetbrains.kotlin.utils.PathUtil;
+import org.jetbrains.kotlin.utils.profiling.ProfilingAgent;
 
 import java.io.File;
 import java.util.Collections;
@@ -62,6 +63,7 @@ public class K2JVMCompiler extends CLICompiler<K2JVMCompilerArguments> {
 
     public static void main(String... args) {
         doMain(new K2JVMCompiler(), args);
+        ProfilingAgent.Runner.beforeExit();
     }
 
     @Override
@@ -73,6 +75,9 @@ public class K2JVMCompiler extends CLICompiler<K2JVMCompilerArguments> {
             @NotNull Disposable rootDisposable
     ) {
         MessageSeverityCollector messageSeverityCollector = new MessageSeverityCollector(messageCollector);
+
+        ProfilingAgent.Runner.beforeStart(arguments.preloadClasses, arguments.yourKit);
+
         KotlinPaths paths = arguments.kotlinHome != null
                                 ? new KotlinPathsFromHomeDir(new File(arguments.kotlinHome))
                                 : PathUtil.getKotlinPathsForCompiler();
