@@ -84,6 +84,10 @@ import org.jetbrains.kotlin.resolve.jvm.extensions.AnalysisCompletedHandlerExten
 import org.jetbrains.kotlin.resolve.lazy.declarations.CliDeclarationProviderFactoryService
 import org.jetbrains.kotlin.resolve.lazy.declarations.DeclarationProviderFactoryService
 import org.jetbrains.kotlin.utils.PathUtil
+import org.jetbrains.kotlin.utils.profiling.JetCounter
+import org.jetbrains.kotlin.utils.profiling.PreloadClassesAgent
+import org.jetbrains.kotlin.utils.profiling.ProfilingAgent
+import org.jetbrains.kotlin.utils.profiling.RunTimeAgent
 import java.io.File
 import java.util.ArrayList
 import java.util.Comparator
@@ -96,9 +100,11 @@ public class KotlinCoreEnvironment private constructor(
         configuration: CompilerConfiguration
 ) {
 
-    private val projectEnvironment: JavaCoreProjectEnvironment = object : KotlinCoreProjectEnvironment(parentDisposable, applicationEnvironment) {
-        override fun preregisterServices() {
-            registerProjectExtensionPoints(Extensions.getArea(getProject()))
+    private val projectEnvironment: JavaCoreProjectEnvironment = RunTimeAgent.runTaskAndReport("KotlinCoreEnvironment#projectEnvironment") {
+        object : KotlinCoreProjectEnvironment(parentDisposable, applicationEnvironment) {
+            override fun preregisterServices() {
+                registerProjectExtensionPoints(Extensions.getArea(getProject()))
+            }
         }
     }
     private val sourceFiles = ArrayList<JetFile>()
@@ -120,7 +126,9 @@ public class KotlinCoreEnvironment private constructor(
         registerProjectServicesForCLI(projectEnvironment)
         registerProjectServices(projectEnvironment)
 
-        fillClasspath(configuration)
+        RunTimeAgent.runTaskAndReport("KotlinCoreEnvironment#fillClasspath") {
+            fillClasspath(configuration)
+        }
         val fileManager = ServiceManager.getService(project, javaClass<CoreJavaFileManager>())
         val index = JvmDependenciesIndex(javaRoots)
         (fileManager as KotlinCliJavaFileManagerImpl).initIndex(index)
@@ -255,23 +263,26 @@ public class KotlinCoreEnvironment private constructor(
         platformStatic public fun createForProduction(
                 parentDisposable: Disposable, configuration: CompilerConfiguration, configFilePaths: List<String>
         ): KotlinCoreEnvironment {
-            // JPS may run many instances of the compiler in parallel (there's an option for compiling independent modules in parallel in IntelliJ)
-            // All projects share the same ApplicationEnvironment, and when the last project is disposed, the ApplicationEnvironment is disposed as well
-            Disposer.register(parentDisposable, object : Disposable {
-                override fun dispose() {
-                    synchronized (APPLICATION_LOCK) {
-                        if (--ourProjectCount <= 0) {
-                            disposeApplicationEnvironment()
+
+            return RunTimeAgent.runTaskAndReport("createForProduction") {
+                // JPS may run many instances of the compiler in parallel (there's an option for compiling independent modules in parallel in IntelliJ)
+                // All projects share the same ApplicationEnvironment, and when the last project is disposed, the ApplicationEnvironment is disposed as well
+                Disposer.register(parentDisposable, object : Disposable {
+                    override fun dispose() {
+                        synchronized (APPLICATION_LOCK) {
+                            if (--ourProjectCount <= 0) {
+                                disposeApplicationEnvironment()
+                            }
                         }
                     }
-                }
-            })
-            val environment = KotlinCoreEnvironment(parentDisposable, getOrCreateApplicationEnvironmentForProduction(configuration, configFilePaths), configuration)
+                })
+                val environment = KotlinCoreEnvironment(parentDisposable, getOrCreateApplicationEnvironmentForProduction(configuration, configFilePaths), configuration)
 
-            synchronized (APPLICATION_LOCK) {
-                ourProjectCount++
+                synchronized (APPLICATION_LOCK) {
+                    ourProjectCount++
+                }
+                environment
             }
-            return environment
         }
 
         TestOnly platformStatic public fun createForTests(
@@ -307,18 +318,37 @@ public class KotlinCoreEnvironment private constructor(
                 Disposer.dispose(environment!!.getParentDisposable())
             }
         }
-
+        object Counters {
+            val counter = JetCounter("createApplicationEnvironment", true).disable()
+            init {
+                counter.defaultLimit = 5
+            }
+        }
         private fun createApplicationEnvironment(parentDisposable: Disposable, configuration: CompilerConfiguration, configFilePaths: List<String>): JavaCoreApplicationEnvironment {
-            Extensions.cleanRootArea(parentDisposable)
-            registerAppExtensionPoints()
-            val applicationEnvironment = JavaCoreApplicationEnvironment(parentDisposable)
+            val counter = Counters.counter
 
-            for (configPath in configFilePaths) {
-                registerApplicationExtensionPointsAndExtensionsFrom(configuration, configPath)
+            counter.touch("cleanRootArea") {
+                Extensions.cleanRootArea(parentDisposable)
+            }
+            counter.touch("registerAppExtensionPoints") {
+                registerAppExtensionPoints()
             }
 
-            registerApplicationServicesForCLI(applicationEnvironment)
-            registerApplicationServices(applicationEnvironment)
+            val applicationEnvironment = counter.touch("JavaCoreApplicationEnvironment") {
+                JavaCoreApplicationEnvironment(parentDisposable)
+            }
+            for (configPath in configFilePaths) {
+                counter.touch(configPath) {
+                    registerApplicationExtensionPointsAndExtensionsFrom(configuration, configPath)
+                }
+            }
+
+            counter.touch("registerApplicationServicesForCLI") {
+                registerApplicationServicesForCLI(applicationEnvironment)
+            }
+            counter.touch("registerApplicationServices") {
+                registerApplicationServices(applicationEnvironment)
+            }
 
             return applicationEnvironment
         }
