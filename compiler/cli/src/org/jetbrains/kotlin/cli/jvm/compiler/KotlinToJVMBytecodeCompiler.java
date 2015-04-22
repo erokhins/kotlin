@@ -131,12 +131,17 @@ public class KotlinToJVMBytecodeCompiler {
         });
         ////DropAnnotationCache.dropCache(environment.getProject());
         //
+        //PerformanceSnapshot snapsot = new PerformanceSnapshot("analize", PerformanceKind.SAMPLING);
+        //snapsot.start();
         //RunTimeAgent.INSTANCE$.runTaskAndReport("Second analyze", new Function0<AnalysisResult>() {
         //    @Override
         //    public AnalysisResult invoke() {
         //        return analyze(finalEnvironment);
         //    }
         //});
+        //snapsot.stopAndCapture();
+
+        
         if (result == null) {
             return false;
         }
