@@ -36,25 +36,43 @@ object YourKitProfilerAgent : ProfilingAgent() {
         assert(profilingInProcess == null)
         profilingInProcess = kind
 
-        if (kind == PerformanceKind.SAMPLING) {
-            controller?.startCPUProfiling(4L, null);
-        }
-        else {
-            controller?.startCPUProfiling(12L, null);
+        when (kind) {
+            PerformanceKind.SAMPLING -> {
+                controller?.startCPUProfiling(4L, null);
+            }
+            PerformanceKind.TRACING -> {
+                controller?.startCPUProfiling(12L, null);
+            }
+            PerformanceKind.ALLOCATION ->  {
+                // For example, the following call will record allocation of each 10th object OR if object size is 100K or more:
+                // controller.startAllocationRecording(true, 10, true, 100*1024)
+                controller?.startAllocationRecording(true, 10, true, 100*1024, true)
+            }
         }
     }
 
-    fun stop(name: String? = null) {
+    fun stop(kind: PerformanceKind, name: String? = null) {
         assert(profilingInProcess != null)
         profilingInProcess = null
 
         val myController = controller
         if (myController != null) {
-            myController.stopCPUProfiling()
-            val snapshotName = name.toString() + time
-            RunTimeAgent.runTaskAndReport("Capture snapshot $snapshotName") {
-                myController.captureSnapshot(0L, null, snapshotName, null)
+            val snapshotName = name.toString() + time + kind
+            when (kind) {
+                PerformanceKind.SAMPLING, PerformanceKind.TRACING -> {
+                    myController.stopCPUProfiling()
+                    RunTimeAgent.runTaskAndReport("Capture performance snapshot $snapshotName") {
+                        myController.captureSnapshot(0L, null, snapshotName, null)
+                    }
+                }
+                PerformanceKind.ALLOCATION -> {
+                    myController.stopAllocationRecording()
+                    RunTimeAgent.runTaskAndReport("Capture allocation snapshot $snapshotName") {
+                        myController.captureSnapshot(1L, null, snapshotName, null)
+                    }
+                }
             }
+
         }
     }
 
@@ -66,6 +84,7 @@ object YourKitProfilerAgent : ProfilingAgent() {
 enum class PerformanceKind {
     SAMPLING
     TRACING
+    ALLOCATION
 }
 
 class PerformanceSnapshot(val name: String? = null, val kind: PerformanceKind = PerformanceKind.SAMPLING) {
@@ -81,7 +100,7 @@ class PerformanceSnapshot(val name: String? = null, val kind: PerformanceKind = 
     fun stopAndCapture() {
         assert(state == 1) {name.toString()}
         state = 2
-        YourKitProfilerAgent.stop(name)
+        YourKitProfilerAgent.stop(kind, name)
     }
 
     fun makeSnapshot<T>(doIt: Boolean, f: () -> T): T {
