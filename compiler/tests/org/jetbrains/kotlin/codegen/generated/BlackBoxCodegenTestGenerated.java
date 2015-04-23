@@ -3868,6 +3868,12 @@ public class BlackBoxCodegenTestGenerated extends AbstractBlackBoxCodegenTest {
             doTest(fileName);
         }
 
+        @TestMetadata("myError.kt")
+        public void testMyError() throws Exception {
+            String fileName = JetTestUtils.navigationMetadata("compiler/testData/codegen/box/functions/myError.kt");
+            doTest(fileName);
+        }
+
         @TestMetadata("nothisnoclosure.kt")
         public void testNothisnoclosure() throws Exception {
             String fileName = JetTestUtils.navigationMetadata("compiler/testData/codegen/box/functions/nothisnoclosure.kt");
