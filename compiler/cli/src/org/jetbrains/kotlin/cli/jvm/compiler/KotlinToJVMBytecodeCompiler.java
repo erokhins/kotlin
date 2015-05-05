@@ -131,7 +131,7 @@ public class KotlinToJVMBytecodeCompiler {
         });
         ////DropAnnotationCache.dropCache(environment.getProject());
         //
-        //PerformanceSnapshot snapsot = new PerformanceSnapshot("analize", PerformanceKind.SAMPLING);
+        //PerformanceSnapshot snapsot = new PerformanceSnapshot("analize", SnapshotKind.SAMPLING);
         //snapsot.start();
         //RunTimeAgent.INSTANCE$.runTaskAndReport("Second analyze", new Function0<AnalysisResult>() {
         //    @Override
