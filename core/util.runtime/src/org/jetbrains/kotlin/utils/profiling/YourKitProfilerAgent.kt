@@ -46,7 +46,7 @@ object YourKitProfilerAgent : ProfilingAgent() {
             PerformanceKind.ALLOCATION ->  {
                 // For example, the following call will record allocation of each 10th object OR if object size is 100K or more:
                 // controller.startAllocationRecording(true, 10, true, 100*1024)
-                controller?.startAllocationRecording(true, 10, true, 100*1024, true)
+                controller?.startAllocationRecording(null)
             }
         }
     }
