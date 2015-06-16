@@ -58,7 +58,7 @@ object RunTimeAgent : ProfilingAgent() {
         println()
     }
 
-    class Task private (val name: String) {
+    class Task private constructor(val name: String) {
         private var running: Boolean = true
 
         private var startTime = System.currentTimeMillis()
