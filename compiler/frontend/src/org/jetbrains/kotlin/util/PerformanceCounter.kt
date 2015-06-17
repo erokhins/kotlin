@@ -16,15 +16,20 @@
 
 package org.jetbrains.kotlin.util
 
+import org.jetbrains.kotlin.config.CommonConfigurationKeys
+import org.jetbrains.kotlin.config.CompilerConfiguration
 import java.lang.management.ManagementFactory
+import java.util.HashSet
 import java.util.concurrent.TimeUnit
 
-public class PerformanceCounter jvmOverloads constructor (val name: String, val reenterable: Boolean = false) {
+public abstract class PerformanceCounter protected constructor(val name: String) {
     companion object {
         private val threadMxBean = ManagementFactory.getThreadMXBean()
         private val allCounters = arrayListOf<PerformanceCounter>()
 
         private val enteredCounters = ThreadLocal<MutableSet<PerformanceCounter>>()
+
+        private var enabled = true
 
         init {
             threadMxBean.setThreadCpuTimeEnabled(true)
@@ -49,10 +54,43 @@ public class PerformanceCounter jvmOverloads constructor (val name: String, val 
         public fun report(consumer: (String) -> Unit) {
             allCounters.forEach { it.report(consumer) }
         }
+
+        public fun enabled(configuration: CompilerConfiguration) {
+        }
     }
+
+    protected var count: Int = 0
+    protected var totalTimeNanos: Long = 0
+
+    public abstract fun increment()
+
+    public abstract fun time<T>(block: () -> T): T
+
+    public fun report(consumer: (String) -> Unit) {
+        if (totalTimeNanos == 0L) {
+            consumer("$name performed $count times")
+        }
+        else {
+            val millis = TimeUnit.NANOSECONDS.toMillis(totalTimeNanos)
+            consumer("$name performed $count times, total time $millis ms")
+        }
+    }
+}
+
+public class SimplePerformanceCounter jvmOverloads constructor(val name: String, val reenterable: Boolean = false) {
+    constructor(name: String, excluded: Set<PerformanceCounter>) : this(name, true) {
+        excluded.forEach { excludedFrom.add(this) }
+    }
+
+
+
+    private val excludedFrom: MutableSet<PerformanceCounter> = HashSet()
 
     private var count: Int = 0
     private var totalTimeNanos: Long = 0
+    private var prevStartTime: Long = 0
+
+    private fun start()
 
     init {
         allCounters.add(this)
@@ -77,13 +115,5 @@ public class PerformanceCounter jvmOverloads constructor (val name: String, val 
         }
     }
 
-    public fun report(consumer: (String) -> Unit) {
-        if (totalTimeNanos == 0L) {
-            consumer("$name performed $count times")
-        }
-        else {
-            val millis = TimeUnit.NANOSECONDS.toMillis(totalTimeNanos)
-            consumer("$name performed $count times, total time $millis ms")
-        }
-    }
 }
+
