@@ -56,7 +56,9 @@ import org.jetbrains.kotlin.resolve.jvm.JvmClassName;
 import org.jetbrains.kotlin.resolve.jvm.TopDownAnalyzerFacadeForJVM;
 import org.jetbrains.kotlin.util.PerformanceCounter;
 import org.jetbrains.kotlin.utils.KotlinPaths;
+import org.jetbrains.kotlin.utils.profiling.PerformanceSnapshot;
 import org.jetbrains.kotlin.utils.profiling.RunTimeAgent;
+import org.jetbrains.kotlin.utils.profiling.SnapshotKind;
 import profiling.JetCountingVisitor;
 
 import java.io.File;
@@ -123,15 +125,17 @@ public class KotlinToJVMBytecodeCompiler {
         Map<Module, ClassFileFactory> outputFiles = Maps.newHashMap();
 
         final KotlinCoreEnvironment finalEnvironment = environment;
+
+        PerformanceSnapshot snapsot = new PerformanceSnapshot("analize~" + directory.getName(), SnapshotKind.SAMPLING).start();
         AnalysisResult result = RunTimeAgent.INSTANCE$.runTaskAndReport("First analyze", new Function0<AnalysisResult>() {
             @Override
             public AnalysisResult invoke() {
                 return analyze(finalEnvironment);
             }
         });
+        snapsot.stopAndCapture();
         ////DropAnnotationCache.dropCache(environment.getProject());
         //
-        //PerformanceSnapshot snapsot = new PerformanceSnapshot("analize", SnapshotKind.SAMPLING);
         //snapsot.start();
         //RunTimeAgent.INSTANCE$.runTaskAndReport("Second analyze", new Function0<AnalysisResult>() {
         //    @Override

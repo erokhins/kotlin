@@ -60,18 +60,18 @@ object YourKitProfilerAgent : ProfilingAgent() {
 
         val myController = controller
         if (myController != null) {
-            val snapshotName = name.toString() + time + kind
+            val snapshotName = name.toString() +"~" + time + "~" + kind
             when (kind) {
                 SnapshotKind.SAMPLING, SnapshotKind.TRACING, SnapshotKind.CALL_COUNTING -> {
                     myController.stopCPUProfiling()
                     RunTimeAgent.runTaskAndReport("Capture performance snapshot $snapshotName") {
-                        myController.captureSnapshot(0L, null, snapshotName, null)
+                        myController.captureSnapshot(Controller.SNAPSHOT_WITHOUT_HEAP, null, snapshotName, null)
                     }
                 }
                 SnapshotKind.ALLOCATION -> {
                     myController.stopAllocationRecording()
                     RunTimeAgent.runTaskAndReport("Capture allocation snapshot $snapshotName") {
-                        myController.captureSnapshot(1L, null, snapshotName, null)
+                        myController.captureSnapshot(Controller.SNAPSHOT_WITH_HEAP, null, snapshotName, null)
                     }
                 }
             }
@@ -85,20 +85,21 @@ object YourKitProfilerAgent : ProfilingAgent() {
 }
 
 enum class SnapshotKind {
-    SAMPLING
-    TRACING
-    ALLOCATION
+    SAMPLING,
+    TRACING,
+    ALLOCATION,
     CALL_COUNTING
 }
 
 class PerformanceSnapshot(val name: String? = null, val kind: SnapshotKind = SnapshotKind.SAMPLING) {
     private var state = 0
 
-    fun start() {
+    fun start(): PerformanceSnapshot {
         assert(state == 0) {name.toString()}
         state = 1
 
         YourKitProfilerAgent.start(kind)
+        return this
     }
 
     fun stopAndCapture() {
