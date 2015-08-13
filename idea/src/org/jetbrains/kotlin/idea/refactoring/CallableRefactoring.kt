@@ -192,7 +192,7 @@ fun DeclarationDescriptor.getContainingScope(bindingContext: BindingContext): Je
     else {
         val containingDescriptor = getContainingDeclaration() ?: return null
         return when (containingDescriptor) {
-            is ClassDescriptorWithResolutionScopes -> containingDescriptor.getScopeForInitializerResolution()
+            is ClassDescriptorWithResolutionScopes -> containingDescriptor.getScopeForInitializerResolution().asJetScope()
             is PackageFragmentDescriptor -> containingDescriptor.getMemberScope()
             else -> null
         }

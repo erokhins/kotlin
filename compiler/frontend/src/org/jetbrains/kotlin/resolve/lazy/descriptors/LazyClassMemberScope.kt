@@ -33,6 +33,7 @@ import org.jetbrains.kotlin.resolve.dataClassUtils.isComponentLike
 import org.jetbrains.kotlin.resolve.lazy.LazyClassContext
 import org.jetbrains.kotlin.resolve.lazy.declarations.ClassMemberDeclarationProvider
 import org.jetbrains.kotlin.resolve.scopes.DescriptorKindFilter
+import org.jetbrains.kotlin.resolve.scopes.LexicalScopePart
 import org.jetbrains.kotlin.resolve.scopes.JetScope
 import org.jetbrains.kotlin.incremental.components.LookupLocation
 import org.jetbrains.kotlin.resolve.varianceChecker.VarianceChecker
@@ -91,7 +92,7 @@ public open class LazyClassMemberScope(
     private val primaryConstructor: NullableLazyValue<ConstructorDescriptor>
             = c.storageManager.createNullableLazyValue { resolvePrimaryConstructor() }
 
-    override fun getScopeForMemberDeclarationResolution(declaration: JetDeclaration): JetScope {
+    override fun getScopeForMemberDeclarationResolution(declaration: JetDeclaration): LexicalScopePart {
         if (declaration is JetProperty) {
             return thisDescriptor.getScopeForInitializerResolution()
         }

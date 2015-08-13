@@ -29,6 +29,7 @@ import java.util.regex.Pattern
 import org.jetbrains.kotlin.resolve.constants.IntegerValueTypeConstructor
 import org.jetbrains.kotlin.types.JetTypeImpl
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
+import org.jetbrains.kotlin.resolve.scopes.asLocalScope
 
 public class ConstraintSystemTestData(
         context: BindingContext,
@@ -66,8 +67,8 @@ public class ConstraintSystemTestData(
             )
         }
         return typeResolver.resolveType(
-            scopeToResolveTypeParameters, JetPsiFactory(project).createType(name),
-            JetTestUtils.DUMMY_TRACE, true)
+                scopeToResolveTypeParameters.asLocalScope(), JetPsiFactory(project).createType(name),
+                JetTestUtils.DUMMY_TRACE, true)
     }
 }
 

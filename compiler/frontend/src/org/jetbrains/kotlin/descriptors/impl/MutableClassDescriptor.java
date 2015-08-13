@@ -47,10 +47,10 @@ public class MutableClassDescriptor extends ClassDescriptorBase implements Class
     private final Set<SimpleFunctionDescriptor> functions = Sets.newLinkedHashSet();
 
     private final MutableScopeForMemberResolution mutableScopeForMemberResolution;
-    private final JetScope scopeForMemberResolution;
+    private final LexicalScopePart scopeForMemberResolution;
     // This scope contains type parameters but does not contain inner classes
     private final WritableScope scopeForSupertypeResolution;
-    private JetScope scopeForInitializers; //contains members + primary constructor value parameters + map for backing fields
+    private LexicalScopePart scopeForInitializers; //contains members + primary constructor value parameters + map for backing fields
     private final JetScope unsubstitutedMemberScope;
     private final JetScope staticScope = new StaticScopeForKotlinClass(this);
 
@@ -80,7 +80,7 @@ public class MutableClassDescriptor extends ClassDescriptorBase implements Class
             setUpScopeForInitializers(this);
         }
 
-        this.scopeForMemberResolution = new ChainedScope(this, "MemberResolutionWithStatic", mutableScopeForMemberResolution, staticScope);
+        this.scopeForMemberResolution = ScopesPackage.asLocalScope(new ChainedScope(this, "MemberResolutionWithStatic", mutableScopeForMemberResolution, staticScope));
     }
 
     @Nullable
@@ -229,19 +229,19 @@ public class MutableClassDescriptor extends ClassDescriptorBase implements Class
 
     @Override
     @NotNull
-    public JetScope getScopeForClassHeaderResolution() {
+    public LexicalScopePart getScopeForClassHeaderResolution() {
         return scopeForSupertypeResolution;
     }
 
     @Override
     @NotNull
-    public JetScope getScopeForMemberDeclarationResolution() {
+    public LexicalScopePart getScopeForMemberDeclarationResolution() {
         return scopeForMemberResolution;
     }
 
     @Override
     @NotNull
-    public JetScope getScopeForInitializerResolution() {
+    public LexicalScopePart getScopeForInitializerResolution() {
         if (scopeForInitializers == null) {
             throw new IllegalStateException("Scope for initializers queried before the primary constructor is set");
         }

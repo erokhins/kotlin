@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.psi.JetPsiFactory
 import org.jetbrains.kotlin.resolve.BindingTraceContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo
 import org.jetbrains.kotlin.resolve.scopes.JetScope
+import org.jetbrains.kotlin.resolve.scopes.asLocalScope
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.types.JetType
 import org.jetbrains.kotlin.types.TypeUtils
@@ -68,7 +69,7 @@ public class IterableTypesDetector(
         val expression = JetPsiFactory(project).createExpression("fake")
         val expressionReceiver = ExpressionReceiver(expression, type.type)
         val expressionTypingComponents = container.expressionTypingComponents
-        val context = ExpressionTypingContext.newContext(BindingTraceContext(), scope, DataFlowInfo.EMPTY, TypeUtils.NO_EXPECTED_TYPE)
+        val context = ExpressionTypingContext.newContext(BindingTraceContext(), scope.asLocalScope(), DataFlowInfo.EMPTY, TypeUtils.NO_EXPECTED_TYPE)
         val elementType = expressionTypingComponents.getForLoopConventionsChecker().checkIterableConvention(expressionReceiver, context)
         return elementType?.let { FuzzyType(it, type.freeParameters) }
     }

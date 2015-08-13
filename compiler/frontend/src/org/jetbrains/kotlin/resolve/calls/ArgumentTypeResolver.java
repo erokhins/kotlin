@@ -39,7 +39,7 @@ import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValue;
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactory;
 import org.jetbrains.kotlin.resolve.constants.IntegerValueTypeConstructor;
 import org.jetbrains.kotlin.resolve.constants.evaluate.ConstantExpressionEvaluator;
-import org.jetbrains.kotlin.resolve.scopes.JetScope;
+import org.jetbrains.kotlin.resolve.scopes.LexicalScopePart;
 import org.jetbrains.kotlin.resolve.scopes.receivers.QualifierReceiver;
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue;
 import org.jetbrains.kotlin.types.ErrorUtils;
@@ -265,7 +265,7 @@ public class ArgumentTypeResolver {
     @Nullable
     public JetType getShapeTypeOfFunctionLiteral(
             @NotNull JetFunction function,
-            @NotNull JetScope scope,
+            @NotNull LexicalScopePart scope,
             @NotNull BindingTrace trace,
             boolean expectedTypeIsUnknown
     ) {
@@ -294,7 +294,7 @@ public class ArgumentTypeResolver {
     @Nullable
     public JetType resolveTypeRefWithDefault(
             @Nullable JetTypeReference returnTypeRef,
-            @NotNull JetScope scope,
+            @NotNull LexicalScopePart scope,
             @NotNull BindingTrace trace,
             @Nullable JetType defaultValue
     ) {

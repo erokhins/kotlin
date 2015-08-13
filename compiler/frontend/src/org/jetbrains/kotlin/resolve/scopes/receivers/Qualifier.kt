@@ -114,7 +114,7 @@ fun createQualifier(
         context: ExpressionTypingContext
 ): QualifierReceiver? {
     val receiverScope = when {
-        !receiver.exists() -> context.scope
+        !receiver.exists() -> context.scope.asJetScope()
         receiver is QualifierReceiver -> receiver.scope
         else -> receiver.getType().getMemberScope()
     }

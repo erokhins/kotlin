@@ -221,7 +221,7 @@ public class LazyDeclarationResolver {
             return packageDescriptor.getMemberScope();
         }
         else {
-            return scopeProvider.getResolutionScopeForDeclaration(declaration);
+            return scopeProvider.getResolutionScopeForDeclaration(declaration).asJetScope();
         }
     }
 }

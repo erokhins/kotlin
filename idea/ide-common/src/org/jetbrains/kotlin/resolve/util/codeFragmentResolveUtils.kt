@@ -56,7 +56,7 @@ public fun JetCodeFragment.getScopeAndDataFlowForAnalyzeFragment(
         is JetClassOrObject -> {
             val descriptor = resolveSession.getClassDescriptor(context) as ClassDescriptorWithResolutionScopes
 
-            scopeForContextElement = descriptor.getScopeForMemberDeclarationResolution()
+            scopeForContextElement = descriptor.getScopeForMemberDeclarationResolution().asJetScope()
             dataFlowInfo = DataFlowInfo.EMPTY
         }
         is JetExpression -> {

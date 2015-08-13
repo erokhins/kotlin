@@ -32,7 +32,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.resolve.*
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo
 import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyClassDescriptor
-import org.jetbrains.kotlin.resolve.scopes.JetScope
+import org.jetbrains.kotlin.resolve.scopes.LexicalScopePart
 import org.jetbrains.kotlin.resolve.util.getScopeAndDataFlowForAnalyzeFragment
 import org.jetbrains.kotlin.types.TypeUtils
 
@@ -401,7 +401,7 @@ public abstract class ElementResolver protected constructor(
 
     private class BodyResolveContextForLazy(
             private val topDownAnalysisMode: TopDownAnalysisMode,
-            private val declaringScopes: Function1<JetDeclaration, JetScope?>
+            private val declaringScopes: Function1<JetDeclaration, LexicalScopePart?>
     ) : BodiesResolveContext {
         override fun getFiles(): Collection<JetFile> = setOf()
 
@@ -415,7 +415,7 @@ public abstract class ElementResolver protected constructor(
 
         override fun getFunctions(): MutableMap<JetNamedFunction, SimpleFunctionDescriptor> = hashMapOf()
 
-        override fun getDeclaringScope(declaration: JetDeclaration): JetScope? = declaringScopes(declaration)
+        override fun getDeclaringScope(declaration: JetDeclaration): LexicalScopePart? = declaringScopes(declaration)
 
         override fun getScripts(): MutableMap<JetScript, ScriptDescriptor> = hashMapOf()
 

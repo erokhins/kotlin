@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.resolve.calls.model.MutableDataFlowInfoForArguments;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo;
 import org.jetbrains.kotlin.resolve.inline.InlineUtil;
-import org.jetbrains.kotlin.resolve.scopes.JetScope;
+import org.jetbrains.kotlin.resolve.scopes.LexicalScopePart;
 import org.jetbrains.kotlin.resolve.scopes.WritableScope;
 import org.jetbrains.kotlin.resolve.scopes.WritableScopeImpl;
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver;
@@ -66,7 +66,7 @@ public class ControlStructureTypingVisitor extends ExpressionTypingVisitor {
     }
 
     @NotNull
-    private DataFlowInfo checkCondition(@NotNull JetScope scope, @Nullable JetExpression condition, ExpressionTypingContext context) {
+    private DataFlowInfo checkCondition(@NotNull LexicalScopePart scope, @Nullable JetExpression condition, ExpressionTypingContext context) {
         if (condition != null) {
             JetTypeInfo typeInfo = facade.getTypeInfo(condition, context.replaceScope(scope)
                     .replaceExpectedType(components.builtIns.getBooleanType()).replaceContextDependency(INDEPENDENT));
@@ -304,7 +304,7 @@ public class ControlStructureTypingVisitor extends ExpressionTypingVisitor {
         ExpressionTypingContext context =
                 contextWithExpectedType.replaceExpectedType(NO_EXPECTED_TYPE).replaceContextDependency(INDEPENDENT);
         JetExpression body = expression.getBody();
-        JetScope conditionScope = context.scope;
+        LexicalScopePart conditionScope = context.scope;
         // Preliminary analysis
         PreliminaryLoopVisitor loopVisitor = PreliminaryLoopVisitor.visitLoop(expression);
         context = context.replaceDataFlowInfo(
@@ -449,7 +449,7 @@ public class ControlStructureTypingVisitor extends ExpressionTypingVisitor {
         {
             // http://youtrack.jetbrains.net/issue/KT-527
 
-            VariableDescriptor olderVariable = context.scope.getLocalVariable(variableDescriptor.getName());
+            VariableDescriptor olderVariable = context.scope.asJetScope().getLocalVariable(variableDescriptor.getName());
             if (olderVariable != null && isLocal(context.scope.getContainingDeclaration(), olderVariable)) {
                 PsiElement declaration = DescriptorToSourceUtils.descriptorToDeclaration(variableDescriptor);
                 context.trace.report(Errors.NAME_SHADOWING.on(declaration, variableDescriptor.getName().asString()));

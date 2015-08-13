@@ -18,19 +18,15 @@ package org.jetbrains.kotlin.resolve.calls.checkers
 
 import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.psi.JetFunction
-import org.jetbrains.kotlin.psi.JetFunctionLiteral
-import org.jetbrains.kotlin.psi.JetFunctionLiteralExpression
-import org.jetbrains.kotlin.psi.JetNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingContext.CAPTURED_IN_CLOSURE
 import org.jetbrains.kotlin.resolve.BindingTrace
 import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
-import org.jetbrains.kotlin.resolve.calls.callUtil.getParentResolvedCall
 import org.jetbrains.kotlin.resolve.calls.context.BasicCallResolutionContext
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionResolvedCall
 import org.jetbrains.kotlin.resolve.inline.InlineUtil
-import org.jetbrains.kotlin.resolve.scopes.JetScope
+import org.jetbrains.kotlin.resolve.scopes.LexicalScopePart
 import org.jetbrains.kotlin.types.expressions.CaptureKind
 
 class CapturingInClosureChecker : CallChecker {
@@ -42,7 +38,7 @@ class CapturingInClosureChecker : CallChecker {
         }
     }
 
-    private fun checkCapturingInClosure(variable: VariableDescriptor, trace: BindingTrace, scope: JetScope) {
+    private fun checkCapturingInClosure(variable: VariableDescriptor, trace: BindingTrace, scope: LexicalScopePart) {
         val variableParent = variable.getContainingDeclaration()
         val scopeContainer = scope.getContainingDeclaration()
         if (isCapturedVariable(variableParent, scopeContainer)) {

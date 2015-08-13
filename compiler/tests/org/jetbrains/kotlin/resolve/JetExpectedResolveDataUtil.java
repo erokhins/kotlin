@@ -29,6 +29,7 @@ import org.jetbrains.kotlin.resolve.calls.results.OverloadResolutionResults;
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo;
 import org.jetbrains.kotlin.resolve.descriptorUtil.DescriptorUtilPackage;
 import org.jetbrains.kotlin.resolve.lazy.LazyResolveTestUtil;
+import org.jetbrains.kotlin.resolve.scopes.ScopesPackage;
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue;
 import org.jetbrains.kotlin.test.JetTestUtils;
 import org.jetbrains.kotlin.tests.di.ContainerForTests;
@@ -133,7 +134,7 @@ public class JetExpectedResolveDataUtil {
         emptyModule.initialize(PackageFragmentProvider.Empty.INSTANCE$);
 
         ExpressionTypingContext context = ExpressionTypingContext.newContext(
-                new BindingTraceContext(), classDescriptor.getDefaultType().getMemberScope(),
+                new BindingTraceContext(), ScopesPackage.asLocalScope(classDescriptor.getDefaultType().getMemberScope()),
                 DataFlowInfo.EMPTY, TypeUtils.NO_EXPECTED_TYPE);
 
         OverloadResolutionResults<FunctionDescriptor> functions = container.getFakeCallResolver().resolveFakeCall(

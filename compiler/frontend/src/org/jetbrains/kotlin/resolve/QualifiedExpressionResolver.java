@@ -30,6 +30,7 @@ import org.jetbrains.kotlin.incremental.KotlinLookupLocation;
 import org.jetbrains.kotlin.name.Name;
 import org.jetbrains.kotlin.psi.*;
 import org.jetbrains.kotlin.resolve.scopes.AbstractScopeAdapter;
+import org.jetbrains.kotlin.resolve.scopes.LexicalScopePart;
 import org.jetbrains.kotlin.resolve.scopes.JetScope;
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue;
 import org.jetbrains.kotlin.resolve.validation.SymbolUsageValidator;
@@ -76,7 +77,7 @@ public class QualifiedExpressionResolver {
     @NotNull
     public Collection<DeclarationDescriptor> lookupDescriptorsForUserType(
             @NotNull JetUserType userType,
-            @NotNull JetScope outerScope,
+            @NotNull LexicalScopePart outerScope,
             @NotNull BindingTrace trace,
             boolean onlyClassifiers
     ) {
@@ -95,7 +96,7 @@ public class QualifiedExpressionResolver {
         JetUserType qualifier = userType.getQualifier();
 
         // We do not want to resolve the last segment of a user type to a package
-        JetScope filteredScope = filterOutPackagesIfNeeded(outerScope, onlyClassifiers);
+        JetScope filteredScope = filterOutPackagesIfNeeded(outerScope.asJetScope(), onlyClassifiers);
 
         DeclarationDescriptor shouldBeVisibleFrom = outerScope.getContainingDeclaration();
         if (qualifier == null) {

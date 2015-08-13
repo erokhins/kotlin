@@ -22,6 +22,7 @@ import org.jetbrains.kotlin.psi.JetDeclaration
 import org.jetbrains.kotlin.resolve.lazy.ResolveSession
 import org.jetbrains.kotlin.resolve.lazy.declarations.PackageMemberDeclarationProvider
 import org.jetbrains.kotlin.resolve.scopes.DescriptorKindFilter
+import org.jetbrains.kotlin.resolve.scopes.asLocalScope
 
 public class LazyPackageMemberScope(
         private val resolveSession: ResolveSession,
@@ -36,7 +37,7 @@ public class LazyPackageMemberScope(
     override fun getPackage(name: Name): PackageViewDescriptor? = null
 
     override fun getScopeForMemberDeclarationResolution(declaration: JetDeclaration)
-            = resolveSession.getFileScopeProvider().getFileScope(declaration.getContainingJetFile())
+            = resolveSession.getFileScopeProvider().getFileScope(declaration.getContainingJetFile()).asLocalScope()
 
     override fun getNonDeclaredFunctions(name: Name, result: MutableSet<FunctionDescriptor>) {
         // No extra functions

@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.idea.util.getImplicitReceiversWithInstanceToExpressi
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.parentsWithSelf
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.scopes.LexicalScopePart
 import org.jetbrains.kotlin.resolve.scopes.JetScope
 import org.jetbrains.kotlin.resolve.scopes.receivers.ThisReceiver
 import java.util.HashMap
@@ -70,7 +71,7 @@ public fun Call.mapArgumentsToParameters(targetDescriptor: CallableDescriptor): 
     return map
 }
 
-public fun ThisReceiver.asExpression(resolutionScope: JetScope, psiFactory: JetPsiFactory): JetExpression? {
+public fun ThisReceiver.asExpression(resolutionScope: LexicalScopePart, psiFactory: JetPsiFactory): JetExpression? {
     val expressionFactory = resolutionScope.getImplicitReceiversWithInstanceToExpression()
                                     .entrySet()
                                     .firstOrNull { it.key.getContainingDeclaration() == this.getDeclarationDescriptor() }
@@ -88,7 +89,7 @@ public fun PsiElement.getResolutionScope(bindingContext: BindingContext, resolut
         if (parent is JetClassBody) {
             val classDescriptor = bindingContext[BindingContext.CLASS, parent.getParent()] as? ClassDescriptorWithResolutionScopes
             if (classDescriptor != null) {
-                return classDescriptor.getScopeForMemberDeclarationResolution()
+                return classDescriptor.getScopeForMemberDeclarationResolution().asJetScope()
             }
         }
 

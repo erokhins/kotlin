@@ -125,7 +125,7 @@ fun JetType.hasTypeParametersToAdd(functionDescriptor: FunctionDescriptor, conte
     val scope =
             when (functionDescriptor) {
                 is ConstructorDescriptor -> {
-                    (functionDescriptor.containingDeclaration as? ClassDescriptorWithResolutionScopes)?.scopeForClassHeaderResolution
+                    (functionDescriptor.containingDeclaration as? ClassDescriptorWithResolutionScopes)?.scopeForClassHeaderResolution?.asJetScope()
                 }
 
                 is FunctionDescriptor -> {

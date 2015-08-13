@@ -44,7 +44,7 @@ import org.jetbrains.kotlin.resolve.calls.tasks.*;
 import org.jetbrains.kotlin.resolve.calls.tasks.collectors.CallableDescriptorCollectors;
 import org.jetbrains.kotlin.resolve.calls.util.CallMaker;
 import org.jetbrains.kotlin.resolve.descriptorUtil.DescriptorUtilPackage;
-import org.jetbrains.kotlin.resolve.scopes.JetScope;
+import org.jetbrains.kotlin.resolve.scopes.LexicalScopePart;
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver;
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue;
 import org.jetbrains.kotlin.types.JetType;
@@ -255,7 +255,7 @@ public class CallResolver {
     @NotNull
     public OverloadResolutionResults<FunctionDescriptor> resolveFunctionCall(
             @NotNull BindingTrace trace,
-            @NotNull JetScope scope,
+            @NotNull LexicalScopePart scope,
             @NotNull Call call,
             @NotNull JetType expectedType,
             @NotNull DataFlowInfo dataFlowInfo,
@@ -333,7 +333,7 @@ public class CallResolver {
 
     @Nullable
     public OverloadResolutionResults<FunctionDescriptor> resolveConstructorDelegationCall(
-            @NotNull BindingTrace trace, @NotNull JetScope scope, @NotNull DataFlowInfo dataFlowInfo,
+            @NotNull BindingTrace trace, @NotNull LexicalScopePart scope, @NotNull DataFlowInfo dataFlowInfo,
             @NotNull ConstructorDescriptor constructorDescriptor,
             @NotNull JetConstructorDelegationCall call, @NotNull CallChecker callChecker
     ) {

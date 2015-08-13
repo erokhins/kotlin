@@ -29,6 +29,7 @@ import org.jetbrains.kotlin.resolve.bindingContextUtil.getDataFlowInfo
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.DelegatingCall
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
+import org.jetbrains.kotlin.resolve.scopes.asLocalScope
 import org.jetbrains.kotlin.types.JetType
 import org.jetbrains.kotlin.types.TypeUtils
 import org.jetbrains.kotlin.types.checker.JetTypeChecker
@@ -70,7 +71,7 @@ public class RemoveExplicitTypeArgumentsIntention : JetSelfTargetingOffsetIndepe
             val dataFlow = context.getDataFlowInfo(callExpression)
             val container = createContainerForMacros(callExpression.getProject(), callExpression.findModuleDescriptor())
             val resolutionResults = container.callResolver.resolveFunctionCall(
-                    BindingTraceContext(), scope, untypedCall, expectedType, dataFlow, false)
+                    BindingTraceContext(), scope.asLocalScope(), untypedCall, expectedType, dataFlow, false)
             if (!resolutionResults.isSingleResult()) {
                 return false
             }

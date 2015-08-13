@@ -31,10 +31,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getDataFlowInfo
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo
 import org.jetbrains.kotlin.resolve.calls.smartcasts.SmartCastUtils
-import org.jetbrains.kotlin.resolve.scopes.DescriptorKindExclude
-import org.jetbrains.kotlin.resolve.scopes.DescriptorKindFilter
-import org.jetbrains.kotlin.resolve.scopes.JetScope
-import org.jetbrains.kotlin.resolve.scopes.getDescriptorsFiltered
+import org.jetbrains.kotlin.resolve.scopes.*
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.synthetic.SyntheticJavaPropertyDescriptor
@@ -134,7 +131,7 @@ public class ReferenceVariantsHelper(
         }
         else {
             // process instance members that can be called via implicit receiver's instances
-            val receivers = resolutionScope.getImplicitReceiversWithInstance()
+            val receivers = resolutionScope.asLocalScope().getImplicitReceiversWithInstance()
             val receiverValues = receivers.map { it.getValue() }
             for (receiverValue in receiverValues) {
                 descriptors.addMembersFromReceiverAndSyntheticExtensions(receiverValue, CallType.NORMAL, kindFilter, nameFilter, resolutionScope, dataFlowInfo)
@@ -214,7 +211,7 @@ public class ReferenceVariantsHelper(
             return ReceiversData(listOf(ExpressionReceiver(receiverExpression, expressionType)), receiverData.second)
         }
         else {
-            val resolutionScope = context[BindingContext.RESOLUTION_SCOPE, expression] ?: return ReceiversData.Empty
+            val resolutionScope = context[BindingContext.RESOLUTION_SCOPE, expression]?.asLocalScope() ?: return ReceiversData.Empty
             return ReceiversData(resolutionScope.getImplicitReceiversWithInstance().map { it.getValue() }, CallType.NORMAL)
         }
     }
@@ -244,7 +241,7 @@ public class ReferenceVariantsHelper(
         }
 
         // process member extensions from implicit receivers separately to filter out ones from implicit receivers with no instance
-        for (implicitReceiver in resolutionScope.getImplicitReceiversWithInstance()) {
+        for (implicitReceiver in resolutionScope.asLocalScope().getImplicitReceiversWithInstance()) {
             for (extension in implicitReceiver.getType().getMemberScope().getDescriptorsFiltered(extensionsFilter, nameFilter)) {
                 processExtension(extension)
             }

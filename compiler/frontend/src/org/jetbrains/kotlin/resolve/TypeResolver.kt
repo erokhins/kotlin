@@ -30,6 +30,7 @@ import org.jetbrains.kotlin.resolve.PossiblyBareType.type
 import org.jetbrains.kotlin.resolve.TypeResolver.FlexibleTypeCapabilitiesProvider
 import org.jetbrains.kotlin.resolve.lazy.ForceResolveUtil
 import org.jetbrains.kotlin.resolve.lazy.LazyEntity
+import org.jetbrains.kotlin.resolve.scopes.LexicalScopePart
 import org.jetbrains.kotlin.resolve.scopes.JetScope
 import org.jetbrains.kotlin.resolve.scopes.LazyScopeAdapter
 import org.jetbrains.kotlin.storage.LockBasedStorageManager
@@ -58,7 +59,7 @@ public class TypeResolver(
         }
     }
 
-    public fun resolveType(scope: JetScope, typeReference: JetTypeReference, trace: BindingTrace, checkBounds: Boolean): JetType {
+    public fun resolveType(scope: LexicalScopePart, typeReference: JetTypeReference, trace: BindingTrace, checkBounds: Boolean): JetType {
         // bare types are not allowed
         return resolveType(TypeResolutionContext(scope, trace, checkBounds, false), typeReference)
     }
@@ -108,7 +109,7 @@ public class TypeResolver(
         val typeElement = typeReference.getTypeElement()
 
         val type = resolveTypeElement(c, annotations, typeElement)
-        c.trace.record(BindingContext.TYPE_RESOLUTION_SCOPE, typeReference, c.scope)
+        c.trace.record(BindingContext.TYPE_RESOLUTION_SCOPE, typeReference, c.scope.asJetScope())
 
         if (!type.isBare) {
             for (argument in type.actualType.arguments) {
@@ -307,7 +308,7 @@ public class TypeResolver(
         }
     }
 
-    public fun resolveClass(scope: JetScope, userType: JetUserType, trace: BindingTrace): ClassifierDescriptor? {
+    public fun resolveClass(scope: LexicalScopePart, userType: JetUserType, trace: BindingTrace): ClassifierDescriptor? {
         if (userType.qualifier != null) { // we must resolve all type references in arguments of qualifier type
             for (typeArgument in userType.qualifier!!.typeArguments) {
                 typeArgument.typeReference?.let {

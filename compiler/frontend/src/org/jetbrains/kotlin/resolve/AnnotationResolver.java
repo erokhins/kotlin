@@ -38,7 +38,7 @@ import org.jetbrains.kotlin.resolve.constants.evaluate.ConstantExpressionEvaluat
 import org.jetbrains.kotlin.resolve.lazy.ForceResolveUtil;
 import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyAnnotationDescriptor;
 import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyAnnotationsContextImpl;
-import org.jetbrains.kotlin.resolve.scopes.JetScope;
+import org.jetbrains.kotlin.resolve.scopes.LexicalScopePart;
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue;
 import org.jetbrains.kotlin.storage.StorageManager;
 import org.jetbrains.kotlin.types.ErrorUtils;
@@ -74,7 +74,7 @@ public class AnnotationResolver {
 
     @NotNull
     public Annotations resolveAnnotationsWithoutArguments(
-            @NotNull JetScope scope,
+            @NotNull LexicalScopePart scope,
             @Nullable JetModifierList modifierList,
             @NotNull BindingTrace trace
     ) {
@@ -83,7 +83,7 @@ public class AnnotationResolver {
 
     @NotNull
     public Annotations resolveAnnotationsWithArguments(
-            @NotNull JetScope scope,
+            @NotNull LexicalScopePart scope,
             @Nullable JetModifierList modifierList,
             @NotNull BindingTrace trace
     ) {
@@ -92,7 +92,7 @@ public class AnnotationResolver {
 
     @NotNull
     public Annotations resolveAnnotationsWithoutArguments(
-            @NotNull JetScope scope,
+            @NotNull LexicalScopePart scope,
             @NotNull List<JetAnnotationEntry> annotationEntries,
             @NotNull BindingTrace trace
     ) {
@@ -101,7 +101,7 @@ public class AnnotationResolver {
 
     @NotNull
     public Annotations resolveAnnotationsWithArguments(
-            @NotNull JetScope scope,
+            @NotNull LexicalScopePart scope,
             @NotNull List<JetAnnotationEntry> annotationEntries,
             @NotNull BindingTrace trace
     ) {
@@ -109,7 +109,7 @@ public class AnnotationResolver {
     }
 
     private Annotations resolveAnnotations(
-            @NotNull JetScope scope,
+            @NotNull LexicalScopePart scope,
             @Nullable JetModifierList modifierList,
             @NotNull BindingTrace trace,
             boolean shouldResolveArguments
@@ -124,7 +124,7 @@ public class AnnotationResolver {
     }
 
     private Annotations resolveAnnotationEntries(
-            @NotNull JetScope scope,
+            @NotNull LexicalScopePart scope,
             @NotNull List<JetAnnotationEntry> annotationEntryElements,
             @NotNull BindingTrace trace,
             boolean shouldResolveArguments
@@ -146,7 +146,7 @@ public class AnnotationResolver {
     }
 
     @NotNull
-    public JetType resolveAnnotationType(@NotNull JetScope scope, @NotNull JetAnnotationEntry entryElement) {
+    public JetType resolveAnnotationType(@NotNull LexicalScopePart scope, @NotNull JetAnnotationEntry entryElement) {
         JetTypeReference typeReference = entryElement.getTypeReference();
         if (typeReference == null) {
             return ErrorUtils.createErrorType("No type reference: " + entryElement.getText());
@@ -183,7 +183,7 @@ public class AnnotationResolver {
     @NotNull
     public OverloadResolutionResults<FunctionDescriptor> resolveAnnotationCall(
             JetAnnotationEntry annotationEntry,
-            JetScope scope,
+            LexicalScopePart scope,
             BindingTrace trace
     ) {
         return callResolver.resolveFunctionCall(

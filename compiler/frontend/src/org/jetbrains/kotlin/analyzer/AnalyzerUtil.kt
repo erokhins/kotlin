@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.resolve.BindingTraceContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo
 import org.jetbrains.kotlin.resolve.descriptorUtil.module
 import org.jetbrains.kotlin.resolve.scopes.JetScope
+import org.jetbrains.kotlin.resolve.scopes.asLocalScope
 import org.jetbrains.kotlin.types.ErrorUtils
 import org.jetbrains.kotlin.types.JetType
 import org.jetbrains.kotlin.types.TypeUtils
@@ -38,7 +39,7 @@ public fun JetExpression.computeTypeInfoInContext(
         module: ModuleDescriptor = scope.getModule()
 ): JetTypeInfo {
     val expressionTypingServices = createContainerForMacros(getProject(), module).expressionTypingServices
-    return expressionTypingServices.getTypeInfo(scope, this, expectedType, dataFlowInfo, trace)
+    return expressionTypingServices.getTypeInfo(scope.asLocalScope(), this, expectedType, dataFlowInfo, trace)
 }
 
 public fun JetExpression.analyzeInContext(

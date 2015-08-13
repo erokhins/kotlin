@@ -19,14 +19,12 @@ package org.jetbrains.kotlin.resolve.scopes;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
-import org.jetbrains.kotlin.descriptors.*;
-import org.jetbrains.kotlin.psi.*;
-import org.jetbrains.kotlin.resolve.BindingContext;
+import org.jetbrains.kotlin.descriptors.PropertyDescriptor;
+import org.jetbrains.kotlin.descriptors.ReceiverParameterDescriptor;
+import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor;
 import org.jetbrains.kotlin.resolve.BindingTrace;
 import org.jetbrains.kotlin.resolve.TraceBasedRedeclarationHandler;
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue;
@@ -39,7 +37,7 @@ public final class JetScopeUtils {
     private JetScopeUtils() {}
 
     @NotNull
-    public static List<ReceiverValue> getImplicitReceiversHierarchyValues(@NotNull JetScope scope) {
+    public static List<ReceiverValue> getImplicitReceiversHierarchyValues(@NotNull LexicalScopePart scope) {
         Collection<ReceiverParameterDescriptor> hierarchy = scope.getImplicitReceiversHierarchy();
 
         return Lists.newArrayList(
@@ -53,12 +51,12 @@ public final class JetScopeUtils {
         );
     }
 
-    public static JetScope makeScopeForPropertyAccessor(
+    public static LexicalScopePart makeScopeForPropertyAccessor(
             @NotNull PropertyDescriptor propertyDescriptor,
-            @NotNull JetScope parentScope,
+            @NotNull LexicalScopePart parentScope,
             @NotNull BindingTrace trace
     ) {
-        JetScope propertyDeclarationInnerScope =
+        LexicalScopePart propertyDeclarationInnerScope =
                 getPropertyDeclarationInnerScope(propertyDescriptor, parentScope,
                                                  propertyDescriptor.getTypeParameters(),
                                                  propertyDescriptor.getExtensionReceiverParameter(), trace);
@@ -69,9 +67,9 @@ public final class JetScopeUtils {
         return accessorScope;
     }
 
-    public static JetScope getPropertyDeclarationInnerScope(
+    public static LexicalScopePart getPropertyDeclarationInnerScope(
             @NotNull PropertyDescriptor propertyDescriptor,
-            @NotNull JetScope outerScope,
+            @NotNull LexicalScopePart outerScope,
             @NotNull RedeclarationHandler redeclarationHandler
     ) {
         return getPropertyDeclarationInnerScope(propertyDescriptor,
@@ -82,9 +80,9 @@ public final class JetScopeUtils {
                                                 true);
     }
 
-    public static JetScope getPropertyDeclarationInnerScope(
+    public static LexicalScopePart getPropertyDeclarationInnerScope(
             @NotNull PropertyDescriptor propertyDescriptor,
-            @NotNull JetScope outerScope,
+            @NotNull LexicalScopePart outerScope,
             @NotNull List<? extends TypeParameterDescriptor> typeParameters,
             @Nullable ReceiverParameterDescriptor receiver,
             BindingTrace trace
@@ -92,9 +90,9 @@ public final class JetScopeUtils {
         return getPropertyDeclarationInnerScope(propertyDescriptor, outerScope, typeParameters, receiver, trace, true);
     }
 
-    public static JetScope getPropertyDeclarationInnerScopeForInitializer(
+    public static LexicalScopePart getPropertyDeclarationInnerScopeForInitializer(
             @NotNull PropertyDescriptor propertyDescriptor,
-            @NotNull JetScope outerScope,
+            @NotNull LexicalScopePart outerScope,
             @NotNull List<? extends TypeParameterDescriptor> typeParameters,
             @Nullable ReceiverParameterDescriptor receiver,
             BindingTrace trace
@@ -102,9 +100,9 @@ public final class JetScopeUtils {
         return getPropertyDeclarationInnerScope(propertyDescriptor, outerScope, typeParameters, receiver, trace, false);
     }
 
-    private static JetScope getPropertyDeclarationInnerScope(
+    private static LexicalScopePart getPropertyDeclarationInnerScope(
             @NotNull PropertyDescriptor propertyDescriptor,
-            @NotNull JetScope outerScope,
+            @NotNull LexicalScopePart outerScope,
             @NotNull List<? extends TypeParameterDescriptor> typeParameters,
             @Nullable ReceiverParameterDescriptor receiver,
             BindingTrace trace,
@@ -116,9 +114,9 @@ public final class JetScopeUtils {
     }
 
     @NotNull
-    private static JetScope getPropertyDeclarationInnerScope(
+    private static LexicalScopePart getPropertyDeclarationInnerScope(
             @NotNull PropertyDescriptor propertyDescriptor,
-            @NotNull JetScope outerScope,
+            @NotNull LexicalScopePart outerScope,
             @NotNull List<? extends TypeParameterDescriptor> typeParameters,
             @Nullable ReceiverParameterDescriptor receiver,
             @NotNull RedeclarationHandler redeclarationHandler,

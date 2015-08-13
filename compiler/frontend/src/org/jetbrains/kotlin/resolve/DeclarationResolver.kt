@@ -33,6 +33,7 @@ import org.jetbrains.kotlin.utils.*
 import java.util.HashSet
 
 import org.jetbrains.kotlin.diagnostics.Errors.REDECLARATION
+import org.jetbrains.kotlin.resolve.scopes.asLocalScope
 import kotlin.properties.Delegates
 
 public class DeclarationResolver(private val annotationResolver: AnnotationResolver,
@@ -41,8 +42,8 @@ public class DeclarationResolver(private val annotationResolver: AnnotationResol
     public fun resolveAnnotationsOnFiles(c: TopDownAnalysisContext, scopeProvider: FileScopeProvider) {
         val filesToScope = c.getFiles().keysToMap { scopeProvider.getFileScope(it) }
         for ((file, fileScope) in filesToScope) {
-            annotationResolver.resolveAnnotationsWithArguments(fileScope, file.getAnnotationEntries(), trace)
-            annotationResolver.resolveAnnotationsWithArguments(fileScope, file.getDanglingAnnotations(), trace)
+            annotationResolver.resolveAnnotationsWithArguments(fileScope.asLocalScope(), file.getAnnotationEntries(), trace)
+            annotationResolver.resolveAnnotationsWithArguments(fileScope.asLocalScope(), file.getDanglingAnnotations(), trace)
         }
     }
 

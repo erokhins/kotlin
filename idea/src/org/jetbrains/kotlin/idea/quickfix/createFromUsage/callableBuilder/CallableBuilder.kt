@@ -339,7 +339,7 @@ class CallableBuilder(val config: CallableBuilderConfiguration) {
             }
 
             if (receiverClassDescriptor is ClassDescriptorWithResolutionScopes) {
-                return receiverClassDescriptor.getScopeForMemberDeclarationResolution()
+                return receiverClassDescriptor.getScopeForMemberDeclarationResolution().asJetScope()
             }
 
             assert (receiverClassDescriptor is JavaClassDescriptor) { "Unexpected receiver class: $receiverClassDescriptor" }

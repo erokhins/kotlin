@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.resolve.DescriptorUtils
 import org.jetbrains.kotlin.resolve.constants.ConstantValue
 import org.jetbrains.kotlin.resolve.lazy.ForceResolveUtil
 import org.jetbrains.kotlin.resolve.lazy.LazyEntity
+import org.jetbrains.kotlin.resolve.scopes.LexicalScopePart
 import org.jetbrains.kotlin.resolve.scopes.JetScope
 import org.jetbrains.kotlin.resolve.source.toSourceElement
 import org.jetbrains.kotlin.storage.StorageManager
@@ -37,14 +38,14 @@ abstract class LazyAnnotationsContext(
          val storageManager: StorageManager,
          val trace: BindingTrace
 ) {
-    abstract val scope: JetScope
+    abstract val scope: LexicalScopePart
 }
 
 class LazyAnnotationsContextImpl(
         annotationResolver: AnnotationResolver,
         storageManager: StorageManager,
         trace: BindingTrace,
-        override val scope: JetScope
+        override val scope: LexicalScopePart
 ) : LazyAnnotationsContext(annotationResolver, storageManager, trace)
 
 public class LazyAnnotations(

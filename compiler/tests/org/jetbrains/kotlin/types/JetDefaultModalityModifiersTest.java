@@ -29,10 +29,7 @@ import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo;
 import org.jetbrains.kotlin.resolve.lazy.JvmResolveUtil;
 import org.jetbrains.kotlin.resolve.lazy.ResolveSession;
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory;
-import org.jetbrains.kotlin.resolve.scopes.JetScope;
-import org.jetbrains.kotlin.resolve.scopes.RedeclarationHandler;
-import org.jetbrains.kotlin.resolve.scopes.WritableScope;
-import org.jetbrains.kotlin.resolve.scopes.WritableScopeImpl;
+import org.jetbrains.kotlin.resolve.scopes.*;
 import org.jetbrains.kotlin.test.ConfigurationKind;
 import org.jetbrains.kotlin.test.JetLiteFixture;
 import org.jetbrains.kotlin.test.JetTestUtils;
@@ -125,9 +122,10 @@ public class JetDefaultModalityModifiersTest extends JetLiteFixture {
 
             List<JetDeclaration> declarations = aClass.getDeclarations();
             JetNamedFunction function = (JetNamedFunction) declarations.get(0);
-            SimpleFunctionDescriptor functionDescriptor = functionDescriptorResolver.resolveFunctionDescriptor(classDescriptor, scope, function,
-                                                                                                       JetTestUtils.DUMMY_TRACE,
-                                                                                                       DataFlowInfo.EMPTY);
+            SimpleFunctionDescriptor functionDescriptor = functionDescriptorResolver.resolveFunctionDescriptor(classDescriptor,
+                                                                                                               ScopesPackage.asLocalScope(scope), function,
+                                                                                                               JetTestUtils.DUMMY_TRACE,
+                                                                                                               DataFlowInfo.EMPTY);
 
             assertEquals(expectedFunctionModality, functionDescriptor.getModality());
         }
@@ -139,7 +137,7 @@ public class JetDefaultModalityModifiersTest extends JetLiteFixture {
             List<JetDeclaration> declarations = aClass.getDeclarations();
             JetProperty property = (JetProperty) declarations.get(0);
             PropertyDescriptor propertyDescriptor = descriptorResolver.resolvePropertyDescriptor(
-                    classDescriptor, scope, property, JetTestUtils.DUMMY_TRACE, DataFlowInfo.EMPTY);
+                    classDescriptor, ScopesPackage.asLocalScope(scope), property, JetTestUtils.DUMMY_TRACE, DataFlowInfo.EMPTY);
 
             assertEquals(expectedPropertyModality, propertyDescriptor.getModality());
         }
@@ -152,7 +150,7 @@ public class JetDefaultModalityModifiersTest extends JetLiteFixture {
             List<JetDeclaration> declarations = aClass.getDeclarations();
             JetProperty property = (JetProperty) declarations.get(0);
             PropertyDescriptor propertyDescriptor = descriptorResolver.resolvePropertyDescriptor(
-                    classDescriptor, scope, property, JetTestUtils.DUMMY_TRACE, DataFlowInfo.EMPTY);
+                    classDescriptor, ScopesPackage.asLocalScope(scope), property, JetTestUtils.DUMMY_TRACE, DataFlowInfo.EMPTY);
             PropertyAccessorDescriptor propertyAccessor = isGetter
                                                           ? propertyDescriptor.getGetter()
                                                           : propertyDescriptor.getSetter();

@@ -42,6 +42,7 @@ import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyPackageDescriptor;
 import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyScriptDescriptor;
 import org.jetbrains.kotlin.resolve.scopes.JetScope;
 import org.jetbrains.kotlin.incremental.components.LookupLocation;
+import org.jetbrains.kotlin.resolve.scopes.ScopesPackage;
 import org.jetbrains.kotlin.storage.*;
 
 import javax.inject.Inject;
@@ -212,7 +213,8 @@ public class ResolveSession implements KotlinCodeAnalyzer, LazyClassContext {
 
     private LazyAnnotations createAnnotations(JetFile file, List<JetAnnotationEntry> annotationEntries) {
         JetScope scope = fileScopeProvider.getFileScope(file);
-        LazyAnnotationsContextImpl lazyAnnotationContext = new LazyAnnotationsContextImpl(annotationResolve, storageManager, trace, scope);
+        LazyAnnotationsContextImpl lazyAnnotationContext = new LazyAnnotationsContextImpl(annotationResolve, storageManager, trace,
+                                                                                          ScopesPackage.asLocalScope(scope));
         return new LazyAnnotations(lazyAnnotationContext, annotationEntries);
     }
 

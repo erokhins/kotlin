@@ -40,6 +40,15 @@ public class WritableScopeImpl @jvmOverloads constructor(
         private val labeledDeclaration: DeclarationDescriptor? = null
 ) : AbstractScopeAdapter(), WritableScope {
 
+    public @jvmOverloads constructor(
+            parentScope: LexicalScopePart,
+            ownerDeclarationDescriptor: DeclarationDescriptor,
+            redeclarationHandler: RedeclarationHandler,
+            debugName: String,
+            implicitReceiver: ReceiverParameterDescriptor? = null,
+            labeledDeclaration: DeclarationDescriptor? = null
+    ): this(parentScope.asJetScope(), ownerDeclarationDescriptor, redeclarationHandler, debugName, implicitReceiver, labeledDeclaration)
+
     override val workerScope: JetScope = if (outerScope is WritableScope) outerScope.takeSnapshot() else outerScope
 
     private val addedDescriptors = SmartList<DeclarationDescriptor>()
@@ -226,6 +235,11 @@ public class WritableScopeImpl @jvmOverloads constructor(
         p.popIndent()
         p.println("}")
     }
+
+    override val parentScope: LexicalScopePart?
+        get() = throw UnsupportedOperationException()
+
+    override fun asJetScope(): JetScope = this
 
     private class IntList(val last: Int, val prev: IntList?)
 

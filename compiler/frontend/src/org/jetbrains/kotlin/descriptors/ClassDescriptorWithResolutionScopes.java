@@ -19,19 +19,19 @@ package org.jetbrains.kotlin.descriptors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.ReadOnly;
-import org.jetbrains.kotlin.resolve.scopes.JetScope;
+import org.jetbrains.kotlin.resolve.scopes.LexicalScopePart;
 
 import java.util.Collection;
 
 public interface ClassDescriptorWithResolutionScopes extends ClassDescriptor {
     @NotNull
-    JetScope getScopeForClassHeaderResolution();
+    LexicalScopePart getScopeForClassHeaderResolution();
 
     @NotNull
-    JetScope getScopeForMemberDeclarationResolution();
+    LexicalScopePart getScopeForMemberDeclarationResolution();
 
     @NotNull
-    JetScope getScopeForInitializerResolution();
+    LexicalScopePart getScopeForInitializerResolution();
 
     @Nullable
     @Override

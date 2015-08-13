@@ -62,6 +62,7 @@ import static org.jetbrains.kotlin.diagnostics.Errors.*;
 import static org.jetbrains.kotlin.resolve.BindingContext.TYPE;
 import static org.jetbrains.kotlin.resolve.ModifiersChecker.*;
 import static org.jetbrains.kotlin.resolve.source.SourcePackage.toSourceElement;
+import static org.jetbrains.kotlin.resolve.scopes.ScopesPackage.asLocalScope;
 
 public class LazyClassDescriptor extends ClassDescriptorBase implements ClassDescriptorWithResolutionScopes, LazyEntity {
     private static final Predicate<JetType> VALID_SUPERTYPE = new Predicate<JetType>() {
@@ -89,7 +90,7 @@ public class LazyClassDescriptor extends ClassDescriptorBase implements ClassDes
 
     private final LazyClassMemberScope unsubstitutedMemberScope;
 
-    private final NotNullLazyValue<JetScope> scopeForPropertyInitializerResolution;
+    private final NotNullLazyValue<LexicalScopePart> scopeForPropertyInitializerResolution;
 
     private final NullableLazyValue<Void> forceResolveAllContents;
     private final boolean isCompanionObject;
@@ -168,7 +169,7 @@ public class LazyClassDescriptor extends ClassDescriptorBase implements ClassDes
                     ) {
                         @NotNull
                         @Override
-                        public JetScope getScope() {
+                        public LexicalScopePart getScope() {
                             return getOuterScope();
                         }
                     },
@@ -193,7 +194,7 @@ public class LazyClassDescriptor extends ClassDescriptorBase implements ClassDes
                     ) {
                         @NotNull
                         @Override
-                        public JetScope getScope() {
+                        public LexicalScopePart getScope() {
                             return getScopeForMemberDeclarationResolution();
                         }
                     },
@@ -213,9 +214,9 @@ public class LazyClassDescriptor extends ClassDescriptorBase implements ClassDes
                 return computeCompanionObjectDescriptor(companionObject);
             }
         });
-        this.scopeForPropertyInitializerResolution = storageManager.createLazyValue(new Function0<JetScope>() {
+        this.scopeForPropertyInitializerResolution = storageManager.createLazyValue(new Function0<LexicalScopePart>() {
             @Override
-            public JetScope invoke() {
+            public LexicalScopePart invoke() {
                 return computeScopeForPropertyInitializerResolution();
             }
         });
@@ -227,9 +228,9 @@ public class LazyClassDescriptor extends ClassDescriptorBase implements ClassDes
             }
         }, null);
 
-        this.resolutionScopesSupport = new ClassResolutionScopesSupport(this, storageManager, new Function0<JetScope>() {
+        this.resolutionScopesSupport = new ClassResolutionScopesSupport(this, storageManager, new Function0<LexicalScopePart>() {
             @Override
-            public JetScope invoke() {
+            public LexicalScopePart invoke() {
                 return getOuterScope();
             }
         });
@@ -252,24 +253,24 @@ public class LazyClassDescriptor extends ClassDescriptorBase implements ClassDes
 
     @Override
     @NotNull
-    public JetScope getScopeForClassHeaderResolution() {
+    public LexicalScopePart getScopeForClassHeaderResolution() {
         return resolutionScopesSupport.getScopeForClassHeaderResolution();
     }
 
     @NotNull
-    protected JetScope getOuterScope() {
+    protected LexicalScopePart getOuterScope() {
         return c.getDeclarationScopeProvider().getResolutionScopeForDeclaration(declarationProvider.getOwnerInfo().getScopeAnchor());
     }
 
     @Override
     @NotNull
-    public JetScope getScopeForMemberDeclarationResolution() {
+    public LexicalScopePart getScopeForMemberDeclarationResolution() {
         return resolutionScopesSupport.getScopeForMemberDeclarationResolution();
     }
 
     @Override
     @NotNull
-    public JetScope getScopeForInitializerResolution() {
+    public LexicalScopePart getScopeForInitializerResolution() {
         return scopeForPropertyInitializerResolution.invoke();
     }
 
@@ -290,7 +291,7 @@ public class LazyClassDescriptor extends ClassDescriptorBase implements ClassDes
     }
 
     @NotNull
-    private JetScope computeScopeForPropertyInitializerResolution() {
+    private LexicalScopePart computeScopeForPropertyInitializerResolution() {
         ConstructorDescriptor primaryConstructor = getUnsubstitutedPrimaryConstructor();
         if (primaryConstructor == null) return getScopeForMemberDeclarationResolution();
 
@@ -303,10 +304,11 @@ public class LazyClassDescriptor extends ClassDescriptorBase implements ClassDes
         }
         scope.changeLockLevel(WritableScope.LockLevel.READING);
 
-        return new ChainedScope(
+        JetScope chainedScope = new ChainedScope(
                 primaryConstructor,
                 "ScopeForPropertyInitializerResolution: " + getName(),
-                scope, getScopeForMemberDeclarationResolution());
+                scope, getScopeForMemberDeclarationResolution().asJetScope());
+        return asLocalScope(chainedScope);
     }
 
 

@@ -23,7 +23,6 @@ import com.intellij.psi.search.PsiShortNamesCache
 import com.intellij.psi.stubs.StringStubIndexExtension
 import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.idea.caches.resolve.ResolutionFacade
-import org.jetbrains.kotlin.idea.caches.resolve.getResolutionFacade
 import org.jetbrains.kotlin.idea.codeInsight.ReferenceVariantsHelper
 import org.jetbrains.kotlin.idea.imports.importableFqName
 import org.jetbrains.kotlin.idea.stubindex.*
@@ -31,13 +30,16 @@ import org.jetbrains.kotlin.idea.util.CallType
 import org.jetbrains.kotlin.idea.util.getImplicitReceiversWithInstance
 import org.jetbrains.kotlin.idea.util.substituteExtensionIfCallable
 import org.jetbrains.kotlin.name.FqName
-import org.jetbrains.kotlin.psi.*
-import org.jetbrains.kotlin.resolve.*
-import org.jetbrains.kotlin.resolve.QualifiedExpressionResolver.LookupMode
+import org.jetbrains.kotlin.psi.JetCallableDeclaration
+import org.jetbrains.kotlin.psi.JetFile
+import org.jetbrains.kotlin.psi.JetNamedDeclaration
+import org.jetbrains.kotlin.psi.JetSimpleNameExpression
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getDataFlowInfo
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo
 import org.jetbrains.kotlin.resolve.calls.smartcasts.SmartCastUtils
 import org.jetbrains.kotlin.resolve.lazy.ResolveSessionUtils
+import org.jetbrains.kotlin.resolve.scopes.asLocalScope
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.types.JetType
@@ -140,7 +142,7 @@ public class KotlinIndicesHelper(
             return listOf(receiverValue to callType)
         }
         else {
-            val resolutionScope = bindingContext[BindingContext.RESOLUTION_SCOPE, expression] ?: return emptyList()
+            val resolutionScope = bindingContext[BindingContext.RESOLUTION_SCOPE, expression]?.asLocalScope() ?: return emptyList()
             return resolutionScope.getImplicitReceiversWithInstance().map { it.getValue() to CallType.NORMAL }
         }
     }

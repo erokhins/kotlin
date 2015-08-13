@@ -28,7 +28,6 @@ import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
 import org.jetbrains.kotlin.diagnostics.Errors.*
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
-import org.jetbrains.kotlin.resolve.scopes.JetScope
 import org.jetbrains.kotlin.resolve.ModifiersChecker.*
 import org.jetbrains.kotlin.resolve.DescriptorUtils.*
 import org.jetbrains.kotlin.resolve.DescriptorResolver.*
@@ -36,6 +35,7 @@ import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo
 import org.jetbrains.kotlin.resolve.lazy.ForceResolveUtil
 import org.jetbrains.kotlin.resolve.scopes.WritableScope
 import org.jetbrains.kotlin.resolve.scopes.WritableScopeImpl
+import org.jetbrains.kotlin.resolve.scopes.*
 import org.jetbrains.kotlin.resolve.source.toSourceElement
 import org.jetbrains.kotlin.storage.StorageManager
 import org.jetbrains.kotlin.types.DeferredType
@@ -58,7 +58,7 @@ class FunctionDescriptorResolver(
 ) {
     public fun resolveFunctionDescriptor(
             containingDescriptor: DeclarationDescriptor,
-            scope: JetScope,
+            scope: LexicalScopePart,
             function: JetNamedFunction,
             trace: BindingTrace,
             dataFlowInfo: DataFlowInfo
@@ -72,7 +72,7 @@ class FunctionDescriptorResolver(
 
     public fun resolveFunctionExpressionDescriptor(
             containingDescriptor: DeclarationDescriptor,
-            scope: JetScope,
+            scope: LexicalScopePart,
             function: JetNamedFunction,
             trace: BindingTrace,
             dataFlowInfo: DataFlowInfo,
@@ -83,7 +83,7 @@ class FunctionDescriptorResolver(
     private fun resolveFunctionDescriptor(
             functionConstructor: (DeclarationDescriptor, Annotations, Name, CallableMemberDescriptor.Kind, SourceElement) -> SimpleFunctionDescriptorImpl,
             containingDescriptor: DeclarationDescriptor,
-            scope: JetScope,
+            scope: LexicalScopePart,
             function: JetNamedFunction,
             trace: BindingTrace,
             dataFlowInfo: DataFlowInfo,
@@ -103,7 +103,7 @@ class FunctionDescriptorResolver(
     }
 
     private fun initializeFunctionReturnTypeBasedOnFunctionBody(
-            scope: JetScope,
+            scope: LexicalScopePart,
             function: JetNamedFunction,
             functionDescriptor: SimpleFunctionDescriptorImpl,
             trace: BindingTrace,
@@ -130,7 +130,7 @@ class FunctionDescriptorResolver(
 
     fun initializeFunctionDescriptorAndExplicitReturnType(
             containingDescriptor: DeclarationDescriptor,
-            scope: JetScope,
+            scope: LexicalScopePart,
             function: JetFunction,
             functionDescriptor: SimpleFunctionDescriptorImpl,
             trace: BindingTrace,
@@ -218,7 +218,7 @@ class FunctionDescriptorResolver(
             if (functionTypeExpected()) KotlinBuiltIns.getValueParameters(owner, this) else null
 
     public fun resolvePrimaryConstructorDescriptor(
-            scope: JetScope,
+            scope: LexicalScopePart,
             classDescriptor: ClassDescriptor,
             classElement: JetClassOrObject,
             trace: BindingTrace
@@ -237,7 +237,7 @@ class FunctionDescriptorResolver(
     }
 
     public fun resolveSecondaryConstructorDescriptor(
-            scope: JetScope,
+            scope: LexicalScopePart,
             classDescriptor: ClassDescriptor,
             constructor: JetSecondaryConstructor,
             trace: BindingTrace
@@ -255,7 +255,7 @@ class FunctionDescriptorResolver(
     }
 
     private fun createConstructorDescriptor(
-            scope: JetScope,
+            scope: LexicalScopePart,
             classDescriptor: ClassDescriptor,
             isPrimary: Boolean,
             modifierList: JetModifierList?,

@@ -24,10 +24,10 @@ import org.jetbrains.kotlin.psi.JetNamedFunction;
 import org.jetbrains.kotlin.resolve.FunctionDescriptorResolver;
 import org.jetbrains.kotlin.resolve.OverloadUtil;
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo;
+import org.jetbrains.kotlin.resolve.scopes.ScopesPackage;
 import org.jetbrains.kotlin.test.ConfigurationKind;
 import org.jetbrains.kotlin.test.JetLiteFixture;
 import org.jetbrains.kotlin.test.JetTestUtils;
-import org.jetbrains.kotlin.tests.di.ContainerForTests;
 import org.jetbrains.kotlin.tests.di.DiPackage;
 
 import static org.jetbrains.kotlin.psi.PsiPackage.JetPsiFactory;
@@ -173,7 +173,7 @@ public class JetOverloadTest extends JetLiteFixture {
 
     private FunctionDescriptor makeFunction(String funDecl) {
         JetNamedFunction function = JetPsiFactory(getProject()).createFunction(funDecl);
-        return functionDescriptorResolver.resolveFunctionDescriptor(root, KotlinBuiltIns.getInstance().getBuiltInsPackageScope(), function,
-                                                            JetTestUtils.DUMMY_TRACE, DataFlowInfo.EMPTY);
+        return functionDescriptorResolver.resolveFunctionDescriptor(root, ScopesPackage.asLocalScope(KotlinBuiltIns.getInstance().getBuiltInsPackageScope()), function,
+                                                                    JetTestUtils.DUMMY_TRACE, DataFlowInfo.EMPTY);
     }
 }

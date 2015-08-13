@@ -31,6 +31,7 @@ import org.jetbrains.kotlin.resolve.DescriptorUtils
 import org.jetbrains.kotlin.resolve.scopes.ChainedScope
 import org.jetbrains.kotlin.resolve.scopes.JetScope
 import org.jetbrains.kotlin.incremental.components.LookupLocation
+import org.jetbrains.kotlin.resolve.scopes.asLocalScope
 import org.jetbrains.kotlin.types.*
 import java.util.HashMap
 
@@ -97,7 +98,7 @@ public object HeuristicSignatures {
         val rootPackagesScope = SubpackagesScope(moduleDescriptor, FqName.ROOT)
         val typeParametersScope = TypeParametersScope(typeParameters)
         val scope = ChainedScope(moduleDescriptor, "Root packages + type parameters", typeParametersScope, rootPackagesScope)
-        val type = container.typeResolver.resolveType(scope, typeRef, BindingTraceContext(), false)
+        val type = container.typeResolver.resolveType(scope.asLocalScope(), typeRef, BindingTraceContext(), false)
         assert(!type.isError()) { "No type resolved from '$text'" }
         return type
     }

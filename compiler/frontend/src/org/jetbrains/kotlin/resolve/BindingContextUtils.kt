@@ -56,7 +56,7 @@ public fun JetExpression.isUsedAsStatement(context: BindingContext): Boolean = !
 public fun <C : ResolutionContext<C>> ResolutionContext<C>.recordScopeAndDataFlowInfo(expression: JetExpression?) {
     if (expression == null) return
 
-    val scopeToRecord = if (scope is WritableScope) scope.takeSnapshot() else scope
+    val scopeToRecord = if (scope is WritableScope) scope.takeSnapshot() else scope.asJetScope()
     trace.record(BindingContext.RESOLUTION_SCOPE, expression, scopeToRecord)
 
     val typeInfo = trace.get(BindingContext.EXPRESSION_TYPE_INFO, expression)

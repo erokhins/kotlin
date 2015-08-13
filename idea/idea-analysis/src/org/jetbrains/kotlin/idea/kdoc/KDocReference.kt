@@ -19,7 +19,6 @@ package org.jetbrains.kotlin.idea.kdoc
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.*
-import org.jetbrains.kotlin.idea.caches.resolve.KotlinCacheService
 import org.jetbrains.kotlin.idea.caches.resolve.ResolutionFacade
 import org.jetbrains.kotlin.idea.caches.resolve.getResolutionFacade
 import org.jetbrains.kotlin.idea.references.JetMultiReference
@@ -31,7 +30,6 @@ import org.jetbrains.kotlin.psi.JetFile
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.FunctionDescriptorUtil
-import org.jetbrains.kotlin.resolve.lazy.KotlinCodeAnalyzer
 import org.jetbrains.kotlin.resolve.scopes.*
 import org.jetbrains.kotlin.resolve.source.PsiSourceElement
 
@@ -85,7 +83,7 @@ public fun resolveKDocLink(resolutionFacade: ResolutionFacade,
     var result: Collection<DeclarationDescriptor> = listOf(fromDescriptor)
     qualifiedName.forEach { nameComponent ->
         if (result.size() != 1) return listOf()
-        val scope = getResolutionScope(resolutionFacade, result.first())
+        val scope = getResolutionScope(resolutionFacade, result.first()).asJetScope()
         result = scope.getDescriptors().filter { it.getName().asString() == nameComponent }
     }
 
@@ -96,7 +94,7 @@ private fun resolveInLocalScope(fromDescriptor: DeclarationDescriptor,
                                 name: String,
                                 resolutionFacade: ResolutionFacade): List<DeclarationDescriptor> {
     val scope = getResolutionScope(resolutionFacade, fromDescriptor)
-    return scope.getDescriptors().filter {
+    return scope.asJetScope().getDescriptors().filter {
         it.getName().asString() == name && it.getContainingDeclaration() == fromDescriptor
     }
 }
@@ -130,7 +128,7 @@ private fun getPackageInnerScope(descriptor: PackageFragmentDescriptor): JetScop
     return descriptor.getContainingDeclaration().getPackage(descriptor.fqName).memberScope
 }
 
-private fun getClassInnerScope(outerScope: JetScope, descriptor: ClassDescriptor): JetScope {
+private fun getClassInnerScope(outerScope: LexicalScopePart, descriptor: ClassDescriptor): LexicalScopePart {
     val redeclarationHandler = RedeclarationHandler.DO_NOTHING
 
     val headerScope = WritableScopeImpl(outerScope, descriptor, redeclarationHandler, "Class ${descriptor.getName()} header scope")
@@ -143,16 +141,16 @@ private fun getClassInnerScope(outerScope: JetScope, descriptor: ClassDescriptor
     headerScope.changeLockLevel(WritableScope.LockLevel.READING)
 
     val classScope = ChainedScope(descriptor, "Class ${descriptor.getName()} scope", descriptor.getDefaultType().getMemberScope(), headerScope)
-    return classScope
+    return classScope.asLocalScope()
 }
 
-public fun getResolutionScope(resolutionFacade: ResolutionFacade, descriptor: DeclarationDescriptor): JetScope {
+public fun getResolutionScope(resolutionFacade: ResolutionFacade, descriptor: DeclarationDescriptor): LexicalScopePart {
     return when (descriptor) {
         is PackageFragmentDescriptor ->
-            getPackageInnerScope(descriptor)
+            getPackageInnerScope(descriptor).asLocalScope()
 
         is PackageViewDescriptor ->
-            descriptor.memberScope
+            descriptor.memberScope.asLocalScope()
 
         is ClassDescriptorWithResolutionScopes ->
                 descriptor.getScopeForMemberDeclarationResolution()
@@ -176,12 +174,12 @@ public fun getResolutionScope(resolutionFacade: ResolutionFacade, descriptor: De
     }
 }
 
-private fun getOuterScope(descriptor: DeclarationDescriptorWithSource, resolutionFacade: ResolutionFacade): JetScope {
+private fun getOuterScope(descriptor: DeclarationDescriptorWithSource, resolutionFacade: ResolutionFacade): LexicalScopePart {
     val parent = descriptor.getContainingDeclaration()
     if (parent is PackageFragmentDescriptor) {
         val containingFile = (descriptor.getSource() as? PsiSourceElement)?.psi?.getContainingFile() as? JetFile
         if (containingFile != null) {
-            return resolutionFacade.getFileTopLevelScope(containingFile)
+            return resolutionFacade.getFileTopLevelScope(containingFile).asLocalScope()
         }
     }
     return getResolutionScope(resolutionFacade, parent!!)

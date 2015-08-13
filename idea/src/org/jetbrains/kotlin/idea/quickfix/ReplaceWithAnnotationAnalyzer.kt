@@ -94,7 +94,7 @@ object ReplaceWithAnnotationAnalyzer {
         val explicitlyImportedSymbols = importFqNames.flatMap { resolutionFacade.resolveImportReference(symbolDescriptor.module, it) }
 
         val symbolScope = getResolutionScope(symbolDescriptor)
-        val scope = ChainedScope(symbolDescriptor, "ReplaceWith resolution scope", ExplicitImportsScope(explicitlyImportedSymbols), symbolScope)
+        val scope = ChainedScope(symbolDescriptor, "ReplaceWith resolution scope", ExplicitImportsScope(explicitlyImportedSymbols), symbolScope.asJetScope())
 
         var bindingContext = expression.analyzeInContext(scope)
 
@@ -159,7 +159,7 @@ object ReplaceWithAnnotationAnalyzer {
         return ReplacementExpression(expression, importFqNames)
     }
 
-    private fun getResolutionScope(descriptor: DeclarationDescriptor): JetScope {
+    private fun getResolutionScope(descriptor: DeclarationDescriptor): LexicalScopePart {
         return when (descriptor) {
             is PackageFragmentDescriptor -> {
                 val moduleDescriptor = descriptor.getContainingDeclaration()
@@ -167,7 +167,7 @@ object ReplaceWithAnnotationAnalyzer {
             }
 
             is PackageViewDescriptor ->
-                descriptor.memberScope
+                descriptor.memberScope.asLocalScope()
 
             is ClassDescriptorWithResolutionScopes ->
                 descriptor.getScopeForMemberDeclarationResolution()
@@ -187,7 +187,7 @@ object ReplaceWithAnnotationAnalyzer {
                                                                RedeclarationHandler.DO_NOTHING)
             is LocalVariableDescriptor -> {
                 val declaration = DescriptorToSourceUtils.descriptorToDeclaration(descriptor) as JetDeclaration
-                declaration.analyze()[BindingContext.RESOLUTION_SCOPE, declaration]!!
+                declaration.analyze()[BindingContext.RESOLUTION_SCOPE, declaration]!!.asLocalScope()
             }
 
             //TODO?

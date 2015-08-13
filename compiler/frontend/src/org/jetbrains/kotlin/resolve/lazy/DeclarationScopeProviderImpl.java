@@ -22,7 +22,8 @@ import org.jetbrains.kotlin.psi.*;
 import org.jetbrains.kotlin.psi.psiUtil.PsiUtilPackage;
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo;
 import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyClassDescriptor;
-import org.jetbrains.kotlin.resolve.scopes.JetScope;
+import org.jetbrains.kotlin.resolve.scopes.LexicalScopePart;
+import org.jetbrains.kotlin.resolve.scopes.ScopesPackage;
 
 public class DeclarationScopeProviderImpl implements DeclarationScopeProvider {
 
@@ -40,7 +41,7 @@ public class DeclarationScopeProviderImpl implements DeclarationScopeProvider {
 
     @Override
     @NotNull
-    public JetScope getResolutionScopeForDeclaration(@NotNull PsiElement elementOfDeclaration) {
+    public LexicalScopePart getResolutionScopeForDeclaration(@NotNull PsiElement elementOfDeclaration) {
         JetDeclaration jetDeclaration = JetStubbedPsiUtil.getPsiOrStubParent(elementOfDeclaration, JetDeclaration.class, false);
 
         assert !(elementOfDeclaration instanceof JetDeclaration) || jetDeclaration == elementOfDeclaration :
@@ -54,7 +55,7 @@ public class DeclarationScopeProviderImpl implements DeclarationScopeProvider {
         }
 
         if (parentDeclaration == null) {
-            return fileScopeProvider.getFileScope((JetFile) elementOfDeclaration.getContainingFile());
+            return ScopesPackage.asLocalScope(fileScopeProvider.getFileScope((JetFile) elementOfDeclaration.getContainingFile()));
         }
 
         if (parentDeclaration instanceof JetClassOrObject) {

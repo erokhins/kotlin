@@ -82,6 +82,8 @@ import org.jetbrains.kotlin.types.TypeUtils;
 
 import java.util.*;
 
+import static org.jetbrains.kotlin.idea.refactoring.RefactoringPackage.*;
+
 public class JetChangeSignatureUsageProcessor implements ChangeSignatureUsageProcessor {
     // This is special 'PsiElement' whose purpose is to wrap JetMethodDescriptor so that it can be kept in the usage list
     private static class OriginalJavaMethodDescriptorWrapper extends UsageInfo {
@@ -613,11 +615,11 @@ public class JetChangeSignatureUsageProcessor implements ChangeSignatureUsagePro
 
         JetScope parametersScope = null;
         if (oldDescriptor instanceof ConstructorDescriptor && containingDeclaration instanceof ClassDescriptorWithResolutionScopes)
-            parametersScope = ((ClassDescriptorWithResolutionScopes) containingDeclaration).getScopeForInitializerResolution();
+            parametersScope = ((ClassDescriptorWithResolutionScopes) containingDeclaration).getScopeForInitializerResolution().asJetScope();
         else if (function instanceof JetFunction)
-            parametersScope = org.jetbrains.kotlin.idea.refactoring.RefactoringPackage.getBodyScope((JetFunction) function, bindingContext);
+            parametersScope = getBodyScope((JetFunction) function, bindingContext);
 
-        JetScope callableScope = org.jetbrains.kotlin.idea.refactoring.RefactoringPackage.getContainingScope(oldDescriptor, bindingContext);
+        JetScope callableScope = getContainingScope(oldDescriptor, bindingContext);
 
         JetMethodDescriptor.Kind kind = ChangeSignaturePackage.getKind(changeInfo);
         if (!kind.getIsConstructor() && callableScope != null && !info.getNewName().isEmpty()) {

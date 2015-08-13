@@ -24,10 +24,7 @@ import org.jetbrains.kotlin.descriptors.impl.FunctionDescriptorImpl;
 import org.jetbrains.kotlin.descriptors.impl.SimpleFunctionDescriptorImpl;
 import org.jetbrains.kotlin.descriptors.impl.TypeParameterDescriptorImpl;
 import org.jetbrains.kotlin.descriptors.impl.ValueParameterDescriptorImpl;
-import org.jetbrains.kotlin.resolve.scopes.JetScope;
-import org.jetbrains.kotlin.resolve.scopes.RedeclarationHandler;
-import org.jetbrains.kotlin.resolve.scopes.WritableScope;
-import org.jetbrains.kotlin.resolve.scopes.WritableScopeImpl;
+import org.jetbrains.kotlin.resolve.scopes.*;
 import org.jetbrains.kotlin.types.*;
 import org.jetbrains.kotlin.types.typeUtil.TypeUtilPackage;
 
@@ -60,14 +57,14 @@ public class FunctionDescriptorUtil {
     }
 
     @NotNull
-    public static JetScope getFunctionInnerScope(@NotNull JetScope outerScope, @NotNull FunctionDescriptor descriptor, @NotNull BindingTrace trace) {
+    public static LexicalScopePart getFunctionInnerScope(@NotNull LexicalScopePart outerScope, @NotNull FunctionDescriptor descriptor, @NotNull BindingTrace trace) {
         TraceBasedRedeclarationHandler redeclarationHandler = new TraceBasedRedeclarationHandler(trace);
         return getFunctionInnerScope(outerScope, descriptor, redeclarationHandler);
     }
 
     @NotNull
-    public static JetScope getFunctionInnerScope(
-            @NotNull JetScope outerScope,
+    public static LexicalScopePart getFunctionInnerScope(
+            @NotNull LexicalScopePart outerScope,
             @NotNull FunctionDescriptor descriptor,
             @NotNull RedeclarationHandler redeclarationHandler
     ) {
