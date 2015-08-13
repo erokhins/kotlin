@@ -16,21 +16,14 @@
 
 package org.jetbrains.kotlin.resolve.lazy
 
-import org.jetbrains.kotlin.descriptors.ModuleDescriptor
+import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.PackageFragmentDescriptor
-import org.jetbrains.kotlin.descriptors.impl.SubpackagesScope
-import org.jetbrains.kotlin.name.FqName
-import org.jetbrains.kotlin.psi.JetCodeFragment
-import org.jetbrains.kotlin.psi.JetFile
+import org.jetbrains.kotlin.incremental.components.LookupLocation
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.JetImportDirective
-import org.jetbrains.kotlin.resolve.BindingTrace
-import org.jetbrains.kotlin.resolve.NoSubpackagesInPackageScope
-import org.jetbrains.kotlin.resolve.QualifiedExpressionResolver
 import org.jetbrains.kotlin.resolve.scopes.ChainedScope
+import org.jetbrains.kotlin.resolve.scopes.FileScope
 import org.jetbrains.kotlin.resolve.scopes.JetScope
-import org.jetbrains.kotlin.storage.StorageManager
-import org.jetbrains.kotlin.utils.sure
-import java.util.ArrayList
 
 class LazyFileScope(
         scopeChain: List<JetScope>,
@@ -38,7 +31,15 @@ class LazyFileScope(
         private val allUnderImportResolver: LazyImportResolver,
         containingDeclaration: PackageFragmentDescriptor,
         debugName: String
-) : ChainedScope(containingDeclaration, debugName, *scopeChain.toTypedArray()) {
+) : ChainedScope(containingDeclaration, debugName, *scopeChain.toTypedArray()), FileScope {
+    override val containingDeclaration_: DeclarationDescriptor
+        get() = getContainingDeclaration()
+
+    override fun getOwnClassifier(name: Name, location: LookupLocation) = getClassifier(name, location)
+
+    override fun getOwnProperties(name: Name, location: LookupLocation) = getProperties(name, location)
+
+    override fun getOwnFunctions(name: Name, location: LookupLocation) = getFunctions(name, location)
 
     public fun forceResolveAllImports() {
         aliasImportResolver.forceResolveAllContents()
