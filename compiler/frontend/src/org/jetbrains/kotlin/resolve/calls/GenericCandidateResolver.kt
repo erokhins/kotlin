@@ -41,6 +41,7 @@ import org.jetbrains.kotlin.resolve.calls.results.ResolutionStatus.INCOMPLETE_TY
 import org.jetbrains.kotlin.resolve.calls.results.ResolutionStatus.OTHER_ERROR
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactory
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
+import org.jetbrains.kotlin.resolve.scopes.utils.asJetScope
 import org.jetbrains.kotlin.types.*
 import org.jetbrains.kotlin.types.TypeUtils.DONT_CARE
 import org.jetbrains.kotlin.types.TypeUtils.makeConstantSubstitutor
@@ -230,7 +231,7 @@ class GenericCandidateResolver(
         val effectiveExpectedType = getEffectiveExpectedType(valueParameterDescriptor, valueArgument)
         var expectedType = constraintSystem.getCurrentSubstitutor().substitute(effectiveExpectedType, Variance.INVARIANT)
         if (expectedType == null || TypeUtils.isDontCarePlaceholder(expectedType)) {
-            expectedType = argumentTypeResolver.getShapeTypeOfFunctionLiteral(functionLiteral, context.scope, context.trace, false)
+            expectedType = argumentTypeResolver.getShapeTypeOfFunctionLiteral(functionLiteral, context.scope.asJetScope(), context.trace, false)
         }
         if (expectedType == null || !KotlinBuiltIns.isFunctionOrExtensionFunctionType(expectedType) ||
             hasUnknownFunctionParameter(expectedType)) {

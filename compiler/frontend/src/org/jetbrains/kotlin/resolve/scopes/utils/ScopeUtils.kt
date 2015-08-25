@@ -74,13 +74,13 @@ public fun LexicalScope.getDeclarationsByLabel(labelName: Name): Collection<Decl
 }
 
 @deprecated("Use getOwnProperties instead")
-public fun LexicalScope.getLocalVariable(name: Name, location: LookupLocation = NoLookupLocation.UNSORTED): VariableDescriptor? {
+public fun LexicalScope.getLocalVariable(name: Name): VariableDescriptor? {
     processForMeAndParent {
         if (it is MemberScopeToFileScopeAdapter) { // todo remove hack
             return it.memberScope.getLocalVariable(name)
         }
         else if (it !is FileScope) { // todo check this
-            it.getDeclaredVariables(name, location).singleOrNull()?.let { return it }
+            it.getDeclaredVariables(name, NoLookupLocation.UNSORTED).singleOrNull()?.let { return it }
         }
     }
     return null
@@ -99,8 +99,16 @@ public fun LexicalScope.asJetScope(): JetScope {
     return LexicalToJetScopeAdapter(this)
 }
 
-@deprecated("Remove this method after scope refactoring")
 public fun JetScope.memberScopeAsFileScope(): FileScope = MemberScopeToFileScopeAdapter(this)
+
+@deprecated("Remove this method after scope refactoring")
+public fun JetScope.asLexicalScope(): LexicalScope
+        = if (this is LexicalToJetScopeAdapter) {
+            lexicalScope
+        }
+        else {
+            memberScopeAsFileScope()
+        }
 
 private class LexicalToJetScopeAdapter(val lexicalScope: LexicalScope): JetScope {
 
@@ -191,9 +199,7 @@ private class MemberScopeToFileScopeAdapter(val memberScope: JetScope) : FileSco
 
     override fun getDeclaredClassifier(name: Name, location: LookupLocation) = memberScope.getClassifier(name, location)
 
-    override fun getDeclaredVariables(name: Name, location: LookupLocation): Collection<VariableDescriptor> {
-        throw IllegalStateException()
-    }
+    override fun getDeclaredVariables(name: Name, location: LookupLocation) = memberScope.getProperties(name, location)
 
     override fun getDeclaredFunctions(name: Name, location: LookupLocation) = memberScope.getFunctions(name, location)
 

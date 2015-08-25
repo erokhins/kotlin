@@ -24,8 +24,10 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.DescriptorResolver
 import org.jetbrains.kotlin.resolve.TypeResolver
 import org.jetbrains.kotlin.resolve.dataClassUtils.createComponentName
-import org.jetbrains.kotlin.resolve.scopes.WritableScope
+import org.jetbrains.kotlin.resolve.scopes.LexicalWritableScope
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
+import org.jetbrains.kotlin.resolve.scopes.utils.asJetScope
+import org.jetbrains.kotlin.resolve.scopes.utils.getLocalVariable
 import org.jetbrains.kotlin.resolve.validation.SymbolUsageValidator
 import org.jetbrains.kotlin.types.ErrorUtils
 import org.jetbrains.kotlin.types.JetType
@@ -39,7 +41,7 @@ public class MultiDeclarationResolver(
         private val symbolUsageValidator: SymbolUsageValidator
 ) {
     public fun defineLocalVariablesFromMultiDeclaration(
-            writableScope: WritableScope,
+            writableScope: LexicalWritableScope,
             multiDeclaration: JetMultiDeclaration,
             receiver: ReceiverValue,
             reportErrorsOn: JetExpression,
@@ -72,7 +74,7 @@ public class MultiDeclarationResolver(
             if (componentType == null) {
                 componentType = ErrorUtils.createErrorType("$componentName() return type")
             }
-            val variableDescriptor = descriptorResolver.resolveLocalVariableDescriptorWithType(writableScope, entry, componentType, context.trace)
+            val variableDescriptor = descriptorResolver.resolveLocalVariableDescriptorWithType(writableScope.asJetScope(), entry, componentType, context.trace)
 
             val olderVariable = writableScope.getLocalVariable(variableDescriptor.getName())
             ExpressionTypingUtils.checkVariableShadowing(context, variableDescriptor, olderVariable)

@@ -40,8 +40,9 @@ import org.jetbrains.kotlin.resolve.calls.results.OverloadResolutionResultsUtil;
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo;
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValue;
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactory;
-import org.jetbrains.kotlin.resolve.scopes.WritableScope;
+import org.jetbrains.kotlin.resolve.scopes.LexicalWritableScope;
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver;
+import org.jetbrains.kotlin.resolve.scopes.utils.UtilsPackage;
 import org.jetbrains.kotlin.types.JetType;
 import org.jetbrains.kotlin.types.TypeUtils;
 import org.jetbrains.kotlin.types.checker.JetTypeChecker;
@@ -54,12 +55,13 @@ import static org.jetbrains.kotlin.psi.JetPsiUtil.deparenthesizeWithResolutionSt
 import static org.jetbrains.kotlin.resolve.BindingContext.AMBIGUOUS_REFERENCE_TARGET;
 import static org.jetbrains.kotlin.resolve.BindingContext.VARIABLE_REASSIGNMENT;
 import static org.jetbrains.kotlin.resolve.calls.context.ContextDependency.INDEPENDENT;
+import static org.jetbrains.kotlin.resolve.scopes.utils.UtilsPackage.asJetScope;
 import static org.jetbrains.kotlin.types.TypeUtils.NO_EXPECTED_TYPE;
 import static org.jetbrains.kotlin.types.TypeUtils.noExpectedType;
 
 @SuppressWarnings("SuspiciousMethodCalls")
 public class ExpressionTypingVisitorForStatements extends ExpressionTypingVisitor {
-    private final WritableScope scope;
+    private final LexicalWritableScope scope;
     private final BasicExpressionTypingVisitor basic;
     private final ControlStructureTypingVisitor controlStructures;
     private final PatternMatchingTypingVisitor patterns;
@@ -67,7 +69,7 @@ public class ExpressionTypingVisitorForStatements extends ExpressionTypingVisito
 
     public ExpressionTypingVisitorForStatements(
             @NotNull ExpressionTypingInternals facade,
-            @NotNull WritableScope scope,
+            @NotNull LexicalWritableScope scope,
             @NotNull BasicExpressionTypingVisitor basic,
             @NotNull ControlStructureTypingVisitor controlStructures,
             @NotNull PatternMatchingTypingVisitor patterns,
@@ -99,7 +101,7 @@ public class ExpressionTypingVisitorForStatements extends ExpressionTypingVisito
     public JetTypeInfo visitObjectDeclaration(@NotNull JetObjectDeclaration declaration, ExpressionTypingContext context) {
         components.localClassifierAnalyzer.processClassOrObject(
                 scope, context.replaceScope(scope).replaceContextDependency(INDEPENDENT),
-                scope.getContainingDeclaration(),
+                scope.getOwnerDescriptor(),
                 declaration);
         return TypeInfoFactoryPackage.createTypeInfo(components.dataFlowAnalyzer.checkStatementType(declaration, context), context);
     }
@@ -147,7 +149,7 @@ public class ExpressionTypingVisitorForStatements extends ExpressionTypingVisito
             if (property.getTypeReference() == null && type != null) {
                 DataFlowValue variableDataFlowValue = DataFlowValueFactory.createDataFlowValue(
                         propertyDescriptor, context.trace.getBindingContext(),
-                        DescriptorUtils.getContainingModuleOrNull(scope.getContainingDeclaration()));
+                        DescriptorUtils.getContainingModuleOrNull(scope.getOwnerDescriptor()));
                 DataFlowValue initializerDataFlowValue = DataFlowValueFactory.createDataFlowValue(initializer, type, context);
                 // We cannot say here anything new about initializerDataFlowValue
                 // except it has the same value as variableDataFlowValue
@@ -159,7 +161,7 @@ public class ExpressionTypingVisitorForStatements extends ExpressionTypingVisito
         }
 
         {
-            VariableDescriptor olderVariable = scope.getLocalVariable(propertyDescriptor.getName());
+            VariableDescriptor olderVariable = UtilsPackage.getLocalVariable(scope, propertyDescriptor.getName());
             ExpressionTypingUtils.checkVariableShadowing(context, propertyDescriptor, olderVariable);
         }
 
@@ -171,7 +173,7 @@ public class ExpressionTypingVisitorForStatements extends ExpressionTypingVisito
     @Override
     public JetTypeInfo visitMultiDeclaration(@NotNull JetMultiDeclaration multiDeclaration, ExpressionTypingContext context) {
         components.annotationResolver.resolveAnnotationsWithArguments(
-                scope, multiDeclaration.getModifierList(), context.trace);
+                asJetScope(scope), multiDeclaration.getModifierList(), context.trace);
 
         JetExpression initializer = multiDeclaration.getInitializer();
         if (initializer == null) {
@@ -197,7 +199,7 @@ public class ExpressionTypingVisitorForStatements extends ExpressionTypingVisito
     public JetTypeInfo visitClass(@NotNull JetClass klass, ExpressionTypingContext context) {
         components.localClassifierAnalyzer.processClassOrObject(
                 scope, context.replaceScope(scope).replaceContextDependency(INDEPENDENT),
-                scope.getContainingDeclaration(),
+                scope.getOwnerDescriptor(),
                 klass);
         return TypeInfoFactoryPackage.createTypeInfo(components.dataFlowAnalyzer.checkStatementType(klass, context), context);
     }

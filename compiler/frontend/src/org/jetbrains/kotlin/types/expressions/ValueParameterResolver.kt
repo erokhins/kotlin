@@ -25,7 +25,8 @@ import org.jetbrains.kotlin.resolve.DescriptorUtils
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo
 import org.jetbrains.kotlin.resolve.constants.evaluate.ConstantExpressionEvaluator
 import org.jetbrains.kotlin.resolve.lazy.ForceResolveUtil
-import org.jetbrains.kotlin.resolve.scopes.JetScope
+import org.jetbrains.kotlin.resolve.scopes.LexicalScope
+import org.jetbrains.kotlin.resolve.scopes.utils.asJetScope
 import org.jetbrains.kotlin.types.TypeUtils
 
 public class ValueParameterResolver(
@@ -35,7 +36,7 @@ public class ValueParameterResolver(
     public fun resolveValueParameters(
             valueParameters: List<JetParameter>,
             valueParameterDescriptors: List<ValueParameterDescriptor>,
-            declaringScope: JetScope,
+            declaringScope: LexicalScope,
             dataFlowInfo: DataFlowInfo,
             trace: BindingTrace
     ) {
@@ -63,7 +64,7 @@ public class ValueParameterResolver(
         if (!valueParameterDescriptor.declaresDefaultValue()) return
         val defaultValue = jetParameter.getDefaultValue() ?: return
         expressionTypingServices.getTypeInfo(defaultValue, context.replaceExpectedType(valueParameterDescriptor.getType()))
-        if (DescriptorUtils.isAnnotationClass(DescriptorResolver.getContainingClass(context.scope))) {
+        if (DescriptorUtils.isAnnotationClass(DescriptorResolver.getContainingClass(context.scope.asJetScope()))) {
             constantExpressionEvaluator.evaluateExpression(defaultValue, context.trace, valueParameterDescriptor.getType())
             ?: context.trace.report(Errors.ANNOTATION_PARAMETER_DEFAULT_VALUE_MUST_BE_CONSTANT.on(defaultValue))
         }

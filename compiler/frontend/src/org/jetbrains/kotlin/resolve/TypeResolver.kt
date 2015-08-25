@@ -32,6 +32,8 @@ import org.jetbrains.kotlin.resolve.lazy.ForceResolveUtil
 import org.jetbrains.kotlin.resolve.lazy.LazyEntity
 import org.jetbrains.kotlin.resolve.scopes.JetScope
 import org.jetbrains.kotlin.resolve.scopes.LazyScopeAdapter
+import org.jetbrains.kotlin.resolve.scopes.LexicalScope
+import org.jetbrains.kotlin.resolve.scopes.utils.asJetScope
 import org.jetbrains.kotlin.storage.LockBasedStorageManager
 import org.jetbrains.kotlin.storage.StorageManager
 import org.jetbrains.kotlin.types.*
@@ -56,6 +58,10 @@ public class TypeResolver(
         public open fun getCapabilities(): FlexibleTypeCapabilities {
             return FlexibleTypeCapabilities.NONE
         }
+    }
+
+    public fun resolveType(scope: LexicalScope, typeReference: JetTypeReference, trace: BindingTrace, checkBounds: Boolean): JetType {
+        return resolveType(scope.asJetScope(), typeReference, trace, checkBounds)
     }
 
     public fun resolveType(scope: JetScope, typeReference: JetTypeReference, trace: BindingTrace, checkBounds: Boolean): JetType {
