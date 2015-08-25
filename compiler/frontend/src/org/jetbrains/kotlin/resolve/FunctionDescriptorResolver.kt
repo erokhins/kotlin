@@ -28,13 +28,17 @@ import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
 import org.jetbrains.kotlin.diagnostics.Errors.*
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
-import org.jetbrains.kotlin.resolve.ModifiersChecker.*
-import org.jetbrains.kotlin.resolve.DescriptorUtils.*
 import org.jetbrains.kotlin.resolve.DescriptorResolver.*
+import org.jetbrains.kotlin.resolve.DescriptorUtils.getDispatchReceiverParameterIfNeeded
+import org.jetbrains.kotlin.resolve.DescriptorUtils.isFunctionExpression
+import org.jetbrains.kotlin.resolve.DescriptorUtils.isFunctionLiteral
+import org.jetbrains.kotlin.resolve.ModifiersChecker.resolveModalityFromModifiers
+import org.jetbrains.kotlin.resolve.ModifiersChecker.resolveVisibilityFromModifiers
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo
 import org.jetbrains.kotlin.resolve.lazy.ForceResolveUtil
-import org.jetbrains.kotlin.resolve.scopes.*
-import org.jetbrains.kotlin.resolve.scopes.utils.asJetScope
+import org.jetbrains.kotlin.resolve.scopes.LexicalScope
+import org.jetbrains.kotlin.resolve.scopes.LexicalWritableScope
+import org.jetbrains.kotlin.resolve.scopes.WritableScope
 import org.jetbrains.kotlin.resolve.source.toSourceElement
 import org.jetbrains.kotlin.storage.StorageManager
 import org.jetbrains.kotlin.types.DeferredType
@@ -44,7 +48,7 @@ import org.jetbrains.kotlin.types.TypeUtils
 import org.jetbrains.kotlin.types.checker.JetTypeChecker
 import org.jetbrains.kotlin.types.expressions.ExpressionTypingServices
 import org.jetbrains.kotlin.types.expressions.ExpressionTypingUtils
-import java.util.ArrayList
+import java.util.*
 
 class FunctionDescriptorResolver(
         private val typeResolver: TypeResolver,
@@ -90,7 +94,7 @@ class FunctionDescriptorResolver(
     ): SimpleFunctionDescriptor {
         val functionDescriptor = functionConstructor(
                 containingDescriptor,
-                annotationResolver.resolveAnnotationsWithoutArguments(scope.asJetScope(), function.getModifierList(), trace),
+                annotationResolver.resolveAnnotationsWithoutArguments(scope, function.getModifierList(), trace),
                 function.getNameAsSafeName(),
                 CallableMemberDescriptor.Kind.DECLARATION,
                 function.toSourceElement()
@@ -141,7 +145,7 @@ class FunctionDescriptorResolver(
         val typeParameterDescriptors = descriptorResolver.
                 resolveTypeParametersForCallableDescriptor(functionDescriptor, innerScope, function.getTypeParameters(), trace)
         innerScope.changeLockLevel(WritableScope.LockLevel.BOTH)
-        descriptorResolver.resolveGenericBounds(function, functionDescriptor, innerScope.asJetScope(), typeParameterDescriptors, trace)
+        descriptorResolver.resolveGenericBounds(function, functionDescriptor, innerScope, typeParameterDescriptors, trace)
 
         val receiverTypeRef = function.getReceiverTypeReference()
         val receiverType =
@@ -262,7 +266,7 @@ class FunctionDescriptorResolver(
     ): ConstructorDescriptorImpl {
         val constructorDescriptor = ConstructorDescriptorImpl.create(
                 classDescriptor,
-                annotationResolver.resolveAnnotationsWithoutArguments(scope.asJetScope(), modifierList, trace),
+                annotationResolver.resolveAnnotationsWithoutArguments(scope, modifierList, trace),
                 isPrimary,
                 declarationToTrace.toSourceElement()
         )
@@ -343,7 +347,7 @@ class FunctionDescriptorResolver(
                 }
             }
 
-            val valueParameterDescriptor = descriptorResolver.resolveValueParameterDescriptor(parameterScope.asJetScope(), functionDescriptor,
+            val valueParameterDescriptor = descriptorResolver.resolveValueParameterDescriptor(parameterScope, functionDescriptor,
                                                                                               valueParameter, i, type, trace)
             parameterScope.addVariableDescriptor(valueParameterDescriptor)
             result.add(valueParameterDescriptor)

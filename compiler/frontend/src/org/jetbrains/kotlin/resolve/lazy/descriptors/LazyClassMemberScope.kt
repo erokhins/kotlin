@@ -224,7 +224,7 @@ public open class LazyClassMemberScope(
             val parameter = primaryConstructorParameters.get(valueParameterDescriptor.getIndex())
             if (parameter.hasValOrVar()) {
                 val propertyDescriptor = c.descriptorResolver.resolvePrimaryConstructorParameterToAProperty(
-                        thisDescriptor, valueParameterDescriptor, thisDescriptor.getScopeForClassHeaderResolution().asJetScope(), parameter, trace)
+                        thisDescriptor, valueParameterDescriptor, thisDescriptor.getScopeForClassHeaderResolution(), parameter, trace)
                 result.add(propertyDescriptor)
             }
         }
@@ -235,7 +235,7 @@ public open class LazyClassMemberScope(
             ?: return setOf()
 
         val lazyTypeResolver = DelegationResolver.TypeResolver { reference ->
-            c.typeResolver.resolveType(thisDescriptor.getScopeForClassHeaderResolution().asJetScope(), reference, trace, false)
+            c.typeResolver.resolveType(thisDescriptor.getScopeForClassHeaderResolution(), reference, trace, false)
         }
         val lazyMemberExtractor = DelegationResolver.MemberExtractor<T> {
             type -> extractor.extract(type, name)
@@ -284,7 +284,7 @@ public open class LazyClassMemberScope(
 
         if (DescriptorUtils.canHaveDeclaredConstructors(thisDescriptor) || hasPrimaryConstructor) {
             val constructor = c.functionDescriptorResolver.resolvePrimaryConstructorDescriptor(
-                    thisDescriptor.getScopeForClassHeaderResolution().asJetScope(), thisDescriptor, classOrObject, trace)
+                    thisDescriptor.getScopeForClassHeaderResolution(), thisDescriptor, classOrObject, trace)
             constructor ?: return null
             setDeferredReturnType(constructor)
             return constructor
@@ -301,7 +301,7 @@ public open class LazyClassMemberScope(
 
         return classOrObject.getSecondaryConstructors().map { constructor ->
             val descriptor = c.functionDescriptorResolver.resolveSecondaryConstructorDescriptor(
-                    thisDescriptor.getScopeForClassHeaderResolution().asJetScope(), thisDescriptor, constructor, trace
+                    thisDescriptor.getScopeForClassHeaderResolution(), thisDescriptor, constructor, trace
             )
             setDeferredReturnType(descriptor)
             descriptor

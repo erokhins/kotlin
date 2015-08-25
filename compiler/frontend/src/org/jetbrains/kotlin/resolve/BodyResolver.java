@@ -513,7 +513,7 @@ public class BodyResolver {
         JetModifierList modifierList = owner.getModifierList();
         if (modifierList == null) return;
 
-        annotationResolver.resolveAnnotationsWithArguments(asJetScope(scope), modifierList, trace);
+        annotationResolver.resolveAnnotationsWithArguments(scope, modifierList, trace);
     }
 
     private void resolvePrimaryConstructorParameters(@NotNull BodiesResolveContext c) {

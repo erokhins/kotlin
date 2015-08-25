@@ -55,7 +55,6 @@ import static org.jetbrains.kotlin.psi.JetPsiUtil.deparenthesizeWithResolutionSt
 import static org.jetbrains.kotlin.resolve.BindingContext.AMBIGUOUS_REFERENCE_TARGET;
 import static org.jetbrains.kotlin.resolve.BindingContext.VARIABLE_REASSIGNMENT;
 import static org.jetbrains.kotlin.resolve.calls.context.ContextDependency.INDEPENDENT;
-import static org.jetbrains.kotlin.resolve.scopes.utils.UtilsPackage.asJetScope;
 import static org.jetbrains.kotlin.types.TypeUtils.NO_EXPECTED_TYPE;
 import static org.jetbrains.kotlin.types.TypeUtils.noExpectedType;
 
@@ -172,8 +171,7 @@ public class ExpressionTypingVisitorForStatements extends ExpressionTypingVisito
 
     @Override
     public JetTypeInfo visitMultiDeclaration(@NotNull JetMultiDeclaration multiDeclaration, ExpressionTypingContext context) {
-        components.annotationResolver.resolveAnnotationsWithArguments(
-                asJetScope(scope), multiDeclaration.getModifierList(), context.trace);
+        components.annotationResolver.resolveAnnotationsWithArguments(scope, multiDeclaration.getModifierList(), context.trace);
 
         JetExpression initializer = multiDeclaration.getInitializer();
         if (initializer == null) {
