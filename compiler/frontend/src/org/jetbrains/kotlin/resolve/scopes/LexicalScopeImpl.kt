@@ -18,18 +18,17 @@ package org.jetbrains.kotlin.resolve.scopes
 
 import com.intellij.util.SmartList
 import org.jetbrains.kotlin.descriptors.*
-import org.jetbrains.kotlin.incremental.components.LookupLocation
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.utils.Printer
 
-public open class LexicalScopeImpl(
+public class LexicalScopeImpl(
         override val parent: LexicalScope,
         override val ownerDescriptor: DeclarationDescriptor,
         override val isOwnerDescriptorAccessibleByLabel: Boolean,
         override val implicitReceiver: ReceiverParameterDescriptor?,
         private val debugName: String,
         initialize: LexicalScopeImpl.InitializeHandler.() -> Unit = {}
-): LexicalScope, WritableScopeStorage {
+): LexicalScope, WritableScopeStorage, ScopeStorageToLexicalScopeAdapter {
     override val addedDescriptors: MutableList<DeclarationDescriptor> = SmartList()
     override val redeclarationHandler: RedeclarationHandler
         get() = RedeclarationHandler.DO_NOTHING
@@ -40,17 +39,6 @@ public open class LexicalScopeImpl(
     init {
         InitializeHandler().initialize()
     }
-
-    override fun getDeclaredDescriptors(): Collection<DeclarationDescriptor> = addedDescriptors
-
-    override fun getDeclaredClassifier(name: Name, location: LookupLocation)
-            = variableOrClassDescriptorByName(name) as? ClassifierDescriptor
-
-    override fun getDeclaredVariables(name: Name, location: LookupLocation): Collection<VariableDescriptor>
-            = listOfNotNull(variableOrClassDescriptorByName(name) as? VariableDescriptor)
-
-    override fun getDeclaredFunctions(name: Name, location: LookupLocation): Collection<FunctionDescriptor>
-            = functionsByName(name) ?: emptyList()
 
     override fun toString(): String = debugName
 
