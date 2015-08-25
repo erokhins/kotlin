@@ -27,6 +27,7 @@ public class LexicalScopeImpl(
         override val isOwnerDescriptorAccessibleByLabel: Boolean,
         override val implicitReceiver: ReceiverParameterDescriptor?,
         private val debugName: String,
+        redeclarationHandler: RedeclarationHandler = RedeclarationHandler.DO_NOTHING,
         initialize: LexicalScopeImpl.InitializeHandler.() -> Unit = {}
 ): LexicalScope, WritableScopeStorage, ScopeStorageToLexicalScopeAdapter {
     override val addedDescriptors: MutableList<DeclarationDescriptor> = SmartList()
@@ -37,7 +38,7 @@ public class LexicalScopeImpl(
     override var variablesAndClassifiersByName: MutableMap<Name, WritableScopeStorage.IntList>? = null
 
     init {
-        InitializeHandler().initialize()
+        InitializeHandler(redeclarationHandler).initialize()
     }
 
     override fun toString(): String = debugName
@@ -54,14 +55,28 @@ public class LexicalScopeImpl(
         p.println("}")
     }
 
-    inner class InitializeHandler {
+    inner class InitializeHandler(override val redeclarationHandler: RedeclarationHandler): WritableScopeStorage {
+        override val addedDescriptors: MutableList<DeclarationDescriptor>
+            get() = this@LexicalScopeImpl.addedDescriptors
+        override var functionsByName: MutableMap<Name, WritableScopeStorage.IntList>?
+            get() = this@LexicalScopeImpl.functionsByName
+            set(value) {
+                this@LexicalScopeImpl.functionsByName = value
+            }
+        override var variablesAndClassifiersByName: MutableMap<Name, WritableScopeStorage.IntList>?
+            get() = this@LexicalScopeImpl.variablesAndClassifiersByName
+            set(value) {
+                this@LexicalScopeImpl.variablesAndClassifiersByName = value
+            }
+
         public fun addVariableDescriptor(variableDescriptor: VariableDescriptor): Unit
-                = this@LexicalScopeImpl.addVariableOrClassDescriptor(variableDescriptor)
+                    = addVariableOrClassDescriptor(variableDescriptor)
 
-        public fun addFunctionDescriptor(functionDescriptor: FunctionDescriptor): Unit
-                = this@LexicalScopeImpl.addFunctionDescriptor(functionDescriptor)
+            public override fun addFunctionDescriptor(functionDescriptor: FunctionDescriptor): Unit
+                    = addFunctionDescriptor(functionDescriptor)
 
-        public fun addClassifierDescriptor(classifierDescriptor: ClassifierDescriptor): Unit
-                = this@LexicalScopeImpl.addVariableOrClassDescriptor(classifierDescriptor)
+            public fun addClassifierDescriptor(classifierDescriptor: ClassifierDescriptor): Unit
+                    = addVariableOrClassDescriptor(classifierDescriptor)
+
     }
 }
