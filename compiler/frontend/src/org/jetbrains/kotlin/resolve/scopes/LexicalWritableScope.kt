@@ -18,6 +18,7 @@ package org.jetbrains.kotlin.resolve.scopes
 
 import com.intellij.util.SmartList
 import org.jetbrains.kotlin.descriptors.*
+import org.jetbrains.kotlin.incremental.components.LookupLocation
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.utils.Printer
 
@@ -28,7 +29,7 @@ class LexicalWritableScope(
         override val implicitReceiver: ReceiverParameterDescriptor?,
         override val redeclarationHandler: RedeclarationHandler,
         private val debugName: String
-) : LexicalScope, WritableScopeStorage, ScopeStorageToLexicalScopeAdapter {
+) : LexicalScope, WritableScopeStorage {
     override val addedDescriptors: MutableList<DeclarationDescriptor> = SmartList()
 
     override var functionsByName: MutableMap<Name, WritableScopeStorage.IntList>? = null
@@ -67,10 +68,19 @@ class LexicalWritableScope(
         addVariableOrClassDescriptor(classifierDescriptor)
     }
 
-    private fun checkMayRead() {
+    override fun getDeclaredDescriptors() = checkMayRead().addedDescriptors
+
+    override fun getDeclaredClassifier(name: Name, location: LookupLocation) = checkMayRead().getDeclaredClassifier(name)
+
+    override fun getDeclaredVariables(name: Name, location: LookupLocation) = checkMayRead().getDeclaredVariables(name)
+
+    override fun getDeclaredFunctions(name: Name, location: LookupLocation) = checkMayRead().getDeclaredFunctions(name)
+
+    private fun checkMayRead(): LexicalWritableScope {
         if (lockLevel != WritableScope.LockLevel.READING && lockLevel != WritableScope.LockLevel.BOTH) {
             throw IllegalStateException("cannot read with lock level " + lockLevel + " at " + toString())
         }
+        return this
     }
 
     private fun checkMayWrite() {
@@ -79,7 +89,7 @@ class LexicalWritableScope(
         }
     }
 
-    private inner class Snapshot(override val descriptorLimit: Int): WritableScopeStorage by this, ScopeStorageToLexicalScopeAdapter {
+    private inner class Snapshot(val descriptorLimit: Int): LexicalScope {
         override val parent: LexicalScope?
             get() = this@LexicalWritableScope.parent
         override val ownerDescriptor: DeclarationDescriptor
@@ -88,6 +98,17 @@ class LexicalWritableScope(
             get() = this@LexicalWritableScope.isOwnerDescriptorAccessibleByLabel
         override val implicitReceiver: ReceiverParameterDescriptor?
             get() = this@LexicalWritableScope.implicitReceiver
+
+        override fun getDeclaredDescriptors() = this@LexicalWritableScope.addedDescriptors.subList(0, descriptorLimit)
+
+        override fun getDeclaredClassifier(name: Name, location: LookupLocation)
+                = this@LexicalWritableScope.getDeclaredClassifier(name, descriptorLimit)
+
+        override fun getDeclaredVariables(name: Name, location: LookupLocation)
+                = this@LexicalWritableScope.getDeclaredVariables(name, descriptorLimit)
+
+        override fun getDeclaredFunctions(name: Name, location: LookupLocation)
+                = this@LexicalWritableScope.getDeclaredFunctions(name, descriptorLimit)
 
         override fun toString(): String = "Snapshot for $debugName"
 

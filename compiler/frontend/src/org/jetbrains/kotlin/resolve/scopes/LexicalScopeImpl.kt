@@ -18,6 +18,7 @@ package org.jetbrains.kotlin.resolve.scopes
 
 import com.intellij.util.SmartList
 import org.jetbrains.kotlin.descriptors.*
+import org.jetbrains.kotlin.incremental.components.LookupLocation
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.utils.Printer
 
@@ -29,7 +30,7 @@ public class LexicalScopeImpl(
         private val debugName: String,
         redeclarationHandler: RedeclarationHandler = RedeclarationHandler.DO_NOTHING,
         initialize: LexicalScopeImpl.InitializeHandler.() -> Unit = {}
-): LexicalScope, WritableScopeStorage, ScopeStorageToLexicalScopeAdapter {
+): LexicalScope, WritableScopeStorage {
     override val addedDescriptors: MutableList<DeclarationDescriptor> = SmartList()
     override val redeclarationHandler: RedeclarationHandler
         get() = RedeclarationHandler.DO_NOTHING
@@ -40,6 +41,14 @@ public class LexicalScopeImpl(
     init {
         InitializeHandler(redeclarationHandler).initialize()
     }
+
+    override fun getDeclaredDescriptors() = addedDescriptors
+
+    override fun getDeclaredClassifier(name: Name, location: LookupLocation) = getDeclaredClassifier(name)
+
+    override fun getDeclaredVariables(name: Name, location: LookupLocation) = getDeclaredVariables(name)
+
+    override fun getDeclaredFunctions(name: Name, location: LookupLocation) = getDeclaredFunctions(name)
 
     override fun toString(): String = debugName
 
