@@ -31,12 +31,11 @@ import org.jetbrains.kotlin.resolve.calls.context.BasicCallResolutionContext
 import org.jetbrains.kotlin.resolve.calls.context.CheckArgumentTypesMode
 import org.jetbrains.kotlin.resolve.calls.context.ContextDependency
 import org.jetbrains.kotlin.resolve.calls.util.DelegatingCall
-import org.jetbrains.kotlin.resolve.scopes.ChainedScope
 import org.jetbrains.kotlin.resolve.scopes.ExplicitImportsScope
+import org.jetbrains.kotlin.resolve.scopes.LexicalChainedScope
 import org.jetbrains.kotlin.types.TypeUtils
 import org.jetbrains.kotlin.util.descriptorsEqualWithSubstitution
-import java.util.ArrayList
-import java.util.HashSet
+import java.util.*
 
 public class ShadowedDeclarationsFilter(
         private val bindingContext: BindingContext,
@@ -154,11 +153,12 @@ public class ShadowedDeclarationsFilter(
         }
 
         val calleeExpression = call.getCalleeExpression() ?: return descriptors
-        var resolutionScope = bindingContext[BindingContext.RESOLUTION_SCOPE, calleeExpression] ?: return descriptors
+        var resolutionScope = bindingContext[BindingContext.LEXICAL_SCOPE, calleeExpression] ?: return descriptors
 
         if (descriptorsToImport.isNotEmpty()) {
-            resolutionScope = ChainedScope(resolutionScope.getContainingDeclaration(), "Scope with explicitly imported descriptors",
-                                           ExplicitImportsScope(descriptorsToImport), resolutionScope)
+            resolutionScope = LexicalChainedScope(resolutionScope, resolutionScope.ownerDescriptor, false, null,
+                                                  "Scope with explicitly imported descriptors",
+                                                  ExplicitImportsScope(descriptorsToImport))
         }
 
         val dataFlowInfo = bindingContext.getDataFlowInfo(calleeExpression)

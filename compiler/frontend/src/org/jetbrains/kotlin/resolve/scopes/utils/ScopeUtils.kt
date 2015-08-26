@@ -73,6 +73,22 @@ public fun LexicalScope.getDeclarationsByLabel(labelName: Name): Collection<Decl
     }
 }
 
+// Result is guaranteed to be filtered by kind and name.
+public fun LexicalScope.getDescriptorsFiltered(
+        kindFilter: DescriptorKindFilter = DescriptorKindFilter.ALL,
+        nameFilter: (Name) -> Boolean = { true }
+): Collection<DeclarationDescriptor> {
+    if (kindFilter.kindMask == 0) return listOf()
+    return collectAllFromMeAndParent {
+        if (it is FileScope) {
+            it.getDescriptors(kindFilter, nameFilter)
+        } else {
+            it.getDeclaredDescriptors()
+        }
+    }.filter { kindFilter.accepts(it) && nameFilter(it.name) }
+}
+
+
 @deprecated("Use getOwnProperties instead")
 public fun LexicalScope.getLocalVariable(name: Name): VariableDescriptor? {
     processForMeAndParent {

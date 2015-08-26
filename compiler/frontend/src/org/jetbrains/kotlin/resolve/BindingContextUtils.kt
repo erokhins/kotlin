@@ -59,6 +59,7 @@ public fun <C : ResolutionContext<C>> ResolutionContext<C>.recordScopeAndDataFlo
 
     val scopeToRecord = if (scope is LexicalWritableScope) scope.takeSnapshot() else scope
     trace.record(BindingContext.RESOLUTION_SCOPE, expression, scopeToRecord.asJetScope())
+    trace.record(BindingContext.LEXICAL_SCOPE, expression, scopeToRecord)
 
     val typeInfo = trace.get(BindingContext.EXPRESSION_TYPE_INFO, expression)
     if (typeInfo != null) {
