@@ -221,7 +221,7 @@ public class LabelResolver {
 
             if (declarationDescriptor instanceof ClassDescriptor) {
                 ClassDescriptor classDescriptor = (ClassDescriptor) declarationDescriptor;
-                if (!DescriptorResolver.checkHasOuterClassInstance(UtilsPackage.asJetScope(context.scope), context.trace, targetLabel, classDescriptor)) {
+                if (!DescriptorResolver.checkHasOuterClassInstance(context.scope, context.trace, targetLabel, classDescriptor)) {
                     return LabeledReceiverResolutionResult.labelResolutionFailed();
                 }
             }

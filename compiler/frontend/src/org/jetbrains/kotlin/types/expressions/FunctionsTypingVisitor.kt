@@ -34,7 +34,6 @@ import org.jetbrains.kotlin.resolve.BindingTrace
 import org.jetbrains.kotlin.resolve.FunctionDescriptorUtil
 import org.jetbrains.kotlin.resolve.lazy.ForceResolveUtil
 import org.jetbrains.kotlin.resolve.scopes.LexicalWritableScope
-import org.jetbrains.kotlin.resolve.scopes.utils.asJetScope
 import org.jetbrains.kotlin.resolve.source.toSourceElement
 import org.jetbrains.kotlin.types.CommonSupertypes
 import org.jetbrains.kotlin.types.JetType
@@ -163,7 +162,7 @@ public class FunctionsTypingVisitor(facade: ExpressionTypingInternals) : Express
         val functionLiteral = expression.getFunctionLiteral()
         val functionDescriptor = AnonymousFunctionDescriptor(
             context.scope.ownerDescriptor,
-            components.annotationResolver.resolveAnnotationsWithArguments(context.scope.asJetScope(), expression.getAnnotationEntries(), context.trace),
+            components.annotationResolver.resolveAnnotationsWithArguments(context.scope, expression.getAnnotationEntries(), context.trace),
             CallableMemberDescriptor.Kind.DECLARATION, functionLiteral.toSourceElement()
         )
         components.functionDescriptorResolver.

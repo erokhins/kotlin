@@ -167,7 +167,7 @@ public class BasicExpressionTypingVisitor extends ExpressionTypingVisitor {
         IElementType operationType = expression.getOperationReference().getReferencedNameElementType();
 
         boolean allowBareTypes = BARE_TYPES_ALLOWED.contains(operationType);
-        TypeResolutionContext typeResolutionContext = new TypeResolutionContext(asJetScope(context.scope), context.trace, true, allowBareTypes);
+        TypeResolutionContext typeResolutionContext = new TypeResolutionContext(context.scope, context.trace, true, allowBareTypes);
         PossiblyBareType possiblyBareTarget = components.typeResolver.resolvePossiblyBareType(typeResolutionContext, right);
 
         if (operationType == JetTokens.COLON) {
@@ -356,7 +356,7 @@ public class BasicExpressionTypingVisitor extends ExpressionTypingVisitor {
                 JetUserType userType = (JetUserType) typeElement;
                 // This may be just a superclass name even if the superclass is generic
                 if (userType.getTypeArguments().isEmpty()) {
-                    classifierCandidate = components.typeResolver.resolveClass(asJetScope(context.scope), userType, context.trace);
+                    classifierCandidate = components.typeResolver.resolveClass(context.scope, userType, context.trace);
                 }
                 else {
                     supertype = components.typeResolver.resolveType(context.scope, superTypeQualifier, context.trace, true);
@@ -536,7 +536,7 @@ public class BasicExpressionTypingVisitor extends ExpressionTypingVisitor {
         }
 
         TypeResolutionContext context =
-                new TypeResolutionContext(asJetScope(c.scope), c.trace, /* checkBounds = */ false, /* allowBareTypes = */ true);
+                new TypeResolutionContext(c.scope, c.trace, /* checkBounds = */ false, /* allowBareTypes = */ true);
         PossiblyBareType possiblyBareType =
                 components.typeResolver.resolvePossiblyBareType(context, typeReference);
 
@@ -1384,8 +1384,7 @@ public class BasicExpressionTypingVisitor extends ExpressionTypingVisitor {
     }
 
     public JetTypeInfo visitAnnotatedExpression(JetAnnotatedExpression expression, ExpressionTypingContext context, boolean isStatement) {
-        components.annotationResolver.resolveAnnotationsWithArguments(
-                asJetScope(context.scope), expression.getAnnotationEntries(), context.trace);
+        components.annotationResolver.resolveAnnotationsWithArguments(context.scope, expression.getAnnotationEntries(), context.trace);
 
         JetExpression baseExpression = expression.getBaseExpression();
         if (baseExpression == null) {

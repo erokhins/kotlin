@@ -306,7 +306,7 @@ public class PatternMatchingTypingVisitor extends ExpressionTypingVisitor {
         if (typeReferenceAfterIs == null) {
             return noChange(context);
         }
-        TypeResolutionContext typeResolutionContext = new TypeResolutionContext(UtilsPackage.asJetScope(context.scope), context.trace, true, /*allowBareTypes=*/ true);
+        TypeResolutionContext typeResolutionContext = new TypeResolutionContext(context.scope, context.trace, true, /*allowBareTypes=*/ true);
         PossiblyBareType possiblyBareTarget = components.typeResolver.resolvePossiblyBareType(typeResolutionContext, typeReferenceAfterIs);
         JetType targetType = TypeReconstructionUtil.reconstructBareType(typeReferenceAfterIs, possiblyBareTarget, subjectType, context.trace, components.builtIns);
 

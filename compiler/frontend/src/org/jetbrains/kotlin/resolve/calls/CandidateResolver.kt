@@ -128,7 +128,7 @@ public class CandidateResolver(
                     ModifierCheckerCore.check(projection, trace, null)
                 }
                 val type = argumentTypeResolver.resolveTypeRefWithDefault(
-                        projection.getTypeReference(), scope.asJetScope(), trace,
+                        projection.getTypeReference(), scope, trace,
                         ErrorUtils.createErrorType("Star projection in a call"))!!
                 ForceResolveUtil.forceResolveAllContents(type)
                 typeArguments.add(type)
@@ -244,7 +244,7 @@ public class CandidateResolver(
         val candidateThis = getDeclaringClass(context.candidateCall.getCandidateDescriptor())
         if (candidateThis == null || candidateThis.getKind().isSingleton()) return true
 
-        return DescriptorResolver.checkHasOuterClassInstance(context.scope.asJetScope(), context.trace, context.call.getCallElement(), candidateThis)
+        return DescriptorResolver.checkHasOuterClassInstance(context.scope, context.trace, context.call.getCallElement(), candidateThis)
     }
 
     private fun CallCandidateResolutionContext<*>.checkAbstractAndSuper() = check {
