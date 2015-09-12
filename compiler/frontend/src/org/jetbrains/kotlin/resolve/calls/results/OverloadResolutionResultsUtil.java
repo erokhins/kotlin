@@ -46,6 +46,15 @@ public class OverloadResolutionResultsUtil {
     }
 
     @Nullable
+    public static <D extends CallableDescriptor> D getResultingDescriptor(
+            @NotNull OverloadResolutionResults<D> results,
+            @NotNull ContextDependency contextDependency
+    ) {
+        ResolvedCall<D> resultingCall = getResultingCall(results, contextDependency);
+        return resultingCall != null ? resultingCall.getResultingDescriptor() : null;
+    }
+
+    @Nullable
     public static <D extends CallableDescriptor> ResolvedCall<D> getResultingCall(
             @NotNull OverloadResolutionResults<D> results,
             @NotNull ContextDependency contextDependency

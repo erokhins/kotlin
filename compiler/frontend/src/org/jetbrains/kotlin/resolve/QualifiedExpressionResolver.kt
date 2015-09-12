@@ -24,20 +24,18 @@ import org.jetbrains.kotlin.incremental.KotlinLookupLocation
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
-import org.jetbrains.kotlin.psi.psiUtil.getIfChildIsInBranch
 import org.jetbrains.kotlin.resolve.descriptorUtil.module
 import org.jetbrains.kotlin.resolve.scopes.JetScope
 import org.jetbrains.kotlin.resolve.scopes.LexicalScope
 import org.jetbrains.kotlin.resolve.scopes.receivers.QualifierReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
+import org.jetbrains.kotlin.resolve.scopes.receivers.getKeyForQualifierTraceRecord
 import org.jetbrains.kotlin.resolve.scopes.utils.getClassifier
 import org.jetbrains.kotlin.resolve.validation.SymbolUsageValidator
 import org.jetbrains.kotlin.utils.addIfNotNull
 
 
-
 public class QualifiedExpressionResolver(val symbolUsageValidator: SymbolUsageValidator) {
-
 
     public fun resolvePackageHeader(
             packageDirective: JetPackageDirective,
@@ -233,6 +231,25 @@ public class QualifiedExpressionResolver(val symbolUsageValidator: SymbolUsageVa
         return result.asReversed()
     }
 
+    public fun resolveMaximallyPrefixAsQualifier(
+            expression: JetExpression,
+            scope: LexicalScope,
+            trace: BindingTrace
+    ) {
+        val path = expression.asQualifierPartList(trace)
+        if (path.isEmpty()) return
+
+        resolveToPackageOrClass(
+                path,
+                scope.ownerDescriptor.module,
+                trace,
+                scope.ownerDescriptor,
+                reportUnresolved = false
+        ) { // todo package.java.lang.Integer
+            scope.getClassifier(it.name, it.location)
+        }
+    }
+
     private data class QualifierPart(
             val name: Name,
             val expression: JetSimpleNameExpression,
@@ -246,6 +263,7 @@ public class QualifiedExpressionResolver(val symbolUsageValidator: SymbolUsageVa
             moduleDescriptor: ModuleDescriptor,
             trace: BindingTrace,
             shouldBeVisibleFrom: DeclarationDescriptor,
+            reportUnresolved: Boolean = true,
             firstPartResolver: (QualifierPart) -> DeclarationDescriptor? = { null }
     ): DeclarationDescriptor? {
         if (path.isEmpty()) {
@@ -279,6 +297,8 @@ public class QualifiedExpressionResolver(val symbolUsageValidator: SymbolUsageVa
                 }
                 else -> null
             }
+            if (nextDescriptor == null && !reportUnresolved) return@fold null
+
             storageResult(trace, qualifierPart.expression, listOfNotNull(nextDescriptor), shouldBeVisibleFrom)
             nextDescriptor
         }
@@ -351,7 +371,7 @@ public class QualifiedExpressionResolver(val symbolUsageValidator: SymbolUsageVa
     private fun storageQualifier(trace: BindingTrace, referenceExpression: JetSimpleNameExpression, descriptor: DeclarationDescriptor) {
         if (descriptor is PackageViewDescriptor || descriptor is ClassifierDescriptor) {
             val qualifier = QualifierReceiver(referenceExpression, descriptor as? PackageViewDescriptor, descriptor as? ClassifierDescriptor)
-            trace.record(BindingContext.QUALIFIER, qualifier.expression, qualifier)
+            trace.record(BindingContext.QUALIFIER, referenceExpression.getKeyForQualifierTraceRecord(), qualifier)
         }
     }
 

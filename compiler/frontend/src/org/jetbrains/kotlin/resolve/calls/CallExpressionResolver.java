@@ -21,14 +21,13 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.kotlin.builtins.KotlinBuiltIns;
 import org.jetbrains.kotlin.descriptors.*;
 import org.jetbrains.kotlin.lexer.JetTokens;
 import org.jetbrains.kotlin.psi.*;
 import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.kotlin.resolve.BindingTrace;
 import org.jetbrains.kotlin.resolve.DescriptorUtils;
-import org.jetbrains.kotlin.resolve.calls.callUtil.CallUtilPackage;
+import org.jetbrains.kotlin.resolve.QualifiedExpressionResolver;
 import org.jetbrains.kotlin.resolve.calls.context.BasicCallResolutionContext;
 import org.jetbrains.kotlin.resolve.calls.context.CheckArgumentTypesMode;
 import org.jetbrains.kotlin.resolve.calls.context.ResolutionContext;
@@ -38,7 +37,6 @@ import org.jetbrains.kotlin.resolve.calls.results.OverloadResolutionResults;
 import org.jetbrains.kotlin.resolve.calls.results.OverloadResolutionResultsUtil;
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo;
 import org.jetbrains.kotlin.resolve.calls.util.CallMaker;
-import org.jetbrains.kotlin.resolve.calls.util.FakeCallableDescriptorForObject;
 import org.jetbrains.kotlin.resolve.constants.CompileTimeConstant;
 import org.jetbrains.kotlin.resolve.constants.evaluate.ConstantExpressionEvaluator;
 import org.jetbrains.kotlin.resolve.scopes.receivers.*;
@@ -57,27 +55,32 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.jetbrains.kotlin.diagnostics.Errors.*;
+import static org.jetbrains.kotlin.resolve.bindingContextUtil.BindingContextUtilPackage.recordScopeAndDataFlowInfo;
 import static org.jetbrains.kotlin.resolve.calls.context.ContextDependency.INDEPENDENT;
-import static org.jetbrains.kotlin.resolve.scopes.receivers.ReceiversPackage.createQualifier;
-import static org.jetbrains.kotlin.resolve.scopes.receivers.ReceiversPackage.resolveAsStandaloneExpression;
+import static org.jetbrains.kotlin.resolve.calls.results.OverloadResolutionResultsUtil.getResultingCall;
+import static org.jetbrains.kotlin.resolve.calls.results.OverloadResolutionResultsUtil.getResultingDescriptor;
 import static org.jetbrains.kotlin.types.TypeUtils.NO_EXPECTED_TYPE;
+import static org.jetbrains.kotlin.types.expressions.typeInfoFactory.TypeInfoFactoryPackage.createTypeInfo;
 
 public class CallExpressionResolver {
 
     private final CallResolver callResolver;
     private final ConstantExpressionEvaluator constantExpressionEvaluator;
     private final SymbolUsageValidator symbolUsageValidator;
+    private final QualifiedExpressionResolver qualifiedExpressionResolver;
     private final DataFlowAnalyzer dataFlowAnalyzer;
 
     public CallExpressionResolver(
             @NotNull CallResolver callResolver,
             @NotNull ConstantExpressionEvaluator constantExpressionEvaluator,
             @NotNull SymbolUsageValidator symbolUsageValidator,
+            @NotNull QualifiedExpressionResolver qualifiedExpressionResolver,
             @NotNull DataFlowAnalyzer dataFlowAnalyzer
     ) {
         this.callResolver = callResolver;
         this.constantExpressionEvaluator = constantExpressionEvaluator;
         this.symbolUsageValidator = symbolUsageValidator;
+        this.qualifiedExpressionResolver = qualifiedExpressionResolver;
         this.dataFlowAnalyzer = dataFlowAnalyzer;
     }
 
@@ -89,58 +92,16 @@ public class CallExpressionResolver {
         this.expressionTypingServices = expressionTypingServices;
     }
 
-    @Nullable
-    public ResolvedCall<FunctionDescriptor> getResolvedCallForFunction(
-            @NotNull Call call, @NotNull JetExpression callExpression,
-            @NotNull ResolutionContext context, @NotNull CheckArgumentTypesMode checkArguments,
-            @NotNull boolean[] result
-    ) {
-        OverloadResolutionResults<FunctionDescriptor> results = callResolver.resolveFunctionCall(
-                BasicCallResolutionContext.create(context, call, checkArguments));
-        if (!results.isNothing()) {
-            result[0] = true;
-            return OverloadResolutionResultsUtil.getResultingCall(results, context.contextDependency);
-        }
-        result[0] = false;
-        return null;
-    }
-
-    @Nullable
-    private JetType getVariableType(
+    @NotNull
+    private OverloadResolutionResults<VariableDescriptor> resolveVariable(
             @NotNull JetSimpleNameExpression nameExpression, @NotNull ReceiverValue receiver,
-            @Nullable ASTNode callOperationNode, @NotNull ExpressionTypingContext context, @NotNull boolean[] result
+            @Nullable ASTNode callOperationNode, @NotNull ExpressionTypingContext context
     ) {
-        TemporaryTraceAndCache temporaryForVariable = TemporaryTraceAndCache.create(
-                context, "trace to resolve as local variable or property", nameExpression);
         Call call = CallMaker.makePropertyCall(receiver, callOperationNode, nameExpression);
         BasicCallResolutionContext contextForVariable = BasicCallResolutionContext.create(
-                context.replaceTraceAndCache(temporaryForVariable),
+                context,
                 call, CheckArgumentTypesMode.CHECK_VALUE_ARGUMENTS);
-        OverloadResolutionResults<VariableDescriptor> resolutionResult = callResolver.resolveSimpleProperty(contextForVariable);
-
-        // if the expression is a receiver in a qualified expression, it should be resolved after the selector is resolved
-        boolean isLHSOfDot = JetPsiUtil.isLHSOfDot(nameExpression);
-        if (!resolutionResult.isNothing() && resolutionResult.getResultCode() != OverloadResolutionResults.Code.CANDIDATES_WITH_WRONG_RECEIVER) {
-            boolean isQualifier = isLHSOfDot && resolutionResult.isSingleResult()
-                                  && resolutionResult.getResultingDescriptor() instanceof FakeCallableDescriptorForObject;
-            if (!isQualifier) {
-                result[0] = true;
-                temporaryForVariable.commit();
-                return resolutionResult.isSingleResult() ? resolutionResult.getResultingDescriptor().getReturnType() : null;
-            }
-        }
-
-        QualifierReceiver qualifier = createQualifier(nameExpression, receiver, context);
-        if (qualifier != null) {
-            result[0] = true;
-            if (!isLHSOfDot) {
-                resolveAsStandaloneExpression(qualifier, context, symbolUsageValidator);
-            }
-            return null;
-        }
-        temporaryForVariable.commit();
-        result[0] = !resolutionResult.isNothing();
-        return resolutionResult.isSingleResult() ? resolutionResult.getResultingDescriptor().getReturnType() : null;
+        return callResolver.resolveSimpleProperty(contextForVariable);
     }
 
     @NotNull
@@ -148,34 +109,33 @@ public class CallExpressionResolver {
             @NotNull JetSimpleNameExpression nameExpression, @NotNull ReceiverValue receiver,
             @Nullable ASTNode callOperationNode, @NotNull ExpressionTypingContext context
     ) {
-        boolean[] result = new boolean[1];
-
         TemporaryTraceAndCache temporaryForVariable = TemporaryTraceAndCache.create(
                 context, "trace to resolve as variable", nameExpression);
-        JetType type =
-                getVariableType(nameExpression, receiver, callOperationNode, context.replaceTraceAndCache(temporaryForVariable), result);
+        OverloadResolutionResults<VariableDescriptor> results =
+                resolveVariable(nameExpression, receiver, callOperationNode, context.replaceTraceAndCache(temporaryForVariable));
         // TODO: for a safe call, it's necessary to set receiver != null here, as inside ArgumentTypeResolver.analyzeArgumentsAndRecordTypes
         // Unfortunately it provokes problems with x?.y!!.foo() with the following x!!.bar():
         // x != null proceeds to successive statements
 
-        if (result[0]) {
+        if (!results.isNothing()) {
             temporaryForVariable.commit();
-            return TypeInfoFactoryPackage.createTypeInfo(type, context);
+
+            return createTypeInfo(OverloadResolutionResultsUtil.getResultingType(results, context.contextDependency), context);
         }
 
         Call call = CallMaker.makeCall(nameExpression, receiver, callOperationNode, nameExpression, Collections.<ValueArgument>emptyList());
         TemporaryTraceAndCache temporaryForFunction = TemporaryTraceAndCache.create(
                 context, "trace to resolve as function", nameExpression);
         ResolutionContext newContext = context.replaceTraceAndCache(temporaryForFunction);
-        ResolvedCall<FunctionDescriptor> resolvedCall = getResolvedCallForFunction(
-                call, nameExpression, newContext, CheckArgumentTypesMode.CHECK_VALUE_ARGUMENTS, result);
-        if (result[0]) {
-            FunctionDescriptor functionDescriptor = resolvedCall != null ? resolvedCall.getResultingDescriptor() : null;
+        OverloadResolutionResults<FunctionDescriptor> functionResults = callResolver
+                .resolveFunctionCall(BasicCallResolutionContext.create(newContext, call, CheckArgumentTypesMode.CHECK_VALUE_ARGUMENTS));
+        if (!functionResults.isNothing()) {
+            FunctionDescriptor functionDescriptor = getResultingDescriptor(functionResults, context.contextDependency);
             temporaryForFunction.commit();
             boolean hasValueParameters = functionDescriptor == null || functionDescriptor.getValueParameters().size() > 0;
             context.trace.report(FUNCTION_CALL_EXPECTED.on(nameExpression, nameExpression, hasValueParameters));
-            type = functionDescriptor != null ? functionDescriptor.getReturnType() : null;
-            return TypeInfoFactoryPackage.createTypeInfo(type, context);
+            JetType type = functionDescriptor != null ? functionDescriptor.getReturnType() : null;
+            return createTypeInfo(type, context);
         }
 
         temporaryForVariable.commit();
@@ -203,17 +163,17 @@ public class CallExpressionResolver {
             @NotNull JetCallExpression callExpression, @NotNull ReceiverValue receiver,
             @Nullable ASTNode callOperationNode, @NotNull ExpressionTypingContext context
     ) {
-        boolean[] result = new boolean[1];
         Call call = CallMaker.makeCall(receiver, callOperationNode, callExpression);
 
         TemporaryTraceAndCache temporaryForFunction = TemporaryTraceAndCache.create(
                 context, "trace to resolve as function call", callExpression);
-        ResolvedCall<FunctionDescriptor> resolvedCall = getResolvedCallForFunction(
-                call, callExpression,
+        OverloadResolutionResults<FunctionDescriptor> functionResults = callResolver.resolveFunctionCall(BasicCallResolutionContext.create(
                 // It's possible start of a call so we should reset safe call chain
                 context.replaceTraceAndCache(temporaryForFunction).replaceInsideCallChain(false),
-                CheckArgumentTypesMode.CHECK_VALUE_ARGUMENTS, result);
-        if (result[0]) {
+                call, CheckArgumentTypesMode.CHECK_VALUE_ARGUMENTS)
+        );
+        if (!functionResults.isNothing()) {
+            ResolvedCall<FunctionDescriptor> resolvedCall = getResultingCall(functionResults, context.contextDependency);
             FunctionDescriptor functionDescriptor = resolvedCall != null ? resolvedCall.getResultingDescriptor() : null;
             temporaryForFunction.commit();
             if (callExpression.getValueArgumentList() == null && callExpression.getFunctionLiteralArguments().isEmpty()) {
@@ -253,18 +213,19 @@ public class CallExpressionResolver {
                     break;
                 }
             }
-            return TypeInfoFactoryPackage.createTypeInfo(type, resultFlowInfo, jumpOutPossible, jumpFlowInfo);
+            return createTypeInfo(type, resultFlowInfo, jumpOutPossible, jumpFlowInfo);
         }
 
         JetExpression calleeExpression = callExpression.getCalleeExpression();
         if (calleeExpression instanceof JetSimpleNameExpression && callExpression.getTypeArgumentList() == null) {
             TemporaryTraceAndCache temporaryForVariable = TemporaryTraceAndCache.create(
                     context, "trace to resolve as variable with 'invoke' call", callExpression);
-            JetType type = getVariableType((JetSimpleNameExpression) calleeExpression, receiver, callOperationNode,
-                                           context.replaceTraceAndCache(temporaryForVariable), result);
-            Qualifier qualifier = temporaryForVariable.trace.get(BindingContext.QUALIFIER, calleeExpression);
-            if (result[0] && (qualifier == null || qualifier.getPackageView() == null)) {
+            OverloadResolutionResults<VariableDescriptor> variableResults =
+                    resolveVariable((JetSimpleNameExpression) calleeExpression, receiver, callOperationNode,
+                                    context.replaceTraceAndCache(temporaryForVariable));
+            if (!variableResults.isNothing()) {
                 temporaryForVariable.commit();
+                JetType type = OverloadResolutionResultsUtil.getResultingType(variableResults, context.contextDependency);
                 context.trace.report(FUNCTION_EXPECTED.on(calleeExpression, calleeExpression,
                                                           type != null ? type : ErrorUtils.createErrorType("")));
                 return TypeInfoFactoryPackage.noTypeInfo(context);
@@ -352,13 +313,15 @@ public class CallExpressionResolver {
                 replaceContextDependency(INDEPENDENT).
                 replaceInsideCallChain(true); // Enter call chain
         // Visit receiver (x in x.y or x?.z) here. Recursion is possible.
-        JetTypeInfo receiverTypeInfo = expressionTypingServices.getTypeInfo(receiverExpression, contextForReceiver);
-        JetType receiverType = receiverTypeInfo.getType();
-        QualifierReceiver qualifierReceiver = (QualifierReceiver) context.trace.get(BindingContext.QUALIFIER, receiverExpression);
 
+        Qualifier qualifier = resolveAsQualifier(receiverExpression, context);
+        JetTypeInfo receiverTypeInfo = qualifier == null
+                                       ? expressionTypingServices.getTypeInfo(receiverExpression, contextForReceiver)
+                                       : TypeInfoFactoryPackage.noTypeInfo(context);
+        JetType receiverType = receiverTypeInfo.getType();
         if (receiverType == null) receiverType = ErrorUtils.createErrorType("Type for " + expression.getText());
 
-        ReceiverValue receiver = qualifierReceiver == null ? new ExpressionReceiver(receiverExpression, receiverType) : qualifierReceiver;
+        ReceiverValue receiver = qualifier == null ? new ExpressionReceiver(receiverExpression, receiverType) : qualifier;
         DataFlowInfo receiverDataFlowInfo = receiverTypeInfo.getDataFlowInfo();
         // Receiver changes should be always applied, at least for argument analysis
         context = context.replaceDataFlowInfo(receiverDataFlowInfo);
@@ -368,7 +331,6 @@ public class CallExpressionResolver {
                 receiver, expression.getOperationTokenNode(), selectorExpression, context);
         JetType selectorReturnType = selectorReturnTypeInfo.getType();
 
-        resolveDeferredReceiverInQualifiedExpression(qualifierReceiver, expression, context);
         checkNestedClassAccess(expression, context);
 
         //TODO move further
@@ -437,18 +399,50 @@ public class CallExpressionResolver {
         return typeInfo;
     }
 
-    private void resolveDeferredReceiverInQualifiedExpression(
-            @Nullable QualifierReceiver qualifierReceiver,
-            @NotNull JetQualifiedExpression qualifiedExpression,
-            @NotNull ExpressionTypingContext context
-    ) {
-        if (qualifierReceiver == null) return;
-        JetExpression calleeExpression =
-                JetPsiUtil.deparenthesize(CallUtilPackage.getCalleeExpressionIfAny(qualifiedExpression.getSelectorExpression()), false);
-        DeclarationDescriptor selectorDescriptor =
-                calleeExpression instanceof JetReferenceExpression
-                ? context.trace.get(BindingContext.REFERENCE_TARGET, (JetReferenceExpression) calleeExpression) : null;
-        ReceiversPackage.resolveAsReceiverInQualifiedExpression(qualifierReceiver, context, symbolUsageValidator, selectorDescriptor);
+    @Nullable
+    private Qualifier resolveAsQualifier(@NotNull JetExpression qualifier, @NotNull ExpressionTypingContext context) {
+        Qualifier cachedQualifier = context.trace.get(BindingContext.QUALIFIER, qualifier);
+        if (cachedQualifier != null) return cachedQualifier;
+
+        // todo comment
+        if (qualifier.getParent().getParent() instanceof JetQualifiedExpression) return null;
+
+        JetSimpleNameExpression firstQualifier = null;
+        JetExpression expression = qualifier;
+        while (true) {
+            if (expression instanceof JetSimpleNameExpression) {
+                firstQualifier = (JetSimpleNameExpression) expression;
+                break;
+            }
+            else if (expression instanceof JetQualifiedExpression) {
+                expression = ((JetQualifiedExpression) expression).getReceiverExpression();
+            }
+            else {
+                break;
+            }
+        }
+        // if firstQualifier is null or was resolved early, then we should resolve it as qualifier
+        if (firstQualifier == null || context.trace.get(BindingContext.EXPRESSION_TYPE_INFO, firstQualifier) != null) {
+            return null;
+        }
+
+        // try resolve first qualifier as local variable
+        TemporaryTraceAndCache temporaryForVariable = TemporaryTraceAndCache.create(
+                context, "trace to resolve as variable", firstQualifier);
+        OverloadResolutionResults<VariableDescriptor> results =
+                resolveVariable(firstQualifier, ReceiverValue.NO_RECEIVER, null, context.replaceTraceAndCache(temporaryForVariable));
+        if (!results.isNothing() && results.getResultCode() != OverloadResolutionResults.Code.CANDIDATES_WITH_WRONG_RECEIVER) {
+            JetTypeInfo typeInfo = createTypeInfo(OverloadResolutionResultsUtil.getResultingType(results, context.contextDependency), context);
+
+            // todo review
+            context.trace.record(BindingContext.EXPRESSION_TYPE_INFO, firstQualifier, typeInfo);
+            recordScopeAndDataFlowInfo(context.replaceDataFlowInfo(typeInfo.getDataFlowInfo()), firstQualifier);
+            return null;
+        }
+
+        // try resolve it as qualifier
+        qualifiedExpressionResolver.resolveMaximallyPrefixAsQualifier(qualifier, context.scope, context.trace);
+        return context.trace.get(BindingContext.QUALIFIER, qualifier);
     }
 
     private static void checkNestedClassAccess(

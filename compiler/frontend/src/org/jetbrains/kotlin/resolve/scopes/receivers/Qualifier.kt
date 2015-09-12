@@ -67,7 +67,7 @@ class QualifierReceiver (
         override val classifier: ClassifierDescriptor?
 ) : Qualifier {
 
-    override val expression: JetExpression = referenceExpression.getTopmostParentQualifiedExpressionForSelector() ?: referenceExpression
+    override val expression: JetExpression = referenceExpression.getKeyForQualifierTraceRecord()
 
     val descriptor: DeclarationDescriptor
         get() = classifier ?: packageView ?: throw AssertionError("PackageView and classifier both are null")
@@ -108,6 +108,8 @@ class QualifierReceiver (
 
     override fun toString() = "Package{$packageView} OR Class{$classifier}"
 }
+
+fun JetSimpleNameExpression.getKeyForQualifierTraceRecord() = getTopmostParentQualifiedExpressionForSelector() ?: this
 
 fun createQualifier(
         expression: JetSimpleNameExpression,
