@@ -4,7 +4,7 @@ package d
 
 import d.<!CANNOT_IMPORT_ON_DEMAND_FROM_SINGLETON!>A<!>.*
 import d.M.R
-import d.M.R.<!CANNOT_BE_IMPORTED!>bar<!>
+import d.M.<!CANNOT_IMPORT_ON_DEMAND_FROM_SINGLETON!>R<!>.bar
 import d.M.T
 import d.M.Y
 
