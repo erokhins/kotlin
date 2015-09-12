@@ -150,6 +150,7 @@ public class DefaultErrorMessages {
 
         MAP.put(CANNOT_IMPORT_ON_DEMAND_FROM_SINGLETON, "Cannot import-on-demand from object ''{0}''", NAME);
         MAP.put(CANNOT_BE_IMPORTED, "Cannot import ''{0}'', functions and properties can be imported only from packages", NAME);
+        MAP.put(PACKAGE_CANNOT_BE_IMPORTED, "Package ''{0}''cannot be imported", NAME);
         MAP.put(CONFLICTING_IMPORT, "Conflicting import, imported name ''{0}'' is ambiguous", STRING);
         MAP.put(PLATFORM_CLASS_MAPPED_TO_KOTLIN, "This class shouldn''t be used in Kotlin. Use {0} instead.", CLASSES_OR_SEPARATED);
 
