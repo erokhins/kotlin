@@ -90,7 +90,7 @@ public fun JetElement.getQualifiedElementSelector(): JetElement? {
 public fun JetSimpleNameExpression.getReceiverExpression(): JetExpression? {
     val parent = getParent()
     when {
-        parent is JetQualifiedExpression && !isImportDirectiveExpression() -> {
+        parent is JetQualifiedExpression -> {
             val receiverExpression = parent.getReceiverExpression()
             // Name expression can't be receiver for itself
             if (receiverExpression != this) {
@@ -346,6 +346,16 @@ public fun JetSimpleNameExpression.isImportDirectiveExpression(): Boolean {
     }
     else {
         return parent is JetImportDirective || parent.getParent() is JetImportDirective
+    }
+}
+
+public fun JetSimpleNameExpression.isPackageDirectiveExpression(): Boolean {
+    val parent = getParent()
+    if (parent == null) {
+        return false
+    }
+    else {
+        return parent is JetPackageDirective || parent.getParent() is JetPackageDirective
     }
 }
 
