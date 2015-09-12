@@ -28,9 +28,12 @@ import org.jetbrains.kotlin.idea.util.ShadowedDeclarationsFilter
 import org.jetbrains.kotlin.idea.util.getImplicitReceiversWithInstance
 import org.jetbrains.kotlin.idea.util.substituteExtensionIfCallable
 import org.jetbrains.kotlin.lexer.JetTokens
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
+import org.jetbrains.kotlin.psi.psiUtil.isImportDirectiveExpression
+import org.jetbrains.kotlin.psi.psiUtil.isPackageDirectiveExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getDataFlowInfo
 import org.jetbrains.kotlin.resolve.calls.smartcasts.SmartCastManager
@@ -102,13 +105,13 @@ public class ReferenceVariantsHelper(
             explicitReceiverData: ExplicitReceiverData?,
             useRuntimeReceiverType: Boolean
     ): Collection<DeclarationDescriptor> {
+        if (expression.isImportDirectiveExpression() || expression.isPackageDirectiveExpression()) {
+            return getReferenceVariantsForImportOrPackageDirective(expression, kindFilter, nameFilter)
+        }
+
         val parent = expression.getParent()
         val resolutionScope = context[BindingContext.RESOLUTION_SCOPE, expression] ?: return listOf()
         val containingDeclaration = resolutionScope.getContainingDeclaration()
-
-        if (parent is JetImportDirective || parent is JetPackageDirective) {
-            return resolutionScope.getDescriptorsFiltered(kindFilter.restrictedToKinds(DescriptorKindFilter.PACKAGES_MASK), nameFilter)
-        }
 
         if (parent is JetUserType) {
             return resolutionScope.getDescriptorsFiltered(kindFilter.restrictedToKinds(DescriptorKindFilter.CLASSIFIERS_MASK or DescriptorKindFilter.PACKAGES_MASK), nameFilter)
@@ -161,6 +164,27 @@ public class ReferenceVariantsHelper(
         }
 
         return descriptors
+    }
+
+    private fun getReferenceVariantsForImportOrPackageDirective(
+            expression: JetSimpleNameExpression,
+            kindFilter: DescriptorKindFilter,
+            nameFilter: (Name) -> Boolean
+    ): Collection<DeclarationDescriptor> {
+        val accurateKindFilter = if (expression.isPackageDirectiveExpression()) {
+            kindFilter.restrictedToKinds(DescriptorKindFilter.PACKAGES_MASK)
+        }
+        else kindFilter
+
+        val receiverExpression = (expression.parent as? JetQualifiedExpression)?.receiverExpression
+        if (receiverExpression != null) {
+            val qualifier = context[BindingContext.QUALIFIER, receiverExpression] ?: return emptyList()
+            return qualifier.scope.getDescriptorsFiltered(accurateKindFilter, nameFilter)
+        }
+        else {
+            val rootPackage = resolutionFacade.moduleDescriptor.getPackage(FqName.ROOT)
+            return rootPackage.memberScope.getDescriptorsFiltered(accurateKindFilter, nameFilter)
+        }
     }
 
     private fun MutableSet<DeclarationDescriptor>.processAll(

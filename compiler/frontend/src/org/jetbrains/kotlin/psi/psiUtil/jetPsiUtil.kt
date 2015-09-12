@@ -349,6 +349,16 @@ public fun JetSimpleNameExpression.isImportDirectiveExpression(): Boolean {
     }
 }
 
+public fun JetSimpleNameExpression.isPackageDirectiveExpression(): Boolean {
+    val parent = getParent()
+    if (parent == null) {
+        return false
+    }
+    else {
+        return parent is JetPackageDirective || parent.getParent() is JetPackageDirective
+    }
+}
+
 public fun JetExpression.isFunctionLiteralOutsideParentheses(): Boolean {
     val parent = getParent()
     return when (parent) {
