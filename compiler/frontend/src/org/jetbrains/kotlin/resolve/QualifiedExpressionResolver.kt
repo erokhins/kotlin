@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.incremental.KotlinLookupLocation
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.psi.psiUtil.getIfChildIsInBranch
 import org.jetbrains.kotlin.resolve.descriptorUtil.module
 import org.jetbrains.kotlin.resolve.scopes.JetScope
 import org.jetbrains.kotlin.resolve.scopes.LexicalScope
@@ -32,6 +33,8 @@ import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.resolve.scopes.utils.getClassifier
 import org.jetbrains.kotlin.resolve.validation.SymbolUsageValidator
 import org.jetbrains.kotlin.utils.addIfNotNull
+
+
 
 public class QualifiedExpressionResolver(val symbolUsageValidator: SymbolUsageValidator) {
 
@@ -51,7 +54,7 @@ public class QualifiedExpressionResolver(val symbolUsageValidator: SymbolUsageVa
             scope: LexicalScope,
             trace: BindingTrace
     ): ClassifierDescriptor? {
-        if (userType.qualifier == null) { // optimization for non-qualified types
+        if (userType.qualifier == null && !userType.startWithPackage) { // optimization for non-qualified types
             return userType.referenceExpression?.let {
                 val classifier = scope.getClassifier(it.getReferencedNameAsName(), KotlinLookupLocation(it))
                 storageResult(trace, it, listOfNotNull(classifier), scope.ownerDescriptor)
@@ -64,13 +67,13 @@ public class QualifiedExpressionResolver(val symbolUsageValidator: SymbolUsageVa
             resolveToPackageOrClass(qualifierPartList, scope.ownerDescriptor.module, trace, scope.ownerDescriptor)
             return null
         }
-        assert(qualifierPartList.size() > 1) {
+        assert(qualifierPartList.size() >= 1) {
             "Too short qualifier list for user type $userType : ${qualifierPartList.joinToString()}"
         }
 
         val qualifier = resolveToPackageOrClass(qualifierPartList.subList(0, qualifierPartList.size() - 1),
                                                 scope.ownerDescriptor.module, trace, scope.ownerDescriptor) {
-            if (userType.isAbsoluteInRootPackage) {
+            if (userType.startWithPackage) {
                 null
             }
             else {
@@ -86,6 +89,16 @@ public class QualifiedExpressionResolver(val symbolUsageValidator: SymbolUsageVa
         storageResult(trace, lastPart.expression, listOfNotNull(classifier), scope.ownerDescriptor)
         return classifier
     }
+
+    private val JetUserType.startWithPackage: Boolean
+        get() {
+            var firstPart = this
+            while (firstPart.qualifier != null) {
+                firstPart = firstPart.qualifier!!
+            }
+            return firstPart.isAbsoluteInRootPackage
+        }
+
 
     private fun JetUserType.asQualifierPartList(): Pair<List<QualifierPart>, Boolean> {
         var hasError = false
