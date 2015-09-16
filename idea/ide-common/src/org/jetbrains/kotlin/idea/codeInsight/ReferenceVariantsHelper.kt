@@ -44,6 +44,8 @@ import org.jetbrains.kotlin.resolve.scopes.*
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.resolve.scopes.utils.getDescriptorsFiltered
+import org.jetbrains.kotlin.resolve.scopes.utils.getFileScope
+import org.jetbrains.kotlin.resolve.scopes.utils.getImplicitReceiversHierarchy
 import org.jetbrains.kotlin.synthetic.SyntheticJavaPropertyDescriptor
 import org.jetbrains.kotlin.types.JetType
 import org.jetbrains.kotlin.types.TypeUtils
@@ -118,16 +120,16 @@ public class ReferenceVariantsHelper(
             return getVariantsForUserType(explicitReceiverData, expression, kindFilter, nameFilter)
         }
 
-        val resolutionScope = context[BindingContext.RESOLUTION_SCOPE, expression] ?: return listOf()
-        val containingDeclaration = resolutionScope.getContainingDeclaration()
+        val lexicalScope = context[BindingContext.LEXICAL_SCOPE, expression] ?: return listOf()
+        val ownerDescriptor = lexicalScope.ownerDescriptor
 
         val descriptors = LinkedHashSet<DeclarationDescriptor>()
 
         val dataFlowInfo = context.getDataFlowInfo(expression)
 
         val smartCastManager = resolutionFacade.frontendService<SmartCastManager>()
-        val implicitReceiverTypes = resolutionScope.getImplicitReceiversWithInstance().flatMap {
-            smartCastManager.getSmartCastVariantsWithLessSpecificExcluded(it.value, context, containingDeclaration, dataFlowInfo)
+        val implicitReceiverTypes = lexicalScope.getImplicitReceiversHierarchy().flatMap {
+            smartCastManager.getSmartCastVariantsWithLessSpecificExcluded(it.value, context, ownerDescriptor, dataFlowInfo)
         }.toSet()
 
         if (explicitReceiverData != null) {
@@ -146,19 +148,19 @@ public class ReferenceVariantsHelper(
             if (expressionType != null && !expressionType.isError()) {
                 val receiverValue = ExpressionReceiver(receiverExpression, expressionType)
                 val explicitReceiverTypes = smartCastManager
-                        .getSmartCastVariantsWithLessSpecificExcluded(receiverValue, context, containingDeclaration, dataFlowInfo)
+                        .getSmartCastVariantsWithLessSpecificExcluded(receiverValue, context, ownerDescriptor, dataFlowInfo)
 
-                descriptors.processAll(implicitReceiverTypes, explicitReceiverTypes, resolutionScope, callType, kindFilter, nameFilter)
+                descriptors.processAll(implicitReceiverTypes, explicitReceiverTypes, lexicalScope, callType, kindFilter, nameFilter)
             }
         }
         else {
-            descriptors.processAll(implicitReceiverTypes, implicitReceiverTypes, resolutionScope, CallType.NORMAL, kindFilter, nameFilter)
+            descriptors.processAll(implicitReceiverTypes, implicitReceiverTypes, lexicalScope, CallType.NORMAL, kindFilter, nameFilter)
 
             // process non-instance members
-            for (descriptor in resolutionScope.getDescriptorsFiltered(kindFilter, nameFilter)) {
+            for (descriptor in lexicalScope.getDescriptorsFiltered(kindFilter, nameFilter)) {
                 if (descriptor is CallableDescriptor) {
                     assert(descriptor.dispatchReceiverParameter == null) {
-                        "Resolution scope with member descriptor: $descriptor. Scope structure: ${JetScopeUtils.printStructure(resolutionScope)}"
+                        "Resolution scope with member descriptor: $descriptor. Scope structure: ${JetScopeUtils.printStructure(lexicalScope)}"
                     }
                 }
                 if (!descriptor.isExtension) {
@@ -199,14 +201,14 @@ public class ReferenceVariantsHelper(
     private fun MutableSet<DeclarationDescriptor>.processAll(
             implicitReceiverTypes: Collection<JetType>,
             receiverTypes: Collection<JetType>,
-            resolutionScope: JetScope,
+            lexicalScope: LexicalScope,
             callType: CallType,
             kindFilter: DescriptorKindFilter,
             nameFilter: (Name) -> Boolean
     ) {
         addNonExtensionMembers(receiverTypes, callType, kindFilter, nameFilter)
         addMemberExtensions(implicitReceiverTypes, receiverTypes, callType, kindFilter, nameFilter)
-        addScopeAndSyntheticExtensions(resolutionScope, receiverTypes, callType, kindFilter, nameFilter)
+        addScopeAndSyntheticExtensions(lexicalScope, receiverTypes, callType, kindFilter, nameFilter)
     }
 
     private fun MutableSet<DeclarationDescriptor>.addMemberExtensions(
@@ -247,7 +249,7 @@ public class ReferenceVariantsHelper(
     }
 
     private fun MutableSet<DeclarationDescriptor>.addScopeAndSyntheticExtensions(
-            resolutionScope: JetScope,
+            lexicalScope: LexicalScope,
             receiverTypes: Collection<JetType>,
             callType: CallType,
             kindFilter: DescriptorKindFilter,
@@ -262,23 +264,24 @@ public class ReferenceVariantsHelper(
             }
         }
 
-        for (descriptor in resolutionScope.getDescriptors(kindFilter exclude DescriptorKindExclude.NonExtensions, nameFilter)) {
+        for (descriptor in lexicalScope.getDescriptorsFiltered(kindFilter exclude DescriptorKindExclude.NonExtensions, nameFilter)) {
             assert(descriptor !is CallableDescriptor || descriptor.dispatchReceiverParameter == null) {
-                "Resolution scope with member descriptor: $descriptor. Scope structure: ${JetScopeUtils.printStructure(resolutionScope)}"
+                "Resolution scope with member descriptor: $descriptor. Scope structure: ${JetScopeUtils.printStructure(lexicalScope)}"
             }
             if (descriptor.isExtension) {
                 process(descriptor as CallableDescriptor)
             }
         }
 
+        val fileScope = lexicalScope.getFileScope()
         if (kindFilter.acceptsKinds(DescriptorKindFilter.VARIABLES_MASK)) {
-            for (extension in resolutionScope.getSyntheticExtensionProperties(receiverTypes)) {
+            for (extension in fileScope.getSyntheticExtensionProperties(receiverTypes)) {
                 process(extension)
             }
         }
 
         if (kindFilter.acceptsKinds(DescriptorKindFilter.FUNCTIONS_MASK)) {
-            for (extension in resolutionScope.getSyntheticExtensionFunctions(receiverTypes)) {
+            for (extension in fileScope.getSyntheticExtensionFunctions(receiverTypes)) {
                 process(extension)
             }
         }
@@ -292,8 +295,8 @@ public class ReferenceVariantsHelper(
             return ReceiversData(listOf(ExpressionReceiver(receiverExpression, expressionType)), receiverData.callType)
         }
         else {
-            val resolutionScope = context[BindingContext.RESOLUTION_SCOPE, expression] ?: return ReceiversData.Empty
-            return ReceiversData(resolutionScope.getImplicitReceiversWithInstance().map { it.getValue() }, CallType.NORMAL)
+            val lexicalScope = context[BindingContext.LEXICAL_SCOPE, expression] ?: return ReceiversData.Empty
+            return ReceiversData(lexicalScope.getImplicitReceiversHierarchy().map { it.getValue() }, CallType.NORMAL)
         }
     }
 
@@ -310,8 +313,8 @@ public class ReferenceVariantsHelper(
             expression: JetSimpleNameExpression,
             nameFilter: (Name) -> Boolean
     ): Collection<DeclarationDescriptor> {
-        val resolutionScope = context[BindingContext.RESOLUTION_SCOPE, expression] ?: return listOf()
-        return resolutionScope.getDescriptorsFiltered(DescriptorKindFilter.PACKAGES, nameFilter).filter(visibilityFilter)
+        val lexicalScope = context[BindingContext.LEXICAL_SCOPE, expression] ?: return listOf()
+        return lexicalScope.getDescriptorsFiltered(DescriptorKindFilter.PACKAGES, nameFilter).filter(visibilityFilter)
     }
 
     companion object {

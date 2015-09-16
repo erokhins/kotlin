@@ -147,4 +147,18 @@ public final class JetScopeUtils {
         }
         return out.toString();
     }
+
+    @TestOnly
+    @NotNull
+    public static String printStructure(@Nullable LexicalScope scope) {
+        StringBuilder out = new StringBuilder();
+        Printer p = new Printer(out);
+        if (scope == null) {
+            p.println("null");
+        }
+        else {
+            scope.printStructure(p);
+        }
+        return out.toString();
+    }
 }
