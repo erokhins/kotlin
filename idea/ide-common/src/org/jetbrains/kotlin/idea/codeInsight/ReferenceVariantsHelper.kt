@@ -43,6 +43,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.isExtension
 import org.jetbrains.kotlin.resolve.scopes.*
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
+import org.jetbrains.kotlin.resolve.scopes.utils.getDescriptorsFiltered
 import org.jetbrains.kotlin.synthetic.SyntheticJavaPropertyDescriptor
 import org.jetbrains.kotlin.types.JetType
 import org.jetbrains.kotlin.types.TypeUtils
@@ -171,7 +172,7 @@ public class ReferenceVariantsHelper(
 
     private fun getVariantsForUserType(explicitReceiverData: ExplicitReceiverData?, expression: JetSimpleNameExpression, kindFilter: DescriptorKindFilter, nameFilter: (Name) -> Boolean): Collection<DeclarationDescriptor> {
         val lexicalScope = expression.getParentOfType<JetTypeReference>(strict = true)?.let {
-            context[BindingContext.TYPE_RESOLUTION_SCOPE, it]
+            context[BindingContext.TYPE_LEXICAL_SCOPE, it]
         } ?: return emptyList()
         explicitReceiverData?.expression?.let {
             val qualifier = context[BindingContext.QUALIFIER, it] ?: return emptyList()

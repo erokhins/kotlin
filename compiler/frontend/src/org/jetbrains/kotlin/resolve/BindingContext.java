@@ -140,7 +140,7 @@ public interface BindingContext {
     /**
      * A scope where type of expression has been resolved
      */
-    WritableSlice<JetTypeReference, JetScope> TYPE_RESOLUTION_SCOPE = Slices.createSimpleSlice();
+    WritableSlice<JetTypeReference, LexicalScope> TYPE_LEXICAL_SCOPE = Slices.createSimpleSlice();
     @Deprecated WritableSlice<JetExpression, JetScope> RESOLUTION_SCOPE = Slices.createSimpleSlice();
     WritableSlice<JetExpression, LexicalScope> LEXICAL_SCOPE = Slices.createSimpleSlice();
 
