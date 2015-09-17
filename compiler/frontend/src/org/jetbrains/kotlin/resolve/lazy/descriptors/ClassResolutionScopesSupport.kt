@@ -30,7 +30,7 @@ class ClassResolutionScopesSupport(
         private val primaryConstructorParameters: List<JetParameter>? = null
 ) {
     private fun scopeWithGenerics(parent: LexicalScope, debugName: String): LexicalScopeImpl {
-        return LexicalScopeImpl(parent, classDescriptor, false, null, debugName) {
+        return LexicalScopeImpl(parent, LexicalScope.Position.CLASS_OR_OBJECT_HEADER, classDescriptor, false, null, debugName) {
             classDescriptor.typeConstructor.parameters.forEach { addClassifierDescriptor(it) }
         }
     }
@@ -75,7 +75,7 @@ class ClassResolutionScopesSupport(
         assert(primaryConstructorParameters != null) {
             "primary constructor parameters must be not null, because primary constructor exist: $primaryConstructor"
         }
-        LexicalScopeImpl(scopeForMemberDeclarationResolution(), primaryConstructor, false, null,
+        LexicalScopeImpl(scopeForMemberDeclarationResolution(), LexicalScope.Position.BODY, primaryConstructor, false, null,
                          "Scope for initializer resolution: ${classDescriptor.name}") {
             primaryConstructorParameters!!.forEachIndexed {
                 index, parameter ->
