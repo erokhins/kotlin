@@ -35,14 +35,14 @@ import a.<!INVISIBLE_REFERENCE!>D<!>
 
 fun test() {
     f(A)
-    f(<!INVISIBLE_MEMBER!>B<!>)
+    f(<!UNRESOLVED_REFERENCE!>B<!>)
     f(<!INVISIBLE_MEMBER!>C<!>)
-    f(<!INVISIBLE_MEMBER!>D<!>)
+    f(<!UNRESOLVED_REFERENCE!>D<!>)
 
     A.foo()
-    B.<!INVISIBLE_MEMBER!>bar<!>()
+    <!UNRESOLVED_REFERENCE!>B<!>.<!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE!>bar<!>()
     C.<!INVISIBLE_MEMBER!>baz<!>()
-    D.<!INVISIBLE_MEMBER!>quux<!>()
+    <!UNRESOLVED_REFERENCE!>D<!>.<!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE!>quux<!>()
 
     a.A.foo()
     a.C.<!INVISIBLE_MEMBER!>baz<!>()

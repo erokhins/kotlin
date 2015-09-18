@@ -27,16 +27,16 @@ package a {
     }
 
     package a.c {
-        public val mc1: a.MyJavaClass
-        public val x: kotlin.Int
-        public val y: kotlin.Int
-        public val z: a.MyJavaClass.NestedClass
+        public val mc1: [ERROR : Type for MyJavaClass()]
+        public val x: [ERROR : <ERROR FUNCTION RETURN TYPE>]
+        public val y: [ERROR : <ERROR FUNCTION RETURN TYPE>]
+        public val z: [ERROR : <ERROR FUNCTION RETURN TYPE>]
     }
 }
 
 package b {
-    public val mc1: a.MyJavaClass
-    public val x: kotlin.Int
-    public val y: kotlin.Int
-    public val z: a.MyJavaClass.NestedClass
+    public val mc1: [ERROR : Type for MyJavaClass()]
+    public val x: [ERROR : <ERROR FUNCTION RETURN TYPE>]
+    public val y: [ERROR : <ERROR FUNCTION RETURN TYPE>]
+    public val z: [ERROR : <ERROR FUNCTION RETURN TYPE>]
 }

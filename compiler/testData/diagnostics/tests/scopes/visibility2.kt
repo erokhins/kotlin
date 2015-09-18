@@ -23,15 +23,15 @@ import a.<!INVISIBLE_REFERENCE!>PO<!>
 fun test() {
     val y = makeA()
     y.<!INVISIBLE_MEMBER!>bar<!>()
-    <!INVISIBLE_MEMBER!>foo<!>()
+    <!UNRESOLVED_REFERENCE!>foo<!>()
 
-    val <!UNUSED_VARIABLE!>u<!> : <!INVISIBLE_REFERENCE!>A<!> = <!INVISIBLE_MEMBER!>A<!>()
+    val <!UNUSED_VARIABLE!>u<!> : <!UNRESOLVED_REFERENCE!>A<!> = <!UNRESOLVED_REFERENCE!>A<!>()
     val <!UNUSED_VARIABLE!>a<!> : java.util.Arrays.<!INVISIBLE_REFERENCE!>ArrayList<!><Int>;
 
-    val <!UNUSED_VARIABLE!>po<!> = <!INVISIBLE_MEMBER!>PO<!>
+    val <!UNUSED_VARIABLE!>po<!> = <!UNRESOLVED_REFERENCE!>PO<!>
 }
 
-class B : <!INVISIBLE_REFERENCE, INVISIBLE_MEMBER!>A<!>() {}
+class B : <!UNRESOLVED_REFERENCE!>A<!>() {}
 
 class Q {
     class W {

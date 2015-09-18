@@ -23,12 +23,11 @@ package a {
 package b {
     public fun test(): kotlin.Unit
 
-    public final class B : a.A {
+    public final class B {
         public constructor B()
-        invisible_fake final override /*1*/ /*fake_override*/ fun bar(): kotlin.Unit
-        invisible_fake open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
-        invisible_fake open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
-        invisible_fake open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+        public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+        public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+        public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
     }
 
     public final class NewClass : java.util.ArrayList<java.lang.Integer> {

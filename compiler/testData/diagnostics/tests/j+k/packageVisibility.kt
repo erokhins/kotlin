@@ -26,19 +26,19 @@ package b
 
 import a.<!INVISIBLE_REFERENCE!>MyJavaClass<!>
 
-val mc1 = <!INVISIBLE_MEMBER!>MyJavaClass<!>()
+val mc1 = <!UNRESOLVED_REFERENCE!>MyJavaClass<!>()
 
-val x = MyJavaClass.<!INVISIBLE_MEMBER!>staticMethod<!>()
-val y = MyJavaClass.NestedClass.<!INVISIBLE_MEMBER!>staticMethodOfNested<!>()
-val z = MyJavaClass.<!INVISIBLE_MEMBER!>NestedClass<!>()
+val x = <!UNRESOLVED_REFERENCE!>MyJavaClass<!>.<!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE!>staticMethod<!>()
+val y = <!UNRESOLVED_REFERENCE!>MyJavaClass<!>.<!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE!>NestedClass<!>.<!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE!>staticMethodOfNested<!>()
+val z = <!UNRESOLVED_REFERENCE!>MyJavaClass<!>.<!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE!>NestedClass<!>()
 
 //FILE: c.kt
 package a.c
 
 import a.<!INVISIBLE_REFERENCE!>MyJavaClass<!>
 
-val mc1 = <!INVISIBLE_MEMBER!>MyJavaClass<!>()
+val mc1 = <!UNRESOLVED_REFERENCE!>MyJavaClass<!>()
 
-val x = MyJavaClass.<!INVISIBLE_MEMBER!>staticMethod<!>()
-val y = MyJavaClass.NestedClass.<!INVISIBLE_MEMBER!>staticMethodOfNested<!>()
-val z = MyJavaClass.<!INVISIBLE_MEMBER!>NestedClass<!>()
+val x = <!UNRESOLVED_REFERENCE!>MyJavaClass<!>.<!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE!>staticMethod<!>()
+val y = <!UNRESOLVED_REFERENCE!>MyJavaClass<!>.<!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE!>NestedClass<!>.<!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE!>staticMethodOfNested<!>()
+val z = <!UNRESOLVED_REFERENCE!>MyJavaClass<!>.<!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE!>NestedClass<!>()
