@@ -29,12 +29,7 @@ import org.jetbrains.kotlin.descriptors.ReceiverParameterDescriptor
 import org.jetbrains.kotlin.idea.JetIcons
 import org.jetbrains.kotlin.idea.completion.handlers.CastReceiverInsertHandler
 import org.jetbrains.kotlin.idea.completion.handlers.WithTailInsertHandler
-import org.jetbrains.kotlin.idea.core.getResolutionScope
-import org.jetbrains.kotlin.idea.resolve.ResolutionFacade
-import org.jetbrains.kotlin.idea.util.IdeDescriptorRenderers
-import org.jetbrains.kotlin.idea.util.ShortenReferences
-import org.jetbrains.kotlin.idea.util.findLabelAndCall
-import org.jetbrains.kotlin.idea.util.getImplicitReceiversWithInstanceToExpression
+import org.jetbrains.kotlin.idea.util.*
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.parentsWithSelf
@@ -188,8 +183,8 @@ class ThisItemLookupObject(val receiverParameter: ReceiverParameterDescriptor, v
 fun ThisItemLookupObject.createLookupElement() = createKeywordElement("this", labelName.labelNameToTail(), lookupObject = this)
         .withTypeText(DescriptorRenderer.SHORT_NAMES_IN_TYPES.renderType(receiverParameter.type))
 
-fun thisExpressionItems(bindingContext: BindingContext, position: JetExpression, prefix: String, resolutionFacade: ResolutionFacade): Collection<ThisItemLookupObject> {
-    val scope = position.getResolutionScope(bindingContext, resolutionFacade)
+fun thisExpressionItems(bindingContext: BindingContext, position: JetExpression, prefix: String): Collection<ThisItemLookupObject> {
+    val scope = position.getLexicalScope(bindingContext)
 
     val psiFactory = JetPsiFactory(position)
 

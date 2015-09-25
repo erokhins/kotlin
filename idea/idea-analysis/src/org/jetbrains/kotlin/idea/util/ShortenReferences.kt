@@ -33,7 +33,6 @@ import org.jetbrains.kotlin.idea.util.ShortenReferences.Options
 import org.jetbrains.kotlin.incremental.components.NoLookupLocation
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.getElementTextWithContext
-import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.parents
 import org.jetbrains.kotlin.renderer.DescriptorRenderer
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -272,8 +271,7 @@ public class ShortenReferences(val options: (JetElement) -> Options = { Options.
             val bindingContext = resolutionFacade.analyze(referenceExpression)
             val target = referenceExpression.targets(bindingContext).singleOrNull() ?: return
 
-            val typeReference = type.getStrictParentOfType<JetTypeReference>()!!
-            val scope = bindingContext[BindingContext.LEXICAL_SCOPE, typeReference] ?: return
+            val scope = type.getLexicalScope(bindingContext)
             val name = target.getName()
             val targetByName = if (target is ClassifierDescriptor) scope.getClassifier(name, NoLookupLocation.FROM_IDE) else {
                 scope.getFileScope().getPackage(name)

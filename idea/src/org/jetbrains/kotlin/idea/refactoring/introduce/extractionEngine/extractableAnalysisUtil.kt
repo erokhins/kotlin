@@ -40,12 +40,11 @@ import org.jetbrains.kotlin.descriptors.impl.LocalVariableDescriptor
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.idea.caches.resolve.analyzeFully
 import org.jetbrains.kotlin.idea.caches.resolve.findModuleDescriptor
-import org.jetbrains.kotlin.idea.caches.resolve.getResolutionFacade
 import org.jetbrains.kotlin.idea.codeInsight.DescriptorToSourceUtilsIde
 import org.jetbrains.kotlin.idea.core.KotlinNameSuggester
 import org.jetbrains.kotlin.idea.core.NewDeclarationNameValidator
 import org.jetbrains.kotlin.idea.core.comparePossiblyOverridingDescriptors
-import org.jetbrains.kotlin.idea.core.getResolutionScope
+import org.jetbrains.kotlin.idea.util.getLexicalScope
 import org.jetbrains.kotlin.idea.core.refactoring.createTempCopy
 import org.jetbrains.kotlin.idea.refactoring.JetRefactoringBundle
 import org.jetbrains.kotlin.idea.refactoring.introduce.extractionEngine.AnalysisResult.ErrorMessage
@@ -876,7 +875,7 @@ fun ExtractionData.performAnalysis(): AnalysisResult {
 
     val modifiedVarDescriptorsWithExpressions = localInstructions.getModifiedVarDescriptors(bindingContext)
 
-    val targetScope = targetSibling.getResolutionScope(bindingContext, commonParent.getResolutionFacade())
+    val targetScope = targetSibling.getLexicalScope(bindingContext)
     val paramsInfo = inferParametersInfo(commonParent, pseudocode, bindingContext, targetScope, modifiedVarDescriptorsWithExpressions.keySet())
     if (paramsInfo.errorMessage != null) {
         return AnalysisResult(null, Status.CRITICAL_ERROR, listOf(paramsInfo.errorMessage!!))
