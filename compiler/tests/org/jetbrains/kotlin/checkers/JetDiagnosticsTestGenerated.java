@@ -12603,6 +12603,12 @@ public class JetDiagnosticsTestGenerated extends AbstractJetDiagnosticsTest {
                 doTest(fileName);
             }
 
+            @TestMetadata("genericVsNested.kt")
+            public void testGenericVsNested() throws Exception {
+                String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/scopes/genericVsNested.kt");
+                doTest(fileName);
+            }
+
             @TestMetadata("initializerScopeOfExtensionProperty.kt")
             public void testInitializerScopeOfExtensionProperty() throws Exception {
                 String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/scopes/initializerScopeOfExtensionProperty.kt");
@@ -12799,6 +12805,117 @@ public class JetDiagnosticsTestGenerated extends AbstractJetDiagnosticsTest {
             public void testVisibilityInheritModifier() throws Exception {
                 String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/scopes/VisibilityInheritModifier.kt");
                 doTest(fileName);
+            }
+
+            @TestMetadata("compiler/testData/diagnostics/tests/scopes/inheritance")
+            @TestDataPath("$PROJECT_ROOT")
+            @RunWith(JUnit3RunnerWithInners.class)
+            public static class Inheritance extends AbstractJetDiagnosticsTest {
+                public void testAllFilesPresentInInheritance() throws Exception {
+                    JetTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/diagnostics/tests/scopes/inheritance"), Pattern.compile("^(.+)\\.kt$"), true);
+                }
+
+                @TestMetadata("companionExtension.kt")
+                public void testCompanionExtension() throws Exception {
+                    String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/scopes/inheritance/companionExtension.kt");
+                    doTest(fileName);
+                }
+
+                @TestMetadata("companionObject.kt")
+                public void testCompanionObject() throws Exception {
+                    String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/scopes/inheritance/companionObject.kt");
+                    doTest(fileName);
+                }
+
+                @TestMetadata("companionObjectAfterJava.kt")
+                public void testCompanionObjectAfterJava() throws Exception {
+                    String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/scopes/inheritance/companionObjectAfterJava.kt");
+                    doTest(fileName);
+                }
+
+                @TestMetadata("innerClasses.kt")
+                public void testInnerClasses() throws Exception {
+                    String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/scopes/inheritance/innerClasses.kt");
+                    doTest(fileName);
+                }
+
+                @TestMetadata("methodsPriority.kt")
+                public void testMethodsPriority() throws Exception {
+                    String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/scopes/inheritance/methodsPriority.kt");
+                    doTest(fileName);
+                }
+
+                @TestMetadata("nestedCompanionClass.kt")
+                public void testNestedCompanionClass() throws Exception {
+                    String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/scopes/inheritance/nestedCompanionClass.kt");
+                    doTest(fileName);
+                }
+
+                @TestMetadata("nestedCompanionClassVsNested.kt")
+                public void testNestedCompanionClassVsNested() throws Exception {
+                    String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/scopes/inheritance/nestedCompanionClassVsNested.kt");
+                    doTest(fileName);
+                }
+
+                @TestMetadata("nestedCompanionClassVsNestedJava.kt")
+                public void testNestedCompanionClassVsNestedJava() throws Exception {
+                    String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/scopes/inheritance/nestedCompanionClassVsNestedJava.kt");
+                    doTest(fileName);
+                }
+
+                @TestMetadata("nestedFromJava.kt")
+                public void testNestedFromJava() throws Exception {
+                    String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/scopes/inheritance/nestedFromJava.kt");
+                    doTest(fileName);
+                }
+
+                @TestMetadata("nestedFromJavaAfterKotlin.kt")
+                public void testNestedFromJavaAfterKotlin() throws Exception {
+                    String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/scopes/inheritance/nestedFromJavaAfterKotlin.kt");
+                    doTest(fileName);
+                }
+
+                @TestMetadata("nestedVsToplevelClass.kt")
+                public void testNestedVsToplevelClass() throws Exception {
+                    String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/scopes/inheritance/nestedVsToplevelClass.kt");
+                    doTest(fileName);
+                }
+
+                @TestMetadata("overloadStatic.kt")
+                public void testOverloadStatic() throws Exception {
+                    String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/scopes/inheritance/overloadStatic.kt");
+                    doTest(fileName);
+                }
+
+                @TestMetadata("severalCompanions.kt")
+                public void testSeveralCompanions() throws Exception {
+                    String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/scopes/inheritance/severalCompanions.kt");
+                    doTest(fileName);
+                }
+
+                @TestMetadata("staticVsCompanion.kt")
+                public void testStaticVsCompanion() throws Exception {
+                    String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/scopes/inheritance/staticVsCompanion.kt");
+                    doTest(fileName);
+                }
+
+                @TestMetadata("staticVsImport.kt")
+                public void testStaticVsImport() throws Exception {
+                    String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/scopes/inheritance/staticVsImport.kt");
+                    doTest(fileName);
+                }
+
+                @TestMetadata("staticsFromjava.kt")
+                public void testStaticsFromjava() throws Exception {
+                    String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/scopes/inheritance/staticsFromjava.kt");
+                    doTest(fileName);
+                }
+
+                @TestMetadata("staticsFromjavaAfterKotlin.kt")
+                public void testStaticsFromjavaAfterKotlin() throws Exception {
+                    String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/scopes/inheritance/staticsFromjavaAfterKotlin.kt");
+                    doTest(fileName);
+                }
             }
         }
 
