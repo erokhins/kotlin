@@ -39,6 +39,13 @@ public class OverloadResolutionResultsImpl<D extends CallableDescriptor> impleme
         return results;
     }
 
+    public static <D extends CallableDescriptor> OverloadResolutionResultsImpl<D> errorExplicitReceiver() {
+        OverloadResolutionResultsImpl<D> results = new OverloadResolutionResultsImpl<D>(
+                Code.ERROR_EXPLICIT_RECEIVER, Collections.<MutableResolvedCall<D>>emptyList());
+        results.setAllCandidates(Collections.<ResolvedCall<D>>emptyList());
+        return results;
+    }
+
     public static <D extends CallableDescriptor> OverloadResolutionResultsImpl<D> singleFailedCandidate(MutableResolvedCall<D> candidate) {
         return new OverloadResolutionResultsImpl<D>(Code.SINGLE_CANDIDATE_ARGUMENT_MISMATCH, Collections.singleton(candidate));
     }

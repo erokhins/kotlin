@@ -27,6 +27,7 @@ public interface OverloadResolutionResults<D extends CallableDescriptor> {
     enum Code {
         SUCCESS(true),
         NAME_NOT_FOUND(false),
+        ERROR_EXPLICIT_RECEIVER(false),
         SINGLE_CANDIDATE_ARGUMENT_MISMATCH(false),
         AMBIGUITY(false),
         MANY_FAILED_CANDIDATES(false),

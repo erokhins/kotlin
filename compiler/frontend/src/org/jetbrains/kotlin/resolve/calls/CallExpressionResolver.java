@@ -123,6 +123,12 @@ public class CallExpressionResolver {
                 call, CheckArgumentTypesMode.CHECK_VALUE_ARGUMENTS);
         OverloadResolutionResults<VariableDescriptor> resolutionResult = callResolver.resolveSimpleProperty(contextForVariable);
 
+        if (resolutionResult.getResultCode() == OverloadResolutionResults.Code.ERROR_EXPLICIT_RECEIVER) {
+            temporaryForVariable.commit();
+            result[0] = true;
+            return null;
+        }
+
         // if the expression is a receiver in a qualified expression, it should be resolved after the selector is resolved
         boolean isLHSOfDot = KtPsiUtil.isLHSOfDot(nameExpression);
         if (!resolutionResult.isNothing() && resolutionResult.getResultCode() != OverloadResolutionResults.Code.CANDIDATES_WITH_WRONG_RECEIVER) {
