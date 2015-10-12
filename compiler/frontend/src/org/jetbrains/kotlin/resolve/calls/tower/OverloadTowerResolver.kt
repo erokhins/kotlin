@@ -81,6 +81,9 @@ public class OverloadTowerResolver(
             towerContext: OverloadTowerResolverContext,
             candidatesCollectors: List<TowerCandidatesCollector<D>>
     ): OverloadResolutionResultsImpl<D> {
+        if (towerContext.resolveTower.explicitReceiver?.type?.isError ?: false) {
+            return OverloadResolutionResultsImpl.errorExplicitReceiver()
+        }
 
         val resultCollector = ResultCollector<D>()
 
@@ -98,6 +101,8 @@ public class OverloadTowerResolver(
             popCandidates(candidatesCollectors.flatMap { it.getCurrentCandidates() })?.let { return it }
 
             for (implicitReceiver in towerContext.resolveTower.implicitReceiversHierarchy) {
+                if (implicitReceiver.value.type.isError) continue
+
                 candidatesCollectors.forEach {
                     it.pushImplicitReceiver(implicitReceiver)
                 }
