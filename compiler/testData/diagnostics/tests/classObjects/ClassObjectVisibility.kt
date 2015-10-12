@@ -2,7 +2,8 @@ package foo
 
 fun test() {
   A.d
-  A.Companion.<!INVISIBLE_MEMBER!>f<!>
+  A.Companion.<!NONE_APPLICABLE!>f<!> // todo happened because we have two f here -- as Member of A.Companion and as static object A.Companion
+  A.Companion.g
   B.<!INVISIBLE_MEMBER!>D<!>
   <!INVISIBLE_MEMBER!>CCC<!>
   CCC.<!INVISIBLE_MEMBER!>classObjectVar<!>
@@ -14,6 +15,7 @@ class A() {
     private object f {
 
     }
+    object g
   }
 }
 
