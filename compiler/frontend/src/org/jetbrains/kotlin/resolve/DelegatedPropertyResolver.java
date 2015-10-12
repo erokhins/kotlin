@@ -188,6 +188,8 @@ public class DelegatedPropertyResolver {
         assert call != null : "'getDelegatedPropertyConventionMethod' didn't record a call";
 
         if (!functionResults.isSuccess()) {
+            if (functionResults.getResultCode() == OverloadResolutionResults.Code.ERROR_EXPLICIT_RECEIVER) return;
+
             String expectedFunction = renderCall(call, trace.getBindingContext());
             if (functionResults.isIncomplete()) {
                 trace.report(DELEGATE_SPECIAL_FUNCTION_MISSING.on(delegateExpression, expectedFunction, delegateType));
