@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.VariableDescriptor
 import org.jetbrains.kotlin.resolve.calls.results.ResolutionStatus
 import org.jetbrains.kotlin.resolve.DelegatingBindingTrace
+import org.jetbrains.kotlin.resolve.calls.CallResolver
 
 public interface VariableAsFunctionResolvedCall {
     public val functionCall: ResolvedCall<FunctionDescriptor>
@@ -41,8 +42,12 @@ class VariableAsFunctionResolvedCallImpl(
     override fun getStatus(): ResolutionStatus = variableCall.getStatus().combine(functionCall.getStatus())
 
     override fun getTrace(): DelegatingBindingTrace {
-        //functionCall.trace is temporary trace above variableCall.trace and is committed already
-        return variableCall.getTrace()
+        if (CallResolver.USE_NEW_RESOLVE) {
+            return functionCall.getTrace()
+        } else {
+            //functionCall.trace is temporary trace above variableCall.trace and is committed already
+            return variableCall.trace
+        }
     }
 
 }
