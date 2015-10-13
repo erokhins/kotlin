@@ -6,5 +6,5 @@ class A {
 }
 
 fun main() {
-    ::<!UNRESOLVED_REFERENCE!>Inner<!>
+    ::<!UNSUPPORTED!>Inner<!>
 }

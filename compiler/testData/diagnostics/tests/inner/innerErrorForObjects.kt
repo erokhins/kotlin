@@ -10,12 +10,12 @@ class Test {
         }
 
         fun more(): InnerClass {
-            val b = <!NO_COMPANION_OBJECT, FUNCTION_EXPECTED!>InnerClass<!>()
+            val b = <!INACCESSIBLE_OUTER_CLASS_EXPRESSION!>InnerClass()<!>
 
             val <!UNUSED_VARIABLE!>testVal<!> = <!UNRESOLVED_REFERENCE!>inClass<!>
             <!UNRESOLVED_REFERENCE!>foo<!>()
 
-            return <!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE!>b<!>
+            return b
         }
     }
 
