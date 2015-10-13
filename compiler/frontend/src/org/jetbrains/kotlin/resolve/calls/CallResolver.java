@@ -45,6 +45,7 @@ import org.jetbrains.kotlin.resolve.calls.results.ResolutionResultsHandler;
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo;
 import org.jetbrains.kotlin.resolve.calls.tasks.*;
 import org.jetbrains.kotlin.resolve.calls.tasks.collectors.CallableDescriptorCollectors;
+import org.jetbrains.kotlin.resolve.calls.tower.OverloadTowerResolver;
 import org.jetbrains.kotlin.resolve.calls.util.CallMaker;
 import org.jetbrains.kotlin.resolve.descriptorUtil.DescriptorUtilsKt;
 import org.jetbrains.kotlin.resolve.lazy.ForceResolveUtil;
@@ -82,9 +83,12 @@ public class CallResolver {
     private ArgumentTypeResolver argumentTypeResolver;
     private GenericCandidateResolver genericCandidateResolver;
     private CallCompleter callCompleter;
+    private OverloadTowerResolver tower;
     private final TaskPrioritizer taskPrioritizer;
     private final ResolutionResultsHandler resolutionResultsHandler;
     @NotNull private KotlinBuiltIns builtIns;
+
+    public static final boolean USE_NEW_RESOLVE = true;
 
     private static final PerformanceCounter callResolvePerfCounter = PerformanceCounter.Companion.create("Call resolve", ExpressionTypingVisitorDispatcher.typeInfoPerfCounter);
     private static final PerformanceCounter candidatePerfCounter = PerformanceCounter.Companion.create("Call resolve candidate analysis", true);
@@ -133,6 +137,12 @@ public class CallResolver {
     @Inject
     public void setCallCompleter(@NotNull CallCompleter callCompleter) {
         this.callCompleter = callCompleter;
+    }
+
+    // component dependency cycle
+    @Inject
+    public void setTower(OverloadTowerResolver tower) {
+        this.tower = tower;
     }
 
     @NotNull
@@ -204,7 +214,7 @@ public class CallResolver {
             @Override
             public OverloadResolutionResults<F> invoke() {
                 List<ResolutionTask<D, F>> tasks = taskPrioritizer.<D, F>computePrioritizedTasks(context, name, tracing, collectors);
-                return doResolveCallOrGetCachedResults(context, tasks, callTransformer, tracing);
+                return doResolveCallOrGetCachedResults(context, name, tasks, callTransformer, tracing);
             }
         });
     }
@@ -232,7 +242,7 @@ public class CallResolver {
             public OverloadResolutionResults<F> invoke() {
                 List<ResolutionTask<D, F>> prioritizedTasks =
                         taskPrioritizer.<D, F>computePrioritizedTasksFromCandidates(context, candidates, tracing);
-                return doResolveCallOrGetCachedResults(context, prioritizedTasks, callTransformer, tracing);
+                return doResolveCallOrGetCachedResults(context, null, prioritizedTasks, callTransformer, tracing);
             }
         });
     }
@@ -464,13 +474,14 @@ public class CallResolver {
                 List<ResolutionTask<CallableDescriptor, FunctionDescriptor>> tasks =
                         taskPrioritizer.<CallableDescriptor, FunctionDescriptor>computePrioritizedTasksFromCandidates(
                                 basicCallResolutionContext, Collections.singleton(candidate), tracing);
-                return doResolveCallOrGetCachedResults(basicCallResolutionContext, tasks, CallTransformer.FUNCTION_CALL_TRANSFORMER, tracing);
+                return doResolveCallOrGetCachedResults(basicCallResolutionContext, null, tasks, CallTransformer.FUNCTION_CALL_TRANSFORMER, tracing);
             }
         });
     }
 
     private <D extends CallableDescriptor, F extends D> OverloadResolutionResultsImpl<F> doResolveCallOrGetCachedResults(
             @NotNull BasicCallResolutionContext context,
+            @Nullable Name name,
             @NotNull List<ResolutionTask<D, F>> prioritizedTasks,
             @NotNull CallTransformer<D, F> callTransformer,
             @NotNull TracingStrategy tracing
@@ -484,7 +495,7 @@ public class CallResolver {
         BindingContextUtilsKt.recordScope(newContext.trace, newContext.scope, newContext.call.getCalleeExpression());
         BindingContextUtilsKt.recordDataFlowInfo(newContext, newContext.call.getCalleeExpression());
 
-        OverloadResolutionResultsImpl<F> results = doResolveCall(newContext, prioritizedTasks, callTransformer, tracing);
+        OverloadResolutionResultsImpl<F> results = doResolveCall(newContext, name, prioritizedTasks, callTransformer, tracing);
         DelegatingBindingTrace deltasTraceForTypeInference = ((OverloadResolutionResultsImpl) results).getTrace();
         if (deltasTraceForTypeInference != null) {
             deltasTraceForTypeInference.addOwnDataTo(traceToResolveCall);
@@ -544,6 +555,7 @@ public class CallResolver {
     @NotNull
     private <D extends CallableDescriptor, F extends D> OverloadResolutionResultsImpl<F> doResolveCall(
             @NotNull BasicCallResolutionContext context,
+            @Nullable Name name,
             @NotNull List<ResolutionTask<D, F>> prioritizedTasks, // high to low priority
             @NotNull CallTransformer<D, F> callTransformer,
             @NotNull TracingStrategy tracing
@@ -565,6 +577,30 @@ public class CallResolver {
                 ForceResolveUtil.forceResolveAllContents(type);
             }
         }
+
+        // todo remove old resolve
+        if (USE_NEW_RESOLVE && name != null) {
+            OverloadResolutionResultsImpl results;
+            TemporaryBindingTrace newResolveTrace =
+                    TemporaryBindingTrace.create(context.trace, "trace for new resolve", context.call.getCalleeExpression());
+            BasicCallResolutionContext newResolveContext = context.replaceBindingTrace(newResolveTrace);
+
+            if (CallTransformer.FUNCTION_CALL_TRANSFORMER == ((CallTransformer) callTransformer)) {
+                results = tower.runFunctionResolve(newResolveContext, name, tracing);
+            }
+            else if (CallTransformer.MEMBER_CALL_TRANSFORMER == ((CallTransformer) callTransformer)) {
+                results = tower.runCallableResolve(newResolveContext, name, tracing);
+            }
+            else {
+                results = tower.runVariableResolve(newResolveContext, name, tracing);
+            }
+            if (results.isNothing()) {
+                argumentTypeResolver.checkTypesWithNoCallee(context, SHAPE_FUNCTION_ARGUMENTS);
+            }
+            newResolveTrace.commit();
+            return results;
+        }
+
 
         Collection<ResolvedCall<F>> allCandidates = Lists.newArrayList();
         OverloadResolutionResultsImpl<F> successfulResults = null;
