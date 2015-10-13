@@ -5,7 +5,7 @@ package nestedObejcts {
     public val b: nestedObejcts.B
     public val c: nestedObejcts.A.B
     public val d: nestedObejcts.A.B.A
-    public val e: [ERROR : <ERROR PROPERTY TYPE>]
+    public val e: [ERROR : Type for B.A.B]
 
     public object A {
         private constructor A()

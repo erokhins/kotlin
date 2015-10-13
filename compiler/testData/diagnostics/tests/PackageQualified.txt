@@ -1,7 +1,7 @@
 package
 
 package foobar {
-    public val x1: [ERROR : <ERROR PROPERTY TYPE>]
+    public val x1: [ERROR : Type for a.a]
     public val x2: java.util.List<kotlin.Int>? = null
     public val y1: kotlin.List<kotlin.Int>? = null
     public fun </*0*/ O> done(/*0*/ result: O): foobar.Iteratee<kotlin.Any?, O>
