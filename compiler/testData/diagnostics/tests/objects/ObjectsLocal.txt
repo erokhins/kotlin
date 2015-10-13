@@ -1,7 +1,7 @@
 package
 
 package localObjects {
-    public val bb: [ERROR : <ERROR FUNCTION RETURN TYPE>]
+    public val bb: [ERROR : Type for B.foo()]
     public fun test(): kotlin.Unit
 
     public object A {
