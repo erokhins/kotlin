@@ -88,17 +88,17 @@ fun f13(a : A?) {
   }
   else {
     a?.foo()
-    <!UNRESOLVED_REFERENCE!>c<!>.<!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE!>bar<!>()
+    <!UNRESOLVED_REFERENCE!>c<!>.<!DEBUG_INFO_MISSING_UNRESOLVED!>bar<!>()
   }
 
   a?.foo()
   if (!(a is B)) {
     a?.foo()
-    <!UNRESOLVED_REFERENCE!>c<!>.<!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE!>bar<!>()
+    <!UNRESOLVED_REFERENCE!>c<!>.<!DEBUG_INFO_MISSING_UNRESOLVED!>bar<!>()
   }
   else {
     <!DEBUG_INFO_SMARTCAST!>a<!>.foo()
-    <!UNRESOLVED_REFERENCE!>c<!>.<!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE!>bar<!>()
+    <!UNRESOLVED_REFERENCE!>c<!>.<!DEBUG_INFO_MISSING_UNRESOLVED!>bar<!>()
   }
 
   a?.foo()
@@ -108,7 +108,7 @@ fun f13(a : A?) {
   }
   else {
     a?.foo()
-    <!UNRESOLVED_REFERENCE!>c<!>.<!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE!>bar<!>()
+    <!UNRESOLVED_REFERENCE!>c<!>.<!DEBUG_INFO_MISSING_UNRESOLVED!>bar<!>()
   }
 
   if (!(a is B) || !(a is C)) {
