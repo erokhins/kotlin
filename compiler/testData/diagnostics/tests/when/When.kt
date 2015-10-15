@@ -10,8 +10,8 @@ fun foo() : Int {
       <!INCOMPATIBLE_TYPES!>s<!> -> <!UNUSED_EXPRESSION!>1<!>
       1 -> <!UNUSED_EXPRESSION!>1<!>
       1 + <!UNRESOLVED_REFERENCE!>a<!> -> <!UNUSED_EXPRESSION!>1<!>
-      in 1..<!UNRESOLVED_REFERENCE!>a<!> -> <!UNUSED_EXPRESSION!>1<!>
-      !in 1..<!UNRESOLVED_REFERENCE!>a<!> -> <!UNUSED_EXPRESSION!>1<!>
+      <!TYPE_MISMATCH_IN_RANGE!>in<!> 1..<!UNRESOLVED_REFERENCE!>a<!> -> <!UNUSED_EXPRESSION!>1<!>
+      <!TYPE_MISMATCH_IN_RANGE!>!in<!> 1..<!UNRESOLVED_REFERENCE!>a<!> -> <!UNUSED_EXPRESSION!>1<!>
       else -> <!UNUSED_EXPRESSION!>1<!>
     }
 
