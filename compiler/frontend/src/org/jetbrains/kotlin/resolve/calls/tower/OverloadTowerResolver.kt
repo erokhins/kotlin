@@ -23,11 +23,11 @@ import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.resolve.TemporaryBindingTrace
 import org.jetbrains.kotlin.resolve.calls.CandidateResolver
+import org.jetbrains.kotlin.resolve.calls.callResolverUtil.getUnaryPlusOrMinusOperatorFunctionName
 import org.jetbrains.kotlin.resolve.calls.callUtil.createLookupLocation
 import org.jetbrains.kotlin.resolve.calls.context.BasicCallResolutionContext
 import org.jetbrains.kotlin.resolve.calls.context.CallCandidateResolutionContext
 import org.jetbrains.kotlin.resolve.calls.context.CandidateResolveMode
-import org.jetbrains.kotlin.resolve.calls.context.CheckArgumentTypesMode
 import org.jetbrains.kotlin.resolve.calls.model.MutableResolvedCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallImpl
 import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionResolvedCallImpl
@@ -36,6 +36,7 @@ import org.jetbrains.kotlin.resolve.calls.results.ResolutionResultsHandler
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.resolve.calls.tasks.TracingStrategy
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
+import org.jetbrains.kotlin.util.OperatorNameConventions
 import org.jetbrains.kotlin.utils.addToStdlib.check
 
 public class OverloadTowerResolver(
@@ -62,13 +63,31 @@ public class OverloadTowerResolver(
     }
 
     public fun runFunctionResolve(basicCallContext: BasicCallResolutionContext, name: Name, tracing: TracingStrategy): OverloadResolutionResultsImpl<FunctionDescriptor> {
-        val towerContext = OverloadTowerResolverContext(this, basicCallContext, name, tracing)
+        val temporaryTrace = TemporaryBindingTrace.create(basicCallContext.trace, "Trace for function resolve")
+
+        val towerContext = OverloadTowerResolverContext(this, basicCallContext.replaceBindingTrace(temporaryTrace), name, tracing)
 
         createCallTowerCollectorsForExplicitInvoke(towerContext)?.let {
             return runResolve(towerContext, listOf(it))
         }
 
-        return runResolve(towerContext, createFunctionCollector(towerContext) + InvokeCollector(towerContext) + InvokeExtensionCollector(towerContext))
+        val result = runResolve(towerContext, createFunctionCollector(towerContext) + InvokeCollector(towerContext) + InvokeExtensionCollector(towerContext))
+
+        if (!result.isSuccess) {
+            // Temporary hack for code migration (unaryPlus()/unaryMinus())
+            val unaryConventionName = getUnaryPlusOrMinusOperatorFunctionName(basicCallContext.call)
+            if (unaryConventionName != null) {
+                val deprecatedName = if (name == OperatorNameConventions.UNARY_PLUS)
+                    OperatorNameConventions.PLUS
+                else
+                    OperatorNameConventions.MINUS
+                val deprecatedTowerContext = OverloadTowerResolverContext(this, basicCallContext, deprecatedName, tracing)
+                return runResolve(deprecatedTowerContext, createFunctionCollector(deprecatedTowerContext))
+            }
+        }
+
+        temporaryTrace.commit()
+        return result
     }
 
     public fun runCallableResolve(basicCallContext: BasicCallResolutionContext, name: Name, tracing: TracingStrategy): OverloadResolutionResultsImpl<CallableDescriptor> {
@@ -81,6 +100,7 @@ public class OverloadTowerResolver(
             towerContext: OverloadTowerResolverContext,
             candidatesCollectors: List<TowerCandidatesCollector<D>>
     ): OverloadResolutionResultsImpl<D> {
+
         if (towerContext.resolveTower.explicitReceiver?.type?.isError ?: false) {
             return OverloadResolutionResultsImpl.errorExplicitReceiver()
         }

@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.resolve.calls.tasks.createSynthesizedInvokes
 import org.jetbrains.kotlin.resolve.calls.tower.OverloadTowerResolver.OverloadTowerResolverContext
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
-import org.jetbrains.kotlin.types.expressions.OperatorConventions
+import org.jetbrains.kotlin.util.OperatorNameConventions
 import org.jetbrains.kotlin.utils.addToStdlib.check
 import java.util.*
 
@@ -93,7 +93,7 @@ internal abstract class AbstractInvokeCollectors(
         val newVariables = variableResolver.getCurrentCandidates()
 
         // todo overloads (after smart cast) KT-9517, also  KT-9518, KT-9523
-        if (newVariables.size() > 1) {
+        if (newVariables.size > 1) {
             variableResolveFailed = true
             return
         }
@@ -186,7 +186,7 @@ internal class InvokeCollector(context: OverloadTowerResolverContext) :
 
         val basicCallResolutionContext = context.basicCallContext.replaceBindingTrace(variableResolvedCall.trace).replaceContextDependency(ContextDependency.DEPENDENT) // todo
 
-        val newContext = OverloadTowerResolverContext(context.overloadTowerResolver, basicCallResolutionContext, OperatorConventions.INVOKE, tracingForInvoke)
+        val newContext = OverloadTowerResolverContext(context.overloadTowerResolver, basicCallResolutionContext, OperatorNameConventions.INVOKE, tracingForInvoke)
 
         // todo filter by operator
         return ExplicitReceiverTowerCandidateCollector(newContext, variableReceiver) { getFunctions(it) }
@@ -206,7 +206,7 @@ internal class InvokeExtensionCollector(context: OverloadTowerResolverContext) :
             val functionCall = CallTransformer.CallForImplicitInvoke(ReceiverValue.NO_RECEIVER, variableReceiver, context.basicCallContext.call)
             val tracingForInvoke = TracingStrategyForInvoke(variableReceiver.expression, functionCall, variableReceiver.type)
             val basicCallResolutionContext = context.basicCallContext.replaceBindingTrace(variableResolvedCall.trace).replaceContextDependency(ContextDependency.DEPENDENT) // todo
-            val newContext = OverloadTowerResolverContext(context.overloadTowerResolver, basicCallResolutionContext, OperatorConventions.INVOKE, tracingForInvoke)
+            val newContext = OverloadTowerResolverContext(context.overloadTowerResolver, basicCallResolutionContext, OperatorNameConventions.INVOKE, tracingForInvoke)
 
             return InvokeExtensionTowerCandidatesCollector(newContext, variableResolvedCall, invokeDescriptor, context.resolveTower.explicitReceiver)
         }
@@ -250,7 +250,7 @@ private fun OverloadTowerResolverContext.getExtensionInvokeCandidateDescriptor(
 
     val extFunReceiver = possibleExtensionFunctionReceiver
 
-    return ReceiverTowerLevel(resolveTower, extFunReceiver).getFunctions(OperatorConventions.INVOKE)
+    return ReceiverTowerLevel(resolveTower, extFunReceiver).getFunctions(OperatorNameConventions.INVOKE)
             .single().let {
         assert(it.errors.isEmpty())
         val synthesizedInvoke = createSynthesizedInvokes(listOf(it.descriptor)).single() // todo priority synthesized
