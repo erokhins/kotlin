@@ -188,7 +188,7 @@ internal class InvokeCollector(context: OverloadTowerResolverContext) :
             variableResolvedCall: MutableResolvedCall<VariableDescriptor>,
             variableReceiver: ExpressionReceiver
     ): TowerCandidatesCollector<FunctionDescriptor> {
-        val functionCall = CallTransformer.CallForImplicitInvoke(ReceiverValue.NO_RECEIVER, variableReceiver, context.basicCallContext.call)
+        val functionCall = CallTransformer.CallForImplicitInvoke(context.resolveTower.explicitReceiver ?: ReceiverValue.NO_RECEIVER, variableReceiver, context.basicCallContext.call)
         val tracingForInvoke = TracingStrategyForInvoke(variableReceiver.expression, functionCall, variableReceiver.type)
 
         val basicCallResolutionContext = context.basicCallContext.replaceBindingTrace(variableResolvedCall.trace).replaceContextDependency(ContextDependency.DEPENDENT) // todo
@@ -210,7 +210,7 @@ internal class InvokeExtensionCollector(context: OverloadTowerResolverContext) :
         val invokeDescriptor = context.getExtensionInvokeCandidateDescriptor(variableReceiver)
         if (invokeDescriptor != null) {
             // todo hack
-            val functionCall = CallTransformer.CallForImplicitInvoke(ReceiverValue.NO_RECEIVER, variableReceiver, context.basicCallContext.call)
+            val functionCall = CallTransformer.CallForImplicitInvoke(context.resolveTower.explicitReceiver ?: ReceiverValue.NO_RECEIVER, variableReceiver, context.basicCallContext.call)
             val tracingForInvoke = TracingStrategyForInvoke(variableReceiver.expression, functionCall, variableReceiver.type)
             val basicCallResolutionContext = context.basicCallContext.replaceBindingTrace(variableResolvedCall.trace).replaceContextDependency(ContextDependency.DEPENDENT) // todo
             val newContext = OverloadTowerResolverContext(context.overloadTowerResolver, basicCallResolutionContext, OperatorNameConventions.INVOKE, tracingForInvoke)
