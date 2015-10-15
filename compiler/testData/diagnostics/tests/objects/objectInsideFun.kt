@@ -4,8 +4,8 @@ interface A {
         get() = ""
 }
 
-fun test(foo: Int, bar: Int) {
+fun test(<!UNUSED_PARAMETER!>foo<!>: Int, <!UNUSED_PARAMETER!>bar<!>: Int) {
     object : A {
-        override val foo: Int = foo + bar
+        override val foo: Int = <!UNINITIALIZED_VARIABLE!>foo<!> <!NONE_APPLICABLE!>+<!> bar
     }
 }
