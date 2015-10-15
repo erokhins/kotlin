@@ -26,7 +26,6 @@ import org.jetbrains.kotlin.resolve.scopes.JetScope
 import org.jetbrains.kotlin.resolve.scopes.LexicalScope
 import org.jetbrains.kotlin.resolve.scopes.receivers.QualifierReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
-import org.jetbrains.kotlin.resolve.scopes.utils.getClassifier
 import org.jetbrains.kotlin.types.ErrorUtils
 import org.jetbrains.kotlin.types.JetType
 
@@ -195,7 +194,7 @@ internal open class ScopeTowerLevel(
         val variables = lexicalScope.getDeclaredVariables(name, location).map {
             createCandidateDescriptor(it, dispatchReceiver = null)
         }
-        return variables fastPlus createVariableDescriptor(lexicalScope.getClassifier(name, location))
+        return variables fastPlus createVariableDescriptor(lexicalScope.getDeclaredClassifier(name, location))
     }
 
     override fun getFunctions(name: Name): Collection<CandidateDescriptor<FunctionDescriptor>> {
@@ -204,7 +203,7 @@ internal open class ScopeTowerLevel(
         }
 
         // todo report errors for constructors if there is no match receiver
-        return functions fastPlus createConstructors(lexicalScope.getClassifier(name, location), dispatchReceiver = null) {
+        return functions fastPlus createConstructors(lexicalScope.getDeclaredClassifier(name, location), dispatchReceiver = null) {
             if (!it.isInner) return@createConstructors null
 
             // todo add constructors functions to member class member scope
