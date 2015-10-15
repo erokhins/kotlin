@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.ReceiverParameterDescriptor
 import org.jetbrains.kotlin.descriptors.VariableDescriptor
+import org.jetbrains.kotlin.resolve.TemporaryBindingTrace
 import org.jetbrains.kotlin.resolve.calls.CallTransformer
 import org.jetbrains.kotlin.resolve.calls.context.ContextDependency
 import org.jetbrains.kotlin.resolve.calls.model.MutableResolvedCall
@@ -31,6 +32,7 @@ import org.jetbrains.kotlin.resolve.calls.tasks.createSynthesizedInvokes
 import org.jetbrains.kotlin.resolve.calls.tower.OverloadTowerResolver.OverloadTowerResolverContext
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
+import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
 import org.jetbrains.kotlin.util.OperatorNameConventions
 import org.jetbrains.kotlin.utils.addToStdlib.check
 import java.util.*
@@ -93,16 +95,21 @@ internal abstract class AbstractInvokeCollectors(
         val newVariables = variableResolver.getCurrentCandidates()
 
         // todo overloads (after smart cast) KT-9517, also  KT-9518, KT-9523
-        if (newVariables.size > 1) {
-            variableResolveFailed = true
-            return
+        val result = context.overloadTowerResolver.resolutionResultsHandler.chooseAndReportMaximallySpecific<VariableDescriptor>(newVariables.mapTo(HashSet()) {it.first}, true, true)
+
+        if (!result.isSuccess && !result.isIncomplete) {
+            if (newVariables.isNotEmpty()) {
+                variableResolveFailed = true
+                return
+            }
         }
-
-        val variable = newVariables.firstOrNull()
-        if (variable != null) {
-            variableResolvedCall = variable.first
-
+        else {
+            variableResolvedCall = result.resultingCall
             val variableResolvedCall = variableResolvedCall!!
+            // todo hack
+            context.tracing.bindReference(variableResolvedCall.trace, variableResolvedCall)
+            context.tracing.bindResolvedCall(variableResolvedCall.trace, variableResolvedCall)
+
 
             val calleeExpression = context.basicCallContext.call.calleeExpression
             if (calleeExpression == null) {
