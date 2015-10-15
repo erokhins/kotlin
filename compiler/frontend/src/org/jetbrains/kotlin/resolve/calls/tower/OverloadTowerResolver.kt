@@ -34,6 +34,7 @@ import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionResolvedCallIm
 import org.jetbrains.kotlin.resolve.calls.results.OverloadResolutionResultsImpl
 import org.jetbrains.kotlin.resolve.calls.results.ResolutionResultsHandler
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
+import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind.*
 import org.jetbrains.kotlin.resolve.calls.tasks.TracingStrategy
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.util.OperatorNameConventions
@@ -186,7 +187,7 @@ public class OverloadTowerResolver(
         val candidateCall = ResolvedCallImpl(
                 towerContext.basicCallContext.call, candidate.descriptor,
                 candidate.dispatchReceiver ?: ReceiverValue.NO_RECEIVER, extensionReceiver ?: ReceiverValue.NO_RECEIVER,
-                explicitReceiverKind, null, candidateTrace, towerContext.tracing,
+                explicitReceiverKind.modify(candidate, extensionReceiver), null, candidateTrace, towerContext.tracing,
                 towerContext.basicCallContext.dataFlowInfoForArguments // todo may be we should create new mutable info for arguments
         )
         val callCandidateResolutionContext = CallCandidateResolutionContext.create(
@@ -198,6 +199,28 @@ public class OverloadTowerResolver(
         val errors = (candidate.errors + createPreviousResolveError(candidateCall.status)).filterNotNull() // todo optimize
         return candidateCall to createResolveCandidateStatus(candidate.isSynthetic, errors)
     }
+
+    private fun ExplicitReceiverKind.modify(candidate: CandidateDescriptor<*>, extensionReceiver: ReceiverValue?): ExplicitReceiverKind {
+        if (candidate.errors.isEmpty()) return this
+
+        return if (extensionReceiver != null) {
+            if (candidate.dispatchReceiver != null) {
+                BOTH_RECEIVERS
+            }
+            else {
+                EXTENSION_RECEIVER
+            }
+        }
+        else {
+            if (candidate.dispatchReceiver != null) {
+                DISPATCH_RECEIVER
+            }
+            else {
+                NO_EXPLICIT_RECEIVER
+            }
+        }
+    }
+
 }
 
 // collect all candidates
