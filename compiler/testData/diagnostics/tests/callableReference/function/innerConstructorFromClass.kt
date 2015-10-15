@@ -14,7 +14,7 @@ class A {
     
     companion object {
         fun main() {
-            ::<!INACCESSIBLE_OUTER_CLASS_EXPRESSION!>Inner<!>
+            ::<!INACCESSIBLE_OUTER_CLASS_EXPRESSION, CALLABLE_REFERENCE_TO_MEMBER_OR_EXTENSION_WITH_EMPTY_LHS!>Inner<!>
             val y = A::Inner
 
             checkSubtype<KFunction1<A, A.Inner>>(y)
