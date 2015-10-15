@@ -68,7 +68,9 @@ public class OverloadTowerResolver(
         val towerContext = OverloadTowerResolverContext(this, basicCallContext.replaceBindingTrace(temporaryTrace), name, tracing)
 
         createCallTowerCollectorsForExplicitInvoke(towerContext)?.let {
-            return runResolve(towerContext, listOf(it))
+            val result = runResolve(towerContext, listOf(it))
+            temporaryTrace.commit()
+            return result
         }
 
         val result = runResolve(towerContext, createFunctionCollector(towerContext) + InvokeCollector(towerContext) + InvokeExtensionCollector(towerContext))
