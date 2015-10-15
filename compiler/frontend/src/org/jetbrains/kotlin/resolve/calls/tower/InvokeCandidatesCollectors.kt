@@ -17,11 +17,7 @@
 package org.jetbrains.kotlin.resolve.calls.tower
 
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
-import org.jetbrains.kotlin.descriptors.CallableDescriptor
-import org.jetbrains.kotlin.descriptors.FunctionDescriptor
-import org.jetbrains.kotlin.descriptors.ReceiverParameterDescriptor
-import org.jetbrains.kotlin.descriptors.VariableDescriptor
-import org.jetbrains.kotlin.resolve.TemporaryBindingTrace
+import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.resolve.calls.CallTransformer
 import org.jetbrains.kotlin.resolve.calls.context.ContextDependency
 import org.jetbrains.kotlin.resolve.calls.model.MutableResolvedCall
@@ -31,8 +27,8 @@ import org.jetbrains.kotlin.resolve.calls.tasks.TracingStrategyForInvoke
 import org.jetbrains.kotlin.resolve.calls.tasks.createSynthesizedInvokes
 import org.jetbrains.kotlin.resolve.calls.tower.OverloadTowerResolver.OverloadTowerResolverContext
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
+import org.jetbrains.kotlin.resolve.scopes.receivers.QualifierReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
-import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
 import org.jetbrains.kotlin.util.OperatorNameConventions
 import org.jetbrains.kotlin.utils.addToStdlib.check
 import java.util.*
@@ -270,7 +266,13 @@ internal class ExplicitExtensionInvokeCallTowerCollector(
         val call: CallTransformer.CallForImplicitInvoke,
         val invokeExtensionDescriptor: CandidateDescriptor<FunctionDescriptor>
 ): AbstractTowerCandidatesCollector<FunctionDescriptor>(context) {
-    private var currentCandidates = resolve(call.explicitReceiver.check { it.exists() })
+    private var currentCandidates = resolve(call.explicitReceiver.let {
+        if (it is QualifierReceiver) {
+            // todo
+            val objectDescriptor = (it.classifier as? ClassDescriptor)?.check { it.kind.isSingleton }
+            objectDescriptor?.thisAsReceiverParameter?.value ?: it.getClassObjectReceiver()
+        } else it.check { it.exists() }
+    })
 
     private fun resolve(extensionReceiver: ReceiverValue?)
             : Collection<Pair<MutableResolvedCall<FunctionDescriptor>, ResolveCandidateStatus>> {
