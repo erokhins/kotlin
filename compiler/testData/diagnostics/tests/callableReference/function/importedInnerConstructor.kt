@@ -6,5 +6,5 @@ class A {
 }
 
 fun main() {
-    ::<!UNSUPPORTED!>Inner<!>
+    ::<!UNSUPPORTED, CALLABLE_REFERENCE_TO_MEMBER_OR_EXTENSION_WITH_EMPTY_LHS!>Inner<!>
 }

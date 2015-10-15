@@ -4,7 +4,7 @@ class A {
     fun A.extA(x: String) = x
     
     fun main() {
-        Int::<!UNRESOLVED_REFERENCE_WRONG_RECEIVER!>extInt<!>
+        Int::<!EXTENSION_IN_CLASS_REFERENCE_NOT_ALLOWED!>extInt<!>
         A::<!EXTENSION_IN_CLASS_REFERENCE_NOT_ALLOWED!>extA<!>
     }
 }
