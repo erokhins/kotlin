@@ -96,12 +96,13 @@ public class OverloadTowerResolver(
     public fun runCallableResolve(basicCallContext: BasicCallResolutionContext, name: Name, tracing: TracingStrategy): OverloadResolutionResultsImpl<CallableDescriptor> {
         val towerContext = OverloadTowerResolverContext(this, basicCallContext, name, tracing)
         val list = createVariableCollector(towerContext) + createFunctionCollector(towerContext)
-        return runResolve(towerContext, list as List<TowerCandidatesCollector<CallableDescriptor>>) // this cast is correct, but in java impossible define declared side variance (on ResolvedCall)
+        return runResolve(towerContext, list as List<TowerCandidatesCollector<CallableDescriptor>>, useOrder = false) // this cast is correct, but in java impossible define declared side variance (on ResolvedCall)
     }
 
     private fun <D: CallableDescriptor> runResolve(
             towerContext: OverloadTowerResolverContext,
-            candidatesCollectors: List<TowerCandidatesCollector<D>>
+            candidatesCollectors: List<TowerCandidatesCollector<D>>,
+            useOrder: Boolean = true
     ): OverloadResolutionResultsImpl<D> {
 
         if (towerContext.resolveTower.explicitReceiver?.type?.isError ?: false) {
@@ -110,26 +111,32 @@ public class OverloadTowerResolver(
 
         val resultCollector = ResultCollector<D>()
 
-        fun popCandidates(candidates: Collection<Pair<MutableResolvedCall<D>, ResolveCandidateStatus>>): OverloadResolutionResultsImpl<D>? {
-            resultCollector.pushCandidates(candidates)
-
-            return resultCollector.getResolved()?.let { convertToOverloadResults(towerContext, it) }
+        fun pushSomething(action: TowerCandidatesCollector<D>.() -> Unit): OverloadResolutionResultsImpl<D>? {
+            if (useOrder) {
+                candidatesCollectors.forEach {
+                    it.action()
+                    resultCollector.pushCandidates(it.getCurrentCandidates())
+                    resultCollector.getResolved()?.let { return convertToOverloadResults(towerContext, it) }
+                }
+            }
+            else {
+                candidatesCollectors.forEach { it.action() }
+                resultCollector.pushCandidates(candidatesCollectors.flatMap { it.getCurrentCandidates() })
+                resultCollector.getResolved()?.let { return convertToOverloadResults(towerContext, it) }
+            }
+            return null
         }
 
         // possible there is explicit member
-        popCandidates(candidatesCollectors.flatMap { it.getCurrentCandidates() })?.let { return it }
+        pushSomething {  }?.let { return it }
 
         for (level in towerContext.resolveTower.levels) {
-            candidatesCollectors.forEach { it.pushTowerLevel(level) }
-            popCandidates(candidatesCollectors.flatMap { it.getCurrentCandidates() })?.let { return it }
+            pushSomething { pushTowerLevel(level) }?.let { return it }
 
             for (implicitReceiver in towerContext.resolveTower.implicitReceiversHierarchy) {
                 if (implicitReceiver.value.type.isError) continue
 
-                candidatesCollectors.forEach {
-                    it.pushImplicitReceiver(implicitReceiver)
-                }
-                popCandidates(candidatesCollectors.flatMap { it.getCurrentCandidates() })?.let { return it }
+                pushSomething { pushImplicitReceiver(implicitReceiver) }?.let { return it }
             }
         }
 
