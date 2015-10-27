@@ -33,7 +33,7 @@ class FunctionImportedFromObject(val functionFromObject: FunctionDescriptor) :
         functionFromObject.original.wrap()
     }
 
-    override fun getOriginal() = _original
+    override fun getOriginal(): FunctionDescriptor = _original
 
     override fun copy(
             newOwner: DeclarationDescriptor?, modality: Modality?, visibility: Visibility?,
@@ -54,7 +54,7 @@ class PropertyImportedFromObject(val propertyFromObject: PropertyDescriptor) :
         propertyFromObject.original.wrap()
     }
 
-    override fun getOriginal() = _original
+    override fun getOriginal(): PropertyDescriptor = _original
 
     override fun copy(
             newOwner: DeclarationDescriptor?, modality: Modality?, visibility: Visibility?,
