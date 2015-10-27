@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.resolve.calls.tower.ResolveCandidateLevel.IMPOSSIBLE
 import org.jetbrains.kotlin.resolve.calls.tower.ResolveCandidateLevel.MAY_THROW_RUNTIME_ERROR
 import org.jetbrains.kotlin.resolve.calls.tower.ResolveCandidateLevel.OTHER
 import org.jetbrains.kotlin.resolve.calls.tower.ResolveCandidateLevel.RUNTIME_ERROR
+import org.jetbrains.kotlin.resolve.descriptorUtil.hasLowPriorityInOverloadResolution
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.types.ErrorUtils
 import org.jetbrains.kotlin.types.KotlinType
@@ -32,7 +33,8 @@ public interface CandidateDescriptor<out D : CallableDescriptor> {
     val errors: List<ResolveCandidateError>
 
     val isSynthetic: Boolean // todo dynamics calls
-        get() = descriptor is CallableMemberDescriptor && isOrOverridesSynthesized(descriptor as CallableMemberDescriptor)
+        get() = (descriptor is CallableMemberDescriptor && isOrOverridesSynthesized(descriptor as CallableMemberDescriptor))
+                || descriptor.hasLowPriorityInOverloadResolution()
 
     val requiredExtensionParameter: Boolean
         get() = descriptor.extensionReceiverParameter != null
