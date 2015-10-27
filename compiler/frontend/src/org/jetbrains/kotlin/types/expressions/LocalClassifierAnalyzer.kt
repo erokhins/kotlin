@@ -112,12 +112,12 @@ class LocalClassDescriptorHolder(
     fun isMyClass(element: PsiElement): Boolean = element == myClass
     fun insideMyClass(element: PsiElement): Boolean = PsiTreeUtil.isAncestor(myClass, element, false)
 
-    fun getClassDescriptor(classOrObject: KtClassOrObject, declarationScopeProvider: DeclarationScopeProvider): ClassDescriptor {
+    fun getClassDescriptor(classOrObject: KtClassOrObject, declarationScopeProvider_: DeclarationScopeProvider): ClassDescriptor {
         assert(isMyClass(classOrObject)) { "Called on a wrong class: ${classOrObject.getDebugText()}" }
         if (classDescriptor == null) {
             classDescriptor = LazyClassDescriptor(
                     object : LazyClassContext {
-                        override val declarationScopeProvider = declarationScopeProvider
+                        override val declarationScopeProvider = declarationScopeProvider_
                         override val storageManager = this@LocalClassDescriptorHolder.storageManager
                         override val trace = expressionTypingContext.trace
                         override val moduleDescriptor = this@LocalClassDescriptorHolder.moduleDescriptor
