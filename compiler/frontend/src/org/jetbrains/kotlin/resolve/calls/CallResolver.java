@@ -88,7 +88,7 @@ public class CallResolver {
     private final ResolutionResultsHandler resolutionResultsHandler;
     @NotNull private KotlinBuiltIns builtIns;
 
-    public static final boolean USE_NEW_RESOLVE = true;
+    public static final boolean USE_NEW_RESOLVE = System.getenv("kotlin.internal.new_resolve") != null;
 
     private static final PerformanceCounter callResolvePerfCounter = PerformanceCounter.Companion.create("Call resolve", ExpressionTypingVisitorDispatcher.typeInfoPerfCounter);
     private static final PerformanceCounter candidatePerfCounter = PerformanceCounter.Companion.create("Call resolve candidate analysis", true);
