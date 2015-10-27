@@ -132,27 +132,29 @@ private fun TranslationContext.createCallInfo(resolvedCall: ResolvedCall<out Cal
         }
     }
 
-    var dispatchReceiver = getDispatchReceiver()
-    var extensionReceiver = getExtensionReceiver()
+    var dispatchReceiver_ = getDispatchReceiver()
+    var extensionReceiver_ = getExtensionReceiver()
     var notNullConditional: JsConditional? = null
 
     if (resolvedCall.isSafeCall()) {
         when (resolvedCall.getExplicitReceiverKind()) {
             BOTH_RECEIVERS, EXTENSION_RECEIVER -> {
-                notNullConditional = TranslationUtils.notNullConditional(extensionReceiver!!, JsLiteral.NULL, this)
-                extensionReceiver = notNullConditional.getThenExpression()
+                notNullConditional = TranslationUtils.notNullConditional(extensionReceiver_!!, JsLiteral.NULL, this)
+                extensionReceiver_ = notNullConditional.getThenExpression()
             }
             else -> {
-                notNullConditional = TranslationUtils.notNullConditional(dispatchReceiver!!, JsLiteral.NULL, this)
-                dispatchReceiver = notNullConditional.getThenExpression()
+                notNullConditional = TranslationUtils.notNullConditional(dispatchReceiver_!!, JsLiteral.NULL, this)
+                dispatchReceiver_ = notNullConditional.getThenExpression()
             }
         }
     }
+
+    val resolvedCall_ = resolvedCall
     return object : AbstractCallInfo(), CallInfo {
         override val context: TranslationContext = this@createCallInfo
-        override val resolvedCall: ResolvedCall<out CallableDescriptor> = resolvedCall
-        override val dispatchReceiver: JsExpression? = dispatchReceiver
-        override val extensionReceiver: JsExpression? = extensionReceiver
+        override val resolvedCall: ResolvedCall<out CallableDescriptor> = resolvedCall_
+        override val dispatchReceiver: JsExpression? = dispatchReceiver_
+        override val extensionReceiver: JsExpression? = extensionReceiver_
 
         val notNullConditionalForSafeCall: JsConditional? = notNullConditional
 
