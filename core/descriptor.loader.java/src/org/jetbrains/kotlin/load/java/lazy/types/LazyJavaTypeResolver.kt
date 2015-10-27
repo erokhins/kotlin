@@ -397,22 +397,26 @@ fun TypeUsage.toAttributes(
         allowFlexible: Boolean = true,
         isForAnnotationParameter: Boolean = false,
         upperBoundForTypeParameter: TypeParameterDescriptor? = null
-) = object : JavaTypeAttributes {
-    override val howThisTypeIsUsed: TypeUsage = this@toAttributes
-    override val howThisTypeIsUsedAccordingToAnnotations: TypeUsage
+): JavaTypeAttributes {
+    val allowFlexible_ = allowFlexible
+    val isForAnnotationParameter_ = isForAnnotationParameter
+    return object : JavaTypeAttributes {
+        override val howThisTypeIsUsed: TypeUsage = this@toAttributes
+        override val howThisTypeIsUsedAccordingToAnnotations: TypeUsage
             get() = howThisTypeIsUsed
-    override val isMarkedNotNull: Boolean = false
-    override val allowFlexible: Boolean = allowFlexible
+        override val isMarkedNotNull: Boolean = false
+        override val allowFlexible: Boolean = allowFlexible_
 
-    override val typeAnnotations: Annotations = Annotations.EMPTY
+        override val typeAnnotations: Annotations = Annotations.EMPTY
 
-    override val isForAnnotationParameter: Boolean = isForAnnotationParameter
-    override val upperBoundOfTypeParameter: TypeParameterDescriptor? = upperBoundForTypeParameter
+        override val isForAnnotationParameter: Boolean = isForAnnotationParameter_
+        override val upperBoundOfTypeParameter: TypeParameterDescriptor? = upperBoundForTypeParameter
+    }
 }
 
-fun JavaTypeAttributes.toFlexible(flexibility: JavaTypeFlexibility) =
+fun JavaTypeAttributes.toFlexible(flexibility_: JavaTypeFlexibility) =
         object : JavaTypeAttributes by this {
-            override val flexibility = flexibility
+            override val flexibility = flexibility_
         }
 
 

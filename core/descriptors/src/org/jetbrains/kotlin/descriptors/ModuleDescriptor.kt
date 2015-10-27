@@ -53,8 +53,8 @@ interface ModuleParameters {
     }
 }
 
-public fun ModuleParameters(defaultImports: List<ImportPath>, platformToKotlinClassMap: PlatformToKotlinClassMap): ModuleParameters =
+public fun ModuleParameters(defaultImports_: List<ImportPath>, platformToKotlinClassMap_: PlatformToKotlinClassMap): ModuleParameters =
         object : ModuleParameters {
-            override val defaultImports: List<ImportPath> = defaultImports
-            override val platformToKotlinClassMap: PlatformToKotlinClassMap = platformToKotlinClassMap
+            override val defaultImports: List<ImportPath> = defaultImports_
+            override val platformToKotlinClassMap: PlatformToKotlinClassMap = platformToKotlinClassMap_
         }
