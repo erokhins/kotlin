@@ -76,19 +76,6 @@ public class OverloadTowerResolver(
 
         val result = runResolve(towerContext, createFunctionCollector(towerContext) + InvokeCollector(towerContext) + InvokeExtensionCollector(towerContext))
 
-        if (!result.isSuccess) {
-            // Temporary hack for code migration (unaryPlus()/unaryMinus())
-            val unaryConventionName = getUnaryPlusOrMinusOperatorFunctionName(basicCallContext.call)
-            if (unaryConventionName != null) {
-                val deprecatedName = if (name == OperatorNameConventions.UNARY_PLUS)
-                    OperatorNameConventions.PLUS
-                else
-                    OperatorNameConventions.MINUS
-                val deprecatedTowerContext = OverloadTowerResolverContext(this, basicCallContext, deprecatedName, tracing)
-                return runResolve(deprecatedTowerContext, createFunctionCollector(deprecatedTowerContext))
-            }
-        }
-
         temporaryTrace.commit()
         return result
     }
