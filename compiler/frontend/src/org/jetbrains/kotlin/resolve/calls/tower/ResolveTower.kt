@@ -29,6 +29,8 @@ import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.resolve.scopes.utils.getImplicitReceiversHierarchy
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.utils.addToStdlib.check
+import org.jetbrains.kotlin.utils.addToStdlib.singletonList
+import org.jetbrains.kotlin.utils.addToStdlib.singletonOrEmptyList
 import java.util.*
 
 public interface ResolveTower {
@@ -104,7 +106,7 @@ internal class ResolveTowerImpl(
 
                 // before we creating this level all smartCasts for implicit receivers will be calculated
                 if (allKnownReceivers == null) {
-                    allKnownReceivers = (implicitReceiversHierarchy.map { it.value } fastPlus explicitReceiver).flatMap {
+                    allKnownReceivers = (explicitReceiver?.singletonList() ?: implicitReceiversHierarchy.map { it.value }).flatMap {
                         smartCastCache.getSmartCastPossibleTypes(it) fastPlus it.type
                     }
                 }
