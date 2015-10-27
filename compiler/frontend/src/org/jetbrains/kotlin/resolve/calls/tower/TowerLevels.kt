@@ -21,13 +21,11 @@ import org.jetbrains.kotlin.incremental.components.LookupLocation
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.resolve.calls.util.FakeCallableDescriptorForObject
 import org.jetbrains.kotlin.resolve.descriptorUtil.hasClassObjectType
-import org.jetbrains.kotlin.resolve.scopes.FileScope
-import org.jetbrains.kotlin.resolve.scopes.JetScope
-import org.jetbrains.kotlin.resolve.scopes.LexicalScope
+import org.jetbrains.kotlin.resolve.scopes.*
 import org.jetbrains.kotlin.resolve.scopes.receivers.QualifierReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.types.ErrorUtils
-import org.jetbrains.kotlin.types.JetType
+import org.jetbrains.kotlin.types.KotlinType
 
 public interface TowerLevel {
 
@@ -45,7 +43,7 @@ internal abstract class AbstractTowerLevel(
             descriptor: D,
             dispatchReceiver: ReceiverValue?,
             specialError: ResolveCandidateError? = null,
-            dispatchReceiverSmartCastType: JetType? = null
+            dispatchReceiverSmartCastType: KotlinType? = null
     ): CandidateDescriptor<D> {
         val visibilityError = checkVisibility(
                 resolveTower.resolutionContext.scope.ownerDescriptor,
@@ -66,7 +64,7 @@ internal abstract class ConstructorsAndFakeVariableHackLevel(resolveTower: Resol
     protected fun createConstructors(
             classifier: ClassifierDescriptor?,
             dispatchReceiver: ReceiverValue?,
-            dispatchReceiverSmartCastType: JetType? = null,
+            dispatchReceiverSmartCastType: KotlinType? = null,
             reportError: (ClassDescriptor) -> ResolveCandidateError? = { null }
     ): Collection<CandidateDescriptor<FunctionDescriptor>> {
         val classDescriptor = getClassWithConstructors(classifier) ?: return emptyList()
@@ -90,7 +88,7 @@ internal abstract class ConstructorsAndFakeVariableHackLevel(resolveTower: Resol
 
     protected fun createVariableDescriptor(
             classifier: ClassifierDescriptor?,
-            dispatchReceiverSmartCastType: JetType? = null,
+            dispatchReceiverSmartCastType: KotlinType? = null,
             reportError: (ClassDescriptor) -> ResolveCandidateError? = { null }
     ): CandidateDescriptor<VariableDescriptor>? {
         val fakeVariable = getFakeDescriptorForObject(classifier) ?: return null
@@ -123,8 +121,8 @@ internal class ReceiverTowerLevel(
     private val memberScope = dispatchReceiver.type.memberScope
 
     private fun <D: CallableDescriptor> collectMembers(
-            members: JetScope.() -> Collection<D>,
-            additionalDescriptors: JetScope.(smartCastType: JetType?) -> Collection<CandidateDescriptor<D>> // todo
+            members: KtScope.() -> Collection<D>,
+            additionalDescriptors: KtScope.(smartCastType: KotlinType?) -> Collection<CandidateDescriptor<D>> // todo
     ): Collection<CandidateDescriptor<D>> {
         var result: Collection<CandidateDescriptor<D>> = memberScope.members().map {
             createCandidateDescriptor(it, dispatchReceiver)
@@ -191,19 +189,19 @@ internal open class ScopeTowerLevel(
 ) : ConstructorsAndFakeVariableHackLevel(resolveTower) {
 
     override fun getVariables(name: Name): Collection<CandidateDescriptor<VariableDescriptor>> {
-        val variables = lexicalScope.getDeclaredVariables(name, location).map {
+        val variables = lexicalScope.getContributedVariables(name, location).map {
             createCandidateDescriptor(it, dispatchReceiver = null)
         }
-        return variables fastPlus createVariableDescriptor(lexicalScope.getDeclaredClassifier(name, location))
+        return variables fastPlus createVariableDescriptor(lexicalScope.getContributedClassifier(name, location))
     }
 
     override fun getFunctions(name: Name): Collection<CandidateDescriptor<FunctionDescriptor>> {
-        val functions = lexicalScope.getDeclaredFunctions(name, location).map {
+        val functions = lexicalScope.getContributedFunctions(name, location).map {
             createCandidateDescriptor(it, dispatchReceiver = null)
         }
 
         // todo report errors for constructors if there is no match receiver
-        return functions fastPlus createConstructors(lexicalScope.getDeclaredClassifier(name, location), dispatchReceiver = null) {
+        return functions fastPlus createConstructors(lexicalScope.getContributedClassifier(name, location), dispatchReceiver = null) {
             if (!it.isInner) return@createConstructors null
 
             // todo add constructors functions to member class member scope
@@ -213,25 +211,22 @@ internal open class ScopeTowerLevel(
     }
 }
 
-internal class FileScopeTowerLevel(
+internal class ImportingScopeTowerLevel(
         resolveTower: ResolveTower,
-        private val fileScope: FileScope
-): ScopeTowerLevel(resolveTower, fileScope) {
+        private val importingScope: ImportingScope,
+        private val allKnownReceivers: Collection<KotlinType>
+): ScopeTowerLevel(resolveTower, importingScope) {
 
-    // before we creating this level all smartCasts for implicit receivers will be calculated
-    private val allKnownReceivers = (resolveTower.implicitReceiversHierarchy.map { it.value } fastPlus resolveTower.explicitReceiver).flatMap {
-        resolveTower.smartCastCache.getSmartCastPossibleTypes(it) fastPlus it.type
-    }
 
     override fun getVariables(name: Name): Collection<CandidateDescriptor<VariableDescriptor>> {
-        val synthetic = fileScope.getSyntheticExtensionProperties(allKnownReceivers, name, location).map {
+        val synthetic = importingScope.getContributedSyntheticExtensionProperties(allKnownReceivers, name, location).map {
             createCandidateDescriptor(it, dispatchReceiver = null)
         }
         return super.getVariables(name) fastPlus synthetic
     }
 
     override fun getFunctions(name: Name): Collection<CandidateDescriptor<FunctionDescriptor>> {
-        val synthetic = fileScope.getSyntheticExtensionFunctions(allKnownReceivers, name, location).map {
+        val synthetic = importingScope.getContributedSyntheticExtensionFunctions(allKnownReceivers, name, location).map {
             createCandidateDescriptor(it, dispatchReceiver = null)
         }
         return super.getFunctions(name) fastPlus synthetic

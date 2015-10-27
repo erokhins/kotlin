@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.resolve.calls.tower.ResolveCandidateLevel.OTHER
 import org.jetbrains.kotlin.resolve.calls.tower.ResolveCandidateLevel.RUNTIME_ERROR
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.types.ErrorUtils
-import org.jetbrains.kotlin.types.JetType
+import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.expressions.ExpressionTypingUtils
 
 public interface CandidateDescriptor<out D : CallableDescriptor> {
@@ -39,7 +39,7 @@ public interface CandidateDescriptor<out D : CallableDescriptor> {
 
     val dispatchReceiver: ReceiverValue?
 
-    val dispatchReceiverSmartCastType: JetType? // todo fake override
+    val dispatchReceiverSmartCastType: KotlinType? // todo fake override
 
     val descriptor: D
 }
@@ -58,7 +58,7 @@ internal class CandidateDescriptorImpl<D : CallableDescriptor>(
         override val dispatchReceiver: ReceiverValue?,
         override val descriptor: D,
         override val errors: List<ResolveCandidateError>,
-        override val dispatchReceiverSmartCastType: JetType?
+        override val dispatchReceiverSmartCastType: KotlinType?
 ) : CandidateDescriptor<D>
 
 internal fun checkVisibility(
