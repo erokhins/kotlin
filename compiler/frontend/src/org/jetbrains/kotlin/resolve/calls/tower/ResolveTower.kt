@@ -21,13 +21,13 @@ import org.jetbrains.kotlin.incremental.components.LookupLocation
 import org.jetbrains.kotlin.resolve.calls.context.ResolutionContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValue
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactory
-import org.jetbrains.kotlin.resolve.scopes.FileScope
+import org.jetbrains.kotlin.resolve.scopes.ImportingScope
 import org.jetbrains.kotlin.resolve.scopes.LexicalScope
 import org.jetbrains.kotlin.resolve.scopes.receivers.Qualifier
 import org.jetbrains.kotlin.resolve.scopes.receivers.QualifierReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.resolve.scopes.utils.getImplicitReceiversHierarchy
-import org.jetbrains.kotlin.types.JetType
+import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.utils.addToStdlib.check
 import java.util.*
 
@@ -65,9 +65,9 @@ public class SmartCastCache(private val resolutionContext: ResolutionContext<*>)
     public fun isStableReceiver(receiver: ReceiverValue): Boolean = getSmartCastInfo(receiver).dataFlowValue.isPredictable
 
     // exclude receiver.type
-    public fun getSmartCastPossibleTypes(receiver: ReceiverValue): Set<JetType> = getSmartCastInfo(receiver).possibleTypes
+    public fun getSmartCastPossibleTypes(receiver: ReceiverValue): Set<KotlinType> = getSmartCastInfo(receiver).possibleTypes
 
-    private data class SmartCastInfo(val dataFlowValue: DataFlowValue, val possibleTypes: Set<JetType>)
+    private data class SmartCastInfo(val dataFlowValue: DataFlowValue, val possibleTypes: Set<KotlinType>)
 }
 
 
@@ -90,17 +90,28 @@ internal class ResolveTowerImpl(
         NOT_START,
         RECEIVER,
         SCOPE,
+        IMPORTING_SCOPE,
         END
     }
 
     private inner class LevelIterator(): Iterator<TowerLevel> {
         private var currentLexicalScope: LexicalScope = resolutionContext.scope
         private var state = IteratorState.NOT_START
+        private var allKnownReceivers: Collection<KotlinType>? = null
 
         private fun currentScopeAsScopeLevel(): TowerLevel {
-            if (currentLexicalScope is FileScope) {
-                state = IteratorState.END
-                return FileScopeTowerLevel(this@ResolveTowerImpl, currentLexicalScope as FileScope)
+            if (currentLexicalScope is ImportingScope) {
+
+                // before we creating this level all smartCasts for implicit receivers will be calculated
+                if (allKnownReceivers == null) {
+                    allKnownReceivers = (implicitReceiversHierarchy.map { it.value } fastPlus explicitReceiver).flatMap {
+                        smartCastCache.getSmartCastPossibleTypes(it) fastPlus it.type
+                    }
+                }
+
+                state = IteratorState.IMPORTING_SCOPE.check { currentLexicalScope.parent != null } ?: IteratorState.END
+
+                return ImportingScopeTowerLevel(this@ResolveTowerImpl, currentLexicalScope as ImportingScope, allKnownReceivers!!)
             }
             else {
                 state = IteratorState.SCOPE
@@ -128,7 +139,7 @@ internal class ResolveTowerImpl(
                 IteratorState.RECEIVER -> {
                     currentScopeAsScopeLevel()
                 }
-                IteratorState.SCOPE -> {
+                IteratorState.SCOPE, IteratorState.IMPORTING_SCOPE -> {
                     val parent = currentLexicalScope.parent
                     assert(parent != null) {
                         "This should never happened because of currentScopeAsScopeLevel(), currentScope: $currentLexicalScope"
