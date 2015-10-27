@@ -88,8 +88,8 @@ internal class ResolveTowerImpl(
 
     private enum class IteratorState {
         NOT_START,
-        RECEIVER,
         SCOPE,
+        RECEIVER,
         IMPORTING_SCOPE,
         END
     }
@@ -119,36 +119,31 @@ internal class ResolveTowerImpl(
             }
         }
 
-        private fun entranceToScope(scope: LexicalScope): TowerLevel {
-            currentLexicalScope = scope
+        private fun entranceToParentScope(): TowerLevel {
+            val parent = currentLexicalScope.parent
+            assert(parent != null) {
+                "This should never happened because of currentScopeAsScopeLevel(), currentScope: $currentLexicalScope"
+            }
+            currentLexicalScope = parent!!
+            return currentScopeAsScopeLevel()
+        }
+
+        private fun implicitReceiverOrParent(): TowerLevel {
             val implicitReceiver = currentLexicalScope.implicitReceiver
             if (implicitReceiver != null) {
                 state = IteratorState.RECEIVER
                 return ReceiverTowerLevel(this@ResolveTowerImpl, implicitReceiver.value)
             }
             else {
-                return currentScopeAsScopeLevel()
+                return entranceToParentScope()
             }
         }
 
-        override fun next(): TowerLevel {
-            return when (state) {
-                IteratorState.NOT_START -> {
-                    entranceToScope(currentLexicalScope)
-                }
-                IteratorState.RECEIVER -> {
-                    currentScopeAsScopeLevel()
-                }
-                IteratorState.SCOPE, IteratorState.IMPORTING_SCOPE -> {
-                    val parent = currentLexicalScope.parent
-                    assert(parent != null) {
-                        "This should never happened because of currentScopeAsScopeLevel(), currentScope: $currentLexicalScope"
-                    }
-                    entranceToScope(parent!!)
-
-                }
-                else -> throw IllegalStateException("Illegal state: $state, currentScope: $currentLexicalScope")
-            }
+        override fun next() = when (state) {
+            IteratorState.NOT_START -> currentScopeAsScopeLevel()
+            IteratorState.RECEIVER, IteratorState.IMPORTING_SCOPE ->  entranceToParentScope()
+            IteratorState.SCOPE -> implicitReceiverOrParent()
+            else -> throw IllegalStateException("Illegal state: $state, currentScope: $currentLexicalScope")
         }
 
         override fun hasNext() = state != IteratorState.END
