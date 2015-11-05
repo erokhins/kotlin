@@ -30,6 +30,7 @@ import org.jetbrains.kotlin.resolve.DescriptorUtils
 import org.jetbrains.kotlin.resolve.TypeResolver
 import org.jetbrains.kotlin.resolve.scopes.LexicalScope
 import org.jetbrains.kotlin.resolve.scopes.LexicalScopeImpl
+import org.jetbrains.kotlin.resolve.scopes.LexicalScopeKind
 import org.jetbrains.kotlin.resolve.scopes.utils.memberScopeAsImportingScope
 import org.jetbrains.kotlin.types.*
 import java.util.*
@@ -75,7 +76,7 @@ public class HeuristicSignatures(
     private fun typeFromText(text: String, typeParameters: Collection<TypeParameterDescriptor>): KotlinType {
         val typeRef = KtPsiFactory(project).createType(text)
         val rootPackagesScope = SubpackagesScope(moduleDescriptor, FqName.ROOT).memberScopeAsImportingScope()
-        val scope = LexicalScopeImpl(rootPackagesScope, moduleDescriptor, false, null, "Root packages + type parameters") {
+        val scope = LexicalScopeImpl(rootPackagesScope, moduleDescriptor, false, null, LexicalScopeKind.SYNTHETIC) {
                         typeParameters.forEach { addClassifierDescriptor(it) }
                     }
         val type = typeResolver.resolveType(scope, typeRef, BindingTraceContext(), false)
