@@ -54,8 +54,6 @@ interface LexicalScope: HierarchicalScope {
 }
 
 enum class LexicalScopeKind {
-    @Deprecated("Temporary")
-    UNSORTED,
     EMPTY,
 
     CLASS_HEADER,
