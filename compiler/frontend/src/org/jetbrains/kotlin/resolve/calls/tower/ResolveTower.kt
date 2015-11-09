@@ -27,10 +27,10 @@ import org.jetbrains.kotlin.resolve.scopes.receivers.Qualifier
 import org.jetbrains.kotlin.resolve.scopes.receivers.QualifierReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.resolve.scopes.utils.getImplicitReceiversHierarchy
+import org.jetbrains.kotlin.resolve.scopes.utils.parentsWithSelf
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.utils.addToStdlib.check
 import org.jetbrains.kotlin.utils.addToStdlib.singletonList
-import org.jetbrains.kotlin.utils.addToStdlib.singletonOrEmptyList
 import java.util.*
 
 public interface ResolveTower {
@@ -86,70 +86,55 @@ internal class ResolveTowerImpl(
     override val implicitReceiversHierarchy = resolutionContext.scope.getImplicitReceiversHierarchy()
 
     // todo val?
-    override val levels: Sequence<TowerLevel> = LevelIterator().asSequence()
+    override val levels: Sequence<TowerLevel> = createPrototypeLevels().asSequence().map { it.asTowerLevel(this) }
 
-    private enum class IteratorState {
-        NOT_START,
-        SCOPE,
-        RECEIVER,
-        IMPORTING_SCOPE,
-        END
+    // we shouldn't calculate this before we entrance to some importing scope
+    private val allKnownReceivers by lazy(LazyThreadSafetyMode.PUBLICATION) {
+        (explicitReceiver?.singletonList() ?: implicitReceiversHierarchy.map { it.value }).flatMap {
+            smartCastCache.getSmartCastPossibleTypes(it) fastPlus it.type
+        }
     }
 
-    private inner class LevelIterator(): Iterator<TowerLevel> {
-        private var currentLexicalScope: LexicalScope = resolutionContext.scope
-        private var state = IteratorState.NOT_START
-        private var allKnownReceivers: Collection<KotlinType>? = null
+    private sealed class LevelPrototype {
+        abstract fun asTowerLevel(resolveTower: ResolveTower): TowerLevel
 
-        private fun currentScopeAsScopeLevel(): TowerLevel {
-            if (currentLexicalScope is ImportingScope) {
+        class LocalScope(val lexicalScope: LexicalScope): LevelPrototype() {
+            override fun asTowerLevel(resolveTower: ResolveTower) = ScopeTowerLevel(resolveTower, lexicalScope)
+        }
 
-                // before we creating this level all smartCasts for implicit receivers will be calculated
-                if (allKnownReceivers == null) {
-                    allKnownReceivers = (explicitReceiver?.singletonList() ?: implicitReceiversHierarchy.map { it.value }).flatMap {
-                        smartCastCache.getSmartCastPossibleTypes(it) fastPlus it.type
-                    }
-                }
+        class Scope(val lexicalScope: LexicalScope): LevelPrototype() {
+            override fun asTowerLevel(resolveTower: ResolveTower) = ScopeTowerLevel(resolveTower, lexicalScope)
+        }
 
-                state = IteratorState.IMPORTING_SCOPE.check { currentLexicalScope.parent != null } ?: IteratorState.END
+        class Receiver(val implicitReceiver: ReceiverParameterDescriptor): LevelPrototype() {
+            override fun asTowerLevel(resolveTower: ResolveTower) = ReceiverTowerLevel(resolveTower, implicitReceiver.value)
+        }
 
-                return ImportingScopeTowerLevel(this@ResolveTowerImpl, currentLexicalScope as ImportingScope, allKnownReceivers!!)
+        class ImportingScopeLevel(val importingScope: ImportingScope, val lazyAllKnowReceivers: () -> List<KotlinType>): LevelPrototype() {
+            override fun asTowerLevel(resolveTower: ResolveTower) = ImportingScopeTowerLevel(resolveTower, importingScope, lazyAllKnowReceivers())
+        }
+    }
+
+    private fun createPrototypeLevels(): List<LevelPrototype> {
+        val result = ArrayList<LevelPrototype>()
+
+        // locals win
+        result.addAll(resolutionContext.scope.parentsWithSelf.
+                filter { it is LexicalScope && it.kind.local }.
+                map { LevelPrototype.LocalScope(it as LexicalScope) })
+
+        resolutionContext.scope.parentsWithSelf.forEach { scope ->
+            if (scope is LexicalScope) {
+                if (!scope.kind.local) result.add(LevelPrototype.Scope(scope))
+
+                scope.implicitReceiver?.let { result.add(LevelPrototype.Receiver(it)) }
             }
             else {
-                state = IteratorState.SCOPE
-                return ScopeTowerLevel(this@ResolveTowerImpl, currentLexicalScope)
+                result.add(LevelPrototype.ImportingScopeLevel(scope as ImportingScope, { allKnownReceivers }))
             }
         }
 
-        private fun entranceToParentScope(): TowerLevel {
-            val parent = currentLexicalScope.parent
-            assert(parent != null) {
-                "This should never happened because of currentScopeAsScopeLevel(), currentScope: $currentLexicalScope"
-            }
-            currentLexicalScope = parent!!
-            return currentScopeAsScopeLevel()
-        }
-
-        private fun implicitReceiverOrParent(): TowerLevel {
-            val implicitReceiver = currentLexicalScope.implicitReceiver
-            if (implicitReceiver != null) {
-                state = IteratorState.RECEIVER
-                return ReceiverTowerLevel(this@ResolveTowerImpl, implicitReceiver.value)
-            }
-            else {
-                return entranceToParentScope()
-            }
-        }
-
-        override fun next() = when (state) {
-            IteratorState.NOT_START -> currentScopeAsScopeLevel()
-            IteratorState.RECEIVER, IteratorState.IMPORTING_SCOPE ->  entranceToParentScope()
-            IteratorState.SCOPE -> implicitReceiverOrParent()
-            else -> throw IllegalStateException("Illegal state: $state, currentScope: $currentLexicalScope")
-        }
-
-        override fun hasNext() = state != IteratorState.END
-
+        return result
     }
 
 }
