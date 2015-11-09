@@ -559,5 +559,10 @@ public class ControlStructureTypingUtils {
         public void nonExtensionFunctionCalledAsExtension(@NotNull BindingTrace trace) {
             logError();
         }
+
+        @Override
+        public void deprecatedInvokeOnExtensionFunctionWithBothReceivers(@NotNull BindingTrace trace) {
+            logError();
+        }
     }
 }

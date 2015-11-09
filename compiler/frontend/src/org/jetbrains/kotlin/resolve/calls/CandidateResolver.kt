@@ -43,6 +43,7 @@ import org.jetbrains.kotlin.resolve.calls.results.ResolutionStatus
 import org.jetbrains.kotlin.resolve.calls.results.ResolutionStatus.*
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactory
 import org.jetbrains.kotlin.resolve.calls.smartcasts.SmartCastManager
+import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.resolve.calls.util.FakeCallableDescriptorForObject
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
@@ -270,14 +271,20 @@ public class CandidateResolver(
 
     private fun CallCandidateResolutionContext<*>.checkNonExtensionCalledWithReceiver() = checkAndReport {
         val call = candidateCall.call
+        val dispatchReceiver = candidateCall.dispatchReceiver
         if (call is CallTransformer.CallForImplicitInvoke && candidateCall.extensionReceiver.exists()
-                && candidateCall.dispatchReceiver.exists()
+            && dispatchReceiver.exists()
         ) {
-            if (call.dispatchReceiver == candidateCall.dispatchReceiver
+            if (call.dispatchReceiver == dispatchReceiver
                     && !KotlinBuiltIns.isExactExtensionFunctionType(call.dispatchReceiver.type)
             ) {
                 tracing.nonExtensionFunctionCalledAsExtension(trace)
                 return@checkAndReport OTHER_ERROR
+            }
+
+            if (candidateCall.explicitReceiverKind == ExplicitReceiverKind.DISPATCH_RECEIVER
+                && dispatchReceiver is ExpressionReceiver && dispatchReceiver.expression !is KtParenthesizedExpression) {
+                tracing.deprecatedInvokeOnExtensionFunctionWithBothReceivers(trace)
             }
         }
         SUCCESS

@@ -256,4 +256,9 @@ public abstract class AbstractTracingStrategy implements TracingStrategy {
     public void nonExtensionFunctionCalledAsExtension(@NotNull BindingTrace trace) {
         trace.report(INVOKE_EXTENSION_ON_NOT_EXTENSION_FUNCTION.on(reference, reference));
     }
+
+    @Override
+    public void deprecatedInvokeOnExtensionFunctionWithBothReceivers(@NotNull BindingTrace trace) {
+        trace.report(DEPRECATED_INVOKE_EXTENSION_WITH_BOTH_RECEIVERS.on(reference, reference));
+    }
 }
