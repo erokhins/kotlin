@@ -13310,7 +13310,7 @@ public class DiagnosticsTestGenerated extends AbstractDiagnosticsTest {
 
             @TestMetadata("implicitReceiverMemberVsParameter.kt")
             public void testImplicitReceiverMemberVsParameter() throws Exception {
-                String fileName = JetTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/scopes/implicitReceiverMemberVsParameter.kt");
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/scopes/implicitReceiverMemberVsParameter.kt");
                 doTest(fileName);
             }
 
