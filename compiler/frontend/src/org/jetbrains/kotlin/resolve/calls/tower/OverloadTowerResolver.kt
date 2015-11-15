@@ -107,7 +107,7 @@ public class OverloadTowerResolver(
         for (level in towerContext.resolveTower.levels) {
             pushSomething { pushTowerLevel(level) }?.let { return it }
 
-            for (implicitReceiver in towerContext.resolveTower.implicitReceiversHierarchy) {
+            for (implicitReceiver in towerContext.resolveTower.implicitReceivers) {
                 pushSomething { pushImplicitReceiver(implicitReceiver) }?.let { return it }
             }
         }
@@ -158,7 +158,7 @@ public class OverloadTowerResolver(
 
     internal fun <D : CallableDescriptor> checkCandidate(
             towerContext: OverloadTowerResolverContext,
-            candidate: CandidateDescriptor<D>,
+            candidate: TowerCandidate<D>,
             explicitReceiverKind: ExplicitReceiverKind,
             extensionReceiver: ReceiverValue?
     ): Pair<MutableResolvedCall<D>, ResolveCandidateStatus> {

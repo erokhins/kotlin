@@ -220,7 +220,7 @@ internal class InvokeExtensionCollector(context: OverloadTowerResolverContext) :
     private class InvokeExtensionTowerCandidatesCollector(
             context: OverloadTowerResolverContext,
             val variableResolvedCall: MutableResolvedCall<VariableDescriptor>,
-            val invokeCandidateDescriptor: CandidateDescriptor<FunctionDescriptor>,
+            val invokeCandidateDescriptor: TowerCandidate<FunctionDescriptor>,
             val explicitReceiver: ReceiverValue?
     ) : AbstractTowerCandidatesCollector<FunctionDescriptor>(context) {
         private var currentCandidates = resolve(explicitReceiver)
@@ -248,7 +248,7 @@ internal class InvokeExtensionCollector(context: OverloadTowerResolverContext) :
 // todo debug info
 private fun OverloadTowerResolverContext.getExtensionInvokeCandidateDescriptor(
         possibleExtensionFunctionReceiver: ReceiverValue
-): CandidateDescriptor<FunctionDescriptor>? {
+): TowerCandidate<FunctionDescriptor>? {
     if (!KotlinBuiltIns.isExactExtensionFunctionType(possibleExtensionFunctionReceiver.type)) return null
 
     val extFunReceiver = possibleExtensionFunctionReceiver
@@ -257,14 +257,14 @@ private fun OverloadTowerResolverContext.getExtensionInvokeCandidateDescriptor(
             .single().let {
         assert(it.errors.isEmpty())
         val synthesizedInvoke = createSynthesizedInvokes(listOf(it.descriptor)).single() // todo priority synthesized
-        CandidateDescriptorImpl(extFunReceiver, synthesizedInvoke, listOf(), null)
+        TowerCandidateImpl(extFunReceiver, synthesizedInvoke, listOf(), null)
     }
 }
 
 internal class ExplicitExtensionInvokeCallTowerCollector(
         context: OverloadTowerResolverContext,
         val call: CallTransformer.CallForImplicitInvoke,
-        val invokeExtensionDescriptor: CandidateDescriptor<FunctionDescriptor>
+        val invokeExtensionDescriptor: TowerCandidate<FunctionDescriptor>
 ): AbstractTowerCandidatesCollector<FunctionDescriptor>(context) {
     private var currentCandidates = resolve(call.explicitReceiver.let {
         if (it is QualifierReceiver) {
