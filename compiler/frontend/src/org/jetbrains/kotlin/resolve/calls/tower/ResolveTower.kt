@@ -32,8 +32,6 @@ interface ResolveTower {
      */
     val implicitReceivers: List<ReceiverValue>
 
-    val explicitReceiver: Receiver?
-
     val lexicalScope: LexicalScope
 
     val location: LookupLocation

@@ -16,17 +16,14 @@
 
 package org.jetbrains.kotlin.resolve.calls.tower
 
-import org.jetbrains.kotlin.descriptors.*
+import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.descriptors.CallableMemberDescriptor
+import org.jetbrains.kotlin.descriptors.ReceiverParameterDescriptor
 import org.jetbrains.kotlin.incremental.components.LookupLocation
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callResolverUtil.isOrOverridesSynthesized
 import org.jetbrains.kotlin.resolve.calls.context.ResolutionContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValue
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactory
-import org.jetbrains.kotlin.resolve.calls.tower.ResolveCandidateLevel.IMPOSSIBLE_TO_GENERATE
-import org.jetbrains.kotlin.resolve.calls.tower.ResolveCandidateLevel.MAY_THROW_RUNTIME_ERROR
-import org.jetbrains.kotlin.resolve.calls.tower.ResolveCandidateLevel.OTHER
-import org.jetbrains.kotlin.resolve.calls.tower.ResolveCandidateLevel.RUNTIME_ERROR
 import org.jetbrains.kotlin.resolve.descriptorUtil.hasLowPriorityInOverloadResolution
 import org.jetbrains.kotlin.resolve.scopes.ImportingScope
 import org.jetbrains.kotlin.resolve.scopes.LexicalScope
@@ -35,9 +32,7 @@ import org.jetbrains.kotlin.resolve.scopes.receivers.Receiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.resolve.scopes.utils.getImplicitReceiversHierarchy
 import org.jetbrains.kotlin.resolve.scopes.utils.parentsWithSelf
-import org.jetbrains.kotlin.types.ErrorUtils
 import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.expressions.ExpressionTypingUtils
 import org.jetbrains.kotlin.types.typeUtil.containsError
 import org.jetbrains.kotlin.utils.addToStdlib.check
 import java.util.*
@@ -50,7 +45,7 @@ internal class TowerCandidateImpl<D : CallableDescriptor>(
         override val dispatchReceiverSmartCastType: KotlinType?
 ) : TowerCandidate<D> {
     override val isSynthetic: Boolean // todo dynamics calls
-        get() = (descriptor is CallableMemberDescriptor && isOrOverridesSynthesized(descriptor as CallableMemberDescriptor))
+        get() = (descriptor is CallableMemberDescriptor && isOrOverridesSynthesized(descriptor))
                 || descriptor.hasLowPriorityInOverloadResolution()
 
     override val requiredExtensionParameter: Boolean // todo extension function by fully qualified name
@@ -65,7 +60,7 @@ private fun SmartCastCache.getAllPossibleTypes(receiver: ReceiverValue): Collect
 
 internal class ResolveTowerImpl(
         resolutionContext: ResolutionContext<*>,
-        override val explicitReceiver: Receiver?,
+        private val explicitReceiver: Receiver?,
         override val location: LookupLocation
 ): ResolveTower {
     override val smartCastCache: SmartCastCache = SmartCastCacheImpl(resolutionContext)

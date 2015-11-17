@@ -66,3 +66,5 @@ internal infix fun <T: Any> Collection<T>.fastPlus(other: Collection<T>?): Colle
     return this + other
 }
 
+internal val ResolveCandidateLevel.isSuccess: Boolean
+    get() = this == ResolveCandidateLevel.RESOLVED || this == ResolveCandidateLevel.RESOLVED_SYNTHETIC

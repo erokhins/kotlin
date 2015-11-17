@@ -16,169 +16,156 @@
 
 package org.jetbrains.kotlin.resolve.calls.tower
 
-import org.jetbrains.kotlin.descriptors.CallableDescriptor
-import org.jetbrains.kotlin.descriptors.ReceiverParameterDescriptor
-import org.jetbrains.kotlin.descriptors.VariableDescriptor
 import org.jetbrains.kotlin.name.Name
-import org.jetbrains.kotlin.resolve.calls.CallTransformer
-import org.jetbrains.kotlin.resolve.calls.model.MutableResolvedCall
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
+import org.jetbrains.kotlin.resolve.scopes.receivers.ClassQualifier
 import org.jetbrains.kotlin.resolve.scopes.receivers.QualifierReceiver
+import org.jetbrains.kotlin.resolve.scopes.receivers.Receiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.utils.addToStdlib.check
 
-// todo convert ResolvedCall to kotlin
-internal interface TowerCandidatesCollector</*out */D : CallableDescriptor> {
-    fun pushTowerLevel(level: TowerLevel)
 
-    fun pushImplicitReceiver(implicitReceiver: ReceiverParameterDescriptor)
-
-    // candidates with match receivers (dispatch was matched already in TowerLevel)
-    fun getCurrentCandidates(): Collection<Pair<MutableResolvedCall<D>, ResolveCandidateStatus>>
-}
-
-internal class KnownResultCandidatesCollector<D: CallableDescriptor>(
-        result: Collection<Pair<MutableResolvedCall<D>, ResolveCandidateStatus>>
-): TowerCandidatesCollector<D> {
+internal class KnownResultCandidatesCollector<Candidate>(
+        result: Collection<Candidate>
+): TowerCandidatesCollector<Candidate> {
     var candidates = result
 
     override fun pushTowerLevel(level: TowerLevel) {
         candidates = emptyList()
     }
 
-    override fun pushImplicitReceiver(implicitReceiver: ReceiverParameterDescriptor) {
+    override fun pushImplicitReceiver(implicitReceiver: ReceiverValue) {
         candidates = emptyList()
     }
 
-    override fun getCurrentCandidates() = candidates
+    override fun getCandidatesGroups() = listOfNotNull(candidates.check { it.isNotEmpty() })
 }
 
-internal abstract class AbstractTowerCandidatesCollector<D : CallableDescriptor>(
-        val context: OverloadTowerResolver.OverloadTowerResolverContext
-) : TowerCandidatesCollector<D> {
-    protected val name: Name = context.name
+internal class CompositeTowerCandidatesCollector<Candidate>(
+        vararg val collectors: TowerCandidatesCollector<Candidate>
+) : TowerCandidatesCollector<Candidate> {
+    override fun pushTowerLevel(level: TowerLevel) = collectors.forEach { it.pushTowerLevel(level) }
 
-    fun checkCandidate(candidate: TowerCandidate<D>, explicitReceiverKind: ExplicitReceiverKind, extensionReceiver: ReceiverValue?)
-            = context.overloadTowerResolver.checkCandidate(context, candidate, explicitReceiverKind, extensionReceiver)
+    override fun pushImplicitReceiver(implicitReceiver: ReceiverValue)
+            = collectors.forEach { it.pushImplicitReceiver(implicitReceiver) }
+
+    override fun getCandidatesGroups(): List<Collection<Candidate>> = collectors.flatMap { it.getCandidatesGroups() }
 }
 
-internal class ExplicitReceiverTowerCandidateCollector<D: CallableDescriptor>(
-        context: OverloadTowerResolver.OverloadTowerResolverContext,
+internal abstract class AbstractTowerCandidatesCollector<Candidate>(
+        val context: TowerContext<Candidate>
+) : TowerCandidatesCollector<Candidate> {
+    protected val name: Name get() = context.name
+
+    protected abstract var candidates: Collection<Candidate>
+
+    override fun getCandidatesGroups() = listOfNotNull(candidates.check { it.isNotEmpty() })
+}
+
+internal class ExplicitReceiverTowerCandidateCollector<Candidate>(
+        context: TowerContext<Candidate>,
         val explicitReceiver: ReceiverValue,
-        val collectCandidates: TowerLevel.(Name) -> Collection<TowerCandidate<D>>
-): AbstractTowerCandidatesCollector<D>(context) {
-    private var currentCandidates: Collection<Pair<MutableResolvedCall<D>, ResolveCandidateStatus>> = resolveAsMember()
+        val collectCandidates: TowerLevel.(Name) -> Collection<TowerCandidate<*>>
+): AbstractTowerCandidatesCollector<Candidate>(context) {
+    override var candidates = resolveAsMember()
 
     override fun pushTowerLevel(level: TowerLevel) {
-        currentCandidates = resolveAsExtension(level)
+        candidates = resolveAsExtension(level)
     }
 
-    override fun pushImplicitReceiver(implicitReceiver: ReceiverParameterDescriptor) {
+    override fun pushImplicitReceiver(implicitReceiver: ReceiverValue) {
         // no candidates, because we already have receiver
-        currentCandidates = emptyList()
+        candidates = emptyList()
     }
 
-    override fun getCurrentCandidates() = currentCandidates
-
-    private fun resolveAsMember(): Collection<Pair<MutableResolvedCall<D>, ResolveCandidateStatus>> {
+    private fun resolveAsMember(): Collection<Candidate> {
         val members = ReceiverTowerLevel(context.resolveTower, explicitReceiver).collectCandidates(name).filter { !it.requiredExtensionParameter }
-        return members.map { checkCandidate(it, ExplicitReceiverKind.DISPATCH_RECEIVER, extensionReceiver = null) }
+        return members.map { context.createCandidate(it, ExplicitReceiverKind.DISPATCH_RECEIVER, extensionReceiver = null) }
     }
 
-    private fun resolveAsExtension(level: TowerLevel): Collection<Pair<MutableResolvedCall<D>, ResolveCandidateStatus>> {
+    private fun resolveAsExtension(level: TowerLevel): Collection<Candidate> {
         val extensions = level.collectCandidates(name).filter { it.requiredExtensionParameter }
-        return extensions.map { checkCandidate(it, ExplicitReceiverKind.EXTENSION_RECEIVER, extensionReceiver = explicitReceiver) }
+        return extensions.map { context.createCandidate(it, ExplicitReceiverKind.EXTENSION_RECEIVER, extensionReceiver = explicitReceiver) }
     }
 }
 
-private class QualifierTowerCandidateCollector<D: CallableDescriptor>(
-        context: OverloadTowerResolver.OverloadTowerResolverContext,
+private class QualifierTowerCandidateCollector<Candidate>(
+        context: TowerContext<Candidate>,
         val qualifier: QualifierReceiver,
-        val collectCandidates: TowerLevel.(Name) -> Collection<TowerCandidate<D>>
-): AbstractTowerCandidatesCollector<D>(context) {
-    private var currentCandidates: Collection<Pair<MutableResolvedCall<D>, ResolveCandidateStatus>> = resolve()
+        val collectCandidates: TowerLevel.(Name) -> Collection<TowerCandidate<*>>
+): AbstractTowerCandidatesCollector<Candidate>(context) {
+    override var candidates = resolve()
 
     override fun pushTowerLevel(level: TowerLevel) {
         // no candidates, because we done all already
-        currentCandidates = emptyList()
+        candidates = emptyList()
     }
 
-    override fun pushImplicitReceiver(implicitReceiver: ReceiverParameterDescriptor) {
+    override fun pushImplicitReceiver(implicitReceiver: ReceiverValue) {
         // no candidates, because we done all already
-        currentCandidates = emptyList()
+        candidates = emptyList()
     }
 
-    override fun getCurrentCandidates() = currentCandidates
-
-    private fun resolve(): Collection<Pair<MutableResolvedCall<D>, ResolveCandidateStatus>> {
+    private fun resolve(): Collection<Candidate> {
         val staticMembers = QualifierTowerLevel(context.resolveTower, qualifier).collectCandidates(name)
                 .filter { !it.requiredExtensionParameter }
-                .map { checkCandidate(it, ExplicitReceiverKind.NO_EXPLICIT_RECEIVER, extensionReceiver = null) }
+                .map { context.createCandidate(it, ExplicitReceiverKind.NO_EXPLICIT_RECEIVER, extensionReceiver = null) }
         return staticMembers
     }
 }
 
-private class NoExplicitReceiverTowerCandidateCollector<D : CallableDescriptor>(
-        context: OverloadTowerResolver.OverloadTowerResolverContext,
-        val collectCandidates: TowerLevel.(Name) -> Collection<TowerCandidate<D>>
-) : AbstractTowerCandidatesCollector<D>(context) {
-    private var descriptorsRequestImplicitReceiver = emptyList<TowerCandidate<D>>()
-    private var currentDescriptors: Collection<Pair<MutableResolvedCall<D>, ResolveCandidateStatus>> = emptyList()
+private class NoExplicitReceiverTowerCandidateCollector<Candidate>(
+        context: TowerContext<Candidate>,
+        val collectCandidates: TowerLevel.(Name) -> Collection<TowerCandidate<*>>
+) : AbstractTowerCandidatesCollector<Candidate>(context) {
+    override var candidates: Collection<Candidate> = emptyList()
+
+    private var descriptorsRequestImplicitReceiver = emptyList<TowerCandidate<*>>()
 
     override fun pushTowerLevel(level: TowerLevel) {
         val descriptors = level.collectCandidates(name)
 
         descriptorsRequestImplicitReceiver = descriptors.filter { it.requiredExtensionParameter }
 
-        currentDescriptors = descriptors.filter { !it.requiredExtensionParameter }
-                .map { checkCandidate(it, ExplicitReceiverKind.NO_EXPLICIT_RECEIVER, extensionReceiver = null) }
+        candidates = descriptors.filter { !it.requiredExtensionParameter }
+                .map { context.createCandidate(it, ExplicitReceiverKind.NO_EXPLICIT_RECEIVER, extensionReceiver = null) }
     }
 
-    override fun pushImplicitReceiver(implicitReceiver: ReceiverParameterDescriptor) {
-        currentDescriptors = descriptorsRequestImplicitReceiver
-                .map { checkCandidate(it, ExplicitReceiverKind.NO_EXPLICIT_RECEIVER, extensionReceiver = implicitReceiver.value) }
+    override fun pushImplicitReceiver(implicitReceiver: ReceiverValue) {
+        candidates = descriptorsRequestImplicitReceiver
+                .map { context.createCandidate(it, ExplicitReceiverKind.NO_EXPLICIT_RECEIVER, extensionReceiver = implicitReceiver) }
     }
 
-    override fun getCurrentCandidates() = currentDescriptors
 }
 
-private fun <D: CallableDescriptor> createSimpleCollector(
-        context: OverloadTowerResolver.OverloadTowerResolverContext,
-        explicitReceiver: ReceiverValue?,
-        qualifier: QualifierReceiver?,
-        collectCandidates: TowerLevel.(Name) -> Collection<TowerCandidate<D>>
-) : List<TowerCandidatesCollector<D>> {
-    if (explicitReceiver != null) {
-        return listOf(ExplicitReceiverTowerCandidateCollector(context, explicitReceiver, collectCandidates))
+private fun <Candidate> createSimpleCollector(
+        context: TowerContext<Candidate>,
+        explicitReceiver: Receiver?,
+        collectCandidates: TowerLevel.(Name) -> Collection<TowerCandidate<*>>
+) : TowerCandidatesCollector<Candidate> {
+    if (explicitReceiver is ReceiverValue) {
+        return ExplicitReceiverTowerCandidateCollector(context, explicitReceiver, collectCandidates)
     }
-    else if (qualifier != null) {
-        val qualifierCollector = QualifierTowerCandidateCollector(context, qualifier, collectCandidates)
-        val companionObject = qualifier.getClassObjectReceiver().check { it.exists() } ?: return listOf(qualifierCollector)
-        return listOf(qualifierCollector, ExplicitReceiverTowerCandidateCollector(context, companionObject, collectCandidates))
+    else if (explicitReceiver is QualifierReceiver) {
+        val qualifierCollector = QualifierTowerCandidateCollector(context, explicitReceiver, collectCandidates)
+
+        // todo enum entry, object.
+        val companionObject = (explicitReceiver as? ClassQualifier)?.companionObjectReceiver ?: return qualifierCollector
+        return CompositeTowerCandidatesCollector(
+                qualifierCollector,
+                ExplicitReceiverTowerCandidateCollector(context, companionObject, collectCandidates)
+        )
     }
     else {
-        return listOf(NoExplicitReceiverTowerCandidateCollector(context, collectCandidates))
+        assert(explicitReceiver == null) {
+            "Illegal explicit receiver: $explicitReceiver(${explicitReceiver!!.javaClass.simpleName})"
+        }
+        return NoExplicitReceiverTowerCandidateCollector(context, collectCandidates)
     }
 }
 
-internal fun createVariableCollector(
-        context: OverloadTowerResolver.OverloadTowerResolverContext,
-        explicitReceiver: ReceiverValue? = context.resolveTower.explicitReceiver,
-        qualifier: QualifierReceiver? = context.resolveTower.qualifier
-) = createSimpleCollector(context, explicitReceiver, qualifier) { getVariables(it) }
+internal fun <Candidate> createVariableCollector(context: TowerContext<Candidate>, explicitReceiver: Receiver?)
+        = createSimpleCollector(context, explicitReceiver, TowerLevel::getVariables)
 
-internal fun createFunctionCollector(
-        context: OverloadTowerResolver.OverloadTowerResolverContext,
-        explicitReceiver: ReceiverValue? = context.resolveTower.explicitReceiver,
-        qualifier: QualifierReceiver? = context.resolveTower.qualifier
-) = createSimpleCollector(context, explicitReceiver, qualifier) { getFunctions(it) }
-
-internal fun createVariableCollectorForInvoke(
-        context: OverloadTowerResolver.OverloadTowerResolverContext,
-        explicitReceiver: ReceiverValue? = context.resolveTower.explicitReceiver,
-        qualifier: QualifierReceiver? = context.resolveTower.qualifier
-): List<TowerCandidatesCollector<VariableDescriptor>> {
-    val basicCallResolutionContext = context.basicCallContext.replaceCall(CallTransformer.stripCallArguments(context.basicCallContext.call))
-    val newContext = OverloadTowerResolver.OverloadTowerResolverContext(context.overloadTowerResolver, basicCallResolutionContext, context.name, context.tracing)
-    return createVariableCollector(newContext, explicitReceiver, qualifier)
-}
+internal fun <Candidate> createFunctionCollector(context: TowerContext<Candidate>, explicitReceiver: Receiver?)
+        = createSimpleCollector(context, explicitReceiver, TowerLevel::getFunctions)
