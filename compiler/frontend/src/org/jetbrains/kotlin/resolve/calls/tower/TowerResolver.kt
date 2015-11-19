@@ -51,8 +51,8 @@ internal interface TowerCandidatesCollector<Candidate> {
     fun getCandidatesGroups(): List<Collection<Candidate>>
 }
 
-internal class TowerResolver {
-    fun <Candidate> runResolve(
+class TowerResolver {
+    internal fun <Candidate> runResolve(
             context: TowerContext<Candidate>,
             collector: TowerCandidatesCollector<Candidate>,
             useOrder: Boolean = true
@@ -91,7 +91,7 @@ internal class TowerResolver {
     }
 
 
-    // collect all candidates
+    //todo collect all candidates
     internal class ResultCollector<Candidate>(private val getStatus: (Candidate) -> ResolveCandidateStatus) {
         private var currentCandidates: Collection<Candidate> = emptyList()
         private var currentLevel: ResolveCandidateLevel? = null

@@ -44,6 +44,7 @@ import org.jetbrains.kotlin.resolve.calls.results.ResolutionResultsHandler;
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo;
 import org.jetbrains.kotlin.resolve.calls.tasks.*;
 import org.jetbrains.kotlin.resolve.calls.tasks.collectors.CallableDescriptorCollectors;
+import org.jetbrains.kotlin.resolve.calls.tower.NewResolveOldInference;
 import org.jetbrains.kotlin.resolve.calls.util.CallMaker;
 import org.jetbrains.kotlin.resolve.descriptorUtil.DescriptorUtilsKt;
 import org.jetbrains.kotlin.resolve.lazy.ForceResolveUtil;
@@ -78,6 +79,7 @@ public class CallResolver {
     private ArgumentTypeResolver argumentTypeResolver;
     private GenericCandidateResolver genericCandidateResolver;
     private CallCompleter callCompleter;
+    private NewResolveOldInference newCallResolver;
     private final TaskPrioritizer taskPrioritizer;
     private final ResolutionResultsHandler resolutionResultsHandler;
     @NotNull private KotlinBuiltIns builtIns;
@@ -129,6 +131,12 @@ public class CallResolver {
     @Inject
     public void setCallCompleter(@NotNull CallCompleter callCompleter) {
         this.callCompleter = callCompleter;
+    }
+
+    // component dependency cycle
+    @Inject
+    public void setCallCompleter(@NotNull NewResolveOldInference newCallResolver) {
+        this.newCallResolver = newCallResolver;
     }
 
     @NotNull
@@ -590,6 +598,12 @@ public class CallResolver {
             if (type != null) {
                 ForceResolveUtil.forceResolveAllContents(type);
             }
+        }
+
+        if (contextForMigration.resolveKind != ResolveKind.GIVEN_CANDIDATES) {
+            assert contextForMigration.name != null;
+            return (OverloadResolutionResultsImpl<F>)
+                    newCallResolver.runResolve(context, contextForMigration.name, contextForMigration.resolveKind, tracing);
         }
 
         return doResolveCall(context, contextForMigration.lazyTasks.invoke(), contextForMigration.callTransformer, tracing);
