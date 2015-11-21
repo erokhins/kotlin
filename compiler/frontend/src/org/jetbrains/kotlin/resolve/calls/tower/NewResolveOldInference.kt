@@ -55,10 +55,11 @@ class NewResolveOldInference(
             kind: CallResolver.ResolveKind,
             tracing: TracingStrategy
     ): OverloadResolutionResultsImpl<*> {
-        val resolveTower = ResolveTowerImpl(context, context.call.explicitReceiver, context.call.createLookupLocation())
+        val explicitReceiver = context.call.explicitReceiver.check { it.exists() }
+
+        val resolveTower = ResolveTowerImpl(context, explicitReceiver, context.call.createLookupLocation())
 
         val baseContext = Context(resolveTower, name, context, tracing)
-        val explicitReceiver = context.call.explicitReceiver.check { it.exists() }
 
         val collector =
             when (kind) {
@@ -143,7 +144,8 @@ class NewResolveOldInference(
                         tracing.nestedClassAccessViaInstanceReference(resolvedCall.trace, error.classDescriptor, resolvedCall.explicitReceiverKind)
                     }
                     else if (error is ErrorDescriptor) {
-                        return@map null
+                        // todo
+                        //  return@map null
                     }
                 }
             }

@@ -87,6 +87,8 @@ public class CallResolver {
     private static final PerformanceCounter callResolvePerfCounter = PerformanceCounter.Companion.create("Call resolve", ExpressionTypingVisitorDispatcher.typeInfoPerfCounter);
     private static final PerformanceCounter candidatePerfCounter = PerformanceCounter.Companion.create("Call resolve candidate analysis", true);
 
+    public static boolean useNewResolve = true;
+
     public CallResolver(
             @NotNull TaskPrioritizer taskPrioritizer,
             @NotNull ResolutionResultsHandler resolutionResultsHandler,
@@ -600,7 +602,7 @@ public class CallResolver {
             }
         }
 
-        if (contextForMigration.resolveKind != ResolveKind.GIVEN_CANDIDATES) {
+        if (contextForMigration.resolveKind != ResolveKind.GIVEN_CANDIDATES && useNewResolve) {
             assert contextForMigration.name != null;
             return (OverloadResolutionResultsImpl<F>)
                     newCallResolver.runResolve(context, contextForMigration.name, contextForMigration.resolveKind, tracing);

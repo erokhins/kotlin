@@ -67,7 +67,7 @@ internal class ResolveTowerImpl(
     override val lexicalScope: LexicalScope = resolutionContext.scope
 
     override val implicitReceivers = resolutionContext.scope.getImplicitReceiversHierarchy().
-            map { it.value.check { it.type.containsError() } }.filterNotNull()
+            map { it.value.check { !it.type.containsError() } }.filterNotNull()
 
     override val levels: Sequence<TowerLevel> = createPrototypeLevels().asSequence().map { it.asTowerLevel(this) }
 
