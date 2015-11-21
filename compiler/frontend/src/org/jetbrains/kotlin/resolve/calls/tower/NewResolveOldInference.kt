@@ -222,7 +222,9 @@ class NewResolveOldInference(
             assert(variable.resolvedCall.status.isSuccess && calleeExpression != null && variableDescriptor is VariableDescriptor) {
                 "Unexpected varialbe candidate: $variable"
             }
-            val variableReceiver = ExpressionReceiver(calleeExpression!!, (variableDescriptor as VariableDescriptor).type)
+            val variableReceiver = ExpressionReceiver.create(calleeExpression!!,
+                                                             (variableDescriptor as VariableDescriptor).type,
+                                                             basicCallContext.trace.bindingContext)
 
             // todo hack
             val functionCall = CallTransformer.CallForImplicitInvoke(

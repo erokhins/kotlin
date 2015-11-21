@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.incremental.components.LookupLocation
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.resolve.calls.util.FakeCallableDescriptorForObject
-import org.jetbrains.kotlin.resolve.descriptorUtil.hasClassObjectType
+import org.jetbrains.kotlin.resolve.descriptorUtil.hasClassValueDescriptor
 import org.jetbrains.kotlin.resolve.scopes.ImportingScope
 import org.jetbrains.kotlin.resolve.scopes.ResolutionScope
 import org.jetbrains.kotlin.resolve.scopes.receivers.QualifierReceiver
@@ -108,7 +108,7 @@ internal abstract class ConstructorsAndFakeVariableHackLevel(resolveTower: Resol
     }
 
     private fun getFakeDescriptorForObject(classifier: ClassifierDescriptor?): FakeCallableDescriptorForObject? {
-        if (classifier !is ClassDescriptor || !classifier.hasClassObjectType) return null
+        if (classifier !is ClassDescriptor || !classifier.hasClassValueDescriptor) return null // todo
 
         return FakeCallableDescriptorForObject(classifier)
     }
