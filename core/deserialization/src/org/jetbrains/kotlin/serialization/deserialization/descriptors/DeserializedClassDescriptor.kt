@@ -260,7 +260,7 @@ public class DeserializedClassDescriptor(
     }
 
     private inner class NestedClassDescriptors {
-        internal val nestedClassNames = nestedClassNames()
+        internal val nestedClassNames: Set<Name> = nestedClassNames()
 
         internal val findNestedClass = c.storageManager.createMemoizedFunctionWithNullableValues<Name, ClassDescriptor> {
             name ->
@@ -287,7 +287,7 @@ public class DeserializedClassDescriptor(
     }
 
     private inner class EnumEntryClassDescriptors {
-        private val enumEntryNames = enumEntryNames()
+        private val enumEntryNames: Set<Name> = enumEntryNames()
 
         private fun enumEntryNames(): Set<Name> {
             if (getKind() != ClassKind.ENUM_CLASS) return setOf()
