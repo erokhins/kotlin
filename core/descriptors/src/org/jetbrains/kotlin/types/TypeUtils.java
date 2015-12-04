@@ -22,12 +22,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns;
 import org.jetbrains.kotlin.descriptors.ClassDescriptor;
+import org.jetbrains.kotlin.descriptors.ClassifierDescriptor;
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor;
 import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor;
 import org.jetbrains.kotlin.descriptors.annotations.Annotations;
 import org.jetbrains.kotlin.resolve.constants.IntegerValueTypeConstructor;
 import org.jetbrains.kotlin.resolve.scopes.MemberScope;
 import org.jetbrains.kotlin.types.checker.KotlinTypeChecker;
+import sun.reflect.generics.tree.BaseType;
 
 import java.util.*;
 
@@ -258,17 +260,29 @@ public class TypeUtils {
 
     @NotNull
     public static List<KotlinType> getImmediateSupertypes(@NotNull KotlinType type) {
-        boolean isNullable = type.isMarkedNullable();
         TypeSubstitutor substitutor = TypeSubstitutor.create(type);
         Collection<KotlinType> originalSupertypes = type.getConstructor().getSupertypes();
         List<KotlinType> result = new ArrayList<KotlinType>(originalSupertypes.size());
         for (KotlinType supertype : originalSupertypes) {
-            KotlinType substitutedType = substitutor.substitute(supertype, Variance.INVARIANT);
+            KotlinType substitutedType = createSubstitutedSupertype(type, supertype, substitutor);
             if (substitutedType != null) {
-                result.add(makeNullableIfNeeded(substitutedType, isNullable));
+                result.add(substitutedType);
             }
         }
         return result;
+    }
+
+    @Nullable
+    public static KotlinType createSubstitutedSupertype(
+            @NotNull KotlinType baseType,
+            @NotNull KotlinType supertype,
+            @NotNull TypeSubstitutor substitutor
+    ) {
+        KotlinType substitutedType = substitutor.substitute(supertype, Variance.INVARIANT);
+        if (substitutedType != null) {
+            return makeNullableIfNeeded(substitutedType, baseType.isMarkedNullable());
+        }
+        return null;
     }
 
     private static void collectAllSupertypes(@NotNull KotlinType type, @NotNull Set<KotlinType> result) {
