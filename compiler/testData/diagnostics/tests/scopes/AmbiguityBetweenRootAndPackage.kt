@@ -9,4 +9,4 @@ fun testFun() = 12
 // FILE: using.kt
 import test.*
 
-val t = <!OVERLOAD_RESOLUTION_AMBIGUITY!>testFun<!>()
+val t = testFun()
