@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.incremental.components.LookupLocation
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValue
+import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.resolve.scopes.LexicalScope
 import org.jetbrains.kotlin.resolve.scopes.MemberScope
 import org.jetbrains.kotlin.resolve.scopes.SyntheticScopes
@@ -54,17 +55,21 @@ interface DataFlowDecorator {
 }
 
 interface ScopeTowerLevel {
-    fun getVariables(name: Name, extensionReceiver: ReceiverValue?): Collection<CandidateWithBoundDispatchReceiver<VariableDescriptor>>
+    fun getVariables(name: Name, extensionReceiver: ReceiverValue?, receiverKind: ExplicitReceiverKind): Collection<CandidateWithMatchedReceivers<VariableDescriptor>>
 
-    fun getFunctions(name: Name, extensionReceiver: ReceiverValue?): Collection<CandidateWithBoundDispatchReceiver<FunctionDescriptor>>
+    fun getFunctions(name: Name, extensionReceiver: ReceiverValue?, receiverKind: ExplicitReceiverKind): Collection<CandidateWithMatchedReceivers<FunctionDescriptor>>
 }
 
-interface CandidateWithBoundDispatchReceiver<out D : CallableDescriptor> {
+interface CandidateWithMatchedReceivers<out D : CallableDescriptor> {
     val descriptor: D
 
     val diagnostics: List<ResolutionDiagnostic>
 
     val dispatchReceiver: ReceiverValue?
+
+    val extensionReceiver: ReceiverValue?
+
+    val explicitReceiverKind: ExplicitReceiverKind
 }
 
 data class ResolutionCandidateStatus(val diagnostics: List<ResolutionDiagnostic>) {

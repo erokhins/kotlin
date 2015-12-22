@@ -30,9 +30,7 @@ interface TowerContext<C> {
     val scopeContext: ResolutionScopeContext
 
     fun createCandidate(
-            towerCandidate: CandidateWithBoundDispatchReceiver<*>,
-            explicitReceiverKind: ExplicitReceiverKind,
-            extensionReceiver: ReceiverValue?
+            towerCandidate: CandidateWithMatchedReceivers<*>
     ): C
 
     fun getStatus(candidate: C): ResolutionCandidateStatus

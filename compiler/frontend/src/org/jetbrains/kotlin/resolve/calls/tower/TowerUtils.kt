@@ -41,7 +41,4 @@ internal val ResolutionCandidateApplicability.isSuccess: Boolean
 internal val CallableDescriptor.isSynthesized: Boolean
     get() = (this is CallableMemberDescriptor && kind == CallableMemberDescriptor.Kind.SYNTHESIZED)
 
-internal val CandidateWithBoundDispatchReceiver<*>.requiresExtensionReceiver: Boolean
-    get() = descriptor.extensionReceiverParameter != null
-
 internal fun DataFlowDecorator.getAllPossibleTypes(receiver: ReceiverValue) = getSmartCastTypes(receiver) + receiver.type

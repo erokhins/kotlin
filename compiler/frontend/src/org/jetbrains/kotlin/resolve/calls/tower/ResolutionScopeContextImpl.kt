@@ -21,24 +21,25 @@ import org.jetbrains.kotlin.incremental.components.LookupLocation
 import org.jetbrains.kotlin.resolve.calls.context.ResolutionContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValue
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactory
-import org.jetbrains.kotlin.resolve.scopes.ImportingScope
+import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.resolve.scopes.LexicalScope
 import org.jetbrains.kotlin.resolve.scopes.MemberScope
 import org.jetbrains.kotlin.resolve.scopes.SyntheticScopes
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.resolve.scopes.utils.getImplicitReceiversHierarchy
-import org.jetbrains.kotlin.resolve.scopes.utils.parentsWithSelf
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.containsError
 import org.jetbrains.kotlin.utils.addToStdlib.check
 import java.util.*
 
 
-internal class CandidateWithBoundDispatchReceiverImpl<D : CallableDescriptor>(
+internal class CandidateWithMatchedReceiversImpl<D : CallableDescriptor>(
         override val dispatchReceiver: ReceiverValue?,
+        override val extensionReceiver: ReceiverValue?,
+        override val explicitReceiverKind: ExplicitReceiverKind,
         override val descriptor: D,
         override val diagnostics: List<ResolutionDiagnostic>
-) : CandidateWithBoundDispatchReceiver<D>
+) : CandidateWithMatchedReceivers<D>
 
 internal class ResolutionScopeContextImpl(
         resolutionContext: ResolutionContext<*>,

@@ -128,13 +128,15 @@ private class InvokeExtensionScopeTowerProcessor<C>(
     // here we don't add SynthesizedDescriptor diagnostic because it should has priority as member
     override fun simpleProcess(data: TowerData): Collection<C> {
         if (explicitReceiver != null && data == TowerData.Empty) {
-            val candidate = CandidateWithBoundDispatchReceiverImpl(invokeDispatchReceiver, invokeCandidateDescriptor, listOf())
-            return listOf(context.createCandidate(candidate, ExplicitReceiverKind.BOTH_RECEIVERS, explicitReceiver))
+            val candidate = CandidateWithMatchedReceiversImpl(invokeDispatchReceiver, explicitReceiver, ExplicitReceiverKind.BOTH_RECEIVERS,
+                                                              invokeCandidateDescriptor, listOf())
+            return listOf(context.createCandidate(candidate))
         }
 
         if (explicitReceiver == null && data is TowerData.OnlyImplicitReceiver) {
-            val candidate = CandidateWithBoundDispatchReceiverImpl(invokeDispatchReceiver, invokeCandidateDescriptor, listOf())
-            return listOf(context.createCandidate(candidate, ExplicitReceiverKind.DISPATCH_RECEIVER, data.implicitReceiver))
+            val candidate = CandidateWithMatchedReceiversImpl(invokeDispatchReceiver, data.implicitReceiver,
+                                                              ExplicitReceiverKind.DISPATCH_RECEIVER, invokeCandidateDescriptor, listOf())
+            return listOf(context.createCandidate(candidate))
         }
         return emptyList()
     }

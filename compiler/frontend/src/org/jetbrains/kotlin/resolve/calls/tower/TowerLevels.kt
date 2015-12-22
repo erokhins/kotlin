@@ -20,6 +20,7 @@ import com.intellij.util.SmartList
 import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.incremental.components.LookupLocation
 import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.resolve.calls.util.FakeCallableDescriptorForObject
 import org.jetbrains.kotlin.resolve.descriptorUtil.hasClassValueDescriptor
 import org.jetbrains.kotlin.resolve.descriptorUtil.hasLowPriorityInOverloadResolution
@@ -33,7 +34,6 @@ import org.jetbrains.kotlin.types.ErrorUtils
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.isDynamic
 import org.jetbrains.kotlin.types.typeUtil.getImmediateSuperclassNotAny
-import org.jetbrains.kotlin.utils.addIfNotNull
 import java.util.*
 
 internal abstract class AbstractScopeTowerLevel(
@@ -44,26 +44,27 @@ internal abstract class AbstractScopeTowerLevel(
     protected fun <D : CallableDescriptor> createCandidateDescriptor(
             descriptor: D,
             dispatchReceiver: ReceiverValue?,
-            specialError: ResolutionDiagnostic? = null,
-            dispatchReceiverSmartCastType: KotlinType? = null
-    ): CandidateWithBoundDispatchReceiver<D> {
-        val diagnostics = SmartList<ResolutionDiagnostic>()
-        diagnostics.addIfNotNull(specialError)
+            extensionReceiver: ReceiverValue?,
+            explicitReceiverKind: ExplicitReceiverKind,
+            diagnostics: List<ResolutionDiagnostic> = emptyList()
+    ): CandidateWithMatchedReceivers<D>? {
+        if ((descriptor.extensionReceiverParameter == null) != (extensionReceiver == null)) return null
+
+        val allDiagnostics = SmartList<ResolutionDiagnostic>(diagnostics)
 
         if (ErrorUtils.isError(descriptor)) {
-            diagnostics.add(ErrorDescriptorDiagnostic)
+            allDiagnostics.add(ErrorDescriptorDiagnostic)
         }
         else {
-            if (descriptor.hasLowPriorityInOverloadResolution()) diagnostics.add(LowPriorityDescriptorDiagnostic)
-            if (descriptor.isSynthesized) diagnostics.add(SynthesizedDescriptorDiagnostic)
-            if (dispatchReceiverSmartCastType != null) diagnostics.add(UsedSmartCastForDispatchReceiver(dispatchReceiverSmartCastType))
+            if (descriptor.hasLowPriorityInOverloadResolution()) allDiagnostics.add(LowPriorityDescriptorDiagnostic)
+            if (descriptor.isSynthesized) allDiagnostics.add(SynthesizedDescriptorDiagnostic)
 
             Visibilities.findInvisibleMember(
                     dispatchReceiver, descriptor,
                     scopeTower.lexicalScope.ownerDescriptor
-            )?.let { diagnostics.add(VisibilityError(it)) }
+            )?.let { allDiagnostics.add(VisibilityError(it)) }
         }
-        return CandidateWithBoundDispatchReceiverImpl(dispatchReceiver, descriptor, diagnostics)
+        return CandidateWithMatchedReceiversImpl(dispatchReceiver, extensionReceiver, explicitReceiverKind, descriptor, allDiagnostics)
     }
 
 }
@@ -76,20 +77,23 @@ internal class ReceiverScopeTowerLevel(
 ): AbstractScopeTowerLevel(scopeTower) {
 
     private fun <D : CallableDescriptor> collectMembers(
+            extensionReceiver: ReceiverValue?,
+            receiverKind: ExplicitReceiverKind,
             getMembers: ResolutionScope.(KotlinType?) -> Collection<D>
-    ): Collection<CandidateWithBoundDispatchReceiver<D>> {
-        val result = ArrayList<CandidateWithBoundDispatchReceiver<D>>(0)
-        dispatchReceiver.type.memberScope.getMembers(dispatchReceiver.type).mapTo(result) {
-            createCandidateDescriptor(it, dispatchReceiver)
+    ): Collection<CandidateWithMatchedReceivers<D>> {
+        val result = ArrayList<CandidateWithMatchedReceivers<D>>(0)
+        dispatchReceiver.type.memberScope.getMembers(dispatchReceiver.type).mapNotNullTo(result) {
+            createCandidateDescriptor(it, dispatchReceiver, extensionReceiver, receiverKind)
         }
 
         val smartCastPossibleTypes = scopeTower.dataFlowInfo.getSmartCastTypes(dispatchReceiver)
         val unstableError = if (scopeTower.dataFlowInfo.isStableReceiver(dispatchReceiver)) null else UnstableSmartCastDiagnostic
-        val unstableCandidates = if (unstableError != null) ArrayList<CandidateWithBoundDispatchReceiver<D>>(0) else null
+        val unstableCandidates = if (unstableError != null) ArrayList<CandidateWithMatchedReceivers<D>>(0) else null
 
         for (possibleType in smartCastPossibleTypes) {
-            possibleType.memberScope.getMembers(possibleType).mapTo(unstableCandidates ?: result) {
-                createCandidateDescriptor(it, dispatchReceiver.smartCastReceiver(possibleType), unstableError, dispatchReceiverSmartCastType = possibleType)
+            possibleType.memberScope.getMembers(possibleType).mapNotNullTo(unstableCandidates ?: result) {
+                createCandidateDescriptor(it, dispatchReceiver.smartCastReceiver(possibleType), extensionReceiver, receiverKind,
+                                          listOfNotNull(unstableError, UsedSmartCastForDispatchReceiver(possibleType)))
             }
         }
 
@@ -103,8 +107,8 @@ internal class ReceiverScopeTowerLevel(
         }
 
         if (dispatchReceiver.type.isDynamic()) {
-            scopeTower.dynamicScope.getMembers(null).mapTo(result) {
-                createCandidateDescriptor(it, dispatchReceiver, DynamicDescriptorDiagnostic)
+            scopeTower.dynamicScope.getMembers(null).mapNotNullTo(result) {
+                createCandidateDescriptor(it, dispatchReceiver, extensionReceiver, receiverKind, listOf(DynamicDescriptorDiagnostic))
             }
         }
 
@@ -114,26 +118,26 @@ internal class ReceiverScopeTowerLevel(
     private fun ReceiverValue.smartCastReceiver(targetType: KotlinType)
             = if (this is ImplicitClassReceiver) CastImplicitClassReceiver(this.classDescriptor, targetType) else this
 
-    override fun getVariables(name: Name, extensionReceiver: ReceiverValue?): Collection<CandidateWithBoundDispatchReceiver<VariableDescriptor>> {
-        return collectMembers { getContributedVariables(name, location) }
+    override fun getVariables(name: Name, extensionReceiver: ReceiverValue?, receiverKind: ExplicitReceiverKind): Collection<CandidateWithMatchedReceivers<VariableDescriptor>> {
+        return collectMembers(extensionReceiver, receiverKind) { getContributedVariables(name, location) }
     }
 
-    override fun getFunctions(name: Name, extensionReceiver: ReceiverValue?): Collection<CandidateWithBoundDispatchReceiver<FunctionDescriptor>> {
-        return collectMembers {
+    override fun getFunctions(name: Name, extensionReceiver: ReceiverValue?, receiverKind: ExplicitReceiverKind): Collection<CandidateWithMatchedReceivers<FunctionDescriptor>> {
+        return collectMembers(extensionReceiver, receiverKind) {
             getContributedFunctions(name, location) + it.getInnerConstructors(name, location)
         }
     }
 }
 
 internal class QualifierScopeTowerLevel(scopeTower: ResolutionScopeContext, val qualifier: QualifierReceiver) : AbstractScopeTowerLevel(scopeTower) {
-    override fun getVariables(name: Name, extensionReceiver: ReceiverValue?) = qualifier.getNestedClassesAndPackageMembersScope()
-            .getContributedVariablesAndObjects(name, location).map {
-                createCandidateDescriptor(it, dispatchReceiver = null)
+    override fun getVariables(name: Name, extensionReceiver: ReceiverValue?, receiverKind: ExplicitReceiverKind) = qualifier.getNestedClassesAndPackageMembersScope()
+            .getContributedVariablesAndObjects(name, location).mapNotNull {
+                createCandidateDescriptor(it, null, extensionReceiver, receiverKind)
             }
 
-    override fun getFunctions(name: Name, extensionReceiver: ReceiverValue?) = qualifier.getNestedClassesAndPackageMembersScope()
-            .getContributedFunctionsAndConstructors(name, location).map {
-                createCandidateDescriptor(it, dispatchReceiver = null)
+    override fun getFunctions(name: Name, extensionReceiver: ReceiverValue?, receiverKind: ExplicitReceiverKind) = qualifier.getNestedClassesAndPackageMembersScope()
+            .getContributedFunctionsAndConstructors(name, location).mapNotNull {
+                createCandidateDescriptor(it, null, extensionReceiver, receiverKind)
             }
 }
 
@@ -145,14 +149,14 @@ internal open class ScopeBasedTowerLevel protected constructor(
 
     internal constructor(scopeTower: ResolutionScopeContext, lexicalScope: LexicalScope): this(scopeTower, lexicalScope as ResolutionScope)
 
-    override fun getVariables(name: Name, extensionReceiver: ReceiverValue?): Collection<CandidateWithBoundDispatchReceiver<VariableDescriptor>>
-            = resolutionScope.getContributedVariablesAndObjects(name, location).map {
-                createCandidateDescriptor(it, dispatchReceiver = null)
+    override fun getVariables(name: Name, extensionReceiver: ReceiverValue?, receiverKind: ExplicitReceiverKind): Collection<CandidateWithMatchedReceivers<VariableDescriptor>>
+            = resolutionScope.getContributedVariablesAndObjects(name, location).mapNotNull {
+                createCandidateDescriptor(it, null, extensionReceiver, receiverKind)
             }
 
-    override fun getFunctions(name: Name, extensionReceiver: ReceiverValue?): Collection<CandidateWithBoundDispatchReceiver<FunctionDescriptor>>
-            = resolutionScope.getContributedFunctionsAndConstructors(name, location).map {
-                createCandidateDescriptor(it, dispatchReceiver = null)
+    override fun getFunctions(name: Name, extensionReceiver: ReceiverValue?, receiverKind: ExplicitReceiverKind): Collection<CandidateWithMatchedReceivers<FunctionDescriptor>>
+            = resolutionScope.getContributedFunctionsAndConstructors(name, location).mapNotNull {
+                createCandidateDescriptor(it, null, extensionReceiver, receiverKind)
             }
 }
 internal class ImportingScopeBasedTowerLevel(
@@ -165,21 +169,21 @@ internal class SyntheticScopeBasedTowerLevel(
         private val syntheticScopes: SyntheticScopes
 ): AbstractScopeTowerLevel(scopeTower) {
 
-    override fun getVariables(name: Name, extensionReceiver: ReceiverValue?): Collection<CandidateWithBoundDispatchReceiver<VariableDescriptor>> {
+    override fun getVariables(name: Name, extensionReceiver: ReceiverValue?, receiverKind: ExplicitReceiverKind): Collection<CandidateWithMatchedReceivers<VariableDescriptor>> {
         if (extensionReceiver == null) return emptyList()
 
         val extensionReceiverTypes = scopeTower.dataFlowInfo.getAllPossibleTypes(extensionReceiver)
-        return syntheticScopes.collectSyntheticExtensionProperties(extensionReceiverTypes, name, location).map {
-            createCandidateDescriptor(it, dispatchReceiver = null)
+        return syntheticScopes.collectSyntheticExtensionProperties(extensionReceiverTypes, name, location).mapNotNull {
+            createCandidateDescriptor(it, null, extensionReceiver, receiverKind)
         }
     }
 
-    override fun getFunctions(name: Name, extensionReceiver: ReceiverValue?): Collection<CandidateWithBoundDispatchReceiver<FunctionDescriptor>> {
+    override fun getFunctions(name: Name, extensionReceiver: ReceiverValue?, receiverKind: ExplicitReceiverKind): Collection<CandidateWithMatchedReceivers<FunctionDescriptor>> {
         if (extensionReceiver == null) return emptyList()
 
         val extensionReceiverTypes = scopeTower.dataFlowInfo.getAllPossibleTypes(extensionReceiver)
-        return syntheticScopes.collectSyntheticExtensionFunctions(extensionReceiverTypes, name, location).map {
-            createCandidateDescriptor(it, dispatchReceiver = null)
+        return syntheticScopes.collectSyntheticExtensionFunctions(extensionReceiverTypes, name, location).mapNotNull {
+            createCandidateDescriptor(it, null, extensionReceiver, receiverKind)
         }
     }
 }

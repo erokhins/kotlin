@@ -40,7 +40,6 @@ import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionResolvedCallIm
 import org.jetbrains.kotlin.resolve.calls.results.OverloadResolutionResultsImpl
 import org.jetbrains.kotlin.resolve.calls.results.ResolutionResultsHandler
 import org.jetbrains.kotlin.resolve.calls.tasks.DynamicCallableDescriptors
-import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.resolve.calls.tasks.TracingStrategy
 import org.jetbrains.kotlin.resolve.calls.tasks.TracingStrategyForInvoke
 import org.jetbrains.kotlin.resolve.isHiddenInResolution
@@ -202,15 +201,14 @@ class NewResolveOldInference(
     ) : TowerContext<Candidate> {
 
         override fun createCandidate(
-                towerCandidate: CandidateWithBoundDispatchReceiver<*>,
-                explicitReceiverKind: ExplicitReceiverKind,
-                extensionReceiver: ReceiverValue?
+                towerCandidate: CandidateWithMatchedReceivers<*>
         ): Candidate {
             val candidateTrace = TemporaryBindingTrace.create(basicCallContext.trace, "Context for resolve candidate")
+            val extensionReceiver = towerCandidate.extensionReceiver
             val candidateCall = ResolvedCallImpl(
                     basicCallContext.call, towerCandidate.descriptor,
                     towerCandidate.dispatchReceiver, extensionReceiver,
-                    explicitReceiverKind, null, candidateTrace, tracing,
+                    towerCandidate.explicitReceiverKind, null, candidateTrace, tracing,
                     basicCallContext.dataFlowInfoForArguments // todo may be we should create new mutable info for arguments
             )
 
