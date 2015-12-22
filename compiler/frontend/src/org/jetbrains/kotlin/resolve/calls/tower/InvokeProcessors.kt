@@ -112,42 +112,42 @@ internal class InvokeExtensionTowerProcessor<C>(
     override fun createInvokeProcessor(variableCandidate: C): ScopeTowerProcessor<C> {
         val (variableReceiver, invokeContext) = functionContext.contextForInvoke(variableCandidate, useExplicitReceiver = true)
                                                 ?: return KnownResultProcessor(emptyList())
-        val invokeDescriptor = functionContext.scopeContext.getExtensionInvokeCandidateDescriptor(variableReceiver)
+        val invokeDescriptor = functionContext.scopeContext.getExtensionInvokeDescriptor(variableReceiver)
                                ?: return KnownResultProcessor(emptyList())
-        return InvokeExtensionScopeTowerProcessor(invokeContext, invokeDescriptor, explicitReceiver)
+        return InvokeExtensionScopeTowerProcessor(invokeContext, invokeDescriptor, variableReceiver, explicitReceiver)
     }
 }
 
 private class InvokeExtensionScopeTowerProcessor<C>(
         context: TowerContext<C>,
-        private val invokeCandidateDescriptor: CandidateWithBoundDispatchReceiver<FunctionDescriptor>,
+        private val invokeCandidateDescriptor: FunctionDescriptor,
+        private val invokeDispatchReceiver: ReceiverValue,
         private val explicitReceiver: ReceiverValue?
 ) : AbstractSimpleScopeTowerProcessor<C>(context) {
 
+    // here we don't add SynthesizedDescriptor diagnostic because it should has priority as member
     override fun simpleProcess(data: TowerData): Collection<C> {
         if (explicitReceiver != null && data == TowerData.Empty) {
-            return listOf(context.createCandidate(invokeCandidateDescriptor, ExplicitReceiverKind.BOTH_RECEIVERS, explicitReceiver))
+            val candidate = CandidateWithBoundDispatchReceiverImpl(invokeDispatchReceiver, invokeCandidateDescriptor, listOf())
+            return listOf(context.createCandidate(candidate, ExplicitReceiverKind.BOTH_RECEIVERS, explicitReceiver))
         }
 
         if (explicitReceiver == null && data is TowerData.OnlyImplicitReceiver) {
-            return listOf(context.createCandidate(invokeCandidateDescriptor, ExplicitReceiverKind.DISPATCH_RECEIVER, data.implicitReceiver))
+            val candidate = CandidateWithBoundDispatchReceiverImpl(invokeDispatchReceiver, invokeCandidateDescriptor, listOf())
+            return listOf(context.createCandidate(candidate, ExplicitReceiverKind.DISPATCH_RECEIVER, data.implicitReceiver))
         }
-
         return emptyList()
     }
 }
 
 // todo debug info
-private fun ResolutionScopeContext.getExtensionInvokeCandidateDescriptor(
+private fun ResolutionScopeContext.getExtensionInvokeDescriptor(
         extensionFunctionReceiver: ReceiverValue
-): CandidateWithBoundDispatchReceiver<FunctionDescriptor>? {
+): FunctionDescriptor? {
     if (!KotlinBuiltIns.isExactExtensionFunctionType(extensionFunctionReceiver.type)) return null
 
     val invokeDescriptor = extensionFunctionReceiver.type.memberScope.getContributedFunctions(OperatorNameConventions.INVOKE, location).single()
-    val synthesizedInvoke = createSynthesizedInvokes(listOf(invokeDescriptor)).single()
-
-    // here we don't add SynthesizedDescriptor diagnostic because it should has priority as member
-    return CandidateWithBoundDispatchReceiverImpl(extensionFunctionReceiver, synthesizedInvoke, listOf())
+    return createSynthesizedInvokes(listOf(invokeDescriptor)).single()
 }
 
 // case 1.(foo())() or (foo())()
@@ -156,14 +156,14 @@ internal fun <C> createCallTowerProcessorForExplicitInvoke(
         expressionForInvoke: ReceiverValue,
         explicitReceiver: ReceiverValue?
 ): ScopeTowerProcessor<C> {
-    val invokeExtensionDescriptor = contextForInvoke.scopeContext.getExtensionInvokeCandidateDescriptor(expressionForInvoke)
+    val invokeExtensionDescriptor = contextForInvoke.scopeContext.getExtensionInvokeDescriptor(expressionForInvoke)
     if (explicitReceiver != null) {
         if (invokeExtensionDescriptor == null) {
             // case 1.(foo())(), where foo() isn't extension function
             return KnownResultProcessor(emptyList())
         }
         else {
-            return InvokeExtensionScopeTowerProcessor(contextForInvoke, invokeExtensionDescriptor, explicitReceiver = explicitReceiver)
+            return InvokeExtensionScopeTowerProcessor(contextForInvoke, invokeExtensionDescriptor, expressionForInvoke, explicitReceiver = explicitReceiver)
         }
     }
     else {
@@ -175,7 +175,7 @@ internal fun <C> createCallTowerProcessorForExplicitInvoke(
         else {
             return CompositeScopeTowerProcessor(
                     usualInvoke,
-                    InvokeExtensionScopeTowerProcessor(contextForInvoke, invokeExtensionDescriptor, explicitReceiver = null)
+                    InvokeExtensionScopeTowerProcessor(contextForInvoke, invokeExtensionDescriptor, expressionForInvoke, explicitReceiver = null)
             )
         }
     }
