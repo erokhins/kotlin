@@ -17,8 +17,6 @@
 package org.jetbrains.kotlin.resolve.calls.tower
 
 import org.jetbrains.kotlin.name.Name
-import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
-import org.jetbrains.kotlin.resolve.scopes.ImportingScope
 import org.jetbrains.kotlin.resolve.scopes.LexicalScope
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.resolve.scopes.utils.parentsWithSelf
@@ -91,7 +89,7 @@ class TowerResolver {
                     isFirstImportingScope = false
                     result.add(SyntheticScopeBasedTowerLevel(this, syntheticScopes))
                 }
-                result.add(ImportingScopeBasedTowerLevel(this, scope as ImportingScope))
+                result.add(ScopeBasedTowerLevel(this, scope))
             }
         }
 

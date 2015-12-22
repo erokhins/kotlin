@@ -142,12 +142,10 @@ internal class QualifierScopeTowerLevel(scopeTower: ResolutionScopeContext, val 
 }
 
 // KT-3335 Creating imported super class' inner class fails in codegen
-internal open class ScopeBasedTowerLevel protected constructor(
+internal open class ScopeBasedTowerLevel(
         scopeTower: ResolutionScopeContext,
         private val resolutionScope: ResolutionScope
 ) : AbstractScopeTowerLevel(scopeTower) {
-
-    internal constructor(scopeTower: ResolutionScopeContext, lexicalScope: LexicalScope): this(scopeTower, lexicalScope as ResolutionScope)
 
     override fun getVariables(name: Name, extensionReceiver: ReceiverValue?, receiverKind: ExplicitReceiverKind): Collection<CandidateWithMatchedReceivers<VariableDescriptor>>
             = resolutionScope.getContributedVariablesAndObjects(name, location).mapNotNull {
@@ -159,10 +157,6 @@ internal open class ScopeBasedTowerLevel protected constructor(
                 createCandidateDescriptor(it, null, extensionReceiver, receiverKind)
             }
 }
-internal class ImportingScopeBasedTowerLevel(
-        scopeTower: ResolutionScopeContext,
-        private val importingScope: ImportingScope
-): ScopeBasedTowerLevel(scopeTower, importingScope)
 
 internal class SyntheticScopeBasedTowerLevel(
         scopeTower: ResolutionScopeContext,
