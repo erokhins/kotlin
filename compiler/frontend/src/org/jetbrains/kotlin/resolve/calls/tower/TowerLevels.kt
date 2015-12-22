@@ -82,19 +82,22 @@ internal class ReceiverScopeTowerLevel(
             getMembers: ResolutionScope.(KotlinType?) -> Collection<D>
     ): Collection<CandidateWithMatchedReceivers<D>> {
         val result = ArrayList<CandidateWithMatchedReceivers<D>>(0)
-        dispatchReceiver.type.memberScope.getMembers(dispatchReceiver.type).mapNotNullTo(result) {
-            createCandidateDescriptor(it, dispatchReceiver, extensionReceiver, receiverKind)
+
+        fun MutableList<CandidateWithMatchedReceivers<D>>.addCandidatesForType(type: KotlinType, dispatchReceiver: ReceiverValue, diagnostics: List<ResolutionDiagnostic>) {
+            type.memberScope.getMembers(type).mapNotNullTo(this) {
+                createCandidateDescriptor(it, dispatchReceiver, extensionReceiver, receiverKind, diagnostics)
+            }
         }
+
+        result.addCandidatesForType(dispatchReceiver.type, dispatchReceiver, listOf())
 
         val smartCastPossibleTypes = scopeTower.dataFlowInfo.getSmartCastTypes(dispatchReceiver)
         val unstableError = if (scopeTower.dataFlowInfo.isStableReceiver(dispatchReceiver)) null else UnstableSmartCastDiagnostic
         val unstableCandidates = if (unstableError != null) ArrayList<CandidateWithMatchedReceivers<D>>(0) else null
 
         for (possibleType in smartCastPossibleTypes) {
-            possibleType.memberScope.getMembers(possibleType).mapNotNullTo(unstableCandidates ?: result) {
-                createCandidateDescriptor(it, dispatchReceiver.smartCastReceiver(possibleType), extensionReceiver, receiverKind,
-                                          listOfNotNull(unstableError, UsedSmartCastForDispatchReceiver(possibleType)))
-            }
+            (unstableCandidates ?: result).addCandidatesForType(possibleType, dispatchReceiver.smartCastReceiver(possibleType),
+                                                                listOfNotNull(unstableError, UsedSmartCastForDispatchReceiver(possibleType)))
         }
 
         if (smartCastPossibleTypes.isNotEmpty()) {
