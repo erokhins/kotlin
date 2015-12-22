@@ -70,7 +70,7 @@ class NewResolveOldInference(
         val explicitReceiver = context.call.explicitReceiver
 
         val dynamicScope = dynamicCallableDescriptors.createDynamicDescriptorScope(context.call, context.scope.ownerDescriptor)
-        val scopeTower = ScopeTowerImpl(context, dynamicScope, syntheticScopes, context.call.createLookupLocation())
+        val scopeTower = ResolutionScopeContextImpl(context, dynamicScope, syntheticScopes, context.call.createLookupLocation())
 
         val baseContext = Context(scopeTower, name, context, tracing)
 
@@ -195,7 +195,7 @@ class NewResolveOldInference(
     private data class Candidate(val candidateStatus: ResolutionCandidateStatus, val resolvedCall: MutableResolvedCall<*>)
 
     private inner class Context(
-            override val scopeTower: ScopeTower,
+            override val scopeContext: ResolutionScopeContext,
             override val name: Name,
             private val basicCallContext: BasicCallResolutionContext,
             private val tracing: TracingStrategy
@@ -265,7 +265,7 @@ class NewResolveOldInference(
             val newCall = CallTransformer.stripCallArguments(basicCallContext.call).let {
                 if (stripExplicitReceiver) CallTransformer.stripReceiver(it) else it
             }
-            return Context(scopeTower, name, basicCallContext.replaceCall(newCall), tracing)
+            return Context(scopeContext, name, basicCallContext.replaceCall(newCall), tracing)
         }
 
         override fun contextForInvoke(variable: Candidate, useExplicitReceiver: Boolean): Pair<ReceiverValue, TowerContext<Candidate>>? {
@@ -297,8 +297,8 @@ class NewResolveOldInference(
                     .replaceCall(functionCall)
                     .replaceContextDependency(ContextDependency.DEPENDENT) // todo
 
-            val newScopeTower = ScopeTowerImpl(basicCallResolutionContext, scopeTower.dynamicScope, scopeTower.syntheticScopes, scopeTower.location)
-            val newContext = Context(newScopeTower, OperatorNameConventions.INVOKE, basicCallResolutionContext, tracingForInvoke)
+            val newScopeContext = ResolutionScopeContextImpl(basicCallResolutionContext, scopeContext.dynamicScope, scopeContext.syntheticScopes, scopeContext.location)
+            val newContext = Context(newScopeContext, OperatorNameConventions.INVOKE, basicCallResolutionContext, tracingForInvoke)
 
             return variableReceiver to newContext
         }

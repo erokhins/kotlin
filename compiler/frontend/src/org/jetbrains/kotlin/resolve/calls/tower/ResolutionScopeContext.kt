@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.resolve.scopes.SyntheticScopes
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.types.KotlinType
 
-interface ScopeTower {
+interface ResolutionScopeContext {
     /**
      * Adds receivers to the list in order of locality, so that the closest (the most local) receiver goes first
      * Doesn't include receivers with error types

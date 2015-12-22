@@ -37,7 +37,7 @@ import org.jetbrains.kotlin.utils.addIfNotNull
 import java.util.*
 
 internal abstract class AbstractScopeTowerLevel(
-        protected val scopeTower: ScopeTower
+        protected val scopeTower: ResolutionScopeContext
 ): ScopeTowerLevel {
     protected val location: LookupLocation get() = scopeTower.location
 
@@ -71,7 +71,7 @@ internal abstract class AbstractScopeTowerLevel(
 // todo KT-9538 Unresolved inner class via subclass reference
 // todo add static methods & fields with error
 internal class ReceiverScopeTowerLevel(
-        scopeTower: ScopeTower,
+        scopeTower: ResolutionScopeContext,
         val dispatchReceiver: ReceiverValue
 ): AbstractScopeTowerLevel(scopeTower) {
 
@@ -125,7 +125,7 @@ internal class ReceiverScopeTowerLevel(
     }
 }
 
-internal class QualifierScopeTowerLevel(scopeTower: ScopeTower, val qualifier: QualifierReceiver) : AbstractScopeTowerLevel(scopeTower) {
+internal class QualifierScopeTowerLevel(scopeTower: ResolutionScopeContext, val qualifier: QualifierReceiver) : AbstractScopeTowerLevel(scopeTower) {
     override fun getVariables(name: Name, extensionReceiver: ReceiverValue?) = qualifier.getNestedClassesAndPackageMembersScope()
             .getContributedVariablesAndObjects(name, location).map {
                 createCandidateDescriptor(it, dispatchReceiver = null)
@@ -139,11 +139,11 @@ internal class QualifierScopeTowerLevel(scopeTower: ScopeTower, val qualifier: Q
 
 // KT-3335 Creating imported super class' inner class fails in codegen
 internal open class ScopeBasedTowerLevel protected constructor(
-        scopeTower: ScopeTower,
+        scopeTower: ResolutionScopeContext,
         private val resolutionScope: ResolutionScope
 ) : AbstractScopeTowerLevel(scopeTower) {
 
-    internal constructor(scopeTower: ScopeTower, lexicalScope: LexicalScope): this(scopeTower, lexicalScope as ResolutionScope)
+    internal constructor(scopeTower: ResolutionScopeContext, lexicalScope: LexicalScope): this(scopeTower, lexicalScope as ResolutionScope)
 
     override fun getVariables(name: Name, extensionReceiver: ReceiverValue?): Collection<CandidateWithBoundDispatchReceiver<VariableDescriptor>>
             = resolutionScope.getContributedVariablesAndObjects(name, location).map {
@@ -156,12 +156,12 @@ internal open class ScopeBasedTowerLevel protected constructor(
             }
 }
 internal class ImportingScopeBasedTowerLevel(
-        scopeTower: ScopeTower,
+        scopeTower: ResolutionScopeContext,
         private val importingScope: ImportingScope
 ): ScopeBasedTowerLevel(scopeTower, importingScope)
 
 internal class SyntheticScopeBasedTowerLevel(
-        scopeTower: ScopeTower,
+        scopeTower: ResolutionScopeContext,
         private val syntheticScopes: SyntheticScopes
 ): AbstractScopeTowerLevel(scopeTower) {
 

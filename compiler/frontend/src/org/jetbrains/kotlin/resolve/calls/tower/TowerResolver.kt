@@ -27,7 +27,7 @@ import java.util.*
 
 interface TowerContext<C> {
     val name: Name
-    val scopeTower: ScopeTower
+    val scopeContext: ResolutionScopeContext
 
     fun createCandidate(
             towerCandidate: CandidateWithBoundDispatchReceiver<*>,
@@ -72,7 +72,7 @@ class TowerResolver {
         return run(context, processor, false, AllCandidatesCollector(context))
     }
 
-    private fun ScopeTower.createLevels(): List<ScopeTowerLevel> {
+    private fun ResolutionScopeContext.createLevels(): List<ScopeTowerLevel> {
         val result = ArrayList<ScopeTowerLevel>()
 
         // locals win
@@ -121,14 +121,14 @@ class TowerResolver {
             return null
         }
 
-        for (implicitReceiver in context.scopeTower.implicitReceivers) {
+        for (implicitReceiver in context.scopeContext.implicitReceivers) {
             collectCandidates(TowerData.OnlyImplicitReceiver(implicitReceiver))?.let { return it }
         }
         // possible there is explicit member
         collectCandidates(TowerData.Empty)?.let { return it }
 
-        for (level in context.scopeTower.createLevels()) {
-            for (implicitReceiver in context.scopeTower.implicitReceivers) {
+        for (level in context.scopeContext.createLevels()) {
+            for (implicitReceiver in context.scopeContext.implicitReceivers) {
                 collectCandidates(TowerData.BothTowerLevelAndImplicitReceiver(level, implicitReceiver))?.let { return it }
             }
             collectCandidates(TowerData.TowerLevel(level))?.let { return it }

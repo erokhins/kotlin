@@ -40,12 +40,12 @@ internal class CandidateWithBoundDispatchReceiverImpl<D : CallableDescriptor>(
         override val diagnostics: List<ResolutionDiagnostic>
 ) : CandidateWithBoundDispatchReceiver<D>
 
-internal class ScopeTowerImpl(
+internal class ResolutionScopeContextImpl(
         resolutionContext: ResolutionContext<*>,
         override val dynamicScope: MemberScope,
         override val syntheticScopes: SyntheticScopes,
         override val location: LookupLocation
-): ScopeTower {
+): ResolutionScopeContext {
     override val dataFlowInfo: DataFlowDecorator = DataFlowDecoratorImpl(resolutionContext)
     override val lexicalScope: LexicalScope = resolutionContext.scope
 

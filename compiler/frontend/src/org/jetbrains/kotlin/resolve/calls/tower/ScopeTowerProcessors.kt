@@ -62,7 +62,7 @@ internal class ExplicitReceiverScopeTowerProcessor<C>(
     }
 
     private fun resolveAsMember(): Collection<C> {
-        val members = ReceiverScopeTowerLevel(context.scopeTower, explicitReceiver)
+        val members = ReceiverScopeTowerLevel(context.scopeContext, explicitReceiver)
                 .collectCandidates(name, null).filter { !it.requiresExtensionReceiver }
         return members.map { context.createCandidate(it, ExplicitReceiverKind.DISPATCH_RECEIVER, extensionReceiver = null) }
     }
@@ -81,7 +81,7 @@ private class QualifierScopeTowerProcessor<C>(
     override fun simpleProcess(data: TowerData): Collection<C> {
         if (data != TowerData.Empty) return emptyList()
 
-        val staticMembers = QualifierScopeTowerLevel(context.scopeTower, qualifier).collectCandidates(name, null)
+        val staticMembers = QualifierScopeTowerLevel(context.scopeContext, qualifier).collectCandidates(name, null)
                 .filter { !it.requiresExtensionReceiver }
                 .map { context.createCandidate(it, ExplicitReceiverKind.NO_EXPLICIT_RECEIVER, extensionReceiver = null) }
         return staticMembers

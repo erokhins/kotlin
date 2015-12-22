@@ -112,7 +112,7 @@ internal class InvokeExtensionTowerProcessor<C>(
     override fun createInvokeProcessor(variableCandidate: C): ScopeTowerProcessor<C> {
         val (variableReceiver, invokeContext) = functionContext.contextForInvoke(variableCandidate, useExplicitReceiver = true)
                                                 ?: return KnownResultProcessor(emptyList())
-        val invokeDescriptor = functionContext.scopeTower.getExtensionInvokeCandidateDescriptor(variableReceiver)
+        val invokeDescriptor = functionContext.scopeContext.getExtensionInvokeCandidateDescriptor(variableReceiver)
                                ?: return KnownResultProcessor(emptyList())
         return InvokeExtensionScopeTowerProcessor(invokeContext, invokeDescriptor, explicitReceiver)
     }
@@ -138,7 +138,7 @@ private class InvokeExtensionScopeTowerProcessor<C>(
 }
 
 // todo debug info
-private fun ScopeTower.getExtensionInvokeCandidateDescriptor(
+private fun ResolutionScopeContext.getExtensionInvokeCandidateDescriptor(
         extensionFunctionReceiver: ReceiverValue
 ): CandidateWithBoundDispatchReceiver<FunctionDescriptor>? {
     if (!KotlinBuiltIns.isExactExtensionFunctionType(extensionFunctionReceiver.type)) return null
@@ -156,7 +156,7 @@ internal fun <C> createCallTowerProcessorForExplicitInvoke(
         expressionForInvoke: ReceiverValue,
         explicitReceiver: ReceiverValue?
 ): ScopeTowerProcessor<C> {
-    val invokeExtensionDescriptor = contextForInvoke.scopeTower.getExtensionInvokeCandidateDescriptor(expressionForInvoke)
+    val invokeExtensionDescriptor = contextForInvoke.scopeContext.getExtensionInvokeCandidateDescriptor(expressionForInvoke)
     if (explicitReceiver != null) {
         if (invokeExtensionDescriptor == null) {
             // case 1.(foo())(), where foo() isn't extension function
