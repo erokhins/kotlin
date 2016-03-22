@@ -81,7 +81,9 @@ class JavaSyntheticPropertiesScope(storageManager: StorageManager, private val l
         val memberScope = kotlinType.memberScope
 
         // property already exist
-        if (memberScope.getContributedVariables(name, location).isNotEmpty()) return null
+        if (memberScope.getContributedVariables(name, location).any {
+            it.visibility.isVisibleOutside()
+        }) return null
 
         val getMethod = findGetMethod(memberScope, name, location) ?: return null
 
