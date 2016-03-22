@@ -122,12 +122,16 @@ internal class ReceiverScopeTowerLevel(
             = if (this is ImplicitClassReceiver) CastImplicitClassReceiver(this.classDescriptor, targetType) else this
 
     override fun getVariables(name: Name, extensionReceiver: ReceiverValue?): Collection<CandidateWithBoundDispatchReceiver<VariableDescriptor>> {
-        return collectMembers { getContributedVariables(name, location) }
+        return collectMembers {
+            getContributedVariables(name, location) +
+            scopeTower.syntheticScopes.collectSyntheticExtensionProperties(listOfNotNull(it), name, location)
+        }
     }
 
     override fun getFunctions(name: Name, extensionReceiver: ReceiverValue?): Collection<CandidateWithBoundDispatchReceiver<FunctionDescriptor>> {
         return collectMembers {
-            getContributedFunctions(name, location) + it.getInnerConstructors(name, location)
+            getContributedFunctions(name, location) + it.getInnerConstructors(name, location) +
+            scopeTower.syntheticScopes.collectSyntheticExtensionFunctions(listOfNotNull(it), name, location)
         }
     }
 }
@@ -166,30 +170,6 @@ internal class ImportingScopeBasedTowerLevel(
         scopeTower: ScopeTower,
         private val importingScope: ImportingScope
 ): ScopeBasedTowerLevel(scopeTower, importingScope)
-
-internal class SyntheticScopeBasedTowerLevel(
-        scopeTower: ScopeTower,
-        private val syntheticScopes: SyntheticScopes
-): AbstractScopeTowerLevel(scopeTower) {
-
-    override fun getVariables(name: Name, extensionReceiver: ReceiverValue?): Collection<CandidateWithBoundDispatchReceiver<VariableDescriptor>> {
-        if (extensionReceiver == null) return emptyList()
-
-        val extensionReceiverTypes = scopeTower.dataFlowInfo.getAllPossibleTypes(extensionReceiver)
-        return syntheticScopes.collectSyntheticExtensionProperties(extensionReceiverTypes, name, location).map {
-            createCandidateDescriptor(it, dispatchReceiver = null)
-        }
-    }
-
-    override fun getFunctions(name: Name, extensionReceiver: ReceiverValue?): Collection<CandidateWithBoundDispatchReceiver<FunctionDescriptor>> {
-        if (extensionReceiver == null) return emptyList()
-
-        val extensionReceiverTypes = scopeTower.dataFlowInfo.getAllPossibleTypes(extensionReceiver)
-        return syntheticScopes.collectSyntheticExtensionFunctions(extensionReceiverTypes, name, location).map {
-            createCandidateDescriptor(it, dispatchReceiver = null)
-        }
-    }
-}
 
 internal class HidesMembersTowerLevel(scopeTower: ScopeTower): AbstractScopeTowerLevel(scopeTower) {
     override fun getVariables(name: Name, extensionReceiver: ReceiverValue?)
