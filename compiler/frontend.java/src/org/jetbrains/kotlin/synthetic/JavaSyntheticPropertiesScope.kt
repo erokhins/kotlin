@@ -28,10 +28,7 @@ import org.jetbrains.kotlin.incremental.components.NoLookupLocation
 import org.jetbrains.kotlin.load.java.JvmAbi
 import org.jetbrains.kotlin.load.java.propertyNameByGetMethodName
 import org.jetbrains.kotlin.name.Name
-import org.jetbrains.kotlin.resolve.scopes.DescriptorKindFilter
-import org.jetbrains.kotlin.resolve.scopes.SyntheticScope
-import org.jetbrains.kotlin.resolve.scopes.SyntheticScopes
-import org.jetbrains.kotlin.resolve.scopes.collectSyntheticExtensionProperties
+import org.jetbrains.kotlin.resolve.scopes.*
 import org.jetbrains.kotlin.storage.StorageManager
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.TypeSubstitutor
@@ -76,8 +73,8 @@ interface SyntheticJavaPropertyDescriptor : PropertyDescriptor {
 }
 
 class JavaSyntheticPropertiesScope(storageManager: StorageManager, private val lookupTracker: LookupTracker) : SyntheticScope {
-    private val syntheticPropertyByOriginalGet = storageManager.createMemoizedFunctionWithNullableValues<SimpleFunctionDescriptor, PropertyDescriptor> { originalGet ->
-        syntheticPropertyByGetNotCached(originalGet, NoLookupLocation.FROM_SYNTHETIC_SCOPE)
+    private val syntheticPropertyByOriginalGet = storageManager.createMemoizedFunctionWithNullableValues<Pair<SimpleFunctionDescriptor, MemberScope>, PropertyDescriptor> { pair ->
+        syntheticPropertyByGetNotCached(pair.first, pair.second, NoLookupLocation.FROM_SYNTHETIC_SCOPE)
     }
 
     private fun getSyntheticPropertyAndRecordLookups(kotlinType: KotlinType, name: Name, location: LookupLocation): PropertyDescriptor? {
@@ -87,10 +84,10 @@ class JavaSyntheticPropertiesScope(storageManager: StorageManager, private val l
             // TODO: optimize
             kotlinType.memberScope.getContributedFunctions(setMethodName(getMethod.name), location)
 
-            return  syntheticPropertyByOriginalGet(getMethod)
+            return syntheticPropertyByOriginalGet(getMethod to kotlinType.memberScope)
         }
         else {
-            return syntheticPropertyByGetNotCached(getMethod, location)
+            return syntheticPropertyByGetNotCached(getMethod, kotlinType.memberScope, location)
         }
     }
 
@@ -113,9 +110,7 @@ class JavaSyntheticPropertiesScope(storageManager: StorageManager, private val l
                                 }
     }
 
-    private fun syntheticPropertyByGetNotCached(getMethod: SimpleFunctionDescriptor, location: LookupLocation): PropertyDescriptor? {
-        val memberScope = getMethod.dispatchReceiverParameter!!.value.type.memberScope
-
+    private fun syntheticPropertyByGetNotCached(getMethod: SimpleFunctionDescriptor, memberScope: MemberScope, location: LookupLocation): PropertyDescriptor? {
         val setMethodName = setMethodName(getMethod.name)
         val setMethod = memberScope.getContributedFunctions(setMethodName, location)
                 .singleOrNull { isGoodSetMethod(it, getMethod) }
