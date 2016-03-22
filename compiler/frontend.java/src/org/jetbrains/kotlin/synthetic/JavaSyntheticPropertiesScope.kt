@@ -78,20 +78,25 @@ class JavaSyntheticPropertiesScope(storageManager: StorageManager, private val l
     }
 
     private fun getSyntheticPropertyAndRecordLookups(kotlinType: KotlinType, name: Name, location: LookupLocation): PropertyDescriptor? {
-        val getMethod = findGetMethod(kotlinType, name, location) ?: return null
+        val memberScope = kotlinType.memberScope
+
+        // property already exist
+        if (memberScope.getContributedVariables(name, location).isNotEmpty()) return null
+
+        val getMethod = findGetMethod(memberScope, name, location) ?: return null
 
         if (getMethod.original === getMethod) {
             // TODO: optimize
-            kotlinType.memberScope.getContributedFunctions(setMethodName(getMethod.name), location)
+            memberScope.getContributedFunctions(setMethodName(getMethod.name), location)
 
-            return syntheticPropertyByOriginalGet(getMethod to kotlinType.memberScope)
+            return syntheticPropertyByOriginalGet(getMethod to memberScope)
         }
         else {
-            return syntheticPropertyByGetNotCached(getMethod, kotlinType.memberScope, location)
+            return syntheticPropertyByGetNotCached(getMethod, memberScope, location)
         }
     }
 
-    private fun findGetMethod(kotlinType: KotlinType, name: Name, location: LookupLocation): SimpleFunctionDescriptor? {
+    private fun findGetMethod(memberScope: MemberScope, name: Name, location: LookupLocation): SimpleFunctionDescriptor? {
         if (name.isSpecial) return null
 
         val identifier = name.identifier
@@ -99,8 +104,6 @@ class JavaSyntheticPropertiesScope(storageManager: StorageManager, private val l
 
         val firstChar = identifier[0]
         if (!firstChar.isJavaIdentifierStart() || firstChar in 'A'..'Z') return null
-
-        val memberScope = kotlinType.memberScope
 
         val possibleGetMethodNames = possibleGetMethodNames(name)
         return possibleGetMethodNames
