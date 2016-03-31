@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.kotlin.descriptors.CallableDescriptor;
 import org.jetbrains.kotlin.resolve.DelegatingBindingTrace;
 import org.jetbrains.kotlin.resolve.calls.model.MutableResolvedCall;
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -35,7 +35,7 @@ public class OverloadResolutionResultsImpl<D extends CallableDescriptor> impleme
     public static <D extends CallableDescriptor> OverloadResolutionResultsImpl<D> nameNotFound() {
         OverloadResolutionResultsImpl<D> results = new OverloadResolutionResultsImpl<D>(
                 Code.NAME_NOT_FOUND, Collections.<MutableResolvedCall<D>>emptyList());
-        results.setAllCandidates(Collections.<ResolvedCall<D>>emptyList());
+        results.setAllCandidates(Collections.<ResolvedCallInternal<D>>emptyList());
         return results;
     }
 
@@ -65,7 +65,7 @@ public class OverloadResolutionResultsImpl<D extends CallableDescriptor> impleme
     private final Collection<MutableResolvedCall<D>> results;
     private final Code resultCode;
     private DelegatingBindingTrace trace;
-    private Collection<ResolvedCall<D>> allCandidates;
+    private Collection<ResolvedCallInternal<D>> allCandidates;
 
     private OverloadResolutionResultsImpl(@NotNull Code resultCode, @NotNull Collection<MutableResolvedCall<D>> results) {
         this.results = results;
@@ -131,13 +131,13 @@ public class OverloadResolutionResultsImpl<D extends CallableDescriptor> impleme
         return this;
     }
 
-    public void setAllCandidates(@Nullable Collection<ResolvedCall<D>> allCandidates) {
+    public void setAllCandidates(@Nullable Collection<ResolvedCallInternal<D>> allCandidates) {
         this.allCandidates = allCandidates;
     }
 
     @Nullable
     @Override
-    public Collection<ResolvedCall<D>> getAllCandidates() {
+    public Collection<ResolvedCallInternal<D>> getAllCandidates() {
         return allCandidates;
     }
 

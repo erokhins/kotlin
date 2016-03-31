@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.resolve.calls.tasks.TracingStrategy;
 import org.jetbrains.kotlin.types.KotlinType;
 import org.jetbrains.kotlin.types.TypeSubstitutor;
 
-public interface MutableResolvedCall<D extends CallableDescriptor> extends ResolvedCall<D>  {
+public interface MutableResolvedCall<D extends CallableDescriptor> extends ResolvedCallInternal<D>  {
 
     void addStatus(@NotNull ResolutionStatus status);
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package org.jetbrains.kotlin.resolve.calls.results;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.kotlin.descriptors.CallableDescriptor;
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal;
 
 import java.util.Collection;
 
@@ -46,13 +46,13 @@ public interface OverloadResolutionResults<D extends CallableDescriptor> {
 
     /* All candidates are collected only if ResolutionContext.collectAllCandidates is set to true */
     @Nullable
-    Collection<ResolvedCall<D>> getAllCandidates();
+    Collection<ResolvedCallInternal<D>> getAllCandidates();
 
     @NotNull
-    Collection<? extends ResolvedCall<D>> getResultingCalls();
+    Collection<? extends ResolvedCallInternal<D>> getResultingCalls();
 
     @NotNull
-    ResolvedCall<D> getResultingCall();
+    ResolvedCallInternal<D> getResultingCall();
 
     @NotNull
     D getResultingDescriptor();
