@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,5 +64,5 @@ class ArgumentMatchImpl(override val valueParameter: ValueParameterDescriptor): 
 }
 
 //TODO: temporary hack until status.isSuccess is not always correct
-fun ResolvedCall<*>.isReallySuccess(): Boolean
+fun ResolvedCallInternal<*>.isReallySuccess(): Boolean
         = status.isSuccess && !ErrorUtils.isError(resultingDescriptor)

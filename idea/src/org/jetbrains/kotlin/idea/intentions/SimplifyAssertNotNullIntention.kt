@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCallInternal
 import org.jetbrains.kotlin.resolve.calls.model.isReallySuccess
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstanceOrNull
@@ -57,7 +57,7 @@ class SimplifyAssertNotNullIntention : SelfTargetingOffsetIndependentIntention<K
         if (prevDeclaration.initializer == null) return false
 
         val bindingContext = element.analyze(BodyResolveMode.PARTIAL)
-        val resolvedCall = element.getResolvedCall(bindingContext) ?: return false
+        val resolvedCall = element.getResolvedCallInternal(bindingContext) ?: return false
         if (!resolvedCall.isReallySuccess()) return false
         val function = resolvedCall.resultingDescriptor as? FunctionDescriptor ?: return false
         if (function.importableFqName?.asString() != "kotlin.assert") return false

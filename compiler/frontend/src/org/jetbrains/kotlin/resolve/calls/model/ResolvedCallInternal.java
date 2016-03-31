@@ -19,9 +19,12 @@ package org.jetbrains.kotlin.resolve.calls.model;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.kotlin.descriptors.CallableDescriptor;
+import org.jetbrains.kotlin.resolve.calls.results.ResolutionStatus;
 import org.jetbrains.kotlin.types.KotlinType;
 
 public interface ResolvedCallInternal<D extends CallableDescriptor> extends ResolvedCall<D> {
+    @NotNull
+    ResolutionStatus getStatus();
 
     /** Data flow info for each argument and the result data flow info */
     @NotNull

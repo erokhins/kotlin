@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCallInternal
 import org.jetbrains.kotlin.resolve.calls.model.isReallySuccess
 
 
@@ -45,7 +45,7 @@ class InsertDelegationCallQuickfix(val isThis: Boolean, element: KtSecondaryCons
     override fun invoke(project: Project, editor: Editor?, file: KtFile) {
         val newDelegationCall = element.replaceImplicitDelegationCallWithExplicit(isThis)
 
-        val resolvedCall = newDelegationCall.getResolvedCall(newDelegationCall.analyze())
+        val resolvedCall = newDelegationCall.getResolvedCallInternal(newDelegationCall.analyze())
         val descriptor = element.resolveToDescriptor()
 
         // if empty call is ok and it's resolved to another constructor, do not move caret

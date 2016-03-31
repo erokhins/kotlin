@@ -33,7 +33,6 @@ import org.jetbrains.kotlin.lexer.KtTokens;
 import org.jetbrains.kotlin.psi.*;
 import org.jetbrains.kotlin.psi.psiUtil.PsiUtilsKt;
 import org.jetbrains.kotlin.resolve.calls.CallResolver;
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal;
 import org.jetbrains.kotlin.resolve.calls.results.OverloadResolutionResults;
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo;
@@ -223,7 +222,7 @@ public class BodyResolver {
 
     @Nullable
     private ConstructorDescriptor getDelegatedConstructor(@NotNull ConstructorDescriptor constructor) {
-        ResolvedCall<ConstructorDescriptor> call = trace.get(CONSTRUCTOR_RESOLVED_DELEGATION_CALL, constructor);
+        ResolvedCallInternal<ConstructorDescriptor> call = trace.get(CONSTRUCTOR_RESOLVED_DELEGATION_CALL, constructor);
         return call == null || !call.getStatus().isSuccess() ? null : call.getResultingDescriptor().getOriginal();
     }
 
@@ -262,7 +261,7 @@ public class BodyResolver {
         final ExpressionTypingServices typeInferrer = expressionTypingServices; // TODO : flow
 
         final Map<KtTypeReference, KotlinType> supertypes = Maps.newLinkedHashMap();
-        final ResolvedCall<?>[] primaryConstructorDelegationCall = new ResolvedCall[1];
+        final ResolvedCallInternal<?>[] primaryConstructorDelegationCall = new ResolvedCallInternal[1];
         KtVisitorVoid visitor = new KtVisitorVoid() {
             private void recordSupertype(KtTypeReference typeReference, KotlinType supertype) {
                 if (supertype == null) return;
@@ -410,10 +409,10 @@ public class BodyResolver {
     private static void recordConstructorDelegationCall(
             @NotNull BindingTrace trace,
             @NotNull ConstructorDescriptor constructor,
-            @NotNull ResolvedCall<?> call
+            @NotNull ResolvedCallInternal<?> call
     ) {
         //noinspection unchecked
-        trace.record(CONSTRUCTOR_RESOLVED_DELEGATION_CALL, constructor, (ResolvedCall<ConstructorDescriptor>) call);
+        trace.record(CONSTRUCTOR_RESOLVED_DELEGATION_CALL, constructor, (ResolvedCallInternal<ConstructorDescriptor>) call);
     }
 
     private void checkSupertypeList(

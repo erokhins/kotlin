@@ -43,6 +43,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCallInternal
 import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
@@ -59,7 +60,7 @@ class KotlinFunctionCallUsage(
         private val callee: KotlinCallableDefinitionUsage<*>
 ) : KotlinUsageInfo<KtCallElement>(element) {
     private val context = element.analyze(BodyResolveMode.FULL)
-    private val resolvedCall = element.getResolvedCall(context)
+    private val resolvedCall = element.getResolvedCallInternal(context)
 
     override fun processUsage(changeInfo: KotlinChangeInfo, element: KtCallElement, allUsages: Array<out UsageInfo>): Boolean {
         if (shouldSkipUsage(element)) return true

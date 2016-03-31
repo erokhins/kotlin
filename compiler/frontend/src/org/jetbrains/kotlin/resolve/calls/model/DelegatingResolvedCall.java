@@ -23,7 +23,6 @@ import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor;
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor;
 import org.jetbrains.kotlin.psi.Call;
 import org.jetbrains.kotlin.psi.ValueArgument;
-import org.jetbrains.kotlin.resolve.calls.results.ResolutionStatus;
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind;
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue;
 import org.jetbrains.kotlin.types.KotlinType;
@@ -36,12 +35,6 @@ public abstract class DelegatingResolvedCall<D extends CallableDescriptor> imple
 
     public DelegatingResolvedCall(@NotNull ResolvedCall<? extends D> resolvedCall) {
         this.resolvedCall = resolvedCall;
-    }
-
-    @NotNull
-    @Override
-    public ResolutionStatus getStatus() {
-        return resolvedCall.getStatus();
     }
 
     @NotNull

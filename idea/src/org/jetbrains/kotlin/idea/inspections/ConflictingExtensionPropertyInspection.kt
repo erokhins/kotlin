@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.renderer.render
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCallInternal
 import org.jetbrains.kotlin.resolve.calls.model.isReallySuccess
 import org.jetbrains.kotlin.resolve.isHiddenInResolution
 import org.jetbrains.kotlin.resolve.scopes.SyntheticScopes
@@ -131,7 +131,7 @@ class ConflictingExtensionPropertyInspection : AbstractKotlinInspection(), Clean
     private fun KtExpression?.isGetMethodCall(getMethod: FunctionDescriptor): Boolean {
         when (this) {
             is KtCallExpression -> {
-                val resolvedCall = getResolvedCall(analyze())
+                val resolvedCall = getResolvedCallInternal(analyze())
                 return resolvedCall != null && resolvedCall.isReallySuccess() && resolvedCall.resultingDescriptor.original == getMethod.original
             }
 
@@ -148,7 +148,7 @@ class ConflictingExtensionPropertyInspection : AbstractKotlinInspection(), Clean
         when (this) {
             is KtCallExpression -> {
                 if ((valueArguments.singleOrNull()?.getArgumentExpression() as? KtSimpleNameExpression)?.getReferencedNameAsName() != valueParameterName) return false
-                val resolvedCall = getResolvedCall(analyze())
+                val resolvedCall = getResolvedCallInternal(analyze())
                 return resolvedCall != null && resolvedCall.isReallySuccess() && resolvedCall.resultingDescriptor.original == setMethod.original
             }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@ import org.jetbrains.kotlin.resolve.CompileTimeConstantUtils
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getDataFlowInfo
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCallInternal
 import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.resolve.descriptorUtil.isExtension
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
@@ -57,7 +58,7 @@ class CallableUsageReplacementStrategy(
 
     override fun createReplacer(usage: KtSimpleNameExpression): (() -> KtElement)? {
         val bindingContext = usage.analyze(BodyResolveMode.PARTIAL)
-        val resolvedCall = usage.getResolvedCall(bindingContext) ?: return null
+        val resolvedCall = usage.getResolvedCallInternal(bindingContext) ?: return null
         if (!resolvedCall.isReallySuccess()) return null
 
         val callElement = resolvedCall.call.callElement
@@ -458,7 +459,7 @@ private fun introduceNamedArguments(result: KtElement) {
 
     for (callExpression in callsToProcess) {
         val bindingContext = callExpression.analyze(BodyResolveMode.PARTIAL)
-        val resolvedCall = callExpression.getResolvedCall(bindingContext) ?: return
+        val resolvedCall = callExpression.getResolvedCallInternal(bindingContext) ?: return
         if (!resolvedCall.isReallySuccess()) return
 
         val argumentsToMakeNamed = callExpression.valueArguments.dropWhile { !it[MAKE_ARGUMENT_NAMED_KEY] }
@@ -488,7 +489,7 @@ private fun dropArgumentsForDefaultValues(result: KtElement) {
     fun canDropArgument(argument: ValueArgument) = (argument as KtValueArgument)[DEFAULT_PARAMETER_VALUE_KEY]
 
     result.forEachDescendantOfType<KtCallExpression> { callExpression ->
-        val resolvedCall = callExpression.getResolvedCall(newBindingContext) ?: return@forEachDescendantOfType
+        val resolvedCall = callExpression.getResolvedCallInternal(newBindingContext) ?: return@forEachDescendantOfType
 
         argumentsToDrop.addAll(OptionalParametersHelper.detectArgumentsToDropForDefaults(resolvedCall, project, ::canDropArgument))
     }
@@ -577,7 +578,7 @@ private fun restoreFunctionLiteralArguments(expression: KtElement) {
         val callExpression = argumentList.parent as? KtCallExpression ?: return
         if (callExpression.lambdaArguments.isNotEmpty()) return
 
-        val resolvedCall = callExpression.getResolvedCall(callExpression.analyze(BodyResolveMode.PARTIAL)) ?: return
+        val resolvedCall = callExpression.getResolvedCallInternal(callExpression.analyze(BodyResolveMode.PARTIAL)) ?: return
         if (!resolvedCall.isReallySuccess()) return
         val argumentMatch = resolvedCall.getArgumentMapping(argument) as ArgumentMatch
         if (argumentMatch.valueParameter != resolvedCall.resultingDescriptor.valueParameters.last()) return

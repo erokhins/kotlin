@@ -23,7 +23,6 @@ import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor;
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor;
 import org.jetbrains.kotlin.psi.Call;
 import org.jetbrains.kotlin.psi.ValueArgument;
-import org.jetbrains.kotlin.resolve.calls.results.ResolutionStatus;
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind;
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue;
 import org.jetbrains.kotlin.types.KotlinType;
@@ -32,8 +31,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface ResolvedCall<D extends CallableDescriptor> {
-    @NotNull
-    ResolutionStatus getStatus();
 
     /** The call that was resolved to this ResolvedCall */
     @NotNull
