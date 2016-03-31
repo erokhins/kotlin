@@ -34,6 +34,7 @@ import org.jetbrains.kotlin.psi.*;
 import org.jetbrains.kotlin.psi.psiUtil.PsiUtilsKt;
 import org.jetbrains.kotlin.resolve.calls.CallResolver;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal;
 import org.jetbrains.kotlin.resolve.calls.results.OverloadResolutionResults;
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo;
 import org.jetbrains.kotlin.resolve.calls.util.CallMaker;
@@ -165,7 +166,7 @@ public class BodyResolver {
                 descriptor, constructor.getDelegationCall());
 
         if (results != null && results.isSingleResult()) {
-            ResolvedCall<? extends CallableDescriptor> resolvedCall = results.getResultingCall();
+            ResolvedCallInternal<? extends CallableDescriptor> resolvedCall = results.getResultingCall();
             recordConstructorDelegationCall(trace, descriptor, resolvedCall);
             return resolvedCall.getDataFlowInfoForArguments().getResultInfo();
         }

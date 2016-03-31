@@ -104,10 +104,4 @@ public abstract class DelegatingResolvedCall<D extends CallableDescriptor> imple
         return resolvedCall.getTypeArguments();
     }
 
-    @NotNull
-    @Override
-    public DataFlowInfoForArguments getDataFlowInfoForArguments() {
-        return resolvedCall.getDataFlowInfoForArguments();
-    }
-
 }

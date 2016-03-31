@@ -44,6 +44,7 @@ import org.jetbrains.kotlin.resolve.calls.inference.ConstraintsUtil;
 import org.jetbrains.kotlin.resolve.calls.inference.InferenceErrorData;
 import org.jetbrains.kotlin.resolve.calls.model.MutableDataFlowInfoForArguments;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal;
 import org.jetbrains.kotlin.resolve.calls.results.OverloadResolutionResults;
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo;
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind;
@@ -93,7 +94,7 @@ public class ControlStructureTypingUtils {
         this.moduleDescriptor = moduleDescriptor;
     }
 
-    /*package*/ ResolvedCall<FunctionDescriptor> resolveSpecialConstructionAsCall(
+    /*package*/ ResolvedCallInternal<FunctionDescriptor> resolveSpecialConstructionAsCall(
             @NotNull Call call,
             @NotNull ResolveConstruct construct,
             @NotNull List<String> argumentNames,

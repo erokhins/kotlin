@@ -37,7 +37,7 @@ import org.jetbrains.kotlin.resolve.calls.context.ContextDependency.INDEPENDENT
 import org.jetbrains.kotlin.resolve.calls.context.ResolutionContext
 import org.jetbrains.kotlin.resolve.calls.context.TemporaryTraceAndCache
 import org.jetbrains.kotlin.resolve.calls.model.DataFlowInfoForArgumentsImpl
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal
 import org.jetbrains.kotlin.resolve.calls.results.OverloadResolutionResults.Code.CANDIDATES_WITH_WRONG_RECEIVER
 import org.jetbrains.kotlin.resolve.calls.results.OverloadResolutionResults.Code.NAME_NOT_FOUND
 import org.jetbrains.kotlin.resolve.calls.results.OverloadResolutionResultsUtil
@@ -83,7 +83,7 @@ class CallExpressionResolver(
             context: ResolutionContext<*>,
             checkArguments: CheckArgumentTypesMode,
             initialDataFlowInfoForArguments: DataFlowInfo
-    ): Pair<Boolean, ResolvedCall<FunctionDescriptor>?> {
+    ): Pair<Boolean, ResolvedCallInternal<FunctionDescriptor>?> {
         val results = callResolver.resolveFunctionCall(BasicCallResolutionContext.create(
                 context, call, checkArguments, DataFlowInfoForArgumentsImpl(initialDataFlowInfoForArguments, call)))
         return if (!results.isNothing) Pair(true, OverloadResolutionResultsUtil.getResultingCall(results, context.contextDependency))

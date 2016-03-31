@@ -75,8 +75,4 @@ public interface ResolvedCall<D extends CallableDescriptor> {
     @NotNull
     Map<TypeParameterDescriptor, KotlinType> getTypeArguments();
 
-    /** Data flow info for each argument and the result data flow info */
-    @NotNull
-    DataFlowInfoForArguments getDataFlowInfoForArguments();
-
 }
