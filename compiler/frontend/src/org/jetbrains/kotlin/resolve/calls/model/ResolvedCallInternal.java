@@ -16,7 +16,13 @@
 
 package org.jetbrains.kotlin.resolve.calls.model;
 
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.kotlin.descriptors.CallableDescriptor;
+import org.jetbrains.kotlin.types.KotlinType;
 
 public interface ResolvedCallInternal<D extends CallableDescriptor> extends ResolvedCall<D> {
+
+    @Nullable
+    KotlinType getSmartCastDispatchReceiverType();
+
 }

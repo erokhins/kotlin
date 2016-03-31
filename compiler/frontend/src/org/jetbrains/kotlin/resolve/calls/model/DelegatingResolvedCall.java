@@ -110,9 +110,4 @@ public abstract class DelegatingResolvedCall<D extends CallableDescriptor> imple
         return resolvedCall.getDataFlowInfoForArguments();
     }
 
-    @Nullable
-    @Override
-    public KotlinType getSmartCastDispatchReceiverType() {
-        return resolvedCall.getSmartCastDispatchReceiverType();
-    }
 }

@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.isSafeCall
 import org.jetbrains.kotlin.resolve.calls.context.CallResolutionContext
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactory
 import org.jetbrains.kotlin.resolve.calls.smartcasts.getReceiverValueWithSmartCast
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
@@ -90,5 +91,5 @@ fun ResolvedCall<*>.makeNullableTypeIfSafeReceiver(type: KotlinType?, context: C
 
 fun ResolvedCall<*>.hasBothReceivers() = dispatchReceiver != null && extensionReceiver != null
 
-fun ResolvedCall<*>.getDispatchReceiverWithSmartCast(): ReceiverValue?
+fun ResolvedCallInternal<*>.getDispatchReceiverWithSmartCast(): ReceiverValue?
         = getReceiverValueWithSmartCast(dispatchReceiver, smartCastDispatchReceiverType)

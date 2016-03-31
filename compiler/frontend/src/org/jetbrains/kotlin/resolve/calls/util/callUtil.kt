@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,6 @@ import org.jetbrains.kotlin.resolve.calls.ArgumentTypeResolver
 import org.jetbrains.kotlin.resolve.calls.CallTransformer
 import org.jetbrains.kotlin.resolve.calls.context.ResolutionContext
 import org.jetbrains.kotlin.resolve.calls.model.*
-import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstanceOrNull
 import org.jetbrains.kotlin.utils.sure
 
 // resolved call
@@ -173,6 +172,10 @@ fun Call?.getResolvedCall(context: BindingContext): ResolvedCall<out CallableDes
 
 fun KtElement?.getResolvedCall(context: BindingContext): ResolvedCall<out CallableDescriptor>? {
     return this?.getCall(context)?.getResolvedCall(context)
+}
+
+fun KtElement?.getResolvedCallInternal(context: BindingContext): ResolvedCallInternal<out CallableDescriptor>? {
+    return this?.getCall(context)?.getResolvedCall(context)?.let { it as ResolvedCallInternal<out CallableDescriptor> } // todo add assert message
 }
 
 fun KtElement?.getParentResolvedCall(context: BindingContext, strict: Boolean = true): ResolvedCall<out CallableDescriptor>? {

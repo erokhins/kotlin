@@ -79,6 +79,4 @@ public interface ResolvedCall<D extends CallableDescriptor> {
     @NotNull
     DataFlowInfoForArguments getDataFlowInfoForArguments();
 
-    @Nullable
-    KotlinType getSmartCastDispatchReceiverType();
 }

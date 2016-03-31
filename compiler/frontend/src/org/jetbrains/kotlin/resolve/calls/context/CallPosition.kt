@@ -19,16 +19,16 @@ package org.jetbrains.kotlin.resolve.calls.context
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.ValueArgument
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal
 
 
 sealed class CallPosition {
     object Unknown : CallPosition()
 
-    class ExtensionReceiverPosition(val resolvedCall: ResolvedCall<*>) : CallPosition()
+    class ExtensionReceiverPosition(val resolvedCall: ResolvedCallInternal<*>) : CallPosition()
 
     class ValueArgumentPosition(
-            val resolvedCall: ResolvedCall<*>,
+            val resolvedCall: ResolvedCallInternal<*>,
             val valueParameter: ValueParameterDescriptor,
             val valueArgument: ValueArgument
     ) : CallPosition()

@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.resolve.BindingTrace
 import org.jetbrains.kotlin.resolve.calls.callResolverUtil.getEffectiveExpectedType
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCallInternal
 import org.jetbrains.kotlin.resolve.calls.context.CallPosition
 import org.jetbrains.kotlin.resolve.calls.context.ResolutionContext
 import org.jetbrains.kotlin.resolve.calls.inference.isCaptured
@@ -54,7 +54,7 @@ fun ResolutionContext<*>.reportTypeMismatchDueToTypeProjection(
                     f.extensionReceiverParameter?.type
                 })
         is CallPosition.PropertyAssignment -> Pair(
-                callPosition.leftPart.getResolvedCall(trace.bindingContext) ?: return false, {
+                callPosition.leftPart.getResolvedCallInternal(trace.bindingContext) ?: return false, {
                     f: CallableDescriptor ->
                     (f as? PropertyDescriptor)?.setter?.valueParameters?.get(0)?.type
                 })
