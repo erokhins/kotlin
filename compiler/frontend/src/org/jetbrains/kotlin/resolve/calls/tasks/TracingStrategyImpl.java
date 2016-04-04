@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.psi.Call;
 import org.jetbrains.kotlin.psi.KtReferenceExpression;
 import org.jetbrains.kotlin.resolve.BindingTrace;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal;
-import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionResolvedCall;
+import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionMutableResolvedCall;
 import org.jetbrains.kotlin.resolve.calls.util.FakeCallableDescriptorForObject;
 import org.jetbrains.kotlin.types.ErrorUtils;
 
@@ -54,8 +54,8 @@ public class TracingStrategyImpl extends AbstractTracingStrategy {
     @Override
     public <D extends CallableDescriptor> void bindReference(@NotNull BindingTrace trace, @NotNull ResolvedCallInternal<D> resolvedCall) {
         DeclarationDescriptor descriptor = resolvedCall.getCandidateDescriptor();
-        if (resolvedCall instanceof VariableAsFunctionResolvedCall) {
-            descriptor = ((VariableAsFunctionResolvedCall) resolvedCall).getVariableCall().getCandidateDescriptor();
+        if (resolvedCall instanceof VariableAsFunctionMutableResolvedCall) {
+            descriptor = ((VariableAsFunctionMutableResolvedCall) resolvedCall).getVariableCall().getCandidateDescriptor();
         }
         if (descriptor instanceof FakeCallableDescriptorForObject) {
             FakeCallableDescriptorForObject fakeCallableDescriptorForObject = (FakeCallableDescriptorForObject) descriptor;

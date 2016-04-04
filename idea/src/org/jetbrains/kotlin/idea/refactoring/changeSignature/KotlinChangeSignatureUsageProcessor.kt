@@ -65,6 +65,7 @@ import org.jetbrains.kotlin.renderer.DescriptorRenderer
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCallInternal
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 import org.jetbrains.kotlin.resolve.scopes.receivers.ImplicitReceiver
@@ -718,7 +719,7 @@ class KotlinChangeSignatureUsageProcessor : ChangeSignatureUsageProcessor {
                         ?.getNonStrictParentOfType<KtReferenceExpression>()
                 val newResolvedCall = newRef.getResolvedCall(newContext)
                 if (newResolvedCall == null || newResolvedCall.extensionReceiver != null || newResolvedCall.dispatchReceiver != null) {
-                    val descriptor = originalRef.getResolvedCall(originalContext)!!.candidateDescriptor
+                    val descriptor = originalRef.getResolvedCallInternal(originalContext)!!.candidateDescriptor
                     val declaration = DescriptorToSourceUtilsIde.getAnyDeclaration(callable.project, descriptor)
                     val prefix = if (declaration != null) RefactoringUIUtil.getDescription(declaration, true) else originalRef.text
                     result.putValue(originalRef, prefix.capitalize() + " will no longer be accessible after signature change")

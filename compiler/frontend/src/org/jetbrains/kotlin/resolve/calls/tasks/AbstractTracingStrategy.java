@@ -34,7 +34,6 @@ import org.jetbrains.kotlin.resolve.calls.context.ResolutionContext;
 import org.jetbrains.kotlin.resolve.calls.inference.ConstraintSystem;
 import org.jetbrains.kotlin.resolve.calls.inference.ConstraintSystemStatus;
 import org.jetbrains.kotlin.resolve.calls.inference.InferenceErrorData;
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal;
 import org.jetbrains.kotlin.resolve.descriptorUtil.DescriptorUtilsKt;
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver;
@@ -64,7 +63,7 @@ public abstract class AbstractTracingStrategy implements TracingStrategy {
     @Override
     public <D extends CallableDescriptor> void recordAmbiguity(@NotNull BindingTrace trace, @NotNull Collection<? extends ResolvedCallInternal<D>> candidates) {
         Collection<D> descriptors = Sets.newHashSet();
-        for (ResolvedCall<D> candidate : candidates) {
+        for (ResolvedCallInternal<D> candidate : candidates) {
             descriptors.add(candidate.getCandidateDescriptor());
         }
         trace.record(AMBIGUOUS_REFERENCE_TARGET, reference, descriptors);

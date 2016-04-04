@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@
 package org.jetbrains.kotlin.resolve.calls.inference;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal;
 
 public interface ConstraintSystemCompleter {
     void completeConstraintSystem(
             @NotNull ConstraintSystem.Builder constraintSystem,
-            @NotNull ResolvedCall<?> resolvedCall
+            @NotNull ResolvedCallInternal<?> resolvedCall
     );
 }

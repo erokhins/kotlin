@@ -29,9 +29,9 @@ import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.isOverridable
 import org.jetbrains.kotlin.psi.typeRefHelpers.setReceiverTypeReference
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
-import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCallInternal
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal
+import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionMutableResolvedCall
 
 class UnusedReceiverParameterInspection : AbstractKotlinInspection() {
     override val suppressionKey: String get() = "unused"
@@ -55,17 +55,17 @@ class UnusedReceiverParameterInspection : AbstractKotlinInspection() {
                         element.acceptChildren(this)
 
                         val bindingContext = element.analyze()
-                        val resolvedCall = element.getResolvedCall(bindingContext) ?: return
+                        val resolvedCall = element.getResolvedCallInternal(bindingContext) ?: return
 
                         if (isUsageOfReceiver(resolvedCall, bindingContext)) {
                             used = true
-                        } else if (resolvedCall is VariableAsFunctionResolvedCall
+                        } else if (resolvedCall is VariableAsFunctionMutableResolvedCall
                                    && isUsageOfReceiver(resolvedCall.variableCall, bindingContext)) {
                             used = true
                         }
                     }
 
-                    private fun isUsageOfReceiver(resolvedCall: ResolvedCall<*>, bindingContext: BindingContext): Boolean {
+                    private fun isUsageOfReceiver(resolvedCall: ResolvedCallInternal<*>, bindingContext: BindingContext): Boolean {
                         // As receiver of call
                         if (resolvedCall.dispatchReceiver.getThisReceiverOwner(bindingContext) == callable ||
                             resolvedCall.extensionReceiver.getThisReceiverOwner(bindingContext) == callable) {

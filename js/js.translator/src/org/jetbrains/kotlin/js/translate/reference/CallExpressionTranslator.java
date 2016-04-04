@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,8 +35,8 @@ import org.jetbrains.kotlin.resolve.inline.InlineUtil;
 import java.util.List;
 
 import static org.jetbrains.kotlin.js.resolve.diagnostics.JsCallChecker.isJsCall;
-import static org.jetbrains.kotlin.js.translate.utils.PsiUtils.getFunctionDescriptor;
 import static org.jetbrains.kotlin.js.translate.utils.InlineUtils.setInlineCallMetadata;
+import static org.jetbrains.kotlin.js.translate.utils.PsiUtils.getOriginalFunctionDescriptor;
 import static org.jetbrains.kotlin.resolve.constants.evaluate.ConstantExpressionEvaluator.getConstant;
 
 public final class CallExpressionTranslator extends AbstractCallExpressionTranslator {
@@ -65,7 +65,7 @@ public final class CallExpressionTranslator extends AbstractCallExpressionTransl
     public static boolean shouldBeInlined(@NotNull KtCallExpression expression, @NotNull TranslationContext context) {
         if (!context.getConfig().isInlineEnabled()) return false;
 
-        CallableDescriptor descriptor = getFunctionDescriptor(expression, context);
+        CallableDescriptor descriptor = getOriginalFunctionDescriptor(expression, context);
         return shouldBeInlined(descriptor);
     }
 

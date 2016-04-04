@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -132,22 +132,22 @@ public final class PsiUtils {
     }
 
     @NotNull
-    public static CallableDescriptor getFunctionDescriptor(
+    public static CallableDescriptor getOriginalFunctionDescriptor(
             @NotNull KtCallExpression expression,
             @NotNull TranslationContext context
     ) {
         ResolvedCall<?> resolvedCall = CallUtilKt.getResolvedCall(expression, context.bindingContext());
         assert resolvedCall != null;
 
-        return getFunctionDescriptor(resolvedCall);
+        return getOriginalFunctionDescriptor(resolvedCall);
     }
 
     @NotNull
-    public static CallableDescriptor getFunctionDescriptor(ResolvedCall<?> resolvedCall) {
+    public static CallableDescriptor getOriginalFunctionDescriptor(ResolvedCall<?> resolvedCall) {
         if (resolvedCall instanceof VariableAsFunctionResolvedCall) {
-            return  ((VariableAsFunctionResolvedCall) resolvedCall).getVariableCall().getCandidateDescriptor();
+            return  ((VariableAsFunctionResolvedCall) resolvedCall).getVariableCall().getResultingDescriptor().getOriginal();
         }
 
-        return resolvedCall.getCandidateDescriptor();
+        return resolvedCall.getResultingDescriptor().getOriginal();
     }
 }

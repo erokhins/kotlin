@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,8 @@ import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.getElementTextWithContext
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCallInternal
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal
 import org.jetbrains.kotlin.resolve.dataClassUtils.getComponentIndex
 import org.jetbrains.kotlin.resolve.descriptorUtil.builtIns
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
@@ -111,7 +112,7 @@ class ChangeFunctionReturnTypeFix(element: KtFunction, type: KotlinType) : Kotli
         override fun createAction(diagnostic: Diagnostic): IntentionAction? {
             val entry = getDestructuringDeclarationEntryThatTypeMismatchComponentFunction(diagnostic)
             val context = entry.analyze(BodyResolveMode.PARTIAL)
-            val resolvedCall = context.get(BindingContext.COMPONENT_RESOLVED_CALL, entry) ?: return null
+            val resolvedCall = context.get(BindingContext.COMPONENT_RESOLVED_CALL, entry) as ResolvedCallInternal? ?: return null
             val componentFunction = DescriptorToSourceUtils.descriptorToDeclaration(resolvedCall.candidateDescriptor) as KtFunction? ?: return null
             val expectedType = context[BindingContext.TYPE, entry.typeReference!!] ?: return null
             return ChangeFunctionReturnTypeFix(componentFunction, expectedType)
@@ -123,7 +124,7 @@ class ChangeFunctionReturnTypeFix(element: KtFunction, type: KotlinType) : Kotli
             val expression = QuickFixUtil.getParentElementOfType(diagnostic, KtExpression::class.java)
                              ?: error("HAS_NEXT_FUNCTION_TYPE_MISMATCH reported on element that is not within any expression")
             val context = expression.analyze(BodyResolveMode.PARTIAL)
-            val resolvedCall = context[BindingContext.LOOP_RANGE_HAS_NEXT_RESOLVED_CALL, expression] ?: return null
+            val resolvedCall = context[BindingContext.LOOP_RANGE_HAS_NEXT_RESOLVED_CALL, expression] as ResolvedCallInternal? ?: return null
             val hasNextDescriptor = resolvedCall.candidateDescriptor
             val hasNextFunction = DescriptorToSourceUtils.descriptorToDeclaration(hasNextDescriptor) as KtFunction? ?: return null
             return ChangeFunctionReturnTypeFix(hasNextFunction, hasNextDescriptor.builtIns.booleanType)
@@ -134,7 +135,7 @@ class ChangeFunctionReturnTypeFix(element: KtFunction, type: KotlinType) : Kotli
         override fun createAction(diagnostic: Diagnostic): IntentionAction? {
             val expression = QuickFixUtil.getParentElementOfType(diagnostic, KtBinaryExpression::class.java) ?: error("COMPARE_TO_TYPE_MISMATCH reported on element that is not within any expression")
             val context = expression.analyze(BodyResolveMode.PARTIAL)
-            val resolvedCall = expression.getResolvedCall(context) ?: return null
+            val resolvedCall = expression.getResolvedCallInternal(context) ?: return null
             val compareToDescriptor = resolvedCall.candidateDescriptor
             val compareTo = DescriptorToSourceUtils.descriptorToDeclaration(compareToDescriptor) as? KtFunction ?: return null
             return ChangeFunctionReturnTypeFix(compareTo, compareToDescriptor.builtIns.intType)

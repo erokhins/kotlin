@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import org.jetbrains.kotlin.idea.util.ShortenReferences
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal
 import org.jetbrains.kotlin.types.ErrorUtils
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.checker.KotlinTypeChecker
@@ -80,7 +81,7 @@ class ChangeVariableTypeFix(element: KtVariableDeclaration, type: KotlinType) : 
         override fun createAction(diagnostic: Diagnostic): IntentionAction? {
             val entry = ChangeFunctionReturnTypeFix.getDestructuringDeclarationEntryThatTypeMismatchComponentFunction(diagnostic)
             val context = entry.analyze()
-            val resolvedCall = context.get(BindingContext.COMPONENT_RESOLVED_CALL, entry) ?: return null
+            val resolvedCall = context.get(BindingContext.COMPONENT_RESOLVED_CALL, entry) as ResolvedCallInternal? ?: return null
             if (DescriptorToSourceUtils.descriptorToDeclaration(resolvedCall.candidateDescriptor) == null) return null
             val expectedType = resolvedCall.candidateDescriptor.returnType ?: return null
             return ChangeVariableTypeFix(entry, expectedType)

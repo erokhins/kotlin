@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.idea.caches.resolve.analyze
 import org.jetbrains.kotlin.idea.editor.KotlinSmartEnterHandler
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCallInternal
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 
 class KotlinLastLambdaParameterFixer : SmartEnterProcessorWithFixers.Fixer<KotlinSmartEnterHandler>() {
@@ -32,7 +32,7 @@ class KotlinLastLambdaParameterFixer : SmartEnterProcessorWithFixers.Fixer<Kotli
         if (element !is KtCallExpression) return
 
         val bindingContext = element.analyze(BodyResolveMode.PARTIAL)
-        val resolvedCall = element.getResolvedCall(bindingContext) ?: return
+        val resolvedCall = element.getResolvedCallInternal(bindingContext) ?: return
 
         val valueParameters = resolvedCall.candidateDescriptor.valueParameters
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedElementSelector
 import org.jetbrains.kotlin.resolve.calls.callUtil.getCalleeExpressionIfAny
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCallInternal
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 import org.jetbrains.kotlin.util.OperatorNameConventions
 
@@ -129,7 +130,7 @@ class OperatorToFunctionIntention : SelfTargetingIntention<KtExpression>(KtExpre
             }
 
             val context = element.analyze(BodyResolveMode.PARTIAL)
-            val functionCandidate = element.getResolvedCall(context)
+            val functionCandidate = element.getResolvedCallInternal(context)
             val functionName = functionCandidate?.candidateDescriptor?.name.toString()
             val elemType = context.getType(left)
 

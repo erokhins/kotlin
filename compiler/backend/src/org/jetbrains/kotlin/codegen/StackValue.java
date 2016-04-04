@@ -1413,7 +1413,7 @@ public abstract class StackValue {
                 @NotNull GenerationState state
         ) {
             if (extensionReceiver != null) {
-                CallableDescriptor descriptor = resolvedCall.getCandidateDescriptor();
+                CallableDescriptor descriptor = resolvedCall.getResultingDescriptor().getOriginal();
 
                 if (descriptor instanceof PropertyDescriptor &&
                     // hackaround: boxing changes behaviour of T.javaClass intrinsic

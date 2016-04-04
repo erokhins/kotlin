@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import com.intellij.openapi.util.TextRange
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.psi.KtForExpression
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal
 import java.util.*
 
 class KtForLoopInReference(element: KtForExpression) : KtMultiReference<KtForExpression>(element) {
@@ -38,7 +39,7 @@ class KtForLoopInReference(element: KtForExpression) : KtMultiReference<KtForExp
         if (loopRange == null) {
             return Collections.emptyList()
         }
-        return LOOP_RANGE_KEYS.mapNotNull { key -> context.get(key, loopRange)?.candidateDescriptor }
+        return LOOP_RANGE_KEYS.mapNotNull { key -> (context.get(key, loopRange) as ResolvedCallInternal?)?.candidateDescriptor }
     }
 
     companion object {

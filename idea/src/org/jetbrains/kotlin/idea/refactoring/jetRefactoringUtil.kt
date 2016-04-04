@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,7 +88,7 @@ import org.jetbrains.kotlin.renderer.DescriptorRenderer
 import org.jetbrains.kotlin.resolve.AnalyzingUtils
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getCallWithAssert
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCallInternal
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 import java.io.File
 import java.lang.annotation.Retention
@@ -744,7 +744,7 @@ fun dropOverrideKeywordIfNecessary(element: KtNamedDeclaration) {
 
 fun getQualifiedTypeArgumentList(initializer: KtExpression): KtTypeArgumentList? {
     val context = initializer.analyze(BodyResolveMode.PARTIAL)
-    val call = initializer.getResolvedCall(context) ?: return null
+    val call = initializer.getResolvedCallInternal(context) ?: return null
     val typeArgumentMap = call.typeArguments
     val typeArguments = call.candidateDescriptor.typeParameters.mapNotNull { typeArgumentMap[it] }
     val renderedList = typeArguments.joinToString(prefix = "<", postfix = ">") {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import org.jetbrains.kotlin.lexer.KtTokens;
 import org.jetbrains.kotlin.psi.KtArrayAccessExpression;
 import org.jetbrains.kotlin.psi.KtContainerNode;
 import org.jetbrains.kotlin.resolve.BindingContext;
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -54,12 +54,14 @@ public class KtArrayAccessReference extends KtSimpleReference<KtArrayAccessExpre
     protected Collection<DeclarationDescriptor> getTargetDescriptors(@NotNull BindingContext context) {
         List<DeclarationDescriptor> result = Lists.newArrayList();
 
-        ResolvedCall<FunctionDescriptor> getFunction = context.get(INDEXED_LVALUE_GET, getExpression());
+        ResolvedCallInternal<FunctionDescriptor> getFunction =
+                (ResolvedCallInternal<FunctionDescriptor>) context.get(INDEXED_LVALUE_GET, getExpression());
         if (getFunction != null) {
             result.add(getFunction.getCandidateDescriptor());
         }
 
-        ResolvedCall<FunctionDescriptor> setFunction = context.get(INDEXED_LVALUE_SET, getExpression());
+        ResolvedCallInternal<FunctionDescriptor> setFunction =
+                (ResolvedCallInternal<FunctionDescriptor>) context.get(INDEXED_LVALUE_SET, getExpression());
         if (setFunction != null) {
             result.add(setFunction.getCandidateDescriptor());
         }

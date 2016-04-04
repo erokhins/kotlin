@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,7 +82,7 @@ public class DestructuringDeclarationTranslator extends AbstractTranslator {
             ResolvedCall<FunctionDescriptor> entryInitCall =  context().bindingContext().get(BindingContext.COMPONENT_RESOLVED_CALL, entry);
             assert entryInitCall != null : "Entry init call must be not null";
             JsExpression entryInitializer = CallTranslator.translate(context(), entryInitCall, multiObjNameRef);
-            FunctionDescriptor candidateDescriptor = entryInitCall.getCandidateDescriptor();
+            FunctionDescriptor candidateDescriptor = entryInitCall.getResultingDescriptor().getOriginal();
             if (CallExpressionTranslator.shouldBeInlined(candidateDescriptor)) {
                 setInlineCallMetadata(entryInitializer, entry, entryInitCall, context());
             }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -161,7 +161,7 @@ fun isValueArgumentForCallToMethodWithTypeCheckBarrier(
     val argumentExpression = parentCall.valueArguments.singleOrNull()?.getArgumentExpression() ?: return false
     if (KtPsiUtil.deparenthesize(argumentExpression) !== element) return false
 
-    val candidateDescriptor = parentCall.getResolvedCall(bindingContext)?.candidateDescriptor as CallableMemberDescriptor?
+    val candidateDescriptor = parentCall.getResolvedCall(bindingContext)?.resultingDescriptor?.original as CallableMemberDescriptor?
                               ?: return false
 
     return candidateDescriptor.getSpecialSignatureInfo()?.isObjectReplacedWithTypeParameter ?: false

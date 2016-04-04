@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,10 @@ import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtPropertyDelegate
-import org.jetbrains.kotlin.resolve.BindingContext
-import java.util.Collections
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal
+import java.util.*
 
 class KtPropertyDelegationMethodsReference(element: KtPropertyDelegate) : KtMultiReference<KtPropertyDelegate>(element) {
 
@@ -44,7 +45,7 @@ class KtPropertyDelegationMethodsReference(element: KtPropertyDelegate) : KtMult
         }
         return (descriptor.accessors.mapNotNull {
             accessor ->
-            context.get(BindingContext.DELEGATED_PROPERTY_RESOLVED_CALL, accessor)?.candidateDescriptor
-        } + listOfNotNull(context.get(BindingContext.DELEGATED_PROPERTY_PD_RESOLVED_CALL, descriptor)?.candidateDescriptor))
+            (context.get(BindingContext.DELEGATED_PROPERTY_RESOLVED_CALL, accessor) as ResolvedCallInternal?)?.candidateDescriptor
+        } + listOfNotNull((context.get(BindingContext.DELEGATED_PROPERTY_PD_RESOLVED_CALL, descriptor) as ResolvedCallInternal?)?.candidateDescriptor))
     }
 }

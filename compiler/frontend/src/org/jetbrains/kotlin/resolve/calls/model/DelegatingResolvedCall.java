@@ -44,12 +44,6 @@ public abstract class DelegatingResolvedCall<D extends CallableDescriptor> imple
 
     @NotNull
     @Override
-    public D getCandidateDescriptor() {
-        return resolvedCall.getCandidateDescriptor();
-    }
-
-    @NotNull
-    @Override
     public D getResultingDescriptor() {
         return resolvedCall.getResultingDescriptor();
     }

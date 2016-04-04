@@ -33,6 +33,7 @@ import org.jetbrains.kotlin.resolve.calls.inference.ConstraintSystem;
 import org.jetbrains.kotlin.resolve.calls.inference.ConstraintSystemCompleter;
 import org.jetbrains.kotlin.resolve.calls.inference.TypeVariableKt;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal;
 import org.jetbrains.kotlin.resolve.calls.results.OverloadResolutionResults;
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo;
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfoFactory;
@@ -362,7 +363,7 @@ public class DelegatedPropertyResolver {
         return new ConstraintSystemCompleter() {
             @Override
             public void completeConstraintSystem(
-                    @NotNull ConstraintSystem.Builder constraintSystem, @NotNull ResolvedCall<?> resolvedCall
+                    @NotNull ConstraintSystem.Builder constraintSystem, @NotNull ResolvedCallInternal<?> resolvedCall
             ) {
                 KotlinType returnType = resolvedCall.getCandidateDescriptor().getReturnType();
                 if (returnType == null) return;

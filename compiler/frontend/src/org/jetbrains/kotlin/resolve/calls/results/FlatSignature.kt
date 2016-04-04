@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.psi.ValueArgument
 import org.jetbrains.kotlin.resolve.calls.model.DefaultValueArgument
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.utils.singletonOrEmptyList
 import java.util.*
@@ -37,7 +37,7 @@ class FlatSignature<out T>(
     val isGeneric = typeParameters.isNotEmpty()
 
     companion object {
-        fun <D : CallableDescriptor, RC : ResolvedCall<D>> createFromResolvedCall(resolvedCall: RC): FlatSignature<RC> {
+        fun <D : CallableDescriptor, RC : ResolvedCallInternal<D>> createFromResolvedCall(resolvedCall: RC): FlatSignature<RC> {
             val originalDescriptor = resolvedCall.candidateDescriptor.original
             val originalValueParameters = originalDescriptor.valueParameters
 

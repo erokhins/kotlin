@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +53,7 @@ class CallArgumentTranslator private constructor(
         HAS_NOT_EMPTY_EXPRESSION_ARGUMENT
     }
 
-    private val isNativeFunctionCall = AnnotationsUtils.isNativeObject(resolvedCall.candidateDescriptor)
+    private val isNativeFunctionCall = AnnotationsUtils.isNativeObject(resolvedCall.resultingDescriptor.original)
 
     private fun removeLastUndefinedArguments(result: MutableList<JsExpression>) {
         var i = result.size - 1
@@ -168,7 +168,7 @@ class CallArgumentTranslator private constructor(
             val argumentTranslator = CallArgumentTranslator(resolvedCall, receiver, innerContext)
             val result = argumentTranslator.translate()
             context.moveVarsFrom(innerContext)
-            val callDescriptor = resolvedCall.candidateDescriptor
+            val callDescriptor = resolvedCall.resultingDescriptor.original
 
             if (CallExpressionTranslator.shouldBeInlined(callDescriptor)) {
                 val typeArgs = resolvedCall.typeArguments

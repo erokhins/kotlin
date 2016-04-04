@@ -36,10 +36,11 @@ import org.jetbrains.kotlin.renderer.DescriptorRenderer
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
 import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCallInternal
 import org.jetbrains.kotlin.resolve.calls.callUtil.isSafeCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
-import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal
+import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionMutableResolvedCall
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ImplicitReceiver
@@ -168,7 +169,7 @@ class KotlinPsiUnifier(
             }
         }
 
-        private fun matchResolvedCalls(rc1: ResolvedCall<*>, rc2: ResolvedCall<*>): Status? {
+        private fun matchResolvedCalls(rc1: ResolvedCallInternal<*>, rc2: ResolvedCallInternal<*>): Status? {
             fun checkSpecialOperations(): Boolean {
                 val op1 = (rc1.call.calleeExpression as? KtSimpleNameExpression)?.getReferencedNameElementType()
                 val op2 = (rc2.call.calleeExpression as? KtSimpleNameExpression)?.getReferencedNameElementType()
@@ -273,14 +274,14 @@ class KotlinPsiUnifier(
 
         private val KtElement.bindingContext: BindingContext get() = if (this in originalPattern) patternContext else targetContext
 
-        private fun KtElement.getAdjustedResolvedCall(): ResolvedCall<*>? {
+        private fun KtElement.getAdjustedResolvedCall(): ResolvedCallInternal<*>? {
             val rc = if (this is KtArrayAccessExpression) {
-                bindingContext[BindingContext.INDEXED_LVALUE_GET, this]
+                bindingContext[BindingContext.INDEXED_LVALUE_GET, this] as ResolvedCallInternal?
             }
             else {
-                getResolvedCall(bindingContext)?.let {
+                getResolvedCallInternal(bindingContext)?.let {
                     when {
-                        it !is VariableAsFunctionResolvedCall -> it
+                        it !is VariableAsFunctionMutableResolvedCall -> it
                         this is KtSimpleNameExpression -> it.variableCall
                         else -> it.functionCall
                     }
@@ -389,7 +390,7 @@ class KotlinPsiUnifier(
                 val lhs = left?.unwrap()
                 if (lhs !is KtArrayAccessExpression) return null
 
-                val setResolvedCall = bindingContext[BindingContext.INDEXED_LVALUE_SET, lhs]
+                val setResolvedCall = bindingContext[BindingContext.INDEXED_LVALUE_SET, lhs] as ResolvedCallInternal?
                 val resolvedCallToMatch = e.getAdjustedResolvedCall()
 
                 return if (setResolvedCall == null || resolvedCallToMatch == null) null else matchResolvedCalls(setResolvedCall, resolvedCallToMatch)
@@ -437,8 +438,8 @@ class KotlinPsiUnifier(
 
             return entries1.zip(entries2).all { p ->
                 val (entry1, entry2) = p
-                val rc1 = entry1.bindingContext[BindingContext.COMPONENT_RESOLVED_CALL, entry1]
-                val rc2 = entry2.bindingContext[BindingContext.COMPONENT_RESOLVED_CALL, entry2]
+                val rc1 = entry1.bindingContext[BindingContext.COMPONENT_RESOLVED_CALL, entry1] as ResolvedCallInternal?
+                val rc2 = entry2.bindingContext[BindingContext.COMPONENT_RESOLVED_CALL, entry2] as ResolvedCallInternal?
                 when {
                     rc1 == null && rc2 == null -> true
                     rc1 != null && rc2 != null -> matchResolvedCalls(rc1, rc2) == MATCHED

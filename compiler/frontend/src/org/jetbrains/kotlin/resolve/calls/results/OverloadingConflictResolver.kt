@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,10 +25,7 @@ import org.jetbrains.kotlin.descriptors.VariableDescriptor
 import org.jetbrains.kotlin.descriptors.Visibilities
 import org.jetbrains.kotlin.resolve.calls.context.CheckArgumentTypesMode
 import org.jetbrains.kotlin.resolve.calls.inference.toHandle
-import org.jetbrains.kotlin.resolve.calls.model.MutableResolvedCall
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
-import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionMutableResolvedCall
-import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.TypeUtils
 
@@ -282,13 +279,13 @@ class OverloadingConflictResolver(private val builtIns: KotlinBuiltIns) {
     }
 }
 
-internal fun <D : CallableDescriptor> FlatSignature<ResolvedCall<D>>.candidateDescriptor() =
+internal fun <D : CallableDescriptor> FlatSignature<ResolvedCallInternal<D>>.candidateDescriptor() =
         origin.candidateDescriptor.original
 
-internal fun <D : CallableDescriptor> FlatSignature<ResolvedCall<D>>.callHandle() =
+internal fun <D : CallableDescriptor> FlatSignature<ResolvedCallInternal<D>>.callHandle() =
         origin.call.toHandle()
 
-internal fun <D : CallableDescriptor> FlatSignature<ResolvedCall<D>>.descriptorVisibility() =
+internal fun <D : CallableDescriptor> FlatSignature<ResolvedCallInternal<D>>.descriptorVisibility() =
         candidateDescriptor().visibility
 
 internal fun CallableDescriptor.varargParameterPosition() =

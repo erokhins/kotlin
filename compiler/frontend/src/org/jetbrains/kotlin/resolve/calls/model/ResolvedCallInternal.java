@@ -27,6 +27,10 @@ public interface ResolvedCallInternal<D extends CallableDescriptor> extends Reso
     @NotNull
     ResolutionStatus getStatus();
 
+    /** A target callable descriptor as it was accessible in the corresponding scope, i.e. with type arguments not substituted */
+    @NotNull
+    D getCandidateDescriptor();
+
     /** The result of mapping the value argument to a parameter */
     @NotNull
     ArgumentMapping getArgumentMapping(@NotNull ValueArgument valueArgument);

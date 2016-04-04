@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,8 @@ import org.jetbrains.kotlin.lexer.KtTokens;
 import org.jetbrains.kotlin.psi.*;
 import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.kotlin.resolve.calls.callUtil.CallUtilKt;
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
-import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionResolvedCall;
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal;
+import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionMutableResolvedCall;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,10 +50,10 @@ public class KtInvokeFunctionReference extends KtSimpleReference<KtCallExpressio
     @NotNull
     protected Collection<DeclarationDescriptor> getTargetDescriptors(@NotNull BindingContext context) {
         Call call = CallUtilKt.getCall(getElement(), context);
-        ResolvedCall<?> resolvedCall = CallUtilKt.getResolvedCall(call, context);
-        if (resolvedCall instanceof VariableAsFunctionResolvedCall) {
+        ResolvedCallInternal<?> resolvedCall = (ResolvedCallInternal<?>) CallUtilKt.getResolvedCall(call, context);
+        if (resolvedCall instanceof VariableAsFunctionMutableResolvedCall) {
             return Collections.<DeclarationDescriptor>singleton(
-                    ((VariableAsFunctionResolvedCall) resolvedCall).getFunctionCall().getCandidateDescriptor());
+                    ((VariableAsFunctionMutableResolvedCall) resolvedCall).getFunctionCall().getCandidateDescriptor());
         }
         if (call != null && resolvedCall != null && call.getCallType() == Call.CallType.INVOKE) {
             return Collections.<DeclarationDescriptor>singleton(resolvedCall.getCandidateDescriptor());

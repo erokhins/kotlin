@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,11 +24,12 @@ import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.idea.caches.resolve.analyze
 import org.jetbrains.kotlin.psi.KtDestructuringDeclaration
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal
 
 class KtDestructuringDeclarationReference(element: KtDestructuringDeclaration) : KtMultiReference<KtDestructuringDeclaration>(element) {
     override fun getTargetDescriptors(context: BindingContext): Collection<DeclarationDescriptor> {
         return expression.entries.mapNotNull { entry ->
-            context.get(BindingContext.COMPONENT_RESOLVED_CALL, entry)?.candidateDescriptor
+            (context.get(BindingContext.COMPONENT_RESOLVED_CALL, entry) as ResolvedCallInternal?)?.candidateDescriptor
         }
     }
 

@@ -35,10 +35,6 @@ public interface ResolvedCall<D extends CallableDescriptor> {
     @NotNull
     Call getCall();
 
-    /** A target callable descriptor as it was accessible in the corresponding scope, i.e. with type arguments not substituted */
-    @NotNull
-    D getCandidateDescriptor();
-
     /** Type arguments are substituted. This descriptor is guaranteed to have NO declared type parameters */
     @NotNull
     D getResultingDescriptor();

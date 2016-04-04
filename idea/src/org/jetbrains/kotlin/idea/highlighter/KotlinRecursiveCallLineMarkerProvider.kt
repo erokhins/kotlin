@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,12 +33,13 @@ import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.parents
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCallInternal
 import org.jetbrains.kotlin.resolve.inline.InlineUtil
 import org.jetbrains.kotlin.resolve.scopes.receivers.Receiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
 import org.jetbrains.kotlin.util.OperatorNameConventions
-import java.util.HashSet
+import java.util.*
 
 class KotlinRecursiveCallLineMarkerProvider() : LineMarkerProvider {
     override fun getLineMarkerInfo(element: PsiElement) = null
@@ -87,8 +88,7 @@ class KotlinRecursiveCallLineMarkerProvider() : LineMarkerProvider {
         val bindingContext = element.analyze()
         val enclosingFunctionDescriptor = bindingContext[BindingContext.FUNCTION, enclosingFunction] ?: return false
 
-        val call = bindingContext[BindingContext.CALL, element] ?: return false
-        val resolvedCall = bindingContext[BindingContext.RESOLVED_CALL, call] ?: return false
+        val resolvedCall = element.getResolvedCallInternal(bindingContext) ?: return false
 
         if (resolvedCall.candidateDescriptor.original != enclosingFunctionDescriptor) return false
 
