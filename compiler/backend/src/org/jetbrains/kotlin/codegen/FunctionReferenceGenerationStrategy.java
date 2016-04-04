@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.codegen.state.GenerationState;
 import org.jetbrains.kotlin.descriptors.*;
 import org.jetbrains.kotlin.psi.*;
 import org.jetbrains.kotlin.resolve.BindingContext;
-import org.jetbrains.kotlin.resolve.calls.model.DelegatingResolvedCall;
+import org.jetbrains.kotlin.resolve.calls.model.BackendResolvedCall;
 import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedValueArgument;
@@ -64,43 +64,24 @@ public class FunctionReferenceGenerationStrategy extends FunctionGenerationStrat
          */
 
         KtCallExpression fakeExpression = constructFakeFunctionCall();
-        final List<? extends ValueArgument> fakeArguments = fakeExpression.getValueArguments();
+        List<? extends ValueArgument> fakeArguments = fakeExpression.getValueArguments();
 
-        final ReceiverValue dispatchReceiver = computeAndSaveReceiver(signature, codegen, referencedFunction.getDispatchReceiverParameter());
-        final ReceiverValue extensionReceiver = computeAndSaveReceiver(signature, codegen, referencedFunction.getExtensionReceiverParameter());
+        ReceiverValue dispatchReceiver = computeAndSaveReceiver(signature, codegen, referencedFunction.getDispatchReceiverParameter());
+        ReceiverValue extensionReceiver = computeAndSaveReceiver(signature, codegen, referencedFunction.getExtensionReceiverParameter());
         computeAndSaveArguments(fakeArguments, codegen);
 
-        ResolvedCall<CallableDescriptor> fakeResolvedCall = new DelegatingResolvedCall<CallableDescriptor>(resolvedCall) {
+        Map<ValueParameterDescriptor, ResolvedValueArgument> argumentMap = new LinkedHashMap<ValueParameterDescriptor, ResolvedValueArgument>(fakeArguments.size());
+        int index = 0;
+        List<ValueParameterDescriptor> parameters = callableDescriptor.getValueParameters();
+        for (ValueArgument argument : fakeArguments) {
+            argumentMap.put(parameters.get(index), new ExpressionValueArgument(argument));
+            index++;
+        }
 
-            private final Map<ValueParameterDescriptor, ResolvedValueArgument> argumentMap;
-            {
-                argumentMap = new LinkedHashMap<ValueParameterDescriptor, ResolvedValueArgument>(fakeArguments.size());
-                int index = 0;
-                List<ValueParameterDescriptor> parameters = callableDescriptor.getValueParameters();
-                for (ValueArgument argument : fakeArguments) {
-                    argumentMap.put(parameters.get(index), new ExpressionValueArgument(argument));
-                    index++;
-                }
-            }
-
-            @Nullable
-            @Override
-            public ReceiverValue getExtensionReceiver() {
-                return extensionReceiver;
-            }
-
-            @Nullable
-            @Override
-            public ReceiverValue getDispatchReceiver() {
-                return dispatchReceiver;
-            }
-
-            @NotNull
-            @Override
-            public Map<ValueParameterDescriptor, ResolvedValueArgument> getValueArguments() {
-                return argumentMap;
-            }
-        };
+        ResolvedCall<CallableDescriptor> fakeResolvedCall =
+                new BackendResolvedCall<CallableDescriptor>(resolvedCall.getCall(), resolvedCall.getResultingDescriptor(),
+                                                            extensionReceiver, dispatchReceiver, resolvedCall.getExplicitReceiverKind(),
+                                                            argumentMap, resolvedCall.getTypeArguments());
 
         StackValue result;
         Type returnType = codegen.getReturnType();

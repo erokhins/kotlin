@@ -70,3 +70,16 @@ val <D: CallableDescriptor> ResolvedCall<D>.valueArgumentsByIndex: List<Resolved
         @Suppress("UNCHECKED_CAST")
         return arguments as List<ResolvedValueArgument>
     }
+
+fun <D: CallableDescriptor> ResolvedCall<D>.asBackendResolvedCall() : BackendResolvedCall<D>
+        = BackendResolvedCall(call, resultingDescriptor, extensionReceiver, dispatchReceiver, explicitReceiverKind, valueArguments, typeArguments)
+
+class BackendResolvedCall<out D : CallableDescriptor>(
+        override val call: Call,
+        override val resultingDescriptor: D,
+        override val extensionReceiver: ReceiverValue?,
+        override val dispatchReceiver: ReceiverValue?,
+        override val explicitReceiverKind: ExplicitReceiverKind,
+        override val valueArguments: Map<ValueParameterDescriptor, ResolvedValueArgument>,
+        override val typeArguments: Map<TypeParameterDescriptor, KotlinType>
+) : ResolvedCall<D>
