@@ -38,7 +38,6 @@ import org.jetbrains.kotlin.resolve.bindingContextUtil.getReferenceTargets
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getTargetFunctionDescriptor
 import org.jetbrains.kotlin.resolve.calls.ValueArgumentsToParametersMapper
 import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
-import org.jetbrains.kotlin.resolve.calls.callUtil.isSafeCall
 import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.resolve.calls.resolvedCallUtil.getExplicitReceiverValue
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo
@@ -52,14 +51,14 @@ import org.jetbrains.kotlin.types.TypeUtils
 import java.util.*
 
 fun getReceiverTypePredicate(resolvedCall: ResolvedCall<*>, receiverValue: ReceiverValue): TypePredicate? {
-    val callableDescriptor = resolvedCall.getResultingDescriptor() ?: return null
+    val callableDescriptor = resolvedCall.resultingDescriptor ?: return null
 
     when (receiverValue) {
-        resolvedCall.getExtensionReceiver() -> {
+        resolvedCall.extensionReceiver -> {
             val receiverParameter = callableDescriptor.getExtensionReceiverParameter()
             if (receiverParameter != null) return receiverParameter.getType().getSubtypesPredicate()
         }
-        resolvedCall.getDispatchReceiver() -> {
+        resolvedCall.dispatchReceiver -> {
             val rootCallableDescriptors = callableDescriptor.findTopMostOverriddenDescriptors()
             return or(rootCallableDescriptors.mapNotNull {
                 it.getDispatchReceiverParameter()?.getType()?.let { TypeUtils.makeNullableIfNeeded(it, resolvedCall.call.isSafeCall()) }?.getSubtypesPredicate()
@@ -120,7 +119,7 @@ fun getExpectedTypePredicate(
                                                                                         LinkedHashSet())
             if (!status.isSuccess()) continue
 
-            val candidateArgumentMap = candidateCall.getValueArguments()
+            val candidateArgumentMap = candidateCall.valueArguments
             val callArguments = call.getValueArguments()
             val i = inputValueIndex - argValueOffset
             if (i < 0 || i >= callArguments.size) continue
@@ -171,7 +170,7 @@ fun getExpectedTypePredicate(
                     else {
                         val expectedType = when (accessTarget) {
                             is AccessTarget.Call ->
-                                (accessTarget.resolvedCall.getResultingDescriptor() as? VariableDescriptor)?.getType()
+                                (accessTarget.resolvedCall.resultingDescriptor as? VariableDescriptor)?.getType()
                             is AccessTarget.Declaration ->
                                 accessTarget.descriptor.getType()
                             else ->
@@ -188,7 +187,7 @@ fun getExpectedTypePredicate(
                     }
                     else {
                         it.arguments[value]?.let { parameter ->
-                            val expectedType = when (it.resolvedCall.getValueArguments()[parameter]) {
+                            val expectedType = when (it.resolvedCall.valueArguments[parameter]) {
                                 is VarargValueArgument ->
                                     parameter.varargElementType
                                 else ->
@@ -239,7 +238,7 @@ fun getExpectedTypePredicate(
 
 fun Instruction.getPrimaryDeclarationDescriptorIfAny(bindingContext: BindingContext): DeclarationDescriptor? {
     return when (this) {
-        is CallInstruction -> return resolvedCall.getResultingDescriptor()
+        is CallInstruction -> return resolvedCall.resultingDescriptor
         else -> PseudocodeUtil.extractVariableDescriptorIfAny(this, false, bindingContext)
     }
 }
@@ -254,7 +253,7 @@ fun Instruction.calcSideEffectFree(): Boolean {
     return when (this) {
         is ReadValueInstruction -> target.let {
             when (it) {
-                is AccessTarget.Call -> when (it.resolvedCall.getResultingDescriptor()) {
+                is AccessTarget.Call -> when (it.resolvedCall.resultingDescriptor) {
                     is LocalVariableDescriptor, is ValueParameterDescriptor, is ReceiverParameterDescriptor -> true
                     else -> false
                 }

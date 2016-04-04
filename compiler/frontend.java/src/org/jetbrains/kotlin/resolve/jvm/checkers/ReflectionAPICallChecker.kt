@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,6 +63,6 @@ class ReflectionAPICallChecker(private val module: ModuleDescriptor, storageMana
             kPropertyClasses.any { kProperty -> DescriptorUtils.isSubclass(containingClass, kProperty) } -> return
         }
 
-        context.trace.report(NO_REFLECTION_IN_CLASS_PATH.on(resolvedCall.getCall().getCallElement()))
+        context.trace.report(NO_REFLECTION_IN_CLASS_PATH.on(resolvedCall.call.getCallElement()))
     }
 }

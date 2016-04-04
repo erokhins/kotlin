@@ -19,7 +19,6 @@ package org.jetbrains.kotlin.resolve.calls
 import com.google.common.collect.Lists
 import com.google.common.collect.Sets
 import org.jetbrains.kotlin.builtins.ReflectionTypes
-import org.jetbrains.kotlin.builtins.isExtensionFunctionType
 import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.diagnostics.Errors.SUPER_CANT_BE_EXTENSION_RECEIVER
@@ -33,8 +32,6 @@ import org.jetbrains.kotlin.resolve.calls.callResolverUtil.ResolveArgumentsMode.
 import org.jetbrains.kotlin.resolve.calls.callResolverUtil.getEffectiveExpectedType
 import org.jetbrains.kotlin.resolve.calls.callResolverUtil.getErasedReceiverType
 import org.jetbrains.kotlin.resolve.calls.callResolverUtil.isInvokeCallOnExpressionWithBothReceivers
-import org.jetbrains.kotlin.resolve.calls.callUtil.isExplicitSafeCall
-import org.jetbrains.kotlin.resolve.calls.callUtil.isSafeCall
 import org.jetbrains.kotlin.resolve.calls.context.*
 import org.jetbrains.kotlin.resolve.calls.inference.SubstitutionFilteringInternalResolveAnnotations
 import org.jetbrains.kotlin.resolve.calls.model.ArgumentMatchStatus
@@ -204,7 +201,7 @@ class CandidateResolver(
 
     private fun CallCandidateResolutionContext<*>.checkExtensionReceiver() = checkAndReport {
         val receiverParameter = candidateCall.getCandidateDescriptor().extensionReceiverParameter
-        val receiverArgument = candidateCall.getExtensionReceiver()
+        val receiverArgument = candidateCall.extensionReceiver
         if (receiverParameter != null && receiverArgument == null) {
             tracing.missingReceiver(candidateCall.getTrace(), receiverParameter)
             OTHER_ERROR
@@ -225,7 +222,7 @@ class CandidateResolver(
 
     private fun CallCandidateResolutionContext<*>.checkDispatchReceiver() = checkAndReport {
         val candidateDescriptor = candidateDescriptor
-        val dispatchReceiver = candidateCall.getDispatchReceiver()
+        val dispatchReceiver = candidateCall.dispatchReceiver
         if (dispatchReceiver != null) {
             var nestedClass: ClassDescriptor? = null
             if (candidateDescriptor is ConstructorDescriptor
@@ -237,12 +234,12 @@ class CandidateResolver(
                 nestedClass = candidateDescriptor.getReferencedDescriptor()
             }
             if (nestedClass != null) {
-                tracing.nestedClassAccessViaInstanceReference(trace, nestedClass, candidateCall.getExplicitReceiverKind())
+                tracing.nestedClassAccessViaInstanceReference(trace, nestedClass, candidateCall.explicitReceiverKind)
                 return@checkAndReport OTHER_ERROR
             }
         }
 
-        assert((dispatchReceiver != null) == (candidateCall.getResultingDescriptor().dispatchReceiverParameter != null)) {
+        assert((dispatchReceiver != null) == (candidateCall.resultingDescriptor.dispatchReceiverParameter != null)) {
             "Shouldn't happen because of TaskPrioritizer: $candidateDescriptor"
         }
 
@@ -268,7 +265,7 @@ class CandidateResolver(
 
     private fun CallCandidateResolutionContext<*>.checkAbstractAndSuper() = check {
         val descriptor = candidateDescriptor
-        val expression = candidateCall.getCall().getCalleeExpression()
+        val expression = candidateCall.call.getCalleeExpression()
 
         if (expression is KtSimpleNameExpression) {
             // 'B' in 'class A: B()' is JetConstructorCalleeExpression
@@ -280,7 +277,7 @@ class CandidateResolver(
             }
         }
 
-        val superDispatchReceiver = getReceiverSuper(candidateCall.getDispatchReceiver())
+        val superDispatchReceiver = getReceiverSuper(candidateCall.dispatchReceiver)
         if (superDispatchReceiver != null) {
             if (descriptor is MemberDescriptor && descriptor.modality == Modality.ABSTRACT) {
                 tracing.abstractSuperCall(trace)
@@ -290,7 +287,7 @@ class CandidateResolver(
 
         // 'super' cannot be passed as an argument, for receiver arguments expression typer does not track this
         // See TaskPrioritizer for more
-        val superExtensionReceiver = getReceiverSuper(candidateCall.getExtensionReceiver())
+        val superExtensionReceiver = getReceiverSuper(candidateCall.extensionReceiver)
         if (superExtensionReceiver != null) {
             trace.report(SUPER_CANT_BE_EXTENSION_RECEIVER.on(superExtensionReceiver, superExtensionReceiver.getText()))
             candidateCall.addStatus(OTHER_ERROR)
@@ -344,7 +341,7 @@ class CandidateResolver(
         var resultStatus = SUCCESS
         val argumentTypes = Lists.newArrayList<KotlinType>()
         val infoForArguments = candidateCall.getDataFlowInfoForArguments()
-        for (entry in candidateCall.getValueArguments().entries) {
+        for (entry in candidateCall.valueArguments.entries) {
             val parameterDescriptor = entry.key
             val resolvedArgument = entry.value
 
@@ -422,7 +419,7 @@ class CandidateResolver(
             assert(callExtensionReceiver is ReceiverValue?) { "Expected ReceiverValue, got $callExtensionReceiver" }
             checkReceiverTypeError(extensionReceiver, callExtensionReceiver as ReceiverValue?)
         }
-        checkReceiverTypeError(dispatchReceiver, candidateCall.getDispatchReceiver())
+        checkReceiverTypeError(dispatchReceiver, candidateCall.dispatchReceiver)
     }
 
     private fun CallCandidateResolutionContext<*>.checkReceiverTypeError(
@@ -451,14 +448,14 @@ class CandidateResolver(
 
         resultStatus = resultStatus.combine(context.checkReceiver(
                 candidateCall,
-                candidateCall.getResultingDescriptor().extensionReceiverParameter,
+                candidateCall.resultingDescriptor.extensionReceiverParameter,
                 candidateCall.extensionReceiver,
                 candidateCall.explicitReceiverKind.isExtensionReceiver,
                 implicitInvokeCheck = false, isDispatchReceiver = false))
 
         resultStatus = resultStatus.combine(context.checkReceiver(candidateCall,
-                                                                  candidateCall.getResultingDescriptor().dispatchReceiverParameter, candidateCall.getDispatchReceiver(),
-                                                                  candidateCall.getExplicitReceiverKind().isDispatchReceiver,
+                                                                  candidateCall.resultingDescriptor.dispatchReceiverParameter, candidateCall.dispatchReceiver,
+                                                                  candidateCall.explicitReceiverKind.isDispatchReceiver,
                 // for the invocation 'foo(1)' where foo is a variable of function type we should mark 'foo' if there is unsafe call error
                                                                   implicitInvokeCheck = context.call is CallForImplicitInvoke,
                                                                   isDispatchReceiver = true))

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ class JsCallChecker(
     companion object {
         private val JS_PATTERN: DescriptorPredicate = PatternBuilder.pattern("kotlin.js.js(String)")
 
-        @JvmStatic fun <F : CallableDescriptor?> ResolvedCall<F>.isJsCall(): Boolean {
+        @JvmStatic fun <F : CallableDescriptor> ResolvedCall<F>.isJsCall(): Boolean {
             val descriptor = resultingDescriptor
             return descriptor is SimpleFunctionDescriptor && JS_PATTERN.apply(descriptor)
         }
