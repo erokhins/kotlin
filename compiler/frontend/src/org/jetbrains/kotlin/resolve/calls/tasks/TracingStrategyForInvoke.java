@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.psi.KtReferenceExpression;
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression;
 import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.kotlin.resolve.BindingTrace;
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal;
 import org.jetbrains.kotlin.types.KotlinType;
 
 import java.util.Collection;
@@ -58,7 +58,7 @@ public class TracingStrategyForInvoke extends AbstractTracingStrategy {
 
     @Override
     public <D extends CallableDescriptor> void bindReference(
-            @NotNull BindingTrace trace, @NotNull ResolvedCall<D> resolvedCall
+            @NotNull BindingTrace trace, @NotNull ResolvedCallInternal<D> resolvedCall
     ) {
         PsiElement callElement = call.getCallElement();
         if (callElement instanceof KtReferenceExpression) {
@@ -68,7 +68,7 @@ public class TracingStrategyForInvoke extends AbstractTracingStrategy {
 
     @Override
     public <D extends CallableDescriptor> void bindResolvedCall(
-            @NotNull BindingTrace trace, @NotNull ResolvedCall<D> resolvedCall
+            @NotNull BindingTrace trace, @NotNull ResolvedCallInternal<D> resolvedCall
     ) {
         if (reference instanceof KtSimpleNameExpression) return;
         trace.record(RESOLVED_CALL, call, resolvedCall);
@@ -81,7 +81,7 @@ public class TracingStrategyForInvoke extends AbstractTracingStrategy {
 
     @Override
     public <D extends CallableDescriptor> void unresolvedReferenceWrongReceiver(
-            @NotNull BindingTrace trace, @NotNull Collection<? extends ResolvedCall<D>> candidates
+            @NotNull BindingTrace trace, @NotNull Collection<? extends ResolvedCallInternal<D>> candidates
     ) {
         functionExpectedOrNoReceiverAllowed(trace);
     }

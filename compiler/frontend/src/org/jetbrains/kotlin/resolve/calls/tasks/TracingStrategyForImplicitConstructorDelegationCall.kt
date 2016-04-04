@@ -22,15 +22,11 @@ import org.jetbrains.kotlin.diagnostics.Errors.UNRESOLVED_REFERENCE
 import org.jetbrains.kotlin.diagnostics.Errors.UNRESOLVED_REFERENCE_WRONG_RECEIVER
 import org.jetbrains.kotlin.psi.Call
 import org.jetbrains.kotlin.psi.KtConstructorDelegationCall
-import org.jetbrains.kotlin.psi.KtLambdaArgument
-import org.jetbrains.kotlin.psi.KtSecondaryConstructor
-import org.jetbrains.kotlin.resolve.BindingContext.CALL
-import org.jetbrains.kotlin.resolve.BindingContext.REFERENCE_TARGET
-import org.jetbrains.kotlin.resolve.BindingContext.RESOLVED_CALL
+import org.jetbrains.kotlin.resolve.BindingContext.*
 import org.jetbrains.kotlin.resolve.BindingTrace
 import org.jetbrains.kotlin.resolve.calls.context.ResolutionContext
 import org.jetbrains.kotlin.resolve.calls.inference.InferenceErrorData
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.types.ErrorUtils
 import org.jetbrains.kotlin.types.KotlinType
@@ -46,7 +42,7 @@ class TracingStrategyForImplicitConstructorDelegationCall(
         trace.record(CALL, call.calleeExpression, call)
     }
 
-    override fun <D : CallableDescriptor> bindReference(trace: BindingTrace, resolvedCall: ResolvedCall<D>) {
+    override fun <D : CallableDescriptor> bindReference(trace: BindingTrace, resolvedCall: ResolvedCallInternal<D>) {
         val descriptor = resolvedCall.candidateDescriptor
         val storedReference = trace.get(REFERENCE_TARGET, calleeExpression)
         if (storedReference == null || !ErrorUtils.isError(descriptor)) {
@@ -54,7 +50,7 @@ class TracingStrategyForImplicitConstructorDelegationCall(
         }
     }
 
-    override fun <D : CallableDescriptor> bindResolvedCall(trace: BindingTrace, resolvedCall: ResolvedCall<D>) {
+    override fun <D : CallableDescriptor> bindResolvedCall(trace: BindingTrace, resolvedCall: ResolvedCallInternal<D>) {
         trace.record(RESOLVED_CALL, call, resolvedCall)
     }
 
@@ -62,7 +58,7 @@ class TracingStrategyForImplicitConstructorDelegationCall(
         trace.report(UNRESOLVED_REFERENCE.on(calleeExpression!!, calleeExpression))
     }
 
-    override fun <D : CallableDescriptor> unresolvedReferenceWrongReceiver(trace: BindingTrace, candidates: Collection<ResolvedCall<D>>) {
+    override fun <D : CallableDescriptor> unresolvedReferenceWrongReceiver(trace: BindingTrace, candidates: MutableCollection<out ResolvedCallInternal<D>>) {
         trace.report(UNRESOLVED_REFERENCE_WRONG_RECEIVER.on(reference, candidates))
     }
 
@@ -70,11 +66,11 @@ class TracingStrategyForImplicitConstructorDelegationCall(
         reportError(trace)
     }
 
-    override fun <D : CallableDescriptor?> ambiguity(trace: BindingTrace, descriptors: MutableCollection<out ResolvedCall<D>>) {
+    override fun <D : CallableDescriptor?> ambiguity(trace: BindingTrace, descriptors: MutableCollection<out ResolvedCallInternal<D>>) {
         reportError(trace)
     }
 
-    override fun <D : CallableDescriptor?> noneApplicable(trace: BindingTrace, descriptors: MutableCollection<out ResolvedCall<D>>) {
+    override fun <D : CallableDescriptor?> noneApplicable(trace: BindingTrace, descriptors: MutableCollection<out ResolvedCallInternal<D>>) {
         reportError(trace)
     }
 
@@ -92,7 +88,7 @@ class TracingStrategyForImplicitConstructorDelegationCall(
 
     // Underlying methods should not be called because such errors are impossible
     // when resolving delegation call
-    override fun <D : CallableDescriptor?> cannotCompleteResolve(trace: BindingTrace, descriptors: MutableCollection<out ResolvedCall<D>>) {
+    override fun <D : CallableDescriptor?> cannotCompleteResolve(trace: BindingTrace, descriptors: MutableCollection<out ResolvedCallInternal<D>>) {
         unexpectedError("cannotCompleteResolve")
     }
 

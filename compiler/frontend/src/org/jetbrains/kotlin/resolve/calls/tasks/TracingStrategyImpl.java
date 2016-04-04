@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.descriptors.DeclarationDescriptor;
 import org.jetbrains.kotlin.psi.Call;
 import org.jetbrains.kotlin.psi.KtReferenceExpression;
 import org.jetbrains.kotlin.resolve.BindingTrace;
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal;
 import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionResolvedCall;
 import org.jetbrains.kotlin.resolve.calls.util.FakeCallableDescriptorForObject;
 import org.jetbrains.kotlin.types.ErrorUtils;
@@ -52,7 +52,7 @@ public class TracingStrategyImpl extends AbstractTracingStrategy {
     }
 
     @Override
-    public <D extends CallableDescriptor> void bindReference(@NotNull BindingTrace trace, @NotNull ResolvedCall<D> resolvedCall) {
+    public <D extends CallableDescriptor> void bindReference(@NotNull BindingTrace trace, @NotNull ResolvedCallInternal<D> resolvedCall) {
         DeclarationDescriptor descriptor = resolvedCall.getCandidateDescriptor();
         if (resolvedCall instanceof VariableAsFunctionResolvedCall) {
             descriptor = ((VariableAsFunctionResolvedCall) resolvedCall).getVariableCall().getCandidateDescriptor();
@@ -71,7 +71,7 @@ public class TracingStrategyImpl extends AbstractTracingStrategy {
     }
 
     @Override
-    public <D extends CallableDescriptor> void bindResolvedCall(@NotNull BindingTrace trace, @NotNull ResolvedCall<D> resolvedCall) {
+    public <D extends CallableDescriptor> void bindResolvedCall(@NotNull BindingTrace trace, @NotNull ResolvedCallInternal<D> resolvedCall) {
         trace.record(RESOLVED_CALL, call, resolvedCall);
     }
 
@@ -81,7 +81,7 @@ public class TracingStrategyImpl extends AbstractTracingStrategy {
     }
 
     @Override
-    public <D extends CallableDescriptor> void unresolvedReferenceWrongReceiver(@NotNull BindingTrace trace, @NotNull Collection<? extends ResolvedCall<D>> candidates) {
+    public <D extends CallableDescriptor> void unresolvedReferenceWrongReceiver(@NotNull BindingTrace trace, @NotNull Collection<? extends ResolvedCallInternal<D>> candidates) {
         trace.report(UNRESOLVED_REFERENCE_WRONG_RECEIVER.on(reference, candidates));
     }
 }

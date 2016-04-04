@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,6 +45,7 @@ import org.jetbrains.kotlin.psi.KtFile;
 import org.jetbrains.kotlin.resolve.*;
 import org.jetbrains.kotlin.resolve.calls.model.MutableResolvedCall;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal;
 import org.jetbrains.kotlin.resolve.diagnostics.Diagnostics;
 import org.jetbrains.kotlin.resolve.jvm.TopDownAnalyzerFacadeForJVM;
 import org.jetbrains.kotlin.resolve.jvm.platform.JvmPlatform;
@@ -390,10 +391,10 @@ public abstract class AbstractDiagnosticsTest extends BaseDiagnosticsTest {
 
     @SuppressWarnings({"unchecked", "ConstantConditions"})
     private static void checkResolvedCallsInDiagnostics(BindingContext bindingContext) {
-        Set<DiagnosticFactory1<PsiElement, Collection<? extends ResolvedCall<?>>>> diagnosticsStoringResolvedCalls1 = Sets.newHashSet(
+        Set<DiagnosticFactory1<PsiElement, Collection<? extends ResolvedCallInternal<?>>>> diagnosticsStoringResolvedCalls1 = Sets.newHashSet(
                 OVERLOAD_RESOLUTION_AMBIGUITY, NONE_APPLICABLE, CANNOT_COMPLETE_RESOLVE, UNRESOLVED_REFERENCE_WRONG_RECEIVER,
                 ASSIGN_OPERATOR_AMBIGUITY, ITERATOR_AMBIGUITY);
-        Set<DiagnosticFactory2<KtExpression, ? extends Comparable<? extends Comparable<?>>, Collection<? extends ResolvedCall<?>>>>
+        Set<DiagnosticFactory2<KtExpression, ? extends Comparable<? extends Comparable<?>>, Collection<? extends ResolvedCallInternal<?>>>>
                 diagnosticsStoringResolvedCalls2 = Sets.newHashSet(
                 COMPONENT_FUNCTION_AMBIGUITY, DELEGATE_SPECIAL_FUNCTION_AMBIGUITY, DELEGATE_SPECIAL_FUNCTION_NONE_APPLICABLE);
         Diagnostics diagnostics = bindingContext.getDiagnostics();
