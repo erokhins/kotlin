@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import org.jetbrains.kotlin.idea.util.IdeDescriptorRenderers
 import org.jetbrains.kotlin.idea.util.ShortenReferences
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.callUtil.getParentResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getParentResolvedCallInternal
 import org.jetbrains.kotlin.resolve.calls.callUtil.getValueArgumentForExpression
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.TypeUtils
@@ -73,7 +73,7 @@ class ChangeFunctionLiteralReturnTypeFix(
                 null
         }
 
-        val resolvedCall = functionLiteralExpression.getParentResolvedCall(context, true)
+        val resolvedCall = functionLiteralExpression.getParentResolvedCallInternal(context, true)
         if (resolvedCall != null) {
             val valueArgument = resolvedCall.call.getValueArgumentForExpression(functionLiteralExpression)
             val correspondingParameter = QuickFixUtil.getParameterDeclarationForValueArgument(resolvedCall, valueArgument)

@@ -36,7 +36,7 @@ import org.jetbrains.kotlin.resolve.calls.CallResolver
 import org.jetbrains.kotlin.resolve.calls.context.BasicCallResolutionContext
 import org.jetbrains.kotlin.resolve.calls.context.CheckArgumentTypesMode
 import org.jetbrains.kotlin.resolve.calls.context.ContextDependency
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal
 import org.jetbrains.kotlin.resolve.calls.resolvedCallUtil.getDispatchReceiverWithSmartCast
 import org.jetbrains.kotlin.resolve.calls.results.ResolutionStatus
 import org.jetbrains.kotlin.resolve.scopes.LexicalScope
@@ -109,7 +109,7 @@ fun Call.resolveCandidates(
         expectedType: KotlinType = expectedType(this, bindingContext),
         filterOutWrongReceiver: Boolean = true,
         filterOutByVisibility: Boolean = true
-): Collection<ResolvedCall<FunctionDescriptor>> {
+): Collection<ResolvedCallInternal<FunctionDescriptor>> {
     val resolutionScope = callElement.getResolutionScope(bindingContext, resolutionFacade)
     val inDescriptor = resolutionScope.ownerDescriptor
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils;
 import org.jetbrains.kotlin.resolve.calls.callUtil.CallUtilKt;
 import org.jetbrains.kotlin.resolve.calls.model.ArgumentMapping;
 import org.jetbrains.kotlin.resolve.calls.model.ArgumentMatch;
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal;
 
 public class InlineUtil {
     public static boolean isInlineLambdaParameter(@NotNull ParameterDescriptor valueParameterOrReceiver) {
@@ -114,7 +114,7 @@ public class InlineUtil {
         KtExpression call = KtPsiUtil.getParentCallIfPresent(argument);
         if (call == null) return null;
 
-        ResolvedCall<?> resolvedCall = CallUtilKt.getResolvedCall(call, bindingContext);
+        ResolvedCallInternal<?> resolvedCall = CallUtilKt.getResolvedCallInternal(call, bindingContext);
         if (resolvedCall == null) return null;
 
         CallableDescriptor descriptor = resolvedCall.getResultingDescriptor();

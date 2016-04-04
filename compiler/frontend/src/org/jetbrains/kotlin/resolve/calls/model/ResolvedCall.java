@@ -22,7 +22,6 @@ import org.jetbrains.kotlin.descriptors.CallableDescriptor;
 import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor;
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor;
 import org.jetbrains.kotlin.psi.Call;
-import org.jetbrains.kotlin.psi.ValueArgument;
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind;
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue;
 import org.jetbrains.kotlin.types.KotlinType;
@@ -64,12 +63,7 @@ public interface ResolvedCall<D extends CallableDescriptor> {
     @Nullable
     List<ResolvedValueArgument> getValueArgumentsByIndex();
 
-    /** The result of mapping the value argument to a parameter */
-    @NotNull
-    ArgumentMapping getArgumentMapping(@NotNull ValueArgument valueArgument);
-
     /** What's substituted for type parameters */
     @NotNull
     Map<TypeParameterDescriptor, KotlinType> getTypeArguments();
-
 }

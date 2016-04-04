@@ -26,9 +26,10 @@ import org.jetbrains.kotlin.renderer.ClassifierNamePolicy
 import org.jetbrains.kotlin.renderer.DescriptorRenderer
 import org.jetbrains.kotlin.renderer.RenderingFormat
 import org.jetbrains.kotlin.resolve.DescriptorUtils
-import org.jetbrains.kotlin.resolve.calls.callUtil.hasTypeMismatchErrorOnParameter
-import org.jetbrains.kotlin.resolve.calls.callUtil.hasUnmappedArguments
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.ArgumentMatch
+import org.jetbrains.kotlin.resolve.calls.model.ArgumentMatchStatus
+import org.jetbrains.kotlin.resolve.calls.model.ArgumentUnmapped
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal
 import org.jetbrains.kotlin.resolve.descriptorUtil.hasDefaultValue
 import org.jetbrains.kotlin.types.ErrorUtils
 
@@ -48,13 +49,23 @@ private val HTML_FOR_UNINFERRED_TYPE_PARAMS: DescriptorRenderer = DescriptorRend
     textFormat = RenderingFormat.HTML
 }
 
-fun renderResolvedCall(resolvedCall: ResolvedCall<*>, context: RenderingContext): String {
+fun renderResolvedCall(resolvedCall: ResolvedCallInternal<*>, context: RenderingContext): String {
     val typeRenderer = SmartTypeRenderer(HTML_FOR_UNINFERRED_TYPE_PARAMS)
     val descriptorRenderer = HTML_FOR_UNINFERRED_TYPE_PARAMS.asRenderer()
     val stringBuilder = StringBuilder("")
     val indent = "&nbsp;&nbsp;"
 
     fun append(any: Any): StringBuilder = stringBuilder.append(any)
+
+    fun hasTypeMismatchErrorOnParameter(parameter: ValueParameterDescriptor): Boolean {
+        val resolvedValueArgument = resolvedCall.valueArguments[parameter]
+        if (resolvedValueArgument == null) return true
+
+        return resolvedValueArgument.arguments.any { argument ->
+            val argumentMapping = resolvedCall.getArgumentMapping(argument)
+            argumentMapping is ArgumentMatch && argumentMapping.status == ArgumentMatchStatus.TYPE_MISMATCH
+        }
+    }
 
     fun renderParameter(parameter: ValueParameterDescriptor): String {
         val varargElementType = parameter.varargElementType
@@ -63,7 +74,7 @@ fun renderResolvedCall(resolvedCall: ResolvedCall<*>, context: RenderingContext)
                 (if (varargElementType != null) "<b>vararg</b> " else "") +
                 typeRenderer.render(parameterType, context) +
                 if (parameter.hasDefaultValue()) " = ..." else ""
-        if (resolvedCall.hasTypeMismatchErrorOnParameter(parameter)) {
+        if (hasTypeMismatchErrorOnParameter(parameter)) {
             return renderError(renderedParameter)
         }
         return renderedParameter
@@ -97,6 +108,10 @@ fun renderResolvedCall(resolvedCall: ResolvedCall<*>, context: RenderingContext)
         }
     }
 
+    fun hasUnmappedArguments(): Boolean {
+        return resolvedCall.call.valueArguments.any { argument -> resolvedCall.getArgumentMapping(argument!!) == ArgumentUnmapped }
+    }
+
     val resultingDescriptor = resolvedCall.resultingDescriptor
     val receiverParameter = resultingDescriptor.extensionReceiverParameter
     if (receiverParameter != null) {
@@ -104,7 +119,7 @@ fun renderResolvedCall(resolvedCall: ResolvedCall<*>, context: RenderingContext)
     }
     append(HtmlEscapers.htmlEscaper().escape(resultingDescriptor.name.asString())).append("(")
     append(resultingDescriptor.valueParameters.map { parameter -> renderParameter(parameter) }.joinToString())
-    append(if (resolvedCall.hasUnmappedArguments()) renderError(")") else ")")
+    append(if (hasUnmappedArguments()) renderError(")") else ")")
 
     if (!resolvedCall.candidateDescriptor.typeParameters.isEmpty()) {
         appendTypeParametersSubstitution()

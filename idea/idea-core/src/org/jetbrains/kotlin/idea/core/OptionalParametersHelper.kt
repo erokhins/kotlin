@@ -66,7 +66,7 @@ object OptionalParametersHelper {
         return argumentsToDrop
     }
 
-    private fun ValueArgument.matchesDefault(resolvedCall: ResolvedCall<out CallableDescriptor>, parameterToDefaultValue: Map<ValueParameterDescriptor, DefaultValue>): Boolean {
+    private fun ValueArgument.matchesDefault(resolvedCall: ResolvedCallInternal<out CallableDescriptor>, parameterToDefaultValue: Map<ValueParameterDescriptor, DefaultValue>): Boolean {
         val parameter = resolvedCall.getParameterForArgument(this) ?: return false
         val defaultValue = parameterToDefaultValue[parameter] ?: return false
         val expression = defaultValue.substituteArguments(resolvedCall)

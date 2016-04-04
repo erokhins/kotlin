@@ -24,7 +24,6 @@ import com.intellij.psi.PsiParameterList
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.tree.TokenSet
-import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.diagnostics.DiagnosticSink
 import org.jetbrains.kotlin.diagnostics.Errors
@@ -34,11 +33,10 @@ import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.stubs.KotlinClassOrObjectStub
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCallInternal
 import org.jetbrains.kotlin.resolve.calls.model.ArgumentMatch
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
 import java.util.*
-import kotlin.text.Regex
 
 // NOTE: in this file we collect only Kotlin-specific methods working with PSI and not modifying it
 
@@ -384,7 +382,7 @@ fun KtNamedDeclaration.getValueParameterList(): KtParameterList? {
 
 fun KtLambdaArgument.getLambdaArgumentName(bindingContext: BindingContext): Name? {
     val callExpression = parent as KtCallExpression
-    val resolvedCall = callExpression.getResolvedCall(bindingContext)
+    val resolvedCall = callExpression.getResolvedCallInternal(bindingContext)
     return (resolvedCall?.getArgumentMapping(this) as? ArgumentMatch)?.valueParameter?.name
 }
 

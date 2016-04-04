@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.idea.conversion.copy.end
 import org.jetbrains.kotlin.idea.conversion.copy.start
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCallInternal
 import org.jetbrains.kotlin.resolve.calls.model.ArgumentMatch
 import org.jetbrains.kotlin.resolve.calls.model.ArgumentMatchStatus
 import org.jetbrains.kotlin.resolve.calls.model.VarargValueArgument
@@ -64,7 +64,7 @@ class AddNameToArgumentIntention
         if (argument != argumentList.arguments.last { !it.isNamed() }) return null
 
         val callExpr = argumentList.parent as? KtCallElement ?: return null
-        val resolvedCall = callExpr.getResolvedCall(callExpr.analyze(BodyResolveMode.PARTIAL)) ?: return null
+        val resolvedCall = callExpr.getResolvedCallInternal(callExpr.analyze(BodyResolveMode.PARTIAL)) ?: return null
         val argumentMatch = resolvedCall.getArgumentMapping(argument) as? ArgumentMatch ?: return null
         if (argumentMatch.status != ArgumentMatchStatus.SUCCESS) return null
 

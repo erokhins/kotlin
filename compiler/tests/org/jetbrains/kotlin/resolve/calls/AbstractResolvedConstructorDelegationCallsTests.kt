@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,26 +16,25 @@
 
 package org.jetbrains.kotlin.resolve.calls
 
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.psi.KtFile
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
-import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
-import org.jetbrains.kotlin.psi.debugText.getDebugText
-import org.jetbrains.kotlin.resolve.calls.callUtil.getParentResolvedCall
+import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.callUtil.getParentResolvedCallInternal
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal
 
 
 abstract class AbstractResolvedConstructorDelegationCallsTests : AbstractResolvedCallsTest() {
     override fun buildCachedCall(
             bindingContext: BindingContext, jetFile: KtFile, text: String
-    ): Pair<PsiElement?, ResolvedCall<out CallableDescriptor>?> {
+    ): Pair<PsiElement?, ResolvedCallInternal<out CallableDescriptor>?> {
         val element = jetFile.findElementAt(text.indexOf("<caret>"))
         val constructor = element?.getNonStrictParentOfType<KtSecondaryConstructor>()!!
         val delegationCall = constructor.getDelegationCall()
 
-        val cachedCall = delegationCall.getParentResolvedCall(bindingContext, strict = false)
+        val cachedCall = delegationCall.getParentResolvedCallInternal(bindingContext, strict = false)
         return Pair(delegationCall, cachedCall)
     }
 }

@@ -44,9 +44,11 @@ import org.jetbrains.kotlin.resolve.BindingContextUtils
 import org.jetbrains.kotlin.resolve.BindingTrace
 import org.jetbrains.kotlin.resolve.CompileTimeConstantUtils
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCallInternal
 import org.jetbrains.kotlin.resolve.calls.model.ArgumentMatch
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
-import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal
+import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionMutableResolvedCall
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.resolve.constants.evaluate.ConstantExpressionEvaluator
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
@@ -262,7 +264,7 @@ class ControlFlowProcessor(private val trace: BindingTrace) {
 
         override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
             val resolvedCall = expression.getResolvedCall(trace.bindingContext)
-            if (resolvedCall is VariableAsFunctionResolvedCall) {
+            if (resolvedCall is VariableAsFunctionMutableResolvedCall) {
                 generateCall(resolvedCall.variableCall)
             }
             else if (!generateCall(expression) && expression.parent !is KtCallExpression) {
@@ -292,7 +294,7 @@ class ControlFlowProcessor(private val trace: BindingTrace) {
                 visitAssignment(left, getDeferredValue(right), expression)
             }
             else if (OperatorConventions.ASSIGNMENT_OPERATIONS.containsKey(operationType)) {
-                val resolvedCall = expression.getResolvedCall(trace.bindingContext)
+                val resolvedCall = expression.getResolvedCallInternal(trace.bindingContext)
                 if (resolvedCall != null) {
                     val rhsValue = generateCall(resolvedCall).outputValue
                     val assignMethodName = OperatorConventions.getNameForOperationSymbol(expression.operationToken as KtToken)
@@ -407,7 +409,7 @@ class ControlFlowProcessor(private val trace: BindingTrace) {
                 rhsDeferredValue: () -> PseudoValue?,
                 parentExpression: KtExpression
         ) {
-            val setResolvedCall = trace.get(BindingContext.INDEXED_LVALUE_SET, lhs)
+            val setResolvedCall = trace.get(BindingContext.INDEXED_LVALUE_SET, lhs) as ResolvedCallInternal?
 
             if (setResolvedCall == null) {
                 generateArrayAccess(lhs, null)
@@ -439,7 +441,7 @@ class ControlFlowProcessor(private val trace: BindingTrace) {
         */
         private fun getArraySetterArguments(
                 rhsDeferredValue: () -> PseudoValue?,
-                setResolvedCall: ResolvedCall<FunctionDescriptor>
+                setResolvedCall: ResolvedCallInternal<FunctionDescriptor>
         ): SmartFMap<PseudoValue, ValueParameterDescriptor> {
             val valueArguments = setResolvedCall.resultingDescriptor.valueParameters.flatMapTo(
                     ArrayList<ValueArgument>()
@@ -465,7 +467,7 @@ class ControlFlowProcessor(private val trace: BindingTrace) {
             return argumentValues
         }
 
-        private fun generateArrayAccess(arrayAccessExpression: KtArrayAccessExpression, resolvedCall: ResolvedCall<*>?) {
+        private fun generateArrayAccess(arrayAccessExpression: KtArrayAccessExpression, resolvedCall: ResolvedCallInternal<*>?) {
             if (builder.getBoundValue(arrayAccessExpression) != null) return
             mark(arrayAccessExpression)
             if (!checkAndGenerateCall(resolvedCall)) {
@@ -505,7 +507,7 @@ class ControlFlowProcessor(private val trace: BindingTrace) {
             }
 
             val incrementOrDecrement = isIncrementOrDecrement(operationType)
-            val resolvedCall = expression.getResolvedCall(trace.bindingContext)
+            val resolvedCall = expression.getResolvedCallInternal(trace.bindingContext)
 
             val rhsValue: PseudoValue?
             if (resolvedCall != null) {
@@ -1131,7 +1133,7 @@ class ControlFlowProcessor(private val trace: BindingTrace) {
         }
 
         override fun visitArrayAccessExpression(expression: KtArrayAccessExpression) {
-            generateArrayAccess(expression, trace.get(BindingContext.INDEXED_LVALUE_GET, expression))
+            generateArrayAccess(expression, trace.get(BindingContext.INDEXED_LVALUE_GET, expression) as ResolvedCallInternal<*>?)
         }
 
         override fun visitIsExpression(expression: KtIsExpression) {
@@ -1353,16 +1355,16 @@ class ControlFlowProcessor(private val trace: BindingTrace) {
         }
 
         private fun generateCall(callElement: KtElement): Boolean {
-            return checkAndGenerateCall(callElement.getResolvedCall(trace.bindingContext))
+            return checkAndGenerateCall(callElement.getResolvedCallInternal(trace.bindingContext))
         }
 
-        private fun checkAndGenerateCall(resolvedCall: ResolvedCall<*>?): Boolean {
+        private fun checkAndGenerateCall(resolvedCall: ResolvedCallInternal<*>?): Boolean {
             if (resolvedCall == null) return false
             generateCall(resolvedCall)
             return true
         }
 
-        private fun generateCall(resolvedCall: ResolvedCall<*>): InstructionWithValue {
+        private fun generateCall(resolvedCall: ResolvedCallInternal<*>): InstructionWithValue {
             val callElement = resolvedCall.call.callElement
 
             val receivers = getReceiverValues(resolvedCall)
@@ -1395,7 +1397,7 @@ class ControlFlowProcessor(private val trace: BindingTrace) {
         private fun getReceiverValues(resolvedCall: ResolvedCall<*>): Map<PseudoValue, ReceiverValue> {
             var varCallResult: PseudoValue? = null
             var explicitReceiver: ReceiverValue? = null
-            if (resolvedCall is VariableAsFunctionResolvedCall) {
+            if (resolvedCall is VariableAsFunctionMutableResolvedCall) {
                 varCallResult = generateCall(resolvedCall.variableCall).outputValue
 
                 val kind = resolvedCall.explicitReceiverKind

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.idea.util.getResolutionScope
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getTargetFunction
-import org.jetbrains.kotlin.resolve.calls.callUtil.getParentResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getParentResolvedCallInternal
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.callUtil.getValueArgumentForExpression
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
@@ -161,7 +161,7 @@ class QuickFixFactoryForTypeMismatchError : KotlinIntentionActionsFactory() {
             }
         }
 
-        val resolvedCall = diagnosticElement.getParentResolvedCall(context, true)
+        val resolvedCall = diagnosticElement.getParentResolvedCallInternal(context, true)
         if (resolvedCall != null) {
             // to fix 'type mismatch' on 'if' branches
             // todo: the same with 'when'

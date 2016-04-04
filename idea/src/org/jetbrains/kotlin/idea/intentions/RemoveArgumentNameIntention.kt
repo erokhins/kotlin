@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.KtValueArgumentList
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCallInternal
 import org.jetbrains.kotlin.resolve.calls.model.ArgumentMatch
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 
@@ -39,7 +39,7 @@ class RemoveArgumentNameIntention
         if (arguments.takeWhile { it != element }.any { it.isNamed() }) return null
 
         val callExpr = argumentList.parent as? KtCallElement ?: return null
-        val resolvedCall = callExpr.getResolvedCall(callExpr.analyze(BodyResolveMode.PARTIAL)) ?: return null
+        val resolvedCall = callExpr.getResolvedCallInternal(callExpr.analyze(BodyResolveMode.PARTIAL)) ?: return null
         val argumentMatch = resolvedCall.getArgumentMapping(element) as? ArgumentMatch ?: return null
         if (argumentMatch.valueParameter.index != arguments.indexOf(element)) return null
 

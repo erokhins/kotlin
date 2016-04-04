@@ -22,7 +22,6 @@ import org.jetbrains.kotlin.descriptors.CallableDescriptor;
 import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor;
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor;
 import org.jetbrains.kotlin.psi.Call;
-import org.jetbrains.kotlin.psi.ValueArgument;
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind;
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue;
 import org.jetbrains.kotlin.types.KotlinType;
@@ -77,12 +76,6 @@ public abstract class DelegatingResolvedCall<D extends CallableDescriptor> imple
     @Override
     public Map<ValueParameterDescriptor, ResolvedValueArgument> getValueArguments() {
         return resolvedCall.getValueArguments();
-    }
-
-    @NotNull
-    @Override
-    public ArgumentMapping getArgumentMapping(@NotNull ValueArgument valueArgument) {
-        return resolvedCall.getArgumentMapping(valueArgument);
     }
 
     @Nullable

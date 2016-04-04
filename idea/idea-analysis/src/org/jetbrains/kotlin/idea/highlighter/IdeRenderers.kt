@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.renderer.DescriptorRenderer
 import org.jetbrains.kotlin.resolve.MemberComparator
 import org.jetbrains.kotlin.resolve.calls.inference.InferenceErrorData
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.ConflictingJvmDeclarationsData
 import kotlin.comparisons.compareBy
 
@@ -40,7 +41,7 @@ object IdeRenderers {
     @JvmField val HTML_RENDER_TYPE = SmartTypeRenderer(DescriptorRenderer.HTML)
 
     @JvmField val HTML_NONE_APPLICABLE_CALLS = Renderer {
-        calls: Collection<ResolvedCall<*>> ->
+        calls: Collection<ResolvedCallInternal<*>> ->
         val context = RenderingContext.Impl(calls.map { it.resultingDescriptor })
         val comparator = compareBy(MemberComparator.INSTANCE) { c: ResolvedCall<*> -> c.resultingDescriptor }
         calls

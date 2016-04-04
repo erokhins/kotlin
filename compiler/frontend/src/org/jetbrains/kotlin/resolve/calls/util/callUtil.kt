@@ -35,33 +35,10 @@ import org.jetbrains.kotlin.utils.sure
 
 // resolved call
 
-fun <D : CallableDescriptor> ResolvedCall<D>.noErrorsInValueArguments(): Boolean {
-    return call.valueArguments.all { argument -> !getArgumentMapping(argument!!).isError() }
-}
-
-fun <D : CallableDescriptor> ResolvedCall<D>.hasUnmappedArguments(): Boolean {
-    return call.valueArguments.any { argument -> getArgumentMapping(argument!!) == ArgumentUnmapped }
-}
-
-fun <D : CallableDescriptor> ResolvedCall<D>.hasUnmappedParameters(): Boolean {
-    val parameterToArgumentMap = valueArguments
-    return !parameterToArgumentMap.keys.containsAll(resultingDescriptor.valueParameters)
-}
-
-fun <D : CallableDescriptor> ResolvedCall<D>.allArgumentsMapped()
+fun <D : CallableDescriptor> ResolvedCallInternal<D>.allArgumentsMapped()
         = call.valueArguments.all { argument -> getArgumentMapping(argument) is ArgumentMatch }
 
-fun <D : CallableDescriptor> ResolvedCall<D>.hasTypeMismatchErrorOnParameter(parameter: ValueParameterDescriptor): Boolean {
-    val resolvedValueArgument = valueArguments[parameter]
-    if (resolvedValueArgument == null) return true
-
-    return resolvedValueArgument.arguments.any { argument ->
-        val argumentMapping = getArgumentMapping(argument)
-        argumentMapping is ArgumentMatch && argumentMapping.status == ArgumentMatchStatus.TYPE_MISMATCH
-    }
-}
-
-fun <D : CallableDescriptor> ResolvedCall<D>.getParameterForArgument(valueArgument: ValueArgument?): ValueParameterDescriptor? {
+fun <D : CallableDescriptor> ResolvedCallInternal<D>.getParameterForArgument(valueArgument: ValueArgument?): ValueParameterDescriptor? {
     return (valueArgument?.let { getArgumentMapping(it) } as? ArgumentMatch)?.valueParameter
 }
 
@@ -180,6 +157,10 @@ fun KtElement?.getResolvedCallInternal(context: BindingContext): ResolvedCallInt
 
 fun KtElement?.getParentResolvedCall(context: BindingContext, strict: Boolean = true): ResolvedCall<out CallableDescriptor>? {
     return this?.getParentCall(context, strict)?.getResolvedCall(context)
+}
+
+fun KtElement?.getParentResolvedCallInternal(context: BindingContext, strict: Boolean = true): ResolvedCallInternal<out CallableDescriptor>? {
+    return this?.getParentCall(context, strict)?.getResolvedCall(context)?.let { it as ResolvedCallInternal<out CallableDescriptor> } // todo add assert message
 }
 
 fun KtElement.getCallWithAssert(context: BindingContext): Call {

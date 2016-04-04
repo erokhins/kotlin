@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,9 +43,10 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPlain
 import org.jetbrains.kotlin.resolve.calls.callUtil.getParentResolvedCall
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCallInternal
 import org.jetbrains.kotlin.resolve.calls.model.ArgumentMatch
 import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 
@@ -89,8 +90,8 @@ private fun KtExpression.getBundleNameByContext(): String? {
             ?.getBundleNameByAnnotation()
 }
 
-private fun KtAnnotationEntry.getPropertyKeyResolvedCall(): ResolvedCall<*>? {
-    val resolvedCall = getResolvedCall(analyze(BodyResolveMode.PARTIAL)) ?: return null
+private fun KtAnnotationEntry.getPropertyKeyResolvedCall(): ResolvedCallInternal<*>? {
+    val resolvedCall = getResolvedCallInternal(analyze(BodyResolveMode.PARTIAL)) ?: return null
     val klass = (resolvedCall.resultingDescriptor as? ConstructorDescriptor)?.containingDeclaration ?: return null
     if (klass.kind != ClassKind.ANNOTATION_CLASS || klass.importableFqName != PROPERTY_KEY) return null
     return resolvedCall

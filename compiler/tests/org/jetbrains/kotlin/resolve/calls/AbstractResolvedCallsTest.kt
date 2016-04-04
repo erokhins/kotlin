@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,11 +29,11 @@ import org.jetbrains.kotlin.psi.ValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.renderer.DescriptorRenderer
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.callUtil.getParentResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getParentResolvedCallInternal
 import org.jetbrains.kotlin.resolve.calls.model.ArgumentMapping
 import org.jetbrains.kotlin.resolve.calls.model.ArgumentMatch
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
-import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal
+import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionMutableResolvedCall
 import org.jetbrains.kotlin.resolve.lazy.JvmResolveUtil
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExtensionReceiver
@@ -55,7 +55,7 @@ abstract class AbstractResolvedCallsTest : KotlinTestWithEnvironment() {
 
         val (element, cachedCall) = buildCachedCall(bindingContext, jetFile, text)
 
-        val resolvedCall = if (cachedCall !is VariableAsFunctionResolvedCall) cachedCall
+        val resolvedCall = if (cachedCall !is VariableAsFunctionMutableResolvedCall) cachedCall
             else if ("(" == element?.text) cachedCall.functionCall
             else cachedCall.variableCall
 
@@ -65,11 +65,11 @@ abstract class AbstractResolvedCallsTest : KotlinTestWithEnvironment() {
 
     open protected fun buildCachedCall(
             bindingContext: BindingContext, jetFile: KtFile, text: String
-    ): Pair<PsiElement?, ResolvedCall<out CallableDescriptor>?> {
+    ): Pair<PsiElement?, ResolvedCallInternal<out CallableDescriptor>?> {
         val element = jetFile.findElementAt(text.indexOf("<caret>"))!!
         val expression = element.getStrictParentOfType<KtExpression>()
 
-        val cachedCall = expression?.getParentResolvedCall(bindingContext, strict = false)
+        val cachedCall = expression?.getParentResolvedCallInternal(bindingContext, strict = false)
         return Pair(element, cachedCall)
     }
 
@@ -98,7 +98,7 @@ private fun DeclarationDescriptor.getText(): String = when (this) {
     else -> DescriptorRenderer.COMPACT_WITH_SHORT_TYPES.render(this)
 }
 
-private fun ResolvedCall<*>.renderToText(): String {
+private fun ResolvedCallInternal<*>.renderToText(): String {
     return buildString {
         appendln("Resolved call:")
         appendln()
