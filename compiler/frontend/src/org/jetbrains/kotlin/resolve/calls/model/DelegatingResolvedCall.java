@@ -26,7 +26,6 @@ import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind;
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue;
 import org.jetbrains.kotlin.types.KotlinType;
 
-import java.util.List;
 import java.util.Map;
 
 public abstract class DelegatingResolvedCall<D extends CallableDescriptor> implements ResolvedCall<D> {
@@ -70,12 +69,6 @@ public abstract class DelegatingResolvedCall<D extends CallableDescriptor> imple
     @Override
     public Map<ValueParameterDescriptor, ResolvedValueArgument> getValueArguments() {
         return resolvedCall.getValueArguments();
-    }
-
-    @Nullable
-    @Override
-    public List<ResolvedValueArgument> getValueArgumentsByIndex() {
-        return resolvedCall.getValueArgumentsByIndex();
     }
 
     @NotNull

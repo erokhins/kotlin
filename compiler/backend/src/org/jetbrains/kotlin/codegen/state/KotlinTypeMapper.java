@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,6 +61,7 @@ import org.jetbrains.kotlin.resolve.*;
 import org.jetbrains.kotlin.resolve.annotations.AnnotationUtilKt;
 import org.jetbrains.kotlin.resolve.calls.model.DefaultValueArgument;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallKt;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedValueArgument;
 import org.jetbrains.kotlin.resolve.descriptorUtil.DescriptorUtilsKt;
 import org.jetbrains.kotlin.resolve.jvm.AsmTypes;
@@ -1419,7 +1420,7 @@ public class KotlinTypeMapper {
             boolean hasOuter
     ) {
         ConstructorDescriptor superDescriptor = SamCodegenUtil.resolveSamAdapter(superCall.getResultingDescriptor());
-        List<ResolvedValueArgument> valueArguments = superCall.getValueArgumentsByIndex();
+        List<ResolvedValueArgument> valueArguments = ResolvedCallKt.getValueArgumentsByIndex(superCall);
         assert valueArguments != null : "Failed to arrange value arguments by index: " + superDescriptor;
 
         List<JvmMethodParameterSignature> parameters = mapSignatureSkipGeneric(superDescriptor).getValueParameters();

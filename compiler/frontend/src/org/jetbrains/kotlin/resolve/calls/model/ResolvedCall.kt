@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.psi.Call
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.types.KotlinType
+import java.util.*
 
 interface ResolvedCall<out D : CallableDescriptor> {
 
@@ -44,9 +45,28 @@ interface ResolvedCall<out D : CallableDescriptor> {
     /** Values (arguments) for value parameters  */
     val valueArguments: Map<ValueParameterDescriptor, ResolvedValueArgument>
 
-    /** Values (arguments) for value parameters indexed by parameter index  */
-    val valueArgumentsByIndex: List<ResolvedValueArgument>?
-
     /** What's substituted for type parameters  */
     val typeArguments: Map<TypeParameterDescriptor, KotlinType>
 }
+
+/** Values (arguments) for value parameters indexed by parameter index  */
+val <D: CallableDescriptor> ResolvedCall<D>.valueArgumentsByIndex: List<ResolvedValueArgument>?
+    get() {
+        val size = resultingDescriptor.valueParameters.size
+        val arguments = ArrayList<ResolvedValueArgument?>(size)
+        for (i in 0..size - 1) {
+            arguments.add(null)
+        }
+
+        for ((parameterDescriptor, value) in valueArguments) {
+            val oldValue = arguments.set(parameterDescriptor.index, value)
+            if (oldValue != null) {
+                return null
+            }
+        }
+
+        if (arguments.any { it == null }) return null
+
+        @Suppress("UNCHECKED_CAST")
+        return arguments as List<ResolvedValueArgument>
+    }

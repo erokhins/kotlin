@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import org.jetbrains.kotlin.psi.KtExpression;
 import org.jetbrains.kotlin.psi.ValueArgument;
 import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallKt;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedValueArgument;
 
 import java.util.*;
@@ -98,7 +99,7 @@ public class ArrayAccessTranslator extends AbstractTranslator implements AccessT
         ResolvedCall<FunctionDescriptor> resolvedCall =
                 BindingUtils.getResolvedCallForArrayAccess(bindingContext(), expression,  /*isGetter = */ false);
 
-        List<ResolvedValueArgument> arguments = resolvedCall.getValueArgumentsByIndex();
+        List<ResolvedValueArgument> arguments = ResolvedCallKt.getValueArgumentsByIndex(resolvedCall);
         if (arguments == null) {
             throw new IllegalStateException("Failed to arrange value arguments by index: " + resolvedCall.getResultingDescriptor());
         }

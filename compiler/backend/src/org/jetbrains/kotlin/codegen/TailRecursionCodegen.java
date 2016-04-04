@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,7 +69,7 @@ public class TailRecursionCodegen {
         assert fd instanceof FunctionDescriptor : "Resolved call doesn't refer to the function descriptor: " + fd;
         CallableMethod callable = (CallableMethod) codegen.resolveToCallable((FunctionDescriptor) fd, false, resolvedCall);
 
-        List<ResolvedValueArgument> arguments = resolvedCall.getValueArgumentsByIndex();
+        List<ResolvedValueArgument> arguments = ResolvedCallKt.getValueArgumentsByIndex(resolvedCall);
         if (arguments == null) {
             throw new IllegalStateException("Failed to arrange value arguments by index: " + fd);
         }

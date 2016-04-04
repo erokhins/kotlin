@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,11 +42,11 @@ import org.jetbrains.kotlin.resolve.DescriptorUtils;
 import org.jetbrains.kotlin.resolve.calls.callUtil.CallUtilKt;
 import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallKt;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedValueArgument;
 import org.jetbrains.kotlin.resolve.constants.ConstantValue;
 import org.jetbrains.kotlin.resolve.constants.EnumValue;
 import org.jetbrains.kotlin.resolve.constants.NullValue;
-import org.jetbrains.kotlin.synthetic.SamAdapterExtensionFunctionDescriptor;
 import org.jetbrains.kotlin.types.KotlinType;
 import org.jetbrains.org.objectweb.asm.Type;
 
@@ -406,7 +406,7 @@ class CodegenAnnotatingVisitor extends KtVisitorVoid {
         FunctionDescriptor original = SamCodegenUtil.getOriginalIfSamAdapter((FunctionDescriptor) descriptor);
         if (original == null) return;
 
-        List<ResolvedValueArgument> valueArguments = call.getValueArgumentsByIndex();
+        List<ResolvedValueArgument> valueArguments = ResolvedCallKt.getValueArgumentsByIndex(call);
         if (valueArguments == null) return;
 
         for (ValueParameterDescriptor valueParameter : original.getValueParameters()) {
@@ -434,7 +434,7 @@ class CodegenAnnotatingVisitor extends KtVisitorVoid {
         CallableDescriptor callableDescriptor = call.getResultingDescriptor();
         if (!(callableDescriptor.getOriginal() instanceof SamConstructorDescriptor)) return;
 
-        List<ResolvedValueArgument> valueArguments = call.getValueArgumentsByIndex();
+        List<ResolvedValueArgument> valueArguments = ResolvedCallKt.getValueArgumentsByIndex(call);
         if (valueArguments == null || valueArguments.size() != 1) return;
 
         ResolvedValueArgument valueArgument = valueArguments.get(0);

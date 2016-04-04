@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,8 +43,8 @@ import org.jetbrains.kotlin.codegen.intrinsics.IntrinsicMethod;
 import org.jetbrains.kotlin.codegen.intrinsics.IntrinsicMethods;
 import org.jetbrains.kotlin.codegen.intrinsics.IntrinsicPropertyGetter;
 import org.jetbrains.kotlin.codegen.pseudoInsns.PseudoInsnsKt;
-import org.jetbrains.kotlin.codegen.signature.JvmSignatureWriter;
 import org.jetbrains.kotlin.codegen.signature.BothSignatureWriter;
+import org.jetbrains.kotlin.codegen.signature.JvmSignatureWriter;
 import org.jetbrains.kotlin.codegen.state.GenerationState;
 import org.jetbrains.kotlin.codegen.state.KotlinTypeMapper;
 import org.jetbrains.kotlin.codegen.when.SwitchCodegen;
@@ -2449,7 +2449,7 @@ public class ExpressionCodegen extends KtVisitor<StackValue, StackValue> impleme
 
         callGenerator.putHiddenParams();
 
-        List<ResolvedValueArgument> valueArguments = resolvedCall.getValueArgumentsByIndex();
+        List<ResolvedValueArgument> valueArguments = ResolvedCallKt.getValueArgumentsByIndex(resolvedCall);
         assert valueArguments != null : "Failed to arrange value arguments by index: " + resolvedCall.getResultingDescriptor();
 
         DefaultCallArgs defaultArgs =
@@ -3571,7 +3571,7 @@ public class ExpressionCodegen extends KtVisitor<StackValue, StackValue> impleme
         ResolvedCall<FunctionDescriptor> resolvedCall = isGetter ? resolvedGetCall : resolvedSetCall;
         assert resolvedCall != null : "couldn't find resolved call: " + expression.getText();
 
-        List<ResolvedValueArgument> valueArguments = resolvedCall.getValueArgumentsByIndex();
+        List<ResolvedValueArgument> valueArguments = ResolvedCallKt.getValueArgumentsByIndex(resolvedCall);
         assert valueArguments != null : "Failed to arrange value arguments by index: " + operationDescriptor;
 
         if (!isGetter) {

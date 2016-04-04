@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,7 @@ import org.jetbrains.kotlin.js.translate.context.TranslationContext
 import org.jetbrains.kotlin.js.translate.general.AbstractTranslator
 import org.jetbrains.kotlin.js.translate.general.Translation
 import org.jetbrains.kotlin.js.translate.utils.JsDescriptorUtils
-import org.jetbrains.kotlin.js.translate.utils.TranslationUtils.assignmentToBackingField
-import org.jetbrains.kotlin.js.translate.utils.TranslationUtils.backingFieldReference
-import org.jetbrains.kotlin.js.translate.utils.TranslationUtils.translateFunctionAsEcma5PropertyDescriptor
+import org.jetbrains.kotlin.js.translate.utils.TranslationUtils.*
 import org.jetbrains.kotlin.js.translate.utils.jsAstUtils.addParameter
 import org.jetbrains.kotlin.js.translate.utils.jsAstUtils.addStatement
 import org.jetbrains.kotlin.psi.KtProperty
@@ -37,6 +35,7 @@ import org.jetbrains.kotlin.psi.KtPropertyAccessor
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.valueArgumentsByIndex
 import org.jetbrains.kotlin.resolve.descriptorUtil.isExtension
 
 /**

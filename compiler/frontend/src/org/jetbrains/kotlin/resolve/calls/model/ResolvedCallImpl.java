@@ -39,7 +39,10 @@ import org.jetbrains.kotlin.types.KotlinType;
 import org.jetbrains.kotlin.types.TypeProjection;
 import org.jetbrains.kotlin.types.TypeSubstitutor;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static org.jetbrains.kotlin.resolve.calls.results.ResolutionStatus.INCOMPLETE_TYPE_INFERENCE;
 import static org.jetbrains.kotlin.resolve.calls.results.ResolutionStatus.UNKNOWN_STATUS;
@@ -293,33 +296,6 @@ public class ResolvedCallImpl<D extends CallableDescriptor> implements MutableRe
     @NotNull
     public Map<ValueParameterDescriptor, ResolvedValueArgument> getValueArguments() {
         return valueArguments;
-    }
-
-    @Nullable
-    @Override
-    public List<ResolvedValueArgument> getValueArgumentsByIndex() {
-        List<ResolvedValueArgument> arguments = new ArrayList<ResolvedValueArgument>(candidateDescriptor.getValueParameters().size());
-        for (int i = 0; i < candidateDescriptor.getValueParameters().size(); ++i) {
-            arguments.add(null);
-        }
-        
-        for (Map.Entry<ValueParameterDescriptor, ResolvedValueArgument> entry : valueArguments.entrySet()) {
-            ValueParameterDescriptor parameterDescriptor = entry.getKey();
-            ResolvedValueArgument value = entry.getValue();
-            ResolvedValueArgument oldValue = arguments.set(parameterDescriptor.getIndex(), value);
-            if (oldValue != null) {
-                return null;
-            }
-        }
-
-        for (int i = 0; i < arguments.size(); i++) {
-            Object o = arguments.get(i);
-            if (o == null) {
-                return null;
-            }
-        }
-        
-        return arguments;
     }
 
     @Override

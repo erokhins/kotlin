@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,10 @@ import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue;
 import org.jetbrains.org.objectweb.asm.Type;
 import org.jetbrains.org.objectweb.asm.commons.InstructionAdapter;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FunctionReferenceGenerationStrategy extends FunctionGenerationStrategy.CodegenBased<FunctionDescriptor> {
     private final ResolvedCall<?> resolvedCall;
@@ -90,12 +93,6 @@ public class FunctionReferenceGenerationStrategy extends FunctionGenerationStrat
             @Override
             public ReceiverValue getDispatchReceiver() {
                 return dispatchReceiver;
-            }
-
-            @NotNull
-            @Override
-            public List<ResolvedValueArgument> getValueArgumentsByIndex() {
-                return new ArrayList<ResolvedValueArgument>(argumentMap.values());
             }
 
             @NotNull
