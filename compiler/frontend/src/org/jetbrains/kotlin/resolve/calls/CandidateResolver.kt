@@ -19,6 +19,7 @@ package org.jetbrains.kotlin.resolve.calls
 import com.google.common.collect.Lists
 import com.google.common.collect.Sets
 import org.jetbrains.kotlin.builtins.ReflectionTypes
+import org.jetbrains.kotlin.builtins.isExtensionFunctionType
 import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.diagnostics.Errors.SUPER_CANT_BE_EXTENSION_RECEIVER
@@ -32,6 +33,8 @@ import org.jetbrains.kotlin.resolve.calls.callResolverUtil.ResolveArgumentsMode.
 import org.jetbrains.kotlin.resolve.calls.callResolverUtil.getEffectiveExpectedType
 import org.jetbrains.kotlin.resolve.calls.callResolverUtil.getErasedReceiverType
 import org.jetbrains.kotlin.resolve.calls.callResolverUtil.isInvokeCallOnExpressionWithBothReceivers
+import org.jetbrains.kotlin.resolve.calls.callUtil.isExplicitSafeCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.isSafeCall
 import org.jetbrains.kotlin.resolve.calls.context.*
 import org.jetbrains.kotlin.resolve.calls.inference.SubstitutionFilteringInternalResolveAnnotations
 import org.jetbrains.kotlin.resolve.calls.model.ArgumentMatchStatus

@@ -143,11 +143,11 @@ fun KtElement.getParentCall(context: BindingContext, strict: Boolean = true): Ca
     return parent?.getCall(context)
 }
 
-fun Call?.getResolvedCall(context: BindingContext): ResolvedCall<out CallableDescriptor>? {
+fun Call?.getResolvedCall(context: BindingContext): ResolvedCall<CallableDescriptor>? {
     return context[RESOLVED_CALL, this]
 }
 
-fun KtElement?.getResolvedCall(context: BindingContext): ResolvedCall<out CallableDescriptor>? {
+fun KtElement?.getResolvedCall(context: BindingContext): ResolvedCall<CallableDescriptor>? {
     return this?.getCall(context)?.getResolvedCall(context)
 }
 
@@ -155,7 +155,7 @@ fun KtElement?.getResolvedCallInternal(context: BindingContext): ResolvedCallInt
     return this?.getCall(context)?.getResolvedCall(context)?.let { it as ResolvedCallInternal<out CallableDescriptor> } // todo add assert message
 }
 
-fun KtElement?.getParentResolvedCall(context: BindingContext, strict: Boolean = true): ResolvedCall<out CallableDescriptor>? {
+fun KtElement?.getParentResolvedCall(context: BindingContext, strict: Boolean = true): ResolvedCall<CallableDescriptor>? {
     return this?.getParentCall(context, strict)?.getResolvedCall(context)
 }
 
@@ -167,21 +167,21 @@ fun KtElement.getCallWithAssert(context: BindingContext): Call {
     return getCall(context).sure { "No call for ${this.getTextWithLocation()}" }
 }
 
-fun KtElement.getResolvedCallWithAssert(context: BindingContext): ResolvedCall<out CallableDescriptor> {
+fun KtElement.getResolvedCallWithAssert(context: BindingContext): ResolvedCall<CallableDescriptor> {
     return getResolvedCall(context).sure { "No resolved call for ${this.getTextWithLocation()}" }
 }
 
-fun Call.getResolvedCallWithAssert(context: BindingContext): ResolvedCall<out CallableDescriptor> {
+fun Call.getResolvedCallWithAssert(context: BindingContext): ResolvedCall<CallableDescriptor> {
     return getResolvedCall(context).sure { "No resolved call for ${this.callElement.getTextWithLocation()}" }
 }
 
-fun KtExpression.getFunctionResolvedCallWithAssert(context: BindingContext): ResolvedCall<out FunctionDescriptor> {
+fun KtExpression.getFunctionResolvedCallWithAssert(context: BindingContext): ResolvedCall<FunctionDescriptor> {
     val resolvedCall = getResolvedCallWithAssert(context)
     assert(resolvedCall.resultingDescriptor is FunctionDescriptor) {
         "ResolvedCall for this expression must be ResolvedCall<? extends FunctionDescriptor>: ${this.getTextWithLocation()}"
     }
     @Suppress("UNCHECKED_CAST")
-    return resolvedCall as ResolvedCall<out FunctionDescriptor>
+    return resolvedCall as ResolvedCall<FunctionDescriptor>
 }
 
 fun Call.isSafeCall(): Boolean {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -188,7 +188,7 @@ public final class ClassInitializerTranslator extends AbstractTranslator {
             if (specifier instanceof KtSuperTypeCallEntry) {
                 KtSuperTypeCallEntry superCall = (KtSuperTypeCallEntry) specifier;
                 //noinspection unchecked
-                return (ResolvedCall<FunctionDescriptor>) CallUtilKt.getResolvedCallWithAssert(superCall, bindingContext());
+                return (ResolvedCall) CallUtilKt.getResolvedCallWithAssert(superCall, bindingContext());
             }
         }
         return null;
