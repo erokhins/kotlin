@@ -40,7 +40,7 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCallInternal
 import org.jetbrains.kotlin.resolve.calls.callUtil.isSafeCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal
-import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionMutableResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionResolvedCallInternal
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ImplicitReceiver
@@ -281,7 +281,7 @@ class KotlinPsiUnifier(
             else {
                 getResolvedCallInternal(bindingContext)?.let {
                     when {
-                        it !is VariableAsFunctionMutableResolvedCall -> it
+                        it !is VariableAsFunctionResolvedCallInternal -> it
                         this is KtSimpleNameExpression -> it.variableCall
                         else -> it.functionCall
                     }

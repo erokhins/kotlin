@@ -30,7 +30,7 @@ import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils;
 import org.jetbrains.kotlin.resolve.calls.callUtil.CallUtilKt;
 import org.jetbrains.kotlin.resolve.calls.model.ArgumentMapping;
 import org.jetbrains.kotlin.resolve.calls.model.ArgumentMatch;
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal;
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
 
 public class InlineUtil {
     public static boolean isInlineLambdaParameter(@NotNull ParameterDescriptor valueParameterOrReceiver) {
@@ -114,7 +114,7 @@ public class InlineUtil {
         KtExpression call = KtPsiUtil.getParentCallIfPresent(argument);
         if (call == null) return null;
 
-        ResolvedCallInternal<?> resolvedCall = CallUtilKt.getResolvedCallInternal(call, bindingContext);
+        ResolvedCall<?> resolvedCall = CallUtilKt.getResolvedCall(call, bindingContext);
         if (resolvedCall == null) return null;
 
         CallableDescriptor descriptor = resolvedCall.getResultingDescriptor();
@@ -123,8 +123,8 @@ public class InlineUtil {
         ValueArgument valueArgument = CallUtilKt.getValueArgumentForExpression(resolvedCall.getCall(), argument);
         if (valueArgument == null) return null;
 
-        ArgumentMapping mapping = resolvedCall.getArgumentMapping(valueArgument);
-        if (!(mapping instanceof ArgumentMatch)) return null;
+        ArgumentMapping mapping = resolvedCall.getArgumentToParameterMap().get(valueArgument);
+        if (mapping == null) return null;
 
         ValueParameterDescriptor parameter = ((ArgumentMatch) mapping).getValueParameter();
         return isInlineLambdaParameter(parameter) ? parameter : null;

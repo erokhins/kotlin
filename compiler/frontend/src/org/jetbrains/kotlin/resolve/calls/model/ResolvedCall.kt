@@ -16,10 +16,9 @@
 
 package org.jetbrains.kotlin.resolve.calls.model
 
-import org.jetbrains.kotlin.descriptors.CallableDescriptor
-import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor
-import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
+import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.psi.Call
+import org.jetbrains.kotlin.psi.ValueArgument
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.types.KotlinType
@@ -47,6 +46,9 @@ interface ResolvedCall<out D : CallableDescriptor> {
 
     /** What's substituted for type parameters  */
     val typeArguments: Map<TypeParameterDescriptor, KotlinType>
+
+    /** The result of mapping the value argument to a parameter */
+    val argumentToParameterMap: Map<ValueArgument, ArgumentMatch>
 }
 
 /** Values (arguments) for value parameters indexed by parameter index  */
@@ -71,8 +73,18 @@ val <D: CallableDescriptor> ResolvedCall<D>.valueArgumentsByIndex: List<Resolved
         return arguments as List<ResolvedValueArgument>
     }
 
-fun <D: CallableDescriptor> ResolvedCall<D>.asBackendResolvedCall() : BackendResolvedCall<D>
-        = BackendResolvedCall(call, resultingDescriptor, extensionReceiver, dispatchReceiver, explicitReceiverKind, valueArguments, typeArguments)
+fun <D: CallableDescriptor> ResolvedCall<D>.asBackendResolvedCall() : ResolvedCall<D> {
+    if (this is VariableAsFunctionResolvedCall) {
+        @Suppress("CAST_NEVER_SUCCEEDS")
+        return BackendVariableAsFunctionResolvedCall(functionCall.asBackendResolvedCall(), variableCall.asBackendResolvedCall()) as ResolvedCall<D>
+    }
+    return BackendResolvedCall(call, resultingDescriptor, extensionReceiver, dispatchReceiver, explicitReceiverKind, valueArguments, typeArguments, argumentToParameterMap)
+}
+
+class BackendVariableAsFunctionResolvedCall(
+        override val functionCall: ResolvedCall<FunctionDescriptor>,
+        override val variableCall: ResolvedCall<VariableDescriptor>
+) : VariableAsFunctionResolvedCall, ResolvedCall<FunctionDescriptor> by functionCall
 
 class BackendResolvedCall<out D : CallableDescriptor>(
         override val call: Call,
@@ -81,5 +93,6 @@ class BackendResolvedCall<out D : CallableDescriptor>(
         override val dispatchReceiver: ReceiverValue?,
         override val explicitReceiverKind: ExplicitReceiverKind,
         override val valueArguments: Map<ValueParameterDescriptor, ResolvedValueArgument>,
-        override val typeArguments: Map<TypeParameterDescriptor, KotlinType>
+        override val typeArguments: Map<TypeParameterDescriptor, KotlinType>,
+        override val argumentToParameterMap: Map<ValueArgument, ArgumentMatch>
 ) : ResolvedCall<D>

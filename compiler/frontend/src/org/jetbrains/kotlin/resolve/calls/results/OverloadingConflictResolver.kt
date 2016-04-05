@@ -54,7 +54,7 @@ class OverloadingConflictResolver(private val builtIns: KotlinBuiltIns) {
 
     fun <D : CallableDescriptor> findMaximallySpecificVariableAsFunctionCalls(candidates: Set<MutableResolvedCall<D>>): Set<MutableResolvedCall<D>> {
         val variableCalls = candidates.mapTo(newResolvedCallSet<MutableResolvedCall<VariableDescriptor>>(candidates.size)) {
-            if (it is VariableAsFunctionMutableResolvedCall)
+            if (it is VariableAsFunctionResolvedCallImpl)
                 it.variableCall
             else
                 throw AssertionError("Regular call among variable-as-function calls: $it")

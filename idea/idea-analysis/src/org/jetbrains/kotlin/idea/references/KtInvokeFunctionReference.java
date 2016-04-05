@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.psi.*;
 import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.kotlin.resolve.calls.callUtil.CallUtilKt;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal;
-import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionMutableResolvedCall;
+import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionResolvedCallInternal;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,9 +51,9 @@ public class KtInvokeFunctionReference extends KtSimpleReference<KtCallExpressio
     protected Collection<DeclarationDescriptor> getTargetDescriptors(@NotNull BindingContext context) {
         Call call = CallUtilKt.getCall(getElement(), context);
         ResolvedCallInternal<?> resolvedCall = (ResolvedCallInternal<?>) CallUtilKt.getResolvedCall(call, context);
-        if (resolvedCall instanceof VariableAsFunctionMutableResolvedCall) {
+        if (resolvedCall instanceof VariableAsFunctionResolvedCallInternal) {
             return Collections.<DeclarationDescriptor>singleton(
-                    ((VariableAsFunctionMutableResolvedCall) resolvedCall).getFunctionCall().getCandidateDescriptor());
+                    ((VariableAsFunctionResolvedCallInternal) resolvedCall).getFunctionCall().getCandidateDescriptor());
         }
         if (call != null && resolvedCall != null && call.getCallType() == Call.CallType.INVOKE) {
             return Collections.<DeclarationDescriptor>singleton(resolvedCall.getCandidateDescriptor());

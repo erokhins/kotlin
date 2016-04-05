@@ -134,7 +134,7 @@ public class BodyResolver {
     ) {
         ForceResolveUtil.forceResolveAllContents(descriptor.getAnnotations());
 
-        resolveFunctionBody(outerDataFlowInfo, trace, constructor, descriptor, declaringScope,
+        resolveFunctionBody(TopDownAnalysisMode.TopLevelDeclarations, outerDataFlowInfo, trace, constructor, descriptor, declaringScope,
                             new Function1<LexicalScope, DataFlowInfo>() {
                                 @Override
                                 public DataFlowInfo invoke(@NotNull LexicalScope headerInnerScope) {
@@ -661,7 +661,7 @@ public class BodyResolver {
         if (getter != null && getterDescriptor != null) {
             LexicalScope accessorScope = makeScopeForPropertyAccessor(c, getter, propertyDescriptor);
             ForceResolveUtil.forceResolveAllContents(getterDescriptor.getAnnotations());
-            resolveFunctionBody(c.getOuterDataFlowInfo(), fieldAccessTrackingTrace, getter, getterDescriptor, accessorScope);
+            resolveFunctionBody(c.getTopDownAnalysisMode(), c.getOuterDataFlowInfo(), fieldAccessTrackingTrace, getter, getterDescriptor, accessorScope);
         }
 
         KtPropertyAccessor setter = property.getSetter();
@@ -669,7 +669,7 @@ public class BodyResolver {
         if (setter != null && setterDescriptor != null) {
             LexicalScope accessorScope = makeScopeForPropertyAccessor(c, setter, propertyDescriptor);
             ForceResolveUtil.forceResolveAllContents(setterDescriptor.getAnnotations());
-            resolveFunctionBody(c.getOuterDataFlowInfo(), fieldAccessTrackingTrace, setter, setterDescriptor, accessorScope);
+            resolveFunctionBody(c.getTopDownAnalysisMode(), c.getOuterDataFlowInfo(), fieldAccessTrackingTrace, setter, setterDescriptor, accessorScope);
         }
     }
 
@@ -763,12 +763,13 @@ public class BodyResolver {
                 bodyResolveCache.resolveFunctionBody(declaration).addOwnDataTo(trace, true);
             }
             else {
-                resolveFunctionBody(c.getOuterDataFlowInfo(), trace, declaration, entry.getValue(), scope);
+                resolveFunctionBody(c.getTopDownAnalysisMode(), c.getOuterDataFlowInfo(), trace, declaration, entry.getValue(), scope);
             }
         }
     }
 
     public void resolveFunctionBody(
+            @NotNull TopDownAnalysisMode analysisMode,
             @NotNull DataFlowInfo outerDataFlowInfo,
             @NotNull BindingTrace trace,
             @NotNull KtDeclarationWithBody function,
@@ -777,12 +778,13 @@ public class BodyResolver {
     ) {
         computeDeferredType(functionDescriptor.getReturnType());
 
-        resolveFunctionBody(outerDataFlowInfo, trace, function, functionDescriptor, declaringScope, null, null);
+        resolveFunctionBody(analysisMode, outerDataFlowInfo, trace, function, functionDescriptor, declaringScope, null, null);
 
         assert functionDescriptor.getReturnType() != null;
     }
 
     private void resolveFunctionBody(
+            @NotNull TopDownAnalysisMode analysisMode,
             @NotNull DataFlowInfo outerDataFlowInfo,
             @NotNull BindingTrace trace,
             @NotNull KtDeclarationWithBody function,
@@ -792,14 +794,16 @@ public class BodyResolver {
             // Creates wrapper scope for header resolution if necessary (see resolveSecondaryConstructorBody)
             @Nullable Function1<LexicalScope, LexicalScope> headerScopeFactory
     ) {
-        PreliminaryDeclarationVisitor.Companion.createForDeclaration(function, trace);
-        LexicalScope innerScope = FunctionDescriptorUtil.getFunctionInnerScope(scope, functionDescriptor, trace);
+        TemporaryBindingTrace traceForBodyAnalysis = expressionTypingServices.getBodyTraceProvider().createTraceForBodyAnalysis(trace);
+
+        PreliminaryDeclarationVisitor.Companion.createForDeclaration(function, traceForBodyAnalysis);
+        LexicalScope innerScope = FunctionDescriptorUtil.getFunctionInnerScope(scope, functionDescriptor, traceForBodyAnalysis);
         List<KtParameter> valueParameters = function.getValueParameters();
         List<ValueParameterDescriptor> valueParameterDescriptors = functionDescriptor.getValueParameters();
 
         LexicalScope headerScope = headerScopeFactory != null ? headerScopeFactory.invoke(innerScope) : innerScope;
         valueParameterResolver.resolveValueParameters(
-                valueParameters, valueParameterDescriptors, headerScope, outerDataFlowInfo, trace
+                valueParameters, valueParameterDescriptors, headerScope, outerDataFlowInfo, traceForBodyAnalysis
         );
 
         // Synthetic "field" creation
@@ -819,7 +823,7 @@ public class BodyResolver {
             // Check parameter name shadowing
             for (KtParameter parameter : function.getValueParameters()) {
                 if (SyntheticFieldDescriptor.NAME.equals(parameter.getNameAsName())) {
-                    trace.report(Errors.ACCESSOR_PARAMETER_NAME_SHADOWING.on(parameter));
+                    traceForBodyAnalysis.report(Errors.ACCESSOR_PARAMETER_NAME_SHADOWING.on(parameter));
                 }
             }
         }
@@ -832,10 +836,16 @@ public class BodyResolver {
 
         if (function.hasBody()) {
             expressionTypingServices.checkFunctionReturnType(
-                    innerScope, function, functionDescriptor, dataFlowInfo != null ? dataFlowInfo : outerDataFlowInfo, null, trace);
+                    innerScope, function, functionDescriptor, dataFlowInfo != null ? dataFlowInfo : outerDataFlowInfo, null, traceForBodyAnalysis);
         }
 
         assert functionDescriptor.getReturnType() != null;
+
+        //KotlinType expectedReturnType = !function.hasBlockBody() && !function.hasDeclaredReturnType()
+        //                                ? NO_EXPECTED_TYPE
+        //                                : functionDescriptor.getReturnType();
+        //controlFlowAnalyzer.checkFunction(analysisMode, traceForBodyAnalysis, function, expectedReturnType);
+        traceForBodyAnalysis.commit();
     }
 
     public void resolveConstructorParameterDefaultValuesAndAnnotations(

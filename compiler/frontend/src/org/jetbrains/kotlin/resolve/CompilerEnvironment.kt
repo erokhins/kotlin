@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,14 @@ package org.jetbrains.kotlin.resolve
 import org.jetbrains.kotlin.container.StorageComponentContainer
 import org.jetbrains.kotlin.container.useImpl
 import org.jetbrains.kotlin.container.useInstance
-import org.jetbrains.kotlin.resolve.lazy.CompilerLocalDescriptorResolver
 import org.jetbrains.kotlin.resolve.lazy.BasicAbsentDescriptorHandler
+import org.jetbrains.kotlin.resolve.lazy.CompilerLocalDescriptorResolver
 
 object CompilerEnvironment : TargetEnvironment("Compiler") {
     override fun configure(container: StorageComponentContainer) {
         container.useInstance(BodyResolveCache.ThrowException)
         container.useImpl<CompilerLocalDescriptorResolver>()
         container.useImpl<BasicAbsentDescriptorHandler>()
+        container.useInstance(BodyTraceProviderForBackend)
     }
 }

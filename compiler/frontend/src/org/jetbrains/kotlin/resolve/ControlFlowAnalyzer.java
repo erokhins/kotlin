@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -97,9 +97,18 @@ public class ControlFlowAnalyzer {
     }
 
     private void checkFunction(@NotNull BodiesResolveContext c, @NotNull KtDeclarationWithBody function, @Nullable KotlinType expectedReturnType) {
+        checkFunction(c.getTopDownAnalysisMode(), trace, function, expectedReturnType);
+    }
+
+    private void checkFunction(
+            @NotNull TopDownAnalysisMode analysisMode,
+            @NotNull BindingTrace trace,
+            @NotNull KtDeclarationWithBody function,
+            @Nullable KotlinType expectedReturnType
+    ) {
         if (!function.hasBody()) return;
         ControlFlowInformationProvider controlFlowInformationProvider = new ControlFlowInformationProvider(function, trace);
-        if (c.getTopDownAnalysisMode().isLocalDeclarations()) {
+        if (analysisMode.isLocalDeclarations()) {
             controlFlowInformationProvider.checkForLocalClassOrObjectMode();
             return;
         }

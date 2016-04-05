@@ -36,7 +36,7 @@ object BodyTraceProviderForBackend : BodyTraceProvider {
 
         override fun commit() {
             map.forEach { slice, key, value ->
-                if (key == BindingContext.RESOLVED_CALL) {
+                if (slice == BindingContext.RESOLVED_CALL) {
                     parentTrace.record(slice, key, (value as ResolvedCall<*>).asBackendResolvedCall())
                 }
                 else {

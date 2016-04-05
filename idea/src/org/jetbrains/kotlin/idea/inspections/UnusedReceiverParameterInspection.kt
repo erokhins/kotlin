@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.psi.typeRefHelpers.setReceiverTypeReference
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCallInternal
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal
-import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionMutableResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionResolvedCallInternal
 
 class UnusedReceiverParameterInspection : AbstractKotlinInspection() {
     override val suppressionKey: String get() = "unused"
@@ -59,7 +59,7 @@ class UnusedReceiverParameterInspection : AbstractKotlinInspection() {
 
                         if (isUsageOfReceiver(resolvedCall, bindingContext)) {
                             used = true
-                        } else if (resolvedCall is VariableAsFunctionMutableResolvedCall
+                        } else if (resolvedCall is VariableAsFunctionResolvedCallInternal
                                    && isUsageOfReceiver(resolvedCall.variableCall, bindingContext)) {
                             used = true
                         }

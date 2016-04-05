@@ -26,15 +26,15 @@ interface VariableAsFunctionResolvedCall {
     val variableCall: ResolvedCall<VariableDescriptor>
 }
 
-interface VariableAsFunctionMutableResolvedCall : VariableAsFunctionResolvedCall {
-    override val functionCall: MutableResolvedCall<FunctionDescriptor>
-    override val variableCall: MutableResolvedCall<VariableDescriptor>
+interface VariableAsFunctionResolvedCallInternal : VariableAsFunctionResolvedCall {
+    override val functionCall: ResolvedCallInternal<FunctionDescriptor>
+    override val variableCall: ResolvedCallInternal<VariableDescriptor>
 }
 
 class VariableAsFunctionResolvedCallImpl(
         override val functionCall: MutableResolvedCall<FunctionDescriptor>,
         override val variableCall: MutableResolvedCall<VariableDescriptor>
-) : VariableAsFunctionMutableResolvedCall, MutableResolvedCall<FunctionDescriptor> by functionCall {
+) : VariableAsFunctionResolvedCallInternal, MutableResolvedCall<FunctionDescriptor> by functionCall {
 
     override fun markCallAsCompleted() {
         functionCall.markCallAsCompleted()

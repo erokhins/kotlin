@@ -33,7 +33,7 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getParentResolvedCallInternal
 import org.jetbrains.kotlin.resolve.calls.model.ArgumentMapping
 import org.jetbrains.kotlin.resolve.calls.model.ArgumentMatch
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal
-import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionMutableResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionResolvedCallInternal
 import org.jetbrains.kotlin.resolve.lazy.JvmResolveUtil
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExtensionReceiver
@@ -55,7 +55,7 @@ abstract class AbstractResolvedCallsTest : KotlinTestWithEnvironment() {
 
         val (element, cachedCall) = buildCachedCall(bindingContext, jetFile, text)
 
-        val resolvedCall = if (cachedCall !is VariableAsFunctionMutableResolvedCall) cachedCall
+        val resolvedCall = if (cachedCall !is VariableAsFunctionResolvedCallInternal) cachedCall
             else if ("(" == element?.text) cachedCall.functionCall
             else cachedCall.variableCall
 

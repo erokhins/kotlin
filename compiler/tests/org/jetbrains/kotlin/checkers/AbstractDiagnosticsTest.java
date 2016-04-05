@@ -382,8 +382,10 @@ public abstract class AbstractDiagnosticsTest extends BaseDiagnosticsTest {
             DiagnosticUtils.LineAndColumn lineAndColumn =
                     DiagnosticUtils.getLineAndColumnInPsiFile(element.getContainingFile(), element.getTextRange());
 
-            assertTrue("Resolved call for '" + element.getText() + "'" + lineAndColumn + " is not completed",
-                       ((MutableResolvedCall<?>) resolvedCall).isCompleted());
+            if (resolvedCall instanceof ResolvedCallInternal) {
+                assertTrue("Resolved call for '" + element.getText() + "'" + lineAndColumn + " is not completed",
+                           ((MutableResolvedCall<?>) resolvedCall).isCompleted());
+            }
         }
 
         checkResolvedCallsInDiagnostics(bindingContext);

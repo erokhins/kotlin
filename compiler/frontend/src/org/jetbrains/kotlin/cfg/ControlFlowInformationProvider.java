@@ -56,7 +56,6 @@ import org.jetbrains.kotlin.resolve.*;
 import org.jetbrains.kotlin.resolve.bindingContextUtil.BindingContextUtilsKt;
 import org.jetbrains.kotlin.resolve.calls.callUtil.CallUtilKt;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallInternal;
 import org.jetbrains.kotlin.resolve.calls.resolvedCallUtil.ResolvedCallUtilKt;
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue;
 import org.jetbrains.kotlin.types.KotlinType;
@@ -464,10 +463,10 @@ public class ControlFlowInformationProvider {
             DeclarationDescriptor descriptor = BindingContextUtils.getEnclosingDescriptor(trace.getBindingContext(), expression);
             PropertySetterDescriptor setterDescriptor = ((PropertyDescriptor) variableDescriptor).getSetter();
 
-            ResolvedCallInternal<? extends CallableDescriptor> resolvedCall = CallUtilKt.getResolvedCallInternal(expression, trace.getBindingContext());
+            ResolvedCall<? extends CallableDescriptor> resolvedCall = CallUtilKt.getResolvedCall(expression, trace.getBindingContext());
             ReceiverValue receiverValue = null;
             if (resolvedCall != null) {
-                receiverValue = ResolvedCallUtilKt.getDispatchReceiverWithSmartCast(resolvedCall);
+                receiverValue = resolvedCall.getDispatchReceiver(); // TODO: smartcast
             }
 
             if (Visibilities.isVisible(receiverValue, variableDescriptor, descriptor) && setterDescriptor != null

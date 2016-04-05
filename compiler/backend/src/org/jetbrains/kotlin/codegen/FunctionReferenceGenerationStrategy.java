@@ -81,7 +81,7 @@ public class FunctionReferenceGenerationStrategy extends FunctionGenerationStrat
         ResolvedCall<CallableDescriptor> fakeResolvedCall =
                 new BackendResolvedCall<CallableDescriptor>(resolvedCall.getCall(), resolvedCall.getResultingDescriptor(),
                                                             extensionReceiver, dispatchReceiver, resolvedCall.getExplicitReceiverKind(),
-                                                            argumentMap, resolvedCall.getTypeArguments());
+                                                            argumentMap, resolvedCall.getTypeArguments(), resolvedCall.getArgumentToParameterMap());
 
         StackValue result;
         Type returnType = codegen.getReturnType();

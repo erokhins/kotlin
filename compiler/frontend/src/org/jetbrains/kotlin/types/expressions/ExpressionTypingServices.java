@@ -53,21 +53,28 @@ public class ExpressionTypingServices {
 
     @NotNull private final AnnotationChecker annotationChecker;
     @NotNull private final StatementFilter statementFilter;
+    @NotNull private final BodyTraceProvider bodyTraceProvider;
 
     public ExpressionTypingServices(
             @NotNull ExpressionTypingComponents components,
             @NotNull AnnotationChecker annotationChecker,
             @NotNull StatementFilter statementFilter,
-            @NotNull ExpressionTypingVisitorDispatcher.ForDeclarations facade
+            @NotNull ExpressionTypingVisitorDispatcher.ForDeclarations facade,
+            @NotNull BodyTraceProvider bodyTraceProvider
     ) {
         this.expressionTypingComponents = components;
         this.annotationChecker = annotationChecker;
         this.statementFilter = statementFilter;
         this.expressionTypingFacade = facade;
+        this.bodyTraceProvider = bodyTraceProvider;
     }
 
     @NotNull public StatementFilter getStatementFilter() {
         return statementFilter;
+    }
+
+    @NotNull public BodyTraceProvider getBodyTraceProvider() {
+        return bodyTraceProvider;
     }
 
     @NotNull

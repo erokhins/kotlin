@@ -943,10 +943,13 @@ public class DescriptorResolver {
         return DeferredType.createRecursionIntolerant(storageManager, trace, new Function0<KotlinType>() {
             @Override
             public KotlinType invoke() {
-                PreliminaryDeclarationVisitor.Companion.createForDeclaration(function, trace);
+                TemporaryBindingTrace traceForBody = expressionTypingServices.getBodyTraceProvider().createTraceForBodyAnalysis(trace);
+                PreliminaryDeclarationVisitor.Companion.createForDeclaration(function, traceForBody);
                 KotlinType type = expressionTypingServices.getBodyExpressionType(
-                        trace, scope, dataFlowInfo, function, functionDescriptor);
-                return transformAnonymousTypeIfNeeded(functionDescriptor, function, type, trace);
+                        traceForBody, scope, dataFlowInfo, function, functionDescriptor);
+                KotlinType returnType = transformAnonymousTypeIfNeeded(functionDescriptor, function, type, traceForBody);
+                traceForBody.commit();
+                return returnType;
             }
         });
     }
