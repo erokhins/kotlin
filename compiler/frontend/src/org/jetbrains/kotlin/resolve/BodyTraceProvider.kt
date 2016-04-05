@@ -16,8 +16,11 @@
 
 package org.jetbrains.kotlin.resolve
 
+import org.jetbrains.kotlin.resolve.BindingContext.*
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.model.asBackendResolvedCall
+import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo
+import org.jetbrains.kotlin.types.expressions.KotlinTypeInfo
 
 interface BodyTraceProvider {
     fun createTraceForBodyAnalysis(parentTrace: BindingTrace): TemporaryBindingTrace
@@ -31,16 +34,23 @@ interface BodyTraceProvider {
 object BodyTraceProviderForBackend : BodyTraceProvider {
     override fun createTraceForBodyAnalysis(parentTrace: BindingTrace): TemporaryBindingTrace = TemporaryTraceForBody(parentTrace)
 
+    private val justDrop = setOf(EXPECTED_EXPRESSION_TYPE, EXPECTED_RETURN_TYPE, DATAFLOW_INFO_AFTER_CONDITION, QUALIFIER,
+                                 THIS_TYPE_FOR_SUPER_EXPRESSION, SHORT_REFERENCE_TO_COMPANION_OBJECT, CONSTRAINT_SYSTEM_COMPLETER,
+                                 AMBIGUOUS_REFERENCE_TARGET, DELEGATED_PROPERTY_PD_RESOLVED_CALL, SMARTCAST_NULL,
+                                 IMPLICIT_RECEIVER_SMARTCAST, LEXICAL_SCOPE, SCRIPT_SCOPE, AUTO_CREATED_IT, PROCESSED,
+                                 USED_AS_EXPRESSION, USED_AS_RESULT_OF_LAMBDA, UNREACHABLE_CODE, PRELIMINARY_VISITOR,
+                                 IS_UNINITIALIZED, TYPE_PARAMETER, AMBIGUOUS_LABEL_TARGET, FQNAME_TO_CLASS_DESCRIPTOR)
+
     private class TemporaryTraceForBody(val parentTrace: BindingTrace):
             DelegatingBindingTrace(parentTrace.bindingContext, "Trace for body analysis"), TemporaryBindingTrace {
 
         override fun commit() {
             map.forEach { slice, key, value ->
-                if (slice == BindingContext.RESOLVED_CALL) {
-                    parentTrace.record(slice, key, (value as ResolvedCall<*>).asBackendResolvedCall())
-                }
-                else {
-                    parentTrace.record(slice, key, value)
+                when (slice) {
+                    RESOLVED_CALL -> parentTrace.record(slice, key, (value as ResolvedCall<*>).asBackendResolvedCall())
+                    EXPRESSION_TYPE_INFO -> parentTrace.record(slice, key, KotlinTypeInfo((value as KotlinTypeInfo).type, DataFlowInfo.EMPTY))
+                    in justDrop -> { /* do nothing */ }
+                    else -> parentTrace.record(slice, key, value)
                 }
 
                 null

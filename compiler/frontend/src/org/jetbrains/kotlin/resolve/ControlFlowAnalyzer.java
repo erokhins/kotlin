@@ -58,7 +58,7 @@ public class ControlFlowAnalyzer {
             KotlinType expectedReturnType = !function.hasBlockBody() && !function.hasDeclaredReturnType()
                                                ? NO_EXPECTED_TYPE
                                                : functionDescriptor.getReturnType();
-            checkFunction(c, function, expectedReturnType);
+            //checkFunction(c, function, expectedReturnType);
         }
         for (Map.Entry<KtProperty, PropertyDescriptor> entry : c.getProperties().entrySet()) {
             KtProperty property = entry.getKey();
@@ -100,7 +100,7 @@ public class ControlFlowAnalyzer {
         checkFunction(c.getTopDownAnalysisMode(), trace, function, expectedReturnType);
     }
 
-    private void checkFunction(
+    void checkFunction(
             @NotNull TopDownAnalysisMode analysisMode,
             @NotNull BindingTrace trace,
             @NotNull KtDeclarationWithBody function,

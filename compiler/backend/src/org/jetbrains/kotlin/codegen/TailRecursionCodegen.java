@@ -60,7 +60,7 @@ public class TailRecursionCodegen {
     }
 
     public boolean isTailRecursion(@NotNull ResolvedCall<?> resolvedCall) {
-        TailRecursionKind status = state.getBindingContext().get(TAIL_RECURSION_CALL, resolvedCall);
+        TailRecursionKind status = state.getBindingContext().get(TAIL_RECURSION_CALL, resolvedCall.getCall());
         return status != null && status.isDoGenerateTailRecursion();
     }
 

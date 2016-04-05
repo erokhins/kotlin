@@ -134,7 +134,7 @@ public class BodyResolver {
     ) {
         ForceResolveUtil.forceResolveAllContents(descriptor.getAnnotations());
 
-        resolveFunctionBody(TopDownAnalysisMode.TopLevelDeclarations, outerDataFlowInfo, trace, constructor, descriptor, declaringScope,
+        resolveFunctionBody(null, outerDataFlowInfo, trace, constructor, descriptor, declaringScope,
                             new Function1<LexicalScope, DataFlowInfo>() {
                                 @Override
                                 public DataFlowInfo invoke(@NotNull LexicalScope headerInnerScope) {
@@ -784,7 +784,7 @@ public class BodyResolver {
     }
 
     private void resolveFunctionBody(
-            @NotNull TopDownAnalysisMode analysisMode,
+            @Nullable TopDownAnalysisMode analysisMode,
             @NotNull DataFlowInfo outerDataFlowInfo,
             @NotNull BindingTrace trace,
             @NotNull KtDeclarationWithBody function,
@@ -841,10 +841,12 @@ public class BodyResolver {
 
         assert functionDescriptor.getReturnType() != null;
 
-        //KotlinType expectedReturnType = !function.hasBlockBody() && !function.hasDeclaredReturnType()
-        //                                ? NO_EXPECTED_TYPE
-        //                                : functionDescriptor.getReturnType();
-        //controlFlowAnalyzer.checkFunction(analysisMode, traceForBodyAnalysis, function, expectedReturnType);
+        if (analysisMode != null) {
+            KotlinType expectedReturnType = !function.hasBlockBody() && !function.hasDeclaredReturnType()
+                                            ? NO_EXPECTED_TYPE
+                                            : functionDescriptor.getReturnType();
+            controlFlowAnalyzer.checkFunction(analysisMode, traceForBodyAnalysis, function, expectedReturnType);
+        }
         traceForBodyAnalysis.commit();
     }
 
