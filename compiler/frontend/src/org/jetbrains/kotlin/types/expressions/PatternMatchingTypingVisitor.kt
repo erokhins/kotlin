@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -211,7 +211,7 @@ class PatternMatchingTypingVisitor internal constructor(facade: ExpressionTyping
             TypeUtils.isNullableType(subjectType) &&
             !WhenChecker.containsNullCase(expression, contextBeforeSubject.trace.bindingContext)
         ) {
-            val trace = TemporaryBindingTrace.create(contextBeforeSubject.trace, "Temporary trace for when subject nullability")
+            val trace = TemporaryBindingTraceImpl.create(contextBeforeSubject.trace, "Temporary trace for when subject nullability")
             val subjectContext = contextBeforeSubject.replaceExpectedType(TypeUtils.makeNotNullable(subjectType)).replaceBindingTrace(trace)
             val castResult = DataFlowAnalyzer.checkPossibleCast(
                     subjectType, KtPsiUtil.safeDeparenthesize(subjectExpression), subjectContext)

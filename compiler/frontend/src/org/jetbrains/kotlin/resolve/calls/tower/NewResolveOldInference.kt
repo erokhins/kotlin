@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.descriptors.VariableDescriptor
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.Call
-import org.jetbrains.kotlin.resolve.TemporaryBindingTrace
+import org.jetbrains.kotlin.resolve.TemporaryBindingTraceImpl
 import org.jetbrains.kotlin.resolve.calls.CallResolver
 import org.jetbrains.kotlin.resolve.calls.CallTransformer
 import org.jetbrains.kotlin.resolve.calls.CandidateResolver
@@ -98,7 +98,7 @@ class NewResolveOldInference(
             candidates: Collection<ResolutionCandidate<D>>
     ): OverloadResolutionResultsImpl<D> {
         val resolvedCandidates = candidates.mapNotNull { candidate ->
-            val candidateTrace = TemporaryBindingTrace.create(basicCallContext.trace, "Context for resolve candidate")
+            val candidateTrace = TemporaryBindingTraceImpl.create(basicCallContext.trace, "Context for resolve candidate")
             val resolvedCall = ResolvedCallImpl.create(candidate, candidateTrace, tracing, basicCallContext.dataFlowInfoForArguments)
 
             if (candidate.descriptor.isHiddenInResolution()) {
@@ -241,7 +241,7 @@ class NewResolveOldInference(
                 explicitReceiverKind: ExplicitReceiverKind,
                 extensionReceiver: ReceiverValue?
         ): Candidate {
-            val candidateTrace = TemporaryBindingTrace.create(basicCallContext.trace, "Context for resolve candidate")
+            val candidateTrace = TemporaryBindingTraceImpl.create(basicCallContext.trace, "Context for resolve candidate")
             val candidateCall = ResolvedCallImpl(
                     basicCallContext.call, towerCandidate.descriptor,
                     towerCandidate.dispatchReceiver, extensionReceiver,

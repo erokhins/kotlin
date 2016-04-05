@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.diagnostics.Errors;
 import org.jetbrains.kotlin.psi.*;
 import org.jetbrains.kotlin.resolve.BindingTrace;
 import org.jetbrains.kotlin.resolve.FunctionTypeResolveUtilsKt;
-import org.jetbrains.kotlin.resolve.TemporaryBindingTrace;
+import org.jetbrains.kotlin.resolve.TemporaryBindingTraceImpl;
 import org.jetbrains.kotlin.resolve.TypeResolver;
 import org.jetbrains.kotlin.resolve.callableReferences.CallableReferencesResolutionUtilsKt;
 import org.jetbrains.kotlin.resolve.calls.callResolverUtil.ResolveArgumentsMode;
@@ -281,7 +281,7 @@ public class ArgumentTypeResolver {
                    );
         }
         List<KtParameter> valueParameters = function.getValueParameters();
-        TemporaryBindingTrace temporaryTrace = TemporaryBindingTrace.create(
+        BindingTrace temporaryTrace = TemporaryBindingTraceImpl.create(
                 trace, "trace to resolve function literal parameter types");
         List<KotlinType> parameterTypes = Lists.newArrayList();
         for (KtParameter parameter : valueParameters) {

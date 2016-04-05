@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,8 @@ import org.jetbrains.kotlin.name.Name;
 import org.jetbrains.kotlin.psi.*;
 import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.kotlin.resolve.BindingContextUtils;
-import org.jetbrains.kotlin.resolve.TemporaryBindingTrace;
+import org.jetbrains.kotlin.resolve.BindingTrace;
+import org.jetbrains.kotlin.resolve.TemporaryBindingTraceImpl;
 import org.jetbrains.kotlin.resolve.calls.context.CallPosition;
 import org.jetbrains.kotlin.resolve.calls.context.TemporaryTraceAndCache;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
@@ -218,7 +219,7 @@ public class ExpressionTypingVisitorForStatements extends ExpressionTypingVisito
         KotlinType binaryOperationType;
         TemporaryTraceAndCache temporaryForBinaryOperation = TemporaryTraceAndCache.create(
                 context, "trace to check binary operation like '+' for", expression);
-        TemporaryBindingTrace ignoreReportsTrace = TemporaryBindingTrace.create(context.trace, "Trace for checking assignability");
+        BindingTrace ignoreReportsTrace = TemporaryBindingTraceImpl.create(context.trace, "Trace for checking assignability");
         boolean lhsAssignable = basic.checkLValue(ignoreReportsTrace, context, left, right);
         if (assignmentOperationType == null || lhsAssignable) {
             // Check for '+'
@@ -259,7 +260,7 @@ public class ExpressionTypingVisitorForStatements extends ExpressionTypingVisito
             temporaryForBinaryOperation.commit();
             context.trace.record(VARIABLE_REASSIGNMENT, expression);
             if (left instanceof KtArrayAccessExpression) {
-                ExpressionTypingContext contextForResolve = context.replaceScope(scope).replaceBindingTrace(TemporaryBindingTrace.create(
+                ExpressionTypingContext contextForResolve = context.replaceScope(scope).replaceBindingTrace(TemporaryBindingTraceImpl.create(
                         context.trace, "trace to resolve array set method for assignment", expression));
                 basic.resolveImplicitArrayAccessSetMethod((KtArrayAccessExpression) left, right, contextForResolve, context.trace);
             }

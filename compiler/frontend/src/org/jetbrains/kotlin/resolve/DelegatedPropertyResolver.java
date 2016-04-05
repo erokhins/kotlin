@@ -142,7 +142,8 @@ public class DelegatedPropertyResolver {
             @NotNull BindingTrace trace,
             @NotNull LexicalScope delegateFunctionsScope
     ) {
-        TemporaryBindingTrace traceToResolvePDMethod = TemporaryBindingTrace.create(trace, "Trace to resolve propertyDelegated method in delegated property");
+        BindingTrace traceToResolvePDMethod = TemporaryBindingTraceImpl
+                .create(trace, "Trace to resolve propertyDelegated method in delegated property");
         ExpressionTypingContext context = ExpressionTypingContext.newContext(
                 traceToResolvePDMethod, delegateFunctionsScope,
                 DataFlowInfoFactory.EMPTY, TypeUtils.NO_EXPECTED_TYPE);
@@ -332,7 +333,8 @@ public class DelegatedPropertyResolver {
             @NotNull BindingTrace trace,
             @NotNull DataFlowInfo dataFlowInfo
     ) {
-        TemporaryBindingTrace traceToResolveDelegatedProperty = TemporaryBindingTrace.create(trace, "Trace to resolve delegated property");
+        TemporaryBindingTraceImpl
+                traceToResolveDelegatedProperty = TemporaryBindingTraceImpl.create(trace, "Trace to resolve delegated property");
         KtExpression calleeExpression = CallUtilKt.getCalleeExpressionIfAny(delegateExpression);
         ConstraintSystemCompleter completer = createConstraintSystemCompleter(
                 property, propertyDescriptor, delegateExpression, scopeForDelegate, trace);
@@ -372,8 +374,8 @@ public class DelegatedPropertyResolver {
                         constraintSystem.getTypeVariableSubstitutors().get(TypeVariableKt.toHandle(resolvedCall.getCall()));
                 assert typeVariableSubstitutor != null : "No substitutor in the system for call: " + resolvedCall.getCall();
 
-                TemporaryBindingTrace traceToResolveConventionMethods =
-                        TemporaryBindingTrace.create(trace, "Trace to resolve delegated property convention methods");
+                TemporaryBindingTraceImpl traceToResolveConventionMethods =
+                        TemporaryBindingTraceImpl.create(trace, "Trace to resolve delegated property convention methods");
                 OverloadResolutionResults<FunctionDescriptor>
                         getMethodResults = getDelegatedPropertyConventionMethod(
                                 propertyDescriptor, delegateExpression, returnType, traceToResolveConventionMethods, delegateFunctionsScope,

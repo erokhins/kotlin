@@ -35,7 +35,7 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.resolve.BindingTrace
-import org.jetbrains.kotlin.resolve.TemporaryBindingTrace
+import org.jetbrains.kotlin.resolve.TemporaryBindingTraceImpl
 import org.jetbrains.kotlin.resolve.calls.checkers.CallChecker
 import org.jetbrains.kotlin.resolve.calls.context.BasicCallResolutionContext
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
@@ -71,7 +71,7 @@ class JsCallChecker(
         val arguments = expression.valueArgumentList?.arguments
         val argument = arguments?.firstOrNull()?.getArgumentExpression() ?: return
 
-        val trace = TemporaryBindingTrace.create(context.trace, "JsCallChecker")
+        val trace = TemporaryBindingTraceImpl.create(context.trace, "JsCallChecker")
 
         val evaluationResult = constantExpressionEvaluator.evaluateExpression(argument, trace, TypeUtils.NO_EXPECTED_TYPE)
         val code = extractStringValue(evaluationResult)

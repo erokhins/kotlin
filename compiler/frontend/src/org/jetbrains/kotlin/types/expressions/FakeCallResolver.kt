@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,10 +26,9 @@ import org.jetbrains.kotlin.psi.Call
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
-import org.jetbrains.kotlin.resolve.TemporaryBindingTrace
+import org.jetbrains.kotlin.resolve.TemporaryBindingTraceImpl
 import org.jetbrains.kotlin.resolve.calls.CallResolver
 import org.jetbrains.kotlin.resolve.calls.results.OverloadResolutionResults
-import org.jetbrains.kotlin.resolve.calls.results.OverloadResolutionResultsImpl
 import org.jetbrains.kotlin.resolve.calls.util.CallMaker
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.types.KotlinType
@@ -54,7 +53,7 @@ class FakeCallResolver(
             callKind: FakeCallKind = FakeCallKind.OTHER,
             vararg argumentTypes: KotlinType
     ): OverloadResolutionResults<FunctionDescriptor> {
-        val traceWithFakeArgumentInfo = TemporaryBindingTrace.create(context.trace, "trace to store fake argument for", name)
+        val traceWithFakeArgumentInfo = TemporaryBindingTraceImpl.create(context.trace, "trace to store fake argument for", name)
         val fakeArguments = ArrayList<KtExpression>()
         for (type in argumentTypes) {
             fakeArguments.add(ExpressionTypingUtils.createFakeExpressionOfType(project, traceWithFakeArgumentInfo,
@@ -86,7 +85,7 @@ class FakeCallResolver(
             callKind: FakeCallKind = FakeCallKind.OTHER,
             reportErrorsOn: KtExpression? = callElement
     ): Pair<Call, OverloadResolutionResults<FunctionDescriptor>> {
-        val fakeTrace = TemporaryBindingTrace.create(context.trace, "trace to resolve fake call for", name)
+        val fakeTrace = TemporaryBindingTraceImpl.create(context.trace, "trace to resolve fake call for", name)
         val fakeBindingTrace = context.replaceBindingTrace(fakeTrace)
 
         var unreportedDiagnostic: Diagnostic? = null

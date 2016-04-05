@@ -563,7 +563,7 @@ public class BasicExpressionTypingVisitor extends ExpressionTypingVisitor {
 
         ResolvedCallImpl<ReceiverParameterDescriptor> resolvedCall =
                 ResolvedCallImpl.create(resolutionCandidate,
-                                        TemporaryBindingTrace.create(trace, "Fake trace for fake 'this' or 'super' resolved call"),
+                                        TemporaryBindingTraceImpl.create(trace, "Fake trace for fake 'this' or 'super' resolved call"),
                                         TracingStrategy.EMPTY,
                                         new DataFlowInfoForArgumentsImpl(context.dataFlowInfo, call));
         resolvedCall.markCallAsCompleted();
@@ -721,8 +721,8 @@ public class BasicExpressionTypingVisitor extends ExpressionTypingVisitor {
             final ExpressionTypingContext context
     ) {
         final KotlinType[] result = new KotlinType[1];
-        TemporaryBindingTrace temporaryTrace = TemporaryBindingTrace.create(context.trace,
-                                                                            "trace to resolve object literal expression", expression);
+        TemporaryBindingTraceImpl temporaryTrace = TemporaryBindingTraceImpl.create(context.trace,
+                                                                                    "trace to resolve object literal expression", expression);
         ObservableBindingTrace.RecordHandler<PsiElement, ClassDescriptor> handler =
                 new ObservableBindingTrace.RecordHandler<PsiElement, ClassDescriptor>() {
 
@@ -858,7 +858,7 @@ public class BasicExpressionTypingVisitor extends ExpressionTypingVisitor {
             baseExpression instanceof KtArrayAccessExpression) {
             KtExpression stubExpression = ExpressionTypingUtils.createFakeExpressionOfType(
                     baseExpression.getProject(), context.trace, "e", type);
-            TemporaryBindingTrace temporaryBindingTrace = TemporaryBindingTrace.create(
+            TemporaryBindingTraceImpl temporaryBindingTrace = TemporaryBindingTraceImpl.create(
                     context.trace, "trace to resolve array access set method for unary expression", expression);
             ExpressionTypingContext newContext = context.replaceBindingTrace(temporaryBindingTrace);
             resolveImplicitArrayAccessSetMethod((KtArrayAccessExpression) baseExpression, stubExpression, newContext, context.trace);
@@ -1026,7 +1026,7 @@ public class BasicExpressionTypingVisitor extends ExpressionTypingVisitor {
             KtExpression arrayExpression = arrayAccessExpression.getArrayExpression();
             if (arrayExpression == null || rightHandSide == null) return false;
 
-            TemporaryBindingTrace ignoreReportsTrace = TemporaryBindingTrace.create(trace, "Trace for checking set function");
+            TemporaryBindingTraceImpl ignoreReportsTrace = TemporaryBindingTraceImpl.create(trace, "Trace for checking set function");
             ExpressionTypingContext findSetterContext = context.replaceBindingTrace(ignoreReportsTrace);
             KotlinTypeInfo info = resolveArrayAccessSetMethod(arrayAccessExpression, rightHandSide, findSetterContext, ignoreReportsTrace);
             return info.getType() != null;
@@ -1154,7 +1154,7 @@ public class BasicExpressionTypingVisitor extends ExpressionTypingVisitor {
 
         KotlinTypeInfo rightTypeInfo = facade.getTypeInfo(right, contextWithDataFlow);
 
-        TemporaryBindingTrace traceInterpretingRightAsNullableAny = TemporaryBindingTrace.create(
+        TemporaryBindingTraceImpl traceInterpretingRightAsNullableAny = TemporaryBindingTraceImpl.create(
                 context.trace, "trace to resolve 'equals(Any?)' interpreting as of type Any? an expression:", right);
         traceInterpretingRightAsNullableAny.recordType(right, components.builtIns.getNullableAnyType());
 

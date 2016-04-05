@@ -67,7 +67,7 @@ class CallCompleter(
         // for the case 'foo(a)' where 'foo' is a variable, the call 'foo.invoke(a)' shouldn't be completed separately,
         // it's completed when the outer (variable as function call) is completed
         if (!isInvokeCallOnVariable(context.call)) {
-            val temporaryTrace = TemporaryBindingTrace.create(context.trace, "Trace to complete a resulting call")
+            val temporaryTrace = TemporaryBindingTraceImpl.create(context.trace, "Trace to complete a resulting call")
 
             completeResolvedCallAndArguments(resolvedCall, results, context.replaceBindingTrace(temporaryTrace), tracing)
 
@@ -109,7 +109,7 @@ class CallCompleter(
         candidates.filterNot { resolvedCall -> resolvedCall.isCompleted }.forEach {
             resolvedCall ->
 
-            val temporaryBindingTrace = TemporaryBindingTrace.create(context.trace, "Trace to complete a candidate that is not a resulting call")
+            val temporaryBindingTrace = TemporaryBindingTraceImpl.create(context.trace, "Trace to complete a candidate that is not a resulting call")
             completeResolvedCallAndArguments(resolvedCall, results, context.replaceBindingTrace(temporaryBindingTrace), TracingStrategy.EMPTY)
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,35 +16,6 @@
 
 package org.jetbrains.kotlin.resolve;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-public class TemporaryBindingTrace extends DelegatingBindingTrace {
-
-    @NotNull
-    public static TemporaryBindingTrace create(@NotNull BindingTrace trace, String debugName) {
-        return new TemporaryBindingTrace(trace, debugName);
-    }
-
-    @NotNull
-    public static TemporaryBindingTrace create(@NotNull BindingTrace trace, String debugName, @Nullable Object resolutionSubjectForMessage) {
-        return create(trace, AnalyzingUtils.formDebugNameForBindingTrace(debugName, resolutionSubjectForMessage));
-    }
-
-    protected final BindingTrace trace;
-
-    protected TemporaryBindingTrace(@NotNull BindingTrace trace, String debugName) {
-        super(trace.getBindingContext(), debugName);
-        this.trace = trace;
-    }
-
-    public void commit() {
-        addOwnDataTo(trace);
-        clear();
-    }
-
-    public void commit(@NotNull TraceEntryFilter filter, boolean commitDiagnostics) {
-        addOwnDataTo(trace, filter, commitDiagnostics);
-        clear();
-    }
+public interface TemporaryBindingTrace extends BindingTrace {
+    void commit();
 }

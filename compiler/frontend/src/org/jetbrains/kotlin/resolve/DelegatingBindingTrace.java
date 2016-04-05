@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,11 +37,11 @@ import java.util.Map;
 
 public class DelegatingBindingTrace implements BindingTrace {
     @SuppressWarnings("ConstantConditions")
-    private final MutableSlicedMap map = BindingTraceContext.TRACK_REWRITES ? new TrackingSlicedMap(BindingTraceContext.TRACK_WITH_STACK_TRACES) : SlicedMapImpl.create();
+    protected final MutableSlicedMap map = BindingTraceContext.TRACK_REWRITES ? new TrackingSlicedMap(BindingTraceContext.TRACK_WITH_STACK_TRACES) : SlicedMapImpl.create();
 
     private final BindingContext parentContext;
     private final String name;
-    private final MutableDiagnosticsWithSuppression mutableDiagnostics;
+    protected final MutableDiagnosticsWithSuppression mutableDiagnostics;
 
     private final BindingContext bindingContext = new BindingContext() {
         @NotNull
