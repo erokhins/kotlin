@@ -518,7 +518,7 @@ internal class MutableParameter(
         val typePredicate = and(typePredicates)
 
         val typeSet = if (defaultType.isFlexible()) {
-            val bounds = defaultType.getCapability(Flexibility::class.java)!!
+            val bounds = defaultType.asFlexibleType()!!
             LinkedHashSet<KotlinType>().apply {
                 if (typePredicate(bounds.upperBound)) add(bounds.upperBound)
                 if (typePredicate(bounds.lowerBound)) add(bounds.lowerBound)

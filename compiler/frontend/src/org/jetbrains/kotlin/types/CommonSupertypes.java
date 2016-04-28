@@ -85,17 +85,16 @@ public class CommonSupertypes {
         boolean hasFlexible = false;
         List<KotlinType> upper = new ArrayList<KotlinType>(types.size());
         List<KotlinType> lower = new ArrayList<KotlinType>(types.size());
-        Set<FlexibleTypeFactory> factories = new LinkedHashSet<FlexibleTypeFactory>();
+        Set<TypeCapabilities> capabilities = new LinkedHashSet<TypeCapabilities>();
         for (KotlinType type : types) {
-            if (FlexibleTypesKt.isFlexible(type)) {
+            KotlinType.FlexibleType flexibleType = FlexibleTypesKt.asFlexibleType(type);
+            if (flexibleType != null) {
                 if (DynamicTypesKt.isDynamic(type)) {
                     return type;
                 }
                 hasFlexible = true;
-                Flexibility flexibility = FlexibleTypesKt.flexibility(type);
-                upper.add(flexibility.getUpperBound());
-                lower.add(flexibility.getLowerBound());
-                factories.add(flexibility.getFactory());
+                upper.add(flexibleType.getUpperBound());
+                lower.add(flexibleType.getLowerBound());
             }
             else {
                 upper.add(type);
@@ -104,9 +103,10 @@ public class CommonSupertypes {
         }
 
         if (!hasFlexible) return commonSuperTypeForInflexible(types, recursionDepth, maxDepth);
-        return CollectionsKt.single(factories).create( // mixing different factories is not supported
-                commonSuperTypeForInflexible(lower, recursionDepth, maxDepth),
-                commonSuperTypeForInflexible(upper, recursionDepth, maxDepth)
+        return new KotlinType.FlexibleType( // mixing different capabilities is not supported
+                                            (KotlinType.SimpleType) commonSuperTypeForInflexible(lower, recursionDepth, maxDepth),
+                                            (KotlinType.SimpleType) commonSuperTypeForInflexible(upper, recursionDepth, maxDepth),
+                                            CollectionsKt.single(capabilities)
         );
     }
 

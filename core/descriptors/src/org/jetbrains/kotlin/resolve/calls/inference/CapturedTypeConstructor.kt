@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ package org.jetbrains.kotlin.resolve.calls.inference
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
+import org.jetbrains.kotlin.resolve.scopes.MemberScope
+import org.jetbrains.kotlin.storage.NotNullLazyValue
 import org.jetbrains.kotlin.types.*
 import org.jetbrains.kotlin.types.Variance.IN_VARIANCE
 import org.jetbrains.kotlin.types.Variance.OUT_VARIANCE
@@ -58,37 +60,36 @@ class CapturedTypeConstructor(
 
 class CapturedType(
         private val typeProjection: TypeProjection
-): DelegatingType(), SubtypingRepresentatives {
+): KotlinType.SimpleType(), SubtypingRepresentatives {
 
-    private val delegateType = run {
-        val scope = ErrorUtils.createErrorScope(
-                "No member resolution should be done on captured type, it used only during constraint system resolution", true)
-        KotlinTypeImpl.create(Annotations.EMPTY, CapturedTypeConstructor(typeProjection), false, listOf(), scope)
+    override val constructor: TypeConstructor get() = CapturedTypeConstructor(typeProjection)
+    override val arguments: List<TypeProjection> get() = listOf()
+    override val isMarkedNullable: Boolean get() = false
+    override val memberScope: MemberScope = ErrorUtils.createErrorScope(
+            "No member resolution should be done on captured type, it used only during constraint system resolution", true)
+
+    override val isError: Boolean get() = false
+    override fun getAnnotations(): Annotations = Annotations.EMPTY
+
+    override val capabilities: TypeCapabilities = object : TypeCapabilities {
+        override fun <T : TypeCapability> getCapability(capabilityClass: Class<T>): T? {
+            @Suppress("UNCHECKED_CAST")
+            if (capabilityClass == SubtypingRepresentatives::class.java) return this@CapturedType as T
+            return null
+        }
     }
 
-    override fun getDelegate(): KotlinType = delegateType
-
-    override fun getCapabilities(): TypeCapabilities = object : TypeCapabilities {
-        override fun <T : TypeCapability> getCapability(capabilityClass: Class<T>) =
-            this@CapturedType.getCapability(capabilityClass)
-    }
-
-    override fun <T : TypeCapability> getCapability(capabilityClass: Class<T>): T? {
-        @Suppress("UNCHECKED_CAST")
-        return if (capabilityClass == SubtypingRepresentatives::class.java) this as T
-        else super.getCapability(capabilityClass)
-    }
 
     override val subTypeRepresentative: KotlinType
-        get() = representative(OUT_VARIANCE, builtIns.nullableAnyType)
+        get() = representative(OUT_VARIANCE, constructor.builtIns.nullableAnyType)
 
     override val superTypeRepresentative: KotlinType
-        get() = representative(IN_VARIANCE, builtIns.nothingType)
+        get() = representative(IN_VARIANCE, constructor.builtIns.nothingType)
 
     private fun representative(variance: Variance, default: KotlinType) =
         if (typeProjection.projectionKind == variance) typeProjection.type else default
 
-    override fun sameTypeConstructor(type: KotlinType) = delegateType.constructor === type.constructor
+    override fun sameTypeConstructor(type: KotlinType) = constructor === type.constructor
 
     override fun toString() = "Captured($typeProjection)"
 }
@@ -118,10 +119,16 @@ private fun TypeProjection.createCapturedIfNeeded(typeParameterDescriptor: TypeP
     // Treat consistent projections as invariant
     if (typeParameterDescriptor.variance == projectionKind) {
         // TODO: Make star projection type lazy
-        return if (isStarProjection)
-            TypeProjectionImpl(object : DelegatingType() {
-                override fun getDelegate() = this@createCapturedIfNeeded.type
+        return if (isStarProjection) {
+            val deferredType = KotlinType.DeferredType(object : NotNullLazyValue<KotlinType> {
+                override fun isComputed() = true
+
+                override fun isComputing() = false
+
+                override fun invoke() = this@createCapturedIfNeeded.type
             })
+            TypeProjectionImpl(deferredType)
+        }
         else
             TypeProjectionImpl(this@createCapturedIfNeeded.type)
     }

@@ -48,6 +48,7 @@ fun <T : TypeCapability> TypeCapabilities.addCapability(clazz: Class<T>, typeCap
 }
 
 inline fun <reified T : TypeCapability> KotlinType.getCapability(): T? = getCapability(T::class.java)
+inline fun <reified T : TypeCapability> KotlinType.getCapability(): T? = capabilities.getCapability(T::class.java)
 
 
 // To facilitate laziness, any KotlinType implementation may inherit from this trait,

@@ -34,7 +34,7 @@ import org.jetbrains.kotlin.resolve.bindingContextUtil.BindingContextUtilsKt;
 import org.jetbrains.kotlin.resolve.calls.context.CallPosition;
 import org.jetbrains.kotlin.resolve.scopes.LexicalScopeKind;
 import org.jetbrains.kotlin.resolve.scopes.LexicalWritableScope;
-import org.jetbrains.kotlin.types.DeferredType;
+import org.jetbrains.kotlin.types.DeferredTypeImpl;
 import org.jetbrains.kotlin.types.ErrorUtils;
 import org.jetbrains.kotlin.types.KotlinType;
 import org.jetbrains.kotlin.types.expressions.typeInfoFactory.TypeInfoFactoryKt;
@@ -187,8 +187,8 @@ public abstract class ExpressionTypingVisitorDispatcher extends KtVisitor<Kotlin
                             return result.replaceType(type);
                         }
 
-                        if (result.getType() instanceof DeferredType) {
-                            result = result.replaceType(((DeferredType) result.getType()).getDelegate());
+                        if (result.getType() instanceof DeferredTypeImpl) {
+                            result = result.replaceType(((DeferredTypeImpl) result.getType()).getDelegate());
                         }
                         context.trace.record(BindingContext.EXPRESSION_TYPE_INFO, expression, result);
                     }

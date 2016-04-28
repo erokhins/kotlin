@@ -101,10 +101,8 @@ class SpecifyTypeExplicitlyIntention : SelfTargetingIntention<KtCallableDeclarat
                             }
                         }
 
-                        object: DelegatingType() {
-                            override fun getDelegate() = it
-                            override fun getArguments() = newArguments
-                        }
+                        // todo
+                        SimpleTypeImpl.create(it as KotlinType.SimpleType, arguments = newArguments)
                     }
                     .ifEmpty { return null }
             return object : ChooseValueExpression<KotlinType>(types, types.first()) {

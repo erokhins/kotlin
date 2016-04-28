@@ -93,14 +93,16 @@ private fun substituteCapturedTypesWithProjections(typeProjection: TypeProjectio
 }
 
 fun approximateCapturedTypes(type: KotlinType): ApproximationBounds<KotlinType> {
-    if (type.isFlexible()) {
-        val boundsForFlexibleLower = approximateCapturedTypes(type.lowerIfFlexible())
-        val boundsForFlexibleUpper = approximateCapturedTypes(type.upperIfFlexible())
+    val simpleOfFlexible = type.simpleOrFlexibleType
+    if (simpleOfFlexible is KotlinType.FlexibleType) {
+        val boundsForFlexibleLower = approximateCapturedTypes(simpleOfFlexible.lowerBound)
+        val boundsForFlexibleUpper = approximateCapturedTypes(simpleOfFlexible.upperBound)
 
-        val factory = type.flexibility().factory
         return ApproximationBounds(
-                factory.create(boundsForFlexibleLower.lower.lowerIfFlexible(), boundsForFlexibleUpper.lower.upperIfFlexible()),
-                factory.create(boundsForFlexibleLower.upper.lowerIfFlexible(), boundsForFlexibleUpper.upper.upperIfFlexible()))
+                KotlinType.FlexibleType(boundsForFlexibleLower.lower.lowerIfFlexible(), boundsForFlexibleUpper.lower.upperIfFlexible(),
+                                        simpleOfFlexible.capabilities),
+                KotlinType.FlexibleType(boundsForFlexibleLower.upper.lowerIfFlexible(), boundsForFlexibleUpper.upper.upperIfFlexible(),
+                                        simpleOfFlexible.capabilities))
     }
 
     val typeConstructor = type.constructor

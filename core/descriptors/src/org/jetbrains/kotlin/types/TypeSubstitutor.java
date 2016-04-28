@@ -134,20 +134,22 @@ public class TypeSubstitutor {
         KotlinType type = originalProjection.getType();
         TypeProjection replacement = substitution.get(type);
         Variance originalProjectionKind = originalProjection.getProjectionKind();
-        if (replacement == null && FlexibleTypesKt.isFlexible(type) && !TypeCapabilitiesKt.isCustomTypeVariable(type)) {
-            Flexibility flexibility = FlexibleTypesKt.flexibility(type);
+        KotlinType.FlexibleType flexibleType = FlexibleTypesKt.asFlexibleType(type);
+
+        if (replacement == null && flexibleType != null && !TypeCapabilitiesKt.isCustomTypeVariable(type)) {
             TypeProjection substitutedLower =
-                    unsafeSubstitute(new TypeProjectionImpl(originalProjectionKind, flexibility.getLowerBound()), recursionDepth + 1);
+                    unsafeSubstitute(new TypeProjectionImpl(originalProjectionKind, flexibleType.getLowerBound()), recursionDepth + 1);
             TypeProjection substitutedUpper =
-                    unsafeSubstitute(new TypeProjectionImpl(originalProjectionKind, flexibility.getUpperBound()), recursionDepth + 1);
+                    unsafeSubstitute(new TypeProjectionImpl(originalProjectionKind, flexibleType.getUpperBound()), recursionDepth + 1);
 
             Variance substitutedProjectionKind = substitutedLower.getProjectionKind();
             assert (substitutedProjectionKind == substitutedUpper.getProjectionKind()) &&
                    originalProjectionKind == Variance.INVARIANT || originalProjectionKind == substitutedProjectionKind :
                     "Unexpected substituted projection kind: " + substitutedProjectionKind + "; original: " + originalProjectionKind;
 
-            KotlinType substitutedFlexibleType = flexibility.getFactory().create(
-                    substitutedLower.getType(), substitutedUpper.getType());
+            KotlinType substitutedFlexibleType = new KotlinType.FlexibleType(
+                    (KotlinType.SimpleType) substitutedLower.getType(), (KotlinType.SimpleType) substitutedUpper.getType(),
+                    flexibleType.getCapabilities());
             return new TypeProjectionImpl(substitutedProjectionKind, substitutedFlexibleType);
         }
 

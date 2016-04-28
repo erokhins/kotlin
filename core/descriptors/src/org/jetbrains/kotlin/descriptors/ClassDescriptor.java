@@ -57,7 +57,7 @@ public interface ClassDescriptor extends ClassifierDescriptor, MemberDescriptor,
      */
     @NotNull
     @Override
-    KotlinType getDefaultType();
+    KotlinType.SimpleType getDefaultType();
 
     @NotNull
     @Override

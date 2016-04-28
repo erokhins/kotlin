@@ -18,9 +18,16 @@ package org.jetbrains.kotlin.serialization.js
 
 import com.google.protobuf.ExtensionRegistryLite
 import org.jetbrains.kotlin.serialization.KotlinSerializerExtensionBase
+import org.jetbrains.kotlin.serialization.ProtoBuf
 import org.jetbrains.kotlin.serialization.SerializerExtensionProtocol
+import org.jetbrains.kotlin.types.DynamicTypeFactory
+import org.jetbrains.kotlin.types.KotlinType
 
-class KotlinJavascriptSerializerExtension : KotlinSerializerExtensionBase(JsSerializerProtocol)
+class KotlinJavascriptSerializerExtension : KotlinSerializerExtensionBase(JsSerializerProtocol) {
+    override fun serializeFlexibleType(flexibleType: KotlinType.FlexibleType, proto: ProtoBuf.Type.Builder) {
+        proto.flexibleTypeCapabilitiesId = stringTable.getStringIndex(DynamicTypeFactory.id)
+    }
+}
 
 object JsSerializerProtocol : SerializerExtensionProtocol(
         ExtensionRegistryLite.newInstance().apply { JsProtoBuf.registerAllExtensions(this) },

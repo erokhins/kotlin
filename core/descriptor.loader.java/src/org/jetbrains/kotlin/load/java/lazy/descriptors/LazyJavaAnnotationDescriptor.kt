@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package org.jetbrains.kotlin.load.java.lazy.descriptors
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor
+import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.incremental.components.NoLookupLocation
 import org.jetbrains.kotlin.load.java.JvmAnnotationNames.DEFAULT_ANNOTATION_MEMBER_NAME
 import org.jetbrains.kotlin.load.java.components.DescriptorResolverUtils
@@ -138,9 +139,12 @@ class LazyJavaAnnotationDescriptor(
         val arguments = listOf(TypeProjectionImpl(type))
 
         val javaClassObjectType = object : AbstractLazyType(c.storageManager) {
-            override fun computeTypeConstructor() = jlClass.getTypeConstructor()
+            override fun computeTypeConstructor() = jlClass.typeConstructor
             override fun computeArguments() = arguments
             override fun computeMemberScope() = jlClass.getMemberScope(arguments)
+
+            override val capabilities: TypeCapabilities get() = TypeCapabilities.NONE
+            override fun getAnnotations(): Annotations = Annotations.EMPTY
         }
 
         return factory.createKClassValue(javaClassObjectType)

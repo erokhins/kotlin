@@ -18,7 +18,8 @@ package org.jetbrains.kotlin.resolve.calls.checkers
 
 import org.jetbrains.kotlin.resolve.calls.context.BasicCallResolutionContext
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
-import org.jetbrains.kotlin.types.DeferredType
+import org.jetbrains.kotlin.types.DeferredTypeImpl
+import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.KotlinType
 
 interface CallChecker {
@@ -30,4 +31,4 @@ interface CallChecker {
 // Receiver parameter is present to emphasize that this function should ideally be only used from call checkers.
 @Suppress("unused")
 fun CallChecker.isComputingDeferredType(type: KotlinType) =
-        type is DeferredType && type.isComputing
+        type is KotlinType.DeferredType && type.isComputing
