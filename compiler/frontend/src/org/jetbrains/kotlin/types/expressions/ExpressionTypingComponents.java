@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,6 +60,7 @@ public class ExpressionTypingComponents {
     /*package*/ DeclarationsCheckerBuilder declarationsCheckerBuilder;
     /*package*/ LocalVariableResolver localVariableResolver;
     /*package*/ LookupTracker lookupTracker;
+    /*package*/ OverloadChecker overloadChecker;
 
 
     @Inject
@@ -200,5 +201,10 @@ public class ExpressionTypingComponents {
     @Inject
     public void setLookupTracker(@NotNull LookupTracker lookupTracker) {
         this.lookupTracker = lookupTracker;
+    }
+
+    @Inject
+    public void setOverloadChecker(OverloadChecker overloadChecker) {
+        this.overloadChecker = overloadChecker;
     }
 }
