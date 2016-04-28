@@ -374,7 +374,7 @@ public class ErrorUtils {
     }
 
     @NotNull
-    public static KotlinType createErrorType(@NotNull String debugMessage) {
+    public static KotlinType.SimpleType createErrorType(@NotNull String debugMessage) {
         return createErrorTypeWithArguments(debugMessage, Collections.<TypeProjection>emptyList());
     }
 
@@ -389,7 +389,7 @@ public class ErrorUtils {
     }
 
     @NotNull
-    public static KotlinType createErrorTypeWithArguments(@NotNull String debugMessage, @NotNull List<TypeProjection> arguments) {
+    public static KotlinType.SimpleType createErrorTypeWithArguments(@NotNull String debugMessage, @NotNull List<TypeProjection> arguments) {
         return new ErrorTypeImpl(createErrorTypeConstructor(debugMessage), createErrorScope(debugMessage), arguments);
     }
 
@@ -484,7 +484,7 @@ public class ErrorUtils {
         );
     }
 
-    private static class ErrorTypeImpl implements KotlinType {
+    private static class ErrorTypeImpl extends KotlinType.SimpleType {
         private final TypeConstructor constructor;
         private final MemberScope memberScope;
         private final List<TypeProjection> arguments;
@@ -535,12 +535,6 @@ public class ErrorUtils {
         @Override
         public Annotations getAnnotations() {
             return Annotations.Companion.getEMPTY();
-        }
-
-        @Nullable
-        @Override
-        public <T extends TypeCapability> T getCapability(@NotNull Class<T> capabilityClass) {
-            return null;
         }
 
         @NotNull

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.util.ReenteringLazyValueComputationException;
 
 import static org.jetbrains.kotlin.resolve.BindingContext.DEFERRED_TYPE;
 
-public class DeferredType extends DelegatingType implements LazyType {
+public class DeferredTypeImpl {
 
     private static final Function1 EMPTY_CONSUMER = new Function1<Object, Void>() {
         @Override
@@ -45,35 +45,35 @@ public class DeferredType extends DelegatingType implements LazyType {
     };
 
     @NotNull
-    public static DeferredType create(
+    public static KotlinType.DeferredType create(
             @NotNull StorageManager storageManager,
             @NotNull BindingTrace trace,
             @NotNull Function0<KotlinType> compute
     ) {
-        DeferredType deferredType = new DeferredType(storageManager.createLazyValue(compute));
-        trace.record(DEFERRED_TYPE, new Box<DeferredType>(deferredType));
+        DeferredTypeImpl deferredType = new KotlinType.DeferredType(storageManager.createLazyValue(compute));
+        trace.record(DEFERRED_TYPE, new Box<DeferredTypeImpl>(deferredType));
         return deferredType;
     }
     
     @NotNull
-    public static DeferredType createRecursionIntolerant(
+    public static KotlinType.DeferredType createRecursionIntolerant(
             @NotNull StorageManager storageManager,
             @NotNull BindingTrace trace,
             @NotNull Function0<KotlinType> compute
     ) {
         //noinspection unchecked
-        DeferredType deferredType = new DeferredType(storageManager.createLazyValueWithPostCompute(
+        DeferredTypeImpl deferredType = new DeferredTypeImpl(storageManager.createLazyValueWithPostCompute(
                 compute,
                 RECURSION_PREVENTER,
                 EMPTY_CONSUMER
         ));
-        trace.record(DEFERRED_TYPE, new Box<DeferredType>(deferredType));
+        trace.record(DEFERRED_TYPE, new Box<DeferredTypeImpl>(deferredType));
         return deferredType;
     }
 
     private final NotNullLazyValue<KotlinType> lazyValue;
 
-    private DeferredType(@NotNull NotNullLazyValue<KotlinType> lazyValue) {
+    private DeferredTypeImpl(@NotNull NotNullLazyValue<KotlinType> lazyValue) {
         this.lazyValue = lazyValue;
     }
 
@@ -86,7 +86,7 @@ public class DeferredType extends DelegatingType implements LazyType {
     }
 
     @Override
-    public KotlinType getDelegate() {
+    public KotlinType computeDelegate() {
         return lazyValue.invoke();
     }
 

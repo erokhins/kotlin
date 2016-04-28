@@ -38,6 +38,7 @@ import org.jetbrains.kotlin.serialization.deserialization.AdditionalClassPartsPr
 import org.jetbrains.kotlin.serialization.deserialization.descriptors.DeserializedClassDescriptor
 import org.jetbrains.kotlin.types.DelegatingType
 import org.jetbrains.kotlin.types.KotlinType
+import org.jetbrains.kotlin.types.LazyDelegateSimpleType
 import org.jetbrains.kotlin.utils.DFS
 import org.jetbrains.kotlin.utils.SmartSet
 import org.jetbrains.kotlin.utils.addToStdlib.check
@@ -60,10 +61,8 @@ open class JvmBuiltInsAdditionalClassPartsProvider(
         }
 
         //NOTE: can't reference anyType right away, because this is sometimes called when JvmBuiltIns are initializing
-        val superTypes = listOf(object : DelegatingType() {
-            override fun getDelegate(): KotlinType {
-                return moduleDescriptor.builtIns.anyType
-            }
+        val superTypes = listOf(object : LazyDelegateSimpleType() {
+            override val delegate: KotlinType get() = moduleDescriptor.builtIns.anyType
         })
 
         val mockSerializableClass = ClassDescriptorImpl(

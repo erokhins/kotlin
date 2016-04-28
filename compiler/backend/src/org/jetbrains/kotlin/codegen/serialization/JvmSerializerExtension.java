@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.codegen.state.GenerationState;
 import org.jetbrains.kotlin.descriptors.*;
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor;
 import org.jetbrains.kotlin.load.java.JvmAbi;
+import org.jetbrains.kotlin.load.java.lazy.types.LazyJavaTypeResolver;
 import org.jetbrains.kotlin.name.ClassId;
 import org.jetbrains.kotlin.serialization.AnnotationSerializer;
 import org.jetbrains.kotlin.serialization.ProtoBuf;
@@ -84,9 +85,18 @@ public class JvmSerializerExtension extends SerializerExtension {
             proto.addExtension(JvmProtoBuf.typeAnnotation, annotationSerializer.serializeAnnotation(annotation));
         }
 
-        if (type.getCapability(RawTypeCapability.class) != null) {
+        // TODO: move raw to serializeFlexibleType
+        if (type.getCapabilities().getCapability(RawTypeCapability.class) != null) {
             proto.setExtension(JvmProtoBuf.isRaw, true);
         }
+    }
+
+    @Override
+    public void serializeFlexibleType(
+            @NotNull KotlinType.FlexibleType flexibleType, @NotNull ProtoBuf.Type.Builder proto
+    ) {
+        proto.setFlexibleTypeCapabilitiesId(getStringTable().getStringIndex(
+                LazyJavaTypeResolver.FlexibleJavaClassifierTypeFactory.INSTANCE.getId()));
     }
 
     @Override

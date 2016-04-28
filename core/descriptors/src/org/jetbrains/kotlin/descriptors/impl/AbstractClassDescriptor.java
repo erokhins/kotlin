@@ -31,7 +31,7 @@ import java.util.List;
 
 public abstract class AbstractClassDescriptor implements ClassDescriptor {
     private final Name name;
-    protected final NotNullLazyValue<KotlinType> defaultType;
+    protected final NotNullLazyValue<KotlinType.SimpleType> defaultType;
     private final NotNullLazyValue<MemberScope> unsubstitutedInnerClassesScope;
     private final NotNullLazyValue<ReceiverParameterDescriptor> thisAsReceiverParameter;
 
@@ -113,7 +113,7 @@ public abstract class AbstractClassDescriptor implements ClassDescriptor {
 
     @NotNull
     @Override
-    public KotlinType getDefaultType() {
+    public KotlinType.SimpleType getDefaultType() {
         return defaultType.invoke();
     }
 

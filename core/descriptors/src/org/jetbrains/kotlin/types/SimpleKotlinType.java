@@ -14,16 +14,7 @@
  * limitations under the License.
  */
 
-package org.jetbrains.kotlin.types
+package org.jetbrains.kotlin.types;
 
-import org.jetbrains.kotlin.renderer.DescriptorRenderer
-
-interface RawTypeCapability : TypeCapability {
-
-    val substitution: TypeSubstitution?
-    val substitutionToComposeWith: TypeSubstitution?
-
-    fun renderInflexible(type: KotlinType, renderer: DescriptorRenderer): String?
-    fun renderBounds(flexibleType: KotlinType.FlexibleType, renderer: DescriptorRenderer): Pair<String, String>?
-
+public abstract class SimpleKotlinType implements KotlinType {
 }

@@ -952,7 +952,7 @@ public class DescriptorResolver {
     }
 
     @NotNull
-    /*package*/ static DeferredType inferReturnTypeFromExpressionBody(
+    /*package*/ static KotlinType.DeferredType inferReturnTypeFromExpressionBody(
             @NotNull StorageManager storageManager,
             @NotNull final ExpressionTypingServices expressionTypingServices,
             @NotNull final BindingTrace trace,
@@ -961,7 +961,7 @@ public class DescriptorResolver {
             @NotNull final KtDeclarationWithBody function,
             @NotNull final FunctionDescriptor functionDescriptor
     ) {
-        return DeferredType.createRecursionIntolerant(storageManager, trace, new Function0<KotlinType>() {
+        return DeferredTypeImpl.createRecursionIntolerant(storageManager, trace, new Function0<KotlinType>() {
             @Override
             public KotlinType invoke() {
                 PreliminaryDeclarationVisitor.Companion.createForDeclaration(function, trace);
@@ -1048,15 +1048,15 @@ public class DescriptorResolver {
 
         List<KtTypeReference> jetTypeArguments = typeElement.getTypeArgumentsAsTypes();
 
+        KotlinType.FlexibleType flexibleType = FlexibleTypesKt.asFlexibleType(type);
         // A type reference from Kotlin code can yield a flexible type only if it's `ft<T1, T2>`, whose bounds should not be checked
-        if (FlexibleTypesKt.isFlexible(type) && !DynamicTypesKt.isDynamic(type)) {
+        if (flexibleType != null && !DynamicTypesKt.isDynamic(type)) {
             assert jetTypeArguments.size() == 2
                     : "Flexible type cannot be denoted in Kotlin otherwise than as ft<T1, T2>, but was: "
                       + PsiUtilsKt.getElementTextWithContext(typeReference);
             // it's really ft<Foo, Bar>
-            Flexibility flexibility = FlexibleTypesKt.flexibility(type);
-            checkBounds(jetTypeArguments.get(0), flexibility.getLowerBound(), trace);
-            checkBounds(jetTypeArguments.get(1), flexibility.getUpperBound(), trace);
+            checkBounds(jetTypeArguments.get(0), flexibleType.getLowerBound(), trace);
+            checkBounds(jetTypeArguments.get(1), flexibleType.getUpperBound(), trace);
             return;
         }
 

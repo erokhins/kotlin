@@ -613,9 +613,9 @@ public class BasicExpressionTypingVisitor extends ExpressionTypingVisitor {
                             final ClassDescriptor descriptor
                     ) {
                         if (slice == CLASS && declaration == expression.getObjectDeclaration()) {
-                            KotlinType defaultType = DeferredType.createRecursionIntolerant(components.globalContext.getStorageManager(),
-                                                                                            context.trace,
-                                                                                            new Function0<KotlinType>() {
+                            KotlinType defaultType = DeferredTypeImpl.createRecursionIntolerant(components.globalContext.getStorageManager(),
+                                                                                                context.trace,
+                                                                                                new Function0<KotlinType>() {
                                                                                                 @Override
                                                                                                 public KotlinType invoke() {
                                                                                                     return descriptor.getDefaultType();

@@ -65,9 +65,8 @@ private fun KotlinType.render(typeParameterNameMap: Map<TypeParameterDescriptor,
                     override fun getTypeConstructor() = wrappingTypeConstructor
                 }
 
-                val wrappingType = object : KotlinType by typeParameter.defaultType {
-                    override fun getConstructor() = wrappingTypeConstructor
-                }
+                val wrappingType = SimpleTypeImpl.create(typeParameter.defaultType as KotlinType.SimpleType,
+                                                         constructor = wrappingTypeConstructor)
 
                 TypeProjectionImpl(wrappingType)
             }

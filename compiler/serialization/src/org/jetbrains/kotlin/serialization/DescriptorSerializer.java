@@ -461,17 +461,17 @@ public class DescriptorSerializer {
     private ProtoBuf.Type.Builder type(@NotNull KotlinType type) {
         assert !type.isError() : "Can't serialize error types: " + type; // TODO
 
-        if (FlexibleTypesKt.isFlexible(type)) {
-            Flexibility flexibility = FlexibleTypesKt.flexibility(type);
-
-            ProtoBuf.Type.Builder lowerBound = type(flexibility.getLowerBound());
-            lowerBound.setFlexibleTypeCapabilitiesId(getStringTable().getStringIndex(flexibility.getFactory().getId()));
+        KotlinType.FlexibleType flexibleType = FlexibleTypesKt.asFlexibleType(type);
+        if (flexibleType != null) {
+            ProtoBuf.Type.Builder lowerBound = type(flexibleType.getLowerBound());
             if (useTypeTable()) {
-                lowerBound.setFlexibleUpperBoundId(typeId(flexibility.getUpperBound()));
+                lowerBound.setFlexibleUpperBoundId(typeId(flexibleType.getUpperBound()));
             }
             else {
-                lowerBound.setFlexibleUpperBound(type(flexibility.getUpperBound()));
+                lowerBound.setFlexibleUpperBound(type(flexibleType.getUpperBound()));
             }
+
+            extension.serializeFlexibleType(flexibleType, lowerBound);
             return lowerBound;
         }
 

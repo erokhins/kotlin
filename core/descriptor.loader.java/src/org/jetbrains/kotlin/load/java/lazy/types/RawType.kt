@@ -49,12 +49,12 @@ object RawTypeCapabilities : TypeCapabilities {
             }
         }
 
-        override fun renderBounds(flexibility: Flexibility, renderer: DescriptorRenderer): Pair<String, String>? {
-            val lowerArgs = renderer.renderArguments(flexibility.lowerBound)
-            val upperArgs = renderer.renderArguments(flexibility.upperBound)
+        override fun renderBounds(flexibleType: KotlinType.FlexibleType, renderer: DescriptorRenderer): Pair<String, String>? {
+            val lowerArgs = renderer.renderArguments(flexibleType.lowerBound)
+            val upperArgs = renderer.renderArguments(flexibleType.upperBound)
 
-            val lowerRendered = renderer.renderType(flexibility.lowerBound)
-            val upperRendered = renderer.renderType(flexibility.upperBound)
+            val lowerRendered = renderer.renderType(flexibleType.lowerBound)
+            val upperRendered = renderer.renderType(flexibleType.upperBound)
 
             if (!upperArgs.isNotEmpty()) return null
 
@@ -100,13 +100,14 @@ internal object RawSubstitution : TypeSubstitution() {
         }
     }
 
-    private fun eraseInflexibleBasedOnClassDescriptor(type: KotlinType, declaration: ClassDescriptor, attr: JavaTypeAttributes): KotlinType {
+    private fun eraseInflexibleBasedOnClassDescriptor(
+            type: KotlinType, declaration: ClassDescriptor, attr: JavaTypeAttributes): KotlinType.SimpleType {
         if (KotlinBuiltIns.isArray(type)) {
             val componentTypeProjection = type.arguments[0]
             val arguments = listOf(
                     TypeProjectionImpl(componentTypeProjection.projectionKind, eraseType(componentTypeProjection.type))
             )
-            return KotlinTypeImpl.create(
+            return SimpleTypeImpl.create(
                     type.annotations, type.constructor, type.isMarkedNullable, arguments,
                     (type.constructor.declarationDescriptor as ClassDescriptor).getMemberScope(arguments)
             )
@@ -115,7 +116,7 @@ internal object RawSubstitution : TypeSubstitution() {
         if (type.isError) return ErrorUtils.createErrorType("Raw error type: ${type.constructor}")
 
         val constructor = type.constructor
-        return KotlinTypeImpl.create(
+        return SimpleTypeImpl.create(
                 type.annotations, constructor, type.isMarkedNullable,
                 type.constructor.parameters.map {
                     parameter ->
