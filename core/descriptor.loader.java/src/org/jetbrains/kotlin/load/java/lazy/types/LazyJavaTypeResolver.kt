@@ -293,25 +293,9 @@ class LazyJavaTypeResolver(
         }
 
         private class Impl(lowerBound: KotlinType, upperBound: KotlinType) :
-                DelegatingFlexibleType(lowerBound, upperBound, FlexibleJavaClassifierTypeFactory), CustomTypeVariable {
+                DelegatingFlexibleType(lowerBound, upperBound, FlexibleJavaClassifierTypeFactory) {
 
             override val delegateType: KotlinType get() = lowerBound
-
-            override fun <T : TypeCapability> getCapability(capabilityClass: Class<T>): T? {
-                @Suppress("UNCHECKED_CAST")
-                if (capabilityClass == CustomTypeVariable::class.java) return this as T
-
-                return super.getCapability(capabilityClass)
-            }
-
-            override val isTypeVariable: Boolean get() = lowerBound.constructor.declarationDescriptor is TypeParameterDescriptor
-                                                         && lowerBound.constructor == upperBound.constructor
-
-            override fun substitutionResult(replacement: KotlinType): KotlinType {
-                return if (replacement.isFlexible()) replacement
-                       else create(replacement, TypeUtils.makeNullable(replacement))
-            }
-
         }
     }
 

@@ -220,8 +220,6 @@ private object EnhancedTypeAnnotationDescriptor : AnnotationDescriptor {
 }
 
 internal object NotNullTypeParameterTypeCapability : CustomTypeVariable {
-    override val isTypeVariable: Boolean
-        get() = true
 
     override fun substitutionResult(replacement: KotlinType): KotlinType {
         if (!TypeUtils.isNullableType(replacement) && !replacement.isTypeParameter()) return replacement

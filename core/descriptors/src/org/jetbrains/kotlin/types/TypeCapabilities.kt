@@ -16,6 +16,8 @@
 
 package org.jetbrains.kotlin.types
 
+import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
+
 interface TypeCapability
 
 interface TypeCapabilities {
@@ -49,22 +51,29 @@ fun <T : TypeCapability> TypeCapabilities.addCapability(clazz: Class<T>, typeCap
 
 inline fun <reified T : TypeCapability> KotlinType.getCapability(): T? = getCapability(T::class.java)
 
-
-// To facilitate laziness, any KotlinType implementation may inherit from this trait,
-// even if it turns out that the type an instance represents is not actually a type variable
-// (i.e. it is not derived from a type parameter), see isTypeVariable
 interface CustomTypeVariable : TypeCapability {
-    val isTypeVariable: Boolean
-
-    // Throws an exception when isTypeVariable == false
     fun substitutionResult(replacement: KotlinType): KotlinType
 }
 
-fun KotlinType.isCustomTypeVariable(): Boolean = this.getCapability(CustomTypeVariable::class.java)?.isTypeVariable ?: false
-fun KotlinType.getCustomTypeVariable(): CustomTypeVariable? =
-        this.getCapability(CustomTypeVariable::class.java)?.let {
-            if (it.isTypeVariable) it else null
+fun KotlinType.getCustomTypeVariable(): CustomTypeVariable? {
+    if (!isTypeParameter()) return null
+    getCapability<CustomTypeVariable>()?.let { return it }
+
+    if (isFlexible()) {
+        val flexibility = flexibility()
+        return object : CustomTypeVariable {
+            override fun substitutionResult(replacement: KotlinType): KotlinType {
+                return if (replacement.isFlexible()) {
+                    replacement
+                }
+                else {
+                    flexibility.factory.create(replacement, TypeUtils.makeNullable(replacement))
+                }
+            }
         }
+    }
+    return null
+}
 
 interface SubtypingRepresentatives : TypeCapability {
     val subTypeRepresentative: KotlinType

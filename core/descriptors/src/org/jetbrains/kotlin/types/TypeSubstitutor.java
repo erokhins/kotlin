@@ -134,7 +134,8 @@ public class TypeSubstitutor {
         KotlinType type = originalProjection.getType();
         TypeProjection replacement = substitution.get(type);
         Variance originalProjectionKind = originalProjection.getProjectionKind();
-        if (replacement == null && FlexibleTypesKt.isFlexible(type) && !TypeCapabilitiesKt.isCustomTypeVariable(type)) {
+        CustomTypeVariable typeVariable = TypeCapabilitiesKt.getCustomTypeVariable(type);
+        if (replacement == null && typeVariable == null && FlexibleTypesKt.isFlexible(type)) {
             Flexibility flexibility = FlexibleTypesKt.flexibility(type);
             TypeProjection substitutedLower =
                     unsafeSubstitute(new TypeProjectionImpl(originalProjectionKind, flexibility.getLowerBound()), recursionDepth + 1);
@@ -171,7 +172,6 @@ public class TypeSubstitutor {
                 }
             }
             KotlinType substitutedType;
-            CustomTypeVariable typeVariable = TypeCapabilitiesKt.getCustomTypeVariable(type);
             if (replacement.isStarProjection()) {
                 return replacement;
             }
