@@ -32,10 +32,14 @@ import org.jetbrains.kotlin.load.java.lazy.types.JavaTypeFlexibility.*
 import org.jetbrains.kotlin.load.java.structure.*
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.platform.JavaToKotlinClassMap
+import org.jetbrains.kotlin.serialization.ProtoBuf
+import org.jetbrains.kotlin.serialization.deserialization.FlexibleTypeDeserializer
+import org.jetbrains.kotlin.storage.getValue
 import org.jetbrains.kotlin.types.*
+import org.jetbrains.kotlin.types.KotlinType.StableType.FlexibleType
+import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType
 import org.jetbrains.kotlin.types.Variance.*
 import org.jetbrains.kotlin.types.typeUtil.createProjection
-import org.jetbrains.kotlin.types.typeUtil.replaceAnnotations
 import org.jetbrains.kotlin.types.typeUtil.replaceArgumentsWithStarProjections
 import org.jetbrains.kotlin.utils.sure
 import org.jetbrains.kotlin.utils.toReadOnlyList
@@ -56,7 +60,7 @@ class LazyJavaTypeResolver(
             }
             is JavaClassifierType ->
                 if (attr.allowFlexible && attr.howThisTypeIsUsed != SUPERTYPE)
-                    FlexibleJavaClassifierTypeFactory.create(
+                    FlexibleTypeIml( // todo raw type
                             LazyJavaClassifierType(javaType, attr.toFlexible(FLEXIBLE_LOWER_BOUND)),
                             LazyJavaClassifierType(javaType, attr.toFlexible(FLEXIBLE_UPPER_BOUND))
                     )
@@ -75,7 +79,7 @@ class LazyJavaTypeResolver(
             if (primitiveType != null) {
                 val jetType = c.module.builtIns.getPrimitiveArrayKotlinType(primitiveType)
                 return@run if (attr.allowFlexible)
-                    FlexibleJavaClassifierTypeFactory.create(jetType, TypeUtils.makeNullable(jetType))
+                    KotlinTypeFactory.createFlexibleType(jetType, jetType.markNullableAsSpecified(true))
                 else TypeUtils.makeNullableAsSpecified(jetType, !attr.isMarkedNotNull)
             }
 
@@ -83,9 +87,9 @@ class LazyJavaTypeResolver(
                                                   TYPE_ARGUMENT.toAttributes(attr.allowFlexible, attr.isForAnnotationParameter))
 
             if (attr.allowFlexible) {
-                return@run FlexibleJavaClassifierTypeFactory.create(
+                return@run KotlinTypeFactory.createFlexibleType(
                         c.module.builtIns.getArrayType(INVARIANT, componentType),
-                        TypeUtils.makeNullable(c.module.builtIns.getArrayType(OUT_VARIANCE, componentType)))
+                        c.module.builtIns.getArrayType(OUT_VARIANCE, componentType).markNullableAsSpecified(true))
             }
 
             val projectionKind = if (attr.howThisTypeIsUsed == MEMBER_SIGNATURE_CONTRAVARIANT || isVararg) OUT_VARIANCE else INVARIANT
@@ -183,11 +187,11 @@ class LazyJavaTypeResolver(
             // such as collections with no generics, so the Java types are not raw, formally, but they don't match with
             // their Kotlin analogs, so we treat them as raw to avoid exceptions
             // No type arguments, but some are expected => raw
-            return javaType.typeArguments.isEmpty() && !getConstructor().parameters.isEmpty()
+            return javaType.typeArguments.isEmpty() && !constructor.parameters.isEmpty()
         }
 
         override fun computeArguments(): List<TypeProjection> {
-            val typeConstructor = getConstructor()
+            val typeConstructor = constructor
             val typeParameters = typeConstructor.parameters
             if (isRaw()) {
                 return typeParameters.map {
@@ -259,9 +263,7 @@ class LazyJavaTypeResolver(
             return this != typeParameter.variance
         }
 
-        override fun getCapabilities(): TypeCapabilities = if (isRaw()) RawTypeCapabilities else TypeCapabilities.NONE
-
-        private val nullable = c.storageManager.createLazyValue l@ {
+        override val isMarkedNullable by c.storageManager.createLazyValue l@ {
             if (attr.flexibility == FLEXIBLE_LOWER_BOUND) return@l false
             if (attr.flexibility == FLEXIBLE_UPPER_BOUND) return@l true
 
@@ -278,41 +280,7 @@ class LazyJavaTypeResolver(
             }
         }
 
-        override fun isMarkedNullable(): Boolean = nullable()
-
         override fun getAnnotations() = annotations
-    }
-
-    object FlexibleJavaClassifierTypeFactory : FlexibleTypeFactory {
-        override val id: String get() = "kotlin.jvm.PlatformType"
-
-        override fun create(lowerBound: KotlinType, upperBound: KotlinType): KotlinType {
-            if (lowerBound == upperBound) return lowerBound
-
-            return Impl(lowerBound, upperBound)
-        }
-
-        private class Impl(lowerBound: KotlinType, upperBound: KotlinType) :
-                DelegatingFlexibleType(lowerBound, upperBound, FlexibleJavaClassifierTypeFactory), CustomTypeVariable {
-
-            override val delegateType: KotlinType get() = lowerBound
-
-            override fun <T : TypeCapability> getCapability(capabilityClass: Class<T>): T? {
-                @Suppress("UNCHECKED_CAST")
-                if (capabilityClass == CustomTypeVariable::class.java) return this as T
-
-                return super.getCapability(capabilityClass)
-            }
-
-            override val isTypeVariable: Boolean get() = lowerBound.constructor.declarationDescriptor is TypeParameterDescriptor
-                                                         && lowerBound.constructor == upperBound.constructor
-
-            override fun substitutionResult(replacement: KotlinType): KotlinType {
-                return if (replacement.isFlexible()) replacement
-                       else create(replacement, TypeUtils.makeNullable(replacement))
-            }
-
-        }
     }
 
 }

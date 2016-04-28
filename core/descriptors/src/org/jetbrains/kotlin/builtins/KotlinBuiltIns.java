@@ -35,6 +35,7 @@ import org.jetbrains.kotlin.serialization.deserialization.AdditionalClassPartsPr
 import org.jetbrains.kotlin.serialization.deserialization.PlatformDependentDeclarationFilter;
 import org.jetbrains.kotlin.storage.StorageManager;
 import org.jetbrains.kotlin.types.*;
+import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType;
 import org.jetbrains.kotlin.types.checker.KotlinTypeChecker;
 
 import java.io.InputStream;
@@ -69,7 +70,7 @@ public abstract class KotlinBuiltIns {
 
     private final Set<PackageFragmentDescriptor> builtInsPackageFragments;
 
-    private final Map<PrimitiveType, KotlinType> primitiveTypeToArrayKotlinType;
+    private final Map<PrimitiveType, SimpleType> primitiveTypeToArrayKotlinType;
     private final Map<KotlinType, KotlinType> primitiveKotlinTypeToKotlinArrayType;
     private final Map<KotlinType, KotlinType> kotlinArrayTypeToPrimitiveKotlinType;
     private final StorageManager storageManager;
@@ -107,7 +108,7 @@ public abstract class KotlinBuiltIns {
 
         builtInsPackageFragments = new LinkedHashSet<PackageFragmentDescriptor>(packageNameToPackageFragment.values());
 
-        primitiveTypeToArrayKotlinType = new EnumMap<PrimitiveType, KotlinType>(PrimitiveType.class);
+        primitiveTypeToArrayKotlinType = new EnumMap<PrimitiveType, SimpleType>(PrimitiveType.class);
         primitiveKotlinTypeToKotlinArrayType = new HashMap<KotlinType, KotlinType>();
         kotlinArrayTypeToPrimitiveKotlinType = new HashMap<KotlinType, KotlinType>();
         for (PrimitiveType primitive : PrimitiveType.values()) {
@@ -127,7 +128,7 @@ public abstract class KotlinBuiltIns {
 
     private void makePrimitive(@NotNull PrimitiveType primitiveType) {
         KotlinType type = getBuiltInTypeByClassName(primitiveType.getTypeName().asString());
-        KotlinType arrayType = getBuiltInTypeByClassName(primitiveType.getArrayTypeName().asString());
+        SimpleType arrayType = getBuiltInTypeByClassName(primitiveType.getArrayTypeName().asString());
 
         primitiveTypeToArrayKotlinType.put(primitiveType, arrayType);
         primitiveKotlinTypeToKotlinArrayType.put(type, arrayType);
@@ -600,28 +601,28 @@ public abstract class KotlinBuiltIns {
     }
 
     @NotNull
-    private KotlinType getBuiltInTypeByClassName(@NotNull String classSimpleName) {
+    private SimpleType getBuiltInTypeByClassName(@NotNull String classSimpleName) {
         return getBuiltInClassByName(classSimpleName).getDefaultType();
     }
 
     @NotNull
-    public KotlinType getNothingType() {
+    public SimpleType getNothingType() {
         return getNothing().getDefaultType();
     }
 
     @NotNull
-    public KotlinType getNullableNothingType() {
-        return TypeUtils.makeNullable(getNothingType());
+    public SimpleType getNullableNothingType() {
+        return getNothingType().markNullableAsSpecified(true);
     }
 
     @NotNull
-    public KotlinType getAnyType() {
+    public SimpleType getAnyType() {
         return getAny().getDefaultType();
     }
 
     @NotNull
-    public KotlinType getNullableAnyType() {
-        return TypeUtils.makeNullable(getAnyType());
+    public SimpleType getNullableAnyType() {
+        return getAnyType().markNullableAsSpecified(true);
     }
 
     @NotNull
@@ -630,7 +631,7 @@ public abstract class KotlinBuiltIns {
     }
 
     @NotNull
-    public KotlinType getPrimitiveKotlinType(@NotNull PrimitiveType type) {
+    public SimpleType getPrimitiveKotlinType(@NotNull PrimitiveType type) {
         return getPrimitiveClassDescriptor(type).getDefaultType();
     }
 
@@ -645,7 +646,7 @@ public abstract class KotlinBuiltIns {
     }
 
     @NotNull
-    public KotlinType getIntType() {
+    public SimpleType getIntType() {
         return getPrimitiveKotlinType(INT);
     }
 
@@ -680,7 +681,7 @@ public abstract class KotlinBuiltIns {
     }
 
     @NotNull
-    public KotlinType getStringType() {
+    public SimpleType getStringType() {
         return getString().getDefaultType();
     }
 
@@ -700,7 +701,7 @@ public abstract class KotlinBuiltIns {
     }
 
     @NotNull
-    public KotlinType getPrimitiveArrayKotlinType(@NotNull PrimitiveType primitiveType) {
+    public SimpleType getPrimitiveArrayKotlinType(@NotNull PrimitiveType primitiveType) {
         return primitiveTypeToArrayKotlinType.get(primitiveType);
     }
 
@@ -727,9 +728,9 @@ public abstract class KotlinBuiltIns {
     }
 
     @NotNull
-    public KotlinType getArrayType(@NotNull Variance projectionType, @NotNull KotlinType argument) {
+    public SimpleType getArrayType(@NotNull Variance projectionType, @NotNull KotlinType argument) {
         List<TypeProjectionImpl> types = Collections.singletonList(new TypeProjectionImpl(projectionType, argument));
-        return KotlinTypeImpl.create(
+        return KotlinTypeFactory.create(
                 Annotations.Companion.getEMPTY(),
                 getArray(),
                 false,
@@ -741,7 +742,7 @@ public abstract class KotlinBuiltIns {
     public KotlinType getEnumType(@NotNull KotlinType argument) {
         Variance projectionType = Variance.INVARIANT;
         List<TypeProjectionImpl> types = Collections.singletonList(new TypeProjectionImpl(projectionType, argument));
-        return KotlinTypeImpl.create(
+        return KotlinTypeFactory.create(
                 Annotations.Companion.getEMPTY(),
                 getEnum(),
                 false,

@@ -29,17 +29,15 @@ import org.jetbrains.kotlin.resolve.createFunctionType
 import org.jetbrains.kotlin.resolve.descriptorUtil.builtIns
 import org.jetbrains.kotlin.resolve.scopes.MemberScopeImpl
 import org.jetbrains.kotlin.resolve.scopes.receivers.TransientReceiver
-import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.Variance
-import org.jetbrains.kotlin.types.createDynamicType
+import org.jetbrains.kotlin.types.*
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
-import org.jetbrains.kotlin.types.isDynamic
+import org.jetbrains.kotlin.types.typeUtil.isDynamic
 import org.jetbrains.kotlin.utils.Printer
 import java.util.*
 
 class DynamicCallableDescriptors(builtIns: KotlinBuiltIns) {
 
-    val dynamicType = createDynamicType(builtIns)
+    val dynamicType = KotlinTypeFactory.createDynamicType(builtIns)
 
     fun createDynamicDescriptorScope(call: Call, owner: DeclarationDescriptor) = object : MemberScopeImpl() {
         override fun printScopeStructure(p: Printer) {
@@ -221,6 +219,6 @@ class DynamicCallableDescriptors(builtIns: KotlinBuiltIns) {
 fun DeclarationDescriptor.isDynamic(): Boolean {
     if (this !is CallableDescriptor) return false
     val dispatchReceiverParameter = dispatchReceiverParameter
-    return dispatchReceiverParameter != null && dispatchReceiverParameter.type.isDynamic()
+    return dispatchReceiverParameter != null && dispatchReceiverParameter.type.isDynamic
 }
 

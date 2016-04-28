@@ -312,7 +312,7 @@ class TypeInstantiationItems(
             private val tail: Tail?) : InheritanceItemsSearcher {
 
         private val baseHasTypeArgs = classDescriptor.declaredTypeParameters.isNotEmpty()
-        private val expectedType = KotlinTypeImpl.create(Annotations.EMPTY, classDescriptor, false, typeArgs)
+        private val expectedType = KotlinTypeFactory.create(Annotations.EMPTY, classDescriptor, false, typeArgs)
         private val expectedFuzzyType = expectedType.toFuzzyType(freeParameters)
 
         override fun search(nameFilter: (String) -> Boolean, consumer: (LookupElement) -> Unit) {
@@ -328,7 +328,7 @@ class TypeInstantiationItems(
                 val hasTypeArgs = descriptor.declaredTypeParameters.isNotEmpty()
                 if (hasTypeArgs || baseHasTypeArgs) {
                     val substitutor = inheritorFuzzyType.checkIsSubtypeOf(expectedFuzzyType) ?: continue
-                    if (!substitutor.isEmpty) {
+                    if (!substitutor.isEmpty()) {
                         val inheritorTypeSubstituted = substitutor.substitute(inheritorFuzzyType.type, Variance.INVARIANT)!!
                         inheritorFuzzyType = inheritorTypeSubstituted.toFuzzyType(freeParameters + inheritorFuzzyType.freeParameters)
                     }

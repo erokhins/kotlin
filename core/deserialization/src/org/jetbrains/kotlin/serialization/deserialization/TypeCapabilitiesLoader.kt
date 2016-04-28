@@ -17,12 +17,41 @@
 package org.jetbrains.kotlin.serialization.deserialization
 
 import org.jetbrains.kotlin.serialization.ProtoBuf
-import org.jetbrains.kotlin.types.TypeCapabilities
+import org.jetbrains.kotlin.types.KotlinType.StableType.FlexibleType
+import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType
+import org.jetbrains.kotlin.types.KotlinTypeFactory
+import org.jetbrains.kotlin.types.TypeSubstitution
+import org.jetbrains.kotlin.types.checker.KotlinTypeChecker
+import org.jetbrains.kotlin.types.typeUtil.builtIns
 
-abstract class TypeCapabilitiesLoader {
-    object NONE : TypeCapabilitiesLoader() {
-        override fun loadCapabilities(type: ProtoBuf.Type): TypeCapabilities = TypeCapabilities.NONE
+// todo move to serialization
+interface FlexibleTypeDeserializer {
+    val id: String
+
+    fun create(proto: ProtoBuf.Type, lowerBound: SimpleType, upperBound: SimpleType): FlexibleType
+
+    fun customSubstitutionForBound(proto: ProtoBuf.Type, isLower: Boolean): TypeSubstitution? = null
+
+    object ThrowException : FlexibleTypeDeserializer {
+        private fun error(): Nothing = throw IllegalArgumentException("This factory should not be used.")
+        override val id: String
+            get() = error()
+
+        override fun create(proto: ProtoBuf.Type, lowerBound: SimpleType, upperBound: SimpleType): FlexibleType = error()
     }
+}
 
-    abstract fun loadCapabilities(type: ProtoBuf.Type): TypeCapabilities
+
+object DynamicTypeDeserializer : FlexibleTypeDeserializer {
+    override val id: String get() = "kotlin.DynamicType"
+
+    override fun create(proto: ProtoBuf.Type, lowerBound: SimpleType, upperBound: SimpleType): FlexibleType {
+        if (KotlinTypeChecker.FLEXIBLE_UNEQUAL_TO_INFLEXIBLE.equalTypes(lowerBound, lowerBound.builtIns.nothingType) &&
+            KotlinTypeChecker.FLEXIBLE_UNEQUAL_TO_INFLEXIBLE.equalTypes(upperBound, upperBound.builtIns.nullableAnyType)) {
+            return KotlinTypeFactory.createDynamicType(lowerBound.builtIns)
+        }
+        else {
+            throw IllegalStateException("Illegal type range for dynamic type: $lowerBound..$upperBound")
+        }
+    }
 }

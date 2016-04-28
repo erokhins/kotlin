@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.name.Name;
 import org.jetbrains.kotlin.resolve.scopes.MemberScope;
 import org.jetbrains.kotlin.resolve.scopes.SubstitutingScope;
 import org.jetbrains.kotlin.types.*;
+import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -130,9 +131,9 @@ public class LazySubstitutingClassDescriptor implements ClassDescriptor {
 
     @NotNull
     @Override
-    public KotlinType getDefaultType() {
+    public SimpleType getDefaultType() {
         List<TypeProjection> typeProjections = TypeUtils.getDefaultTypeProjections(getTypeConstructor().getParameters());
-        return KotlinTypeImpl.create(
+        return KotlinTypeFactory.create(
                 getAnnotations(),
                 this,
                 false,

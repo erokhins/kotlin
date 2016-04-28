@@ -29,7 +29,7 @@ import org.jetbrains.kotlin.descriptors.annotations.AnnotationsImpl
 import org.jetbrains.kotlin.descriptors.impl.ValueParameterDescriptorImpl
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.KotlinTypeImpl
+import org.jetbrains.kotlin.types.KotlinTypeFactory
 import org.jetbrains.kotlin.types.TypeProjection
 
 internal fun createValueParametersForInvokeInFunctionType(
@@ -72,7 +72,7 @@ fun createFunctionType(
                 AnnotationsImpl(annotations + extensionFunctionAnnotation)
             }
 
-    return KotlinTypeImpl.create(typeAnnotations, classDescriptor, false, arguments)
+    return KotlinTypeFactory.create(typeAnnotations, classDescriptor, false, arguments)
 }
 
 fun getValueParametersCountFromFunctionType(type: KotlinType): Int {

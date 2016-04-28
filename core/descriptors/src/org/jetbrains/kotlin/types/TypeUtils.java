@@ -27,6 +27,8 @@ import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor;
 import org.jetbrains.kotlin.descriptors.annotations.Annotations;
 import org.jetbrains.kotlin.resolve.constants.IntegerValueTypeConstructor;
 import org.jetbrains.kotlin.resolve.scopes.MemberScope;
+import org.jetbrains.kotlin.types.KotlinType.StableType.FlexibleType;
+import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType;
 import org.jetbrains.kotlin.types.checker.KotlinTypeChecker;
 
 import java.util.*;
@@ -35,59 +37,25 @@ public class TypeUtils {
     public static final KotlinType DONT_CARE = ErrorUtils.createErrorTypeWithCustomDebugName("DONT_CARE");
     public static final KotlinType CANT_INFER_FUNCTION_PARAM_TYPE = ErrorUtils.createErrorType("Cannot be inferred");
 
-    public static class SpecialType implements KotlinType {
+    private static class SpecialType extends AbstractSimpleType {
         private final String name;
 
         public SpecialType(String name) {
             this.name = name;
         }
 
-        @NotNull
-        @Override
-        public TypeConstructor getConstructor() {
-            throw new IllegalStateException(name);
-        }
-
-        @NotNull
-        @Override
-        public List<TypeProjection> getArguments() {
-            throw new IllegalStateException(name);
-        }
-
-        @Override
-        public boolean isMarkedNullable() {
-            throw new IllegalStateException(name);
-        }
-
-        @NotNull
-        @Override
-        public MemberScope getMemberScope() {
-            throw new IllegalStateException(name);
-        }
-
         @Override
         public boolean isError() {
-            return false;
+            return true;
         }
 
         @NotNull
         @Override
-        public Annotations getAnnotations() {
+        protected KotlinType getDelegate() {
             throw new IllegalStateException(name);
         }
 
-        @Nullable
-        @Override
-        public <T extends TypeCapability> T getCapability(@NotNull Class<T> capabilityClass) {
-            return null;
-        }
-
         @NotNull
-        @Override
-        public TypeCapabilities getCapabilities() {
-            return TypeCapabilities.NONE.INSTANCE;
-        }
-
         @Override
         public String toString() {
             return name;
@@ -119,26 +87,7 @@ public class TypeUtils {
 
     @NotNull
     public static KotlinType makeNullableAsSpecified(@NotNull KotlinType type, boolean nullable) {
-        Flexibility flexibility = type.getCapability(Flexibility.class);
-        if (flexibility != null) {
-            return flexibility.makeNullableAsSpecified(nullable);
-        }
-
-        // Wrapping serves two purposes here
-        // 1. It's requires less memory than copying with a changed nullability flag: a copy has many fields, while a wrapper has only one
-        // 2. It preserves laziness of types
-
-        // Unwrap to avoid long delegation call chains
-        if (type instanceof AbstractTypeWithKnownNullability) {
-            return makeNullableAsSpecified(((AbstractTypeWithKnownNullability) type).delegate, nullable);
-        }
-
-        // checking to preserve laziness
-        if (!(type instanceof LazyType) && type.isMarkedNullable() == nullable) {
-            return type;
-        }
-
-        return nullable ? new NullableType(type) : new NotNullType(type);
+        return TypeOperationsKt.markNullableAsSpecified(type, nullable);
     }
 
     @NotNull
@@ -228,13 +177,13 @@ public class TypeUtils {
     }
 
     @NotNull
-    public static KotlinType makeUnsubstitutedType(ClassDescriptor classDescriptor, MemberScope unsubstitutedMemberScope) {
+    public static SimpleType makeUnsubstitutedType(ClassDescriptor classDescriptor, MemberScope unsubstitutedMemberScope) {
         if (ErrorUtils.isError(classDescriptor)) {
             return ErrorUtils.createErrorType("Unsubstituted type for " + classDescriptor);
         }
         TypeConstructor typeConstructor = classDescriptor.getTypeConstructor();
         List<TypeProjection> arguments = getDefaultTypeProjections(typeConstructor.getParameters());
-        return KotlinTypeImpl.create(
+        return KotlinTypeFactory.create(
                 Annotations.Companion.getEMPTY(),
                 typeConstructor,
                 false,
@@ -399,7 +348,10 @@ public class TypeUtils {
         ));
     }
 
-    public static boolean dependsOnTypeConstructors(@NotNull KotlinType type, @NotNull Collection<TypeConstructor> typeParameterConstructors) {
+    private static boolean dependsOnTypeConstructors(
+            @NotNull KotlinType type,
+            @NotNull Collection<TypeConstructor> typeParameterConstructors
+    ) {
         if (typeParameterConstructors.contains(type.getConstructor())) return true;
         for (TypeProjection typeProjection : type.getArguments()) {
             if (!typeProjection.isStarProjection() && dependsOnTypeConstructors(typeProjection.getType(), typeParameterConstructors)) {
@@ -424,10 +376,9 @@ public class TypeUtils {
     ) {
         if (type == null) return false;
         if (isSpecialType.invoke(type)) return true;
-        Flexibility flexibility = type.getCapability(Flexibility.class);
-        if (flexibility != null
-                && (contains(flexibility.getLowerBound(), isSpecialType) || contains(flexibility.getUpperBound(), isSpecialType))) {
-            return true;
+        FlexibleType flexibleType = FlexibleTypesKt.asFlexibleType(type);
+        if (flexibleType != null) {
+            return contains(flexibleType.getLowerBound(), isSpecialType) || contains(flexibleType.getUpperBound(), isSpecialType);
         }
         for (TypeProjection projection : type.getArguments()) {
             if (!projection.isStarProjection() && contains(projection.getType(), isSpecialType)) return true;
@@ -441,7 +392,7 @@ public class TypeUtils {
     }
 
     @NotNull
-    public static KotlinType getDefaultPrimitiveNumberType(@NotNull IntegerValueTypeConstructor numberValueTypeConstructor) {
+    private static KotlinType getDefaultPrimitiveNumberType(@NotNull IntegerValueTypeConstructor numberValueTypeConstructor) {
         KotlinType type = getDefaultPrimitiveNumberType(numberValueTypeConstructor.getSupertypes());
         assert type != null : "Strange number value type constructor: " + numberValueTypeConstructor + ". " +
                               "Super types doesn't contain double, int or long: " + numberValueTypeConstructor.getSupertypes();
@@ -507,81 +458,4 @@ public class TypeUtils {
         }
         return null;
     }
-
-    private static abstract class AbstractTypeWithKnownNullability extends AbstractKotlinType {
-        private final KotlinType delegate;
-
-        private AbstractTypeWithKnownNullability(@NotNull KotlinType delegate) {
-            this.delegate = delegate;
-        }
-
-        @Override
-        @NotNull
-        public TypeConstructor getConstructor() {
-            return delegate.getConstructor();
-        }
-
-        @Override
-        @NotNull
-        public List<TypeProjection> getArguments() {
-            return delegate.getArguments();
-        }
-
-        @Override
-        public abstract boolean isMarkedNullable();
-
-        @Override
-        @NotNull
-        public MemberScope getMemberScope() {
-            return delegate.getMemberScope();
-        }
-
-        @Override
-        public boolean isError() {
-            return delegate.isError();
-        }
-
-        @Override
-        @NotNull
-        public Annotations getAnnotations() {
-            return delegate.getAnnotations();
-        }
-
-        @Nullable
-        @Override
-        public <T extends TypeCapability> T getCapability(@NotNull Class<T> capabilityClass) {
-            return delegate.getCapability(capabilityClass);
-        }
-
-        @NotNull
-        @Override
-        public TypeCapabilities getCapabilities() {
-            return delegate.getCapabilities();
-        }
-    }
-
-    private static class NullableType extends AbstractTypeWithKnownNullability {
-
-        private NullableType(@NotNull KotlinType delegate) {
-            super(delegate);
-        }
-
-        @Override
-        public boolean isMarkedNullable() {
-            return true;
-        }
-    }
-
-    private static class NotNullType extends AbstractTypeWithKnownNullability {
-
-        private NotNullType(@NotNull KotlinType delegate) {
-            super(delegate);
-        }
-
-        @Override
-        public boolean isMarkedNullable() {
-            return false;
-        }
-    }
-
 }

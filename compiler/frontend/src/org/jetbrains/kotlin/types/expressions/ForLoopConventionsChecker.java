@@ -33,9 +33,9 @@ import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver;
 import org.jetbrains.kotlin.resolve.scopes.receivers.TransientReceiver;
 import org.jetbrains.kotlin.resolve.validation.OperatorValidator;
 import org.jetbrains.kotlin.resolve.validation.SymbolUsageValidator;
-import org.jetbrains.kotlin.types.DynamicTypesKt;
 import org.jetbrains.kotlin.types.ErrorUtils;
 import org.jetbrains.kotlin.types.KotlinType;
+import org.jetbrains.kotlin.types.typeUtil.TypeUtilsKt;
 import org.jetbrains.kotlin.util.slicedMap.WritableSlice;
 
 import java.util.Collections;
@@ -96,7 +96,7 @@ public class ForLoopConventionsChecker {
     private static void checkIfOperatorModifierPresent(KtExpression expression, FunctionDescriptor descriptor, DiagnosticSink sink) {
         if (ErrorUtils.isError(descriptor)) return;
         ReceiverParameterDescriptor extensionReceiverParameter = descriptor.getExtensionReceiverParameter();
-        if ((extensionReceiverParameter != null) && (DynamicTypesKt.isDynamic(extensionReceiverParameter.getType()))) return;
+        if ((extensionReceiverParameter != null) && (TypeUtilsKt.isDynamic(extensionReceiverParameter.getType()))) return;
 
         if (!descriptor.isOperator()) {
             OperatorValidator.Companion.report(expression, descriptor, sink);

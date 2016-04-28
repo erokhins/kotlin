@@ -26,6 +26,8 @@ import org.jetbrains.kotlin.descriptors.annotations.CompositeAnnotations;
 import org.jetbrains.kotlin.descriptors.annotations.FilteredAnnotations;
 import org.jetbrains.kotlin.name.FqName;
 import org.jetbrains.kotlin.resolve.calls.inference.CapturedTypeConstructorKt;
+import org.jetbrains.kotlin.types.KotlinType.StableType.FlexibleType;
+import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType;
 import org.jetbrains.kotlin.types.typeUtil.TypeUtilsKt;
 import org.jetbrains.kotlin.types.typesApproximation.CapturedTypeApproximationKt;
 
@@ -135,20 +137,26 @@ public class TypeSubstitutor {
         KotlinType type = originalProjection.getType();
         TypeProjection replacement = substitution.get(type);
         Variance originalProjectionKind = originalProjection.getProjectionKind();
-        if (replacement == null && FlexibleTypesKt.isFlexible(type) && !TypeCapabilitiesKt.isCustomTypeVariable(type)) {
-            Flexibility flexibility = FlexibleTypesKt.flexibility(type);
+
+        CustomTypeVariable typeVariable = TypeCapabilitiesKt.getCustomTypeVariable(type);
+        FlexibleType flexibleType = FlexibleTypesKt.asFlexibleType(type);
+
+        // Raw type cannot be substituted
+        if (TypeUtilsKt.getStableType(type) instanceof RawType) return originalProjection;
+
+        if (replacement == null && typeVariable == null && flexibleType != null) {
             TypeProjection substitutedLower =
-                    unsafeSubstitute(new TypeProjectionImpl(originalProjectionKind, flexibility.getLowerBound()), recursionDepth + 1);
+                    unsafeSubstitute(new TypeProjectionImpl(originalProjectionKind, flexibleType.getLowerBound()), recursionDepth + 1);
             TypeProjection substitutedUpper =
-                    unsafeSubstitute(new TypeProjectionImpl(originalProjectionKind, flexibility.getUpperBound()), recursionDepth + 1);
+                    unsafeSubstitute(new TypeProjectionImpl(originalProjectionKind, flexibleType.getUpperBound()), recursionDepth + 1);
 
             Variance substitutedProjectionKind = substitutedLower.getProjectionKind();
             assert (substitutedProjectionKind == substitutedUpper.getProjectionKind()) &&
                    originalProjectionKind == Variance.INVARIANT || originalProjectionKind == substitutedProjectionKind :
                     "Unexpected substituted projection kind: " + substitutedProjectionKind + "; original: " + originalProjectionKind;
 
-            KotlinType substitutedFlexibleType = flexibility.getFactory().create(
-                    substitutedLower.getType(), substitutedUpper.getType());
+            KotlinType substitutedFlexibleType = KotlinTypeFactory.createFlexibleType(
+                    (SimpleType) substitutedLower.getType(), (SimpleType) substitutedUpper.getType()); // todo cast
             return new TypeProjectionImpl(substitutedProjectionKind, substitutedFlexibleType);
         }
 
@@ -172,7 +180,6 @@ public class TypeSubstitutor {
                 }
             }
             KotlinType substitutedType;
-            CustomTypeVariable typeVariable = TypeCapabilitiesKt.getCustomTypeVariable(type);
             if (replacement.isStarProjection()) {
                 return replacement;
             }
@@ -187,7 +194,7 @@ public class TypeSubstitutor {
             // substitutionType.annotations = replacement.annotations ++ type.annotations
             if (!type.getAnnotations().isEmpty()) {
                 Annotations typeAnnotations = filterOutUnsafeVariance(substitution.filterAnnotations(type.getAnnotations()));
-                substitutedType = TypeUtilsKt.replaceAnnotations(
+                substitutedType = TypeOperationsKt.replaceAnnotations(
                         substitutedType,
                         new CompositeAnnotations(substitutedType.getAnnotations(), typeAnnotations)
                 );

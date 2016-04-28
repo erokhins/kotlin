@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ import org.jetbrains.kotlin.resolve.scopes.LexicalScope
 import org.jetbrains.kotlin.resolve.scopes.MemberScope
 import org.jetbrains.kotlin.storage.NotNullLazyValue
 import org.jetbrains.kotlin.storage.NullableLazyValue
-import org.jetbrains.kotlin.types.DeferredType
+import org.jetbrains.kotlin.types.DeferredTypeImpl
 import org.jetbrains.kotlin.types.KotlinType
 import java.util.*
 
@@ -313,7 +313,7 @@ open class LazyClassMemberScope(
     }
 
     protected fun setDeferredReturnType(descriptor: ConstructorDescriptorImpl) {
-        descriptor.returnType = DeferredType.create(c.storageManager, trace, { thisDescriptor.getDefaultType() })
+        descriptor.returnType = DeferredTypeImpl.create(c.storageManager, trace, { thisDescriptor.getDefaultType() })
     }
 
     override fun recordLookup(name: Name, from: LookupLocation) {

@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.ReadOnly;
 import org.jetbrains.kotlin.resolve.scopes.MemberScope;
 import org.jetbrains.kotlin.types.KotlinType;
+import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType;
 import org.jetbrains.kotlin.types.TypeProjection;
 import org.jetbrains.kotlin.types.TypeSubstitution;
 import org.jetbrains.kotlin.types.TypeSubstitutor;
@@ -57,7 +58,7 @@ public interface ClassDescriptor extends ClassifierDescriptor, MemberDescriptor,
      */
     @NotNull
     @Override
-    KotlinType getDefaultType();
+    SimpleType getDefaultType();
 
     @NotNull
     @Override

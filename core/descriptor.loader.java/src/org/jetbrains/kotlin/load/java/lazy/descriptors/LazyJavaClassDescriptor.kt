@@ -192,7 +192,7 @@ class LazyJavaClassDescriptor(
                 parameter -> TypeProjectionImpl(Variance.INVARIANT, parameter.defaultType)
             }
 
-            return KotlinTypeImpl.create(
+            return KotlinTypeFactory.create(
                     Annotations.EMPTY, classDescriptor,
                     /* nullable =*/ false, parametersAsTypeProjections
             )

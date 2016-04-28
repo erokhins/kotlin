@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,17 @@
  * limitations under the License.
  */
 
-package org.jetbrains.kotlin.types;
+package org.jetbrains.kotlin.types
 
-public interface LazyType extends KotlinType {
+import org.jetbrains.kotlin.renderer.DescriptorRenderer
+import org.jetbrains.kotlin.types.KotlinType.StableType.FlexibleType
+
+interface RawType {
+
+    val substitution: TypeSubstitution?
+    val substitutionToComposeWith: TypeSubstitution?
+
+    fun renderInflexible(type: KotlinType, renderer: DescriptorRenderer): String?
+    fun renderBounds(flexibleType: FlexibleType, renderer: DescriptorRenderer): Pair<String, String>?
+
 }

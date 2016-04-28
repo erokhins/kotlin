@@ -30,6 +30,7 @@ import org.jetbrains.kotlin.resolve.MemberComparator;
 import org.jetbrains.kotlin.resolve.constants.ConstantValue;
 import org.jetbrains.kotlin.resolve.constants.NullValue;
 import org.jetbrains.kotlin.types.*;
+import org.jetbrains.kotlin.types.KotlinType.StableType.FlexibleType;
 import org.jetbrains.kotlin.utils.ExceptionUtilsKt;
 import org.jetbrains.kotlin.utils.Interner;
 
@@ -466,17 +467,17 @@ public class DescriptorSerializer {
             return builder;
         }
 
-        if (FlexibleTypesKt.isFlexible(type)) {
-            Flexibility flexibility = FlexibleTypesKt.flexibility(type);
-
-            ProtoBuf.Type.Builder lowerBound = type(flexibility.getLowerBound());
-            lowerBound.setFlexibleTypeCapabilitiesId(getStringTable().getStringIndex(flexibility.getFactory().getId()));
+        FlexibleType flexibleType = FlexibleTypesKt.asFlexibleType(type);
+        if (flexibleType != null) {
+            ProtoBuf.Type.Builder lowerBound = type(flexibleType.getLowerBound());
             if (useTypeTable()) {
-                lowerBound.setFlexibleUpperBoundId(typeId(flexibility.getUpperBound()));
+                lowerBound.setFlexibleUpperBoundId(typeId(flexibleType.getUpperBound()));
             }
             else {
-                lowerBound.setFlexibleUpperBound(type(flexibility.getUpperBound()));
+                lowerBound.setFlexibleUpperBound(type(flexibleType.getUpperBound()));
             }
+
+            extension.serializeFlexibleType(flexibleType, lowerBound);
             return lowerBound;
         }
 

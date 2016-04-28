@@ -43,9 +43,9 @@ import org.jetbrains.kotlin.resolve.calls.tasks.*
 import org.jetbrains.kotlin.resolve.isHiddenInResolution
 import org.jetbrains.kotlin.resolve.scopes.SyntheticScopes
 import org.jetbrains.kotlin.resolve.scopes.receivers.*
-import org.jetbrains.kotlin.types.DeferredType
+import org.jetbrains.kotlin.types.DeferredTypeImpl
 import org.jetbrains.kotlin.types.ErrorUtils
-import org.jetbrains.kotlin.types.isDynamic
+import org.jetbrains.kotlin.types.typeUtil.isDynamic
 import org.jetbrains.kotlin.util.OperatorNameConventions
 import org.jetbrains.kotlin.utils.addToStdlib.check
 import org.jetbrains.kotlin.utils.sure
@@ -307,8 +307,8 @@ class NewResolutionOldInference(
             )
 
             // see spec-docs/dynamic-types.md
-            if (extensionReceiver != null && extensionReceiver.type.isDynamic()
-                && !towerCandidate.descriptor.extensionReceiverParameter!!.value.type.isDynamic()) {
+            if (extensionReceiver != null && extensionReceiver.type.isDynamic
+                && !towerCandidate.descriptor.extensionReceiverParameter!!.value.type.isDynamic) {
                 return MyCandidate(ResolutionCandidateStatus(listOf(ExtensionWithStaticTypeWithDynamicReceiver)), candidateCall)
             }
 
@@ -386,7 +386,7 @@ class NewResolutionOldInference(
             }
             val variableType = variableDescriptor.type
 
-            if (variableType is DeferredType && variableType.isComputing) {
+            if (variableType is DeferredTypeImpl && variableType.isComputing()) {
                 return null // todo: create special check that there is no invoke on variable
             }
             val variableReceiver = ExpressionReceiver.create(calleeExpression!!,

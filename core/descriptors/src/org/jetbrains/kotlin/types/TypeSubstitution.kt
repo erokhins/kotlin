@@ -113,39 +113,24 @@ class IndexedParametersSubstitution(
     }
 }
 
-fun KotlinType.computeNewSubstitution(
-        typeConstructor: TypeConstructor,
-        newArguments: List<TypeProjection>
-): TypeSubstitution {
-    val newSubstitution = TypeConstructorSubstitution.create(typeConstructor, newArguments)
-
-    // If previous substitution was trivial just replace it with indexed one
-    val substitutionToComposeWith = getCapability<RawTypeCapability>()?.substitutionToComposeWith ?: return newSubstitution
-    val composedSubstitution = CompositeTypeSubstitution(newSubstitution, substitutionToComposeWith)
-
-    return composedSubstitution
-}
-
 @JvmOverloads
 fun KotlinType.replace(
         newArguments: List<TypeProjection> = arguments,
-        newAnnotations: Annotations = annotations,
-        newCapabilities: TypeCapabilities = capabilities
+        newAnnotations: Annotations = annotations
 ): KotlinType {
-    if (newArguments.isEmpty() && newAnnotations === annotations && newCapabilities === capabilities) return this
+    if (newArguments.isEmpty() && newAnnotations === annotations) return this
 
     if (newArguments.isEmpty()) {
-        return KotlinTypeImpl.create(
+        return KotlinTypeFactory.create(
                 newAnnotations,
                 constructor,
                 isMarkedNullable,
                 arguments,
-                memberScope,
-                newCapabilities
+                memberScope
         )
     }
 
-    val newSubstitution = computeNewSubstitution(constructor, newArguments)
+    val newSubstitution = TypeConstructorSubstitution.create(constructor, newArguments)
 
     val declarationDescriptor = constructor.declarationDescriptor
     val newScope =
@@ -153,35 +138,13 @@ fun KotlinType.replace(
                 declarationDescriptor.getMemberScope(newSubstitution)
             else ErrorUtils.createErrorScope("Unexpected declaration descriptor for type constructor: $constructor")
 
-    return KotlinTypeImpl.create(
+    return KotlinTypeFactory.create(
             newAnnotations,
             constructor,
             isMarkedNullable,
             newArguments,
-            newScope,
-            newCapabilities
+            newScope
     )
-}
-
-private class CompositeTypeSubstitution(
-    private val first: TypeSubstitution,
-    private val second: TypeSubstitution
-) : TypeSubstitution() {
-
-    override fun get(key: KotlinType): TypeProjection? {
-        val firstResult = first[key] ?: return second[key]
-        return second.buildSubstitutor().substitute(firstResult)
-    }
-
-    override fun prepareTopLevelType(topLevelType: KotlinType, position: Variance) =
-            second.prepareTopLevelType(first.prepareTopLevelType(topLevelType, position), position)
-
-    override fun isEmpty() = first.isEmpty() && second.isEmpty()
-
-    override fun approximateCapturedTypes() = first.approximateCapturedTypes() || second.approximateCapturedTypes()
-    override fun approximateContravariantCapturedTypes() = first.approximateContravariantCapturedTypes() || second.approximateContravariantCapturedTypes()
-
-    override fun filterAnnotations(annotations: Annotations): Annotations = second.filterAnnotations(first.filterAnnotations(annotations))
 }
 
 open class DelegatedTypeSubstitution(val substitution: TypeSubstitution): TypeSubstitution() {

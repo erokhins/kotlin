@@ -27,6 +27,7 @@ import org.jetbrains.kotlin.platform.JavaToKotlinClassMap
 import org.jetbrains.kotlin.types.*
 import org.jetbrains.kotlin.types.checker.KotlinTypeChecker
 import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
+import org.jetbrains.kotlin.types.typeUtil.stableType
 import java.util.*
 
 enum class NullabilityQualifier {
@@ -59,7 +60,7 @@ private fun KotlinType.extractQualifiers(): JavaTypeQualifiers {
     return JavaTypeQualifiers(
             if (lower.isMarkedNullable) NULLABLE else if (!upper.isMarkedNullable) NOT_NULL else null,
             if (mapping.isReadOnly(lower)) READ_ONLY else if (mapping.isMutable(upper)) MUTABLE else null,
-            isNotNullTypeParameter = getCapability<CustomTypeVariable>() is NotNullTypeParameterTypeCapability)
+            isNotNullTypeParameter = stableType is NotNullTypeParameter)
 }
 
 private fun KotlinType.extractQualifiersFromAnnotations(): JavaTypeQualifiers {
@@ -101,7 +102,7 @@ fun KotlinType.computeIndexedQualifiersForOverride(fromSupertypes: Collection<Ko
 
         fun add(type: KotlinType) {
             list.add(type)
-            for (arg in type.getArguments()) {
+            for (arg in type.arguments) {
                 if (arg.isStarProjection) {
                     list.add(arg.type)
                 }

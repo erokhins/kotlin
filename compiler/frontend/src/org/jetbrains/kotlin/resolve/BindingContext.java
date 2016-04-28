@@ -35,7 +35,7 @@ import org.jetbrains.kotlin.resolve.constants.CompileTimeConstant;
 import org.jetbrains.kotlin.resolve.diagnostics.Diagnostics;
 import org.jetbrains.kotlin.resolve.scopes.LexicalScope;
 import org.jetbrains.kotlin.resolve.scopes.receivers.Qualifier;
-import org.jetbrains.kotlin.types.DeferredType;
+import org.jetbrains.kotlin.types.DeferredTypeImpl;
 import org.jetbrains.kotlin.types.KotlinType;
 import org.jetbrains.kotlin.types.expressions.CaptureKind;
 import org.jetbrains.kotlin.types.expressions.KotlinTypeInfo;
@@ -158,7 +158,7 @@ public interface BindingContext {
     WritableSlice<VariableDescriptor, CaptureKind> CAPTURED_IN_CLOSURE = new BasicWritableSlice<VariableDescriptor, CaptureKind>(DO_NOTHING);
     WritableSlice<KtDeclaration, PreliminaryDeclarationVisitor> PRELIMINARY_VISITOR = new BasicWritableSlice<KtDeclaration, PreliminaryDeclarationVisitor>(DO_NOTHING);
 
-    WritableSlice<Box<DeferredType>, Boolean> DEFERRED_TYPE = Slices.createCollectiveSetSlice();
+    WritableSlice<Box<DeferredTypeImpl>, Boolean> DEFERRED_TYPE = Slices.createCollectiveSetSlice();
 
     WritableSlice<PropertyDescriptor, Boolean> BACKING_FIELD_REQUIRED = new SetSlice<PropertyDescriptor>(DO_NOTHING) {
         @Override

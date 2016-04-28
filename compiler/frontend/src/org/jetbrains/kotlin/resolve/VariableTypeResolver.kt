@@ -29,7 +29,7 @@ import org.jetbrains.kotlin.resolve.constants.evaluate.ConstantExpressionEvaluat
 import org.jetbrains.kotlin.resolve.scopes.LexicalScope
 import org.jetbrains.kotlin.resolve.scopes.ScopeUtils
 import org.jetbrains.kotlin.storage.StorageManager
-import org.jetbrains.kotlin.types.DeferredType
+import org.jetbrains.kotlin.types.DeferredTypeImpl
 import org.jetbrains.kotlin.types.ErrorUtils
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.TypeUtils
@@ -65,7 +65,7 @@ class VariableTypeResolver(
                 if (hasDelegate && variableDescriptor is PropertyDescriptor) {
                     val property = variable as KtProperty
                     if (property.hasDelegateExpression()) {
-                        return DeferredType.createRecursionIntolerant(
+                        return DeferredTypeImpl.createRecursionIntolerant(
                                 storageManager,
                                 trace
                         ) {
@@ -80,7 +80,7 @@ class VariableTypeResolver(
                 return ErrorUtils.createErrorType("No type, no body")
             }
             notLocal -> {
-                return DeferredType.createRecursionIntolerant(
+                return DeferredTypeImpl.createRecursionIntolerant(
                         storageManager,
                         trace
                 ) {

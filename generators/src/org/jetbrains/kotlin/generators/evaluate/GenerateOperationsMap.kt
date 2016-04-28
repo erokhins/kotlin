@@ -161,7 +161,7 @@ private fun KotlinType.isIntegerType(): Boolean {
 
 
 private fun CallableDescriptor.getParametersTypes(): List<KotlinType> {
-    val list = arrayListOf((containingDeclaration as ClassDescriptor).defaultType)
+    val list = arrayListOf<KotlinType>((containingDeclaration as ClassDescriptor).defaultType)
     valueParameters.map { it.type }.forEach {
         list.add(TypeUtils.makeNotNullable(it))
     }

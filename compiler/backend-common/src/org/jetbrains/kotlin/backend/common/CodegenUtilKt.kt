@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.incremental.components.NoLookupLocation
 import org.jetbrains.kotlin.resolve.DescriptorUtils
 import org.jetbrains.kotlin.resolve.MemberComparator
 import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.isDynamic
+import org.jetbrains.kotlin.types.typeUtil.isDynamic
 import org.jetbrains.kotlin.utils.keysToMapExceptNulls
 import java.util.Comparator
 
@@ -39,7 +39,7 @@ object CodegenUtilKt {
             toInterface: ClassDescriptor,
             delegateExpressionType: KotlinType? = null
     ): Map<CallableMemberDescriptor, CallableDescriptor> {
-        if (delegateExpressionType?.isDynamic() ?: false) return mapOf()
+        if (delegateExpressionType?.isDynamic ?: false) return mapOf()
 
         return descriptor.defaultType.memberScope.getContributedDescriptors().asSequence()
             .filterIsInstance<CallableMemberDescriptor>()

@@ -21,44 +21,39 @@ import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.resolve.scopes.MemberScope
 import org.jetbrains.kotlin.storage.StorageManager
+import org.jetbrains.kotlin.storage.getValue
 
-abstract class AbstractLazyType(storageManager: StorageManager) : AbstractKotlinType(), LazyType {
-
+// TODO: LazyEntity
+abstract class AbstractLazyType(storageManager: StorageManager) : AbstractSimpleType(), KotlinType.LazyType {
     private val typeConstructor = storageManager.createLazyValue { computeTypeConstructor() }
-    override fun getConstructor(): TypeConstructor = typeConstructor()
+    private val typeArguments = storageManager.createLazyValue { computeArguments() }
+
+    override val constructor: TypeConstructor get() = typeConstructor()
+    override val arguments: List<TypeProjection> get() = typeArguments()
+    override val memberScope by storageManager.createLazyValue { computeMemberScope() }
 
     protected abstract fun computeTypeConstructor(): TypeConstructor
-
-    private val arguments = storageManager.createLazyValue { computeArguments() }
-    override fun getArguments(): List<TypeProjection> = arguments()
-
     protected abstract fun computeArguments(): List<TypeProjection>
+    abstract override fun getAnnotations() : Annotations
 
-    private val memberScope = storageManager.createLazyValue { computeMemberScope() }
-    override fun getMemberScope() = memberScope()
+    protected open fun getSubstitution() = TypeConstructorSubstitution.create(constructor, arguments)
 
     protected open fun computeMemberScope(): MemberScope {
         val descriptor = constructor.declarationDescriptor
         return when (descriptor) {
             is TypeParameterDescriptor -> descriptor.getDefaultType().memberScope
-            is ClassDescriptor -> {
-                val substitution = getCapability<RawTypeCapability>()?.substitution
-                                   ?: TypeConstructorSubstitution.create(constructor, getArguments())
-                descriptor.getMemberScope(substitution)
-            }
+            is ClassDescriptor -> descriptor.getMemberScope(getSubstitution())
             else -> throw IllegalStateException("Unsupported classifier: $descriptor")
         }
     }
 
-    override fun isMarkedNullable() = false
+    override val isMarkedNullable: Boolean get() = false
 
-    override fun isError() = constructor.declarationDescriptor?.let { d -> ErrorUtils.isError(d) } ?: false
-
-    override fun getAnnotations() = Annotations.EMPTY
+    override val isError: Boolean get() = constructor.declarationDescriptor?.let { d -> ErrorUtils.isError(d) } ?: false
 
     override fun toString() = when {
         !typeConstructor.isComputed() -> "[Not-computed]"
-        !arguments.isComputed() ->
+        !typeArguments.isComputed() ->
             if (constructor.parameters.isEmpty()) constructor.toString()
             else "$constructor<not-computed>"
         else -> super.toString()

@@ -24,7 +24,6 @@ import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.resolve.constants.ConstantValue
 import org.jetbrains.kotlin.serialization.ProtoBuf
 import org.jetbrains.kotlin.storage.StorageManager
-import org.jetbrains.kotlin.types.FlexibleTypeFactory
 
 class DeserializationComponents(
         val storageManager: StorageManager,
@@ -35,10 +34,9 @@ class DeserializationComponents(
         val localClassResolver: LocalClassResolver,
         val errorReporter: ErrorReporter,
         val lookupTracker: LookupTracker,
-        val flexibleTypeFactory: FlexibleTypeFactory,
+        val flexibleTypeDeserializer: FlexibleTypeDeserializer,
         val fictitiousClassDescriptorFactory: ClassDescriptorFactory,
         val notFoundClasses: NotFoundClasses,
-        val typeCapabilitiesLoader: TypeCapabilitiesLoader = TypeCapabilitiesLoader.NONE,
         val additionalClassPartsProvider: AdditionalClassPartsProvider = AdditionalClassPartsProvider.None,
         val platformDependentDeclarationFilter: PlatformDependentDeclarationFilter = PlatformDependentDeclarationFilter.All
 ) {

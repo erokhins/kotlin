@@ -40,7 +40,7 @@ import org.jetbrains.kotlin.resolve.calls.context.TemporaryTraceAndCache
 import org.jetbrains.kotlin.resolve.calls.util.FakeCallableDescriptorForObject
 import org.jetbrains.kotlin.types.ErrorUtils
 import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.KotlinTypeImpl
+import org.jetbrains.kotlin.types.KotlinTypeFactory
 import org.jetbrains.kotlin.types.TypeUtils
 import org.jetbrains.kotlin.types.expressions.typeInfoFactory.createTypeInfo
 
@@ -81,7 +81,7 @@ class DoubleColonExpressionResolver(
                         context.trace.report(ARRAY_CLASS_LITERAL_REQUIRES_ARGUMENT.on(expression))
                         return null
                     }
-                    type = KotlinTypeImpl.create(
+                    type = KotlinTypeFactory.create(
                             Annotations.EMPTY, descriptor, false, descriptor.typeConstructor.parameters.map(TypeUtils::makeStarProjection)
                     )
                 }

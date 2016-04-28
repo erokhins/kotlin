@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.codegen.state.GenerationState;
 import org.jetbrains.kotlin.descriptors.*;
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor;
 import org.jetbrains.kotlin.load.java.JvmAbi;
+import org.jetbrains.kotlin.load.java.lazy.types.JvmFlexibleTypeDeserializer;
 import org.jetbrains.kotlin.name.ClassId;
 import org.jetbrains.kotlin.serialization.AnnotationSerializer;
 import org.jetbrains.kotlin.serialization.ProtoBuf;
@@ -32,7 +33,8 @@ import org.jetbrains.kotlin.serialization.StringTable;
 import org.jetbrains.kotlin.serialization.jvm.ClassMapperLite;
 import org.jetbrains.kotlin.serialization.jvm.JvmProtoBuf;
 import org.jetbrains.kotlin.types.KotlinType;
-import org.jetbrains.kotlin.types.RawTypeCapability;
+import org.jetbrains.kotlin.types.RawType;
+import org.jetbrains.kotlin.types.typeUtil.TypeUtilsKt;
 import org.jetbrains.org.objectweb.asm.Type;
 import org.jetbrains.org.objectweb.asm.commons.Method;
 
@@ -87,9 +89,18 @@ public class JvmSerializerExtension extends SerializerExtension {
             proto.addExtension(JvmProtoBuf.typeAnnotation, annotationSerializer.serializeAnnotation(annotation));
         }
 
-        if (type.getCapability(RawTypeCapability.class) != null) {
+        // TODO: move raw to serializeFlexibleType
+        if (TypeUtilsKt.getStableType(type) instanceof RawType) {
             proto.setExtension(JvmProtoBuf.isRaw, true);
         }
+    }
+
+    @Override
+    public void serializeFlexibleType(
+            @NotNull KotlinType.StableType.FlexibleType flexibleType, @NotNull ProtoBuf.Type.Builder proto
+    ) {
+        proto.setFlexibleTypeCapabilitiesId(getStringTable().getStringIndex(
+                JvmFlexibleTypeDeserializer.INSTANCE.getId()));
     }
 
     @Override

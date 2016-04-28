@@ -30,6 +30,7 @@ import org.jetbrains.kotlin.resolve.constants.*;
 import org.jetbrains.kotlin.resolve.constants.StringValue;
 import org.jetbrains.kotlin.resolve.descriptorUtil.DescriptorUtilsKt;
 import org.jetbrains.kotlin.types.*;
+import org.jetbrains.kotlin.types.KotlinType.StableType.FlexibleType;
 import org.jetbrains.org.objectweb.asm.*;
 
 import java.lang.annotation.*;
@@ -178,11 +179,11 @@ public abstract class AnnotationCodegen {
             return;
         }
 
-        if (FlexibleTypesKt.isFlexible(type)) {
+        FlexibleType flexibleType = FlexibleTypesKt.asFlexibleType(type);
+        if (flexibleType != null) {
             // A flexible type whose lower bound in not-null and upper bound is nullable, should not be annotated
-            Flexibility flexibility = FlexibleTypesKt.flexibility(type);
 
-            if (!TypeUtils.isNullableType(flexibility.getLowerBound()) && TypeUtils.isNullableType(flexibility.getUpperBound())) {
+            if (!TypeUtils.isNullableType(flexibleType.getLowerBound()) && TypeUtils.isNullableType(flexibleType.getUpperBound())) {
                 AnnotationDescriptor notNull = type.getAnnotations().findAnnotation(JvmAnnotationNames.JETBRAINS_NOT_NULL_ANNOTATION);
                 if (notNull != null) {
                     generateAnnotationIfNotPresent(annotationDescriptorsAlreadyPresent, NotNull.class);

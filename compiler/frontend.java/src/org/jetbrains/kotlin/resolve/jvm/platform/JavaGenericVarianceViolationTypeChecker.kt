@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.resolve.jvm.diagnostics.ErrorsJvm
 import org.jetbrains.kotlin.types.*
 import org.jetbrains.kotlin.types.checker.KotlinTypeChecker
 import org.jetbrains.kotlin.types.checker.TypeCheckingProcedure
+import org.jetbrains.kotlin.types.typeUtil.stableType
 
 object JavaGenericVarianceViolationTypeChecker : AdditionalTypeChecker {
     // Prohibits covariant type argument conversions `List<String> -> (MutableList<Any>..List<Any>)` when expected type's lower bound is invariant.
@@ -51,7 +52,7 @@ object JavaGenericVarianceViolationTypeChecker : AdditionalTypeChecker {
         // Use site variance projection is always the same for flexible types
         if (lowerBound.constructor == upperBound.constructor) return
         // Anything is acceptable for raw types
-        if (expectedType.getCapability<RawTypeCapability>() != null) return
+        if (expectedType.stableType is RawType) return
 
         val correspondingSubType = TypeCheckingProcedure.findCorrespondingSupertype(expressionTypeWithSmartCast, lowerBound) ?: return
 

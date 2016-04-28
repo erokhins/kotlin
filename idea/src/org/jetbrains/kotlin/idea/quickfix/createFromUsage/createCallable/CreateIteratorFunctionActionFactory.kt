@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.idea.quickfix.createFromUsage.callableBuilder.guessT
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtForExpression
-import org.jetbrains.kotlin.types.KotlinTypeImpl
+import org.jetbrains.kotlin.types.KotlinTypeFactory
 import org.jetbrains.kotlin.types.TypeProjectionImpl
 import org.jetbrains.kotlin.types.Variance
 import org.jetbrains.kotlin.util.OperatorNameConventions
@@ -51,11 +51,11 @@ object CreateIteratorFunctionActionFactory : CreateCallableMemberFromUsageFactor
 
         val returnJetTypeParameterType = TypeProjectionImpl(returnJetTypeParameterTypes[0])
         val returnJetTypeArguments = Collections.singletonList(returnJetTypeParameterType)
-        val newReturnJetType = KotlinTypeImpl.create(returnJetType.annotations,
-                                           returnJetType.constructor,
-                                           returnJetType.isMarkedNullable,
-                                           returnJetTypeArguments,
-                                           returnJetType.memberScope)
+        val newReturnJetType = KotlinTypeFactory.create(returnJetType.annotations,
+                                                             returnJetType.constructor,
+                                                             returnJetType.isMarkedNullable,
+                                                             returnJetTypeArguments,
+                                                             returnJetType.memberScope)
         val returnType = TypeInfo(newReturnJetType, Variance.OUT_VARIANCE)
         return FunctionInfo(OperatorNameConventions.ITERATOR.asString(), iterableType, returnType, isOperator = true)
     }

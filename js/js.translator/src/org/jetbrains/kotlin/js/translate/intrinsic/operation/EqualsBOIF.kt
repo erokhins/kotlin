@@ -34,7 +34,7 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.resolve.DescriptorUtils
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
-import org.jetbrains.kotlin.types.isDynamic
+import org.jetbrains.kotlin.types.typeUtil.isDynamic
 import java.util.Arrays
 
 object EqualsBOIF : BinaryOperationIntrinsicFactory {
@@ -62,7 +62,7 @@ object EqualsBOIF : BinaryOperationIntrinsicFactory {
             val appliedToDynamic =
                     resolvedCall != null &&
                     with(resolvedCall.dispatchReceiver) {
-                        if (this != null) type.isDynamic() else false
+                        if (this != null) type.isDynamic else false
                     }
 
             if (appliedToDynamic) {

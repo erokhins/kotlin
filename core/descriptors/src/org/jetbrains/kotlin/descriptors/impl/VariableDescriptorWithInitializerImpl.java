@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.name.Name;
 import org.jetbrains.kotlin.resolve.constants.ConstantValue;
 import org.jetbrains.kotlin.storage.NullableLazyValue;
 import org.jetbrains.kotlin.types.KotlinType;
-import org.jetbrains.kotlin.types.LazyType;
+import org.jetbrains.kotlin.types.KotlinType.LazyType;
 
 public abstract class VariableDescriptorWithInitializerImpl extends VariableDescriptorImpl {
     private final boolean isVar;

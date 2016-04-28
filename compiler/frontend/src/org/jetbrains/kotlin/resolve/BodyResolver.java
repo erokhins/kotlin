@@ -44,6 +44,7 @@ import org.jetbrains.kotlin.types.expressions.ExpressionTypingServices;
 import org.jetbrains.kotlin.types.expressions.PreliminaryDeclarationVisitor;
 import org.jetbrains.kotlin.types.expressions.ValueParameterResolver;
 import org.jetbrains.kotlin.types.expressions.typeInfoFactory.TypeInfoFactoryKt;
+import org.jetbrains.kotlin.types.typeUtil.TypeUtilsKt;
 import org.jetbrains.kotlin.util.Box;
 import org.jetbrains.kotlin.util.ReenteringLazyValueComputationException;
 import org.jetbrains.kotlin.util.slicedMap.WritableSlice;
@@ -467,7 +468,7 @@ public class BodyResolver {
                         addSupertype = false;
                     }
                     else if (supertypeOwner.getKind() == ClassKind.INTERFACE &&
-                             !classAppeared && !DynamicTypesKt.isDynamic(supertype) /* avoid duplicate diagnostics */) {
+                             !classAppeared && !TypeUtilsKt.isDynamic(supertype) /* avoid duplicate diagnostics */) {
                         trace.report(INTERFACE_WITH_SUPERCLASS.on(typeReference));
                         addSupertype = false;
                     }
@@ -846,8 +847,8 @@ public class BodyResolver {
         // fun f() = { f() }
         // val x = x
         // type resolution must be started before body resolution
-        if (type instanceof DeferredType) {
-            DeferredType deferredType = (DeferredType) type;
+        if (type instanceof DeferredTypeImpl) {
+            DeferredTypeImpl deferredType = (DeferredTypeImpl) type;
             if (!deferredType.isComputed()) {
                 deferredType.getDelegate();
             }
@@ -855,27 +856,27 @@ public class BodyResolver {
     }
 
     private void computeDeferredTypes() {
-        Collection<Box<DeferredType>> deferredTypes = trace.getKeys(DEFERRED_TYPE);
+        Collection<Box<DeferredTypeImpl>> deferredTypes = trace.getKeys(DEFERRED_TYPE);
         if (deferredTypes.isEmpty()) {
             return;
         }
         // +1 is a work around against new Queue(0).addLast(...) bug // stepan.koltsov@ 2011-11-21
-        final Queue<DeferredType> queue = new Queue<DeferredType>(deferredTypes.size() + 1);
-        trace.addHandler(DEFERRED_TYPE, new ObservableBindingTrace.RecordHandler<Box<DeferredType>, Boolean>() {
+        final Queue<DeferredTypeImpl> queue = new Queue<DeferredTypeImpl>(deferredTypes.size() + 1);
+        trace.addHandler(DEFERRED_TYPE, new ObservableBindingTrace.RecordHandler<Box<DeferredTypeImpl>, Boolean>() {
             @Override
             public void handleRecord(
-                    WritableSlice<Box<DeferredType>, Boolean> deferredTypeKeyDeferredTypeWritableSlice,
-                    Box<DeferredType> key,
+                    WritableSlice<Box<DeferredTypeImpl>, Boolean> deferredTypeKeyDeferredTypeWritableSlice,
+                    Box<DeferredTypeImpl> key,
                     Boolean value
             ) {
                 queue.addLast(key.getData());
             }
         });
-        for (Box<DeferredType> deferredType : deferredTypes) {
+        for (Box<DeferredTypeImpl> deferredType : deferredTypes) {
             queue.addLast(deferredType.getData());
         }
         while (!queue.isEmpty()) {
-            DeferredType deferredType = queue.pullFirst();
+            DeferredTypeImpl deferredType = queue.pullFirst();
             if (!deferredType.isComputed()) {
                 try {
                     deferredType.getDelegate(); // to compute

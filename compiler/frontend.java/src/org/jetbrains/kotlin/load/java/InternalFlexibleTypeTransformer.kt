@@ -16,12 +16,14 @@
 
 package org.jetbrains.kotlin.load.java
 
-import org.jetbrains.kotlin.load.java.lazy.types.LazyJavaTypeResolver.FlexibleJavaClassifierTypeFactory
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.resolve.DescriptorUtils
 import org.jetbrains.kotlin.resolve.TypeResolver.TypeTransformerForTests
 import org.jetbrains.kotlin.types.KotlinType
+import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType
+import org.jetbrains.kotlin.types.KotlinTypeFactory
+import org.jetbrains.kotlin.types.typeUtil.stableType
 
 object InternalFlexibleTypeTransformer : TypeTransformerForTests() {
     // This is a "magic" classifier: when type resolver sees it in the code, e.g. ft<Foo, Foo?>, instead of creating a normal type,
@@ -35,7 +37,9 @@ object InternalFlexibleTypeTransformer : TypeTransformerForTests() {
         val descriptor = kotlinType.constructor.declarationDescriptor
         if (descriptor != null && FLEXIBLE_TYPE_CLASSIFIER.asSingleFqName().toUnsafe() == DescriptorUtils.getFqName(descriptor)
             && kotlinType.arguments.size == 2) {
-            return FlexibleJavaClassifierTypeFactory.create(kotlinType.arguments[0].type, kotlinType.arguments[1].type)
+            return KotlinTypeFactory.createFlexibleType(
+                    kotlinType.arguments[0].type.stableType as SimpleType,
+                    kotlinType.arguments[1].type.stableType as SimpleType)
         }
         return null
     }

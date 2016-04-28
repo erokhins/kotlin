@@ -156,7 +156,7 @@ public class DelegatedPropertyResolver {
         KotlinType propertyType = variableDescriptor.getType();
 
         /* Do not check return type of get() method of delegate for properties with DeferredType because property type is taken from it */
-        if (!(propertyType instanceof DeferredType) && returnType != null && !KotlinTypeChecker.DEFAULT.isSubtypeOf(returnType, propertyType)) {
+        if (!(propertyType instanceof DeferredTypeImpl) && returnType != null && !KotlinTypeChecker.DEFAULT.isSubtypeOf(returnType, propertyType)) {
             Call call = trace.getBindingContext().get(DELEGATED_PROPERTY_CALL, variableDescriptor.getGetter());
             assert call != null : "Call should exists for " + variableDescriptor.getGetter();
             trace.report(DELEGATE_SPECIAL_FUNCTION_RETURN_TYPE_MISMATCH
@@ -285,7 +285,7 @@ public class DelegatedPropertyResolver {
         VariableAccessorDescriptor accessor = isGet ? propertyDescriptor.getGetter() : propertyDescriptor.getSetter();
         assert accessor != null : "Delegated property should have getter/setter " + propertyDescriptor + " " + delegateExpression.getText();
 
-        KotlinType expectedType = isComplete && isGet && !(propertyDescriptor.getType() instanceof DeferredType)
+        KotlinType expectedType = isComplete && isGet && !(propertyDescriptor.getType() instanceof DeferredTypeImpl)
                                ? propertyDescriptor.getType() : TypeUtils.NO_EXPECTED_TYPE;
 
         ExpressionTypingContext context = ExpressionTypingContext.newContext(
@@ -440,7 +440,7 @@ public class DelegatedPropertyResolver {
                 // For the case: 'val v by d' (no declared type).
                 // When we add a constraint for 'set' method for delegated expression 'd' we use a type of the declared variable 'v'.
                 // But if the type isn't known yet, the constraint shouldn't be added (we try to infer the type of 'v' here as well).
-                if (variableDescriptor.getReturnType() instanceof DeferredType) return;
+                if (variableDescriptor.getReturnType() instanceof DeferredTypeImpl) return;
 
                 OverloadResolutionResults<FunctionDescriptor>
                         setMethodResults = getDelegatedPropertyConventionMethod(

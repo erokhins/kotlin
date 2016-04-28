@@ -51,9 +51,11 @@ import org.jetbrains.kotlin.resolve.scopes.utils.ScopeUtilsKt;
 import org.jetbrains.kotlin.resolve.source.KotlinSourceElementKt;
 import org.jetbrains.kotlin.storage.StorageManager;
 import org.jetbrains.kotlin.types.*;
+import org.jetbrains.kotlin.types.KotlinType.StableType.FlexibleType;
 import org.jetbrains.kotlin.types.checker.KotlinTypeChecker;
 import org.jetbrains.kotlin.types.expressions.ExpressionTypingServices;
 import org.jetbrains.kotlin.types.expressions.PreliminaryDeclarationVisitor;
+import org.jetbrains.kotlin.types.typeUtil.TypeUtilsKt;
 
 import java.util.*;
 
@@ -177,7 +179,7 @@ public class DescriptorResolver {
             KtTypeReference typeReference = delegationSpecifier.getTypeReference();
             if (typeReference != null) {
                 KotlinType supertype = resolver.resolveType(extensibleScope, typeReference, trace, checkBounds);
-                if (DynamicTypesKt.isDynamic(supertype)) {
+                if (TypeUtilsKt.isDynamic(supertype)) {
                     trace.report(DYNAMIC_SUPERTYPE.on(typeReference));
                 }
                 else {
@@ -612,7 +614,7 @@ public class DescriptorResolver {
         if (!TypeUtils.canHaveSubtypes(KotlinTypeChecker.DEFAULT, upperBoundType)) {
             trace.report(FINAL_UPPER_BOUND.on(upperBound, upperBoundType));
         }
-        if (DynamicTypesKt.isDynamic(upperBoundType)) {
+        if (TypeUtilsKt.isDynamic(upperBoundType)) {
             trace.report(DYNAMIC_UPPER_BOUND.on(upperBound));
         }
         if (FunctionTypesKt.isExtensionFunctionType(upperBoundType)) {
@@ -953,7 +955,7 @@ public class DescriptorResolver {
     }
 
     @NotNull
-    /*package*/ static DeferredType inferReturnTypeFromExpressionBody(
+    /*package*/ static KotlinType.DeferredType inferReturnTypeFromExpressionBody(
             @NotNull StorageManager storageManager,
             @NotNull final ExpressionTypingServices expressionTypingServices,
             @NotNull final BindingTrace trace,
@@ -962,7 +964,7 @@ public class DescriptorResolver {
             @NotNull final KtDeclarationWithBody function,
             @NotNull final FunctionDescriptor functionDescriptor
     ) {
-        return DeferredType.createRecursionIntolerant(storageManager, trace, new Function0<KotlinType>() {
+        return DeferredTypeImpl.createRecursionIntolerant(storageManager, trace, new Function0<KotlinType>() {
             @Override
             public KotlinType invoke() {
                 PreliminaryDeclarationVisitor.Companion.createForDeclaration(function, trace);
@@ -1049,15 +1051,15 @@ public class DescriptorResolver {
 
         List<KtTypeReference> jetTypeArguments = typeElement.getTypeArgumentsAsTypes();
 
+        FlexibleType flexibleType = FlexibleTypesKt.asFlexibleType(type);
         // A type reference from Kotlin code can yield a flexible type only if it's `ft<T1, T2>`, whose bounds should not be checked
-        if (FlexibleTypesKt.isFlexible(type) && !DynamicTypesKt.isDynamic(type)) {
+        if (flexibleType != null && !TypeUtilsKt.isDynamic(type)) {
             assert jetTypeArguments.size() == 2
                     : "Flexible type cannot be denoted in Kotlin otherwise than as ft<T1, T2>, but was: "
                       + PsiUtilsKt.getElementTextWithContext(typeReference);
             // it's really ft<Foo, Bar>
-            Flexibility flexibility = FlexibleTypesKt.flexibility(type);
-            checkBounds(jetTypeArguments.get(0), flexibility.getLowerBound(), trace);
-            checkBounds(jetTypeArguments.get(1), flexibility.getUpperBound(), trace);
+            checkBounds(jetTypeArguments.get(0), flexibleType.getLowerBound(), trace);
+            checkBounds(jetTypeArguments.get(1), flexibleType.getUpperBound(), trace);
             return;
         }
 

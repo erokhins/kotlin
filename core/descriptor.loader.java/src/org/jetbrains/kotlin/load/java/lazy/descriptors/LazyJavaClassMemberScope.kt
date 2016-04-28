@@ -678,7 +678,7 @@ class LazyJavaClassMemberScope(
 
         return memberIndex().getAllFieldNames() +
                ownerDescriptor.getTypeConstructor().getSupertypes().flatMapTo(LinkedHashSet<Name>()) { supertype ->
-            supertype.getMemberScope().getContributedDescriptors(kindFilter, nameFilter).map { variable ->
+            supertype.memberScope.getContributedDescriptors(kindFilter, nameFilter).map { variable ->
                 variable.getName()
             }
         }

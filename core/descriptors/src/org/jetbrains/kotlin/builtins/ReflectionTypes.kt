@@ -65,7 +65,7 @@ class ReflectionTypes(module: ModuleDescriptor) {
         }
 
         val arguments = listOf(TypeProjectionImpl(Variance.INVARIANT, type))
-        return KotlinTypeImpl.create(annotations, descriptor, false, arguments)
+        return KotlinTypeFactory.create(annotations, descriptor, false, arguments)
     }
 
     fun getKFunctionType(
@@ -82,7 +82,7 @@ class ReflectionTypes(module: ModuleDescriptor) {
             return classDescriptor.defaultType
         }
 
-        return KotlinTypeImpl.create(annotations, classDescriptor, false, arguments)
+        return KotlinTypeFactory.create(annotations, classDescriptor, false, arguments)
     }
 
     fun getKPropertyType(annotations: Annotations, receiverType: KotlinType?, returnType: KotlinType, mutable: Boolean): KotlinType {
@@ -107,7 +107,7 @@ class ReflectionTypes(module: ModuleDescriptor) {
             arguments.add(TypeProjectionImpl(receiverType))
         }
         arguments.add(TypeProjectionImpl(returnType))
-        return KotlinTypeImpl.create(annotations, classDescriptor, false, arguments)
+        return KotlinTypeFactory.create(annotations, classDescriptor, false, arguments)
     }
 
     companion object {
@@ -130,7 +130,7 @@ class ReflectionTypes(module: ModuleDescriptor) {
 
         fun createKPropertyStarType(module: ModuleDescriptor): KotlinType? {
             val kPropertyClass = module.findClassAcrossModuleDependencies(KotlinBuiltIns.FQ_NAMES.kProperty) ?: return null
-            return KotlinTypeImpl.create(
+            return KotlinTypeFactory.create(
                     Annotations.EMPTY, kPropertyClass, false,
                     listOf(StarProjectionImpl(kPropertyClass.typeConstructor.parameters.single()))
             )

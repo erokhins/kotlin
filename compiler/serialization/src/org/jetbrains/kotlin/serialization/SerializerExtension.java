@@ -19,6 +19,7 @@ package org.jetbrains.kotlin.serialization;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.kotlin.descriptors.*;
 import org.jetbrains.kotlin.types.KotlinType;
+import org.jetbrains.kotlin.types.KotlinType.StableType.FlexibleType;
 
 public abstract class SerializerExtension {
     @NotNull
@@ -50,6 +51,9 @@ public abstract class SerializerExtension {
     }
 
     public void serializeType(@NotNull KotlinType type, @NotNull ProtoBuf.Type.Builder proto) {
+    }
+
+    public void serializeFlexibleType(@NotNull FlexibleType flexibleType, @NotNull ProtoBuf.Type.Builder proto) {
     }
 
     public void serializeTypeParameter(@NotNull TypeParameterDescriptor typeParameter, @NotNull ProtoBuf.TypeParameter.Builder proto) {

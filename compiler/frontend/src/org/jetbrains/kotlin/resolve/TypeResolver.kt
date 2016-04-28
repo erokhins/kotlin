@@ -33,8 +33,6 @@ import org.jetbrains.kotlin.psi.debugText.getDebugText
 import org.jetbrains.kotlin.resolve.PossiblyBareType.type
 import org.jetbrains.kotlin.resolve.bindingContextUtil.recordScope
 import org.jetbrains.kotlin.resolve.calls.tasks.DynamicCallableDescriptors
-import org.jetbrains.kotlin.resolve.lazy.ForceResolveUtil
-import org.jetbrains.kotlin.resolve.lazy.LazyEntity
 import org.jetbrains.kotlin.resolve.scopes.LazyScopeAdapter
 import org.jetbrains.kotlin.resolve.scopes.LexicalScope
 import org.jetbrains.kotlin.resolve.scopes.MemberScope
@@ -84,17 +82,15 @@ class TypeResolver(
 
         if (!c.allowBareTypes && !c.forceResolveLazyTypes && lazinessToken.isLazy()) {
             // Bare types can be allowed only inside expressions; lazy type resolution is only relevant for declarations
-            class LazyKotlinType : DelegatingType(), LazyEntity {
-                private val _delegate = storageManager.createLazyValue { doResolvePossiblyBareType(c, typeReference).getActualType() }
-                override fun getDelegate() = _delegate()
 
-                override fun forceResolveAllContents() {
-                    ForceResolveUtil.forceResolveAllContents(getConstructor())
-                    getArguments().forEach { ForceResolveUtil.forceResolveAllContents(it.getType()) }
-                }
+            val lazyKotlinType = object : KotlinType.DeferredType() {
+                val value = storageManager.createLazyValue { doResolvePossiblyBareType(c, typeReference).actualType }
+
+                override fun isComputed(): Boolean = value.isComputed()
+
+                override val delegate: KotlinType
+                    get() = value()
             }
-
-            val lazyKotlinType = LazyKotlinType()
             c.trace.record(BindingContext.TYPE, typeReference, lazyKotlinType)
             return type(lazyKotlinType)
         }
@@ -315,7 +311,7 @@ class TypeResolver(
         return if (scopeForTypeParameter is ErrorUtils.ErrorScope)
             ErrorUtils.createErrorType("?")
         else
-            KotlinTypeImpl.create(
+            KotlinTypeFactory.create(
                     annotations,
                     typeParameter.typeConstructor,
                     false,
@@ -367,7 +363,7 @@ class TypeResolver(
             " but ${collectedArgumentAsTypeProjections.size} instead of ${parameters.size} found in ${type.text}"
         }
 
-        val resultingType = KotlinTypeImpl.create(annotations, classDescriptor, false, arguments)
+        val resultingType = KotlinTypeFactory.create(annotations, classDescriptor, false, arguments)
 
         // We create flexible types by convention here
         // This is not intended to be used in normal users' environments, only for tests and debugger etc

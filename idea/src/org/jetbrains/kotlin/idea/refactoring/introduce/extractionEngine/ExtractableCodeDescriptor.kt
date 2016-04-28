@@ -334,7 +334,7 @@ val ControlFlow.possibleReturnTypes: List<KotlinType>
             returnType.isAnnotatedNotNull() || returnType.isAnnotatedNullable() ->
                 listOf(returnType.approximateFlexibleTypes())
             else ->
-                returnType.getCapability(Flexibility::class.java).let { listOf(it!!.upperBound, it.lowerBound) }
+                returnType.asFlexibleType()!!.let { listOf(it.upperBound, it.lowerBound) }
         }
     }
 
