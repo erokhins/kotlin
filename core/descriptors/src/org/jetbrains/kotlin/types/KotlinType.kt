@@ -16,8 +16,10 @@
 
 package org.jetbrains.kotlin.types
 
+import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.descriptors.annotations.Annotated
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
+import org.jetbrains.kotlin.renderer.DescriptorRenderer
 import org.jetbrains.kotlin.resolve.scopes.MemberScope
 import org.jetbrains.kotlin.storage.NotNullLazyValue
 import org.jetbrains.kotlin.types.checker.KotlinTypeChecker
@@ -26,49 +28,106 @@ interface LazyType1
 
 /**
  * @see KotlinTypeChecker#isSubtypeOf(KotlinType, KotlinType)
+ * Also for type creating use KotlinTypeFactory.
  */
 sealed class KotlinType : Annotated {
-    abstract val constructor: TypeConstructor
+    protected open val delegate: KotlinType
+        get() = throw IllegalStateException("Should not be called")
 
-    abstract val arguments: List<TypeProjection>
+    open val constructor: TypeConstructor get() =  delegate.constructor
 
-    abstract val isMarkedNullable: Boolean
+    open val arguments: List<TypeProjection> get() = delegate.arguments
 
-    abstract val memberScope: MemberScope
+    open val isMarkedNullable: Boolean get() = delegate.isMarkedNullable
 
-    abstract val isError: Boolean
+    open val memberScope: MemberScope get() = delegate.memberScope
 
-    abstract val capabilities: TypeCapabilities
+    open val isError: Boolean get() = delegate.isError
 
-// ------- internal staff ------
+    open val capabilities: TypeCapabilities get() = delegate.capabilities
 
-    abstract override fun hashCode(): Int
-    abstract override fun equals(other: Any?): Boolean
-    abstract override fun toString(): String
+    override fun getAnnotations(): Annotations = delegate.annotations
 
-    // TODO
-    abstract class SimpleType : KotlinType() {
+    // ------- internal staff ------
 
-        final override fun hashCode(): Int {
-            throw UnsupportedOperationException()
-        }
+    final override fun hashCode(): Int {
+        if (isError) return super.hashCode()
 
-        final override fun equals(other: Any?): Boolean {
-            throw UnsupportedOperationException()
-        }
+        var result = constructor.hashCode()
+        result = 31 * result + arguments.hashCode()
+        result = 31 * result + if (isMarkedNullable) 1 else 0
+        return result
+    }
+
+    final override fun equals(other: Any?): Boolean {
+        if (isError) return super.equals(other)
+
+        if (this === other) return true
+        if (other !is KotlinType) return false
+        if (other.isError) return false
+
+        return isMarkedNullable == other.isMarkedNullable && KotlinTypeChecker.FLEXIBLE_UNEQUAL_TO_INFLEXIBLE.equalTypes(this, other)
+    }
+
+    public abstract class SimpleType : KotlinType() {
 
         override fun toString(): String {
-            throw UnsupportedOperationException()
+            // for error types this method should be overridden
+            if (isError) return "ErrorType"
+
+            return buildString {
+                for (annotation in annotations.getAllAnnotations()) {
+                    append("[", DescriptorRenderer.DEBUG_TEXT.renderAnnotation(annotation.annotation, annotation.target), "] ")
+                }
+
+                append(constructor)
+                if (!arguments.isEmpty()) arguments.joinTo(this, separator = ", ", prefix = "<", postfix = ">")
+                if (isMarkedNullable) append("?")
+            }
         }
     }
 
-    final class FlexibleType @JvmOverloads constructor(
-            val lowerBound: SimpleType,
-            val upperBound: SimpleType,
-            override val capabilities: TypeCapabilities,
-            override val isMarkedNullable: Boolean = lowerBound.isMarkedNullable,
-            val delegateToUpperBound: Boolean = false
-    ) : KotlinType() {
+    public open class FlexibleType private constructor(val lowerBound: SimpleType, val upperBound: SimpleType) : KotlinType() {
+
+        companion object {
+            @JvmField
+            var RUN_SLOW_ASSERTIONS = false
+
+            internal fun create(lowerBound: SimpleType, upperBound: SimpleType, capabilities: TypeCapabilities): KotlinType {
+                if (lowerBound == upperBound) {
+                    if (lowerBound.capabilities == capabilities) {
+                        return lowerBound
+                    }
+                    else {
+                        return KotlinTypeFactory.createSimpleType(lowerBound, capabilities = capabilities)
+                    }
+                }
+                if (capabilities == TypeCapabilities.NONE) {
+                    return FlexibleType(lowerBound, upperBound)
+                }
+                else {
+                    return FlexibleTypeWithCapabilities(lowerBound, upperBound, capabilities)
+                }
+            }
+
+            internal fun createDynamicType(builtIns: KotlinBuiltIns): FlexibleType {
+                return DynamicType(builtIns, TypeCapabilities.NONE)
+            }
+
+            internal fun isDynamicType(type: KotlinType) = type.javaClass == DynamicType::class.java
+        }
+
+        private class FlexibleTypeWithCapabilities(
+                lowerBound: SimpleType, upperBound: SimpleType,
+                override val capabilities: TypeCapabilities
+        ) : FlexibleType(lowerBound, upperBound)
+
+        private class DynamicType(builtIns: KotlinBuiltIns, override val capabilities: TypeCapabilities) :
+                FlexibleType(builtIns.nothingType, builtIns.nullableAnyType) {
+            override val delegate: SimpleType get() = upperBound
+            override val isMarkedNullable: Boolean get() = false
+        }
+
         // These assertions are needed for checking invariants of flexible types.
         //
         // Unfortunately isSubtypeOf is running resolve for lazy types.
@@ -87,79 +146,38 @@ sealed class KotlinType : Annotated {
             }
         }
 
-        private val delegate: SimpleType
+        override val delegate: SimpleType
             get() {
                 runAssertions()
-                return if (delegateToUpperBound) upperBound else lowerBound
+                return lowerBound
             }
 
-        override val constructor: TypeConstructor get() = delegate.constructor
-        override val arguments: List<TypeProjection> get() = delegate.arguments
-        override val memberScope: MemberScope get() = delegate.memberScope
+        override val isError: Boolean get() = false
+        override val capabilities: TypeCapabilities get() = TypeCapabilities.NONE
 
-        override val isError: Boolean
-            get() = false
-
-        // TODO review
-        override fun equals(other: Any?): Boolean = delegate.equals(other)
-        override fun hashCode(): Int = delegate.hashCode()
         override fun toString(): String = "('$lowerBound'..'$upperBound')"
-
-        override fun getAnnotations(): Annotations = TODO() // TODO
-
     }
 
-    final class DeferredType(private val lazyDelegate: NotNullLazyValue<KotlinType>) : KotlinType(), LazyType1 {
-        fun isComputed() = lazyDelegate.isComputed()
-        fun isComputing() = lazyDelegate.isComputing()
+    /**
+     * Only subclasses for this type should be used as wrappers for types.
+     *
+     * Also you can override some methods from KotlinType, but delegate should have same values.
+     * See examples in TypeOperations.kt
+     */
+    public abstract class DeferredType() : KotlinType() {
+        open fun isComputing(): Boolean = false
 
-        // this type is SimpleType or FlexibleType
-        val delegate: KotlinType
-            get() {
-                var result = lazyDelegate()
-                while (result.javaClass == DeferredType::class.java) {
-                    result = (result as DeferredType).lazyDelegate()
-                }
-                return result
-            }
+        abstract fun isComputed(): Boolean
 
-        override val constructor: TypeConstructor get() = delegate.constructor
-        override val arguments: List<TypeProjection> get() = delegate.arguments
-        override val isMarkedNullable: Boolean get() = delegate.isMarkedNullable
-        override val memberScope: MemberScope get() = delegate.memberScope
-        override val isError: Boolean get() = delegate.isError
-        override val capabilities: TypeCapabilities get() = delegate.capabilities
-        override fun getAnnotations(): Annotations = delegate.annotations
-        override fun hashCode(): Int = delegate.hashCode()
-        override fun equals(other: Any?): Boolean = delegate.equals(other)
+        public abstract override val delegate: KotlinType
 
         override fun toString(): String {
-            if (lazyDelegate.isComputed()) {
+            if (isComputed()) {
                 return delegate.toString()
             }
             else {
                 return "<Not computed yet>"
             }
         }
-    }
-
-    companion object {
-        @JvmField
-        var RUN_SLOW_ASSERTIONS = false
-    }
-}
-
-val KotlinType.simpleOrFlexibleType: KotlinType
-    get() = (this as? KotlinType.DeferredType)?.delegate ?: this
-
-
-fun KotlinType.transform(simple: KotlinType.SimpleType.() -> KotlinType.SimpleType,
-                         flexible: KotlinType.FlexibleType.() -> KotlinType.FlexibleType): KotlinType {
-    val simpleOrFlexible = simpleOrFlexibleType
-    if (simpleOrFlexible is KotlinType.SimpleType) {
-        return simple(simpleOrFlexible)
-    }
-    else {
-        return flexible(simpleOrFlexible as KotlinType.FlexibleType)
     }
 }

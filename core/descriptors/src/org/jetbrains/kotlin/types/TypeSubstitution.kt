@@ -132,7 +132,7 @@ fun KotlinType.replace(
     if (newArguments.isEmpty() && newAnnotations === annotations && newCapabilities === capabilities) return this
 
     if (newArguments.isEmpty()) {
-        return KotlinTypeImpl.create(
+        return KotlinTypeFactory.create(
                 newAnnotations,
                 constructor,
                 isMarkedNullable,
@@ -150,7 +150,7 @@ fun KotlinType.replace(
                 declarationDescriptor.getMemberScope(newSubstitution)
             else ErrorUtils.createErrorScope("Unexpected declaration descriptor for type constructor: $constructor")
 
-    return KotlinTypeImpl.create(
+    return KotlinTypeFactory.create(
             newAnnotations,
             constructor,
             isMarkedNullable,

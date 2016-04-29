@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.types.KotlinType;
 public abstract class KotlinTestWithEnvironmentManagement extends KtUsefulTestCase {
     static {
         System.setProperty("java.awt.headless", "true");
-        KotlinType.RUN_SLOW_ASSERTIONS = true;
+        KotlinType.FlexibleType.RUN_SLOW_ASSERTIONS = true;
     }
 
     @NotNull

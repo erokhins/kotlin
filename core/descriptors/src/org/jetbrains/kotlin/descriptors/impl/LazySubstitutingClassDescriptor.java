@@ -130,9 +130,9 @@ public class LazySubstitutingClassDescriptor implements ClassDescriptor {
 
     @NotNull
     @Override
-    public KotlinType getDefaultType() {
+    public KotlinType.SimpleType getDefaultType() {
         List<TypeProjection> typeProjections = TypeUtils.getDefaultTypeProjections(getTypeConstructor().getParameters());
-        return KotlinTypeImpl.create(
+        return KotlinTypeFactory.create(
                 getAnnotations(),
                 this,
                 false,

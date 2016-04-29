@@ -17,7 +17,9 @@
 package org.jetbrains.kotlin.types
 
 import org.jetbrains.kotlin.types.checker.KotlinTypeChecker
+import org.jetbrains.kotlin.types.typeUtil.simpleOrFlexibleType
 
+// todo move to serialization
 interface FlexibleTypeFactory {
     val id: String
 
@@ -30,25 +32,6 @@ interface FlexibleTypeFactory {
 
         override fun create(lowerBound: KotlinType.SimpleType, upperBound: KotlinType.SimpleType): KotlinType.FlexibleType = error()
     }
-}
-
-interface Flexibility : TypeCapability, SubtypingRepresentatives {
-    // lowerBound is a subtype of upperBound
-    val lowerBound: KotlinType
-    val upperBound: KotlinType
-
-    val factory: FlexibleTypeFactory
-
-    override val subTypeRepresentative: KotlinType
-        get() = lowerBound
-
-    override val superTypeRepresentative: KotlinType
-        get() = upperBound
-
-    override fun sameTypeConstructor(type: KotlinType) = false
-
-    fun makeNullableAsSpecified(nullable: Boolean): KotlinType
-
 }
 
 fun KotlinType.isFlexible(): Boolean = simpleOrFlexibleType is KotlinType.FlexibleType

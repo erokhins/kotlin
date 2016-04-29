@@ -33,8 +33,6 @@ import org.jetbrains.kotlin.psi.debugText.getDebugText
 import org.jetbrains.kotlin.resolve.PossiblyBareType.type
 import org.jetbrains.kotlin.resolve.bindingContextUtil.recordScope
 import org.jetbrains.kotlin.resolve.calls.tasks.DynamicCallableDescriptors
-import org.jetbrains.kotlin.resolve.lazy.ForceResolveUtil
-import org.jetbrains.kotlin.resolve.lazy.LazyEntity
 import org.jetbrains.kotlin.resolve.scopes.LazyScopeAdapter
 import org.jetbrains.kotlin.resolve.scopes.LexicalScope
 import org.jetbrains.kotlin.resolve.scopes.MemberScope
@@ -84,21 +82,8 @@ class TypeResolver(
 
         if (!c.allowBareTypes && !c.forceResolveLazyTypes && lazinessToken.isLazy()) {
             // Bare types can be allowed only inside expressions; lazy type resolution is only relevant for declarations
-            class LazyKotlinType : KotlinType.DeferredType(), LazyEntity {
-                private val _delegate = storageManager.createLazyValue { doResolvePossiblyBareType(c, typeReference).actualType }
-                override fun computeDelegate() = _delegate()
 
-                override fun forceResolveAllContents() {
-                    ForceResolveUtil.forceResolveAllContents(constructor)
-                    arguments.forEach { ForceResolveUtil.forceResolveAllContents(it.type) }
-                }
-
-                override fun toString(): String {
-                    TODO() // TODO
-                }
-            }
-
-            val lazyKotlinType = LazyKotlinType()
+            val lazyKotlinType = KotlinType.DeferredType(storageManager.createLazyValue { doResolvePossiblyBareType(c, typeReference).actualType })
             c.trace.record(BindingContext.TYPE, typeReference, lazyKotlinType)
             return type(lazyKotlinType);
         }

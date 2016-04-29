@@ -25,5 +25,5 @@ public interface ClassifierDescriptor extends DeclarationDescriptorNonRoot {
     TypeConstructor getTypeConstructor();
 
     @NotNull
-    KotlinType getDefaultType();
+    KotlinType.SimpleType getDefaultType();
 }

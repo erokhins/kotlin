@@ -41,7 +41,7 @@ public abstract class AbstractTypeParameterDescriptor extends DeclarationDescrip
     private final int index;
 
     private final NotNullLazyValue<TypeConstructor> typeConstructor;
-    private final NotNullLazyValue<KotlinType> defaultType;
+    private final NotNullLazyValue<KotlinType.SimpleType> defaultType;
 
     protected AbstractTypeParameterDescriptor(
             @NotNull final StorageManager storageManager,
@@ -65,10 +65,10 @@ public abstract class AbstractTypeParameterDescriptor extends DeclarationDescrip
                 return new TypeParameterTypeConstructor(storageManager, supertypeLoopChecker);
             }
         });
-        this.defaultType = storageManager.createLazyValue(new Function0<KotlinType>() {
+        this.defaultType = storageManager.createLazyValue(new Function0<KotlinType.SimpleType>() {
             @Override
-            public KotlinType invoke() {
-                return KotlinTypeImpl.create(
+            public KotlinType.SimpleType invoke() {
+                return KotlinTypeFactory.create(
                         Annotations.Companion.getEMPTY(),
                         getTypeConstructor(), false, Collections.<TypeProjection>emptyList(),
                         new LazyScopeAdapter(storageManager.createLazyValue(
@@ -124,7 +124,7 @@ public abstract class AbstractTypeParameterDescriptor extends DeclarationDescrip
 
     @NotNull
     @Override
-    public KotlinType getDefaultType() {
+    public KotlinType.SimpleType getDefaultType() {
         return defaultType.invoke();
     }
 

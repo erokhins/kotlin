@@ -37,9 +37,9 @@ public abstract class AbstractClassDescriptor implements ClassDescriptor {
 
     public AbstractClassDescriptor(@NotNull StorageManager storageManager, @NotNull Name name) {
         this.name = name;
-        this.defaultType = storageManager.createLazyValue(new Function0<KotlinType>() {
+        this.defaultType = storageManager.createLazyValue(new Function0<KotlinType.SimpleType>() {
             @Override
-            public KotlinType invoke() {
+            public KotlinType.SimpleType invoke() {
                 return TypeUtils.makeUnsubstitutedType(AbstractClassDescriptor.this, getUnsubstitutedMemberScope());
             }
         });

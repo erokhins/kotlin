@@ -49,7 +49,6 @@ fun <T : TypeCapability> TypeCapabilities.addCapability(clazz: Class<T>, typeCap
     return CompositeTypeCapabilities(this, newCapabilities)
 }
 
-inline fun <reified T : TypeCapability> KotlinType.getCapability(): T? = getCapability(T::class.java)
 inline fun <reified T : TypeCapability> KotlinType.getCapability(): T? = capabilities.getCapability(T::class.java)
 
 interface CustomTypeVariable : TypeCapability {
@@ -60,16 +59,11 @@ fun KotlinType.getCustomTypeVariable(): CustomTypeVariable? {
     if (!isTypeParameter()) return null
     getCapability<CustomTypeVariable>()?.let { return it }
 
-    if (isFlexible()) {
-        val flexibility = flexibility()
+    val flexibleType = asFlexibleType()
+    if (flexibleType != null) {
         return object : CustomTypeVariable {
             override fun substitutionResult(replacement: KotlinType): KotlinType {
-                return if (replacement.isFlexible()) {
-                    replacement
-                }
-                else {
-                    flexibility.factory.create(replacement, TypeUtils.makeNullable(replacement))
-                }
+                return replacement.transform({ KotlinTypeFactory.createFlexibleType(this, this.markNullableAsSpecified(true)) }) { this }
             }
         }
     }
@@ -83,14 +77,14 @@ interface SubtypingRepresentatives : TypeCapability {
     fun sameTypeConstructor(type: KotlinType): Boolean
 }
 
-fun KotlinType.getSubtypeRepresentative(): KotlinType =
-        this.getCapability(SubtypingRepresentatives::class.java)?.subTypeRepresentative ?: this
+fun KotlinType.getSubtypeRepresentative(): KotlinType
+        = transform( { getCapability<SubtypingRepresentatives>()?.subTypeRepresentative ?: this }) { lowerBound }
 
-fun KotlinType.getSupertypeRepresentative(): KotlinType =
-        this.getCapability(SubtypingRepresentatives::class.java)?.superTypeRepresentative ?: this
+fun KotlinType.getSupertypeRepresentative(): KotlinType
+        = transform( { getCapability<SubtypingRepresentatives>()?.superTypeRepresentative ?: this }) { upperBound }
 
 fun sameTypeConstructors(first: KotlinType, second: KotlinType): Boolean {
-    val typeRangeCapability = SubtypingRepresentatives::class.java
-    return first.getCapability(typeRangeCapability)?.sameTypeConstructor(second) ?: false
-           || second.getCapability(typeRangeCapability)?.sameTypeConstructor(first) ?: false
+    return first.getCapability<SubtypingRepresentatives>()?.sameTypeConstructor(second) ?: false
+           || second.getCapability<SubtypingRepresentatives>()?.sameTypeConstructor(first) ?: false
 }
+

@@ -606,8 +606,8 @@ public abstract class KotlinBuiltIns {
     }
 
     @NotNull
-    public KotlinType getNullableAnyType() {
-        return TypeUtils.makeNullable(getAnyType());
+    public KotlinType.SimpleType getNullableAnyType() {
+        return SimpleTypeImplKt.markNullableAsSpecified(getAnyType(), true);
     }
 
     @NotNull

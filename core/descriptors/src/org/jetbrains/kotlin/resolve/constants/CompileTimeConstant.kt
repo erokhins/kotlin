@@ -99,7 +99,7 @@ class IntegerValueTypeConstant(
         }
     }
 
-    val unknownIntegerType = KotlinTypeImpl.create(
+    val unknownIntegerType = KotlinTypeFactory.create(
             Annotations.EMPTY, typeConstructor, false, emptyList<TypeProjection>(),
             ErrorUtils.createErrorScope("Scope for number value type (" + typeConstructor.toString() + ")", true)
     )

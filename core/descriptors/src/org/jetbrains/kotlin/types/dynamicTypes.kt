@@ -16,10 +16,10 @@
 
 package org.jetbrains.kotlin.types
 
-import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.types.checker.KotlinTypeChecker
 import org.jetbrains.kotlin.types.typeUtil.builtIns
 
+// todo move to frontend
 open class DynamicTypesSettings {
     open val dynamicTypesAllowed: Boolean
         get() = false
@@ -30,31 +30,16 @@ class DynamicTypesAllowed: DynamicTypesSettings() {
         get() = true
 }
 
-fun KotlinType.isDynamic(): Boolean = this.capabilities.getCapability(DynamicTypeCapability::class.java) != null
-
-fun createDynamicType(builtIns: KotlinBuiltIns)
-        = KotlinType.FlexibleType(builtIns.nothingType, builtIns.anyType,
-                                  SingletonTypeCapabilities(DynamicTypeCapability::class.java, DynamicTypeCapability),
-                                  isMarkedNullable = false, delegateToUpperBound = true)
-
-object DynamicTypeCapability : TypeCapability {
-    val id = "kotlin.DynamicType"
-}
-
 object DynamicTypeFactory : FlexibleTypeFactory {
     override val id: String get() = "kotlin.DynamicType"
 
     override fun create(lowerBound: KotlinType.SimpleType, upperBound: KotlinType.SimpleType): KotlinType.FlexibleType {
         if (KotlinTypeChecker.FLEXIBLE_UNEQUAL_TO_INFLEXIBLE.equalTypes(lowerBound, lowerBound.builtIns.nothingType) &&
             KotlinTypeChecker.FLEXIBLE_UNEQUAL_TO_INFLEXIBLE.equalTypes(upperBound, upperBound.builtIns.nullableAnyType)) {
-            return createDynamicType(lowerBound.builtIns)
+            return KotlinTypeFactory.createDynamicType(lowerBound.builtIns)
         }
         else {
             throw IllegalStateException("Illegal type range for dynamic type: $lowerBound..$upperBound")
         }
     }
-
-//        override fun getSpecificityRelationTo(otherType: KotlinType): SpecificityRelation {
-//            return if (!otherType.isDynamic()) SpecificityRelation.LESS_SPECIFIC else SpecificityRelation.DONT_KNOW
-//        }
 }
