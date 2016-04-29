@@ -184,13 +184,17 @@ private object ConstantStarSubstitution : TypeSubstitution() {
     override fun isEmpty() = false
 }
 
-val KotlinType.unwrappedType: KotlinType
+val KotlinType.stableType: KotlinType.StableType<*>
     get() {
         var result = this
-        while (result is KotlinType.DeferredType) {
-            result = result.delegate
+        while (true) {
+            when (result) {
+                is KotlinType.DeferredType -> {
+                    result = result.delegate
+                }
+                is KotlinType.StableType<*> -> return result
+            }
         }
-        return result
     }
 
-val KotlinType.isDynamic: Boolean get() = KotlinType.FlexibleType.isDynamicType(this)
+val KotlinType.isDynamic: Boolean get() = stableType is DynamicType

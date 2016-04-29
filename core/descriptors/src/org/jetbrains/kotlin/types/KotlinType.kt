@@ -16,15 +16,11 @@
 
 package org.jetbrains.kotlin.types
 
-import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.descriptors.annotations.Annotated
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.renderer.DescriptorRenderer
 import org.jetbrains.kotlin.resolve.scopes.MemberScope
-import org.jetbrains.kotlin.storage.NotNullLazyValue
 import org.jetbrains.kotlin.types.checker.KotlinTypeChecker
-
-interface LazyType1
 
 /**
  * @see KotlinTypeChecker#isSubtypeOf(KotlinType, KotlinType)
@@ -70,66 +66,61 @@ sealed class KotlinType : Annotated {
         return isMarkedNullable == other.isMarkedNullable && KotlinTypeChecker.FLEXIBLE_UNEQUAL_TO_INFLEXIBLE.equalTypes(this, other)
     }
 
-    /**
-     * All types which implements this interface can be corrected used as instanceOf
-     */
-    public interface StableType<T : KotlinType> {
-        fun replaceAnnotations(newAnnotations: Annotations): T
-        fun replaceNullability(newNullability: Boolean): T
-    }
+    sealed class StableType<T : KotlinType>: KotlinType() {
+        abstract fun replaceAnnotations(newAnnotations: Annotations): T
+        abstract fun markNullableAsSpecified(newNullability: Boolean): T
 
-    public abstract class SimpleType : KotlinType() {
+        abstract class SimpleType : StableType<SimpleType>() {
+            override fun toString(): String {
+                // for error types this method should be overridden
+                if (isError) return "ErrorType"
 
-        override fun toString(): String {
-            // for error types this method should be overridden
-            if (isError) return "ErrorType"
+                return buildString {
+                    for (annotation in annotations.getAllAnnotations()) {
+                        append("[", DescriptorRenderer.DEBUG_TEXT.renderAnnotation(annotation.annotation, annotation.target), "] ")
+                    }
 
-            return buildString {
-                for (annotation in annotations.getAllAnnotations()) {
-                    append("[", DescriptorRenderer.DEBUG_TEXT.renderAnnotation(annotation.annotation, annotation.target), "] ")
+                    append(constructor)
+                    if (!arguments.isEmpty()) arguments.joinTo(this, separator = ", ", prefix = "<", postfix = ">")
+                    if (isMarkedNullable) append("?")
+                }
+            }
+        }
+
+        abstract class FlexibleType(val lowerBound: SimpleType, val upperBound: SimpleType) : StableType<FlexibleType>() {
+            companion object {
+                @JvmField
+                var RUN_SLOW_ASSERTIONS = false
+            }
+
+            // These assertions are needed for checking invariants of flexible types.
+            //
+            // Unfortunately isSubtypeOf is running resolve for lazy types.
+            // Because of this we can't run these assertions when we are creating this type. See EA-74904
+            //
+            // Also isSubtypeOf is not a very fast operation, so we are running assertions only if ASSERTIONS_ENABLED. See KT-7540
+            private var assertionsDone = false
+
+            protected fun runAssertions() {
+                if (RUN_SLOW_ASSERTIONS || assertionsDone) return
+                assertionsDone = true
+
+                assert (lowerBound != upperBound) { "Lower and upper bounds are equal: $lowerBound == $upperBound" }
+                assert (KotlinTypeChecker.DEFAULT.isSubtypeOf(lowerBound, upperBound)) {
+                    "Lower bound $lowerBound of a flexible type must be a subtype of the upper bound $upperBound"
+                }
+            }
+
+            override val delegate: SimpleType
+                get() {
+                    runAssertions()
+                    return lowerBound
                 }
 
-                append(constructor)
-                if (!arguments.isEmpty()) arguments.joinTo(this, separator = ", ", prefix = "<", postfix = ">")
-                if (isMarkedNullable) append("?")
-            }
+            override val isError: Boolean get() = false
+
+            override fun toString(): String = "('$lowerBound'..'$upperBound')"
         }
-    }
-
-    public abstract class FlexibleType(val lowerBound: SimpleType, val upperBound: SimpleType) : KotlinType(), StableType<FlexibleType> {
-
-        companion object {
-            @JvmField
-            var RUN_SLOW_ASSERTIONS = false
-        }
-
-        // These assertions are needed for checking invariants of flexible types.
-        //
-        // Unfortunately isSubtypeOf is running resolve for lazy types.
-        // Because of this we can't run these assertions when we are creating this type. See EA-74904
-        //
-        // Also isSubtypeOf is not a very fast operation, so we are running assertions only if ASSERTIONS_ENABLED. See KT-7540
-        private var assertionsDone = false
-
-        protected fun runAssertions() {
-            if (RUN_SLOW_ASSERTIONS || assertionsDone) return
-            assertionsDone = true
-
-            assert (lowerBound != upperBound) { "Lower and upper bounds are equal: $lowerBound == $upperBound" }
-            assert (KotlinTypeChecker.DEFAULT.isSubtypeOf(lowerBound, upperBound)) {
-                "Lower bound $lowerBound of a flexible type must be a subtype of the upper bound $upperBound"
-            }
-        }
-
-        override val delegate: SimpleType
-            get() {
-                runAssertions()
-                return lowerBound
-            }
-
-        override val isError: Boolean get() = false
-
-        override fun toString(): String = "('$lowerBound'..'$upperBound')"
     }
 
     /**
@@ -138,7 +129,7 @@ sealed class KotlinType : Annotated {
      * Also you can override some methods from KotlinType, but delegate should have same values.
      * See examples in TypeOperations.kt
      */
-    public abstract class DeferredType() : KotlinType() {
+    abstract class DeferredType() : KotlinType() {
         open fun isComputing(): Boolean = false
 
         abstract fun isComputed(): Boolean

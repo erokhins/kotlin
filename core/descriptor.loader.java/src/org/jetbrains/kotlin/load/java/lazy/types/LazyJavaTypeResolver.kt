@@ -34,6 +34,8 @@ import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.platform.JavaToKotlinClassMap
 import org.jetbrains.kotlin.storage.getValue
 import org.jetbrains.kotlin.types.*
+import org.jetbrains.kotlin.types.KotlinType.StableType.FlexibleType
+import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType
 import org.jetbrains.kotlin.types.Variance.*
 import org.jetbrains.kotlin.types.typeUtil.createProjection
 import org.jetbrains.kotlin.types.typeUtil.replaceAnnotations
@@ -57,10 +59,9 @@ class LazyJavaTypeResolver(
             }
             is JavaClassifierType ->
                 if (attr.allowFlexible && attr.howThisTypeIsUsed != SUPERTYPE)
-                    KotlinType.FlexibleType(
+                    SimpleFlexibleType( // todo raw type
                             LazyJavaClassifierType(javaType, attr.toFlexible(FLEXIBLE_LOWER_BOUND)),
-                            LazyJavaClassifierType(javaType, attr.toFlexible(FLEXIBLE_UPPER_BOUND)),
-                            TypeCapabilities.NONE // TODO
+                            LazyJavaClassifierType(javaType, attr.toFlexible(FLEXIBLE_UPPER_BOUND))
                     )
                 else LazyJavaClassifierType(javaType, attr)
             is JavaArrayType -> transformArrayType(javaType, attr)
@@ -286,8 +287,8 @@ class LazyJavaTypeResolver(
     object FlexibleJavaClassifierTypeFactory : FlexibleTypeFactory {
         override val id: String get() = "kotlin.jvm.PlatformType"
 
-        override fun create(lowerBound: KotlinType.SimpleType, upperBound: KotlinType.SimpleType): KotlinType.FlexibleType {
-            return KotlinType.FlexibleType(lowerBound, upperBound, TypeCapabilities.NONE)
+        override fun create(lowerBound: SimpleType, upperBound: SimpleType): FlexibleType {
+            return SimpleFlexibleType(lowerBound, upperBound)
         }
     }
 

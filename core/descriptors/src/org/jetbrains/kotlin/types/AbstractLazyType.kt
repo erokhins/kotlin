@@ -18,12 +18,13 @@ package org.jetbrains.kotlin.types
 
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor
+import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.resolve.scopes.MemberScope
 import org.jetbrains.kotlin.storage.StorageManager
 import org.jetbrains.kotlin.storage.getValue
 
 // TODO: LazyEntity
-abstract class AbstractLazyType(storageManager: StorageManager) : KotlinType.SimpleType() {
+abstract class AbstractLazyType(storageManager: StorageManager) : AbstractSimpleType() {
     private val typeConstructor = storageManager.createLazyValue { computeTypeConstructor() }
     private val typeArguments = storageManager.createLazyValue { computeArguments() }
 
@@ -32,8 +33,8 @@ abstract class AbstractLazyType(storageManager: StorageManager) : KotlinType.Sim
     override val memberScope by storageManager.createLazyValue { computeMemberScope() }
 
     protected abstract fun computeTypeConstructor(): TypeConstructor
-
     protected abstract fun computeArguments(): List<TypeProjection>
+    abstract override fun getAnnotations() : Annotations
 
     protected open fun computeMemberScope(): MemberScope {
         val descriptor = constructor.declarationDescriptor

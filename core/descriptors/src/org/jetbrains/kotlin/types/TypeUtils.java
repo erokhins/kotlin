@@ -27,6 +27,8 @@ import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor;
 import org.jetbrains.kotlin.descriptors.annotations.Annotations;
 import org.jetbrains.kotlin.resolve.constants.IntegerValueTypeConstructor;
 import org.jetbrains.kotlin.resolve.scopes.MemberScope;
+import org.jetbrains.kotlin.types.KotlinType.StableType.FlexibleType;
+import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType;
 import org.jetbrains.kotlin.types.checker.KotlinTypeChecker;
 
 import java.util.*;
@@ -35,7 +37,7 @@ public class TypeUtils {
     public static final KotlinType DONT_CARE = ErrorUtils.createErrorTypeWithCustomDebugName("DONT_CARE");
     public static final KotlinType CANT_INFER_FUNCTION_PARAM_TYPE = ErrorUtils.createErrorType("Cannot be inferred");
 
-    private static class SpecialType extends KotlinType.SimpleType {
+    private static class SpecialType extends AbstractSimpleType {
         private final String name;
 
         public SpecialType(String name) {
@@ -175,7 +177,7 @@ public class TypeUtils {
     }
 
     @NotNull
-    public static KotlinType.SimpleType makeUnsubstitutedType(ClassDescriptor classDescriptor, MemberScope unsubstitutedMemberScope) {
+    public static SimpleType makeUnsubstitutedType(ClassDescriptor classDescriptor, MemberScope unsubstitutedMemberScope) {
         if (ErrorUtils.isError(classDescriptor)) {
             return ErrorUtils.createErrorType("Unsubstituted type for " + classDescriptor);
         }
@@ -374,7 +376,7 @@ public class TypeUtils {
     ) {
         if (type == null) return false;
         if (isSpecialType.invoke(type)) return true;
-        KotlinType.FlexibleType flexibleType = FlexibleTypesKt.asFlexibleType(type);
+        FlexibleType flexibleType = FlexibleTypesKt.asFlexibleType(type);
         if (flexibleType != null) {
             return contains(flexibleType.getLowerBound(), isSpecialType) || contains(flexibleType.getUpperBound(), isSpecialType);
         }

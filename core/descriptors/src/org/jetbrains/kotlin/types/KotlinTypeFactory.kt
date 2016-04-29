@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.resolve.scopes.MemberScope
 import org.jetbrains.kotlin.storage.NotNullLazyValue
-import org.jetbrains.kotlin.types.KotlinType.SimpleType
+import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType
 
 object KotlinTypeFactory {
     @JvmStatic @JvmOverloads

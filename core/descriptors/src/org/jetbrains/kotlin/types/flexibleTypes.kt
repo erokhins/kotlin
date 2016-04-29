@@ -18,31 +18,33 @@ package org.jetbrains.kotlin.types
 
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
+import org.jetbrains.kotlin.types.KotlinType.StableType.FlexibleType
+import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType
 import org.jetbrains.kotlin.types.checker.KotlinTypeChecker
 import org.jetbrains.kotlin.types.typeUtil.builtIns
-import org.jetbrains.kotlin.types.typeUtil.unwrappedType
+import org.jetbrains.kotlin.types.typeUtil.stableType
 
 // todo move to serialization
 interface FlexibleTypeFactory {
     val id: String
 
-    fun create(lowerBound: KotlinType.SimpleType, upperBound: KotlinType.SimpleType): KotlinType.FlexibleType
+    fun create(lowerBound: SimpleType, upperBound: SimpleType): FlexibleType
 
     object ThrowException : FlexibleTypeFactory {
         private fun error(): Nothing = throw IllegalArgumentException("This factory should not be used.")
         override val id: String
             get() = error()
 
-        override fun create(lowerBound: KotlinType.SimpleType, upperBound: KotlinType.SimpleType): KotlinType.FlexibleType = error()
+        override fun create(lowerBound: SimpleType, upperBound: SimpleType): FlexibleType = error()
     }
 }
 
-fun KotlinType.isFlexible(): Boolean = unwrappedType is KotlinType.FlexibleType
-fun KotlinType.flexibility(): KotlinType.FlexibleType = unwrappedType as KotlinType.FlexibleType
-fun KotlinType.asFlexibleType(): KotlinType.FlexibleType? = unwrappedType as? KotlinType.FlexibleType
+fun KotlinType.isFlexible(): Boolean = stableType is FlexibleType
+fun KotlinType.flexibility(): FlexibleType = stableType as FlexibleType
+fun KotlinType.asFlexibleType(): FlexibleType? = stableType as? FlexibleType
 
 fun KotlinType.isNullabilityFlexible(): Boolean {
-    val flexible = unwrappedType as? KotlinType.FlexibleType ?: return false
+    val flexible = stableType as? FlexibleType ?: return false
     return TypeUtils.isNullableType(flexible.lowerBound) != TypeUtils.isNullableType(flexible.upperBound)
 }
 
@@ -80,25 +82,25 @@ fun Collection<TypeProjection>.singleBestRepresentative(): TypeProjection? {
     return TypeProjectionImpl(projectionKinds.single(), bestType)
 }
 
-fun KotlinType.lowerIfFlexible(): KotlinType.SimpleType
-        = unwrappedType.let { (it as? KotlinType.FlexibleType)?.lowerBound ?: it as KotlinType.SimpleType }
-fun KotlinType.upperIfFlexible(): KotlinType.SimpleType
-        = unwrappedType.let { (it as? KotlinType.FlexibleType)?.upperBound ?: it as KotlinType.SimpleType }
+fun KotlinType.lowerIfFlexible(): SimpleType
+        = stableType.let { (it as? FlexibleType)?.lowerBound ?: it as SimpleType }
+fun KotlinType.upperIfFlexible(): SimpleType
+        = stableType.let { (it as? FlexibleType)?.upperBound ?: it as SimpleType }
 
-class SimpleFlexibleType(lowerBound: KotlinType.SimpleType, upperBound: KotlinType.SimpleType) :
-        KotlinType.FlexibleType(lowerBound, upperBound) {
+class SimpleFlexibleType(lowerBound: SimpleType, upperBound: SimpleType) :
+        FlexibleType(lowerBound, upperBound) {
 
     override fun replaceAnnotations(newAnnotations: Annotations) =
-        SimpleFlexibleType(lowerBound.replaceAnnotationsNotLazy(newAnnotations), upperBound.replaceAnnotationsNotLazy(newAnnotations))
+        SimpleFlexibleType(lowerBound.replaceAnnotations(newAnnotations), upperBound.replaceAnnotations(newAnnotations))
 
-    override fun replaceNullability(newNullability: Boolean) =
-        SimpleFlexibleType(lowerBound.markNullableAsSpecifiedNotLazy(newNullability),
-                           upperBound.markNullableAsSpecifiedNotLazy(newNullability))
+    override fun markNullableAsSpecified(newNullability: Boolean) =
+        SimpleFlexibleType(lowerBound.markNullableAsSpecified(newNullability),
+                           upperBound.markNullableAsSpecified(newNullability))
 }
 
 class DynamicType(builtIns: KotlinBuiltIns,
                   private val annotations: Annotations
-): KotlinType.FlexibleType(builtIns.nothingType, builtIns.nullableAnyType) {
+): FlexibleType(builtIns.nothingType, builtIns.nullableAnyType) {
     override fun getAnnotations()= annotations
 
     override val delegate: SimpleType
@@ -108,5 +110,5 @@ class DynamicType(builtIns: KotlinBuiltIns,
         get() = false
 
     override fun replaceAnnotations(newAnnotations: Annotations) = DynamicType(upperBound.builtIns, newAnnotations)
-    override fun replaceNullability(newNullability: Boolean) = this
+    override fun markNullableAsSpecified(newNullability: Boolean) = this
 }

@@ -20,11 +20,9 @@ import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.resolve.scopes.MemberScope
-import org.jetbrains.kotlin.storage.NotNullLazyValue
 import org.jetbrains.kotlin.types.*
 import org.jetbrains.kotlin.types.Variance.IN_VARIANCE
 import org.jetbrains.kotlin.types.Variance.OUT_VARIANCE
-import org.jetbrains.kotlin.types.typeUtil.builtIns
 
 class CapturedTypeConstructor(
         val typeProjection: TypeProjection
@@ -61,7 +59,7 @@ class CapturedTypeConstructor(
 class CapturedType(
         private val typeProjection: TypeProjection,
         override val isMarkedNullable: Boolean = false
-): KotlinType.SimpleType(), KotlinType.StableType<CapturedType>, SubtypingRepresentatives {
+): KotlinType.StableType.SimpleType(), SubtypingRepresentatives {
 
     override val constructor: TypeConstructor get() = CapturedTypeConstructor(typeProjection)
     override val arguments: List<TypeProjection> get() = listOf()
@@ -85,7 +83,7 @@ class CapturedType(
     override fun replaceAnnotations(newAnnotations: Annotations): CapturedType
             = throw UnsupportedOperationException("Annotations for captured type is unsupported")
 
-    override fun replaceNullability(newNullability: Boolean): CapturedType = TODO()
+    override fun markNullableAsSpecified(newNullability: Boolean): CapturedType = TODO() // todo
 
     override fun toString() = "Captured($typeProjection)"
 }
@@ -116,13 +114,12 @@ private fun TypeProjection.createCapturedIfNeeded(typeParameterDescriptor: TypeP
     if (typeParameterDescriptor.variance == projectionKind) {
         // TODO: Make star projection type lazy
         return if (isStarProjection) {
-            val deferredType = KotlinType.DeferredType(object : NotNullLazyValue<KotlinType> {
+            val deferredType = object : KotlinType.DeferredType() {
                 override fun isComputed() = true
 
-                override fun isComputing() = false
-
-                override fun invoke() = this@createCapturedIfNeeded.type
-            })
+                override val delegate: KotlinType
+                    get() = this@createCapturedIfNeeded.type
+            }
             TypeProjectionImpl(deferredType)
         }
         else

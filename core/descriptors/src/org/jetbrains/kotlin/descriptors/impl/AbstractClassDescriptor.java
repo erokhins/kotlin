@@ -26,20 +26,21 @@ import org.jetbrains.kotlin.resolve.scopes.SubstitutingScope;
 import org.jetbrains.kotlin.storage.NotNullLazyValue;
 import org.jetbrains.kotlin.storage.StorageManager;
 import org.jetbrains.kotlin.types.*;
+import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType;
 
 import java.util.List;
 
 public abstract class AbstractClassDescriptor implements ClassDescriptor {
     private final Name name;
-    protected final NotNullLazyValue<KotlinType.SimpleType> defaultType;
+    protected final NotNullLazyValue<SimpleType> defaultType;
     private final NotNullLazyValue<MemberScope> unsubstitutedInnerClassesScope;
     private final NotNullLazyValue<ReceiverParameterDescriptor> thisAsReceiverParameter;
 
     public AbstractClassDescriptor(@NotNull StorageManager storageManager, @NotNull Name name) {
         this.name = name;
-        this.defaultType = storageManager.createLazyValue(new Function0<KotlinType.SimpleType>() {
+        this.defaultType = storageManager.createLazyValue(new Function0<SimpleType>() {
             @Override
-            public KotlinType.SimpleType invoke() {
+            public SimpleType invoke() {
                 return TypeUtils.makeUnsubstitutedType(AbstractClassDescriptor.this, getUnsubstitutedMemberScope());
             }
         });

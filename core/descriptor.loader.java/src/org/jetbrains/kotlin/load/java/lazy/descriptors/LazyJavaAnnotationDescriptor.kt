@@ -86,7 +86,7 @@ class LazyJavaAnnotationDescriptor(
         }
     }
 
-    private fun getAnnotationClass() = getType().getConstructor().declarationDescriptor as ClassDescriptor
+    private fun getAnnotationClass() = getType().constructor.declarationDescriptor as ClassDescriptor
 
     private fun resolveAnnotationArgument(argument: JavaAnnotationArgument?): ConstantValue<*>? {
         return when (argument) {
@@ -104,7 +104,7 @@ class LazyJavaAnnotationDescriptor(
     }
 
     private fun resolveFromArray(argumentName: Name, elements: List<JavaAnnotationArgument>): ConstantValue<*>? {
-        if (getType().isError()) return null
+        if (getType().isError) return null
 
         val valueParameter = DescriptorResolverUtils.getAnnotationParameterByName(argumentName, getAnnotationClass()) ?: return null
 
@@ -143,7 +143,6 @@ class LazyJavaAnnotationDescriptor(
             override fun computeArguments() = arguments
             override fun computeMemberScope() = jlClass.getMemberScope(arguments)
 
-            override val capabilities: TypeCapabilities get() = TypeCapabilities.NONE
             override fun getAnnotations(): Annotations = Annotations.EMPTY
         }
 

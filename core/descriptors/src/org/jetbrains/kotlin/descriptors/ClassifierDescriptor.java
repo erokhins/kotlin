@@ -18,6 +18,7 @@ package org.jetbrains.kotlin.descriptors;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.kotlin.types.KotlinType;
+import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType;
 import org.jetbrains.kotlin.types.TypeConstructor;
 
 public interface ClassifierDescriptor extends DeclarationDescriptorNonRoot {
@@ -25,5 +26,5 @@ public interface ClassifierDescriptor extends DeclarationDescriptorNonRoot {
     TypeConstructor getTypeConstructor();
 
     @NotNull
-    KotlinType.SimpleType getDefaultType();
+    SimpleType getDefaultType();
 }
