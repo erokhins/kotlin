@@ -18,57 +18,87 @@ package org.jetbrains.kotlin.types
 
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.types.KotlinType.SimpleType
-import org.jetbrains.kotlin.types.typeUtil.isDynamic
-import org.jetbrains.kotlin.types.typeUtil.simpleOrFlexibleType
+import org.jetbrains.kotlin.types.KotlinType.StableType
+import org.jetbrains.kotlin.types.typeUtil.unwrappedType
 
 
-fun <T : KotlinType> KotlinType.transform(simple: SimpleType.() -> T,
-                                          flexible: KotlinType.FlexibleType.() -> T): T {
-    val simpleOrFlexible = simpleOrFlexibleType
-    if (simpleOrFlexible is SimpleType) {
-        return simple(simpleOrFlexible)
+inline fun KotlinType.transform(stable: StableType<*>.() -> KotlinType, simpleUnstable: SimpleType.() -> KotlinType): KotlinType {
+    val unwrappedType = unwrappedType
+    if (unwrappedType is StableType<*>) {
+        return stable(unwrappedType)
     }
     else {
-        return flexible(simpleOrFlexible as KotlinType.FlexibleType)
+        // FlexibleType is StableType => unwrappedType is SimpleType
+        return simpleUnstable(unwrappedType as SimpleType)
     }
 }
 
-fun KotlinType.markNullableAsSpecifiedNotLazy(nullable: Boolean) = transform({ markNullableAsSpecifiedNotLazy(nullable) }) {
-    // Nullability has no effect on dynamics
-    if (isDynamic) return@transform this
-
-    KotlinTypeFactory.createFlexibleType(lowerBound.markNullableAsSpecifiedNotLazy(nullable),
-                            upperBound.markNullableAsSpecifiedNotLazy(nullable),
-                            capabilities)
+fun KotlinType.markNullableAsSpecifiedNotLazy(nullable: Boolean): KotlinType = transform({ replaceNullability(nullable) }) {
+    if (isMarkedNullable == nullable) {
+        this
+    }
+    else {
+        KotlinTypeFactory.createSimpleType(this, nullable = nullable)
+    }
 }
 
-fun SimpleType.markNullableAsSpecifiedNotLazy(nullable: Boolean): SimpleType {
-    if (nullable == nullable) return this
-    return KotlinTypeFactory.createSimpleType(this, nullable = nullable)
+fun SimpleType.markNullableAsSpecifiedNotLazy(nullable: Boolean)
+        = (this as KotlinType).markNullableAsSpecifiedNotLazy(nullable) as SimpleType
+
+fun KotlinType.markNullableAsSpecified(nullable: Boolean): KotlinType {
+    if (this is DeferredTypeWithKnownNullability) {
+        if (nullable == isMarkedNullable) {
+            return this
+        }
+        else {
+            return DeferredTypeWithKnownNullability.create(_delegate, nullable)
+        }
+    }
+
+    return DeferredTypeWithKnownNullability.create(this, nullable)
 }
 
-fun KotlinType.markNullableAsSpecified(nullable: Boolean) {
-
-}
-
-private abstract class DeferedTypeWithKnownNullability()
-
-private class NullableLazySimpleType(val _delegate: KotlinType) : KotlinType.DeferredType() {
+private sealed class DeferredTypeWithKnownNullability(val _delegate: KotlinType) : KotlinType.DeferredType() {
     override fun isComputed(): Boolean = true
 
     override val delegate: KotlinType
-        get() = _delegate.markNullableAsSpecifiedNotLazy(true)
+        get() = _delegate.markNullableAsSpecifiedNotLazy(isMarkedNullable)
 
-    override val isMarkedNullable: Boolean get() = true
+    private class Nullable(delegate: KotlinType) : DeferredTypeWithKnownNullability(delegate) {
+        override val isMarkedNullable: Boolean get() = true
+    }
+
+    private class NotNull(delegate: KotlinType) : DeferredTypeWithKnownNullability(delegate) {
+        override val isMarkedNullable: Boolean get() = false
+    }
+
+    companion object {
+        fun create(delegate: KotlinType, nullable: Boolean) = if (nullable) Nullable(delegate) else NotNull(delegate)
+    }
 }
 
-private class NotNullLazySimpleType(val _delegate: KotlinType) : KotlinType.DeferredType() {
-    override val isMarkedNullable: Boolean get() = false
+fun KotlinType.replaceAnnotationsNotLazy(newAnnotations: Annotations) = transform({ replaceAnnotations(newAnnotations) }) {
+    if (annotations === newAnnotations) {
+        this
+    }
+    else {
+        KotlinTypeFactory.createSimpleType(this, annotations = newAnnotations)
+    }
 }
 
-private class CustomAnnotations(
-        override val delegate: SimpleType,
+fun SimpleType.replaceAnnotationsNotLazy(newAnnotations: Annotations)
+        = (this as KotlinType).replaceAnnotationsNotLazy(newAnnotations) as SimpleType
+
+fun KotlinType.replaceAnnotations(newAnnotations: Annotations): KotlinType = DeferredTypeWithKnownAnnotations(this, newAnnotations)
+
+private class DeferredTypeWithKnownAnnotations(
+        val _delegate: KotlinType,
         private val annotations: Annotations
-): SimpleType(), KotlinType.LazyType {
+): KotlinType.DeferredType() {
+    override fun isComputed(): Boolean = true
+
+    override val delegate: KotlinType
+        get() = _delegate.replaceAnnotationsNotLazy(annotations)
+
     override fun getAnnotations() = annotations
 }

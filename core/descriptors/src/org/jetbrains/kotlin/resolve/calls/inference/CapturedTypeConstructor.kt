@@ -59,26 +59,17 @@ class CapturedTypeConstructor(
 }
 
 class CapturedType(
-        private val typeProjection: TypeProjection
-): KotlinType.SimpleType(), SubtypingRepresentatives {
+        private val typeProjection: TypeProjection,
+        override val isMarkedNullable: Boolean = false
+): KotlinType.SimpleType(), KotlinType.StableType<CapturedType>, SubtypingRepresentatives {
 
     override val constructor: TypeConstructor get() = CapturedTypeConstructor(typeProjection)
     override val arguments: List<TypeProjection> get() = listOf()
-    override val isMarkedNullable: Boolean get() = false
     override val memberScope: MemberScope = ErrorUtils.createErrorScope(
             "No member resolution should be done on captured type, it used only during constraint system resolution", true)
 
     override val isError: Boolean get() = false
     override fun getAnnotations(): Annotations = Annotations.EMPTY
-
-    override val capabilities: TypeCapabilities = object : TypeCapabilities {
-        override fun <T : TypeCapability> getCapability(capabilityClass: Class<T>): T? {
-            @Suppress("UNCHECKED_CAST")
-            if (capabilityClass == SubtypingRepresentatives::class.java) return this@CapturedType as T
-            return null
-        }
-    }
-
 
     override val subTypeRepresentative: KotlinType
         get() = representative(OUT_VARIANCE, constructor.builtIns.nullableAnyType)
@@ -90,6 +81,11 @@ class CapturedType(
         if (typeProjection.projectionKind == variance) typeProjection.type else default
 
     override fun sameTypeConstructor(type: KotlinType) = constructor === type.constructor
+
+    override fun replaceAnnotations(newAnnotations: Annotations): CapturedType
+            = throw UnsupportedOperationException("Annotations for captured type is unsupported")
+
+    override fun replaceNullability(newNullability: Boolean): CapturedType = TODO()
 
     override fun toString() = "Captured($typeProjection)"
 }

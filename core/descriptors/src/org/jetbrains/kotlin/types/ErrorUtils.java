@@ -537,12 +537,6 @@ public class ErrorUtils {
             return Annotations.Companion.getEMPTY();
         }
 
-        @NotNull
-        @Override
-        public TypeCapabilities getCapabilities() {
-            return TypeCapabilities.NONE.INSTANCE;
-        }
-
         @Override
         public String toString() {
             return constructor.toString() + (arguments.isEmpty() ? "" : joinToString(arguments, ", ", "<", ">", -1, "...", null));

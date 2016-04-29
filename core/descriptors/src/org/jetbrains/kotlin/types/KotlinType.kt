@@ -44,6 +44,7 @@ sealed class KotlinType : Annotated {
 
     open val isError: Boolean get() = delegate.isError
 
+    @Deprecated("Will be deleted soon")
     open val capabilities: TypeCapabilities get() = delegate.capabilities
 
     override fun getAnnotations(): Annotations = delegate.annotations
@@ -69,6 +70,14 @@ sealed class KotlinType : Annotated {
         return isMarkedNullable == other.isMarkedNullable && KotlinTypeChecker.FLEXIBLE_UNEQUAL_TO_INFLEXIBLE.equalTypes(this, other)
     }
 
+    /**
+     * All types which implements this interface can be corrected used as instanceOf
+     */
+    public interface StableType<T : KotlinType> {
+        fun replaceAnnotations(newAnnotations: Annotations): T
+        fun replaceNullability(newNullability: Boolean): T
+    }
+
     public abstract class SimpleType : KotlinType() {
 
         override fun toString(): String {
@@ -87,45 +96,11 @@ sealed class KotlinType : Annotated {
         }
     }
 
-    public open class FlexibleType private constructor(val lowerBound: SimpleType, val upperBound: SimpleType) : KotlinType() {
+    public abstract class FlexibleType(val lowerBound: SimpleType, val upperBound: SimpleType) : KotlinType(), StableType<FlexibleType> {
 
         companion object {
             @JvmField
             var RUN_SLOW_ASSERTIONS = false
-
-            internal fun create(lowerBound: SimpleType, upperBound: SimpleType, capabilities: TypeCapabilities): KotlinType {
-                if (lowerBound == upperBound) {
-                    if (lowerBound.capabilities == capabilities) {
-                        return lowerBound
-                    }
-                    else {
-                        return KotlinTypeFactory.createSimpleType(lowerBound, capabilities = capabilities)
-                    }
-                }
-                if (capabilities == TypeCapabilities.NONE) {
-                    return FlexibleType(lowerBound, upperBound)
-                }
-                else {
-                    return FlexibleTypeWithCapabilities(lowerBound, upperBound, capabilities)
-                }
-            }
-
-            internal fun createDynamicType(builtIns: KotlinBuiltIns): FlexibleType {
-                return DynamicType(builtIns, TypeCapabilities.NONE)
-            }
-
-            internal fun isDynamicType(type: KotlinType) = type.javaClass == DynamicType::class.java
-        }
-
-        private class FlexibleTypeWithCapabilities(
-                lowerBound: SimpleType, upperBound: SimpleType,
-                override val capabilities: TypeCapabilities
-        ) : FlexibleType(lowerBound, upperBound)
-
-        private class DynamicType(builtIns: KotlinBuiltIns, override val capabilities: TypeCapabilities) :
-                FlexibleType(builtIns.nothingType, builtIns.nullableAnyType) {
-            override val delegate: SimpleType get() = upperBound
-            override val isMarkedNullable: Boolean get() = false
         }
 
         // These assertions are needed for checking invariants of flexible types.
@@ -136,7 +111,7 @@ sealed class KotlinType : Annotated {
         // Also isSubtypeOf is not a very fast operation, so we are running assertions only if ASSERTIONS_ENABLED. See KT-7540
         private var assertionsDone = false
 
-        private fun runAssertions() {
+        protected fun runAssertions() {
             if (RUN_SLOW_ASSERTIONS || assertionsDone) return
             assertionsDone = true
 
@@ -153,7 +128,6 @@ sealed class KotlinType : Annotated {
             }
 
         override val isError: Boolean get() = false
-        override val capabilities: TypeCapabilities get() = TypeCapabilities.NONE
 
         override fun toString(): String = "('$lowerBound'..'$upperBound')"
     }

@@ -24,15 +24,17 @@ import org.jetbrains.kotlin.storage.NotNullLazyValue
 import org.jetbrains.kotlin.types.KotlinType.SimpleType
 
 object KotlinTypeFactory {
-    @JvmStatic
-    fun createDynamicType(builtIns: KotlinBuiltIns) = KotlinType.FlexibleType.createDynamicType(builtIns)
+    @JvmStatic @JvmOverloads
+    fun createDynamicType(
+            builtIns: KotlinBuiltIns,
+            annotations: Annotations = Annotations.EMPTY
+    ) = DynamicType(builtIns, annotations)
 
-    @JvmOverloads @JvmStatic
+    @JvmStatic
     fun createFlexibleType(
             lowerBound: SimpleType,
-            upperBound: SimpleType,
-            capabilities: TypeCapabilities = TypeCapabilities.NONE
-    ) = KotlinType.FlexibleType.create(lowerBound, upperBound, capabilities)
+            upperBound: SimpleType
+    ) = SimpleFlexibleType(lowerBound, upperBound)
 
     @JvmStatic
     fun createDeferredType(lazyDelegate: NotNullLazyValue<KotlinType>) = KotlinType.DeferredType(lazyDelegate)

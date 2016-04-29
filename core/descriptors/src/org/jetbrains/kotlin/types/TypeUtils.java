@@ -42,44 +42,15 @@ public class TypeUtils {
             this.name = name;
         }
 
-        @NotNull
-        @Override
-        public TypeConstructor getConstructor() {
-            throw new IllegalStateException(name);
-        }
-
-        @NotNull
-        @Override
-        public List<TypeProjection> getArguments() {
-            throw new IllegalStateException(name);
-        }
-
-        @Override
-        public boolean isMarkedNullable() {
-            throw new IllegalStateException(name);
-        }
-
-        @NotNull
-        @Override
-        public MemberScope getMemberScope() {
-            throw new IllegalStateException(name);
-        }
-
         @Override
         public boolean isError() {
-            return false;
+            return true;
         }
 
         @NotNull
         @Override
-        public Annotations getAnnotations() {
+        protected KotlinType getDelegate() {
             throw new IllegalStateException(name);
-        }
-
-        @NotNull
-        @Override
-        public TypeCapabilities getCapabilities() {
-            return TypeCapabilities.NONE.INSTANCE;
         }
 
         @NotNull
@@ -114,7 +85,7 @@ public class TypeUtils {
 
     @NotNull
     public static KotlinType makeNullableAsSpecified(@NotNull KotlinType type, boolean nullable) {
-        return SimpleTypeImplKt.markNullableAsSpecified(type, nullable);
+        return TypeOperationsKt.markNullableAsSpecified(type, nullable);
     }
 
     @NotNull
