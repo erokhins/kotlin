@@ -36,9 +36,7 @@ import org.jetbrains.kotlin.resolve.scopes.DescriptorKindFilter
 import org.jetbrains.kotlin.resolve.scopes.MemberScope
 import org.jetbrains.kotlin.serialization.deserialization.AdditionalClassPartsProvider
 import org.jetbrains.kotlin.serialization.deserialization.descriptors.DeserializedClassDescriptor
-import org.jetbrains.kotlin.types.DelegatingType
 import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.LazyDelegateSimpleType
 import org.jetbrains.kotlin.utils.DFS
 import org.jetbrains.kotlin.utils.SmartSet
 import org.jetbrains.kotlin.utils.addToStdlib.check
@@ -61,7 +59,9 @@ open class JvmBuiltInsAdditionalClassPartsProvider(
         }
 
         //NOTE: can't reference anyType right away, because this is sometimes called when JvmBuiltIns are initializing
-        val superTypes = listOf(object : LazyDelegateSimpleType() {
+        val superTypes = listOf(object : KotlinType.DeferredType() {
+            override fun isComputed(): Boolean = true
+
             override val delegate: KotlinType get() = moduleDescriptor.builtIns.anyType
         })
 

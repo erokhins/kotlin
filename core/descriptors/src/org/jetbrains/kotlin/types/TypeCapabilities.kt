@@ -16,7 +16,10 @@
 
 package org.jetbrains.kotlin.types
 
+import org.jetbrains.kotlin.types.KotlinType.StableType.FlexibleType
+import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType
 import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
+import org.jetbrains.kotlin.types.typeUtil.stableType
 
 interface TypeCapability
 
@@ -28,63 +31,45 @@ interface TypeCapabilities {
     fun <T : TypeCapability> getCapability(capabilityClass: Class<T>): T?
 }
 
-class CompositeTypeCapabilities(private val first: TypeCapabilities, private val second: TypeCapabilities) : TypeCapabilities {
-    override fun <T : TypeCapability> getCapability(capabilityClass: Class<T>): T? =
-            first.getCapability(capabilityClass) ?: second.getCapability(capabilityClass)
-}
+inline fun <reified T : TypeCapability> KotlinType.getCapability(): T? = error("Deleted")
 
-class SingletonTypeCapabilities(private val clazz: Class<*>, private val typeCapability: TypeCapability) : TypeCapabilities {
-    override fun <T : TypeCapability> getCapability(capabilityClass: Class<T>): T? {
-        @Suppress("UNCHECKED_CAST")
-        if (capabilityClass == clazz) return typeCapability as T
-        return null
-    }
-}
-
-fun <T : TypeCapability> TypeCapabilities.addCapability(clazz: Class<T>, typeCapability: T): TypeCapabilities {
-    if (getCapability(clazz) === typeCapability) return this
-    val newCapabilities = SingletonTypeCapabilities(clazz, typeCapability)
-    if (this === TypeCapabilities.NONE) return newCapabilities
-
-    return CompositeTypeCapabilities(this, newCapabilities)
-}
-
-inline fun <reified T : TypeCapability> KotlinType.getCapability(): T? = capabilities.getCapability(T::class.java)
-
-interface CustomTypeVariable : TypeCapability {
+interface CustomTypeVariable {
     fun substitutionResult(replacement: KotlinType): KotlinType
 }
 
 fun KotlinType.getCustomTypeVariable(): CustomTypeVariable? {
     if (!isTypeParameter()) return null
-    getCapability<CustomTypeVariable>()?.let { return it }
+    (stableType as? CustomTypeVariable)?.let { return it }
 
-    val flexibleType = asFlexibleType()
-    if (flexibleType != null) {
+    if (stableType is FlexibleType) {
         return object : CustomTypeVariable {
             override fun substitutionResult(replacement: KotlinType): KotlinType {
-                return replacement.transform({ KotlinTypeFactory.createFlexibleType(this, this.markNullableAsSpecified(true)) }) { this }
+                val stableType = replacement.stableType
+                return when(stableType) {
+                    is FlexibleType -> stableType
+                    is SimpleType -> KotlinTypeFactory.createFlexibleType(stableType, stableType.markNullableAsSpecified(true))
+                }
             }
         }
     }
     return null
 }
 
-interface SubtypingRepresentatives : TypeCapability {
+interface SubtypingRepresentatives {
     val subTypeRepresentative: KotlinType
     val superTypeRepresentative: KotlinType
 
     fun sameTypeConstructor(type: KotlinType): Boolean
 }
 
-fun KotlinType.getSubtypeRepresentative(): KotlinType
-        = transform( { getCapability<SubtypingRepresentatives>()?.subTypeRepresentative ?: this }) { lowerBound }
+fun KotlinType.getSubtypeRepresentative(): KotlinType =
+        (stableType as? SubtypingRepresentatives)?.subTypeRepresentative ?: this
 
-fun KotlinType.getSupertypeRepresentative(): KotlinType
-        = transform( { getCapability<SubtypingRepresentatives>()?.superTypeRepresentative ?: this }) { upperBound }
+fun KotlinType.getSupertypeRepresentative(): KotlinType =
+        (stableType as? SubtypingRepresentatives)?.superTypeRepresentative ?: this
 
 fun sameTypeConstructors(first: KotlinType, second: KotlinType): Boolean {
-    return first.getCapability<SubtypingRepresentatives>()?.sameTypeConstructor(second) ?: false
-           || second.getCapability<SubtypingRepresentatives>()?.sameTypeConstructor(first) ?: false
+    return (first.stableType as? SubtypingRepresentatives)?.sameTypeConstructor(second) ?: false
+           || (second.stableType as? SubtypingRepresentatives)?.sameTypeConstructor(first) ?: false
 }
 

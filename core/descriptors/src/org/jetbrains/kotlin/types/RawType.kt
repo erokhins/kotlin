@@ -17,13 +17,14 @@
 package org.jetbrains.kotlin.types
 
 import org.jetbrains.kotlin.renderer.DescriptorRenderer
+import org.jetbrains.kotlin.types.KotlinType.StableType.FlexibleType
 
-interface RawTypeCapability : TypeCapability {
+interface RawType {
 
     val substitution: TypeSubstitution?
     val substitutionToComposeWith: TypeSubstitution?
 
     fun renderInflexible(type: KotlinType, renderer: DescriptorRenderer): String?
-    fun renderBounds(flexibleType: KotlinType.FlexibleType, renderer: DescriptorRenderer): Pair<String, String>?
+    fun renderBounds(flexibleType: FlexibleType, renderer: DescriptorRenderer): Pair<String, String>?
 
 }

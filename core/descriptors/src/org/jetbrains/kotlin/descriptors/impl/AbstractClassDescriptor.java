@@ -114,7 +114,7 @@ public abstract class AbstractClassDescriptor implements ClassDescriptor {
 
     @NotNull
     @Override
-    public KotlinType.SimpleType getDefaultType() {
+    public SimpleType getDefaultType() {
         return defaultType.invoke();
     }
 

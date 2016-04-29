@@ -75,7 +75,7 @@ fun KotlinType?.isArrayOfNothing(): Boolean {
 fun KotlinType.isSubtypeOf(superType: KotlinType): Boolean = KotlinTypeChecker.DEFAULT.isSubtypeOf(this, superType)
 
 fun KotlinType.cannotBeReified(): Boolean =
-        KotlinBuiltIns.isNothingOrNullableNothing(this) || this.isDynamic() || this.isCaptured()
+        KotlinBuiltIns.isNothingOrNullableNothing(this) || this.isDynamic || this.isCaptured()
 
 fun KotlinType.unsafeAsReifiedArgument(): Boolean = arguments.any { !it.isStarProjection }
 
@@ -83,15 +83,6 @@ fun TypeProjection.substitute(doSubstitute: (KotlinType) -> KotlinType): TypePro
     return if (isStarProjection)
         this
     else TypeProjectionImpl(projectionKind, doSubstitute(type))
-}
-
-fun KotlinType.replaceAnnotations(newAnnotations: Annotations): KotlinType {
-    if (annotations.isEmpty() && newAnnotations.isEmpty()) return this
-    return object : DelegatingType() {
-        override fun getDelegate() = this@replaceAnnotations
-
-        override fun getAnnotations() = newAnnotations
-    }
 }
 
 fun KotlinTypeChecker.equalTypesOrNulls(type1: KotlinType?, type2: KotlinType?): Boolean {

@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.storage.StorageManager
 import org.jetbrains.kotlin.storage.getValue
 
 // TODO: LazyEntity
-abstract class AbstractLazyType(storageManager: StorageManager) : AbstractSimpleType() {
+abstract class AbstractLazyType(storageManager: StorageManager) : AbstractSimpleType(), KotlinType.LazyType {
     private val typeConstructor = storageManager.createLazyValue { computeTypeConstructor() }
     private val typeArguments = storageManager.createLazyValue { computeArguments() }
 
@@ -36,15 +36,13 @@ abstract class AbstractLazyType(storageManager: StorageManager) : AbstractSimple
     protected abstract fun computeArguments(): List<TypeProjection>
     abstract override fun getAnnotations() : Annotations
 
+    protected open fun getSubstitution() = TypeConstructorSubstitution.create(constructor, arguments)
+
     protected open fun computeMemberScope(): MemberScope {
         val descriptor = constructor.declarationDescriptor
         return when (descriptor) {
             is TypeParameterDescriptor -> descriptor.getDefaultType().memberScope
-            is ClassDescriptor -> {
-                val substitution = getCapability<RawTypeCapability>()?.substitution
-                                   ?: TypeConstructorSubstitution.create(constructor, arguments)
-                descriptor.getMemberScope(substitution)
-            }
+            is ClassDescriptor -> descriptor.getMemberScope(getSubstitution())
             else -> throw IllegalStateException("Unsupported classifier: $descriptor")
         }
     }

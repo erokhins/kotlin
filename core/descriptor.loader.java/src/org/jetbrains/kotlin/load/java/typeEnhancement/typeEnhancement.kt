@@ -30,9 +30,10 @@ import org.jetbrains.kotlin.load.java.typeEnhancement.NullabilityQualifier.NULLA
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.platform.JavaToKotlinClassMap
 import org.jetbrains.kotlin.types.*
+import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType
 import org.jetbrains.kotlin.types.typeUtil.createProjection
 import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
-import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
+import org.jetbrains.kotlin.types.typeUtil.stableType
 import org.jetbrains.kotlin.utils.addToStdlib.check
 import org.jetbrains.kotlin.utils.toReadOnlyList
 
@@ -70,7 +71,7 @@ private fun KotlinType.enhancePossiblyFlexible(qualifiers: (Int) -> JavaTypeQual
             val wereChanges = lowerResult.wereChanges || upperResult.wereChanges
             Result(
                 if (wereChanges)
-                    factory.create(lowerResult.type, upperResult.type)
+                    KotlinTypeFactory.createFlexibleType(lowerResult.type as SimpleType, upperResult.type as SimpleType) // todo casts
                 else
                     this@enhancePossiblyFlexible,
                 lowerResult.subtreeSize,
@@ -95,7 +96,7 @@ private fun KotlinType.enhanceInflexible(qualifiers: (Int) -> JavaTypeQualifiers
 
     var globalArgIndex = index + 1
     var wereChanges = enhancedMutabilityAnnotations != null
-    val enhancedArguments = getArguments().mapIndexed {
+    val enhancedArguments = arguments.mapIndexed {
         localArgIndex, arg ->
         if (arg.isStarProjection) {
             globalArgIndex++
@@ -125,22 +126,18 @@ private fun KotlinType.enhanceInflexible(qualifiers: (Int) -> JavaTypeQualifiers
         typeConstructor, enhancedArguments
     )
 
-    val newCapabilities =
-            if (effectiveQualifiers.isNotNullTypeParameter)
-                capabilities.addCapability(CustomTypeVariable::class.java, NotNullTypeParameterTypeCapability)
-            else
-                capabilities
-
-    val enhancedType = KotlinTypeImpl.create(
+    var enhancedType = KotlinTypeFactory.create(
             newAnnotations,
             typeConstructor,
             enhancedNullability,
             enhancedArguments,
             if (enhancedClassifier is ClassDescriptor)
                 enhancedClassifier.getMemberScope(newSubstitution)
-            else enhancedClassifier.getDefaultType().getMemberScope(),
-            newCapabilities
+            else enhancedClassifier.defaultType.memberScope
     )
+    if (effectiveQualifiers.isNotNullTypeParameter) {
+        enhancedType = NotNullTypeParameter(enhancedType)
+    }
     return Result(enhancedType, subtreeSize, wereChanges = true)
 }
 
@@ -180,12 +177,12 @@ private fun ClassifierDescriptor.enhanceMutability(qualifiers: JavaTypeQualifier
 }
 
 private fun KotlinType.getEnhancedNullability(qualifiers: JavaTypeQualifiers, position: TypeComponentPosition): EnhancementResult<Boolean> {
-    if (!position.shouldEnhance()) return this.isMarkedNullable().noChange()
+    if (!position.shouldEnhance()) return this.isMarkedNullable.noChange()
 
     return when (qualifiers.nullability) {
         NULLABLE -> true.enhancedNullability()
         NOT_NULL -> false.enhancedNullability()
-        else -> this.isMarkedNullable().noChange()
+        else -> this.isMarkedNullable.noChange()
     }
 }
 
@@ -219,26 +216,30 @@ private object EnhancedTypeAnnotationDescriptor : AnnotationDescriptor {
     override fun toString() = "[EnhancedType]"
 }
 
-internal object NotNullTypeParameterTypeCapability : CustomTypeVariable {
+internal class NotNullTypeParameter(override val delegate: SimpleType) : CustomTypeVariable, SimpleType() {
+
+    override fun replaceAnnotations(newAnnotations: Annotations) = NotNullTypeParameter(delegate.replaceAnnotations(newAnnotations))
+
+    override fun markNullableAsSpecified(newNullability: Boolean) = this
 
     override fun substitutionResult(replacement: KotlinType): KotlinType {
-        if (!TypeUtils.isNullableType(replacement) && !replacement.isTypeParameter()) return replacement
+        val stableType = replacement.stableType
+        if (!TypeUtils.isNullableType(stableType) && !stableType.isTypeParameter()) return stableType
 
-        if (replacement.isFlexible()) {
-            with(replacement.flexibility()) {
-                return factory.create(lowerBound.prepareReplacement(), upperBound.prepareReplacement())
-            }
+        return when (stableType) {
+            is SimpleType -> stableType.prepareReplacement()
+            is FlexibleType -> KotlinTypeFactory.createFlexibleType(stableType.lowerBound.prepareReplacement(),
+                                                                    stableType.upperBound.prepareReplacement())
         }
-
-        return replacement.prepareReplacement()
     }
 
-    private fun KotlinType.prepareReplacement(): KotlinType {
-        val result = makeNotNullable()
+    override val isMarkedNullable: Boolean
+        get() = false
+
+    private fun SimpleType.prepareReplacement(): SimpleType {
+        val result = markNullableAsSpecified(false)
         if (!this.isTypeParameter()) return result
 
-        return result.replace(
-                newCapabilities = capabilities.addCapability(
-                        CustomTypeVariable::class.java, NotNullTypeParameterTypeCapability))
+        return NotNullTypeParameter(result)
     }
 }

@@ -18,12 +18,15 @@ package org.jetbrains.kotlin.types.typesApproximation
 
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor
+import org.jetbrains.kotlin.resolve.calls.inference.CapturedType
 import org.jetbrains.kotlin.resolve.calls.inference.CapturedTypeConstructor
 import org.jetbrains.kotlin.resolve.calls.inference.isCaptured
 import org.jetbrains.kotlin.resolve.descriptorUtil.builtIns
 import org.jetbrains.kotlin.types.*
+import org.jetbrains.kotlin.types.KotlinType.StableType.FlexibleType
 import org.jetbrains.kotlin.types.checker.KotlinTypeChecker
 import org.jetbrains.kotlin.types.typeUtil.builtIns
+import org.jetbrains.kotlin.types.typeUtil.stableType
 import java.util.*
 
 data class ApproximationBounds<T>(
@@ -93,36 +96,36 @@ private fun substituteCapturedTypesWithProjections(typeProjection: TypeProjectio
 }
 
 fun approximateCapturedTypes(type: KotlinType): ApproximationBounds<KotlinType> {
-    val simpleOfFlexible = type.simpleOrFlexibleType
-    if (simpleOfFlexible is KotlinType.FlexibleType) {
-        val boundsForFlexibleLower = approximateCapturedTypes(simpleOfFlexible.lowerBound)
-        val boundsForFlexibleUpper = approximateCapturedTypes(simpleOfFlexible.upperBound)
+    val stableType = type.stableType
+    if (stableType is FlexibleType) {
+        val boundsForFlexibleLower = approximateCapturedTypes(stableType.lowerBound)
+        val boundsForFlexibleUpper = approximateCapturedTypes(stableType.upperBound)
 
         return ApproximationBounds(
-                KotlinType.FlexibleType(boundsForFlexibleLower.lower.lowerIfFlexible(), boundsForFlexibleUpper.lower.upperIfFlexible(),
-                                        simpleOfFlexible.capabilities),
-                KotlinType.FlexibleType(boundsForFlexibleLower.upper.lowerIfFlexible(), boundsForFlexibleUpper.upper.upperIfFlexible(),
-                                        simpleOfFlexible.capabilities))
+                KotlinTypeFactory.createFlexibleType(boundsForFlexibleLower.lower.lowerIfFlexible(),
+                                                     boundsForFlexibleUpper.lower.upperIfFlexible()),
+                KotlinTypeFactory.createFlexibleType(boundsForFlexibleLower.upper.lowerIfFlexible(),
+                                                     boundsForFlexibleUpper.upper.upperIfFlexible()))
     }
 
-    val typeConstructor = type.constructor
-    if (type.isCaptured()) {
+    val typeConstructor = stableType.constructor
+    if (stableType is CapturedType) {
         val typeProjection = (typeConstructor as CapturedTypeConstructor).typeProjection
-        fun KotlinType.makeNullableIfNeeded() = TypeUtils.makeNullableIfNeeded(this, type.isMarkedNullable)
+        fun KotlinType.makeNullableIfNeeded() = this.markNullableAsSpecified(stableType.isMarkedNullable)
         val bound = typeProjection.type.makeNullableIfNeeded()
 
         return when (typeProjection.projectionKind) {
-            Variance.IN_VARIANCE -> ApproximationBounds(bound, type.builtIns.nullableAnyType)
-            Variance.OUT_VARIANCE -> ApproximationBounds(type.builtIns.nothingType.makeNullableIfNeeded(), bound)
+            Variance.IN_VARIANCE -> ApproximationBounds(bound, stableType.builtIns.nullableAnyType)
+            Variance.OUT_VARIANCE -> ApproximationBounds(stableType.builtIns.nothingType.makeNullableIfNeeded(), bound)
             else -> throw AssertionError("Only nontrivial projections should have been captured, not: $typeProjection")
         }
     }
-    if (type.arguments.isEmpty() || type.arguments.size != typeConstructor.parameters.size) {
-        return ApproximationBounds(type, type)
+    if (stableType.arguments.isEmpty() || stableType.arguments.size != typeConstructor.parameters.size) {
+        return ApproximationBounds(stableType, stableType)
     }
     val lowerBoundArguments = ArrayList<TypeArgument>()
     val upperBoundArguments = ArrayList<TypeArgument>()
-    for ((typeProjection, typeParameter) in type.arguments.zip(typeConstructor.parameters)) {
+    for ((typeProjection, typeParameter) in stableType.arguments.zip(typeConstructor.parameters)) {
         val typeArgument = typeProjection.toTypeArgument(typeParameter)
 
         // Protection from infinite recursion caused by star projection
@@ -138,8 +141,8 @@ fun approximateCapturedTypes(type: KotlinType): ApproximationBounds<KotlinType> 
     }
     val lowerBoundIsTrivial = lowerBoundArguments.any { !it.isConsistent }
     return ApproximationBounds(
-            if (lowerBoundIsTrivial) type.builtIns.nothingType else type.replaceTypeArguments(lowerBoundArguments),
-            type.replaceTypeArguments(upperBoundArguments))
+            if (lowerBoundIsTrivial) stableType.builtIns.nothingType else stableType.replaceTypeArguments(lowerBoundArguments),
+            stableType.replaceTypeArguments(upperBoundArguments))
 }
 
 private fun KotlinType.replaceTypeArguments(newTypeArguments: List<TypeArgument>): KotlinType {

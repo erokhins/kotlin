@@ -30,6 +30,7 @@ import org.jetbrains.kotlin.resolve.scopes.TypeIntersectionScope;
 import org.jetbrains.kotlin.storage.NotNullLazyValue;
 import org.jetbrains.kotlin.storage.StorageManager;
 import org.jetbrains.kotlin.types.*;
+import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -41,7 +42,7 @@ public abstract class AbstractTypeParameterDescriptor extends DeclarationDescrip
     private final int index;
 
     private final NotNullLazyValue<TypeConstructor> typeConstructor;
-    private final NotNullLazyValue<KotlinType.SimpleType> defaultType;
+    private final NotNullLazyValue<SimpleType> defaultType;
 
     protected AbstractTypeParameterDescriptor(
             @NotNull final StorageManager storageManager,
@@ -65,9 +66,9 @@ public abstract class AbstractTypeParameterDescriptor extends DeclarationDescrip
                 return new TypeParameterTypeConstructor(storageManager, supertypeLoopChecker);
             }
         });
-        this.defaultType = storageManager.createLazyValue(new Function0<KotlinType.SimpleType>() {
+        this.defaultType = storageManager.createLazyValue(new Function0<SimpleType>() {
             @Override
-            public KotlinType.SimpleType invoke() {
+            public SimpleType invoke() {
                 return KotlinTypeFactory.create(
                         Annotations.Companion.getEMPTY(),
                         getTypeConstructor(), false, Collections.<TypeProjection>emptyList(),
@@ -124,7 +125,7 @@ public abstract class AbstractTypeParameterDescriptor extends DeclarationDescrip
 
     @NotNull
     @Override
-    public KotlinType.SimpleType getDefaultType() {
+    public SimpleType getDefaultType() {
         return defaultType.invoke();
     }
 

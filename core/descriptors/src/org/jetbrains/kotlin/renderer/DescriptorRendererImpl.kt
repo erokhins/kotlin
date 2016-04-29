@@ -36,6 +36,8 @@ import org.jetbrains.kotlin.types.*
 import org.jetbrains.kotlin.types.ErrorUtils.UninferredParameterTypeConstructor
 import org.jetbrains.kotlin.types.TypeUtils.CANT_INFER_FUNCTION_PARAM_TYPE
 import org.jetbrains.kotlin.types.typeUtil.builtIns
+import org.jetbrains.kotlin.types.typeUtil.isDynamic
+import org.jetbrains.kotlin.types.typeUtil.stableType
 import java.util.*
 
 internal class DescriptorRendererImpl(
@@ -128,10 +130,10 @@ internal class DescriptorRendererImpl(
     }
 
     private fun renderNormalizedType(type: KotlinType): String {
-        if (type is LazyType && debugMode) {
+        if (type is KotlinType.LazyType && debugMode) {
             return type.toString()
         }
-        if (type.isDynamic()) {
+        if (type.isDynamic) {
             return "dynamic"
         }
         if (type.isFlexible()) {
@@ -154,7 +156,7 @@ internal class DescriptorRendererImpl(
     private fun renderInflexibleType(type: KotlinType): String {
         assert(!type.isFlexible()) { "Flexible types not allowed here: " + renderNormalizedType(type) }
 
-        val customResult = type.getCapability<RawTypeCapability>()?.renderInflexible(type, this)
+        val customResult = (type.stableType as? RawType)?.renderInflexible(type, this)
         if (customResult != null) return customResult
 
         if (type == CANT_INFER_FUNCTION_PARAM_TYPE || TypeUtils.isDontCarePlaceholder(type)) {
@@ -183,7 +185,7 @@ internal class DescriptorRendererImpl(
         val lower = type.flexibility().lowerBound
         val upper = type.flexibility().upperBound
 
-        val (lowerRendered, upperRendered) = type.getCapability<RawTypeCapability>()?.renderBounds(type.flexibility(), this)
+        val (lowerRendered, upperRendered) = (type.stableType as? RawType)?.renderBounds(type.flexibility(), this)
                                              ?: Pair(renderInflexibleType(lower), renderInflexibleType(upper))
 
         if (differsOnlyInNullability(lowerRendered, upperRendered)) {

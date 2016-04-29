@@ -16,6 +16,8 @@
 
 package org.jetbrains.kotlin.types
 
+import org.jetbrains.kotlin.types.KotlinType.StableType.FlexibleType
+import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType
 import org.jetbrains.kotlin.types.checker.KotlinTypeChecker
 import org.jetbrains.kotlin.types.typeUtil.builtIns
 
@@ -33,7 +35,7 @@ class DynamicTypesAllowed: DynamicTypesSettings() {
 object DynamicTypeFactory : FlexibleTypeFactory {
     override val id: String get() = "kotlin.DynamicType"
 
-    override fun create(lowerBound: KotlinType.SimpleType, upperBound: KotlinType.SimpleType): KotlinType.FlexibleType {
+    override fun create(lowerBound: SimpleType, upperBound: SimpleType): FlexibleType {
         if (KotlinTypeChecker.FLEXIBLE_UNEQUAL_TO_INFLEXIBLE.equalTypes(lowerBound, lowerBound.builtIns.nothingType) &&
             KotlinTypeChecker.FLEXIBLE_UNEQUAL_TO_INFLEXIBLE.equalTypes(upperBound, upperBound.builtIns.nullableAnyType)) {
             return KotlinTypeFactory.createDynamicType(lowerBound.builtIns)

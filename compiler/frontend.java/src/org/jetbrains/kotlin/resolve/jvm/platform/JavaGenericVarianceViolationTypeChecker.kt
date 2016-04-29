@@ -51,7 +51,7 @@ object JavaGenericVarianceViolationTypeChecker : AdditionalTypeChecker {
         // Use site variance projection is always the same for flexible types
         if (lowerBound.constructor == upperBound.constructor) return
         // Anything is acceptable for raw types
-        if (expectedType.getCapability<RawTypeCapability>() != null) return
+        if (expectedType.getCapability<RawType>() != null) return
 
         val correspondingSubType = TypeCheckingProcedure.findCorrespondingSupertype(expressionTypeWithSmartCast, lowerBound) ?: return
 

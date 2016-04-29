@@ -66,6 +66,9 @@ sealed class KotlinType : Annotated {
         return isMarkedNullable == other.isMarkedNullable && KotlinTypeChecker.FLEXIBLE_UNEQUAL_TO_INFLEXIBLE.equalTypes(this, other)
     }
 
+    // marker for debug purpose
+    internal interface LazyType
+
     sealed class StableType<T : KotlinType>: KotlinType() {
         abstract fun replaceAnnotations(newAnnotations: Annotations): T
         abstract fun markNullableAsSpecified(newNullability: Boolean): T
@@ -87,7 +90,10 @@ sealed class KotlinType : Annotated {
             }
         }
 
-        abstract class FlexibleType(val lowerBound: SimpleType, val upperBound: SimpleType) : StableType<FlexibleType>() {
+        // todo: when we load java descriptors, types is not lazy, because FlexibleType creation use isSubtypeOf
+        // it isn't true -- because when we loading type, we know flexibility
+        abstract class FlexibleType(val lowerBound: SimpleType, val upperBound: SimpleType) :
+                StableType<KotlinType>(), SubtypingRepresentatives {
             companion object {
                 @JvmField
                 var RUN_SLOW_ASSERTIONS = false
@@ -119,6 +125,13 @@ sealed class KotlinType : Annotated {
 
             override val isError: Boolean get() = false
 
+            override val subTypeRepresentative: KotlinType
+                get() = lowerBound
+            override val superTypeRepresentative: KotlinType
+                get() = upperBound
+
+            override fun sameTypeConstructor(type: KotlinType) = false
+
             override fun toString(): String = "('$lowerBound'..'$upperBound')"
         }
     }
@@ -129,7 +142,7 @@ sealed class KotlinType : Annotated {
      * Also you can override some methods from KotlinType, but delegate should have same values.
      * See examples in TypeOperations.kt
      */
-    abstract class DeferredType() : KotlinType() {
+    abstract class DeferredType() : KotlinType(), LazyType {
         open fun isComputing(): Boolean = false
 
         abstract fun isComputed(): Boolean

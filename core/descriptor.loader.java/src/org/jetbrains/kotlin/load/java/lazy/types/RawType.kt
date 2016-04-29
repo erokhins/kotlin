@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.types.*
 
 object RawTypeCapabilities : TypeCapabilities {
 
-    private object Impl : RawTypeCapability {
+    private object Impl : RawType {
         override val substitution: TypeSubstitution?
             get() = RawSubstitution
         override val substitutionToComposeWith: TypeSubstitution?
@@ -72,7 +72,7 @@ object RawTypeCapabilities : TypeCapabilities {
     override fun <T : TypeCapability> getCapability(capabilityClass: Class<T>): T? {
         @Suppress("UNCHECKED_CAST")
         return when(capabilityClass) {
-            RawTypeCapability::class.java -> Impl as T
+            RawType::class.java -> Impl as T
             else -> null
         }
     }

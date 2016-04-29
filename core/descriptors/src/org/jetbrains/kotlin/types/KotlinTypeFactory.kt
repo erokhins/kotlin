@@ -20,7 +20,6 @@ import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.resolve.scopes.MemberScope
-import org.jetbrains.kotlin.storage.NotNullLazyValue
 import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType
 
 object KotlinTypeFactory {
@@ -34,20 +33,10 @@ object KotlinTypeFactory {
     fun createFlexibleType(
             lowerBound: SimpleType,
             upperBound: SimpleType
-    ) = SimpleFlexibleType(lowerBound, upperBound)
+    ): KotlinType.StableType<*> {
+        if (lowerBound == upperBound) return lowerBound
 
-    @JvmStatic
-    fun createDeferredType(lazyDelegate: NotNullLazyValue<KotlinType>) = KotlinType.DeferredType(lazyDelegate)
-
-    @JvmStatic fun create(
-            annotations: Annotations,
-            constructor: TypeConstructor,
-            nullable: Boolean,
-            arguments: List<TypeProjection>,
-            memberScope: MemberScope,
-            capabilities: TypeCapabilities
-    ): SimpleType {
-        TODO()
+        return FlexibleTypeIml(lowerBound, upperBound)
     }
 
     @JvmStatic fun create(
@@ -56,18 +45,14 @@ object KotlinTypeFactory {
             nullable: Boolean,
             arguments: List<TypeProjection>,
             memberScope: MemberScope
-    ): SimpleType {
-        TODO()
-    }
+    ): SimpleType = SimpleTypeImpl(annotations, constructor, arguments, nullable, memberScope)
 
     @JvmStatic fun create(
             annotations: Annotations,
             descriptor: ClassDescriptor,
             nullable: Boolean,
             arguments: List<TypeProjection>
-    ): SimpleType {
-        TODO()
-    }
+    ): SimpleType = SimpleTypeImpl(annotations, descriptor.typeConstructor, arguments, nullable, descriptor.getMemberScope(arguments))
 
     @JvmStatic fun createSimpleType(
             baseType: SimpleType,
@@ -75,7 +60,33 @@ object KotlinTypeFactory {
             constructor: TypeConstructor = baseType.constructor,
             nullable: Boolean = baseType.isMarkedNullable,
             arguments: List<TypeProjection> = baseType.arguments,
-            memberScope: MemberScope = baseType.memberScope,
-            capabilities: TypeCapabilities = baseType.capabilities
-    ): SimpleType = TODO()
+            memberScope: MemberScope = baseType.memberScope
+    ): SimpleType = create(annotations, constructor, nullable, arguments, memberScope)
+}
+
+
+abstract class AbstractSimpleType : SimpleType() {
+    override fun replaceAnnotations(newAnnotations: Annotations): SimpleType {
+        if (newAnnotations === annotations) return this
+        return KotlinTypeFactory.createSimpleType(this, annotations = newAnnotations)
+    }
+
+    override fun markNullableAsSpecified(newNullability: Boolean): SimpleType
+            = KotlinTypeFactory.createSimpleType(this, nullable = newNullability)
+}
+
+internal final class SimpleTypeImpl(
+        private val annotations: Annotations,
+        override val constructor: TypeConstructor,
+        override val arguments: List<TypeProjection>,
+        override val isMarkedNullable: Boolean,
+        override val memberScope: MemberScope
+) : AbstractSimpleType() {
+    override fun getAnnotations(): Annotations = annotations
+
+    init {
+        if (memberScope is ErrorUtils.ErrorScope) {
+            throw IllegalStateException("JetTypeImpl should not be created for error type: $memberScope\n$constructor")
+        }
+    }
 }

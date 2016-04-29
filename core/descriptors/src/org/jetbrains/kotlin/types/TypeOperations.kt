@@ -20,6 +20,10 @@ import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.types.typeUtil.stableType
 
 fun KotlinType.markNullableAsSpecified(nullability: Boolean): KotlinType {
+    if (this !is KotlinType.LazyType) {
+        return stableType.markNullableAsSpecified(nullability)
+    }
+
     if (this is DeferredTypeWithKnownNullability) {
         if (nullability == isMarkedNullable) {
             return this
@@ -36,7 +40,13 @@ private sealed class DeferredTypeWithKnownNullability(val _delegate: KotlinType)
     override fun isComputed(): Boolean = true
 
     override val delegate: KotlinType
-        get() = _delegate.stableType.markNullableAsSpecified(isMarkedNullable)
+        get() {
+            val result = _delegate.stableType.markNullableAsSpecified(isMarkedNullable)
+            assert(result.isMarkedNullable == isMarkedNullable) {
+                "Should has nullability: $isMarkedNullable, $result"
+            }
+            return result
+        }
 
     private class Nullable(delegate: KotlinType) : DeferredTypeWithKnownNullability(delegate) {
         override val isMarkedNullable: Boolean get() = true
@@ -51,7 +61,12 @@ private sealed class DeferredTypeWithKnownNullability(val _delegate: KotlinType)
     }
 }
 
-fun KotlinType.replaceAnnotations(newAnnotations: Annotations): KotlinType = DeferredTypeWithKnownAnnotations(this, newAnnotations)
+fun KotlinType.replaceAnnotations(newAnnotations: Annotations): KotlinType {
+    if (this !is KotlinType.LazyType) {
+        return stableType.replaceAnnotations(newAnnotations)
+    }
+    return DeferredTypeWithKnownAnnotations(this, newAnnotations)
+}
 
 private class DeferredTypeWithKnownAnnotations(
         val _delegate: KotlinType,

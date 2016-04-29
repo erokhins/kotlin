@@ -26,7 +26,8 @@ import org.jetbrains.kotlin.descriptors.annotations.CompositeAnnotations;
 import org.jetbrains.kotlin.descriptors.annotations.FilteredAnnotations;
 import org.jetbrains.kotlin.name.FqName;
 import org.jetbrains.kotlin.resolve.calls.inference.CapturedTypeConstructorKt;
-import org.jetbrains.kotlin.types.typeUtil.TypeUtilsKt;
+import org.jetbrains.kotlin.types.KotlinType.StableType.FlexibleType;
+import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType;
 import org.jetbrains.kotlin.types.typesApproximation.CapturedTypeApproximationKt;
 
 import java.util.ArrayList;
@@ -136,7 +137,7 @@ public class TypeSubstitutor {
         Variance originalProjectionKind = originalProjection.getProjectionKind();
 
         CustomTypeVariable typeVariable = TypeCapabilitiesKt.getCustomTypeVariable(type);
-        KotlinType.FlexibleType flexibleType = FlexibleTypesKt.asFlexibleType(type);
+        FlexibleType flexibleType = FlexibleTypesKt.asFlexibleType(type);
 
         if (replacement == null && typeVariable == null && flexibleType != null) {
             TypeProjection substitutedLower =
@@ -149,9 +150,8 @@ public class TypeSubstitutor {
                    originalProjectionKind == Variance.INVARIANT || originalProjectionKind == substitutedProjectionKind :
                     "Unexpected substituted projection kind: " + substitutedProjectionKind + "; original: " + originalProjectionKind;
 
-            KotlinType substitutedFlexibleType = new KotlinType.FlexibleType(
-                    (KotlinType.SimpleType) substitutedLower.getType(), (KotlinType.SimpleType) substitutedUpper.getType(),
-                    flexibleType.getCapabilities());
+            KotlinType substitutedFlexibleType = KotlinTypeFactory.createFlexibleType(
+                    (SimpleType) substitutedLower.getType(), (SimpleType) substitutedUpper.getType()); // todo cast
             return new TypeProjectionImpl(substitutedProjectionKind, substitutedFlexibleType);
         }
 
@@ -189,7 +189,7 @@ public class TypeSubstitutor {
             // substitutionType.annotations = replacement.annotations ++ type.annotations
             if (!type.getAnnotations().isEmpty()) {
                 Annotations typeAnnotations = filterOutUnsafeVariance(substitution.filterAnnotations(type.getAnnotations()));
-                substitutedType = TypeUtilsKt.replaceAnnotations(
+                substitutedType = TypeOperationsKt.replaceAnnotations(
                         substitutedType,
                         new CompositeAnnotations(substitutedType.getAnnotations(), typeAnnotations)
                 );

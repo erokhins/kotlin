@@ -598,7 +598,7 @@ public abstract class KotlinBuiltIns {
 
     @NotNull
     public SimpleType getNullableNothingType() {
-        return SimpleTypeImplKt.markNullableAsSpecified(getNothingType(), true);
+        return getNothingType().markNullableAsSpecified(true);
     }
 
     @NotNull
@@ -608,7 +608,7 @@ public abstract class KotlinBuiltIns {
 
     @NotNull
     public SimpleType getNullableAnyType() {
-        return SimpleTypeImplKt.markNullableAsSpecified(getAnyType(), true);
+        return getAnyType().markNullableAsSpecified(true);
     }
 
     @NotNull
@@ -716,7 +716,7 @@ public abstract class KotlinBuiltIns {
     @NotNull
     public SimpleType getArrayType(@NotNull Variance projectionType, @NotNull KotlinType argument) {
         List<TypeProjectionImpl> types = Collections.singletonList(new TypeProjectionImpl(projectionType, argument));
-        return SimpleTypeImpl.create(
+        return KotlinTypeFactory.create(
                 Annotations.Companion.getEMPTY(),
                 getArray(),
                 false,
@@ -728,7 +728,7 @@ public abstract class KotlinBuiltIns {
     public KotlinType getEnumType(@NotNull KotlinType argument) {
         Variance projectionType = Variance.INVARIANT;
         List<TypeProjectionImpl> types = Collections.singletonList(new TypeProjectionImpl(projectionType, argument));
-        return KotlinTypeImpl.create(
+        return KotlinTypeFactory.create(
                 Annotations.Companion.getEMPTY(),
                 getEnum(),
                 false,

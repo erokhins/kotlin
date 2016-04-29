@@ -59,7 +59,7 @@ class LazyJavaTypeResolver(
             }
             is JavaClassifierType ->
                 if (attr.allowFlexible && attr.howThisTypeIsUsed != SUPERTYPE)
-                    SimpleFlexibleType( // todo raw type
+                    FlexibleTypeIml( // todo raw type
                             LazyJavaClassifierType(javaType, attr.toFlexible(FLEXIBLE_LOWER_BOUND)),
                             LazyJavaClassifierType(javaType, attr.toFlexible(FLEXIBLE_UPPER_BOUND))
                     )
@@ -288,7 +288,7 @@ class LazyJavaTypeResolver(
         override val id: String get() = "kotlin.jvm.PlatformType"
 
         override fun create(lowerBound: SimpleType, upperBound: SimpleType): FlexibleType {
-            return SimpleFlexibleType(lowerBound, upperBound)
+            return FlexibleTypeIml(lowerBound, upperBound)
         }
     }
 

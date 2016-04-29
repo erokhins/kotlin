@@ -106,7 +106,7 @@ public abstract class AbstractClassTypeConstructor extends AbstractTypeConstruct
         // class B : A.C {}
         DeclarationDescriptor containingDeclaration = getDeclarationDescriptor().getContainingDeclaration();
         if (containingDeclaration instanceof ClassDescriptor) {
-            return Collections.singleton(((ClassDescriptor) containingDeclaration).getDefaultType());
+            return Collections.<KotlinType>singleton(((ClassDescriptor) containingDeclaration).getDefaultType());
         }
         return Collections.emptyList();
     }

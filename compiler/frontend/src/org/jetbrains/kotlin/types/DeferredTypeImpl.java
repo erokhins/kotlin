@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.util.ReenteringLazyValueComputationException;
 
 import static org.jetbrains.kotlin.resolve.BindingContext.DEFERRED_TYPE;
 
-public class DeferredTypeImpl {
+public class DeferredTypeImpl extends KotlinType.DeferredType {
 
     private static final Function1 EMPTY_CONSUMER = new Function1<Object, Void>() {
         @Override
@@ -50,7 +50,7 @@ public class DeferredTypeImpl {
             @NotNull BindingTrace trace,
             @NotNull Function0<KotlinType> compute
     ) {
-        DeferredTypeImpl deferredType = new KotlinType.DeferredType(storageManager.createLazyValue(compute));
+        DeferredTypeImpl deferredType = new DeferredTypeImpl(storageManager.createLazyValue(compute));
         trace.record(DEFERRED_TYPE, new Box<DeferredTypeImpl>(deferredType));
         return deferredType;
     }
@@ -77,19 +77,23 @@ public class DeferredTypeImpl {
         this.lazyValue = lazyValue;
     }
 
+    @Override
     public boolean isComputing() {
         return lazyValue.isComputing();
     }
 
+    @Override
     public boolean isComputed() {
         return lazyValue.isComputed();
     }
 
+    @NotNull
     @Override
-    public KotlinType computeDelegate() {
+    public KotlinType getDelegate() {
         return lazyValue.invoke();
     }
 
+    @NotNull
     @Override
     public String toString() {
         try {

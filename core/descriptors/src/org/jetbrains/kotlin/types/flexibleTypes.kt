@@ -87,21 +87,21 @@ fun KotlinType.lowerIfFlexible(): SimpleType
 fun KotlinType.upperIfFlexible(): SimpleType
         = stableType.let { (it as? FlexibleType)?.upperBound ?: it as SimpleType }
 
-class SimpleFlexibleType(lowerBound: SimpleType, upperBound: SimpleType) :
+class FlexibleTypeIml(lowerBound: SimpleType, upperBound: SimpleType) :
         FlexibleType(lowerBound, upperBound) {
 
     override fun replaceAnnotations(newAnnotations: Annotations) =
-        SimpleFlexibleType(lowerBound.replaceAnnotations(newAnnotations), upperBound.replaceAnnotations(newAnnotations))
+        KotlinTypeFactory.createFlexibleType(lowerBound.replaceAnnotations(newAnnotations), upperBound.replaceAnnotations(newAnnotations))
 
     override fun markNullableAsSpecified(newNullability: Boolean) =
-        SimpleFlexibleType(lowerBound.markNullableAsSpecified(newNullability),
-                           upperBound.markNullableAsSpecified(newNullability))
+        KotlinTypeFactory.createFlexibleType(lowerBound.markNullableAsSpecified(newNullability),
+                                             upperBound.markNullableAsSpecified(newNullability))
 }
 
 class DynamicType(builtIns: KotlinBuiltIns,
                   private val annotations: Annotations
 ): FlexibleType(builtIns.nothingType, builtIns.nullableAnyType) {
-    override fun getAnnotations()= annotations
+    override fun getAnnotations() = annotations
 
     override val delegate: SimpleType
         get() = upperBound

@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.load.java.lazy.types.RawSubstitution
 import org.jetbrains.kotlin.resolve.ExternalOverridabilityCondition
 import org.jetbrains.kotlin.resolve.ExternalOverridabilityCondition.Result
 import org.jetbrains.kotlin.resolve.OverridingUtil
-import org.jetbrains.kotlin.types.RawTypeCapability
+import org.jetbrains.kotlin.types.RawType
 import org.jetbrains.kotlin.types.getCapability
 import org.jetbrains.kotlin.utils.singletonOrEmptyList
 
@@ -40,7 +40,7 @@ class ErasedOverridabilityCondition : ExternalOverridabilityCondition {
                              subDescriptor.returnType!! +
                              subDescriptor.extensionReceiverParameter?.type.singletonOrEmptyList()
 
-        if (signatureTypes.any { it.arguments.isNotEmpty() && it.getCapability<RawTypeCapability>() == null }) return Result.UNKNOWN
+        if (signatureTypes.any { it.arguments.isNotEmpty() && it.getCapability<RawType>() == null }) return Result.UNKNOWN
 
         var erasedSuper = superDescriptor.substitute(RawSubstitution.buildSubstitutor()) ?: return Result.UNKNOWN
 

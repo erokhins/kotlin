@@ -19,6 +19,7 @@ package org.jetbrains.kotlin.types
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
+import org.jetbrains.kotlin.types.typeUtil.stableType
 
 abstract class TypeSubstitution {
     companion object {
@@ -117,7 +118,7 @@ fun KotlinType.computeNewSubstitution(
     val newSubstitution = TypeConstructorSubstitution.create(typeConstructor, newArguments)
 
     // If previous substitution was trivial just replace it with indexed one
-    val substitutionToComposeWith = getCapability<RawTypeCapability>()?.substitutionToComposeWith ?: return newSubstitution
+    val substitutionToComposeWith = (stableType as? RawType)?.substitutionToComposeWith ?: return newSubstitution
     val composedSubstitution = CompositeTypeSubstitution(newSubstitution, substitutionToComposeWith)
 
     return composedSubstitution
@@ -126,10 +127,9 @@ fun KotlinType.computeNewSubstitution(
 @JvmOverloads
 fun KotlinType.replace(
         newArguments: List<TypeProjection> = arguments,
-        newAnnotations: Annotations = annotations,
-        newCapabilities: TypeCapabilities = capabilities
+        newAnnotations: Annotations = annotations
 ): KotlinType {
-    if (newArguments.isEmpty() && newAnnotations === annotations && newCapabilities === capabilities) return this
+    if (newArguments.isEmpty() && newAnnotations === annotations) return this
 
     if (newArguments.isEmpty()) {
         return KotlinTypeFactory.create(
@@ -137,8 +137,7 @@ fun KotlinType.replace(
                 constructor,
                 isMarkedNullable,
                 arguments,
-                memberScope,
-                newCapabilities
+                memberScope
         )
     }
 
@@ -155,8 +154,7 @@ fun KotlinType.replace(
             constructor,
             isMarkedNullable,
             newArguments,
-            newScope,
-            newCapabilities
+            newScope
     )
 }
 
