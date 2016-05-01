@@ -21,18 +21,6 @@ import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType
 import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
 import org.jetbrains.kotlin.types.typeUtil.stableType
 
-interface TypeCapability
-
-interface TypeCapabilities {
-    object NONE : TypeCapabilities {
-        override fun <T : TypeCapability> getCapability(capabilityClass: Class<T>): T? = null
-    }
-
-    fun <T : TypeCapability> getCapability(capabilityClass: Class<T>): T?
-}
-
-inline fun <reified T : TypeCapability> KotlinType.getCapability(): T? = error("Deleted")
-
 interface CustomTypeVariable {
     fun substitutionResult(replacement: KotlinType): KotlinType
 }

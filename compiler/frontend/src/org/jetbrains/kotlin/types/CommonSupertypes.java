@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.descriptors.ClassifierDescriptor;
 import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor;
 import org.jetbrains.kotlin.descriptors.annotations.Annotations;
 import org.jetbrains.kotlin.resolve.scopes.MemberScope;
+import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType;
 import org.jetbrains.kotlin.types.checker.KotlinTypeChecker;
 import org.jetbrains.kotlin.types.typeUtil.TypeUtilsKt;
 import org.jetbrains.kotlin.utils.DFS;
@@ -85,11 +86,10 @@ public class CommonSupertypes {
         boolean hasFlexible = false;
         List<KotlinType> upper = new ArrayList<KotlinType>(types.size());
         List<KotlinType> lower = new ArrayList<KotlinType>(types.size());
-        Set<TypeCapabilities> capabilities = new LinkedHashSet<TypeCapabilities>();
         for (KotlinType type : types) {
-            KotlinType.FlexibleType flexibleType = FlexibleTypesKt.asFlexibleType(type);
+            KotlinType.StableType.FlexibleType flexibleType = FlexibleTypesKt.asFlexibleType(type);
             if (flexibleType != null) {
-                if (DynamicTypesKt.isDynamic(type)) {
+                if (TypeUtilsKt.isDynamic(type)) {
                     return type;
                 }
                 hasFlexible = true;
@@ -103,10 +103,9 @@ public class CommonSupertypes {
         }
 
         if (!hasFlexible) return commonSuperTypeForInflexible(types, recursionDepth, maxDepth);
-        return new KotlinType.FlexibleType( // mixing different capabilities is not supported
-                                            (KotlinType.SimpleType) commonSuperTypeForInflexible(lower, recursionDepth, maxDepth),
-                                            (KotlinType.SimpleType) commonSuperTypeForInflexible(upper, recursionDepth, maxDepth),
-                                            CollectionsKt.single(capabilities)
+        return KotlinTypeFactory.createFlexibleType(
+                                            (SimpleType) commonSuperTypeForInflexible(lower, recursionDepth, maxDepth),
+                                            (SimpleType) commonSuperTypeForInflexible(upper, recursionDepth, maxDepth)
         );
     }
 
@@ -241,7 +240,7 @@ public class CommonSupertypes {
         else {
             newScope = ErrorUtils.createErrorScope("A scope for common supertype which is not a normal classifier", true);
         }
-        return KotlinTypeImpl.create(Annotations.Companion.getEMPTY(), constructor, nullable, newProjections, newScope);
+        return KotlinTypeFactory.create(Annotations.Companion.getEMPTY(), constructor, nullable, newProjections, newScope);
     }
 
     @NotNull

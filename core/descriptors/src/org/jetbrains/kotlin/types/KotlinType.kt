@@ -40,9 +40,6 @@ sealed class KotlinType : Annotated {
 
     open val isError: Boolean get() = delegate.isError
 
-    @Deprecated("Will be deleted soon")
-    open val capabilities: TypeCapabilities get() = delegate.capabilities
-
     override fun getAnnotations(): Annotations = delegate.annotations
 
     // ------- internal staff ------
