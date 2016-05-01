@@ -66,6 +66,7 @@ import org.jetbrains.kotlin.types.checker.KotlinTypeChecker;
 import org.jetbrains.kotlin.types.expressions.ControlStructureTypingUtils.ResolveConstruct;
 import org.jetbrains.kotlin.types.expressions.typeInfoFactory.TypeInfoFactoryKt;
 import org.jetbrains.kotlin.types.expressions.unqualifiedSuper.UnqualifiedSuperKt;
+import org.jetbrains.kotlin.types.typeUtil.TypeUtilsKt;
 import org.jetbrains.kotlin.util.OperatorNameConventions;
 import org.jetbrains.kotlin.util.slicedMap.WritableSlice;
 
@@ -293,7 +294,7 @@ public class BasicExpressionTypingVisitor extends ExpressionTypingVisitor {
 
         DeclarationsCheckerKt.checkNotEnumEntry(expression.getRight(), context.trace);
 
-        if (DynamicTypesKt.isDynamic(targetType)) {
+        if (TypeUtilsKt.isDynamic(targetType)) {
             KtTypeReference right = expression.getRight();
             assert right != null : "We know target is dynamic, but RHS is missing";
             context.trace.report(DYNAMIC_NOT_ALLOWED.on(right));

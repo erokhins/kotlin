@@ -23,7 +23,6 @@ import org.jetbrains.kotlin.psi.Call
 import org.jetbrains.kotlin.resolve.descriptorUtil.hasOnlyInputTypesAnnotation
 import org.jetbrains.kotlin.resolve.scopes.MemberScope
 import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.KotlinTypeImpl
 
 class TypeVariable(
         val call: CallHandle,

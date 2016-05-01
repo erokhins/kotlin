@@ -18,14 +18,14 @@ package org.jetbrains.kotlin.js.resolve
 
 import org.jetbrains.kotlin.resolve.calls.results.TypeSpecificityComparator
 import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.isDynamic
 import org.jetbrains.kotlin.types.isFlexible
+import org.jetbrains.kotlin.types.typeUtil.isDynamic
 
 object JsTypeSpecificityComparator: TypeSpecificityComparator {
 
     private fun checkOnlyDynamicFlexibleType(type: KotlinType) {
         if (type.isFlexible()) {
-            assert(type.isDynamic()) {
+            assert(type.isDynamic) {
                 "Unexpected flexible type in Js: $type"
             }
         }
@@ -35,6 +35,6 @@ object JsTypeSpecificityComparator: TypeSpecificityComparator {
         checkOnlyDynamicFlexibleType(specific)
         checkOnlyDynamicFlexibleType(general)
 
-        return specific.isDynamic() && !general.isDynamic()
+        return specific.isDynamic && !general.isDynamic
     }
 }

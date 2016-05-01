@@ -32,7 +32,6 @@ import org.jetbrains.kotlin.resolve.TargetPlatform
 import org.jetbrains.kotlin.serialization.builtins.BuiltInsProtoBuf
 import org.jetbrains.kotlin.serialization.deserialization.*
 import org.jetbrains.kotlin.serialization.deserialization.descriptors.DeserializedPackageMemberScope
-import org.jetbrains.kotlin.types.FlexibleTypeFactory
 
 class KotlinBuiltInDeserializerForDecompiler(
         packageDirectory: VirtualFile,

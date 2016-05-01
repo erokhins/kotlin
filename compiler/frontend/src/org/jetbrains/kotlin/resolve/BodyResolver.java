@@ -44,6 +44,7 @@ import org.jetbrains.kotlin.types.expressions.ExpressionTypingServices;
 import org.jetbrains.kotlin.types.expressions.PreliminaryDeclarationVisitor;
 import org.jetbrains.kotlin.types.expressions.ValueParameterResolver;
 import org.jetbrains.kotlin.types.expressions.typeInfoFactory.TypeInfoFactoryKt;
+import org.jetbrains.kotlin.types.typeUtil.TypeUtilsKt;
 import org.jetbrains.kotlin.util.Box;
 import org.jetbrains.kotlin.util.ReenteringLazyValueComputationException;
 import org.jetbrains.kotlin.util.slicedMap.WritableSlice;
@@ -457,7 +458,7 @@ public class BodyResolver {
                         addSupertype = false;
                     }
                     else if (supertypeOwner.getKind() == ClassKind.INTERFACE &&
-                             !classAppeared && !DynamicTypesKt.isDynamic(supertype) /* avoid duplicate diagnostics */) {
+                             !classAppeared && !TypeUtilsKt.isDynamic(supertype) /* avoid duplicate diagnostics */) {
                         trace.report(INTERFACE_WITH_SUPERCLASS.on(typeReference));
                         addSupertype = false;
                     }

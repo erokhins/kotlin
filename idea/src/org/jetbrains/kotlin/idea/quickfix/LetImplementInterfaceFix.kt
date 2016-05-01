@@ -61,7 +61,7 @@ class LetImplementInterfaceFix(
         validExpectedType = with (expectedType) {
             isInterface() &&
             !containsStarProjections() &&
-            constructor !in TypeUtils.getAllSupertypes(expressionType).map(KotlinType::getConstructor)
+            constructor !in TypeUtils.getAllSupertypes(expressionType).map(KotlinType::constructor)
         }
     }
 

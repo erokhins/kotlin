@@ -21,8 +21,8 @@ import org.jetbrains.kotlin.renderer.DescriptorRenderer
 import org.jetbrains.kotlin.renderer.DescriptorRendererModifier
 import org.jetbrains.kotlin.renderer.OverrideRenderingPolicy
 import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.isDynamic
 import org.jetbrains.kotlin.types.typeUtil.builtIns
+import org.jetbrains.kotlin.types.typeUtil.isDynamic
 
 object IdeDescriptorRenderers {
     @JvmField val APPROXIMATE_FLEXIBLE_TYPES: (KotlinType) -> KotlinType = { it.approximateFlexibleTypes(preferNotNull = false) }
@@ -30,7 +30,7 @@ object IdeDescriptorRenderers {
     @JvmField val APPROXIMATE_FLEXIBLE_TYPES_NOT_NULL: (KotlinType) -> KotlinType = { it.approximateFlexibleTypes(preferNotNull = true) }
 
     private fun unwrapAnonymousType(type: KotlinType): KotlinType {
-        if (type.isDynamic()) return type
+        if (type.isDynamic) return type
 
         val classifier = type.constructor.declarationDescriptor
         if (classifier != null && !classifier.name.isSpecial) return type

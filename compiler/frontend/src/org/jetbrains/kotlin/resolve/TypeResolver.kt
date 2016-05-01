@@ -83,7 +83,14 @@ class TypeResolver(
         if (!c.allowBareTypes && !c.forceResolveLazyTypes && lazinessToken.isLazy()) {
             // Bare types can be allowed only inside expressions; lazy type resolution is only relevant for declarations
 
-            val lazyKotlinType = KotlinType.DeferredType(storageManager.createLazyValue { doResolvePossiblyBareType(c, typeReference).actualType })
+            val lazyKotlinType = object : KotlinType.DeferredType() {
+                val value = storageManager.createLazyValue { doResolvePossiblyBareType(c, typeReference).actualType }
+
+                override fun isComputed(): Boolean = value.isComputed()
+
+                override val delegate: KotlinType
+                    get() = value()
+            }
             c.trace.record(BindingContext.TYPE, typeReference, lazyKotlinType)
             return type(lazyKotlinType);
         }
@@ -304,7 +311,7 @@ class TypeResolver(
         return if (scopeForTypeParameter is ErrorUtils.ErrorScope)
             ErrorUtils.createErrorType("?")
         else
-            KotlinTypeImpl.create(
+            KotlinTypeFactory.create(
                     annotations,
                     typeParameter.typeConstructor,
                     false,
@@ -356,7 +363,7 @@ class TypeResolver(
             " but ${collectedArgumentAsTypeProjections.size} instead of ${parameters.size} found in ${type.text}"
         }
 
-        val resultingType = KotlinTypeImpl.create(annotations, classDescriptor, false, arguments)
+        val resultingType = KotlinTypeFactory.create(annotations, classDescriptor, false, arguments)
 
         // We create flexible types by convention here
         // This is not intended to be used in normal users' environments, only for tests and debugger etc

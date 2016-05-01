@@ -33,6 +33,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getElementTextWithContext
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 import org.jetbrains.kotlin.types.*
+import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType
 import org.jetbrains.kotlin.utils.SmartSet
 import org.jetbrains.kotlin.utils.addToStdlib.singletonList
 import org.jetbrains.kotlin.utils.ifEmpty
@@ -101,8 +102,7 @@ class SpecifyTypeExplicitlyIntention : SelfTargetingIntention<KtCallableDeclarat
                             }
                         }
 
-                        // todo
-                        SimpleTypeImpl.create(it as KotlinType.SimpleType, arguments = newArguments)
+                        KotlinTypeFactory.createSimpleType(it as SimpleType, arguments = newArguments)
                     }
                     .ifEmpty { return null }
             return object : ChooseValueExpression<KotlinType>(types, types.first()) {

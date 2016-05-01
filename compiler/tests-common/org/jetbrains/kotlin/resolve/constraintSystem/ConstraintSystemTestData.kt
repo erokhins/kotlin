@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.resolve.scopes.LexicalScope
 import org.jetbrains.kotlin.resolve.scopes.MemberScope
 import org.jetbrains.kotlin.test.KotlinTestUtils
 import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.KotlinTypeImpl
+import org.jetbrains.kotlin.types.KotlinTypeFactory
 import java.util.regex.Pattern
 
 class ConstraintSystemTestData(
@@ -64,7 +64,7 @@ class ConstraintSystemTestData(
         val matcher = INTEGER_VALUE_TYPE_PATTERN.matcher(name)
         if (matcher.find()) {
             val number = matcher.group(1)!!
-            return KotlinTypeImpl.create(
+            return KotlinTypeFactory.create(
                     Annotations.EMPTY, IntegerValueTypeConstructor(number.toLong(), functionFoo.builtIns), false, listOf(),
                     MemberScope.Empty
             )

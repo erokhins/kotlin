@@ -23,13 +23,13 @@ import org.jetbrains.kotlin.descriptors.annotations.Annotations;
 import org.jetbrains.kotlin.descriptors.impl.TypeParameterDescriptorImpl;
 import org.jetbrains.kotlin.descriptors.impl.ValueParameterDescriptorImpl;
 import org.jetbrains.kotlin.load.java.descriptors.*;
-import org.jetbrains.kotlin.load.java.lazy.types.LazyJavaTypeResolver;
 import org.jetbrains.kotlin.name.Name;
 import org.jetbrains.kotlin.resolve.DescriptorUtils;
 import org.jetbrains.kotlin.resolve.FunctionTypeResolveUtilsKt;
 import org.jetbrains.kotlin.resolve.descriptorUtil.DescriptorUtilsKt;
 import org.jetbrains.kotlin.resolve.jvm.JavaResolverUtils;
 import org.jetbrains.kotlin.types.*;
+import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,7 +72,7 @@ public class SingleAbstractMethodUtils {
                                       "' should not end with conflict";
 
                 if (FlexibleTypesKt.isNullabilityFlexible(samType)) {
-                    return KotlinTypeFactory.createFlexibleType(type, TypeUtils.makeNullable(type));
+                    return KotlinTypeFactory.createFlexibleType((SimpleType) type, (SimpleType) TypeUtils.makeNullable(type)); // todo cast
                 }
 
                 return TypeUtils.makeNullableAsSpecified(type, samType.isMarkedNullable());

@@ -35,8 +35,8 @@ import org.jetbrains.kotlin.resolve.scopes.utils.collectVariables
 import org.jetbrains.kotlin.resolve.selectMostSpecificInEachOverridableGroup
 import org.jetbrains.kotlin.types.ErrorUtils
 import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.isDynamic
 import org.jetbrains.kotlin.types.typeUtil.getImmediateSuperclassNotAny
+import org.jetbrains.kotlin.types.typeUtil.isDynamic
 import org.jetbrains.kotlin.utils.SmartList
 import org.jetbrains.kotlin.utils.addIfNotNull
 import java.util.*
@@ -111,7 +111,7 @@ internal class ReceiverScopeTowerLevel(
             }
         }
 
-        if (dispatchReceiver.type.isDynamic()) {
+        if (dispatchReceiver.type.isDynamic) {
             scopeTower.dynamicScope.getMembers(null).mapTo(result) {
                 createCandidateDescriptor(it, dispatchReceiver, DynamicDescriptorDiagnostic)
             }

@@ -33,6 +33,7 @@ import org.jetbrains.kotlin.types.TypeUtils.NO_EXPECTED_TYPE
 import org.jetbrains.kotlin.types.checker.KotlinTypeChecker
 import org.jetbrains.kotlin.types.expressions.ControlStructureTypingUtils.*
 import org.jetbrains.kotlin.types.expressions.typeInfoFactory.createTypeInfo
+import org.jetbrains.kotlin.types.typeUtil.isDynamic
 import java.util.*
 
 class PatternMatchingTypingVisitor internal constructor(facade: ExpressionTypingInternals) : ExpressionTypingVisitor(facade) {
@@ -351,7 +352,7 @@ class PatternMatchingTypingVisitor internal constructor(facade: ExpressionTyping
         val possiblyBareTarget = components.typeResolver.resolvePossiblyBareType(typeResolutionContext, typeReferenceAfterIs)
         val targetType = TypeReconstructionUtil.reconstructBareType(typeReferenceAfterIs, possiblyBareTarget, subjectType, context.trace, components.builtIns)
 
-        if (targetType.isDynamic()) {
+        if (targetType.isDynamic) {
             context.trace.report(DYNAMIC_NOT_ALLOWED.on(typeReferenceAfterIs))
         }
         val targetDescriptor = TypeUtils.getClassDescriptor(targetType)

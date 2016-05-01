@@ -30,6 +30,7 @@ import org.jetbrains.kotlin.resolve.constants.*;
 import org.jetbrains.kotlin.resolve.constants.StringValue;
 import org.jetbrains.kotlin.resolve.descriptorUtil.DescriptorUtilsKt;
 import org.jetbrains.kotlin.types.*;
+import org.jetbrains.kotlin.types.KotlinType.StableType.FlexibleType;
 import org.jetbrains.org.objectweb.asm.*;
 
 import java.lang.annotation.*;
@@ -178,7 +179,7 @@ public abstract class AnnotationCodegen {
             return;
         }
 
-        KotlinType.FlexibleType flexibleType = FlexibleTypesKt.asFlexibleType(type);
+        FlexibleType flexibleType = FlexibleTypesKt.asFlexibleType(type);
         if (flexibleType != null) {
             // A flexible type whose lower bound in not-null and upper bound is nullable, should not be annotated
 

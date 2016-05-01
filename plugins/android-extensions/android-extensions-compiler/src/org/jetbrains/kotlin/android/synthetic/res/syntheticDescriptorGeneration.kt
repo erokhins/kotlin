@@ -25,16 +25,14 @@ import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.descriptors.impl.PropertyDescriptorImpl
 import org.jetbrains.kotlin.descriptors.impl.PropertyGetterDescriptorImpl
 import org.jetbrains.kotlin.descriptors.impl.SimpleFunctionDescriptorImpl
-import org.jetbrains.kotlin.load.java.lazy.types.LazyJavaTypeResolver
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.resolve.descriptorUtil.builtIns
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameUnsafe
 import org.jetbrains.kotlin.resolve.source.PsiSourceElement
 import org.jetbrains.kotlin.types.KotlinType
+import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType
 import org.jetbrains.kotlin.types.KotlinTypeFactory
-import org.jetbrains.kotlin.types.KotlinTypeImpl
 import org.jetbrains.kotlin.types.StarProjectionImpl
-import org.jetbrains.kotlin.types.typeUtil.makeNullable
 
 private class XmlSourceElement(override val psi: PsiElement) : PsiSourceElement
 
@@ -110,7 +108,7 @@ private fun genProperty(
         override val resourceId = id
     }
 
-    val flexibleType = KotlinTypeFactory.createFlexibleType(type, type.makeNullable())
+    val flexibleType = KotlinTypeFactory.createFlexibleType(type as SimpleType, type.markNullableAsSpecified(true))
     property.setType(
             flexibleType,
             emptyList<TypeParameterDescriptor>(),

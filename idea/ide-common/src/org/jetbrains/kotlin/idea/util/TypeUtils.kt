@@ -33,7 +33,7 @@ import org.jetbrains.kotlin.types.*
 import org.jetbrains.kotlin.types.typeUtil.*
 
 fun KotlinType.approximateFlexibleTypes(preferNotNull: Boolean = false): KotlinType {
-    if (isDynamic()) return this
+    if (isDynamic) return this
     if (isFlexible()) {
         val flexible = flexibility()
         val lowerClass = flexible.lowerBound.constructor.declarationDescriptor as? ClassDescriptor?
@@ -58,7 +58,7 @@ fun KotlinType.approximateFlexibleTypes(preferNotNull: Boolean = false): KotlinT
 
         return approximation
     }
-    return KotlinTypeImpl.create(
+    return KotlinTypeFactory.create(
             annotations,
             constructor,
             isMarkedNullable,
