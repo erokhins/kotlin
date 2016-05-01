@@ -122,9 +122,7 @@ private fun KotlinType.enhanceInflexible(qualifiers: (Int) -> JavaTypeQualifiers
             enhancedNullabilityAnnotations
     ).filterNotNull().compositeAnnotationsOrSingle()
 
-    val newSubstitution = computeNewSubstitution(
-        typeConstructor, enhancedArguments
-    )
+    val newSubstitution = TypeConstructorSubstitution.create(typeConstructor, enhancedArguments)
 
     var enhancedType = KotlinTypeFactory.create(
             newAnnotations,

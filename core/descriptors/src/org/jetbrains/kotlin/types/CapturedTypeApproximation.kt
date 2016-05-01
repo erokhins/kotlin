@@ -97,6 +97,9 @@ private fun substituteCapturedTypesWithProjections(typeProjection: TypeProjectio
 
 fun approximateCapturedTypes(type: KotlinType): ApproximationBounds<KotlinType> {
     val stableType = type.stableType
+
+    if (stableType is RawType) return ApproximationBounds(stableType, stableType)
+
     if (stableType is FlexibleType) {
         val boundsForFlexibleLower = approximateCapturedTypes(stableType.lowerBound)
         val boundsForFlexibleUpper = approximateCapturedTypes(stableType.upperBound)

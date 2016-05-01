@@ -30,6 +30,7 @@ import org.jetbrains.kotlin.resolve.MemberComparator;
 import org.jetbrains.kotlin.resolve.constants.ConstantValue;
 import org.jetbrains.kotlin.resolve.constants.NullValue;
 import org.jetbrains.kotlin.types.*;
+import org.jetbrains.kotlin.types.KotlinType.StableType.FlexibleType;
 import org.jetbrains.kotlin.utils.ExceptionUtilsKt;
 import org.jetbrains.kotlin.utils.Interner;
 
@@ -461,7 +462,7 @@ public class DescriptorSerializer {
     private ProtoBuf.Type.Builder type(@NotNull KotlinType type) {
         assert !type.isError() : "Can't serialize error types: " + type; // TODO
 
-        KotlinType.FlexibleType flexibleType = FlexibleTypesKt.asFlexibleType(type);
+        FlexibleType flexibleType = FlexibleTypesKt.asFlexibleType(type);
         if (flexibleType != null) {
             ProtoBuf.Type.Builder lowerBound = type(flexibleType.getLowerBound());
             if (useTypeTable()) {

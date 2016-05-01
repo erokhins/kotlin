@@ -24,20 +24,6 @@ import org.jetbrains.kotlin.types.checker.KotlinTypeChecker
 import org.jetbrains.kotlin.types.typeUtil.builtIns
 import org.jetbrains.kotlin.types.typeUtil.stableType
 
-// todo move to serialization
-interface FlexibleTypeFactory {
-    val id: String
-
-    fun create(lowerBound: SimpleType, upperBound: SimpleType): FlexibleType
-
-    object ThrowException : FlexibleTypeFactory {
-        private fun error(): Nothing = throw IllegalArgumentException("This factory should not be used.")
-        override val id: String
-            get() = error()
-
-        override fun create(lowerBound: SimpleType, upperBound: SimpleType): FlexibleType = error()
-    }
-}
 
 fun KotlinType.isFlexible(): Boolean = stableType is FlexibleType
 fun KotlinType.flexibility(): FlexibleType = stableType as FlexibleType

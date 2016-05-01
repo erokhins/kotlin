@@ -20,14 +20,15 @@ import org.jetbrains.kotlin.descriptors.annotations.AnnotationWithTarget
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.serialization.ProtoBuf
 import org.jetbrains.kotlin.serialization.deserialization.descriptors.DeserializedAnnotationsWithPossibleTargets
-import org.jetbrains.kotlin.storage.getValue
 import org.jetbrains.kotlin.types.AbstractLazyType
+import org.jetbrains.kotlin.types.TypeSubstitution
 import org.jetbrains.kotlin.utils.toReadOnlyList
 
 class DeserializedType(
         private val c: DeserializationContext,
         private val typeProto: ProtoBuf.Type,
-        additionalAnnotations: Annotations = Annotations.EMPTY
+        additionalAnnotations: Annotations = Annotations.EMPTY,
+        private val customSubstitution: TypeSubstitution? = null
 ) : AbstractLazyType(c.storageManager) {
     override fun computeTypeConstructor() = c.typeDeserializer.typeConstructor(typeProto)
 
@@ -50,7 +51,5 @@ class DeserializedType(
 
     override fun getAnnotations(): Annotations = annotations
 
-    override val capabilities by c.storageManager.createLazyValue {
-        c.components.typeCapabilitiesLoader.loadCapabilities(typeProto)
-    }
+    override fun getSubstitution(): TypeSubstitution = customSubstitution ?: super.getSubstitution()
 }

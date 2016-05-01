@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.name.FqName;
 import org.jetbrains.kotlin.resolve.calls.inference.CapturedTypeConstructorKt;
 import org.jetbrains.kotlin.types.KotlinType.StableType.FlexibleType;
 import org.jetbrains.kotlin.types.KotlinType.StableType.SimpleType;
+import org.jetbrains.kotlin.types.typeUtil.TypeUtilsKt;
 import org.jetbrains.kotlin.types.typesApproximation.CapturedTypeApproximationKt;
 
 import java.util.ArrayList;
@@ -138,6 +139,9 @@ public class TypeSubstitutor {
 
         CustomTypeVariable typeVariable = TypeCapabilitiesKt.getCustomTypeVariable(type);
         FlexibleType flexibleType = FlexibleTypesKt.asFlexibleType(type);
+
+        // Raw type cannot be substituted
+        if (TypeUtilsKt.getStableType(type) instanceof RawType) return originalProjection;
 
         if (replacement == null && typeVariable == null && flexibleType != null) {
             TypeProjection substitutedLower =

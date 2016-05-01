@@ -19,7 +19,6 @@ package org.jetbrains.kotlin.types
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
-import org.jetbrains.kotlin.types.typeUtil.stableType
 
 abstract class TypeSubstitution {
     companion object {
@@ -111,19 +110,6 @@ class IndexedParametersSubstitution(
     }
 }
 
-fun KotlinType.computeNewSubstitution(
-        typeConstructor: TypeConstructor,
-        newArguments: List<TypeProjection>
-): TypeSubstitution {
-    val newSubstitution = TypeConstructorSubstitution.create(typeConstructor, newArguments)
-
-    // If previous substitution was trivial just replace it with indexed one
-    val substitutionToComposeWith = (stableType as? RawType)?.substitutionToComposeWith ?: return newSubstitution
-    val composedSubstitution = CompositeTypeSubstitution(newSubstitution, substitutionToComposeWith)
-
-    return composedSubstitution
-}
-
 @JvmOverloads
 fun KotlinType.replace(
         newArguments: List<TypeProjection> = arguments,
@@ -141,7 +127,7 @@ fun KotlinType.replace(
         )
     }
 
-    val newSubstitution = computeNewSubstitution(constructor, newArguments)
+    val newSubstitution = TypeConstructorSubstitution.create(constructor, newArguments)
 
     val declarationDescriptor = constructor.declarationDescriptor
     val newScope =
@@ -156,24 +142,6 @@ fun KotlinType.replace(
             newArguments,
             newScope
     )
-}
-
-private class CompositeTypeSubstitution(
-    private val first: TypeSubstitution,
-    private val second: TypeSubstitution
-) : TypeSubstitution() {
-
-    override fun get(key: KotlinType): TypeProjection? {
-        val firstResult = first[key] ?: return second[key]
-        return second.buildSubstitutor().substitute(firstResult)
-    }
-
-    override fun isEmpty() = first.isEmpty() && second.isEmpty()
-
-    override fun approximateCapturedTypes() = first.approximateCapturedTypes() || second.approximateCapturedTypes()
-    override fun approximateContravariantCapturedTypes() = first.approximateContravariantCapturedTypes() || second.approximateContravariantCapturedTypes()
-
-    override fun filterAnnotations(annotations: Annotations): Annotations = second.filterAnnotations(first.filterAnnotations(annotations))
 }
 
 open class DelegatedTypeSubstitution(val substitution: TypeSubstitution): TypeSubstitution() {

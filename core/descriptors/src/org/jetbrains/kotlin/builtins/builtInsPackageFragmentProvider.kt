@@ -51,10 +51,9 @@ fun createBuiltInPackageFragmentProvider(
             localClassResolver,
             ErrorReporter.DO_NOTHING,
             LookupTracker.DO_NOTHING,
-            FlexibleTypeFactory.ThrowException,
+            FlexibleTypeDeserializer.ThrowException,
             classDescriptorFactory,
-            notFoundClasses,
-            additionalClassPartsProvider = additionalClassPartsProvider
+            notFoundClasses
     )
 
     localClassResolver.setDeserializationComponents(components)

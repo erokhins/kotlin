@@ -110,7 +110,7 @@ private fun genProperty(
         override val resourceId = id
     }
 
-    val flexibleType = LazyJavaTypeResolver.FlexibleJavaClassifierTypeFactory.create(type, type.makeNullable())
+    val flexibleType = KotlinTypeFactory.createFlexibleType(type, type.makeNullable())
     property.setType(
             flexibleType,
             emptyList<TypeParameterDescriptor>(),

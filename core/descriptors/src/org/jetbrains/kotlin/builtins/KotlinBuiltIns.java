@@ -617,7 +617,7 @@ public abstract class KotlinBuiltIns {
     }
 
     @NotNull
-    public KotlinType getPrimitiveKotlinType(@NotNull PrimitiveType type) {
+    public SimpleType getPrimitiveKotlinType(@NotNull PrimitiveType type) {
         return getPrimitiveClassDescriptor(type).getDefaultType();
     }
 
@@ -632,7 +632,7 @@ public abstract class KotlinBuiltIns {
     }
 
     @NotNull
-    public KotlinType getIntType() {
+    public SimpleType getIntType() {
         return getPrimitiveKotlinType(INT);
     }
 
@@ -667,7 +667,7 @@ public abstract class KotlinBuiltIns {
     }
 
     @NotNull
-    public KotlinType getStringType() {
+    public SimpleType getStringType() {
         return getString().getDefaultType();
     }
 
