@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.types.checker.KotlinTypeChecker
  */
 sealed class KotlinType : Annotated {
     protected open val delegate: KotlinType
-        get() = throw IllegalStateException("Should not be called")
+        get() = throw IllegalStateException("Should not be called: ${javaClass.canonicalName}")
 
     open val constructor: TypeConstructor get() =  delegate.constructor
 
@@ -71,6 +71,8 @@ sealed class KotlinType : Annotated {
         abstract fun markNullableAsSpecified(newNullability: Boolean): T
 
         abstract class SimpleType : StableType<SimpleType>() {
+            override val isError: Boolean get() = false
+
             override fun toString(): String {
                 // for error types this method should be overridden
                 if (isError) return "ErrorType"
