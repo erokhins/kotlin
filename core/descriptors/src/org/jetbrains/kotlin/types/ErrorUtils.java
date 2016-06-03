@@ -468,7 +468,7 @@ public class ErrorUtils {
         return isErrorClass(candidate) || isErrorClass(candidate.getContainingDeclaration()) || candidate == ERROR_MODULE;
     }
 
-    private static boolean isErrorClass(@Nullable DeclarationDescriptor candidate) {
+    public static boolean isErrorClass(@Nullable DeclarationDescriptor candidate) {
         return candidate instanceof ErrorClassDescriptor;
     }
 

@@ -71,7 +71,6 @@ import org.jetbrains.kotlin.resolve.jvm.jvmSignature.JvmMethodGenericSignature;
 import org.jetbrains.kotlin.resolve.jvm.jvmSignature.JvmMethodParameterKind;
 import org.jetbrains.kotlin.resolve.jvm.jvmSignature.JvmMethodParameterSignature;
 import org.jetbrains.kotlin.resolve.jvm.jvmSignature.JvmMethodSignature;
-import org.jetbrains.kotlin.serialization.deserialization.DeserializedType;
 import org.jetbrains.kotlin.serialization.deserialization.descriptors.DeserializedCallableMemberDescriptor;
 import org.jetbrains.kotlin.serialization.deserialization.descriptors.DeserializedClassDescriptor;
 import org.jetbrains.kotlin.types.*;
@@ -450,13 +449,10 @@ public class KotlinTypeMapper {
         PsiElement declarationElement = DescriptorToSourceUtils.descriptorToDeclaration(descriptor);
 
         if (declarationElement == null) {
-            String message = "Error type encountered: %s (%s).";
-            if (FlexibleTypesKt.upperIfFlexible(type) instanceof DeserializedType) {
-                message +=
+            String message = "Error type encountered: %s (%s)." +
                         " One of the possible reasons may be that this type is not directly accessible from this module. " +
                         "To workaround this error, try adding an explicit dependency on the module or library which contains this type " +
                         "to the classpath";
-            }
             return String.format(message, type, type.getClass().getSimpleName());
         }
 
