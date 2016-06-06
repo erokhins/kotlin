@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -520,7 +520,7 @@ public class KotlinTypeCheckerTest extends KotlinTestWithEnvironment {
             subtypes.add(makeType(type));
         }
         KotlinType result = CommonSupertypes.commonSupertype(subtypes);
-        assertTrue(result + " != " + expected, result.equals(makeType(expected)));
+        assertTrue(result + " != " + expected, KotlinTypeChecker.DEFAULT.equalTypes(result, makeType(expected)));
     }
 
     private void assertSubtypingRelation(String subtype, String supertype, boolean expected) {

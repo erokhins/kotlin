@@ -26,14 +26,20 @@ public interface KotlinTypeChecker {
         boolean equals(@NotNull TypeConstructor a, @NotNull TypeConstructor b);
     }
 
-    KotlinTypeChecker DEFAULT = new KotlinTypeCheckerImpl(new TypeCheckingProcedure(new TypeCheckerProcedureCallbacksImpl()));
 
-    KotlinTypeChecker ERROR_TYPES_ARE_EQUAL_TO_ANYTHING = new KotlinTypeCheckerImpl(new TypeCheckingProcedure(new TypeCheckerProcedureCallbacksImpl() {
+    KotlinTypeChecker DEFAULT_OLD = new KotlinTypeCheckerImpl(new TypeCheckingProcedure(new TypeCheckerProcedureCallbacksImpl()));
+
+
+    KotlinTypeChecker ERROR_TYPES_ARE_EQUAL_TO_ANYTHING_OLD = new KotlinTypeCheckerImpl(new TypeCheckingProcedure(new TypeCheckerProcedureCallbacksImpl() {
         @Override
         public boolean assertEqualTypes(@NotNull KotlinType a, @NotNull KotlinType b, @NotNull TypeCheckingProcedure typeCheckingProcedure) {
             return a.isError() || b.isError() || super.assertEqualTypes(a, b, typeCheckingProcedure);
         }
     }));
+
+    KotlinTypeChecker DEFAULT = TypeCheckerRunner.Default.INSTANCE;
+
+    KotlinTypeChecker ERROR_TYPES_ARE_EQUAL_TO_ANYTHING = ERROR_TYPES_ARE_EQUAL_TO_ANYTHING_OLD;
 
     KotlinTypeChecker FLEXIBLE_UNEQUAL_TO_INFLEXIBLE = new KotlinTypeCheckerImpl(new TypeCheckingProcedure(new TypeCheckerProcedureCallbacksImpl()) {
         @Override

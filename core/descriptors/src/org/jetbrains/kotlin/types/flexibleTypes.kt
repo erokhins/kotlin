@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.renderer.DescriptorRenderer
 import org.jetbrains.kotlin.renderer.DescriptorRendererOptions
 import org.jetbrains.kotlin.types.checker.KotlinTypeChecker
+import org.jetbrains.kotlin.types.checker.TypeCheckerRunner
 import org.jetbrains.kotlin.types.typeUtil.builtIns
 
 
@@ -99,7 +100,7 @@ class FlexibleTypeImpl(lowerBound: SimpleType, upperBound: SimpleType) : Flexibl
         assert (!lowerBound.isFlexible()) { "Lower bound of a flexible type can not be flexible: $lowerBound" }
         assert (!upperBound.isFlexible()) { "Upper bound of a flexible type can not be flexible: $upperBound" }
         assert (lowerBound != upperBound) { "Lower and upper bounds are equal: $lowerBound == $upperBound" }
-        assert (KotlinTypeChecker.DEFAULT.isSubtypeOf(lowerBound, upperBound)) {
+        assert (TypeCheckerRunner.newIsSubtypeOf(lowerBound, upperBound)) {
             "Lower bound $lowerBound of a flexible type must be a subtype of the upper bound $upperBound"
         }
     }
