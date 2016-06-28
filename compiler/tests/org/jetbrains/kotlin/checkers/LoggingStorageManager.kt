@@ -18,6 +18,7 @@ package org.jetbrains.kotlin.checkers
 
 import org.jetbrains.kotlin.storage.ObservableStorageManager
 import org.jetbrains.kotlin.storage.StorageManager
+import org.jetbrains.kotlin.utils.upAny
 import java.lang.reflect.Field
 import java.lang.reflect.GenericDeclaration
 
@@ -117,7 +118,7 @@ class LoggingStorageManager(
         while (true) {
             result.addAll(c.declaredFields.toList())
             @Suppress("UNCHECKED_CAST")
-            val superClass = (c as Class<Any>).superclass as Class<Any>?
+            val superClass = (c as Class<Any>).superclass.upAny as Class<Any>?
             if (superClass == null) break
             if (c == superClass) break
             c = superClass

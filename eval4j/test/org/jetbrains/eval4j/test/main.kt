@@ -321,13 +321,15 @@ class ReflectionLookup(val classLoader: ClassLoader) {
     }
 }
 
+val Any?.upAny: Any? get() = this
+
 @Suppress("UNCHECKED_CAST")
 fun Class<Any>.findMethod(methodDesc: MethodDescription): Method? {
     for (declared in declaredMethods) {
         if (methodDesc.matches(declared)) return declared
     }
 
-    val fromSuperClass = (superclass as Class<Any>).findMethod(methodDesc)
+    val fromSuperClass = (superclass.upAny as Class<Any>).findMethod(methodDesc)
     if (fromSuperClass != null) return fromSuperClass
 
     for (supertype in interfaces) {
@@ -376,7 +378,7 @@ fun Class<Any>.findField(fieldDesc: FieldDescription): Field? {
 
     val superclass = superclass
     if (superclass != null) {
-        val fromSuperClass = (superclass as Class<Any>).findField(fieldDesc)
+        val fromSuperClass = (superclass.upAny as Class<Any>).findField(fieldDesc)
         if (fromSuperClass != null) return fromSuperClass
     }
 

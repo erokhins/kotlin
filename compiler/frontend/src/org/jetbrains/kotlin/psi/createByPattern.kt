@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.parentsWithSelf
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.jetbrains.kotlin.renderer.render
+import org.jetbrains.kotlin.utils.upAny
 import java.util.*
 
 fun KtPsiFactory.createExpressionByPattern(pattern: String, vararg args: Any): KtExpression
@@ -169,7 +170,7 @@ fun <TElement : KtElement> createByPattern(pattern: String, vararg args: Any, fa
         if (element is KtFunctionLiteral) {
             element = element.getParent() as KtLambdaExpression
         }
-        (argumentTypes[n] as PsiElementPlaceholderArgumentType<in Any, in PsiElement>).replacePlaceholderElement(element, args[n])
+        (argumentTypes[n].upAny as PsiElementPlaceholderArgumentType<in Any, in PsiElement>).replacePlaceholderElement(element, args[n])
     }
 
     codeStyleManager.adjustLineIndent(resultElement.containingFile, resultElement.textRange)

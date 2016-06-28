@@ -34,3 +34,5 @@ val DO_NOTHING: (Any?) -> Unit = { }
 val DO_NOTHING_3: (Any?, Any?, Any?) -> Unit = { x, y, z -> }
 
 fun <T> doNothing(): (T) -> Unit = DO_NOTHING
+
+val Any?.upAny: Any? get() = this
