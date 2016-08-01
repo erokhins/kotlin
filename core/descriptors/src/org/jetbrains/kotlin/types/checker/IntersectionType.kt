@@ -19,6 +19,8 @@ package org.jetbrains.kotlin.types.checker
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.types.*
 
+fun intersectWrappedTypes(types: Collection<KotlinType>) = intersectTypes(types.map { it.unwrap() })
+
 fun intersectTypes(types: List<UnwrappedType>): UnwrappedType {
     when (types.size) {
         0 -> error("Expected some types")

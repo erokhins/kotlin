@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2016 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,6 +58,7 @@ import org.jetbrains.kotlin.psi.KtFile;
 import org.jetbrains.kotlin.resolve.*;
 import org.jetbrains.kotlin.resolve.calls.model.MutableResolvedCall;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
+import org.jetbrains.kotlin.resolve.calls.tower.NewCallsKt;
 import org.jetbrains.kotlin.resolve.diagnostics.Diagnostics;
 import org.jetbrains.kotlin.resolve.jvm.JavaDescriptorResolver;
 import org.jetbrains.kotlin.resolve.jvm.TopDownAnalyzerFacadeForJVM;
@@ -473,8 +474,10 @@ public abstract class AbstractDiagnosticsTest extends BaseDiagnosticsTest {
             DiagnosticUtils.LineAndColumn lineAndColumn =
                     DiagnosticUtils.getLineAndColumnInPsiFile(element.getContainingFile(), element.getTextRange());
 
-            assertTrue("Resolved call for '" + element.getText() + "'" + lineAndColumn + " is not completed",
-                       ((MutableResolvedCall<?>) resolvedCall).isCompleted());
+            if (!NewCallsKt.getUSE_NEW_TYPE_INFERENCE()) {
+                assertTrue("Resolved call for '" + element.getText() + "'" + lineAndColumn + " is not completed",
+                           ((MutableResolvedCall<?>) resolvedCall).isCompleted());
+            }
         }
 
         checkResolvedCallsInDiagnostics(bindingContext);
@@ -509,9 +512,11 @@ public abstract class AbstractDiagnosticsTest extends BaseDiagnosticsTest {
             @NotNull Diagnostic diagnostic, @NotNull Collection<? extends ResolvedCall<?>> resolvedCalls
     ) {
         boolean allCallsAreCompleted = true;
-        for (ResolvedCall<?> resolvedCall : resolvedCalls) {
-            if (!((MutableResolvedCall<?>) resolvedCall).isCompleted()) {
-                allCallsAreCompleted = false;
+        if (!NewCallsKt.getUSE_NEW_TYPE_INFERENCE()) {
+            for (ResolvedCall<?> resolvedCall : resolvedCalls) {
+                if (!((MutableResolvedCall<?>) resolvedCall).isCompleted()) {
+                    allCallsAreCompleted = false;
+                }
             }
         }
 

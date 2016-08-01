@@ -1,0 +1,132 @@
+/*
+ * Copyright 2010-2016 JetBrains s.r.o.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.jetbrains.kotlin.resolve.calls
+
+import org.jetbrains.kotlin.builtins.ReflectionTypes
+import org.jetbrains.kotlin.builtins.getReturnTypeFromFunctionType
+import org.jetbrains.kotlin.builtins.isFunctionType
+import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
+import org.jetbrains.kotlin.descriptors.FunctionDescriptor
+import org.jetbrains.kotlin.descriptors.PropertyDescriptor
+import org.jetbrains.kotlin.descriptors.Visibilities
+import org.jetbrains.kotlin.descriptors.annotations.Annotations
+import org.jetbrains.kotlin.resolve.calls.model.*
+import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
+import org.jetbrains.kotlin.types.ErrorUtils
+import org.jetbrains.kotlin.types.KotlinType
+import org.jetbrains.kotlin.types.UnwrappedType
+import org.jetbrains.kotlin.types.typeUtil.immediateSupertypes
+import org.jetbrains.kotlin.types.typeUtil.isUnit
+import org.jetbrains.kotlin.types.upperIfFlexible
+import org.jetbrains.kotlin.utils.addIfNotNull
+import org.jetbrains.kotlin.utils.addToStdlib.check
+import java.util.*
+
+
+class MockReceiverForCallableReference(val lhsOrDeclaredType: UnwrappedType) : ReceiverValue {
+    override fun getType(): KotlinType = lhsOrDeclaredType
+}
+
+val ChosenCallableReferenceDescriptor<*>.dispatchNotBoundReceiver : UnwrappedType?
+    get() = (candidate.dispatchReceiver?.receiverValue as? MockReceiverForCallableReference)?.lhsOrDeclaredType
+
+val ChosenCallableReferenceDescriptor<*>.extensionNotBoundReceiver : UnwrappedType?
+    get() = (extensionReceiver as? MockReceiverForCallableReference)?.lhsOrDeclaredType
+
+
+class CallableReferenceResolver(
+        val reflectionTypes: ReflectionTypes,
+        val argumentsToParametersMapper: ArgumentsToParametersMapper
+) {
+
+    fun resolvePropertyReference(
+            propertyReference: ChosenCallableReferenceDescriptor<PropertyDescriptor>,
+            outerCall: ASTCall,
+            scopeOwnerDescriptor: DeclarationDescriptor
+    ): ResolvedPropertyReference {
+        val descriptor = propertyReference.candidate.descriptor
+
+        val mutable = descriptor.isVar && run {
+            val setter = descriptor.setter
+            setter == null || Visibilities.isVisible(propertyReference.candidate.dispatchReceiver?.receiverValue, setter, scopeOwnerDescriptor)
+        }
+
+        val reflectionType = reflectionTypes.getKPropertyType(Annotations.EMPTY, propertyReference.dispatchNotBoundReceiver,
+                                                              propertyReference.extensionNotBoundReceiver, descriptor.type.unwrap(), mutable)
+
+        return ResolvedPropertyReference(outerCall, propertyReference, reflectionType)
+    }
+
+    private fun createFakeArgumentsAndMapArguments(
+            functionReference: ChosenCallableReferenceDescriptor<FunctionDescriptor>,
+            argumentCount: Int?
+    ): Pair<List<UnwrappedType>, ArgumentsToParametersMapper.ArgumentMapping?> {
+        if (argumentCount == null) {
+            return functionReference.candidate.descriptor.valueParameters.map { it.varargElementType?.unwrap() ?: it.type.unwrap() } to null
+        }
+
+        val fakeArguments = (0..(argumentCount-1)).map { FakeArgumentForCallableReference(functionReference, it) }
+
+        val argumentsToParametersMapping = argumentsToParametersMapper.mapArguments(fakeArguments, null, functionReference.candidate.descriptor)
+        val parameters = Array<UnwrappedType?>(argumentCount) { null }
+
+        for ((parameter, resolvedArgument) in argumentsToParametersMapping.parameterToCallArgumentMap) {
+            for (argument in resolvedArgument.arguments) {
+                val index = (argument as FakeArgumentForCallableReference).index
+                parameters[index] = parameter.type.unwrap()
+            }
+        }
+
+        return parameters.map { it ?: ErrorUtils.createErrorType("Wrong parameters mapping") } to argumentsToParametersMapping
+    }
+
+    fun resolveFunctionReference(
+            functionReference: ChosenCallableReferenceDescriptor<FunctionDescriptor>,
+            outerCall: ASTCall,
+            expectedType: UnwrappedType
+    ): ResolvedFunctionReference {
+        val functionType =
+                if (expectedType.isFunctionType) {
+                    expectedType
+                }
+                else if (ReflectionTypes.isNumberedKFunction(expectedType)) {
+                    expectedType.immediateSupertypes().first { it.isFunctionType }
+                }
+                else {
+                    null
+                }
+
+        val parameterTypes = ArrayList<UnwrappedType>(functionType?.arguments?.size ?: 2)
+        parameterTypes.addIfNotNull(functionReference.dispatchNotBoundReceiver)
+        parameterTypes.addIfNotNull(functionReference.extensionNotBoundReceiver)
+
+        // (A, B, C) -> Int if A -- receiver, then B & C -- parameters
+        val argumentCount = functionType?.arguments?.let { it.size - parameterTypes.size - 1 }?.check { it >= 0 }
+        val (parameters, mapping) = createFakeArgumentsAndMapArguments(functionReference, argumentCount)
+        parameterTypes.addAll(parameters)
+
+        val unitExpectedType = functionType?.let(::getReturnTypeFromFunctionType)?.check { it.upperIfFlexible().isUnit() }
+        // coercion to unit
+        val returnType = unitExpectedType ?: functionReference.candidate.descriptor.returnType
+                          ?: ErrorUtils.createErrorType("Error return type")
+
+        val kFunctionType = reflectionTypes.getKFunctionType(Annotations.EMPTY, null, parameterTypes, returnType)
+
+        return ResolvedFunctionReference(outerCall, functionReference, kFunctionType, mapping)
+    }
+}
+
