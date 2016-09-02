@@ -28,16 +28,14 @@ import org.jetbrains.kotlin.resolve.scopes.utils.parentsWithSelf
 import org.jetbrains.kotlin.utils.addToStdlib.check
 import java.util.*
 
-interface Candidate<out D : CallableDescriptor> {
-    val descriptor: D
-
+interface Candidate {
     // this operation should be very fast
     val isSuccessful: Boolean
 
     val status: ResolutionCandidateStatus
 }
 
-interface CandidateFactory<D : CallableDescriptor, out C: Candidate<D>> {
+interface CandidateFactory<in D : CallableDescriptor, out C: Candidate> {
     fun createCandidate(
             towerCandidate: CandidateWithBoundDispatchReceiver<D>,
             explicitReceiverKind: ExplicitReceiverKind,
@@ -45,7 +43,7 @@ interface CandidateFactory<D : CallableDescriptor, out C: Candidate<D>> {
     ): C
 }
 
-interface CandidateFactoryProviderForInvoke<F : Candidate<FunctionDescriptor>, V : Candidate<VariableDescriptor>> {
+interface CandidateFactoryProviderForInvoke<F : Candidate, V : Candidate> {
 
     fun transformCandidate(variable: V, invoke: F): F
 
@@ -70,13 +68,13 @@ interface ScopeTowerProcessor<out C> {
 }
 
 class TowerResolver {
-    fun <C: Candidate<*>> runResolve(
+    fun <C: Candidate> runResolve(
             scopeTower: ImplicitScopeTower,
             processor: ScopeTowerProcessor<C>,
             useOrder: Boolean
     ): Collection<C> = scopeTower.run(processor, SuccessfulResultCollector { it.status }, useOrder)
 
-    fun <C: Candidate<*>> collectAllCandidates(
+    fun <C: Candidate> collectAllCandidates(
             scopeTower: ImplicitScopeTower,
             processor: ScopeTowerProcessor<C>
     ): Collection<C>
