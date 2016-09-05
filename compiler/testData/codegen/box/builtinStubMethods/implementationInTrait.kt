@@ -27,3 +27,5 @@ fun box(): String {
         return "Fail: no stub method should be generated"
     }
 }
+
+

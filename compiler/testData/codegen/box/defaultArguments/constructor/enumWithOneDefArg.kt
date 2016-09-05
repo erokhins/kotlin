@@ -8,3 +8,5 @@ fun box(): String {
    if (Foo.C.a != 1 || Foo.C.b != "b") return "fail"
    return "OK"
 }
+
+

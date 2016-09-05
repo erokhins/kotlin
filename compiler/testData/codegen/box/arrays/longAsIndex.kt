@@ -7,3 +7,5 @@ fun box(): String {
     l[0.toLong()] += 6
     return if (l[0.toLong()] == 10) "OK" else "Fail"
 }
+
+

@@ -22,3 +22,5 @@ class A : Request ({
 fun box() : String {
     return A().s
 }
+
+

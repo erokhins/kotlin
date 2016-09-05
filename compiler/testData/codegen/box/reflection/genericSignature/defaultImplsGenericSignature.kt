@@ -42,3 +42,5 @@ fun box(): String {
 
     return test2.p1 + test2.p2.value
 }
+
+

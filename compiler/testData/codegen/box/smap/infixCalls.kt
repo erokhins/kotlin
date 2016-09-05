@@ -63,3 +63,5 @@ infix fun String.fail(p: String): String {
 fun call(): String {
     return "xxx"
 }
+
+

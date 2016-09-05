@@ -16,3 +16,5 @@ open class A {
 fun box(): String {
     return if (A().test() == "1234") return "OK" else "fail"
 }
+
+

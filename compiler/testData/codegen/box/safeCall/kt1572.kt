@@ -21,3 +21,5 @@ fun testPrimitives() : Boolean {
 }
 
 fun box() = if (testKt1572() && testPrimitives()) "OK" else "fail"
+
+

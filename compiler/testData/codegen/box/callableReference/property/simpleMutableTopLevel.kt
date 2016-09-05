@@ -10,3 +10,5 @@ fun box(): String {
     if (property.get().value != "second") return "Fail value 2: ${property.get()}"
     return "OK"
 }
+
+

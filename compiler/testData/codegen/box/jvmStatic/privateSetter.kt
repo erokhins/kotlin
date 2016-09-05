@@ -22,3 +22,4 @@ open class TestApp {
 fun box(): String {
     return JavaClass.test()
 }
+

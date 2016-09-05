@@ -40,3 +40,5 @@ open class KMap<K, V> : Map<K, V> {
 }
 
 fun box() = J.foo()
+
+

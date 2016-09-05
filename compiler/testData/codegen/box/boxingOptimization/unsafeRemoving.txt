@@ -1,0 +1,104 @@
+MODULE <test-module>
+  FILE /unsafeRemoving.kt
+    FUN public fun returningBoxed(): kotlin.Int?
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=returningBoxed
+          CONST Int type=kotlin.Int value='1'
+    FUN public fun acceptingBoxed(/*0*/ x: kotlin.Int?): kotlin.Int?
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=acceptingBoxed
+          GET_VAR x type=kotlin.Int? operator=null
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A(/*0*/ x: kotlin.Int? = ...)
+        x: EXPRESSION_BODY
+          CONST Null type=kotlin.Nothing? value='null'
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD x type=kotlin.Unit operator=null
+            receiver: THIS public final class A type=A
+            value: GET_VAR x type=kotlin.Int? operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public final var x: kotlin.Int?
+        EXPRESSION_BODY
+          GET_VAR x type=kotlin.Int? operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Int type=kotlin.Int value='1'
+          actual: CALL .returningBoxed type=kotlin.Int? operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Int type=kotlin.Int value='1'
+          actual: CALL .acceptingBoxed type=kotlin.Int? operator=null
+            x: CONST Int type=kotlin.Int value='1'
+        VAR val a: A
+          CALL .<init> type=A operator=null
+        CALL .<set-x> type=kotlin.Unit operator=EQ
+          $this: GET_VAR a type=A operator=null
+          <set-?>: CONST Int type=kotlin.Int value='1'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Int type=kotlin.Int value='1'
+          actual: CALL .<get-x> type=kotlin.Int? operator=GET_PROPERTY
+            $this: GET_VAR a type=A operator=null
+        VAR val b: kotlin.Array<kotlin.Int?>
+          CALL .<init> type=kotlin.Array<kotlin.Int?> operator=null
+            size: CONST Int type=kotlin.Int value='1'
+            init: BLOCK type=(kotlin.Int) -> kotlin.Nothing? operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.Int): kotlin.Nothing?
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CONST Null type=kotlin.Nothing? value='null'
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> kotlin.Nothing? operator=LAMBDA
+        CALL .set type=kotlin.Unit operator=EQ
+          $this: GET_VAR b type=kotlin.Array<kotlin.Int?> operator=null
+          index: CONST Int type=kotlin.Int value='0'
+          value: CONST Int type=kotlin.Int value='1'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Int type=kotlin.Int value='1'
+          actual: CALL .get type=kotlin.Int? operator=GET_ARRAY_ELEMENT
+            $this: GET_VAR b type=kotlin.Array<kotlin.Int?> operator=null
+            index: CONST Int type=kotlin.Int value='0'
+        VAR val x: kotlin.Int? = 1
+          CONST Int type=kotlin.Int value='1'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Int type=kotlin.Int value='1'
+          actual: CALL .hashCode type=kotlin.Int operator=null
+            $this: BLOCK type=kotlin.Int operator=EXCLEXCL
+              VAR val tmp0_notnull: kotlin.Int?
+                GET_VAR x type=kotlin.Int? operator=null
+              WHEN type=kotlin.Int operator=null
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_notnull type=kotlin.Int? operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                else: GET_VAR tmp0_notnull type=kotlin.Int? operator=null
+        VAR val y: kotlin.Int? = 1000
+          CONST Int type=kotlin.Int value='1000'
+        VAR val z: kotlin.Int? = 1000
+          CONST Int type=kotlin.Int value='1000'
+        VAR val res: kotlin.Boolean
+          CALL .EQEQEQ type=kotlin.Boolean operator=EQEQEQ
+            arg0: GET_VAR y type=kotlin.Int? operator=null
+            arg1: GET_VAR z type=kotlin.Int? operator=null
+        VAR val c1: kotlin.Any
+          WHEN type=kotlin.Any operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CONST Int type=kotlin.Int value='1'
+              arg1: CONST Int type=kotlin.Int value='1'
+            then: CONST Int type=kotlin.Int value='0'
+            else: CONST String type=kotlin.String value='abc'
+        VAR val c2: kotlin.Any
+          WHEN type=kotlin.Any operator=IF
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CONST Int type=kotlin.Int value='1'
+                arg1: CONST Int type=kotlin.Int value='1'
+            then: CONST Int type=kotlin.Int value='0'
+            else: CONST String type=kotlin.String value='abc'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Int type=kotlin.Int value='0'
+          actual: GET_VAR c1 type=kotlin.Any operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='abc'
+          actual: GET_VAR c2 type=kotlin.Any operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

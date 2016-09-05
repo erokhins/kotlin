@@ -7,3 +7,5 @@ fun box(): String {
     val result = f("ENTRY")
     return if (result == E.ENTRY) "OK" else "Fail $result"
 }
+
+

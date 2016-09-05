@@ -11,3 +11,5 @@ open class C : B() {
 }
 
 fun box() = C().bar()
+
+

@@ -7,3 +7,5 @@ object A {
 }
 
 fun box() = A.B.C.ok
+
+

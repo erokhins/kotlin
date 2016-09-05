@@ -9,3 +9,5 @@ fun box(): String {
     assertEquals("Generic", g.simpleName)
     return "OK"
 }
+
+

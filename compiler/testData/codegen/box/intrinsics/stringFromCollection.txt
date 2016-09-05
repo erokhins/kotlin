@@ -1,0 +1,20 @@
+MODULE <test-module>
+  FILE /stringFromCollection.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val list: java.util.ArrayList<kotlin.String>
+          CALL .<init> type=java.util.ArrayList<kotlin.String> operator=null
+        CALL .add type=kotlin.Boolean operator=null
+          $this: GET_VAR list type=java.util.ArrayList<kotlin.String> operator=null
+          element: CONST String type=kotlin.String value='0'
+        CALL .get type=kotlin.Char operator=GET_ARRAY_ELEMENT
+          $this: CALL .get type=kotlin.String operator=GET_ARRAY_ELEMENT
+            $this: GET_VAR list type=java.util.ArrayList<kotlin.String> operator=null
+            index: CONST Int type=kotlin.Int value='0'
+          index: CONST Int type=kotlin.Int value='0'
+        CALL .<get-length> type=kotlin.Int operator=GET_PROPERTY
+          $this: CALL .get type=kotlin.String operator=GET_ARRAY_ELEMENT
+            $this: GET_VAR list type=java.util.ArrayList<kotlin.String> operator=null
+            index: CONST Int type=kotlin.Int value='0'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

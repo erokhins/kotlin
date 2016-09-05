@@ -14,3 +14,5 @@ fun box(): String {
     if(test2.getCanonicalName() != "java.util.Iterator") return "fail"
     return "OK"
 }
+
+

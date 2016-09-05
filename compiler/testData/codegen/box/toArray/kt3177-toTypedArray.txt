@@ -1,0 +1,40 @@
+MODULE <test-module>
+  FILE /kt3177-toTypedArray.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val list: java.util.ArrayList<kotlin.Pair<kotlin.String, kotlin.String>>
+          CALL .<init> type=java.util.ArrayList<kotlin.Pair<kotlin.String, kotlin.String>> operator=null
+        CALL .add type=kotlin.Boolean operator=null
+          $this: GET_VAR list type=java.util.ArrayList<kotlin.Pair<kotlin.String, kotlin.String>> operator=null
+          element: CALL .<init> type=kotlin.Pair<kotlin.String, kotlin.String> operator=null
+            first: CONST String type=kotlin.String value='Sample'
+            second: CONST String type=kotlin.String value='http://cyber.law.harvard.edu/rss/examples/rss2sample.xml'
+        CALL .add type=kotlin.Boolean operator=null
+          $this: GET_VAR list type=java.util.ArrayList<kotlin.Pair<kotlin.String, kotlin.String>> operator=null
+          element: CALL .<init> type=kotlin.Pair<kotlin.String, kotlin.String> operator=null
+            first: CONST String type=kotlin.String value='Scripting'
+            second: CONST String type=kotlin.String value='http://static.scripting.com/rss.xml'
+        VAR val keys: kotlin.Array<kotlin.String>
+          CALL .toTypedArray type=kotlin.Array<kotlin.String> operator=null
+            $receiver: CALL .map type=kotlin.collections.List<kotlin.String> operator=null
+              $receiver: GET_VAR list type=java.util.ArrayList<kotlin.Pair<kotlin.String, kotlin.String>> operator=null
+              transform: BLOCK type=(kotlin.Pair<kotlin.String, kotlin.String>) -> kotlin.String operator=LAMBDA
+                FUN local final fun <anonymous>(/*0*/ it: kotlin.Pair<kotlin.String, kotlin.String>): kotlin.String
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .<get-first> type=kotlin.String operator=GET_PROPERTY
+                        $this: GET_VAR it type=kotlin.Pair<kotlin.String, kotlin.String> operator=null
+                CALLABLE_REFERENCE <anonymous> type=(kotlin.Pair<kotlin.String, kotlin.String>) -> kotlin.String operator=LAMBDA
+        VAR val keysToString: kotlin.String!
+          CALL .toString type=kotlin.String! operator=null
+            p0: GET_VAR keys type=kotlin.Array<kotlin.String> operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR keysToString type=kotlin.String! operator=null
+              arg1: CONST String type=kotlin.String value='[Sample, Scripting]'
+          then: RETURN type=kotlin.Nothing from=box
+            TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.String
+              GET_VAR keysToString type=kotlin.String! operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

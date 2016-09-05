@@ -1,0 +1,161 @@
+MODULE <test-module>
+  FILE /stdlib.kt
+    CLASS INTERFACE ISized
+      PROPERTY public abstract val size: kotlin.Int
+    CLASS INTERFACE javaUtilIterator
+      FUN public open fun remove(): kotlin.Unit
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+    CLASS CLASS MyIterator
+      CONSTRUCTOR public constructor MyIterator</*0*/ T>(/*0*/ array: ReadOnlyArray<T>)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD array type=kotlin.Unit operator=null
+            receiver: THIS public final class MyIterator</*0*/ T> : javaUtilIterator<T> type=MyIterator<T>
+            value: GET_VAR array type=ReadOnlyArray<T> operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=MyIterator
+      PROPERTY public final val array: ReadOnlyArray<T>
+        EXPRESSION_BODY
+          GET_VAR array type=ReadOnlyArray<T> operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY private final var index: kotlin.Int
+        EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='0'
+      FUN public open override /*1*/ fun hasNext(): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=hasNext
+            CALL .LT0 type=kotlin.Boolean operator=LT
+              arg0: CALL .compareTo type=kotlin.Int operator=LT
+                $this: CALL .<get-index> type=kotlin.Int operator=GET_PROPERTY
+                  $this: THIS public final class MyIterator</*0*/ T> : javaUtilIterator<T> type=MyIterator<T>
+                other: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                  $this: CALL .<get-array> type=ReadOnlyArray<T> operator=GET_PROPERTY
+                    $this: THIS public final class MyIterator</*0*/ T> : javaUtilIterator<T> type=MyIterator<T>
+      FUN public open override /*1*/ fun next(): T
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=next
+            CALL .get type=T operator=null
+              $this: CALL .<get-array> type=ReadOnlyArray<T> operator=GET_PROPERTY
+                $this: THIS public final class MyIterator</*0*/ T> : javaUtilIterator<T> type=MyIterator<T>
+              index: BLOCK type=kotlin.Int operator=POSTFIX_INCR
+                VAR val tmp0_this: MyIterator<T>
+                  THIS public final class MyIterator</*0*/ T> : javaUtilIterator<T> type=MyIterator<T>
+                BLOCK type=kotlin.Int operator=POSTFIX_INCR
+                  VAR val tmp1: kotlin.Int
+                    CALL .<get-index> type=kotlin.Int operator=POSTFIX_INCR
+                      $this: GET_VAR tmp0_this type=MyIterator<T> operator=null
+                  CALL .<set-index> type=kotlin.Unit operator=POSTFIX_INCR
+                    $this: GET_VAR tmp0_this type=MyIterator<T> operator=null
+                    <set-?>: CALL .inc type=kotlin.Int operator=POSTFIX_INCR
+                      $this: GET_VAR tmp1 type=kotlin.Int operator=null
+                  GET_VAR tmp1 type=kotlin.Int operator=null
+    CLASS INTERFACE ReadOnlyArray
+      FUN public abstract operator fun get(/*0*/ index: kotlin.Int): T
+      FUN public open override /*1*/ fun iterator(): kotlin.collections.Iterator<T>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=iterator
+            CALL .<init> type=MyIterator<T> operator=null
+              array: THIS public interface ReadOnlyArray</*0*/ out T> : ISized, kotlin.collections.Iterable<T> type=ReadOnlyArray<T>
+    CLASS INTERFACE WriteOnlyArray
+      FUN public abstract operator fun set(/*0*/ index: kotlin.Int, /*1*/ value: T): kotlin.Unit
+      FUN public open operator fun set(/*0*/ from: kotlin.Int, /*1*/ count: kotlin.Int, /*2*/ value: T): kotlin.Unit
+        BLOCK_BODY
+          BLOCK type=kotlin.Unit operator=FOR_LOOP
+            VAR val tmp0_iterator: kotlin.collections.IntIterator
+              CALL .iterator type=kotlin.collections.IntIterator operator=FOR_LOOP_ITERATOR
+                $this: CALL .rangeTo type=kotlin.ranges.IntRange operator=RANGE
+                  $this: GET_VAR from type=kotlin.Int operator=null
+                  other: CALL .minus type=kotlin.Int operator=MINUS
+                    $this: CALL .plus type=kotlin.Int operator=PLUS
+                      $this: GET_VAR from type=kotlin.Int operator=null
+                      other: GET_VAR count type=kotlin.Int operator=null
+                    other: CONST Int type=kotlin.Int value='1'
+            WHILE label=null operator=FOR_LOOP_INNER_WHILE
+              condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+                $this: GET_VAR tmp0_iterator type=kotlin.collections.IntIterator operator=null
+              body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+                VAR val i: kotlin.Int
+                  CALL .next type=kotlin.Int operator=FOR_LOOP_NEXT
+                    $this: GET_VAR tmp0_iterator type=kotlin.collections.IntIterator operator=null
+                BLOCK type=kotlin.Unit operator=null
+                  CALL .set type=kotlin.Unit operator=null
+                    $this: THIS public interface WriteOnlyArray</*0*/ in T> : ISized type=WriteOnlyArray<T>
+                    index: GET_VAR i type=kotlin.Int operator=null
+                    value: GET_VAR value type=T operator=null
+    CLASS CLASS MutableArray
+      CONSTRUCTOR public constructor MutableArray</*0*/ T>(/*0*/ length: kotlin.Int, /*1*/ init: (kotlin.Int) -> T)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=MutableArray
+      PROPERTY private final val array: kotlin.Array<kotlin.Any?>
+        EXPRESSION_BODY
+          CALL .<init> type=kotlin.Array<kotlin.Any?> operator=null
+            size: GET_VAR length type=kotlin.Int operator=null
+            init: GET_VAR init type=(kotlin.Int) -> T operator=null
+      FUN public open override /*1*/ fun get(/*0*/ index: kotlin.Int): T
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=get
+            TYPE_OP operator=CAST typeOperand=T
+              CALL .get type=kotlin.Any? operator=GET_ARRAY_ELEMENT
+                $this: CALL .<get-array> type=kotlin.Array<kotlin.Any?> operator=GET_PROPERTY
+                  $this: THIS public final class MutableArray</*0*/ T> : ReadOnlyArray<T>, WriteOnlyArray<T> type=MutableArray<T>
+                index: GET_VAR index type=kotlin.Int operator=null
+      FUN public open override /*1*/ fun set(/*0*/ index: kotlin.Int, /*1*/ value: T): kotlin.Unit
+        BLOCK_BODY
+          CALL .set type=kotlin.Unit operator=EQ
+            $this: CALL .<get-array> type=kotlin.Array<kotlin.Any?> operator=GET_PROPERTY
+              $this: THIS public final class MutableArray</*0*/ T> : ReadOnlyArray<T>, WriteOnlyArray<T> type=MutableArray<T>
+            index: GET_VAR index type=kotlin.Int operator=null
+            value: GET_VAR value type=T operator=null
+      PROPERTY public open override /*2*/ val size: kotlin.Int
+        PROPERTY_GETTER public open override /*2*/ fun <get-size>(): kotlin.Int
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-size>
+              CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                $this: CALL .<get-array> type=kotlin.Array<kotlin.Any?> operator=GET_PROPERTY
+                  $this: THIS public final class MutableArray</*0*/ T> : ReadOnlyArray<T>, WriteOnlyArray<T> type=MutableArray<T>
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR var a: MutableArray<kotlin.Int>
+          CALL .<init> type=MutableArray<kotlin.Int> operator=null
+            length: CONST Int type=kotlin.Int value='4'
+            init: BLOCK type=(kotlin.Int) -> kotlin.Int operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.Int): kotlin.Int
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CONST Int type=kotlin.Int value='0'
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> kotlin.Int operator=LAMBDA
+        CALL .set type=kotlin.Unit operator=EQ
+          $this: GET_VAR a type=MutableArray<kotlin.Int> operator=null
+          index: CONST Int type=kotlin.Int value='0'
+          value: CONST Int type=kotlin.Int value='10'
+        CALL .set type=kotlin.Unit operator=null
+          $this: GET_VAR a type=MutableArray<kotlin.Int> operator=null
+          from: CONST Int type=kotlin.Int value='1'
+          count: CONST Int type=kotlin.Int value='2'
+          value: CONST Int type=kotlin.Int value='13'
+        CALL .set type=kotlin.Unit operator=EQ
+          $this: GET_VAR a type=MutableArray<kotlin.Int> operator=null
+          index: CONST Int type=kotlin.Int value='3'
+          value: CONST Int type=kotlin.Int value='40'
+        CALL .iterator type=kotlin.collections.Iterator<kotlin.Int> operator=null
+          $this: GET_VAR a type=MutableArray<kotlin.Int> operator=null
+        CALL .hasNext type=kotlin.Boolean operator=null
+          $this: CALL .iterator type=kotlin.collections.Iterator<kotlin.Int> operator=null
+            $this: GET_VAR a type=MutableArray<kotlin.Int> operator=null
+        BLOCK type=kotlin.Unit operator=FOR_LOOP
+          VAR val tmp0_iterator: kotlin.collections.Iterator<kotlin.Int>
+            CALL .iterator type=kotlin.collections.Iterator<kotlin.Int> operator=FOR_LOOP_ITERATOR
+              $this: GET_VAR a type=MutableArray<kotlin.Int> operator=null
+          WHILE label=null operator=FOR_LOOP_INNER_WHILE
+            condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+              $this: GET_VAR tmp0_iterator type=kotlin.collections.Iterator<kotlin.Int> operator=null
+            body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+              VAR val el: kotlin.Int
+                CALL .next type=kotlin.Int operator=FOR_LOOP_NEXT
+                  $this: GET_VAR tmp0_iterator type=kotlin.collections.Iterator<kotlin.Int> operator=null
+              BLOCK type=kotlin.Unit operator=null
+                VAR val fl: kotlin.Int
+                  GET_VAR el type=kotlin.Int operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

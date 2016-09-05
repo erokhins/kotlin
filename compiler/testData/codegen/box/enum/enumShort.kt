@@ -9,3 +9,5 @@ fun foo(): Int {
 }
 
 fun box() = if (foo() == 0xffffff) "OK" else "Fail: ${foo()}"
+
+

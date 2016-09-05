@@ -1,0 +1,45 @@
+MODULE <test-module>
+  FILE /lambdaArgumentWithoutType.kt
+    CLASS CLASS Foo
+      CONSTRUCTOR public constructor Foo(/*0*/ s: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD s type=kotlin.Unit operator=null
+            receiver: THIS public final class Foo type=Foo
+            value: GET_VAR s type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Foo
+      PROPERTY public final val s: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR s type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    FUN public fun foo(): Foo?
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo
+          CALL .<init> type=Foo operator=null
+            s: CONST String type=kotlin.String value='OK'
+    FUN public fun </*0*/ T> run(/*0*/ f: () -> T): T
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=run
+          CALL .invoke type=T operator=INVOKE
+            $this: GET_VAR f type=() -> T operator=VARIABLE_AS_FUNCTION
+    PROPERTY public val foo: Foo
+      EXPRESSION_BODY
+        CALL .run type=Foo operator=null
+          f: BLOCK type=() -> Foo operator=LAMBDA
+            FUN local final fun <anonymous>(): Foo
+              BLOCK_BODY
+                VAR val x: Foo?
+                  CALL .foo type=Foo? operator=null
+                WHEN type=kotlin.Unit operator=IF
+                  if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                    arg0: GET_VAR x type=Foo? operator=null
+                    arg1: CONST Null type=kotlin.Nothing? value='null'
+                  then: THROW type=kotlin.Nothing
+                    CALL .<init> type=java.lang.Exception operator=null
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  GET_VAR x type=Foo? operator=null
+            CALLABLE_REFERENCE <anonymous> type=() -> Foo operator=LAMBDA
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+            $this: CALL .<get-foo> type=Foo operator=GET_PROPERTY

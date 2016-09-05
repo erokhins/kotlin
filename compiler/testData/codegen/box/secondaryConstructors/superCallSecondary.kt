@@ -62,3 +62,5 @@ fun box(): String {
     if (sideEffects != "minus-one#zero#0.5#first#second#fourth#fifth") return "fail8: ${sideEffects}"
     return "OK"
 }
+
+

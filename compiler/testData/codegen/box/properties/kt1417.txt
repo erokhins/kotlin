@@ -1,0 +1,38 @@
+MODULE <test-module>
+  FILE /kt1417.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A(/*0*/ value: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD value type=kotlin.Unit operator=null
+            receiver: THIS public open class A type=pack.A
+            value: GET_VAR value type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public final val value: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR value type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B(/*0*/ value: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL A
+            value: GET_VAR value type=kotlin.String operator=null
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+      FUN public open override /*1*/ fun toString(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=toString
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='B('
+              CALL .<get-value> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public final class B : pack.A type=pack.B
+              CONST String type=kotlin.String value=')'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CALL .toString type=kotlin.String operator=null
+                $this: CALL .<init> type=pack.B operator=null
+                  value: CONST String type=kotlin.String value='4'
+              arg1: CONST String type=kotlin.String value='B(4)'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='fail'

@@ -19,3 +19,5 @@ fun box(): String {
   if (c.prop != 2) return "fail set"
   return "OK"
 }
+
+

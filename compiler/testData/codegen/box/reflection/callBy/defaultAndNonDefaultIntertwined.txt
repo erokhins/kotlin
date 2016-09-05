@@ -1,0 +1,46 @@
+MODULE <test-module>
+  FILE /defaultAndNonDefaultIntertwined.kt
+    FUN public fun foo(/*0*/ a: kotlin.String, /*1*/ b: kotlin.String = ..., /*2*/ c: kotlin.String, /*3*/ d: kotlin.String = ..., /*4*/ e: kotlin.String): kotlin.String
+      b: EXPRESSION_BODY
+        CONST String type=kotlin.String value='b'
+      d: EXPRESSION_BODY
+        CONST String type=kotlin.String value='d'
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo
+          CALL .plus type=kotlin.String operator=PLUS
+            $this: CALL .plus type=kotlin.String operator=PLUS
+              $this: CALL .plus type=kotlin.String operator=PLUS
+                $this: CALL .plus type=kotlin.String operator=PLUS
+                  $this: GET_VAR a type=kotlin.String operator=null
+                  other: GET_VAR b type=kotlin.String operator=null
+                other: GET_VAR c type=kotlin.String operator=null
+              other: GET_VAR d type=kotlin.String operator=null
+            other: GET_VAR e type=kotlin.String operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val p: kotlin.collections.List<kotlin.reflect.KParameter>
+          CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction5<kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='abcde'
+          actual: CALL .callBy type=kotlin.String operator=null
+            $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction5<kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String> operator=null
+            args: CALL .mapOf type=kotlin.collections.Map<kotlin.reflect.KParameter, kotlin.String> operator=null
+              pairs: VARARG type=Array<out Pair<KParameter, String>> varargElementType=Pair<KParameter, String>
+                CALL .to type=kotlin.Pair<kotlin.reflect.KParameter, kotlin.String> operator=null
+                  $receiver: CALL .get type=kotlin.reflect.KParameter operator=GET_ARRAY_ELEMENT
+                    $this: GET_VAR p type=kotlin.collections.List<kotlin.reflect.KParameter> operator=null
+                    index: CONST Int type=kotlin.Int value='0'
+                  that: CONST String type=kotlin.String value='a'
+                CALL .to type=kotlin.Pair<kotlin.reflect.KParameter, kotlin.String> operator=null
+                  $receiver: CALL .get type=kotlin.reflect.KParameter operator=GET_ARRAY_ELEMENT
+                    $this: GET_VAR p type=kotlin.collections.List<kotlin.reflect.KParameter> operator=null
+                    index: CONST Int type=kotlin.Int value='2'
+                  that: CONST String type=kotlin.String value='c'
+                CALL .to type=kotlin.Pair<kotlin.reflect.KParameter, kotlin.String> operator=null
+                  $receiver: CALL .get type=kotlin.reflect.KParameter operator=GET_ARRAY_ELEMENT
+                    $this: GET_VAR p type=kotlin.collections.List<kotlin.reflect.KParameter> operator=null
+                    index: CONST Int type=kotlin.Int value='4'
+                  that: CONST String type=kotlin.String value='e'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

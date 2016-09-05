@@ -1,0 +1,26 @@
+MODULE <test-module>
+  FILE /noclosure.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CLASS CLASS K
+          CONSTRUCTOR public constructor K()
+            BLOCK_BODY
+              DELEGATING_CONSTRUCTOR_CALL Any
+              INSTANCE_INITIALIZER_CALL classDescriptor=K
+          PROPERTY public final val o: kotlin.String = "O"
+            EXPRESSION_BODY
+              CONST String type=kotlin.String value='O'
+        CLASS CLASS Bar
+          CONSTRUCTOR public constructor Bar()
+            BLOCK_BODY
+              DELEGATING_CONSTRUCTOR_CALL K
+              INSTANCE_INITIALIZER_CALL classDescriptor=Bar
+          PROPERTY public final val k: kotlin.String = "K"
+            EXPRESSION_BODY
+              CONST String type=kotlin.String value='K'
+        RETURN type=kotlin.Nothing from=box
+          CALL .plus type=kotlin.String operator=PLUS
+            $this: CALL .<get-o> type=kotlin.String operator=GET_PROPERTY
+              $this: CALL .<init> type=box.K operator=null
+            other: CALL .<get-k> type=kotlin.String operator=GET_PROPERTY
+              $this: CALL .<init> type=box.Bar operator=null

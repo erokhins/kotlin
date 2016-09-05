@@ -7,3 +7,5 @@ class B : A {
 }
 
 fun box() = (A::foo)(B())
+
+

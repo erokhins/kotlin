@@ -6,3 +6,4 @@ class Location(): Persistent("OK"), Hierarchy<Location>
 fun box(): String {
     return Location().p
 }
+

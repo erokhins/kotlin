@@ -15,3 +15,5 @@ operator fun String.invoke() = this + "K"
 fun box(): String {
     return JavaClass().o();
 }
+
+

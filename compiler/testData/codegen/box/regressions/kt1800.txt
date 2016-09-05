@@ -1,0 +1,111 @@
+MODULE <test-module>
+  FILE /kt1800.kt
+    CLASS CLASS User
+      CONSTRUCTOR public constructor User(/*0*/ firstName: kotlin.String, /*1*/ lastName: kotlin.String, /*2*/ age: kotlin.Int)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD firstName type=kotlin.Unit operator=null
+            receiver: THIS public final class User type=i.User
+            value: GET_VAR firstName type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          SET_BACKING_FIELD lastName type=kotlin.Unit operator=null
+            receiver: THIS public final class User type=i.User
+            value: GET_VAR lastName type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          SET_BACKING_FIELD age type=kotlin.Unit operator=null
+            receiver: THIS public final class User type=i.User
+            value: GET_VAR age type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=User
+      PROPERTY public final val firstName: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR firstName type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final val lastName: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR lastName type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final val age: kotlin.Int
+        EXPRESSION_BODY
+          GET_VAR age type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public open override /*1*/ fun toString(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=toString
+            STRING_CONCATENATION type=kotlin.String
+              CALL .<get-firstName> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public final class User type=i.User
+              CONST String type=kotlin.String value=' '
+              CALL .<get-lastName> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public final class User type=i.User
+              CONST String type=kotlin.String value=', age '
+              CALL .<get-age> type=kotlin.Int operator=GET_PROPERTY
+                $this: THIS public final class User type=i.User
+    FUN public fun </*0*/ T : kotlin.Comparable<T>> kotlin.collections.Collection<T>.testMin(): T?
+      BLOCK_BODY
+        VAR var minValue: T?
+          CONST Null type=kotlin.Nothing? value='null'
+        BLOCK type=kotlin.Unit operator=FOR_LOOP
+          VAR val tmp0_iterator: kotlin.collections.Iterator<T>
+            CALL .iterator type=kotlin.collections.Iterator<T> operator=FOR_LOOP_ITERATOR
+              $this: $RECEIVER of: testMin type=kotlin.collections.Collection<T>
+          WHILE label=null operator=FOR_LOOP_INNER_WHILE
+            condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+              $this: GET_VAR tmp0_iterator type=kotlin.collections.Iterator<T> operator=null
+            body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+              VAR val value: T
+                CALL .next type=T operator=FOR_LOOP_NEXT
+                  $this: GET_VAR tmp0_iterator type=kotlin.collections.Iterator<T> operator=null
+              BLOCK type=kotlin.Unit operator=null
+                WHEN type=kotlin.Unit operator=IF
+                  if: WHEN type=kotlin.Boolean operator=OROR
+                    if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                      arg0: GET_VAR minValue type=T? operator=null
+                      arg1: CONST Null type=kotlin.Nothing? value='null'
+                    then: CONST Boolean type=kotlin.Boolean value='true'
+                    else: CALL .LT0 type=kotlin.Boolean operator=LT
+                      arg0: CALL .compareTo type=kotlin.Int operator=LT
+                        $this: CALL .compareTo type=kotlin.Int operator=null
+                          $this: GET_VAR value type=T operator=null
+                          other: BLOCK type=T operator=EXCLEXCL
+                            VAR val tmp1_notnull: T?
+                              GET_VAR minValue type=T? operator=null
+                            WHEN type=T operator=null
+                              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                                arg0: GET_VAR tmp1_notnull type=T? operator=null
+                                arg1: CONST Null type=kotlin.Nothing? value='null'
+                              then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                              else: GET_VAR tmp1_notnull type=T? operator=null
+                        other: CONST Int type=kotlin.Int value='0'
+                  then: BLOCK type=kotlin.Unit operator=null
+                    SET_VAR minValue type=kotlin.Unit operator=EQ
+                      GET_VAR value type=T operator=null
+        RETURN type=kotlin.Nothing from=testMin
+          GET_VAR minValue type=T? operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val users: java.util.ArrayList<i.User>
+          CALL .arrayListOf type=java.util.ArrayList<i.User> operator=null
+            elements: VARARG type=Array<out User> varargElementType=User
+              CALL .<init> type=i.User operator=null
+                firstName: CONST String type=kotlin.String value='John'
+                lastName: CONST String type=kotlin.String value='Doe'
+                age: CONST Int type=kotlin.Int value='30'
+              CALL .<init> type=i.User operator=null
+                firstName: CONST String type=kotlin.String value='Jane'
+                lastName: CONST String type=kotlin.String value='Doe'
+                age: CONST Int type=kotlin.Int value='27'
+        VAR val ages: kotlin.collections.List<kotlin.Int>
+          CALL .map type=kotlin.collections.List<kotlin.Int> operator=null
+            $receiver: GET_VAR users type=java.util.ArrayList<i.User> operator=null
+            transform: BLOCK type=(i.User) -> kotlin.Int operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: i.User): kotlin.Int
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .<get-age> type=kotlin.Int operator=GET_PROPERTY
+                      $this: GET_VAR it type=i.User operator=null
+              CALLABLE_REFERENCE <anonymous> type=(i.User) -> kotlin.Int operator=LAMBDA
+        VAR val minAge: kotlin.Int?
+          CALL .testMin type=kotlin.Int? operator=null
+            $receiver: GET_VAR ages type=kotlin.collections.List<kotlin.Int> operator=null
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: GET_VAR minAge type=kotlin.Int? operator=null
+              arg1: CONST Int type=kotlin.Int value='27'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='fail'

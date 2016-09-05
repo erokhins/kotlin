@@ -1,0 +1,51 @@
+MODULE <test-module>
+  FILE /delegation.kt
+    CLASS INTERFACE A
+      FUN public abstract fun id(/*0*/ t: T): T
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+      FUN public open override /*1*/ fun id(/*0*/ t: kotlin.String): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=id
+            GET_VAR t type=kotlin.String operator=null
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL B
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+    CLASS CLASS D
+      CONSTRUCTOR public constructor D()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=D
+      PROPERTY val `D$A$delegate`: C
+        EXPRESSION_BODY
+          CALL .<init> type=C operator=null
+      FUN public open override /*1*/ /*delegation*/ fun id(/*0*/ t: kotlin.String): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=id
+            CALL .id type=kotlin.String operator=null
+              $this: GET_VAR D$A$delegate type=C operator=null
+              t: GET_VAR t type=kotlin.String operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val d: D
+          CALL .<init> type=D operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .id type=kotlin.String operator=null
+                $this: GET_VAR d type=D operator=null
+                t: CONST String type=kotlin.String value=''
+              arg1: CONST String type=kotlin.String value=''
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail'
+        VAR val a: A<kotlin.String>
+          GET_VAR d type=D operator=null
+        RETURN type=kotlin.Nothing from=box
+          CALL .id type=kotlin.String operator=null
+            $this: GET_VAR a type=A<kotlin.String> operator=null
+            t: CONST String type=kotlin.String value='OK'

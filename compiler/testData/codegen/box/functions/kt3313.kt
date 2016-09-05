@@ -5,3 +5,5 @@ fun box(): String {
     foo(null)
     return "OK"
 }
+
+

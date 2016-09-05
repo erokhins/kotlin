@@ -1,0 +1,62 @@
+MODULE <test-module>
+  FILE /inClassLongTypeInReceiver.kt
+    CLASS CLASS Test
+      CONSTRUCTOR public constructor Test()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Test
+      PROPERTY public final var doubleStorage: kotlin.String
+        EXPRESSION_BODY
+          CONST String type=kotlin.String value='fail'
+      PROPERTY public final var longStorage: kotlin.String
+        EXPRESSION_BODY
+          CONST String type=kotlin.String value='fail'
+      PROPERTY public final var kotlin.Double.foo: kotlin.String
+        PROPERTY_GETTER public final fun kotlin.Double.<get-foo>(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-foo>
+              CALL .<get-doubleStorage> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public final class Test type=Test
+        PROPERTY_SETTER public final fun kotlin.Double.<set-foo>(/*0*/ value: kotlin.String): kotlin.Unit
+          BLOCK_BODY
+            CALL .<set-doubleStorage> type=kotlin.Unit operator=EQ
+              $this: THIS public final class Test type=Test
+              <set-?>: GET_VAR value type=kotlin.String operator=null
+      PROPERTY public final var kotlin.Long.bar: kotlin.String
+        PROPERTY_GETTER public final fun kotlin.Long.<get-bar>(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-bar>
+              CALL .<get-longStorage> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public final class Test type=Test
+        PROPERTY_SETTER public final fun kotlin.Long.<set-bar>(/*0*/ value: kotlin.String): kotlin.Unit
+          BLOCK_BODY
+            CALL .<set-longStorage> type=kotlin.Unit operator=EQ
+              $this: THIS public final class Test type=Test
+              <set-?>: GET_VAR value type=kotlin.String operator=null
+      FUN public final fun test(): kotlin.String
+        BLOCK_BODY
+          VAR val d: kotlin.Double = 1.0.toDouble()
+            CONST Double type=kotlin.Double value='1.0'
+          CALL .<set-foo> type=kotlin.Unit operator=EQ
+            $this: THIS public final class Test type=Test
+            $receiver: GET_VAR d type=kotlin.Double operator=null
+            value: CONST String type=kotlin.String value='O'
+          VAR val l: kotlin.Long = 1.toLong()
+            CONST Long type=kotlin.Long value='1'
+          CALL .<set-bar> type=kotlin.Unit operator=EQ
+            $this: THIS public final class Test type=Test
+            $receiver: GET_VAR l type=kotlin.Long operator=null
+            value: CONST String type=kotlin.String value='K'
+          RETURN type=kotlin.Nothing from=test
+            CALL .plus type=kotlin.String operator=PLUS
+              $this: CALL .<get-foo> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public final class Test type=Test
+                $receiver: GET_VAR d type=kotlin.Double operator=null
+              other: CALL .<get-bar> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public final class Test type=Test
+                $receiver: GET_VAR l type=kotlin.Long operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .test type=kotlin.String operator=null
+            $this: CALL .<init> type=Test operator=null

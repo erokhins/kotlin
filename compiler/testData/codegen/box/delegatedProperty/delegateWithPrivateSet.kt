@@ -11,3 +11,5 @@ class My {
 }
 
 fun box() = My().delegate
+
+

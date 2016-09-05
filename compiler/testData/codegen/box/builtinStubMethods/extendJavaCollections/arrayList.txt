@@ -1,0 +1,47 @@
+MODULE <test-module>
+  FILE /arrayList.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL ArrayList
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val a: A
+          CALL .<init> type=A operator=null
+        VAR val b: A
+          CALL .<init> type=A operator=null
+        CALL .addAll type=kotlin.Boolean operator=null
+          $this: GET_VAR a type=A operator=null
+          elements: GET_VAR b type=A operator=null
+        CALL .addAll type=kotlin.Boolean operator=null
+          $this: GET_VAR a type=A operator=null
+          index: CONST Int type=kotlin.Int value='0'
+          elements: GET_VAR b type=A operator=null
+        CALL .removeAll type=kotlin.Boolean operator=null
+          $this: GET_VAR a type=A operator=null
+          elements: GET_VAR b type=A operator=null
+        CALL .retainAll type=kotlin.Boolean operator=null
+          $this: GET_VAR a type=A operator=null
+          elements: GET_VAR b type=A operator=null
+        CALL .clear type=kotlin.Unit operator=null
+          $this: GET_VAR a type=A operator=null
+        CALL .add type=kotlin.Boolean operator=null
+          $this: GET_VAR a type=A operator=null
+          element: CONST String type=kotlin.String value=''
+        CALL .set type=kotlin.String operator=null
+          $this: GET_VAR a type=A operator=null
+          index: CONST Int type=kotlin.Int value='0'
+          element: CONST String type=kotlin.String value=''
+        CALL .add type=kotlin.Unit operator=null
+          $this: GET_VAR a type=A operator=null
+          index: CONST Int type=kotlin.Int value='0'
+          element: CONST String type=kotlin.String value=''
+        CALL .removeAt type=kotlin.String operator=null
+          $this: GET_VAR a type=A operator=null
+          p0: CONST Int type=kotlin.Int value='0'
+        CALL .remove type=kotlin.Boolean operator=null
+          $this: GET_VAR a type=A operator=null
+          element: CONST String type=kotlin.String value=''
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

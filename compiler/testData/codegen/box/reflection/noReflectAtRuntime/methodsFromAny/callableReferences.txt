@@ -1,0 +1,55 @@
+MODULE <test-module>
+  FILE /callableReferences.kt
+    CLASS CLASS M
+      CONSTRUCTOR public constructor M()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=M
+      FUN public final fun foo(): kotlin.Unit
+        BLOCK_BODY
+      PROPERTY public final val bar: kotlin.Int = 1
+        EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='1'
+    FUN public fun checkEquals(/*0*/ x: kotlin.reflect.KCallable<*>, /*1*/ y: kotlin.reflect.KCallable<*>): kotlin.Unit
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_VAR x type=kotlin.reflect.KCallable<*> operator=null
+          actual: GET_VAR y type=kotlin.reflect.KCallable<*> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_VAR y type=kotlin.reflect.KCallable<*> operator=null
+          actual: GET_VAR x type=kotlin.reflect.KCallable<*> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .hashCode type=kotlin.Int operator=null
+            $this: GET_VAR x type=kotlin.reflect.KCallable<*> operator=null
+          actual: CALL .hashCode type=kotlin.Int operator=null
+            $this: GET_VAR y type=kotlin.reflect.KCallable<*> operator=null
+    FUN public fun checkToString(/*0*/ x: kotlin.reflect.KCallable<*>, /*1*/ expected: kotlin.String): kotlin.Unit
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .plus type=kotlin.String operator=PLUS
+            $this: GET_VAR expected type=kotlin.String operator=null
+            other: CONST String type=kotlin.String value=' (Kotlin reflection is not available)'
+          actual: CALL .toString type=kotlin.String operator=null
+            $this: GET_VAR x type=kotlin.reflect.KCallable<*> operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .checkEquals type=kotlin.Unit operator=null
+          x: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction1<M, kotlin.Unit> operator=null
+          y: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction1<M, kotlin.Unit> operator=null
+        CALL .checkEquals type=kotlin.Unit operator=null
+          x: CALLABLE_REFERENCE bar type=kotlin.reflect.KProperty1<M, kotlin.Int> operator=null
+          y: CALLABLE_REFERENCE bar type=kotlin.reflect.KProperty1<M, kotlin.Int> operator=null
+        CALL .checkEquals type=kotlin.Unit operator=null
+          x: CALLABLE_REFERENCE <init> type=kotlin.reflect.KFunction0<M> operator=null
+          y: CALLABLE_REFERENCE <init> type=kotlin.reflect.KFunction0<M> operator=null
+        CALL .checkToString type=kotlin.Unit operator=null
+          x: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction1<M, kotlin.Unit> operator=null
+          expected: CONST String type=kotlin.String value='function foo'
+        CALL .checkToString type=kotlin.Unit operator=null
+          x: CALLABLE_REFERENCE bar type=kotlin.reflect.KProperty1<M, kotlin.Int> operator=null
+          expected: CONST String type=kotlin.String value='property bar'
+        CALL .checkToString type=kotlin.Unit operator=null
+          x: CALLABLE_REFERENCE <init> type=kotlin.reflect.KFunction0<M> operator=null
+          expected: CONST String type=kotlin.String value='constructor'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

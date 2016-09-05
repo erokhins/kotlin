@@ -24,3 +24,4 @@ fun test(createIntNotLong: Boolean): String {
 fun box(): String {
     return test(true) + test(false)
 }
+

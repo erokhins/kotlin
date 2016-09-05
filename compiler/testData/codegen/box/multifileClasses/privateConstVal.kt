@@ -21,3 +21,4 @@ fun bar() = x
 package test
 
 fun box(): String = foo() + bar()
+

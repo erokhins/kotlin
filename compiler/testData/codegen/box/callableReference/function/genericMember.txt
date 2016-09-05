@@ -1,0 +1,25 @@
+MODULE <test-module>
+  FILE /genericMember.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A</*0*/ T>(/*0*/ t: T)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD t type=kotlin.Unit operator=null
+            receiver: THIS public final class A</*0*/ T> type=A<T>
+            value: GET_VAR t type=T operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public final val t: T
+        EXPRESSION_BODY
+          GET_VAR t type=T operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public final fun foo(): T
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CALL .<get-t> type=T operator=GET_PROPERTY
+              $this: THIS public final class A</*0*/ T> type=A<T>
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .invoke type=kotlin.String operator=null
+            $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction1<A<kotlin.String>, kotlin.String> operator=null
+            p1: CALL .<init> type=A<kotlin.String> operator=null
+              t: CONST String type=kotlin.String value='OK'

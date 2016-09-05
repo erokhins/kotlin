@@ -7,3 +7,4 @@ fun box(): String {
 
     return "O".vf() + "K"?.vf()
 }
+

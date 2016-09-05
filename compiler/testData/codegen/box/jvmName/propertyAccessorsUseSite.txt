@@ -1,0 +1,67 @@
+MODULE <test-module>
+  FILE /propertyAccessorsUseSite.kt
+    CLASS CLASS TestIt
+      CONSTRUCTOR public constructor TestIt()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=TestIt
+      PROPERTY public final var isFries: kotlin.Boolean
+        EXPRESSION_BODY
+          CONST Boolean type=kotlin.Boolean value='true'
+      PROPERTY public final var isUpdateable: kotlin.Boolean
+        delegate: PROPERTY val `isUpdateable$delegate`: Delegate
+          EXPRESSION_BODY
+            GET_OBJECT Delegate type=Delegate
+        PROPERTY_GETTER @get:kotlin.jvm.JvmName(name = "getIsUpdateable") public final fun <get-isUpdateable>(): kotlin.Boolean
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-isUpdateable>
+              CALL .getValue type=kotlin.Boolean operator=null
+                $this: GET_BACKING_FIELD isUpdateable$delegate type=Delegate operator=null
+                  receiver: THIS public final class TestIt type=TestIt
+                thiz: THIS public final class TestIt type=TestIt
+                metadata: CALLABLE_REFERENCE isUpdateable type=kotlin.reflect.KMutableProperty1<TestIt, kotlin.Boolean> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+        PROPERTY_SETTER @set:kotlin.jvm.JvmName(name = "setIsUpdateable") public final fun <set-isUpdateable>(/*0*/ <set-?>: kotlin.Boolean): kotlin.Unit
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<set-isUpdateable>
+              CALL .setValue type=kotlin.Unit operator=null
+                $this: GET_BACKING_FIELD isUpdateable$delegate type=Delegate operator=null
+                  receiver: THIS public final class TestIt type=TestIt
+                thiz: THIS public final class TestIt type=TestIt
+                metadata: CALLABLE_REFERENCE isUpdateable type=kotlin.reflect.KMutableProperty1<TestIt, kotlin.Boolean> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+                value: GET_VAR <set-?> type=kotlin.Boolean operator=null
+    CLASS OBJECT Delegate
+      CONSTRUCTOR private constructor Delegate()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Delegate
+      FUN public final operator fun getValue(/*0*/ thiz: kotlin.Any?, /*1*/ metadata: kotlin.Any?): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getValue
+            CONST Boolean type=kotlin.Boolean value='true'
+      FUN public final operator fun setValue(/*0*/ thiz: kotlin.Any?, /*1*/ metadata: kotlin.Any?, /*2*/ value: kotlin.Boolean): kotlin.Unit
+        BLOCK_BODY
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .listOf type=kotlin.collections.List<kotlin.String> operator=null
+            elements: VARARG type=Array<out String> varargElementType=String
+              CONST String type=kotlin.String value='getIsFries'
+              CONST String type=kotlin.String value='getIsUpdateable'
+              CONST String type=kotlin.String value='setIsFries'
+              CONST String type=kotlin.String value='setIsUpdateable'
+          actual: CALL .sorted type=kotlin.collections.List<kotlin.String!> operator=null
+            $receiver: CALL .map type=kotlin.collections.List<kotlin.String!> operator=null
+              $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.Array<out java.lang.reflect.Method!>
+                CALL .<get-declaredMethods> type=kotlin.Array<(out) java.lang.reflect.Method!>! operator=GET_PROPERTY
+                  $receiver: CALL .<get-java> type=java.lang.Class<TestIt> operator=GET_PROPERTY
+                    $receiver: CLASS_REFERENCE TestIt type=kotlin.reflect.KClass<TestIt>
+              transform: BLOCK type=(java.lang.reflect.Method!) -> kotlin.String! operator=LAMBDA
+                FUN local final fun <anonymous>(/*0*/ it: java.lang.reflect.Method!): kotlin.String!
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .<get-name> type=kotlin.String! operator=GET_PROPERTY
+                        $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Method
+                          GET_VAR it type=java.lang.reflect.Method! operator=null
+                CALLABLE_REFERENCE <anonymous> type=(java.lang.reflect.Method!) -> kotlin.String! operator=LAMBDA
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

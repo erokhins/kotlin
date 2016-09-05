@@ -1,0 +1,73 @@
+MODULE <test-module>
+  FILE /a.kt
+    CLASS CLASS CompositeActor
+      CONSTRUCTOR public constructor CompositeActor()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Actor
+          INSTANCE_INITIALIZER_CALL classDescriptor=CompositeActor
+    CLASS CLASS O2dDialog
+      CONSTRUCTOR public constructor O2dDialog()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL O2dScriptAction
+          INSTANCE_INITIALIZER_CALL classDescriptor=O2dDialog
+      FUN public final fun test(): test2.CompositeActor?
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=test
+            CALL .invoke type=test2.CompositeActor? operator=null
+              $this: BLOCK type=() -> test2.CompositeActor? operator=LAMBDA
+                FUN local final fun <anonymous>(): test2.CompositeActor?
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .<get-owner> type=test2.CompositeActor? operator=GET_PROPERTY
+                        $this: THIS public open class O2dDialog : test.O2dScriptAction<test2.CompositeActor> type=test2.O2dDialog
+                CALLABLE_REFERENCE <anonymous> type=() -> test2.CompositeActor? operator=LAMBDA
+      FUN public final fun test2(): test2.CompositeActor?
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=test2
+            CALL .invoke type=test2.CompositeActor? operator=null
+              $this: BLOCK type=() -> test2.CompositeActor? operator=LAMBDA
+                FUN local final fun <anonymous>(): test2.CompositeActor?
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .calc type=test2.CompositeActor? operator=null
+                        $this: THIS public open class O2dDialog : test.O2dScriptAction<test2.CompositeActor> type=test2.O2dDialog
+                CALLABLE_REFERENCE <anonymous> type=() -> test2.CompositeActor? operator=LAMBDA
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .test type=test2.CompositeActor? operator=null
+                $this: CALL .<init> type=test2.O2dDialog operator=null
+              arg1: CONST Null type=kotlin.Nothing? value='null'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 1'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .test2 type=test2.CompositeActor? operator=null
+                $this: CALL .<init> type=test2.O2dDialog operator=null
+              arg1: CONST Null type=kotlin.Nothing? value='null'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 2'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'
+  FILE /b.kt
+    CLASS CLASS Actor
+      CONSTRUCTOR public constructor Actor()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Actor
+    CLASS CLASS O2dScriptAction
+      CONSTRUCTOR public constructor O2dScriptAction</*0*/ T : test.Actor>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=O2dScriptAction
+      PROPERTY protected final var owner: T?
+        EXPRESSION_BODY
+          CONST Null type=kotlin.Nothing? value='null'
+        PROPERTY_SETTER private final fun <set-owner>(/*0*/ <set-?>: T?): kotlin.Unit
+      FUN protected final fun calc(): T?
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=calc
+            CONST Null type=kotlin.Nothing? value='null'

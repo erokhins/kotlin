@@ -1,0 +1,39 @@
+MODULE <test-module>
+  FILE /differentTypes.kt
+    FUN public fun foo(/*0*/ b: kotlin.Byte, /*1*/ s: kotlin.String, /*2*/ i: kotlin.Int, /*3*/ d: kotlin.Double, /*4*/ li: kotlin.Long): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo
+          STRING_CONCATENATION type=kotlin.String
+            GET_VAR b type=kotlin.Byte operator=null
+            CONST String type=kotlin.String value=' '
+            GET_VAR s type=kotlin.String operator=null
+            CONST String type=kotlin.String value=' '
+            GET_VAR i type=kotlin.Int operator=null
+            CONST String type=kotlin.String value=' '
+            GET_VAR d type=kotlin.Double operator=null
+            CONST String type=kotlin.String value=' '
+            GET_VAR li type=kotlin.Long operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val test: kotlin.String
+          CALL .foo type=kotlin.String operator=null
+            b: CONST Byte type=kotlin.Byte value='1'
+            s: CONST String type=kotlin.String value='abc'
+            i: CONST Int type=kotlin.Int value='1'
+            d: CONST Double type=kotlin.Double value='1.0'
+            li: TRY_CATCH type=kotlin.Long
+              try: BLOCK type=kotlin.Long operator=null
+                CONST Long type=kotlin.Long value='1'
+              catch e: BLOCK type=kotlin.Long operator=null
+                CONST Long type=kotlin.Long value='10'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR test type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='1 abc 1 1.0 1'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Failed, test=='
+              GET_VAR test type=kotlin.String operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

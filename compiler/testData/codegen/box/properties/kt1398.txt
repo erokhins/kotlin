@@ -1,0 +1,32 @@
+MODULE <test-module>
+  FILE /kt1398.kt
+    CLASS CLASS Base
+      CONSTRUCTOR public constructor Base(/*0*/ bar: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD bar type=kotlin.Unit operator=null
+            receiver: THIS public open class Base type=Base
+            value: GET_VAR bar type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Base
+      PROPERTY public final val bar: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR bar type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    CLASS CLASS Foo
+      CONSTRUCTOR public constructor Foo(/*0*/ bar: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Base
+            bar: GET_VAR bar type=kotlin.String operator=null
+          INSTANCE_INITIALIZER_CALL classDescriptor=Foo
+      FUN public final fun something(): kotlin.String!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=something
+            CALL .toUpperCase type=kotlin.String! operator=null
+              $this: TYPE_OP operator=CAST typeOperand=java.lang.String
+                CALL .<get-bar> type=kotlin.String operator=GET_PROPERTY
+                  $this: THIS public final class Foo : Base type=Foo
+    FUN public fun box(): kotlin.String!
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .something type=kotlin.String! operator=null
+            $this: CALL .<init> type=Foo operator=null
+              bar: CONST String type=kotlin.String value='ok'

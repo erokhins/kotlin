@@ -1,0 +1,70 @@
+MODULE <test-module>
+  FILE /getArityViaFunctionImpl.kt
+    FUN public fun test(/*0*/ f: kotlin.Function<*>, /*1*/ arity: kotlin.Int): kotlin.Unit
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_VAR arity type=kotlin.Int operator=null
+          actual: CALL .getArity type=kotlin.Int operator=null
+            $this: TYPE_OP operator=CAST typeOperand=kotlin.jvm.internal.FunctionImpl
+              GET_VAR f type=kotlin.Function<*> operator=null
+    FUN public fun foo(/*0*/ s: kotlin.String, /*1*/ i: kotlin.Int): kotlin.Unit
+      BLOCK_BODY
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public final fun bar(/*0*/ s: kotlin.String, /*1*/ i: kotlin.Int): kotlin.Unit
+        BLOCK_BODY
+    FUN public fun kotlin.Double.baz(/*0*/ s: kotlin.String, /*1*/ i: kotlin.Int): kotlin.Unit
+      BLOCK_BODY
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .test type=kotlin.Unit operator=null
+          f: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction2<kotlin.String, kotlin.Int, kotlin.Unit> operator=null
+          arity: CONST Int type=kotlin.Int value='2'
+        CALL .test type=kotlin.Unit operator=null
+          f: CALLABLE_REFERENCE bar type=kotlin.reflect.KFunction3<A, kotlin.String, kotlin.Int, kotlin.Unit> operator=null
+          arity: CONST Int type=kotlin.Int value='3'
+        CALL .test type=kotlin.Unit operator=null
+          f: CALLABLE_REFERENCE baz type=kotlin.reflect.KFunction3<kotlin.Double, kotlin.String, kotlin.Int, kotlin.Unit> operator=null
+          arity: CONST Int type=kotlin.Int value='3'
+        CALL .test type=kotlin.Unit operator=null
+          f: CALLABLE_REFERENCE box type=kotlin.reflect.KFunction0<kotlin.String> operator=null
+          arity: CONST Int type=kotlin.Int value='0'
+        FUN local final fun local(/*0*/ x: kotlin.Int): kotlin.Unit
+          BLOCK_BODY
+        CALL .test type=kotlin.Unit operator=null
+          f: CALLABLE_REFERENCE local type=kotlin.reflect.KFunction1<kotlin.Int, kotlin.Unit> operator=null
+          arity: CONST Int type=kotlin.Int value='1'
+        CALL .test type=kotlin.Unit operator=null
+          f: BLOCK type=(kotlin.String) -> kotlin.String operator=ANONYMOUS_FUNCTION
+            FUN local final fun <no name provided>(/*0*/ s: kotlin.String): kotlin.String
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<no name provided>
+                  GET_VAR s type=kotlin.String operator=null
+            CALLABLE_REFERENCE <no name provided> type=(kotlin.String) -> kotlin.String operator=ANONYMOUS_FUNCTION
+          arity: CONST Int type=kotlin.Int value='1'
+        CALL .test type=kotlin.Unit operator=null
+          f: BLOCK type=() -> kotlin.Unit operator=ANONYMOUS_FUNCTION
+            FUN local final fun <no name provided>(): kotlin.Unit
+              BLOCK_BODY
+            CALLABLE_REFERENCE <no name provided> type=() -> kotlin.Unit operator=ANONYMOUS_FUNCTION
+          arity: CONST Int type=kotlin.Int value='0'
+        CALL .test type=kotlin.Unit operator=null
+          f: BLOCK type=() -> kotlin.Unit operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Unit
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Unit operator=LAMBDA
+          arity: CONST Int type=kotlin.Int value='0'
+        CALL .test type=kotlin.Unit operator=null
+          f: BLOCK type=(kotlin.Int) -> kotlin.Int operator=LAMBDA
+            FUN local final fun <anonymous>(/*0*/ x: kotlin.Int): kotlin.Int
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  GET_VAR x type=kotlin.Int operator=null
+            CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> kotlin.Int operator=LAMBDA
+          arity: CONST Int type=kotlin.Int value='1'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

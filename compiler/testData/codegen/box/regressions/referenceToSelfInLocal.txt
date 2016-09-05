@@ -1,0 +1,38 @@
+MODULE <test-module>
+  FILE /referenceToSelfInLocal.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR var accessedFromConstructor: java.lang.Class<*>?
+          CONST Null type=kotlin.Nothing? value='null'
+        CLASS CLASS MyClass
+          CONSTRUCTOR public constructor MyClass()
+            BLOCK_BODY
+              DELEGATING_CONSTRUCTOR_CALL Any
+              INSTANCE_INITIALIZER_CALL classDescriptor=MyClass
+          ANONYMOUS_INITIALIZER MyClass
+            BLOCK_BODY
+              SET_VAR accessedFromConstructor type=kotlin.Unit operator=EQ
+                CALL .<get-java> type=java.lang.Class<box.MyClass> operator=GET_PROPERTY
+                  $receiver: CLASS_REFERENCE MyClass type=kotlin.reflect.KClass<box.MyClass>
+        CALL .<init> type=box.MyClass operator=null
+        WHEN type=kotlin.Nothing operator=IF
+          if: CALL .endsWith type=kotlin.Boolean operator=null
+            $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.String
+              CALL .getName type=kotlin.String! operator=null
+                $this: BLOCK type=java.lang.Class<*> operator=EXCLEXCL
+                  VAR val tmp0_notnull: java.lang.Class<*>?
+                    GET_VAR accessedFromConstructor type=java.lang.Class<*>? operator=null
+                  WHEN type=java.lang.Class<*> operator=null
+                    if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                      arg0: GET_VAR tmp0_notnull type=java.lang.Class<*>? operator=null
+                      arg1: CONST Null type=kotlin.Nothing? value='null'
+                    then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                    else: GET_VAR tmp0_notnull type=java.lang.Class<*>? operator=null
+            suffix: CONST String type=kotlin.String value='MyClass'
+          then: BLOCK type=kotlin.Nothing operator=null
+            RETURN type=kotlin.Nothing from=box
+              CONST String type=kotlin.String value='OK'
+          else: BLOCK type=kotlin.Nothing operator=null
+            RETURN type=kotlin.Nothing from=box
+              CALL .toString type=kotlin.String operator=null
+                $receiver: GET_VAR accessedFromConstructor type=java.lang.Class<*>? operator=null

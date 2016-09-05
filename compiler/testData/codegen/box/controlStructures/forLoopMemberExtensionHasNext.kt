@@ -24,3 +24,5 @@ fun box(): String {
     X().test()
     return "OK"
 }
+
+

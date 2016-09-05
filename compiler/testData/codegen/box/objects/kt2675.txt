@@ -1,0 +1,46 @@
+MODULE <test-module>
+  FILE /kt2675.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public final fun ok(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=ok
+            CALL .plus type=kotlin.String operator=PLUS
+              $this: CALL .bar type=kotlin.String operator=null
+                $this: GET_OBJECT Bar type=A.Foo.Bar
+              other: CALL .<get-barv> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_OBJECT Bar type=A.Foo.Bar
+      CLASS OBJECT Foo
+        CONSTRUCTOR private constructor Foo()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Foo
+        FUN public final fun foo(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=foo
+              CONST String type=kotlin.String value='O'
+        PROPERTY public final val foov: kotlin.String = "K"
+          EXPRESSION_BODY
+            CONST String type=kotlin.String value='K'
+        CLASS OBJECT Bar
+          CONSTRUCTOR private constructor Bar()
+            BLOCK_BODY
+              DELEGATING_CONSTRUCTOR_CALL Any
+              INSTANCE_INITIALIZER_CALL classDescriptor=Bar
+          FUN public final fun bar(): kotlin.String
+            BLOCK_BODY
+              RETURN type=kotlin.Nothing from=bar
+                CALL .foo type=kotlin.String operator=null
+                  $this: THIS private object Foo type=A.Foo
+          PROPERTY public final val barv: kotlin.String = "K"
+            EXPRESSION_BODY
+              CALL .<get-foov> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS private object Foo type=A.Foo
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .ok type=kotlin.String operator=null
+            $this: CALL .<init> type=A operator=null

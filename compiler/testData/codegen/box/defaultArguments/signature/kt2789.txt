@@ -1,0 +1,66 @@
+MODULE <test-module>
+  FILE /kt2789.kt
+    CLASS INTERFACE FooTrait
+      FUN public abstract fun make(/*0*/ size: kotlin.Int = ...): T
+        size: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='16'
+      FUN public open fun makeFromTraitImpl(): T
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=makeFromTraitImpl
+            CALL .make type=T operator=null
+              $this: THIS public interface FooTrait</*0*/ T> type=FooTrait<T>
+    CLASS CLASS FooClass
+      CONSTRUCTOR public constructor FooClass()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=FooClass
+      FUN public open override /*1*/ fun make(/*0*/ size: kotlin.Int = ...): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=make
+            TYPE_OP operator=IMPLICIT_CAST typeOperand=kotlin.String
+              GET_VAR size type=kotlin.Int operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val explicitParam: kotlin.String
+          CALL .make type=kotlin.String operator=null
+            $this: CALL .<init> type=FooClass operator=null
+            size: CONST Int type=kotlin.Int value='16'
+        VAR val defaultRes: kotlin.String
+          CALL .make type=kotlin.String operator=null
+            $this: CALL .<init> type=FooClass operator=null
+        VAR val defaultTraitRes: kotlin.String
+          CALL .makeFromTraitImpl type=kotlin.String operator=null
+            $this: CALL .<init> type=FooClass operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR explicitParam type=kotlin.String operator=null
+              arg1: GET_VAR defaultRes type=kotlin.String operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 1: '
+              GET_VAR explicitParam type=kotlin.String operator=null
+              CONST String type=kotlin.String value=' != '
+              GET_VAR defaultRes type=kotlin.String operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR explicitParam type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='16'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 2: '
+              GET_VAR explicitParam type=kotlin.String operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR explicitParam type=kotlin.String operator=null
+              arg1: GET_VAR defaultTraitRes type=kotlin.String operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 3: '
+              GET_VAR explicitParam type=kotlin.String operator=null
+              CONST String type=kotlin.String value=' != '
+              GET_VAR defaultTraitRes type=kotlin.String operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

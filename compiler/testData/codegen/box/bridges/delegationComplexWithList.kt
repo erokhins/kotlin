@@ -16,3 +16,5 @@ object Impl : ContentBox<Content> , AbstractList<Content>() {
 class ContentBoxDelegate<T : Content>() : ContentBox<T> by (Impl as ContentBox<T>)
 
 fun box() = ContentBoxDelegate<Content>()[0].toString()
+
+

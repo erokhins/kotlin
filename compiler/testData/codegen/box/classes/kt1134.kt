@@ -7,3 +7,5 @@ public fun box():String {
     System.out?.println(SomeClass().getClass())
     return "OK"
 }
+
+

@@ -9,3 +9,4 @@ fun box(): String  {
     if (1.0.foo(b = 2.0) != 3.0) return "fail"
     return "OK"
 }
+

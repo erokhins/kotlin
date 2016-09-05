@@ -1,0 +1,28 @@
+MODULE <test-module>
+  FILE /Kotlin.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL JavaClass
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public final fun test(): kotlin.String!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=test
+            CALL .runZ type=kotlin.String! operator=null
+              $this: THIS public final class A : JavaClass type=zzz.A
+              z: CALL .Z type=JavaClass.Z operator=null
+                function: BLOCK type=(kotlin.String!, kotlin.String!) -> kotlin.String operator=LAMBDA
+                  FUN local final fun <anonymous>(/*0*/ a: kotlin.String!, /*1*/ b: kotlin.String!): kotlin.String
+                    BLOCK_BODY
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                        CALL .plus type=kotlin.String operator=PLUS
+                          $this: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.String
+                            GET_VAR a type=kotlin.String! operator=null
+                          other: GET_VAR b type=kotlin.String! operator=null
+                  CALLABLE_REFERENCE <anonymous> type=(kotlin.String!, kotlin.String!) -> kotlin.String operator=LAMBDA
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.String
+            CALL .test type=kotlin.String! operator=null
+              $this: CALL .<init> type=zzz.A operator=null

@@ -1,0 +1,286 @@
+MODULE <test-module>
+  FILE /classMembers.kt
+    PROPERTY public val strs: kotlin.collections.List<kotlin.String>
+      EXPRESSION_BODY
+        CALL .listOf type=kotlin.collections.List<kotlin.String> operator=null
+          elements: VARARG type=Array<out String> varargElementType=String
+            CONST String type=kotlin.String value='abc'
+            CONST String type=kotlin.String value='def'
+    PROPERTY public val ints: kotlin.collections.List<kotlin.Int>
+      EXPRESSION_BODY
+        CALL .listOf type=kotlin.collections.List<kotlin.Int> operator=null
+          elements: VARARG type=Array<out Int> varargElementType=Int
+            CONST Int type=kotlin.Int value='1'
+            CONST Int type=kotlin.Int value='2'
+            CONST Int type=kotlin.Int value='3'
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      FUN @kotlin.jvm.JvmName(name = "instMethodStr") public final fun instMethod(/*0*/ list: kotlin.collections.List<kotlin.String>): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=instMethod
+            CONST String type=kotlin.String value='instMethodStr'
+      FUN @kotlin.jvm.JvmName(name = "instMethodInt") public final fun instMethod(/*0*/ list: kotlin.collections.List<kotlin.Int>): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=instMethod
+            CONST String type=kotlin.String value='instMethodInt'
+      PROPERTY public final var rwProperty: kotlin.Int
+        PROPERTY_GETTER @kotlin.jvm.JvmName(name = "get_rwProperty") public final fun <get-rwProperty>(): kotlin.Int
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-rwProperty>
+              CONST Int type=kotlin.Int value='123'
+        PROPERTY_SETTER @kotlin.jvm.JvmName(name = "set_rwProperty") public final fun <set-rwProperty>(/*0*/ v: kotlin.Int): kotlin.Unit
+          BLOCK_BODY
+      PROPERTY public final var rwValue: kotlin.Int
+        EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='111'
+      FUN public final fun getRwProperty(): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getRwProperty
+            CALL .<get-rwValue> type=kotlin.Int operator=GET_PROPERTY
+              $this: THIS public final class C type=C
+      FUN public final fun setRwProperty(/*0*/ v: kotlin.Int): kotlin.Unit
+        BLOCK_BODY
+          CALL .<set-rwValue> type=kotlin.Unit operator=EQ
+            $this: THIS public final class C type=C
+            <set-?>: GET_VAR v type=kotlin.Int operator=null
+      CLASS CLASS Inner
+        CONSTRUCTOR public constructor Inner()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Inner
+      FUN @kotlin.jvm.JvmName(name = "extMethodWithGenericParamStr") public final fun C.Inner.extMethodWithGenericParam(/*0*/ list: kotlin.collections.List<kotlin.String>): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=extMethodWithGenericParam
+            CONST String type=kotlin.String value='extMethodWithGenericParamStr'
+      FUN @kotlin.jvm.JvmName(name = "extMethodWithGenericParamInt") public final fun C.Inner.extMethodWithGenericParam(/*0*/ list: kotlin.collections.List<kotlin.Int>): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=extMethodWithGenericParam
+            CONST String type=kotlin.String value='extMethodWithGenericParamInt'
+      FUN @kotlin.jvm.JvmName(name = "extMethodWithGenericReceiverStr") public final fun kotlin.collections.List<kotlin.String>.extMethodWithGenericReceiver(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=extMethodWithGenericReceiver
+            CONST String type=kotlin.String value='extMethodWithGenericReceiverStr'
+      FUN @kotlin.jvm.JvmName(name = "extMethodWithGenericReceiverInt") public final fun kotlin.collections.List<kotlin.Int>.extMethodWithGenericReceiver(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=extMethodWithGenericReceiver
+            CONST String type=kotlin.String value='extMethodWithGenericReceiverInt'
+      FUN @kotlin.jvm.JvmName(name = "ambigMethod1") public final fun ambigMethod(/*0*/ str: kotlin.String): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=ambigMethod
+            CONST String type=kotlin.String value='ambigMethod1'
+      FUN @kotlin.jvm.JvmName(name = "ambigMethod2") public final fun kotlin.String.ambigMethod(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=ambigMethod
+            CONST String type=kotlin.String value='ambigMethod2'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val c: C
+          CALL .<init> type=C operator=null
+        VAR val test1: kotlin.String
+          CALL .instMethod type=kotlin.String operator=null
+            $this: GET_VAR c type=C operator=null
+            list: CALL .<get-strs> type=kotlin.collections.List<kotlin.String> operator=GET_PROPERTY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR test1 type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='instMethodStr'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail: c.instMethod(strs)=='
+              GET_VAR test1 type=kotlin.String operator=null
+        VAR val test2: kotlin.String
+          CALL .instMethod type=kotlin.String operator=null
+            $this: GET_VAR c type=C operator=null
+            list: CALL .<get-ints> type=kotlin.collections.List<kotlin.Int> operator=GET_PROPERTY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR test2 type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='instMethodInt'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail: c.instMethod(ints)=='
+              GET_VAR test2 type=kotlin.String operator=null
+        VAR val test3: kotlin.Int
+          CALL .<get-rwProperty> type=kotlin.Int operator=GET_PROPERTY
+            $this: GET_VAR c type=C operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR test3 type=kotlin.Int operator=null
+              arg1: CONST Int type=kotlin.Int value='123'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail: c.rwProperty=='
+              GET_VAR test3 type=kotlin.Int operator=null
+        VAR val test3a: kotlin.Int
+          CALL .getRwProperty type=kotlin.Int operator=null
+            $this: GET_VAR c type=C operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR test3a type=kotlin.Int operator=null
+              arg1: CONST Int type=kotlin.Int value='111'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail: c.getRwProperty()=='
+              GET_VAR test3a type=kotlin.Int operator=null
+        CALL .setRwProperty type=kotlin.Unit operator=null
+          $this: GET_VAR c type=C operator=null
+          v: CONST Int type=kotlin.Int value='444'
+        VAR val test3b: kotlin.Int
+          CALL .<get-rwProperty> type=kotlin.Int operator=GET_PROPERTY
+            $this: GET_VAR c type=C operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR test3b type=kotlin.Int operator=null
+              arg1: CONST Int type=kotlin.Int value='123'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail: c.rwProperty=='
+              GET_VAR test3b type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' after c.setRwProperty(1234)'
+        VAR val test3c: kotlin.Int
+          CALL .getRwProperty type=kotlin.Int operator=null
+            $this: GET_VAR c type=C operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR test3c type=kotlin.Int operator=null
+              arg1: CONST Int type=kotlin.Int value='444'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail: c.getRwProperty()=='
+              GET_VAR test3c type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' after c.setRwProperty(1234)'
+        VAR val test4: kotlin.String
+          CALL .with type=kotlin.String operator=null
+            receiver: GET_VAR c type=C operator=null
+            block: BLOCK type=C.() -> kotlin.String operator=LAMBDA
+              FUN local final fun C.<anonymous>(): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .extMethodWithGenericParam type=kotlin.String operator=null
+                      $this: $RECEIVER of: <anonymous> type=C
+                      $receiver: CALL .<init> type=C.Inner operator=null
+                      list: CALL .<get-strs> type=kotlin.collections.List<kotlin.String> operator=GET_PROPERTY
+              CALLABLE_REFERENCE <anonymous> type=C.() -> kotlin.String operator=LAMBDA
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR test4 type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='extMethodWithGenericParamStr'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail: with(c) { C.Inner().extMethodWithGenericParam(strs) }=='
+              GET_VAR test4 type=kotlin.String operator=null
+        VAR val test5: kotlin.String
+          CALL .with type=kotlin.String operator=null
+            receiver: GET_VAR c type=C operator=null
+            block: BLOCK type=C.() -> kotlin.String operator=LAMBDA
+              FUN local final fun C.<anonymous>(): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .extMethodWithGenericParam type=kotlin.String operator=null
+                      $this: $RECEIVER of: <anonymous> type=C
+                      $receiver: CALL .<init> type=C.Inner operator=null
+                      list: CALL .<get-ints> type=kotlin.collections.List<kotlin.Int> operator=GET_PROPERTY
+              CALLABLE_REFERENCE <anonymous> type=C.() -> kotlin.String operator=LAMBDA
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR test5 type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='extMethodWithGenericParamInt'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail: with(c) { C.Inner().extMethodWithGenericParam(ints) }=='
+              GET_VAR test5 type=kotlin.String operator=null
+        VAR val test6: kotlin.String
+          CALL .with type=kotlin.String operator=null
+            receiver: GET_VAR c type=C operator=null
+            block: BLOCK type=C.() -> kotlin.String operator=LAMBDA
+              FUN local final fun C.<anonymous>(): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .extMethodWithGenericReceiver type=kotlin.String operator=null
+                      $this: $RECEIVER of: <anonymous> type=C
+                      $receiver: CALL .<get-strs> type=kotlin.collections.List<kotlin.String> operator=GET_PROPERTY
+              CALLABLE_REFERENCE <anonymous> type=C.() -> kotlin.String operator=LAMBDA
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR test6 type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='extMethodWithGenericReceiverStr'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail: with(c) { strs.extMethodWithGenericReceiver() }=='
+              GET_VAR test6 type=kotlin.String operator=null
+        VAR val test7: kotlin.String
+          CALL .with type=kotlin.String operator=null
+            receiver: GET_VAR c type=C operator=null
+            block: BLOCK type=C.() -> kotlin.String operator=LAMBDA
+              FUN local final fun C.<anonymous>(): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .extMethodWithGenericReceiver type=kotlin.String operator=null
+                      $this: $RECEIVER of: <anonymous> type=C
+                      $receiver: CALL .<get-ints> type=kotlin.collections.List<kotlin.Int> operator=GET_PROPERTY
+              CALLABLE_REFERENCE <anonymous> type=C.() -> kotlin.String operator=LAMBDA
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR test7 type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='extMethodWithGenericReceiverInt'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail: with(c) { ints.extMethodWithGenericReceiver() }=='
+              GET_VAR test7 type=kotlin.String operator=null
+        VAR val str: kotlin.String = "abc"
+          CONST String type=kotlin.String value='abc'
+        VAR val test8: kotlin.String
+          CALL .with type=kotlin.String operator=null
+            receiver: GET_VAR c type=C operator=null
+            block: BLOCK type=C.() -> kotlin.String operator=LAMBDA
+              FUN local final fun C.<anonymous>(): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .ambigMethod type=kotlin.String operator=null
+                      $this: $RECEIVER of: <anonymous> type=C
+                      str: GET_VAR str type=kotlin.String operator=null
+              CALLABLE_REFERENCE <anonymous> type=C.() -> kotlin.String operator=LAMBDA
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR test8 type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='ambigMethod1'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail: with(c) { ambigMethod(str) }=='
+              GET_VAR test8 type=kotlin.String operator=null
+        VAR val test9: kotlin.String
+          CALL .with type=kotlin.String operator=null
+            receiver: GET_VAR c type=C operator=null
+            block: BLOCK type=C.() -> kotlin.String operator=LAMBDA
+              FUN local final fun C.<anonymous>(): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .ambigMethod type=kotlin.String operator=null
+                      $this: $RECEIVER of: <anonymous> type=C
+                      $receiver: GET_VAR str type=kotlin.String operator=null
+              CALLABLE_REFERENCE <anonymous> type=C.() -> kotlin.String operator=LAMBDA
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR test9 type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='ambigMethod2'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail: with(c) { str.ambigMethod() }=='
+              GET_VAR test9 type=kotlin.String operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -1,0 +1,29 @@
+MODULE <test-module>
+  FILE /simple.kt
+    FUN public inline fun bar(/*0*/ x: kotlin.Int): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=bar
+          GET_VAR x type=kotlin.Int operator=null
+    FUN public fun foobar(/*0*/ x: kotlin.Int, /*1*/ y: kotlin.Int, /*2*/ z: kotlin.Int): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foobar
+          CALL .plus type=kotlin.Int operator=PLUS
+            $this: CALL .plus type=kotlin.Int operator=PLUS
+              $this: GET_VAR x type=kotlin.Int operator=null
+              other: GET_VAR y type=kotlin.Int operator=null
+            other: GET_VAR z type=kotlin.Int operator=null
+    FUN public fun foo(): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo
+          CALL .foobar type=kotlin.Int operator=null
+            x: CONST Int type=kotlin.Int value='1'
+            y: CALL .bar type=kotlin.Int operator=null
+              x: CONST Int type=kotlin.Int value='2'
+            z: CONST Int type=kotlin.Int value='3'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Int type=kotlin.Int value='6'
+          actual: CALL .foo type=kotlin.Int operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -1,0 +1,89 @@
+MODULE <test-module>
+  FILE /delegationMethodsWithArgs.kt
+    CLASS INTERFACE TextField
+      FUN public abstract fun getText(): kotlin.String
+    CLASS INTERFACE InputTextField
+      FUN public abstract fun setText(/*0*/ text: kotlin.String): kotlin.Unit
+    CLASS INTERFACE MooableTextField
+      FUN public abstract fun moo(/*0*/ a: kotlin.Int, /*1*/ b: kotlin.Int, /*2*/ c: kotlin.Int): kotlin.Int
+    CLASS CLASS SimpleTextField
+      CONSTRUCTOR public constructor SimpleTextField()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=SimpleTextField
+      PROPERTY private final var text2: kotlin.String
+        EXPRESSION_BODY
+          CONST String type=kotlin.String value=''
+      FUN public open override /*1*/ fun getText(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getText
+            CALL .<get-text2> type=kotlin.String operator=GET_PROPERTY
+              $this: THIS public final class SimpleTextField : test.MooableTextField type=test.SimpleTextField
+      FUN public open override /*1*/ fun setText(/*0*/ text: kotlin.String): kotlin.Unit
+        BLOCK_BODY
+          CALL .<set-text2> type=kotlin.Unit operator=EQ
+            $this: THIS public final class SimpleTextField : test.MooableTextField type=test.SimpleTextField
+            <set-?>: GET_VAR text type=kotlin.String operator=null
+      FUN public open override /*1*/ fun moo(/*0*/ a: kotlin.Int, /*1*/ b: kotlin.Int, /*2*/ c: kotlin.Int): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=moo
+            CALL .plus type=kotlin.Int operator=PLUS
+              $this: CALL .plus type=kotlin.Int operator=PLUS
+                $this: GET_VAR a type=kotlin.Int operator=null
+                other: GET_VAR b type=kotlin.Int operator=null
+              other: GET_VAR c type=kotlin.Int operator=null
+    CLASS CLASS TextFieldWrapper
+      CONSTRUCTOR public constructor TextFieldWrapper(/*0*/ textField: test.MooableTextField)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=TextFieldWrapper
+      PROPERTY val `TextFieldWrapper$MooableTextField$delegate`: test.MooableTextField
+        EXPRESSION_BODY
+          GET_VAR textField type=test.MooableTextField operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getText(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getText
+            CALL .getText type=kotlin.String operator=null
+              $this: GET_VAR TextFieldWrapper$MooableTextField$delegate type=test.MooableTextField operator=null
+      FUN public open override /*1*/ /*delegation*/ fun moo(/*0*/ a: kotlin.Int, /*1*/ b: kotlin.Int, /*2*/ c: kotlin.Int): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=moo
+            CALL .moo type=kotlin.Int operator=null
+              $this: GET_VAR TextFieldWrapper$MooableTextField$delegate type=test.MooableTextField operator=null
+              a: GET_VAR a type=kotlin.Int operator=null
+              b: GET_VAR b type=kotlin.Int operator=null
+              c: GET_VAR c type=kotlin.Int operator=null
+      FUN public open override /*1*/ /*delegation*/ fun setText(/*0*/ text: kotlin.String): kotlin.Unit
+        BLOCK_BODY
+          CALL .setText type=kotlin.Unit operator=null
+            $this: GET_VAR TextFieldWrapper$MooableTextField$delegate type=test.MooableTextField operator=null
+            text: GET_VAR text type=kotlin.String operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val textField: test.TextFieldWrapper
+          CALL .<init> type=test.TextFieldWrapper operator=null
+            textField: CALL .<init> type=test.SimpleTextField operator=null
+        CALL .setText type=kotlin.Unit operator=null
+          $this: GET_VAR textField type=test.TextFieldWrapper operator=null
+          text: CONST String type=kotlin.String value='hello world!'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .equals type=kotlin.Boolean operator=null
+              $this: CALL .getText type=kotlin.String operator=null
+                $this: GET_VAR textField type=test.TextFieldWrapper operator=null
+              other: CONST String type=kotlin.String value='hello world!'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='FAIL #!1'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .moo type=kotlin.Int operator=null
+                $this: GET_VAR textField type=test.TextFieldWrapper operator=null
+                a: CONST Int type=kotlin.Int value='1'
+                b: CONST Int type=kotlin.Int value='2'
+                c: CONST Int type=kotlin.Int value='3'
+              arg1: CONST Int type=kotlin.Int value='6'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='FAIL #2'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

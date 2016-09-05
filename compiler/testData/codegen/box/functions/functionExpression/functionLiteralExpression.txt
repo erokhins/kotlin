@@ -1,0 +1,168 @@
+MODULE <test-module>
+  FILE /functionLiteralExpression.kt
+    FUN public fun kotlin.Any.foo1(): () -> kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo1
+          BLOCK type=() -> kotlin.String operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.String
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .plus type=kotlin.String operator=PLUS
+                    $this: CONST String type=kotlin.String value='239'
+                    other: $RECEIVER of: foo1 type=kotlin.Any
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+    FUN public fun kotlin.Int.foo2(): (kotlin.Int) -> kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo2
+          BLOCK type=(kotlin.Int) -> kotlin.Int operator=LAMBDA
+            FUN local final fun <anonymous>(/*0*/ x: kotlin.Int): kotlin.Int
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .plus type=kotlin.Int operator=PLUS
+                    $this: GET_VAR x type=kotlin.Int operator=null
+                    other: $RECEIVER of: foo2 type=kotlin.Int
+            CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> kotlin.Int operator=LAMBDA
+    FUN public fun </*0*/ T> fooT1(/*0*/ t: T): () -> kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=fooT1
+          BLOCK type=() -> kotlin.String operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.String
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .toString type=kotlin.String operator=null
+                    $receiver: GET_VAR t type=T operator=null
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+    FUN public fun </*0*/ T> fooT2(/*0*/ t: T): (T) -> kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=fooT2
+          BLOCK type=(T) -> kotlin.String operator=LAMBDA
+            FUN local final fun <anonymous>(/*0*/ x: T): kotlin.String
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .plus type=kotlin.String operator=PLUS
+                    $this: CALL .toString type=kotlin.String operator=null
+                      $receiver: GET_VAR t type=T operator=null
+                    other: CALL .toString type=kotlin.String operator=null
+                      $receiver: GET_VAR x type=T operator=null
+            CALLABLE_REFERENCE <anonymous> type=(T) -> kotlin.String operator=LAMBDA
+    CLASS OBJECT t
+      CONSTRUCTOR private constructor t()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=t
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .invoke type=kotlin.String operator=null
+                $this: CALL .foo1 type=() -> kotlin.String operator=null
+                  $receiver: CONST Int type=kotlin.Int value='10'
+              arg1: CONST String type=kotlin.String value='23910'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='foo1 fail'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .invoke type=kotlin.Int operator=null
+                $this: CALL .foo2 type=(kotlin.Int) -> kotlin.Int operator=null
+                  $receiver: CONST Int type=kotlin.Int value='10'
+                p1: CONST Int type=kotlin.Int value='1'
+              arg1: CONST Int type=kotlin.Int value='11'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='foo2 fail'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .invoke type=kotlin.Int operator=null
+                $this: BLOCK type=kotlin.Int.() -> kotlin.Int operator=ANONYMOUS_FUNCTION
+                  FUN local final fun kotlin.Int.<no name provided>(): kotlin.Int
+                    BLOCK_BODY
+                      RETURN type=kotlin.Nothing from=<no name provided>
+                        CALL .plus type=kotlin.Int operator=PLUS
+                          $this: $RECEIVER of: <no name provided> type=kotlin.Int
+                          other: CONST Int type=kotlin.Int value='1'
+                  CALLABLE_REFERENCE <no name provided> type=kotlin.Int.() -> kotlin.Int operator=ANONYMOUS_FUNCTION
+                $receiver: CONST Int type=kotlin.Int value='1'
+              arg1: CONST Int type=kotlin.Int value='2'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='test 3 failed'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .invoke type=kotlin.Int operator=null
+                $this: BLOCK type=() -> kotlin.Int operator=LAMBDA
+                  FUN local final fun <anonymous>(): kotlin.Int
+                    BLOCK_BODY
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                        CONST Int type=kotlin.Int value='1'
+                  CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Int operator=LAMBDA
+              arg1: CONST Int type=kotlin.Int value='1'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='test 4 failed'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .invoke type=kotlin.Int operator=null
+                $this: BLOCK type=(kotlin.Int) -> kotlin.Int operator=LAMBDA
+                  FUN local final fun <anonymous>(/*0*/ x: kotlin.Int): kotlin.Int
+                    BLOCK_BODY
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                        GET_VAR x type=kotlin.Int operator=null
+                  CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> kotlin.Int operator=LAMBDA
+                p1: CONST Int type=kotlin.Int value='1'
+              arg1: CONST Int type=kotlin.Int value='1'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='test 5 failed'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .invoke type=kotlin.Int operator=null
+                $this: BLOCK type=kotlin.Int.(kotlin.Int) -> kotlin.Int operator=ANONYMOUS_FUNCTION
+                  FUN local final fun kotlin.Int.<no name provided>(/*0*/ x: kotlin.Int): kotlin.Int
+                    BLOCK_BODY
+                      RETURN type=kotlin.Nothing from=<no name provided>
+                        CALL .plus type=kotlin.Int operator=PLUS
+                          $this: GET_VAR x type=kotlin.Int operator=null
+                          other: $RECEIVER of: <no name provided> type=kotlin.Int
+                  CALLABLE_REFERENCE <no name provided> type=kotlin.Int.(kotlin.Int) -> kotlin.Int operator=ANONYMOUS_FUNCTION
+                $receiver: CONST Int type=kotlin.Int value='1'
+                p2: CONST Int type=kotlin.Int value='1'
+              arg1: CONST Int type=kotlin.Int value='2'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='test 6 failed'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .invoke type=kotlin.Any operator=null
+                $this: BLOCK type=kotlin.Any.() -> kotlin.Any operator=ANONYMOUS_FUNCTION
+                  FUN local final fun kotlin.Any.<no name provided>(): kotlin.Any
+                    BLOCK_BODY
+                      RETURN type=kotlin.Nothing from=<no name provided>
+                        $RECEIVER of: <no name provided> type=kotlin.Any
+                  CALLABLE_REFERENCE <no name provided> type=kotlin.Any.() -> kotlin.Any operator=ANONYMOUS_FUNCTION
+                $receiver: GET_OBJECT t type=t
+              arg1: GET_OBJECT t type=t
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='test 7 failed'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .invoke type=kotlin.String operator=null
+                $this: CALL .fooT1 type=() -> kotlin.String operator=null
+                  t: CONST String type=kotlin.String value='mama'
+              arg1: CONST String type=kotlin.String value='mama'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='test 8 failed'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .invoke type=kotlin.String operator=null
+                $this: CALL .fooT2 type=(kotlin.String) -> kotlin.String operator=null
+                  t: CONST String type=kotlin.String value='mama'
+                p1: CONST String type=kotlin.String value='papa'
+              arg1: CONST String type=kotlin.String value='mamapapa'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='test 9 failed'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

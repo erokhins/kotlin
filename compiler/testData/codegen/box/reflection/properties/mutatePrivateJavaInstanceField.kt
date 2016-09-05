@@ -17,3 +17,5 @@ fun box(): String {
     p.set(a, "OK")
     return p.get(a)
 }
+
+

@@ -13,3 +13,5 @@ fun box(): String {
     if (x3 != "int[][][]") return "fail3: $x3"
     return "OK"
 }
+
+

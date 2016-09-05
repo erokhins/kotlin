@@ -12,3 +12,5 @@ fun test(e: E?) = when (e) {
 fun box(): String {
     return test(null)
 }
+
+

@@ -9,3 +9,4 @@ fun box() : String {
   val b: A? = null
   return if(a != b && b != a) "OK" else "fail"
 }
+

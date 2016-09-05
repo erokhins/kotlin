@@ -3,3 +3,5 @@ class A {
 }
 
 fun box() = (A::Nested)("OK").result
+
+

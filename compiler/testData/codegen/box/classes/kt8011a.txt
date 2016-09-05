@@ -1,0 +1,119 @@
+MODULE <test-module>
+  FILE /kt8011a.kt
+    FUN public fun testFun1(/*0*/ str: kotlin.String): kotlin.String
+      BLOCK_BODY
+        VAR val capture: kotlin.String
+          GET_VAR str type=kotlin.String operator=null
+        CLASS CLASS A
+          CONSTRUCTOR public constructor A()
+            BLOCK_BODY
+              DELEGATING_CONSTRUCTOR_CALL Any
+              INSTANCE_INITIALIZER_CALL classDescriptor=A
+          PROPERTY public final val x: kotlin.String
+            EXPRESSION_BODY
+              GET_VAR capture type=kotlin.String operator=null
+        RETURN type=kotlin.Nothing from=testFun1
+          CALL .<get-x> type=kotlin.String operator=GET_PROPERTY
+            $this: CALL .<init> type=testFun1.A operator=null
+    FUN public fun testFun2(/*0*/ str: kotlin.String): kotlin.String
+      BLOCK_BODY
+        CLASS CLASS A
+          CONSTRUCTOR public constructor A()
+            BLOCK_BODY
+              DELEGATING_CONSTRUCTOR_CALL Any
+              INSTANCE_INITIALIZER_CALL classDescriptor=A
+          PROPERTY public final val x: kotlin.String
+            EXPRESSION_BODY
+              GET_VAR str type=kotlin.String operator=null
+        FUN local final fun bar(): testFun2.A
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=bar
+              CALL .<init> type=testFun2.A operator=null
+        RETURN type=kotlin.Nothing from=testFun2
+          CALL .<get-x> type=kotlin.String operator=GET_PROPERTY
+            $this: CALL .bar type=testFun2.A operator=null
+    CLASS CLASS TestClass
+      CONSTRUCTOR public constructor TestClass(/*0*/ str: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD str type=kotlin.Unit operator=null
+            receiver: THIS public final class TestClass type=TestClass
+            value: GET_VAR str type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=TestClass
+      PROPERTY public final val str: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR str type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final var xx: kotlin.String?
+        EXPRESSION_BODY
+          CONST Null type=kotlin.Nothing? value='null'
+      ANONYMOUS_INITIALIZER TestClass
+        BLOCK_BODY
+          CLASS CLASS A
+            CONSTRUCTOR public constructor A()
+              BLOCK_BODY
+                DELEGATING_CONSTRUCTOR_CALL Any
+                INSTANCE_INITIALIZER_CALL classDescriptor=A
+            PROPERTY public final val x: kotlin.String
+              EXPRESSION_BODY
+                CALL .<get-str> type=kotlin.String operator=GET_PROPERTY
+                  $this: THIS public final class TestClass type=TestClass
+          CALL .<set-xx> type=kotlin.Unit operator=EQ
+            $this: THIS public final class TestClass type=TestClass
+            <set-?>: CALL .<get-x> type=kotlin.String operator=GET_PROPERTY
+              $this: CALL .<init> type=TestClass.<init>.A operator=null
+    FUN public fun testFun3(/*0*/ str: kotlin.String): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=testFun3
+          BLOCK type=kotlin.String operator=EXCLEXCL
+            VAR val tmp0_notnull: kotlin.String?
+              CALL .<get-xx> type=kotlin.String? operator=GET_PROPERTY
+                $this: CALL .<init> type=TestClass operator=null
+                  str: GET_VAR str type=kotlin.String operator=null
+            WHEN type=kotlin.String operator=null
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_notnull type=kotlin.String? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+              else: GET_VAR tmp0_notnull type=kotlin.String? operator=null
+    FUN public fun kotlin.String.testFun4(): kotlin.String
+      BLOCK_BODY
+        CLASS CLASS A
+          CONSTRUCTOR public constructor A()
+            BLOCK_BODY
+              DELEGATING_CONSTRUCTOR_CALL Any
+              INSTANCE_INITIALIZER_CALL classDescriptor=A
+          PROPERTY public final val x: kotlin.String
+            EXPRESSION_BODY
+              $RECEIVER of: testFun4 type=kotlin.String
+        RETURN type=kotlin.Nothing from=testFun4
+          CALL .<get-x> type=kotlin.String operator=GET_PROPERTY
+            $this: CALL .<init> type=testFun4.A operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=WHEN
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .testFun1 type=kotlin.String operator=null
+                  str: CONST String type=kotlin.String value='test1'
+                arg1: CONST String type=kotlin.String value='test1'
+            then: CONST String type=kotlin.String value='Fail #1 (local class with capture)'
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .testFun2 type=kotlin.String operator=null
+                  str: CONST String type=kotlin.String value='test2'
+                arg1: CONST String type=kotlin.String value='test2'
+            then: CONST String type=kotlin.String value='Fail #2 (local class with capture ctor in another context)'
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .testFun3 type=kotlin.String operator=null
+                  str: CONST String type=kotlin.String value='test3'
+                arg1: CONST String type=kotlin.String value='test3'
+            then: CONST String type=kotlin.String value='Fail #3 (local class with capture ctor in init{ ... })'
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .testFun4 type=kotlin.String operator=null
+                  $receiver: CONST String type=kotlin.String value='test4'
+                arg1: CONST String type=kotlin.String value='test4'
+            then: CONST String type=kotlin.String value='Fail #4 (local class with extension receiver)'
+            else: CONST String type=kotlin.String value='OK'

@@ -1,0 +1,31 @@
+MODULE <test-module>
+  FILE /longInRange.kt
+    CLASS CLASS LongR
+      CONSTRUCTOR public constructor LongR()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=LongR
+      FUN public final operator fun contains(/*0*/ l: kotlin.Long): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=contains
+            CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: GET_VAR l type=kotlin.Long operator=null
+              arg1: CALL .toLong type=kotlin.Long operator=null
+                $this: CONST Int type=kotlin.Int value='5'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=NOT_IN
+            arg0: CALL .contains type=kotlin.Boolean operator=NOT_IN
+              $this: CALL .<init> type=LongR operator=null
+              l: CONST Long type=kotlin.Long value='5'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 1'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .contains type=kotlin.Boolean operator=IN
+            $this: CALL .<init> type=LongR operator=null
+            l: CONST Long type=kotlin.Long value='6'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 2'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

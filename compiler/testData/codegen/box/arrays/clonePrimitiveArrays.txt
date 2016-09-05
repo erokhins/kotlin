@@ -1,0 +1,170 @@
+MODULE <test-module>
+  FILE /clonePrimitiveArrays.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val i: kotlin.IntArray
+          CALL .intArrayOf type=kotlin.IntArray operator=null
+            elements: VARARG type=IntArray varargElementType=Int
+              CONST Int type=kotlin.Int value='1'
+              CONST Int type=kotlin.Int value='2'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .equals type=kotlin.Boolean operator=null
+              p0: GET_VAR i type=kotlin.IntArray operator=null
+              p1: CALL .clone type=kotlin.IntArray operator=null
+                $this: GET_VAR i type=kotlin.IntArray operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail int'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .EQEQEQ type=kotlin.Boolean operator=EQEQEQ
+            arg0: CALL .clone type=kotlin.IntArray operator=null
+              $this: GET_VAR i type=kotlin.IntArray operator=null
+            arg1: GET_VAR i type=kotlin.IntArray operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail int identity'
+        VAR val j: kotlin.LongArray
+          CALL .longArrayOf type=kotlin.LongArray operator=null
+            elements: VARARG type=LongArray varargElementType=Long
+              CONST Long type=kotlin.Long value='1'
+              CONST Long type=kotlin.Long value='2'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .equals type=kotlin.Boolean operator=null
+              p0: GET_VAR j type=kotlin.LongArray operator=null
+              p1: CALL .clone type=kotlin.LongArray operator=null
+                $this: GET_VAR j type=kotlin.LongArray operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail long'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .EQEQEQ type=kotlin.Boolean operator=EQEQEQ
+            arg0: CALL .clone type=kotlin.LongArray operator=null
+              $this: GET_VAR j type=kotlin.LongArray operator=null
+            arg1: GET_VAR j type=kotlin.LongArray operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail long identity'
+        VAR val s: kotlin.ShortArray
+          CALL .shortArrayOf type=kotlin.ShortArray operator=null
+            elements: VARARG type=ShortArray varargElementType=Short
+              CALL .toShort type=kotlin.Short operator=null
+                $this: CONST Int type=kotlin.Int value='1'
+              CALL .toShort type=kotlin.Short operator=null
+                $this: CONST Int type=kotlin.Int value='2'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .equals type=kotlin.Boolean operator=null
+              p0: GET_VAR s type=kotlin.ShortArray operator=null
+              p1: CALL .clone type=kotlin.ShortArray operator=null
+                $this: GET_VAR s type=kotlin.ShortArray operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail short'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .EQEQEQ type=kotlin.Boolean operator=EQEQEQ
+            arg0: CALL .clone type=kotlin.ShortArray operator=null
+              $this: GET_VAR s type=kotlin.ShortArray operator=null
+            arg1: GET_VAR s type=kotlin.ShortArray operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail short identity'
+        VAR val b: kotlin.ByteArray
+          CALL .byteArrayOf type=kotlin.ByteArray operator=null
+            elements: VARARG type=ByteArray varargElementType=Byte
+              CALL .toByte type=kotlin.Byte operator=null
+                $this: CONST Int type=kotlin.Int value='1'
+              CALL .toByte type=kotlin.Byte operator=null
+                $this: CONST Int type=kotlin.Int value='2'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .equals type=kotlin.Boolean operator=null
+              p0: GET_VAR b type=kotlin.ByteArray operator=null
+              p1: CALL .clone type=kotlin.ByteArray operator=null
+                $this: GET_VAR b type=kotlin.ByteArray operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail byte'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .EQEQEQ type=kotlin.Boolean operator=EQEQEQ
+            arg0: CALL .clone type=kotlin.ByteArray operator=null
+              $this: GET_VAR b type=kotlin.ByteArray operator=null
+            arg1: GET_VAR b type=kotlin.ByteArray operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail byte identity'
+        VAR val c: kotlin.CharArray
+          CALL .charArrayOf type=kotlin.CharArray operator=null
+            elements: VARARG type=CharArray varargElementType=Char
+              CONST Char type=kotlin.Char value='a'
+              CONST Char type=kotlin.Char value='b'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .equals type=kotlin.Boolean operator=null
+              p0: GET_VAR c type=kotlin.CharArray operator=null
+              p1: CALL .clone type=kotlin.CharArray operator=null
+                $this: GET_VAR c type=kotlin.CharArray operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail char'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .EQEQEQ type=kotlin.Boolean operator=EQEQEQ
+            arg0: CALL .clone type=kotlin.CharArray operator=null
+              $this: GET_VAR c type=kotlin.CharArray operator=null
+            arg1: GET_VAR c type=kotlin.CharArray operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail char identity'
+        VAR val d: kotlin.DoubleArray
+          CALL .doubleArrayOf type=kotlin.DoubleArray operator=null
+            elements: VARARG type=DoubleArray varargElementType=Double
+              CONST Double type=kotlin.Double value='1.0'
+              CONST Double type=kotlin.Double value='-1.0'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .equals type=kotlin.Boolean operator=null
+              p0: GET_VAR d type=kotlin.DoubleArray operator=null
+              p1: CALL .clone type=kotlin.DoubleArray operator=null
+                $this: GET_VAR d type=kotlin.DoubleArray operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail double'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .EQEQEQ type=kotlin.Boolean operator=EQEQEQ
+            arg0: CALL .clone type=kotlin.DoubleArray operator=null
+              $this: GET_VAR d type=kotlin.DoubleArray operator=null
+            arg1: GET_VAR d type=kotlin.DoubleArray operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail double identity'
+        VAR val f: kotlin.FloatArray
+          CALL .floatArrayOf type=kotlin.FloatArray operator=null
+            elements: VARARG type=FloatArray varargElementType=Float
+              CONST Float type=kotlin.Float value='1.0'
+              CONST Float type=kotlin.Float value='-1.0'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .equals type=kotlin.Boolean operator=null
+              p0: GET_VAR f type=kotlin.FloatArray operator=null
+              p1: CALL .clone type=kotlin.FloatArray operator=null
+                $this: GET_VAR f type=kotlin.FloatArray operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail float'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .EQEQEQ type=kotlin.Boolean operator=EQEQEQ
+            arg0: CALL .clone type=kotlin.FloatArray operator=null
+              $this: GET_VAR f type=kotlin.FloatArray operator=null
+            arg1: GET_VAR f type=kotlin.FloatArray operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail float identity'
+        VAR val z: kotlin.BooleanArray
+          CALL .booleanArrayOf type=kotlin.BooleanArray operator=null
+            elements: VARARG type=BooleanArray varargElementType=Boolean
+              CONST Boolean type=kotlin.Boolean value='true'
+              CONST Boolean type=kotlin.Boolean value='false'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .equals type=kotlin.Boolean operator=null
+              p0: GET_VAR z type=kotlin.BooleanArray operator=null
+              p1: CALL .clone type=kotlin.BooleanArray operator=null
+                $this: GET_VAR z type=kotlin.BooleanArray operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail boolean'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .EQEQEQ type=kotlin.Boolean operator=EQEQEQ
+            arg0: CALL .clone type=kotlin.BooleanArray operator=null
+              $this: GET_VAR z type=kotlin.BooleanArray operator=null
+            arg1: GET_VAR z type=kotlin.BooleanArray operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail boolean identity'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

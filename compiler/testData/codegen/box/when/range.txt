@@ -1,0 +1,84 @@
+MODULE <test-module>
+  FILE /range.kt
+    FUN public fun isDigit(/*0*/ a: kotlin.Int): kotlin.String
+      BLOCK_BODY
+        VAR val aa: java.util.ArrayList<kotlin.Int>
+          CALL .<init> type=java.util.ArrayList<kotlin.Int> operator=null
+        CALL .add type=kotlin.Boolean operator=null
+          $this: GET_VAR aa type=java.util.ArrayList<kotlin.Int> operator=null
+          element: CONST Int type=kotlin.Int value='239'
+        RETURN type=kotlin.Nothing from=isDigit
+          BLOCK type=kotlin.String operator=WHEN
+            VAR val tmp0_subject: kotlin.Int
+              GET_VAR a type=kotlin.Int operator=null
+            WHEN type=kotlin.String operator=WHEN
+              if: CALL .contains type=kotlin.Boolean operator=IN
+                $this: GET_VAR aa type=java.util.ArrayList<kotlin.Int> operator=null
+                element: GET_VAR tmp0_subject type=kotlin.Int operator=null
+              then: CONST String type=kotlin.String value='array list'
+              if: CALL .contains type=kotlin.Boolean operator=IN
+                $this: CALL .rangeTo type=kotlin.ranges.IntRange operator=RANGE
+                  $this: CONST Int type=kotlin.Int value='0'
+                  other: CONST Int type=kotlin.Int value='9'
+                value: GET_VAR tmp0_subject type=kotlin.Int operator=null
+              then: CONST String type=kotlin.String value='digit'
+              if: CALL .NOT type=kotlin.Boolean operator=EXCL
+                arg0: CALL .contains type=kotlin.Boolean operator=NOT_IN
+                  $this: CALL .rangeTo type=kotlin.ranges.IntRange operator=RANGE
+                    $this: CONST Int type=kotlin.Int value='0'
+                    other: CONST Int type=kotlin.Int value='100'
+                  value: GET_VAR tmp0_subject type=kotlin.Int operator=null
+              then: CONST String type=kotlin.String value='not small'
+              else: CONST String type=kotlin.String value='something'
+    FUN public fun assertDigit(/*0*/ i: kotlin.Int, /*1*/ expected: kotlin.String): kotlin.String
+      BLOCK_BODY
+        VAR val result: kotlin.String
+          CALL .isDigit type=kotlin.String operator=null
+            a: GET_VAR i type=kotlin.Int operator=null
+        RETURN type=kotlin.Nothing from=assertDigit
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: GET_VAR result type=kotlin.String operator=null
+              arg1: GET_VAR expected type=kotlin.String operator=null
+            then: CONST String type=kotlin.String value=''
+            else: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail: isDigit('
+              GET_VAR i type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=') = '
+              CONST String type=kotlin.String value='"'
+              GET_VAR result type=kotlin.String operator=null
+              CONST String type=kotlin.String value='"'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val result: kotlin.String
+          CALL .plus type=kotlin.String operator=PLUS
+            $this: CALL .plus type=kotlin.String operator=PLUS
+              $this: CALL .plus type=kotlin.String operator=PLUS
+                $this: CALL .plus type=kotlin.String operator=PLUS
+                  $this: CALL .plus type=kotlin.String operator=PLUS
+                    $this: CALL .assertDigit type=kotlin.String operator=null
+                      i: CONST Int type=kotlin.Int value='239'
+                      expected: CONST String type=kotlin.String value='array list'
+                    other: CALL .assertDigit type=kotlin.String operator=null
+                      i: CONST Int type=kotlin.Int value='0'
+                      expected: CONST String type=kotlin.String value='digit'
+                  other: CALL .assertDigit type=kotlin.String operator=null
+                    i: CONST Int type=kotlin.Int value='9'
+                    expected: CONST String type=kotlin.String value='digit'
+                other: CALL .assertDigit type=kotlin.String operator=null
+                  i: CONST Int type=kotlin.Int value='5'
+                  expected: CONST String type=kotlin.String value='digit'
+              other: CALL .assertDigit type=kotlin.String operator=null
+                i: CONST Int type=kotlin.Int value='19'
+                expected: CONST String type=kotlin.String value='something'
+            other: CALL .assertDigit type=kotlin.String operator=null
+              i: CONST Int type=kotlin.Int value='190'
+              expected: CONST String type=kotlin.String value='not small'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+            arg0: GET_VAR result type=kotlin.String operator=null
+            arg1: CONST String type=kotlin.String value=''
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='OK'
+        RETURN type=kotlin.Nothing from=box
+          GET_VAR result type=kotlin.String operator=null

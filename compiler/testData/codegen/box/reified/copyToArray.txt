@@ -1,0 +1,43 @@
+MODULE <test-module>
+  FILE /copyToArray.kt
+    FUN public inline fun </*0*/ reified T> copy(/*0*/ c: kotlin.collections.Collection<T>): kotlin.Array<T>
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=copy
+          CALL .toTypedArray type=kotlin.Array<T> operator=null
+            $receiver: GET_VAR c type=kotlin.collections.Collection<T> operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val a: kotlin.Array<kotlin.String>
+          CALL .copy type=kotlin.Array<kotlin.String> operator=null
+            c: CALL .listOf type=kotlin.collections.List<kotlin.String> operator=null
+              elements: VARARG type=Array<out String> varargElementType=String
+                CONST String type=kotlin.String value='a'
+                CONST String type=kotlin.String value='b'
+                CONST String type=kotlin.String value='c'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='abc'
+          actual: CALL .joinToString type=kotlin.String operator=null
+            $receiver: GET_VAR a type=kotlin.Array<kotlin.String> operator=null
+            separator: CONST String type=kotlin.String value=''
+        VAR val b: kotlin.Array<kotlin.Int>
+          CALL .copy type=kotlin.Array<kotlin.Int> operator=null
+            c: CALL .listOf type=kotlin.collections.List<kotlin.Int> operator=null
+              elements: VARARG type=Array<out Int> varargElementType=Int
+                CONST Int type=kotlin.Int value='1'
+                CONST Int type=kotlin.Int value='2'
+                CONST Int type=kotlin.Int value='3'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='123'
+          actual: CALL .joinToString type=kotlin.String operator=null
+            $receiver: CALL .map type=kotlin.collections.List<kotlin.String> operator=null
+              $receiver: GET_VAR b type=kotlin.Array<kotlin.Int> operator=null
+              transform: BLOCK type=(kotlin.Int) -> kotlin.String operator=LAMBDA
+                FUN local final fun <anonymous>(/*0*/ it: kotlin.Int): kotlin.String
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .toString type=kotlin.String operator=null
+                        $this: GET_VAR it type=kotlin.Int operator=null
+                CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> kotlin.String operator=LAMBDA
+            separator: CONST String type=kotlin.String value=''
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -26,3 +26,5 @@ fun foo(d: Direction) = when(d) {
 
 fun box() : String =
     if (foo(Direction.EAST) == 4 && bar(Color.GREEN) == 2) "OK" else "fail"
+
+

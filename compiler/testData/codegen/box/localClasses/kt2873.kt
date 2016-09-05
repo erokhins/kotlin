@@ -13,3 +13,4 @@ fun main(args: Array<String>) {
 fun box(): String {
   return foo()
 }
+

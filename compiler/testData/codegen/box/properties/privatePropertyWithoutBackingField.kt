@@ -15,3 +15,4 @@ fun box(): String {
     Test().foo()
     return "OK"
 }
+

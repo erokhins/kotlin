@@ -8,3 +8,5 @@ fun box() : String {
     }).run()
     return if (a == 2) "OK" else "fail"
 }
+
+

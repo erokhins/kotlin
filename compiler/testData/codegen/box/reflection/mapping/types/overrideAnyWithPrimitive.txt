@@ -1,0 +1,51 @@
+MODULE <test-module>
+  FILE /overrideAnyWithPrimitive.kt
+    CLASS INTERFACE I
+      FUN public abstract fun foo(): kotlin.Any
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public open override /*1*/ fun foo(): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CONST Int type=kotlin.Int value='0'
+      FUN public final fun bar(/*0*/ x: kotlin.Long): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=bar
+            CALL .toInt type=kotlin.Int operator=null
+              $this: GET_VAR x type=kotlin.Long operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .<get-java> type=java.lang.Class<java.lang.Integer> operator=GET_PROPERTY
+            $receiver: CLASS_REFERENCE Integer type=kotlin.reflect.KClass<java.lang.Integer>
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction1<A, kotlin.Int> operator=null
+        CALL .assertNotEquals type=kotlin.Unit operator=null
+          illegal: GET_BACKING_FIELD TYPE type=java.lang.Class<kotlin.Int!>! operator=GET_PROPERTY
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction1<A, kotlin.Int> operator=null
+        CALL .assertNotEquals type=kotlin.Unit operator=null
+          illegal: CALL .<get-java> type=java.lang.Class<java.lang.Integer> operator=GET_PROPERTY
+            $receiver: CLASS_REFERENCE Integer type=kotlin.reflect.KClass<java.lang.Integer>
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE bar type=kotlin.reflect.KFunction2<A, kotlin.Long, kotlin.Int> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_BACKING_FIELD TYPE type=java.lang.Class<kotlin.Int!>! operator=GET_PROPERTY
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE bar type=kotlin.reflect.KFunction2<A, kotlin.Long, kotlin.Int> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_BACKING_FIELD TYPE type=java.lang.Class<kotlin.Long!>! operator=GET_PROPERTY
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .<get-type> type=kotlin.reflect.KType operator=GET_PROPERTY
+              $this: CALL .last type=kotlin.reflect.KParameter operator=null
+                $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+                  $this: CALLABLE_REFERENCE bar type=kotlin.reflect.KFunction2<A, kotlin.Long, kotlin.Int> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -10,3 +10,4 @@ open class Test {
 }
 
 fun box() = if (Test.testStatic(Test().test()).value == 150) "OK" else "FAIL"
+

@@ -27,3 +27,5 @@ fun box(): String {
 
     return MyClass().x
 }
+
+

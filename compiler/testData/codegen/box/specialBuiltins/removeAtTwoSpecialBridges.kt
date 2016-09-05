@@ -94,3 +94,5 @@ fun box(): String {
 
     return a1.removeAt(123) + a2.removeAt(456)
 }
+
+

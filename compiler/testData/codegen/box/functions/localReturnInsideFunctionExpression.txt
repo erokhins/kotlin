@@ -1,0 +1,36 @@
+MODULE <test-module>
+  FILE /localReturnInsideFunctionExpression.kt
+    FUN public fun simple(): () -> kotlin.Boolean
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=simple
+          BLOCK type=() -> kotlin.Boolean operator=ANONYMOUS_FUNCTION
+            FUN local final fun <no name provided>(): kotlin.Boolean
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<no name provided>
+                  CONST Boolean type=kotlin.Boolean value='true'
+            CALLABLE_REFERENCE <no name provided> type=() -> kotlin.Boolean operator=ANONYMOUS_FUNCTION
+    FUN public fun withLabel(): () -> kotlin.Boolean
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=withLabel
+          BLOCK type=() -> kotlin.Boolean operator=ANONYMOUS_FUNCTION
+            FUN local final fun <no name provided>(): kotlin.Boolean
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<no name provided>
+                  CONST Boolean type=kotlin.Boolean value='true'
+            CALLABLE_REFERENCE <no name provided> type=() -> kotlin.Boolean operator=ANONYMOUS_FUNCTION
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .invoke type=kotlin.Boolean operator=null
+              $this: CALL .simple type=() -> kotlin.Boolean operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Test simple failed'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .invoke type=kotlin.Boolean operator=null
+              $this: CALL .withLabel type=() -> kotlin.Boolean operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Test withLabel failed'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

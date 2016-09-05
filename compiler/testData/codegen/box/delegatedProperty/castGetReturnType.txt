@@ -1,0 +1,38 @@
+MODULE <test-module>
+  FILE /castGetReturnType.kt
+    CLASS CLASS Delegate
+      CONSTRUCTOR public constructor Delegate()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Delegate
+      FUN public final operator fun getValue(/*0*/ t: kotlin.Any?, /*1*/ p: kotlin.reflect.KProperty<*>): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getValue
+            CONST Int type=kotlin.Int value='1'
+    CLASS CLASS AImpl
+      CONSTRUCTOR public constructor AImpl()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=AImpl
+      PROPERTY public final val prop: kotlin.Number
+        delegate: PROPERTY val `prop$delegate`: Delegate
+          EXPRESSION_BODY
+            CALL .<init> type=Delegate operator=null
+        PROPERTY_GETTER public final fun <get-prop>(): kotlin.Number
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-prop>
+              CALL .getValue type=kotlin.Int operator=null
+                $this: GET_BACKING_FIELD prop$delegate type=Delegate operator=null
+                  receiver: THIS public final class AImpl type=AImpl
+                t: THIS public final class AImpl type=AImpl
+                p: CALLABLE_REFERENCE prop type=kotlin.reflect.KProperty1<AImpl, kotlin.Number> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CALL .<get-prop> type=kotlin.Number operator=GET_PROPERTY
+                $this: CALL .<init> type=AImpl operator=null
+              arg1: CONST Int type=kotlin.Int value='1'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='fail'

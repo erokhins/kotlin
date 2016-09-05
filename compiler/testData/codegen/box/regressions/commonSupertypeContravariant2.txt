@@ -1,0 +1,35 @@
+MODULE <test-module>
+  FILE /commonSupertypeContravariant2.kt
+    CLASS INTERFACE In
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+    FUN public fun </*0*/ T> select(/*0*/ x: T, /*1*/ y: T): T
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=select
+          BLOCK type=T operator=ELVIS
+            VAR val tmp0_elvis_lhs: T
+              GET_VAR x type=T operator=null
+            WHEN type=T operator=null
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_elvis_lhs type=T operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: GET_VAR y type=T operator=null
+              else: GET_VAR tmp0_elvis_lhs type=T operator=null
+    FUN public fun foobar(/*0*/ a: A, /*1*/ b: B): In<*>
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foobar
+          CALL .select type=In<*> operator=null
+            x: GET_VAR a type=A operator=null
+            y: GET_VAR b type=B operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

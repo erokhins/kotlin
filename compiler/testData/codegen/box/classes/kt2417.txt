@@ -1,0 +1,77 @@
+MODULE <test-module>
+  FILE /kt2417.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val set: java.util.HashSet<kotlin.String>
+          CALL .<init> type=java.util.HashSet<kotlin.String> operator=null
+        CALL .add type=kotlin.Boolean operator=null
+          $this: GET_VAR set type=java.util.HashSet<kotlin.String> operator=null
+          element: CONST String type=kotlin.String value='foo'
+        VAR val t1: kotlin.Boolean
+          CALL .contains type=kotlin.Boolean operator=IN
+            $this: GET_VAR set type=java.util.HashSet<kotlin.String> operator=null
+            element: CONST String type=kotlin.String value='foo'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: GET_VAR t1 type=kotlin.Boolean operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail1'
+        VAR val t2: kotlin.Boolean
+          CALL .NOT type=kotlin.Boolean operator=NOT_IN
+            arg0: CALL .contains type=kotlin.Boolean operator=NOT_IN
+              $this: GET_VAR set type=java.util.HashSet<kotlin.String> operator=null
+              element: CONST String type=kotlin.String value='foo'
+        WHEN type=kotlin.Unit operator=IF
+          if: GET_VAR t2 type=kotlin.Boolean operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail2'
+        VAR val t3: kotlin.Boolean
+          CALL .contains type=kotlin.Boolean operator=IN
+            $this: GET_VAR set type=java.util.HashSet<kotlin.String> operator=null
+            element: CONST String type=kotlin.String value='bar'
+        WHEN type=kotlin.Unit operator=IF
+          if: GET_VAR t3 type=kotlin.Boolean operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail3'
+        VAR val t4: kotlin.Boolean
+          CALL .NOT type=kotlin.Boolean operator=NOT_IN
+            arg0: CALL .contains type=kotlin.Boolean operator=NOT_IN
+              $this: GET_VAR set type=java.util.HashSet<kotlin.String> operator=null
+              element: CONST String type=kotlin.String value='bar'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: GET_VAR t4 type=kotlin.Boolean operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail4'
+        VAR val t5: kotlin.Boolean
+          BLOCK type=kotlin.Boolean operator=WHEN
+            VAR val tmp0_subject: kotlin.String
+              CONST String type=kotlin.String value='foo'
+            WHEN type=kotlin.Boolean operator=WHEN
+              if: CALL .contains type=kotlin.Boolean operator=IN
+                $this: GET_VAR set type=java.util.HashSet<kotlin.String> operator=null
+                element: GET_VAR tmp0_subject type=kotlin.String operator=null
+              then: CONST Boolean type=kotlin.Boolean value='true'
+              else: CONST Boolean type=kotlin.Boolean value='false'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: GET_VAR t5 type=kotlin.Boolean operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail5'
+        VAR val t6: kotlin.Boolean
+          BLOCK type=kotlin.Boolean operator=WHEN
+            VAR val tmp1_subject: kotlin.String
+              CONST String type=kotlin.String value='foo'
+            WHEN type=kotlin.Boolean operator=WHEN
+              if: CALL .NOT type=kotlin.Boolean operator=EXCL
+                arg0: CALL .contains type=kotlin.Boolean operator=NOT_IN
+                  $this: GET_VAR set type=java.util.HashSet<kotlin.String> operator=null
+                  element: GET_VAR tmp1_subject type=kotlin.String operator=null
+              then: CONST Boolean type=kotlin.Boolean value='true'
+              else: CONST Boolean type=kotlin.Boolean value='false'
+        WHEN type=kotlin.Unit operator=IF
+          if: GET_VAR t6 type=kotlin.Boolean operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail6'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

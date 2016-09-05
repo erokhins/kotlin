@@ -1,0 +1,26 @@
+MODULE <test-module>
+  FILE /kt11163.kt
+    FUN public operator fun kotlin.Int.compareTo(/*0*/ c: kotlin.Char): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=compareTo
+          CONST Int type=kotlin.Int value='0'
+    FUN public fun foo(/*0*/ x: kotlin.Int, /*1*/ y: kotlin.Char): kotlin.String
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .LT0 type=kotlin.Boolean operator=LT
+            arg0: CALL .compareTo type=kotlin.Int operator=LT
+              $receiver: GET_VAR x type=kotlin.Int operator=null
+              c: GET_VAR y type=kotlin.Char operator=null
+          then: BLOCK type=kotlin.Nothing operator=null
+            THROW type=kotlin.Nothing
+              CALL .<init> type=java.lang.Error operator=null
+        RETURN type=kotlin.Nothing from=foo
+          STRING_CONCATENATION type=kotlin.String
+            GET_VAR y type=kotlin.Char operator=null
+            CONST String type=kotlin.String value='K'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .foo type=kotlin.String operator=null
+            x: CONST Int type=kotlin.Int value='42'
+            y: CONST Char type=kotlin.Char value='O'

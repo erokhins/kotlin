@@ -15,3 +15,5 @@ fun box(): String {
     SomeClass.run()
     return "OK"
 }
+
+

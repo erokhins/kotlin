@@ -18,3 +18,5 @@ class F {
 fun box(): String {
     return if(F().foo() == 1) "OK" else "fail"
 }
+
+

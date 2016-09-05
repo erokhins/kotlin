@@ -46,3 +46,5 @@ abstract class B : A {
 fun box(): String {
     return JavaClass.test();
 }
+
+

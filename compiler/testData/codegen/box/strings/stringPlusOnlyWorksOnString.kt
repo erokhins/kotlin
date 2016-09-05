@@ -7,3 +7,5 @@ fun box(): String {
     x + ArrayList()
     return "OK"
 }
+
+

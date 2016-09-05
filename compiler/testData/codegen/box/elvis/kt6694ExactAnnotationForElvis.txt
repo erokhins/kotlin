@@ -1,0 +1,55 @@
+MODULE <test-module>
+  FILE /kt6694ExactAnnotationForElvis.kt
+    CLASS INTERFACE PsiElement
+      FUN public open fun </*0*/ T : PsiElement> findChildByType(/*0*/ i: kotlin.Int): T?
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=findChildByType
+            WHEN type=T? operator=IF
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR i type=kotlin.Int operator=null
+                arg1: CONST Int type=kotlin.Int value='42'
+              then: TYPE_OP operator=CAST typeOperand=T
+                CALL .<init> type=JetOperationReferenceExpression operator=null
+              else: THROW type=kotlin.Nothing
+                CALL .<init> type=java.lang.Exception operator=null
+    CLASS INTERFACE JetSimpleNameExpression
+      FUN public abstract fun getReferencedNameElement(): PsiElement
+    CLASS CLASS JetOperationReferenceExpression
+      CONSTRUCTOR public constructor JetOperationReferenceExpression()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=JetOperationReferenceExpression
+      FUN public open override /*1*/ fun getReferencedNameElement(): JetOperationReferenceExpression
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getReferencedNameElement
+            THIS public final class JetOperationReferenceExpression : JetSimpleNameExpression type=JetOperationReferenceExpression
+    CLASS CLASS JetLabelReferenceExpression
+      CONSTRUCTOR public constructor JetLabelReferenceExpression()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=JetLabelReferenceExpression
+      FUN public open override /*1*/ fun getReferencedNameElement(): PsiElement
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getReferencedNameElement
+            BLOCK type=PsiElement operator=ELVIS
+              VAR val tmp0_elvis_lhs: PsiElement?
+                CALL .findChildByType type=PsiElement? operator=null
+                  $this: THIS public final class JetLabelReferenceExpression : JetSimpleNameExpression type=JetLabelReferenceExpression
+                  i: CONST Int type=kotlin.Int value='42'
+              WHEN type=PsiElement operator=null
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_elvis_lhs type=PsiElement? operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: THIS public final class JetLabelReferenceExpression : JetSimpleNameExpression type=JetLabelReferenceExpression
+                else: GET_VAR tmp0_elvis_lhs type=PsiElement? operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val element: PsiElement
+          CALL .getReferencedNameElement type=PsiElement operator=null
+            $this: CALL .<init> type=JetLabelReferenceExpression operator=null
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: TYPE_OP operator=INSTANCEOF typeOperand=JetOperationReferenceExpression
+              GET_VAR element type=PsiElement operator=null
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='fail'

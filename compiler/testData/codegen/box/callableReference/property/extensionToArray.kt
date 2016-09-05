@@ -4,3 +4,5 @@ fun box(): String {
     val p = Array<String>::firstElement
     return p.get(arrayOf("OK", "Fail"))
 }
+
+

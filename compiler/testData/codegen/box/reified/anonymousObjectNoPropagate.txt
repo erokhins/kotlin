@@ -1,0 +1,126 @@
+MODULE <test-module>
+  FILE /anonymousObjectNoPropagate.kt
+    CLASS INTERFACE A
+      FUN public abstract fun f1(): kotlin.String
+      FUN public abstract fun f2(): kotlin.String
+      FUN public abstract fun f3(): kotlin.String
+    FUN public fun doWork(/*0*/ block: () -> kotlin.String): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=doWork
+          CALL .invoke type=kotlin.String operator=INVOKE
+            $this: GET_VAR block type=() -> kotlin.String operator=VARIABLE_AS_FUNCTION
+    FUN public inline fun doWorkInline(/*0*/ block: () -> kotlin.String): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=doWorkInline
+          CALL .invoke type=kotlin.String operator=INVOKE
+            $this: GET_VAR block type=() -> kotlin.String operator=VARIABLE_AS_FUNCTION
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val x: box.<no name provided>
+          BLOCK type=box.<no name provided> operator=OBJECT_LITERAL
+            CLASS CLASS <no name provided>
+              CONSTRUCTOR public constructor <no name provided>()
+                BLOCK_BODY
+                  DELEGATING_CONSTRUCTOR_CALL Any
+                  INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+              FUN public final inline fun </*0*/ reified T : kotlin.Any> bar1(): A
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=bar1
+                    BLOCK type=box.<no name provided>.bar1.<no name provided><T> operator=OBJECT_LITERAL
+                      CLASS CLASS <no name provided>
+                        CONSTRUCTOR public constructor <no name provided>()
+                          BLOCK_BODY
+                            DELEGATING_CONSTRUCTOR_CALL Any
+                            INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+                        FUN public open override /*1*/ fun f1(): kotlin.String
+                          BLOCK_BODY
+                            RETURN type=kotlin.Nothing from=f1
+                              TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.String
+                                CALL .getName type=kotlin.String! operator=null
+                                  $this: CALL .<get-java> type=java.lang.Class<T> operator=GET_PROPERTY
+                                    $receiver: CLASS_REFERENCE T type=kotlin.reflect.KClass<T>
+                        FUN public open override /*1*/ fun f2(): kotlin.String
+                          BLOCK_BODY
+                            RETURN type=kotlin.Nothing from=f2
+                              CALL .doWork type=kotlin.String operator=null
+                                block: BLOCK type=() -> kotlin.String! operator=LAMBDA
+                                  FUN local final fun <anonymous>(): kotlin.String!
+                                    BLOCK_BODY
+                                      RETURN type=kotlin.Nothing from=<anonymous>
+                                        CALL .getName type=kotlin.String! operator=null
+                                          $this: CALL .<get-java> type=java.lang.Class<T> operator=GET_PROPERTY
+                                            $receiver: CLASS_REFERENCE T type=kotlin.reflect.KClass<T>
+                                  CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String! operator=LAMBDA
+                        FUN public open override /*1*/ fun f3(): kotlin.String
+                          BLOCK_BODY
+                            RETURN type=kotlin.Nothing from=f3
+                              CALL .doWorkInline type=kotlin.String operator=null
+                                block: BLOCK type=() -> kotlin.String! operator=LAMBDA
+                                  FUN local final fun <anonymous>(): kotlin.String!
+                                    BLOCK_BODY
+                                      RETURN type=kotlin.Nothing from=<anonymous>
+                                        CALL .getName type=kotlin.String! operator=null
+                                          $this: CALL .<get-java> type=java.lang.Class<T> operator=GET_PROPERTY
+                                            $receiver: CLASS_REFERENCE T type=kotlin.reflect.KClass<T>
+                                  CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String! operator=LAMBDA
+                      CALL .<init> type=box.<no name provided>.bar1.<no name provided><T> operator=OBJECT_LITERAL
+              FUN public final inline fun </*0*/ reified T : kotlin.Any> bar2(): kotlin.String!
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=bar2
+                    CALL .getName type=kotlin.String! operator=null
+                      $this: CALL .<get-java> type=java.lang.Class<T> operator=GET_PROPERTY
+                        $receiver: CLASS_REFERENCE T type=kotlin.reflect.KClass<T>
+              FUN public final inline fun </*0*/ reified T : kotlin.Any> bar3(): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=bar3
+                    CALL .doWork type=kotlin.String operator=null
+                      block: BLOCK type=() -> kotlin.String! operator=LAMBDA
+                        FUN local final fun <anonymous>(): kotlin.String!
+                          BLOCK_BODY
+                            RETURN type=kotlin.Nothing from=<anonymous>
+                              CALL .getName type=kotlin.String! operator=null
+                                $this: CALL .<get-java> type=java.lang.Class<T> operator=GET_PROPERTY
+                                  $receiver: CLASS_REFERENCE T type=kotlin.reflect.KClass<T>
+                        CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String! operator=LAMBDA
+              FUN public final inline fun </*0*/ reified T : kotlin.Any> bar4(): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=bar4
+                    CALL .doWorkInline type=kotlin.String operator=null
+                      block: BLOCK type=() -> kotlin.String! operator=LAMBDA
+                        FUN local final fun <anonymous>(): kotlin.String!
+                          BLOCK_BODY
+                            RETURN type=kotlin.Nothing from=<anonymous>
+                              CALL .getName type=kotlin.String! operator=null
+                                $this: CALL .<get-java> type=java.lang.Class<T> operator=GET_PROPERTY
+                                  $receiver: CLASS_REFERENCE T type=kotlin.reflect.KClass<T>
+                        CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String! operator=LAMBDA
+            CALL .<init> type=box.<no name provided> operator=OBJECT_LITERAL
+        VAR val y: A
+          CALL .bar1 type=A operator=null
+            $this: GET_VAR x type=box.<no name provided> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='java.lang.String'
+          actual: CALL .f1 type=kotlin.String operator=null
+            $this: GET_VAR y type=A operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='java.lang.String'
+          actual: CALL .f2 type=kotlin.String operator=null
+            $this: GET_VAR y type=A operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='java.lang.String'
+          actual: CALL .f3 type=kotlin.String operator=null
+            $this: GET_VAR y type=A operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='java.lang.Integer'
+          actual: CALL .bar2 type=kotlin.String! operator=null
+            $this: GET_VAR x type=box.<no name provided> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='java.lang.Double'
+          actual: CALL .bar3 type=kotlin.String operator=null
+            $this: GET_VAR x type=box.<no name provided> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='java.lang.Long'
+          actual: CALL .bar4 type=kotlin.String operator=null
+            $this: GET_VAR x type=box.<no name provided> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

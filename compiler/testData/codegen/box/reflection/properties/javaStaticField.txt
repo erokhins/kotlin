@@ -1,0 +1,39 @@
+MODULE <test-module>
+  FILE /K.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val f: kotlin.reflect.KMutableProperty0<kotlin.String!>
+          CALLABLE_REFERENCE x type=kotlin.reflect.KMutableProperty0<kotlin.String!> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='x'
+          actual: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+            $this: GET_VAR f type=kotlin.reflect.KMutableProperty0<kotlin.String!> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_VAR f type=kotlin.reflect.KMutableProperty0<kotlin.String!> operator=null
+          actual: CALL .single type=kotlin.reflect.KCallable<*> operator=null
+            $receiver: CALL .<get-members> type=kotlin.collections.Collection<kotlin.reflect.KCallable<*>> operator=GET_PROPERTY
+              $this: CLASS_REFERENCE J type=kotlin.reflect.KClass<J>
+            predicate: BLOCK type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KCallable<*>): kotlin.Boolean
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                      arg0: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+                        $this: GET_VAR it type=kotlin.reflect.KCallable<*> operator=null
+                      arg1: CONST String type=kotlin.String value='x'
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+        CALL .set type=kotlin.Unit operator=null
+          $this: GET_VAR f type=kotlin.reflect.KMutableProperty0<kotlin.String!> operator=null
+          value: CONST String type=kotlin.String value='OK'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='OK'
+          actual: GET_BACKING_FIELD x type=kotlin.String! operator=GET_PROPERTY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='OK'
+          actual: CALL .invoke type=kotlin.String! operator=INVOKE
+            $this: CALL .<get-getter> type=kotlin.reflect.KProperty0.Getter<kotlin.String!> operator=GET_PROPERTY
+              $this: GET_VAR f type=kotlin.reflect.KMutableProperty0<kotlin.String!> operator=null
+        RETURN type=kotlin.Nothing from=box
+          TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.String
+            CALL .get type=kotlin.String! operator=null
+              $this: GET_VAR f type=kotlin.reflect.KMutableProperty0<kotlin.String!> operator=null

@@ -8,3 +8,5 @@ public fun box() : String {
 
     return if (j == 10 && 10 == i) "OK" else "fail i = $i j = $j"
 }
+
+

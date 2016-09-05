@@ -10,3 +10,5 @@ class Outer {
 }
 
 fun box() = Outer().O() + Outer.Nested.K
+
+

@@ -14,3 +14,4 @@ fun box(): String {
 
     return App.s
 }
+

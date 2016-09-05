@@ -15,3 +15,4 @@ fun foo(): String {
 fun box(): String {
     return foo()
 }
+

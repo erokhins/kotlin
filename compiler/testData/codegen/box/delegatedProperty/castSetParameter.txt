@@ -1,0 +1,125 @@
+MODULE <test-module>
+  FILE /castSetParameter.kt
+    CLASS CLASS Delegate
+      CONSTRUCTOR public constructor Delegate()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Delegate
+      PROPERTY public final var inner: Derived
+        EXPRESSION_BODY
+          CALL .<init> type=Derived operator=null
+      FUN public final operator fun getValue(/*0*/ t: kotlin.Any?, /*1*/ p: kotlin.reflect.KProperty<*>): Derived
+        BLOCK_BODY
+          CALL .<set-inner> type=kotlin.Unit operator=EQ
+            $this: THIS public final class Delegate type=Delegate
+            <set-?>: CALL .<init> type=Derived operator=null
+              a: CALL .plus type=kotlin.String operator=PLUS
+                $this: CALL .<get-a> type=kotlin.String operator=GET_PROPERTY
+                  $this: CALL .<get-inner> type=Derived operator=GET_PROPERTY
+                    $this: THIS public final class Delegate type=Delegate
+                other: CONST String type=kotlin.String value='-get'
+          RETURN type=kotlin.Nothing from=getValue
+            CALL .<get-inner> type=Derived operator=GET_PROPERTY
+              $this: THIS public final class Delegate type=Delegate
+      FUN public final operator fun setValue(/*0*/ t: kotlin.Any?, /*1*/ p: kotlin.reflect.KProperty<*>, /*2*/ i: Base): kotlin.Unit
+        BLOCK_BODY
+          CALL .<set-inner> type=kotlin.Unit operator=EQ
+            $this: THIS public final class Delegate type=Delegate
+            <set-?>: CALL .<init> type=Derived operator=null
+              a: CALL .plus type=kotlin.String operator=PLUS
+                $this: CALL .plus type=kotlin.String operator=PLUS
+                  $this: CALL .plus type=kotlin.String operator=PLUS
+                    $this: CALL .<get-a> type=kotlin.String operator=GET_PROPERTY
+                      $this: CALL .<get-inner> type=Derived operator=GET_PROPERTY
+                        $this: THIS public final class Delegate type=Delegate
+                    other: CONST String type=kotlin.String value='-'
+                  other: CALL .<get-a> type=kotlin.String operator=GET_PROPERTY
+                    $this: GET_VAR i type=Base operator=null
+                other: CONST String type=kotlin.String value='-set'
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public final var prop: Derived
+        delegate: PROPERTY val `prop$delegate`: Delegate
+          EXPRESSION_BODY
+            CALL .<init> type=Delegate operator=null
+        PROPERTY_GETTER public final fun <get-prop>(): Derived
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-prop>
+              CALL .getValue type=Derived operator=null
+                $this: GET_BACKING_FIELD prop$delegate type=Delegate operator=null
+                  receiver: THIS public final class A type=A
+                t: THIS public final class A type=A
+                p: CALLABLE_REFERENCE prop type=kotlin.reflect.KMutableProperty1<A, Derived> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+        PROPERTY_SETTER public final fun <set-prop>(/*0*/ <set-?>: Derived): kotlin.Unit
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<set-prop>
+              CALL .setValue type=kotlin.Unit operator=null
+                $this: GET_BACKING_FIELD prop$delegate type=Delegate operator=null
+                  receiver: THIS public final class A type=A
+                t: THIS public final class A type=A
+                p: CALLABLE_REFERENCE prop type=kotlin.reflect.KMutableProperty1<A, Derived> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+                i: GET_VAR <set-?> type=Derived operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val c: A
+          CALL .<init> type=A operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-a> type=kotlin.String operator=GET_PROPERTY
+                $this: CALL .<get-prop> type=Derived operator=GET_PROPERTY
+                  $this: GET_VAR c type=A operator=null
+              arg1: CONST String type=kotlin.String value='derived-get'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail get '
+              CALL .<get-a> type=kotlin.String operator=GET_PROPERTY
+                $this: CALL .<get-prop> type=Derived operator=GET_PROPERTY
+                  $this: GET_VAR c type=A operator=null
+        CALL .<set-prop> type=kotlin.Unit operator=EQ
+          $this: GET_VAR c type=A operator=null
+          <set-?>: CALL .<init> type=Derived operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-a> type=kotlin.String operator=GET_PROPERTY
+                $this: CALL .<get-prop> type=Derived operator=GET_PROPERTY
+                  $this: GET_VAR c type=A operator=null
+              arg1: CONST String type=kotlin.String value='derived-get-derived-set-get'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail set '
+              CALL .<get-a> type=kotlin.String operator=GET_PROPERTY
+                $this: CALL .<get-prop> type=Derived operator=GET_PROPERTY
+                  $this: GET_VAR c type=A operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'
+    CLASS CLASS Base
+      CONSTRUCTOR public constructor Base(/*0*/ a: kotlin.String = ...)
+        a: EXPRESSION_BODY
+          CONST String type=kotlin.String value='base'
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD a type=kotlin.Unit operator=null
+            receiver: THIS public open class Base type=Base
+            value: GET_VAR a type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Base
+      PROPERTY public open val a: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR a type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    CLASS CLASS Derived
+      CONSTRUCTOR public constructor Derived(/*0*/ a: kotlin.String = ...)
+        a: EXPRESSION_BODY
+          CONST String type=kotlin.String value='derived'
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Base
+          SET_BACKING_FIELD a type=kotlin.Unit operator=null
+            receiver: THIS public final class Derived : Base type=Derived
+            value: GET_VAR a type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Derived
+      PROPERTY public open override /*1*/ val a: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR a type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER

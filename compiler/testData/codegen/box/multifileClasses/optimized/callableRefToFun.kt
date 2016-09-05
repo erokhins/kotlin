@@ -11,3 +11,4 @@ fun box(): String = (::ok)()
 package a
 
 fun ok() = "OK"
+

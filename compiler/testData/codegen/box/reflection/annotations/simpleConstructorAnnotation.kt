@@ -13,3 +13,5 @@ fun box(): String {
     if (ans != listOf("Primary", "Secondary")) return "Fail: $ans"
     return "OK"
 }
+
+

@@ -40,3 +40,5 @@ fun box(): String {
     val array = context.projectInfoJsonParser.parse(JsonArray())
     return if (array != null) "OK" else "fail"
 }
+
+

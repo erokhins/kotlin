@@ -11,3 +11,5 @@ fun box(): String = OK
 package a
 
 public val OK = run { "OK" }
+
+

@@ -96,3 +96,5 @@ fun box() : String {
     if (test2WithFinally() != "TryCatchFinally") return "fail4: ${test2WithFinally()}"
     return "OK"
 }
+
+

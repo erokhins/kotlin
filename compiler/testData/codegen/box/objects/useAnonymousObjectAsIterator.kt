@@ -16,3 +16,5 @@ fun box(): String {
 
     return if (result == "01234") "OK" else "Fail $result"
 }
+
+

@@ -8,3 +8,4 @@ fun foo(): Float {
 }
 
 fun box() = if (foo() > 3.5f) "OK" else "Fail"
+

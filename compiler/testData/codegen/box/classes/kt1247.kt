@@ -4,3 +4,5 @@ fun box(): String {
     val x = f(1) { this+it+2 }
     return if (x == 4) "OK" else "fail"
 }
+
+

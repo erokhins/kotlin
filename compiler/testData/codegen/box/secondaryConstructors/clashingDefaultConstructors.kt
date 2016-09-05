@@ -33,3 +33,5 @@ fun box(): String {
     if (b4 != "test#123") return "fail7: $b4"
     return "OK"
 }
+
+

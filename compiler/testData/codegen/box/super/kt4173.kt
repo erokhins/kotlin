@@ -16,3 +16,4 @@ fun box() : String {
     b.foo()
     return if (b.x != 3) "fail: b.x = ${b.x}" else "OK"
 }
+

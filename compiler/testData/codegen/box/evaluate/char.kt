@@ -12,3 +12,5 @@ fun box(): String {
     if (annotation.c1 != 0) return "fail : expected = ${1}, actual = ${annotation.c1}"
     return "OK"
 }
+
+

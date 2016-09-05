@@ -1,0 +1,43 @@
+MODULE <test-module>
+  FILE /kt3738.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public final fun foo(): kotlin.Unit
+        BLOCK_BODY
+      FUN public final fun bar(/*0*/ f: A.() -> kotlin.Unit = ...): kotlin.Unit
+        f: EXPRESSION_BODY
+          BLOCK type=A.() -> kotlin.Unit operator=LAMBDA
+            FUN local final fun A.<anonymous>(): kotlin.Unit
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+            CALLABLE_REFERENCE <anonymous> type=A.() -> kotlin.Unit operator=LAMBDA
+        BLOCK_BODY
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+      CLASS CLASS D
+        CONSTRUCTOR public constructor D()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=D
+        ANONYMOUS_INITIALIZER D
+          BLOCK_BODY
+            CALL .bar type=kotlin.Unit operator=null
+              $this: CALL .<init> type=A operator=null
+              f: BLOCK type=A.() -> kotlin.Unit operator=LAMBDA
+                FUN local final fun A.<anonymous>(): kotlin.Unit
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .foo type=kotlin.Unit operator=null
+                        $this: $RECEIVER of: <anonymous> type=A
+                CALLABLE_REFERENCE <anonymous> type=A.() -> kotlin.Unit operator=LAMBDA
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .<init> type=B.D operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

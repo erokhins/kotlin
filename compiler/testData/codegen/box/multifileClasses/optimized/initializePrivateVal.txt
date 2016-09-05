@@ -1,0 +1,20 @@
+MODULE <test-module>
+  FILE /box.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .ok type=kotlin.String operator=null
+  FILE /part1.kt
+    PROPERTY private val OK: kotlin.String
+      EXPRESSION_BODY
+        CALL .run type=kotlin.String operator=null
+          block: BLOCK type=() -> kotlin.String operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.String
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CONST String type=kotlin.String value='OK'
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+    FUN public fun ok(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=ok
+          CALL .<get-OK> type=kotlin.String operator=GET_PROPERTY

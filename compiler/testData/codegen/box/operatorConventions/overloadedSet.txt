@@ -1,0 +1,49 @@
+MODULE <test-module>
+  FILE /overloadedSet.kt
+    CLASS OBJECT A
+      CONSTRUCTOR private constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public final operator fun get(/*0*/ i: kotlin.Int): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=get
+            CONST Int type=kotlin.Int value='1'
+      FUN public final operator fun set(/*0*/ i: kotlin.Int, /*1*/ j: kotlin.Int): kotlin.Unit
+        BLOCK_BODY
+      FUN public final operator fun set(/*0*/ i: kotlin.Int, /*1*/ x: kotlin.Any): kotlin.Unit
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.Exception operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        BLOCK type=kotlin.Int operator=POSTFIX_INCR
+          VAR val tmp0_array: A
+            GET_OBJECT A type=A
+          VAR val tmp1_index0: kotlin.Int
+            CONST Int type=kotlin.Int value='0'
+          VAR val tmp2: kotlin.Int
+            CALL .get type=kotlin.Int operator=POSTFIX_INCR
+              $this: GET_VAR tmp0_array type=A operator=null
+              i: GET_VAR tmp1_index0 type=kotlin.Int operator=null
+          CALL .set type=kotlin.Unit operator=POSTFIX_INCR
+            $this: GET_VAR tmp0_array type=A operator=null
+            i: GET_VAR tmp1_index0 type=kotlin.Int operator=null
+            j: CALL .inc type=kotlin.Int operator=POSTFIX_INCR
+              $this: GET_VAR tmp2 type=kotlin.Int operator=null
+          GET_VAR tmp2 type=kotlin.Int operator=null
+        BLOCK type=kotlin.Unit operator=PLUSEQ
+          VAR val tmp3_array: A
+            GET_OBJECT A type=A
+          VAR val tmp4_index0: kotlin.Int
+            CONST Int type=kotlin.Int value='0'
+          CALL .set type=kotlin.Unit operator=PLUSEQ
+            $this: GET_VAR tmp3_array type=A operator=null
+            i: GET_VAR tmp4_index0 type=kotlin.Int operator=null
+            j: CALL .plus type=kotlin.Int operator=PLUSEQ
+              $this: CALL .get type=kotlin.Int operator=PLUSEQ
+                $this: GET_VAR tmp3_array type=A operator=null
+                i: GET_VAR tmp4_index0 type=kotlin.Int operator=null
+              other: CONST Int type=kotlin.Int value='1'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

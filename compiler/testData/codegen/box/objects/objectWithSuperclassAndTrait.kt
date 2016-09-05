@@ -19,3 +19,5 @@ object O: A(), T {
 fun box() : String {
   return if (O.foo() == 5) "OK" else "fail"
 }
+
+

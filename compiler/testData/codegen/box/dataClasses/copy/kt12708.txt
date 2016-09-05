@@ -1,0 +1,84 @@
+MODULE <test-module>
+  FILE /kt12708.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val a: A
+          CALL .<init> type=B operator=null
+            x: CONST Int type=kotlin.Int value='1'
+        CALL .copy type=A operator=null
+          $this: GET_VAR a type=A operator=null
+          x: CONST Int type=kotlin.Int value='1'
+        CALL .component1 type=kotlin.Any operator=null
+          $this: GET_VAR a type=A operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'
+    CLASS INTERFACE A
+      FUN public abstract fun copy(/*0*/ x: kotlin.Int): A
+      FUN public abstract fun component1(): kotlin.Any
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B(/*0*/ x: kotlin.Int)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD x type=kotlin.Unit operator=null
+            receiver: THIS public final data class B : A type=B
+            value: GET_VAR x type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+      PROPERTY public final val x: kotlin.Int
+        EXPRESSION_BODY
+          GET_VAR x type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public final operator override /*1*/ /*synthesized*/ fun component1(): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=component1
+            CALL .<get-x> type=kotlin.Int operator=GET_PROPERTY
+              $this: THIS public final data class B : A type=B
+      FUN public final override /*1*/ /*synthesized*/ fun copy(/*0*/ x: kotlin.Int = ...): B
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=copy
+            CALL .<init> type=B operator=null
+              x: GET_VAR x type=kotlin.Int operator=null
+      FUN public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=toString
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='B('
+              CONST String type=kotlin.String value='x='
+              CALL .<get-x> type=kotlin.Int operator=GET_PROPERTY
+                $this: THIS public final data class B : A type=B
+              CONST String type=kotlin.String value=')'
+      FUN public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+        BLOCK_BODY
+          VAR val tmp0_result: kotlin.Int
+            CONST Int type=kotlin.Int value='0'
+          SET_VAR tmp0_result type=kotlin.Unit operator=EQ
+            CALL .hashCode type=kotlin.Int operator=null
+              $this: CALL .<get-x> type=kotlin.Int operator=GET_PROPERTY
+                $this: THIS public final data class B : A type=B
+          RETURN type=kotlin.Nothing from=hashCode
+            GET_VAR tmp0_result type=kotlin.Int operator=null
+      FUN public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+        BLOCK_BODY
+          WHEN type=kotlin.Unit operator=null
+            if: CALL .EQEQEQ type=kotlin.Boolean operator=EQEQEQ
+              arg0: THIS public final data class B : A type=B
+              arg1: GET_VAR other type=kotlin.Any? operator=null
+            then: RETURN type=kotlin.Nothing from=equals
+              CONST Boolean type=kotlin.Boolean value='true'
+          WHEN type=kotlin.Unit operator=null
+            if: TYPE_OP operator=NOT_INSTANCEOF typeOperand=B
+              GET_VAR other type=kotlin.Any? operator=null
+            then: RETURN type=kotlin.Nothing from=equals
+              CONST Boolean type=kotlin.Boolean value='false'
+          VAR val tmp0_other_with_cast: B
+            TYPE_OP operator=CAST typeOperand=B
+              GET_VAR other type=kotlin.Any? operator=null
+          WHEN type=kotlin.Unit operator=null
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .<get-x> type=kotlin.Int operator=GET_PROPERTY
+                  $this: THIS public final data class B : A type=B
+                arg1: CALL .<get-x> type=kotlin.Int operator=GET_PROPERTY
+                  $this: GET_VAR tmp0_other_with_cast type=B operator=null
+            then: RETURN type=kotlin.Nothing from=equals
+              CONST Boolean type=kotlin.Boolean value='false'
+          RETURN type=kotlin.Nothing from=equals
+            CONST Boolean type=kotlin.Boolean value='true'

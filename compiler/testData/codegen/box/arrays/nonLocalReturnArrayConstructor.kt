@@ -19,3 +19,5 @@ fun box(): String {
     testIntArray()
     return "OK"
 }
+
+

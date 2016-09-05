@@ -30,3 +30,5 @@ abstract class A {
         result = "OK"
     }
 }
+
+

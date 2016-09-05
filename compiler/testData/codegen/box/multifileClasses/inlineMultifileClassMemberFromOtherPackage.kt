@@ -20,3 +20,5 @@ inline fun foo(body: () -> String): String = zee(body())
 package a
 
 public fun zee(x: String): String = x
+
+

@@ -9,3 +9,5 @@ fun box(): String {
     val x: Outer.Inner<String> = Outer().Inner("OK")
     return x.box()
 }
+
+

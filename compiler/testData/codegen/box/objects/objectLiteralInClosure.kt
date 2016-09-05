@@ -15,3 +15,5 @@ fun box(): String {
     val x = c().toString()
     return if (x == "child3") "OK" else x
 }
+
+

@@ -11,3 +11,5 @@ interface A {
 }
 
 data class B(val x: Int) : A
+
+

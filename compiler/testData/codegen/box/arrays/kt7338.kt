@@ -7,3 +7,5 @@ fun foo(x : Any): String {
 fun box(): String {
     return foo(arrayOf("OK"))
 }
+
+

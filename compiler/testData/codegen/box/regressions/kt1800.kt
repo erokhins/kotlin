@@ -30,3 +30,5 @@ fun box() : String {
     val minAge = ages.testMin()
     return if (minAge == 27) "OK" else "fail"
 }
+
+

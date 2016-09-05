@@ -5,3 +5,5 @@ object X {
 }
 
 fun box() : String = if (X.doit(3) == 3) "OK" else "fail"
+
+

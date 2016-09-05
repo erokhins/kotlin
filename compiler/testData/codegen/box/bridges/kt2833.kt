@@ -15,3 +15,5 @@ fun box(): String {
     (FunDependencyEdgeImpl(FunctionNodeImpl()) as FunDependencyEdge).from
     return "OK"
 }
+
+

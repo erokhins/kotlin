@@ -24,3 +24,5 @@ fun box(): String {
 open class Base(open val a: String = "base")
 
 class Derived(override val a: String = "derived"): Base()
+
+

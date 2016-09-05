@@ -1,0 +1,11 @@
+MODULE <test-module>
+  FILE /kt3308.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        FUN local final fun </*0*/ T> foo(/*0*/ t: T): T
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=foo
+              GET_VAR t type=T operator=null
+        RETURN type=kotlin.Nothing from=box
+          CALL .foo type=kotlin.String operator=null
+            t: CONST String type=kotlin.String value='OK'

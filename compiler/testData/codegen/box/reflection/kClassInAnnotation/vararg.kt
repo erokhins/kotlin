@@ -16,3 +16,5 @@ fun box(): String {
     val argName2 = args[1].simpleName ?: "fail 2"
     return argName1 + argName2
 }
+
+

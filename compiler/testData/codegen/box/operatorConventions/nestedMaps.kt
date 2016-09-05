@@ -11,3 +11,4 @@ fun box(): String {
     Map1[0, 0][0, 0]++
     return "OK"
 }
+

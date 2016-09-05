@@ -15,3 +15,4 @@ class A {
 fun box() : String {
     return if (A().calc() == 6) "OK" else "fail" 
 }
+

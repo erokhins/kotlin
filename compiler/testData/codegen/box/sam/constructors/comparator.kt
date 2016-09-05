@@ -6,3 +6,4 @@ fun box(): String {
     Collections.sort(list, Comparator { a, b -> b - a })
     return if (list == expected) "OK" else list.toString()
 }
+

@@ -18,3 +18,5 @@ fun box(): String {
     if (currentAccountId != null) return "Fail"
     return "OK"
 }
+
+

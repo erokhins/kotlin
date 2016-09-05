@@ -17,3 +17,5 @@ fun bar(): String {
 }
 
 fun box(): String = foo()
+
+

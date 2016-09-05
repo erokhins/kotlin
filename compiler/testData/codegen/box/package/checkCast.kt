@@ -13,3 +13,5 @@ fun box(): String {
   val c2 = C(10)
   return if (c1 == c2) "OK" else "fail"
 }
+
+

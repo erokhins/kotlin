@@ -100,3 +100,5 @@ fun box(): String {
     if (!x.contains("")) return "fail 2"
     return "OK"
 }
+
+

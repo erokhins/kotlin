@@ -6,3 +6,4 @@ fun box() : String {
   if(A(myArray) != A(myArray)) return "fail 2"
   return "OK"
 }
+

@@ -1,0 +1,409 @@
+MODULE <test-module>
+  FILE /kt1770.kt
+    CLASS CLASS MyElement
+      CONSTRUCTOR public constructor MyElement(/*0*/ e: org.w3c.dom.Element)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=MyElement
+      PROPERTY val `MyElement$Element$delegate`: org.w3c.dom.Element
+        EXPRESSION_BODY
+          GET_VAR e type=org.w3c.dom.Element operator=null
+      FUN public open override /*1*/ /*delegation*/ fun appendChild(/*0*/ p0: org.w3c.dom.Node!): org.w3c.dom.Node!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=appendChild
+            CALL .appendChild type=org.w3c.dom.Node! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=org.w3c.dom.Node! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun cloneNode(/*0*/ p0: kotlin.Boolean): org.w3c.dom.Node!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=cloneNode
+            CALL .cloneNode type=org.w3c.dom.Node! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=kotlin.Boolean operator=null
+      FUN public open override /*1*/ /*delegation*/ fun compareDocumentPosition(/*0*/ p0: org.w3c.dom.Node!): kotlin.Short
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=compareDocumentPosition
+            CALL .compareDocumentPosition type=kotlin.Short operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=org.w3c.dom.Node! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getAttribute(/*0*/ p0: kotlin.String!): kotlin.String!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getAttribute
+            CALL .getAttribute type=kotlin.String! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=kotlin.String! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getAttributeNS(/*0*/ p0: kotlin.String!, /*1*/ p1: kotlin.String!): kotlin.String!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getAttributeNS
+            CALL .getAttributeNS type=kotlin.String! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=kotlin.String! operator=null
+              p1: GET_VAR p1 type=kotlin.String! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getAttributeNode(/*0*/ p0: kotlin.String!): org.w3c.dom.Attr!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getAttributeNode
+            CALL .getAttributeNode type=org.w3c.dom.Attr! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=kotlin.String! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getAttributeNodeNS(/*0*/ p0: kotlin.String!, /*1*/ p1: kotlin.String!): org.w3c.dom.Attr!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getAttributeNodeNS
+            CALL .getAttributeNodeNS type=org.w3c.dom.Attr! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=kotlin.String! operator=null
+              p1: GET_VAR p1 type=kotlin.String! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getAttributes(): org.w3c.dom.NamedNodeMap!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getAttributes
+            CALL .getAttributes type=org.w3c.dom.NamedNodeMap! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getBaseURI(): kotlin.String!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getBaseURI
+            CALL .getBaseURI type=kotlin.String! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getChildNodes(): org.w3c.dom.NodeList!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getChildNodes
+            CALL .getChildNodes type=org.w3c.dom.NodeList! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getElementsByTagName(/*0*/ p0: kotlin.String!): org.w3c.dom.NodeList!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getElementsByTagName
+            CALL .getElementsByTagName type=org.w3c.dom.NodeList! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=kotlin.String! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getElementsByTagNameNS(/*0*/ p0: kotlin.String!, /*1*/ p1: kotlin.String!): org.w3c.dom.NodeList!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getElementsByTagNameNS
+            CALL .getElementsByTagNameNS type=org.w3c.dom.NodeList! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=kotlin.String! operator=null
+              p1: GET_VAR p1 type=kotlin.String! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getFeature(/*0*/ p0: kotlin.String!, /*1*/ p1: kotlin.String!): kotlin.Any!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getFeature
+            CALL .getFeature type=kotlin.Any! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=kotlin.String! operator=null
+              p1: GET_VAR p1 type=kotlin.String! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getFirstChild(): org.w3c.dom.Node!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getFirstChild
+            CALL .getFirstChild type=org.w3c.dom.Node! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getLastChild(): org.w3c.dom.Node!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getLastChild
+            CALL .getLastChild type=org.w3c.dom.Node! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getLocalName(): kotlin.String!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getLocalName
+            CALL .getLocalName type=kotlin.String! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getNamespaceURI(): kotlin.String!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getNamespaceURI
+            CALL .getNamespaceURI type=kotlin.String! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getNextSibling(): org.w3c.dom.Node!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getNextSibling
+            CALL .getNextSibling type=org.w3c.dom.Node! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getNodeName(): kotlin.String!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getNodeName
+            CALL .getNodeName type=kotlin.String! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getNodeType(): kotlin.Short
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getNodeType
+            CALL .getNodeType type=kotlin.Short operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getNodeValue(): kotlin.String!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getNodeValue
+            CALL .getNodeValue type=kotlin.String! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getOwnerDocument(): org.w3c.dom.Document!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getOwnerDocument
+            CALL .getOwnerDocument type=org.w3c.dom.Document! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getParentNode(): org.w3c.dom.Node!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getParentNode
+            CALL .getParentNode type=org.w3c.dom.Node! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getPrefix(): kotlin.String!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getPrefix
+            CALL .getPrefix type=kotlin.String! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getPreviousSibling(): org.w3c.dom.Node!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getPreviousSibling
+            CALL .getPreviousSibling type=org.w3c.dom.Node! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getSchemaTypeInfo(): org.w3c.dom.TypeInfo!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getSchemaTypeInfo
+            CALL .getSchemaTypeInfo type=org.w3c.dom.TypeInfo! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getTagName(): kotlin.String!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getTagName
+            CALL .getTagName type=kotlin.String! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getTextContent(): kotlin.String!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getTextContent
+            CALL .getTextContent type=kotlin.String! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+      FUN public open override /*1*/ /*delegation*/ fun getUserData(/*0*/ p0: kotlin.String!): kotlin.Any!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getUserData
+            CALL .getUserData type=kotlin.Any! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=kotlin.String! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun hasAttribute(/*0*/ p0: kotlin.String!): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=hasAttribute
+            CALL .hasAttribute type=kotlin.Boolean operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=kotlin.String! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun hasAttributeNS(/*0*/ p0: kotlin.String!, /*1*/ p1: kotlin.String!): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=hasAttributeNS
+            CALL .hasAttributeNS type=kotlin.Boolean operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=kotlin.String! operator=null
+              p1: GET_VAR p1 type=kotlin.String! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun hasAttributes(): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=hasAttributes
+            CALL .hasAttributes type=kotlin.Boolean operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+      FUN public open override /*1*/ /*delegation*/ fun hasChildNodes(): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=hasChildNodes
+            CALL .hasChildNodes type=kotlin.Boolean operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+      FUN public open override /*1*/ /*delegation*/ fun insertBefore(/*0*/ p0: org.w3c.dom.Node!, /*1*/ p1: org.w3c.dom.Node!): org.w3c.dom.Node!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=insertBefore
+            CALL .insertBefore type=org.w3c.dom.Node! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=org.w3c.dom.Node! operator=null
+              p1: GET_VAR p1 type=org.w3c.dom.Node! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun isDefaultNamespace(/*0*/ p0: kotlin.String!): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=isDefaultNamespace
+            CALL .isDefaultNamespace type=kotlin.Boolean operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=kotlin.String! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun isEqualNode(/*0*/ p0: org.w3c.dom.Node!): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=isEqualNode
+            CALL .isEqualNode type=kotlin.Boolean operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=org.w3c.dom.Node! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun isSameNode(/*0*/ p0: org.w3c.dom.Node!): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=isSameNode
+            CALL .isSameNode type=kotlin.Boolean operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=org.w3c.dom.Node! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun isSupported(/*0*/ p0: kotlin.String!, /*1*/ p1: kotlin.String!): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=isSupported
+            CALL .isSupported type=kotlin.Boolean operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=kotlin.String! operator=null
+              p1: GET_VAR p1 type=kotlin.String! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun lookupNamespaceURI(/*0*/ p0: kotlin.String!): kotlin.String!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=lookupNamespaceURI
+            CALL .lookupNamespaceURI type=kotlin.String! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=kotlin.String! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun lookupPrefix(/*0*/ p0: kotlin.String!): kotlin.String!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=lookupPrefix
+            CALL .lookupPrefix type=kotlin.String! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=kotlin.String! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun normalize(): kotlin.Unit
+        BLOCK_BODY
+          CALL .normalize type=kotlin.Unit operator=null
+            $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+      FUN public open override /*1*/ /*delegation*/ fun removeAttribute(/*0*/ p0: kotlin.String!): kotlin.Unit
+        BLOCK_BODY
+          CALL .removeAttribute type=kotlin.Unit operator=null
+            $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+            p0: GET_VAR p0 type=kotlin.String! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun removeAttributeNS(/*0*/ p0: kotlin.String!, /*1*/ p1: kotlin.String!): kotlin.Unit
+        BLOCK_BODY
+          CALL .removeAttributeNS type=kotlin.Unit operator=null
+            $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+            p0: GET_VAR p0 type=kotlin.String! operator=null
+            p1: GET_VAR p1 type=kotlin.String! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun removeAttributeNode(/*0*/ p0: org.w3c.dom.Attr!): org.w3c.dom.Attr!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=removeAttributeNode
+            CALL .removeAttributeNode type=org.w3c.dom.Attr! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=org.w3c.dom.Attr! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun removeChild(/*0*/ p0: org.w3c.dom.Node!): org.w3c.dom.Node!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=removeChild
+            CALL .removeChild type=org.w3c.dom.Node! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=org.w3c.dom.Node! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun replaceChild(/*0*/ p0: org.w3c.dom.Node!, /*1*/ p1: org.w3c.dom.Node!): org.w3c.dom.Node!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=replaceChild
+            CALL .replaceChild type=org.w3c.dom.Node! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=org.w3c.dom.Node! operator=null
+              p1: GET_VAR p1 type=org.w3c.dom.Node! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun setAttribute(/*0*/ p0: kotlin.String!, /*1*/ p1: kotlin.String!): kotlin.Unit
+        BLOCK_BODY
+          CALL .setAttribute type=kotlin.Unit operator=null
+            $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+            p0: GET_VAR p0 type=kotlin.String! operator=null
+            p1: GET_VAR p1 type=kotlin.String! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun setAttributeNS(/*0*/ p0: kotlin.String!, /*1*/ p1: kotlin.String!, /*2*/ p2: kotlin.String!): kotlin.Unit
+        BLOCK_BODY
+          CALL .setAttributeNS type=kotlin.Unit operator=null
+            $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+            p0: GET_VAR p0 type=kotlin.String! operator=null
+            p1: GET_VAR p1 type=kotlin.String! operator=null
+            p2: GET_VAR p2 type=kotlin.String! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun setAttributeNode(/*0*/ p0: org.w3c.dom.Attr!): org.w3c.dom.Attr!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=setAttributeNode
+            CALL .setAttributeNode type=org.w3c.dom.Attr! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=org.w3c.dom.Attr! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun setAttributeNodeNS(/*0*/ p0: org.w3c.dom.Attr!): org.w3c.dom.Attr!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=setAttributeNodeNS
+            CALL .setAttributeNodeNS type=org.w3c.dom.Attr! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=org.w3c.dom.Attr! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun setIdAttribute(/*0*/ p0: kotlin.String!, /*1*/ p1: kotlin.Boolean): kotlin.Unit
+        BLOCK_BODY
+          CALL .setIdAttribute type=kotlin.Unit operator=null
+            $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+            p0: GET_VAR p0 type=kotlin.String! operator=null
+            p1: GET_VAR p1 type=kotlin.Boolean operator=null
+      FUN public open override /*1*/ /*delegation*/ fun setIdAttributeNS(/*0*/ p0: kotlin.String!, /*1*/ p1: kotlin.String!, /*2*/ p2: kotlin.Boolean): kotlin.Unit
+        BLOCK_BODY
+          CALL .setIdAttributeNS type=kotlin.Unit operator=null
+            $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+            p0: GET_VAR p0 type=kotlin.String! operator=null
+            p1: GET_VAR p1 type=kotlin.String! operator=null
+            p2: GET_VAR p2 type=kotlin.Boolean operator=null
+      FUN public open override /*1*/ /*delegation*/ fun setIdAttributeNode(/*0*/ p0: org.w3c.dom.Attr!, /*1*/ p1: kotlin.Boolean): kotlin.Unit
+        BLOCK_BODY
+          CALL .setIdAttributeNode type=kotlin.Unit operator=null
+            $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+            p0: GET_VAR p0 type=org.w3c.dom.Attr! operator=null
+            p1: GET_VAR p1 type=kotlin.Boolean operator=null
+      FUN public open override /*1*/ /*delegation*/ fun setNodeValue(/*0*/ p0: kotlin.String!): kotlin.Unit
+        BLOCK_BODY
+          CALL .setNodeValue type=kotlin.Unit operator=null
+            $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+            p0: GET_VAR p0 type=kotlin.String! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun setPrefix(/*0*/ p0: kotlin.String!): kotlin.Unit
+        BLOCK_BODY
+          CALL .setPrefix type=kotlin.Unit operator=null
+            $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+            p0: GET_VAR p0 type=kotlin.String! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun setTextContent(/*0*/ p0: kotlin.String!): kotlin.Unit
+        BLOCK_BODY
+          CALL .setTextContent type=kotlin.Unit operator=null
+            $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+            p0: GET_VAR p0 type=kotlin.String! operator=null
+      FUN public open override /*1*/ /*delegation*/ fun setUserData(/*0*/ p0: kotlin.String!, /*1*/ p1: kotlin.Any!, /*2*/ p2: org.w3c.dom.UserDataHandler!): kotlin.Any!
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=setUserData
+            CALL .setUserData type=kotlin.Any! operator=null
+              $this: GET_VAR MyElement$Element$delegate type=org.w3c.dom.Element operator=null
+              p0: GET_VAR p0 type=kotlin.String! operator=null
+              p1: GET_VAR p1 type=kotlin.Any! operator=null
+              p2: GET_VAR p2 type=org.w3c.dom.UserDataHandler! operator=null
+      FUN public final fun bar(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=bar
+            CONST String type=kotlin.String value='OK'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val factory: javax.xml.parsers.DocumentBuilderFactory
+          BLOCK type=javax.xml.parsers.DocumentBuilderFactory operator=EXCLEXCL
+            VAR val tmp0_notnull: javax.xml.parsers.DocumentBuilderFactory!
+              CALL .newInstance type=javax.xml.parsers.DocumentBuilderFactory! operator=null
+            WHEN type=javax.xml.parsers.DocumentBuilderFactory operator=null
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_notnull type=javax.xml.parsers.DocumentBuilderFactory! operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+              else: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=javax.xml.parsers.DocumentBuilderFactory
+                GET_VAR tmp0_notnull type=javax.xml.parsers.DocumentBuilderFactory! operator=null
+        VAR val builder: javax.xml.parsers.DocumentBuilder
+          BLOCK type=javax.xml.parsers.DocumentBuilder operator=EXCLEXCL
+            VAR val tmp1_notnull: javax.xml.parsers.DocumentBuilder!
+              CALL .newDocumentBuilder type=javax.xml.parsers.DocumentBuilder! operator=null
+                $this: GET_VAR factory type=javax.xml.parsers.DocumentBuilderFactory operator=null
+            WHEN type=javax.xml.parsers.DocumentBuilder operator=null
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp1_notnull type=javax.xml.parsers.DocumentBuilder! operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+              else: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=javax.xml.parsers.DocumentBuilder
+                GET_VAR tmp1_notnull type=javax.xml.parsers.DocumentBuilder! operator=null
+        VAR val source: org.xml.sax.InputSource
+          CALL .<init> type=org.xml.sax.InputSource operator=null
+            p0: CALL .<init> type=java.io.StringReader operator=null
+              p0: CONST String type=kotlin.String value='<OK></OK>'
+        VAR val doc: org.w3c.dom.Document
+          BLOCK type=org.w3c.dom.Document operator=EXCLEXCL
+            VAR val tmp2_notnull: org.w3c.dom.Document!
+              CALL .parse type=org.w3c.dom.Document! operator=null
+                $this: GET_VAR builder type=javax.xml.parsers.DocumentBuilder operator=null
+                p0: GET_VAR source type=org.xml.sax.InputSource operator=null
+            WHEN type=org.w3c.dom.Document operator=null
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp2_notnull type=org.w3c.dom.Document! operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+              else: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=org.w3c.dom.Document
+                GET_VAR tmp2_notnull type=org.w3c.dom.Document! operator=null
+        VAR val myElement: MyElement
+          CALL .<init> type=MyElement operator=null
+            e: BLOCK type=org.w3c.dom.Element operator=EXCLEXCL
+              VAR val tmp3_notnull: org.w3c.dom.Element!
+                CALL .getDocumentElement type=org.w3c.dom.Element! operator=null
+                  $this: GET_VAR doc type=org.w3c.dom.Document operator=null
+              WHEN type=org.w3c.dom.Element operator=null
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp3_notnull type=org.w3c.dom.Element! operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                else: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=org.w3c.dom.Element
+                  GET_VAR tmp3_notnull type=org.w3c.dom.Element! operator=null
+        RETURN type=kotlin.Nothing from=box
+          BLOCK type=kotlin.String operator=EXCLEXCL
+            VAR val tmp4_notnull: kotlin.String!
+              CALL .getTagName type=kotlin.String! operator=null
+                $this: GET_VAR myElement type=MyElement operator=null
+            WHEN type=kotlin.String operator=null
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp4_notnull type=kotlin.String! operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+              else: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.String
+                GET_VAR tmp4_notnull type=kotlin.String! operator=null

@@ -16,3 +16,4 @@ enum class E {
 
     open fun f() = ""
 }
+

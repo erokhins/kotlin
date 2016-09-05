@@ -1,0 +1,53 @@
+MODULE <test-module>
+  FILE /kinds.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public final fun kotlin.Int.foo(/*0*/ x: kotlin.String): kotlin.Unit
+        BLOCK_BODY
+      CLASS CLASS Inner
+        CONSTRUCTOR public constructor Inner(/*0*/ s: kotlin.String)
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Inner
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val foo: kotlin.reflect.KFunction<*>
+          CALL .single type=kotlin.reflect.KFunction<*> operator=null
+            $receiver: CALL .<get-memberExtensionFunctions> type=kotlin.collections.Collection<kotlin.reflect.KFunction<*>> operator=GET_PROPERTY
+              $receiver: CLASS_REFERENCE A type=kotlin.reflect.KClass<A>
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .listOf type=kotlin.collections.List<kotlin.reflect.KParameter.Kind> operator=null
+            elements: VARARG type=Array<out Kind> varargElementType=Kind
+              GET_ENUM_VALUE INSTANCE type=kotlin.reflect.KParameter.Kind
+              GET_ENUM_VALUE EXTENSION_RECEIVER type=kotlin.reflect.KParameter.Kind
+              GET_ENUM_VALUE VALUE type=kotlin.reflect.KParameter.Kind
+          actual: CALL .map type=kotlin.collections.List<kotlin.reflect.KParameter.Kind> operator=null
+            $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+              $this: GET_VAR foo type=kotlin.reflect.KFunction<*> operator=null
+            transform: BLOCK type=(kotlin.reflect.KParameter) -> kotlin.reflect.KParameter.Kind operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KParameter): kotlin.reflect.KParameter.Kind
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .<get-kind> type=kotlin.reflect.KParameter.Kind operator=GET_PROPERTY
+                      $this: GET_VAR it type=kotlin.reflect.KParameter operator=null
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KParameter) -> kotlin.reflect.KParameter.Kind operator=LAMBDA
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .listOf type=kotlin.collections.List<kotlin.reflect.KParameter.Kind> operator=null
+            elements: VARARG type=Array<out Kind> varargElementType=Kind
+              GET_ENUM_VALUE INSTANCE type=kotlin.reflect.KParameter.Kind
+              GET_ENUM_VALUE VALUE type=kotlin.reflect.KParameter.Kind
+          actual: CALL .map type=kotlin.collections.List<kotlin.reflect.KParameter.Kind> operator=null
+            $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE <init> type=kotlin.reflect.KFunction2<A, kotlin.String, A.Inner> operator=null
+            transform: BLOCK type=(kotlin.reflect.KParameter) -> kotlin.reflect.KParameter.Kind operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KParameter): kotlin.reflect.KParameter.Kind
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .<get-kind> type=kotlin.reflect.KParameter.Kind operator=GET_PROPERTY
+                      $this: GET_VAR it type=kotlin.reflect.KParameter operator=null
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KParameter) -> kotlin.reflect.KParameter.Kind operator=LAMBDA
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

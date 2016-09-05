@@ -8,3 +8,5 @@ public open class Test(): java.util.RandomAccess, Cloneable, java.io.Serializabl
 }
 
 fun box() = Test().clone().toString()
+
+

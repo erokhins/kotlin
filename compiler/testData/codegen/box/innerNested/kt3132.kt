@@ -11,3 +11,5 @@ fun box(): String {
     Test.FooImplNested()
     return "OK"
 }
+
+

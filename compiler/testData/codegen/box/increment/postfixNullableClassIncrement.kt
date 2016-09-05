@@ -9,3 +9,5 @@ public fun box() : String {
 
     return if (j is MyClass && null == i) "OK" else "fail i = $i j = $j"
 }
+
+

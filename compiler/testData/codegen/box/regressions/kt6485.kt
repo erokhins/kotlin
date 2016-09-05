@@ -20,3 +20,5 @@ fun box(): String {
     assertEquals("java.lang.String[][]", typeLiteral<Array<Array<String>>>().type.toString())
     return "OK"
 }
+
+

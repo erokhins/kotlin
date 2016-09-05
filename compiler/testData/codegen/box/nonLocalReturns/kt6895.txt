@@ -1,0 +1,62 @@
+MODULE <test-module>
+  FILE /kt6895.kt
+    CLASS CLASS UpdateableThing
+      CONSTRUCTOR public constructor UpdateableThing()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=UpdateableThing
+      PROPERTY private final val lock: java.util.concurrent.locks.ReentrantReadWriteLock
+        EXPRESSION_BODY
+          CALL .<init> type=java.util.concurrent.locks.ReentrantReadWriteLock operator=null
+      PROPERTY private final var updateCount: kotlin.Int
+        EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='0'
+      FUN public final fun </*0*/ T> performUpdates(/*0*/ block: () -> T): T
+        BLOCK_BODY
+          CALL .write type=kotlin.Nothing operator=null
+            $receiver: CALL .<get-lock> type=java.util.concurrent.locks.ReentrantReadWriteLock operator=GET_PROPERTY
+              $this: THIS public final class UpdateableThing type=UpdateableThing
+            action: BLOCK type=() -> kotlin.Nothing operator=LAMBDA
+              FUN local final fun <anonymous>(): kotlin.Nothing
+                BLOCK_BODY
+                  BLOCK type=kotlin.Int operator=PREFIX_INCR
+                    VAR val tmp0_this: UpdateableThing
+                      THIS public final class UpdateableThing type=UpdateableThing
+                    BLOCK type=kotlin.Int operator=PREFIX_INCR
+                      VAR val tmp1: kotlin.Int
+                        CALL .inc type=kotlin.Int operator=PREFIX_INCR
+                          $this: CALL .<get-updateCount> type=kotlin.Int operator=PREFIX_INCR
+                            $this: GET_VAR tmp0_this type=UpdateableThing operator=null
+                      CALL .<set-updateCount> type=kotlin.Unit operator=PREFIX_INCR
+                        $this: GET_VAR tmp0_this type=UpdateableThing operator=null
+                        <set-?>: GET_VAR tmp1 type=kotlin.Int operator=null
+                      GET_VAR tmp1 type=kotlin.Int operator=null
+                  VAR val result: T
+                    CALL .invoke type=T operator=INVOKE
+                      $this: GET_VAR block type=() -> T operator=VARIABLE_AS_FUNCTION
+                  BLOCK type=kotlin.Int operator=PREFIX_DECR
+                    VAR val tmp2_this: UpdateableThing
+                      THIS public final class UpdateableThing type=UpdateableThing
+                    BLOCK type=kotlin.Int operator=PREFIX_DECR
+                      VAR val tmp3: kotlin.Int
+                        CALL .dec type=kotlin.Int operator=PREFIX_DECR
+                          $this: CALL .<get-updateCount> type=kotlin.Int operator=PREFIX_DECR
+                            $this: GET_VAR tmp2_this type=UpdateableThing operator=null
+                      CALL .<set-updateCount> type=kotlin.Unit operator=PREFIX_DECR
+                        $this: GET_VAR tmp2_this type=UpdateableThing operator=null
+                        <set-?>: GET_VAR tmp3 type=kotlin.Int operator=null
+                      GET_VAR tmp3 type=kotlin.Int operator=null
+                  RETURN type=kotlin.Nothing from=performUpdates
+                    GET_VAR result type=T operator=null
+              CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Nothing operator=LAMBDA
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .performUpdates type=kotlin.String operator=null
+            $this: CALL .<init> type=UpdateableThing operator=null
+            block: BLOCK type=() -> kotlin.String operator=LAMBDA
+              FUN local final fun <anonymous>(): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CONST String type=kotlin.String value='OK'
+              CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA

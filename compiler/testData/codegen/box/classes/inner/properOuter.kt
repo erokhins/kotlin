@@ -14,3 +14,4 @@ fun box(): String {
     val res = A("A").C().testC()
     return if (res == "B_C") "OK" else res;
 }
+

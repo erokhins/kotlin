@@ -1,0 +1,338 @@
+MODULE <test-module>
+  FILE /innerClasses.kt
+    CLASS CLASS Outer
+      PROPERTY public final val outerProp: kotlin.String
+      CONSTRUCTOR public constructor Outer(/*0*/ x: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Outer
+          SET_BACKING_FIELD outerProp type=kotlin.Unit operator=null
+            receiver: THIS public final class Outer type=Outer
+            value: GET_VAR x type=kotlin.String operator=null
+      PROPERTY public final var sideEffects: kotlin.String
+        EXPRESSION_BODY
+          CONST String type=kotlin.String value=''
+      CLASS CLASS A1
+        CONSTRUCTOR public constructor A1()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=A1
+        PROPERTY public final var prop: kotlin.String
+          EXPRESSION_BODY
+            CONST String type=kotlin.String value=''
+        ANONYMOUS_INITIALIZER A1
+          BLOCK_BODY
+            BLOCK type=kotlin.Unit operator=PLUSEQ
+              VAR val tmp0_this: Outer
+                THIS public final class Outer type=Outer
+              CALL .<set-sideEffects> type=kotlin.Unit operator=PLUSEQ
+                $this: GET_VAR tmp0_this type=Outer operator=null
+                <set-?>: CALL .plus type=kotlin.String operator=PLUSEQ
+                  $this: CALL .<get-sideEffects> type=kotlin.String operator=PLUSEQ
+                    $this: GET_VAR tmp0_this type=Outer operator=null
+                  other: CALL .plus type=kotlin.String operator=PLUS
+                    $this: CALL .plus type=kotlin.String operator=PLUS
+                      $this: CALL .plus type=kotlin.String operator=PLUS
+                        $this: CALL .<get-outerProp> type=kotlin.String operator=GET_PROPERTY
+                          $this: THIS public final class Outer type=Outer
+                        other: CONST String type=kotlin.String value='#'
+                      other: CALL .<get-prop> type=kotlin.String operator=GET_PROPERTY
+                        $this: THIS public final inner class A1 type=Outer.A1
+                    other: CONST String type=kotlin.String value='first'
+        CONSTRUCTOR public constructor A1(/*0*/ x: kotlin.String)
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL A1
+              $this: THIS public final class Outer type=Outer
+            CALL .<set-prop> type=kotlin.Unit operator=EQ
+              $this: THIS public final inner class A1 type=Outer.A1
+              <set-?>: CALL .plus type=kotlin.String operator=PLUS
+                $this: GET_VAR x type=kotlin.String operator=null
+                other: STRING_CONCATENATION type=kotlin.String
+                  CONST String type=kotlin.String value='#'
+                  CALL .<get-outerProp> type=kotlin.String operator=GET_PROPERTY
+                    $this: THIS public final class Outer type=Outer
+            BLOCK type=kotlin.Unit operator=PLUSEQ
+              VAR val tmp0_this: Outer
+                THIS public final class Outer type=Outer
+              CALL .<set-sideEffects> type=kotlin.Unit operator=PLUSEQ
+                $this: GET_VAR tmp0_this type=Outer operator=null
+                <set-?>: CALL .plus type=kotlin.String operator=PLUSEQ
+                  $this: CALL .<get-sideEffects> type=kotlin.String operator=PLUSEQ
+                    $this: GET_VAR tmp0_this type=Outer operator=null
+                  other: CONST String type=kotlin.String value='#third'
+        ANONYMOUS_INITIALIZER A1
+          BLOCK_BODY
+            BLOCK type=kotlin.Unit operator=PLUSEQ
+              VAR val tmp0_this: Outer
+                THIS public final class Outer type=Outer
+              CALL .<set-sideEffects> type=kotlin.Unit operator=PLUSEQ
+                $this: GET_VAR tmp0_this type=Outer operator=null
+                <set-?>: CALL .plus type=kotlin.String operator=PLUSEQ
+                  $this: CALL .<get-sideEffects> type=kotlin.String operator=PLUSEQ
+                    $this: GET_VAR tmp0_this type=Outer operator=null
+                  other: CALL .plus type=kotlin.String operator=PLUS
+                    $this: CALL .<get-prop> type=kotlin.String operator=GET_PROPERTY
+                      $this: THIS public final inner class A1 type=Outer.A1
+                    other: CONST String type=kotlin.String value='#second'
+        CONSTRUCTOR public constructor A1(/*0*/ x: kotlin.Int)
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL A1
+              $this: THIS public final class Outer type=Outer
+              x: CALL .plus type=kotlin.String operator=PLUS
+                $this: CALL .plus type=kotlin.String operator=PLUS
+                  $this: CALL .toString type=kotlin.String operator=null
+                    $this: GET_VAR x type=kotlin.Int operator=null
+                  other: CONST String type=kotlin.String value='#'
+                other: CALL .<get-outerProp> type=kotlin.String operator=GET_PROPERTY
+                  $this: THIS public final class Outer type=Outer
+            BLOCK type=kotlin.Unit operator=PLUSEQ
+              VAR val tmp0_this: Outer.A1
+                THIS public final inner class A1 type=Outer.A1
+              CALL .<set-prop> type=kotlin.Unit operator=PLUSEQ
+                $this: GET_VAR tmp0_this type=Outer.A1 operator=null
+                <set-?>: CALL .plus type=kotlin.String operator=PLUSEQ
+                  $this: CALL .<get-prop> type=kotlin.String operator=PLUSEQ
+                    $this: GET_VAR tmp0_this type=Outer.A1 operator=null
+                  other: CONST String type=kotlin.String value='#int'
+            BLOCK type=kotlin.Unit operator=PLUSEQ
+              VAR val tmp1_this: Outer
+                THIS public final class Outer type=Outer
+              CALL .<set-sideEffects> type=kotlin.Unit operator=PLUSEQ
+                $this: GET_VAR tmp1_this type=Outer operator=null
+                <set-?>: CALL .plus type=kotlin.String operator=PLUSEQ
+                  $this: CALL .<get-sideEffects> type=kotlin.String operator=PLUSEQ
+                    $this: GET_VAR tmp1_this type=Outer operator=null
+                  other: CONST String type=kotlin.String value='#fourth'
+      CLASS CLASS A2
+        PROPERTY public final var prop: kotlin.String
+          EXPRESSION_BODY
+            CONST String type=kotlin.String value=''
+        ANONYMOUS_INITIALIZER A2
+          BLOCK_BODY
+            BLOCK type=kotlin.Unit operator=PLUSEQ
+              VAR val tmp0_this: Outer
+                THIS public final class Outer type=Outer
+              CALL .<set-sideEffects> type=kotlin.Unit operator=PLUSEQ
+                $this: GET_VAR tmp0_this type=Outer operator=null
+                <set-?>: CALL .plus type=kotlin.String operator=PLUSEQ
+                  $this: CALL .<get-sideEffects> type=kotlin.String operator=PLUSEQ
+                    $this: GET_VAR tmp0_this type=Outer operator=null
+                  other: CALL .plus type=kotlin.String operator=PLUS
+                    $this: CALL .plus type=kotlin.String operator=PLUS
+                      $this: CALL .plus type=kotlin.String operator=PLUS
+                        $this: CALL .<get-outerProp> type=kotlin.String operator=GET_PROPERTY
+                          $this: THIS public final class Outer type=Outer
+                        other: CONST String type=kotlin.String value='#'
+                      other: CALL .<get-prop> type=kotlin.String operator=GET_PROPERTY
+                        $this: THIS public final inner class A2 type=Outer.A2
+                    other: CONST String type=kotlin.String value='first'
+        CONSTRUCTOR public constructor A2(/*0*/ x: kotlin.String)
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=A2
+            CALL .<set-prop> type=kotlin.Unit operator=EQ
+              $this: THIS public final inner class A2 type=Outer.A2
+              <set-?>: CALL .plus type=kotlin.String operator=PLUS
+                $this: GET_VAR x type=kotlin.String operator=null
+                other: STRING_CONCATENATION type=kotlin.String
+                  CONST String type=kotlin.String value='#'
+                  CALL .<get-outerProp> type=kotlin.String operator=GET_PROPERTY
+                    $this: THIS public final class Outer type=Outer
+            BLOCK type=kotlin.Unit operator=PLUSEQ
+              VAR val tmp0_this: Outer
+                THIS public final class Outer type=Outer
+              CALL .<set-sideEffects> type=kotlin.Unit operator=PLUSEQ
+                $this: GET_VAR tmp0_this type=Outer operator=null
+                <set-?>: CALL .plus type=kotlin.String operator=PLUSEQ
+                  $this: CALL .<get-sideEffects> type=kotlin.String operator=PLUSEQ
+                    $this: GET_VAR tmp0_this type=Outer operator=null
+                  other: CONST String type=kotlin.String value='#third'
+        ANONYMOUS_INITIALIZER A2
+          BLOCK_BODY
+            BLOCK type=kotlin.Unit operator=PLUSEQ
+              VAR val tmp0_this: Outer
+                THIS public final class Outer type=Outer
+              CALL .<set-sideEffects> type=kotlin.Unit operator=PLUSEQ
+                $this: GET_VAR tmp0_this type=Outer operator=null
+                <set-?>: CALL .plus type=kotlin.String operator=PLUSEQ
+                  $this: CALL .<get-sideEffects> type=kotlin.String operator=PLUSEQ
+                    $this: GET_VAR tmp0_this type=Outer operator=null
+                  other: CALL .plus type=kotlin.String operator=PLUS
+                    $this: CALL .<get-prop> type=kotlin.String operator=GET_PROPERTY
+                      $this: THIS public final inner class A2 type=Outer.A2
+                    other: CONST String type=kotlin.String value='#second'
+        CONSTRUCTOR public constructor A2(/*0*/ x: kotlin.Int)
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=A2
+            BLOCK type=kotlin.Unit operator=PLUSEQ
+              VAR val tmp0_this: Outer.A2
+                THIS public final inner class A2 type=Outer.A2
+              CALL .<set-prop> type=kotlin.Unit operator=PLUSEQ
+                $this: GET_VAR tmp0_this type=Outer.A2 operator=null
+                <set-?>: CALL .plus type=kotlin.String operator=PLUSEQ
+                  $this: CALL .<get-prop> type=kotlin.String operator=PLUSEQ
+                    $this: GET_VAR tmp0_this type=Outer.A2 operator=null
+                  other: STRING_CONCATENATION type=kotlin.String
+                    GET_VAR x type=kotlin.Int operator=null
+                    CONST String type=kotlin.String value='#'
+                    CALL .<get-outerProp> type=kotlin.String operator=GET_PROPERTY
+                      $this: THIS public final class Outer type=Outer
+                    CONST String type=kotlin.String value='#int'
+            BLOCK type=kotlin.Unit operator=PLUSEQ
+              VAR val tmp1_this: Outer
+                THIS public final class Outer type=Outer
+              CALL .<set-sideEffects> type=kotlin.Unit operator=PLUSEQ
+                $this: GET_VAR tmp1_this type=Outer operator=null
+                <set-?>: CALL .plus type=kotlin.String operator=PLUSEQ
+                  $this: CALL .<get-sideEffects> type=kotlin.String operator=PLUSEQ
+                    $this: GET_VAR tmp1_this type=Outer operator=null
+                  other: CONST String type=kotlin.String value='#fourth'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val outer1: Outer
+          CALL .<init> type=Outer operator=null
+            x: CONST String type=kotlin.String value='propValue1'
+        VAR val a1: Outer.A1
+          CALL .<init> type=Outer.A1 operator=null
+            $this: GET_VAR outer1 type=Outer operator=null
+            x: CONST String type=kotlin.String value='abc'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-prop> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR a1 type=Outer.A1 operator=null
+              arg1: CONST String type=kotlin.String value='abc#propValue1'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail1: '
+              CALL .<get-prop> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR a1 type=Outer.A1 operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-sideEffects> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR outer1 type=Outer operator=null
+              arg1: CONST String type=kotlin.String value='propValue1#first#second#third'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail1-sideEffects: '
+              CALL .<get-sideEffects> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR outer1 type=Outer operator=null
+        VAR val outer2: Outer
+          CALL .<init> type=Outer operator=null
+            x: CONST String type=kotlin.String value='propValue2'
+        VAR val a2: Outer.A1
+          CALL .<init> type=Outer.A1 operator=null
+            $this: GET_VAR outer2 type=Outer operator=null
+            x: CONST Int type=kotlin.Int value='123'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-prop> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR a2 type=Outer.A1 operator=null
+              arg1: CONST String type=kotlin.String value='123#propValue2#propValue2#int'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail2: '
+              CALL .<get-prop> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR a2 type=Outer.A1 operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-sideEffects> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR outer2 type=Outer operator=null
+              arg1: CONST String type=kotlin.String value='propValue2#first#second#third#fourth'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail2-sideEffects: '
+              CALL .<get-sideEffects> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR outer2 type=Outer operator=null
+        VAR val outer3: Outer
+          CALL .<init> type=Outer operator=null
+            x: CONST String type=kotlin.String value='propValue3'
+        VAR val a3: Outer.A1
+          CALL .<init> type=Outer.A1 operator=null
+            $this: GET_VAR outer3 type=Outer operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-prop> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR a3 type=Outer.A1 operator=null
+              arg1: CONST String type=kotlin.String value=''
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail2: '
+              CALL .<get-prop> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR a3 type=Outer.A1 operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-sideEffects> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR outer3 type=Outer operator=null
+              arg1: CONST String type=kotlin.String value='propValue3#first#second'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail3-sideEffects: '
+              CALL .<get-sideEffects> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR outer3 type=Outer operator=null
+        VAR val outer4: Outer
+          CALL .<init> type=Outer operator=null
+            x: CONST String type=kotlin.String value='propValue4'
+        VAR val a4: Outer.A2
+          CALL .<init> type=Outer.A2 operator=null
+            $this: GET_VAR outer4 type=Outer operator=null
+            x: CONST String type=kotlin.String value='abc'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-prop> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR a4 type=Outer.A2 operator=null
+              arg1: CONST String type=kotlin.String value='abc#propValue4'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail4: '
+              CALL .<get-prop> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR a4 type=Outer.A2 operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-sideEffects> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR outer4 type=Outer operator=null
+              arg1: CONST String type=kotlin.String value='propValue4#first#second#third'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail4-sideEffects: '
+              CALL .<get-sideEffects> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR outer4 type=Outer operator=null
+        VAR val outer5: Outer
+          CALL .<init> type=Outer operator=null
+            x: CONST String type=kotlin.String value='propValue5'
+        VAR val a5: Outer.A2
+          CALL .<init> type=Outer.A2 operator=null
+            $this: GET_VAR outer5 type=Outer operator=null
+            x: CONST Int type=kotlin.Int value='123'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-prop> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR a5 type=Outer.A2 operator=null
+              arg1: CONST String type=kotlin.String value='123#propValue5#int'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail5: '
+              CALL .<get-prop> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR a5 type=Outer.A2 operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-sideEffects> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR outer5 type=Outer operator=null
+              arg1: CONST String type=kotlin.String value='propValue5#first#second#fourth'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail5-sideEffects: '
+              CALL .<get-sideEffects> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR outer5 type=Outer operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

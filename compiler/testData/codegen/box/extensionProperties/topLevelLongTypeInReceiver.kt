@@ -20,3 +20,5 @@ fun box(): String {
     l.bar = "K"
     return d.foo + l.bar
 }
+
+

@@ -1,0 +1,57 @@
+MODULE <test-module>
+  FILE /tryFinallyInsideInlineLambda.kt
+    CLASS CLASS Controller
+      CONSTRUCTOR public constructor Controller()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Controller
+      FUN public final suspend fun suspendHere(/*0*/ v: kotlin.String, /*1*/ x: kotlin.coroutines.Continuation<kotlin.String>): kotlin.Unit
+        BLOCK_BODY
+          CALL .resume type=kotlin.Unit operator=null
+            $this: GET_VAR x type=kotlin.coroutines.Continuation<kotlin.String> operator=null
+            data: GET_VAR v type=kotlin.String operator=null
+    FUN public fun builder(/*0*/ coroutine c: Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit>): kotlin.Unit
+      BLOCK_BODY
+        CALL .resume type=kotlin.Unit operator=null
+          $this: CALL .invoke type=kotlin.coroutines.Continuation<kotlin.Unit> operator=INVOKE
+            $this: GET_VAR c type=Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit> operator=VARIABLE_AS_FUNCTION
+            p1: CALL .<init> type=Controller operator=null
+          data: GET_OBJECT Unit type=kotlin.Unit
+    FUN public inline fun run(/*0*/ block: () -> kotlin.Unit): kotlin.Unit
+      BLOCK_BODY
+        CALL .invoke type=kotlin.Unit operator=INVOKE
+          $this: GET_VAR block type=() -> kotlin.Unit operator=VARIABLE_AS_FUNCTION
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR var result: kotlin.String
+          CONST String type=kotlin.String value=''
+        CALL .run type=kotlin.Unit operator=null
+          block: BLOCK type=() -> kotlin.Unit operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Unit
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .builder type=kotlin.Unit operator=null
+                    c: TYPE_OP operator=IMPLICIT_CAST typeOperand=Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit>
+                      BLOCK type=Controller.() -> kotlin.Unit operator=LAMBDA
+                        FUN local final fun Controller.<anonymous>(): kotlin.Unit
+                          BLOCK_BODY
+                            RETURN type=kotlin.Nothing from=<anonymous>
+                              TRY_CATCH type=kotlin.Unit
+                                try: BLOCK type=kotlin.Unit operator=null
+                                  SET_VAR result type=kotlin.Unit operator=PLUSEQ
+                                    CALL .plus type=kotlin.String operator=PLUSEQ
+                                      $this: GET_VAR result type=kotlin.String operator=PLUSEQ
+                                      other: CALL .suspendHere type=kotlin.String operator=null
+                                        $this: $RECEIVER of: <anonymous> type=Controller
+                                        v: CONST String type=kotlin.String value='O'
+                                finally: BLOCK type=kotlin.Unit operator=null
+                                  SET_VAR result type=kotlin.Unit operator=PLUSEQ
+                                    CALL .plus type=kotlin.String operator=PLUSEQ
+                                      $this: GET_VAR result type=kotlin.String operator=PLUSEQ
+                                      other: CALL .suspendHere type=kotlin.String operator=null
+                                        $this: $RECEIVER of: <anonymous> type=Controller
+                                        v: CONST String type=kotlin.String value='K'
+                        CALLABLE_REFERENCE <anonymous> type=Controller.() -> kotlin.Unit operator=LAMBDA
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Unit operator=LAMBDA
+        RETURN type=kotlin.Nothing from=box
+          GET_VAR result type=kotlin.String operator=null

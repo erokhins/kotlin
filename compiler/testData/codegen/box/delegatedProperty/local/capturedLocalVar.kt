@@ -18,3 +18,5 @@ fun box(): String {
     if (prop != 2) return "fail get"
     return run { if (prop != 2) "fail set" else "OK" }
 }
+
+

@@ -19,3 +19,5 @@ fun box(): String {
     assertEquals("java.lang.String", y.f())
     return "OK"
 }
+
+

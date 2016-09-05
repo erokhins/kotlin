@@ -5,3 +5,4 @@ fun box() : String {
   val b = a
   return if(b == a) "OK" else "fail"
 }
+

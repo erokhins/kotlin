@@ -12,3 +12,5 @@ fun box(): String {
     }
     return t.foo
 }
+
+

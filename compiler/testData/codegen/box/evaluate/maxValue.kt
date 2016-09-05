@@ -29,3 +29,5 @@ fun box(): String {
     if (annotation.p6 != java.lang.Long.MAX_VALUE + 1) return "fail 5, expected = ${java.lang.Long.MAX_VALUE + 1}, actual = ${annotation.p6}"
     return "OK"
 }
+
+

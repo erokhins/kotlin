@@ -13,3 +13,4 @@ class A : BK, KTrait {
 fun box(): String {
     return if (A().foo() == "30") "OK" else "fail"
 }
+

@@ -5,3 +5,4 @@ fun box() : String {
     val expected: Long? = 6L
     return if (b.value == expected) "OK" else "fail"
 }
+

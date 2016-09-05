@@ -5,3 +5,5 @@ class A {
 fun A?.bar() = if (this != null) foo() else "FAIL"
 
 fun box() = A().bar()
+
+

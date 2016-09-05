@@ -16,3 +16,5 @@ fun box(): String {
     bar.test()
     return bar.foo
 }
+
+

@@ -18,3 +18,5 @@ fun box(): String {
     val foo = buildFoo({})
     return foo.xyzzy(Bar())
 }
+
+

@@ -9,3 +9,5 @@ fun box() = when(foo()) {
     Season.Warm -> "OK"
     Season.Cold -> "Fail: Cold, should be Warm"
 }
+
+

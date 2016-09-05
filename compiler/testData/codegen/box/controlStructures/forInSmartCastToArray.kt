@@ -12,3 +12,5 @@ fun box(): String {
     a[0] = "OK"
     return f(a) as String
 }
+
+

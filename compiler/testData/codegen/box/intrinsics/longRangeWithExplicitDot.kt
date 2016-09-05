@@ -4,3 +4,4 @@ fun box(): String {
   val r = l.rangeTo(l2)
   return if (r.start == l && r.endInclusive == l2) "OK" else "fail"
 }
+

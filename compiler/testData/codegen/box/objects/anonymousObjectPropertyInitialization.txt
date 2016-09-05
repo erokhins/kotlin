@@ -1,0 +1,36 @@
+MODULE <test-module>
+  FILE /anonymousObjectPropertyInitialization.kt
+    CLASS INTERFACE T
+      FUN public abstract fun foo(): kotlin.String
+    PROPERTY public val o: T
+      EXPRESSION_BODY
+        BLOCK type=o.<no name provided> operator=OBJECT_LITERAL
+          CLASS CLASS <no name provided>
+            CONSTRUCTOR public constructor <no name provided>()
+              BLOCK_BODY
+                DELEGATING_CONSTRUCTOR_CALL Any
+                INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+            PROPERTY public final val a: kotlin.String = "OK"
+              EXPRESSION_BODY
+                CONST String type=kotlin.String value='OK'
+            PROPERTY public final val f: kotlin.String
+              EXPRESSION_BODY
+                CALL .invoke type=kotlin.String operator=null
+                  $this: BLOCK type=() -> kotlin.String operator=LAMBDA
+                    FUN local final fun <anonymous>(): kotlin.String
+                      BLOCK_BODY
+                        RETURN type=kotlin.Nothing from=<anonymous>
+                          CALL .<get-a> type=kotlin.String operator=GET_PROPERTY
+                            $this: THIS local final class <no name provided> : T type=o.<no name provided>
+                    CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+            FUN public open override /*1*/ fun foo(): kotlin.String
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=foo
+                  CALL .<get-f> type=kotlin.String operator=GET_PROPERTY
+                    $this: THIS local final class <no name provided> : T type=o.<no name provided>
+          CALL .<init> type=o.<no name provided> operator=OBJECT_LITERAL
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .foo type=kotlin.String operator=null
+            $this: CALL .<get-o> type=T operator=GET_PROPERTY

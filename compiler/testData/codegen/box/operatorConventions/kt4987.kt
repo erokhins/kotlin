@@ -4,3 +4,4 @@ fun box(): String {
     counter++
     return if (counter == 1) "OK" else "fail: $counter"
 }
+

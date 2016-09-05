@@ -1,0 +1,34 @@
+MODULE <test-module>
+  FILE /overflowInt.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val i1: kotlin.Int = 2147483647
+          CALL .<get-MAX_VALUE> type=kotlin.Int operator=GET_PROPERTY
+            $this: GET_OBJECT Companion type=kotlin.Int.Companion
+        VAR val i2: kotlin.Int = -2147483648
+          CALL .plus type=kotlin.Int operator=PLUS
+            $this: GET_VAR i1 type=kotlin.Int operator=null
+            other: CONST Int type=kotlin.Int value='1'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .GT0 type=kotlin.Boolean operator=GT
+            arg0: CALL .compareTo type=kotlin.Int operator=GT
+              $this: GET_VAR i2 type=kotlin.Int operator=null
+              other: GET_VAR i1 type=kotlin.Int operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail: Int.MAX_VALUE + 1 should overflow to negative.'
+        VAR val i3: kotlin.Int = -2147483648
+          CALL .<get-MIN_VALUE> type=kotlin.Int operator=GET_PROPERTY
+            $this: GET_OBJECT Companion type=kotlin.Int.Companion
+        VAR val i4: kotlin.Int = 2147483647
+          CALL .minus type=kotlin.Int operator=MINUS
+            $this: GET_VAR i3 type=kotlin.Int operator=null
+            other: CONST Int type=kotlin.Int value='1'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .LT0 type=kotlin.Boolean operator=LT
+            arg0: CALL .compareTo type=kotlin.Int operator=LT
+              $this: GET_VAR i4 type=kotlin.Int operator=null
+              other: GET_VAR i3 type=kotlin.Int operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail: Int.MIN_VALUE - 1 should overflow to positive.'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

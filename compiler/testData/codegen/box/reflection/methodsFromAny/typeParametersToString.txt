@@ -1,0 +1,32 @@
+MODULE <test-module>
+  FILE /typeParametersToString.kt
+    CLASS INTERFACE Variance
+    CLASS CLASS OneBound
+      CONSTRUCTOR public constructor OneBound</*0*/ T : kotlin.Enum<T>>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=OneBound
+    CLASS CLASS SeveralBounds
+      CONSTRUCTOR public constructor SeveralBounds</*0*/ T : kotlin.Cloneable>() where T : kotlin.Enum<T>, T : Variance<kotlin.String, kotlin.Int?, kotlin.Double?, kotlin.Number>
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=SeveralBounds
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='[A, in B, out C, D]'
+          actual: CALL .toString type=kotlin.String operator=null
+            $this: CALL .<get-typeParameters> type=kotlin.collections.List<kotlin.reflect.KTypeParameter> operator=GET_PROPERTY
+              $this: CLASS_REFERENCE Variance type=kotlin.reflect.KClass<Variance<*, *, *, *>>
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='[T]'
+          actual: CALL .toString type=kotlin.String operator=null
+            $this: CALL .<get-typeParameters> type=kotlin.collections.List<kotlin.reflect.KTypeParameter> operator=GET_PROPERTY
+              $this: CLASS_REFERENCE OneBound type=kotlin.reflect.KClass<OneBound<*>>
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='[T]'
+          actual: CALL .toString type=kotlin.String operator=null
+            $this: CALL .<get-typeParameters> type=kotlin.collections.List<kotlin.reflect.KTypeParameter> operator=GET_PROPERTY
+              $this: CLASS_REFERENCE SeveralBounds type=kotlin.reflect.KClass<SeveralBounds<*>>
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

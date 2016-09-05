@@ -5,3 +5,5 @@ fun box(): String {
     if("$a" != "A(x=1, z=null)") return "$a"
     return "OK"
 }
+
+

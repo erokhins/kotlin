@@ -14,3 +14,4 @@ enum class MyEnum : T {
 interface T {
     fun f(): String
 }
+

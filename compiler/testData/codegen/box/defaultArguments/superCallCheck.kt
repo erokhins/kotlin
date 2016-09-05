@@ -25,3 +25,5 @@ fun box():String {
 
     return if (!failed) "fail" else "OK"
 }
+
+

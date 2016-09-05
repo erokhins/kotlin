@@ -11,3 +11,5 @@ class A {
 fun box(): String {
     return A.ref.get(A())
 }
+
+

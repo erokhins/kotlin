@@ -1,0 +1,38 @@
+MODULE <test-module>
+  FILE /inClassWithPrivateSetter.kt
+    CLASS CLASS Test
+      CONSTRUCTOR public constructor Test()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Test
+      PROPERTY public final var storage: kotlin.String
+        EXPRESSION_BODY
+          CONST String type=kotlin.String value='Fail'
+      PROPERTY public final var kotlin.Int.foo: kotlin.String
+        PROPERTY_GETTER public final fun kotlin.Int.<get-foo>(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-foo>
+              CALL .<get-storage> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public final class Test type=Test
+        PROPERTY_SETTER private final fun kotlin.Int.<set-foo>(/*0*/ str: kotlin.String): kotlin.Unit
+          BLOCK_BODY
+            CALL .<set-storage> type=kotlin.Unit operator=EQ
+              $this: THIS public final class Test type=Test
+              <set-?>: GET_VAR str type=kotlin.String operator=null
+      FUN public final fun test(): kotlin.String
+        BLOCK_BODY
+          VAR val i: kotlin.Int = 1
+            CONST Int type=kotlin.Int value='1'
+          CALL .<set-foo> type=kotlin.Unit operator=EQ
+            $this: THIS public final class Test type=Test
+            $receiver: GET_VAR i type=kotlin.Int operator=null
+            str: CONST String type=kotlin.String value='OK'
+          RETURN type=kotlin.Nothing from=test
+            CALL .<get-foo> type=kotlin.String operator=GET_PROPERTY
+              $this: THIS public final class Test type=Test
+              $receiver: GET_VAR i type=kotlin.Int operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .test type=kotlin.String operator=null
+            $this: CALL .<init> type=Test operator=null

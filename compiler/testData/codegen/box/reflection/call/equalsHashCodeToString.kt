@@ -25,3 +25,5 @@ fun box(): String {
 
     return String::toString.call("OK")
 }
+
+

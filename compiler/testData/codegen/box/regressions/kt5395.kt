@@ -11,3 +11,5 @@ class D {
 fun box(): String {
     return D().E().foo()
 }
+
+

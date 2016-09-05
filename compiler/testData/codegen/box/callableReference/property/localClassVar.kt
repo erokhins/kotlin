@@ -7,3 +7,5 @@ fun box(): String {
     (Local::result).set(l, "OK")
     return (Local::result).get(l)
 }
+
+

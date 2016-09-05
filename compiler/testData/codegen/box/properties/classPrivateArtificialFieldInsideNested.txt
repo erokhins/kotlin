@@ -1,0 +1,44 @@
+MODULE <test-module>
+  FILE /classPrivateArtificialFieldInsideNested.kt
+    CLASS CLASS Your
+      CONSTRUCTOR public constructor Your()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Your
+      PROPERTY public abstract val your: kotlin.String
+      FUN public final fun foo(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CALL .<get-your> type=kotlin.String operator=GET_PROPERTY
+              $this: THIS public abstract class Your type=Your
+    CLASS CLASS My
+      CONSTRUCTOR public constructor My()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=My
+      PROPERTY private final val back: kotlin.String = "O"
+        EXPRESSION_BODY
+          CONST String type=kotlin.String value='O'
+      PROPERTY public final val my: kotlin.String
+        PROPERTY_GETTER public final fun <get-my>(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-my>
+              CALL .plus type=kotlin.String operator=PLUS
+                $this: CALL .foo type=kotlin.String operator=null
+                  $this: BLOCK type=My.<get-my>.<no name provided> operator=OBJECT_LITERAL
+                    CLASS CLASS <no name provided>
+                      CONSTRUCTOR public constructor <no name provided>()
+                        BLOCK_BODY
+                          DELEGATING_CONSTRUCTOR_CALL Your
+                          INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+                      PROPERTY public open override /*1*/ val your: kotlin.String = "O"
+                        EXPRESSION_BODY
+                          CALL .<get-back> type=kotlin.String operator=GET_PROPERTY
+                            $this: THIS public final class My type=My
+                    CALL .<init> type=My.<get-my>.<no name provided> operator=OBJECT_LITERAL
+                other: CONST String type=kotlin.String value='K'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .<get-my> type=kotlin.String operator=GET_PROPERTY
+            $this: CALL .<init> type=My operator=null

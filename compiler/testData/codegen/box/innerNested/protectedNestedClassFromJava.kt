@@ -32,3 +32,5 @@ public class JavaClass {
         JavaTest.foo(new Object());
     }
 }
+
+

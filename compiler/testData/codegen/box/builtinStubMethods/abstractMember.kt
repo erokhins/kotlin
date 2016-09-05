@@ -18,3 +18,5 @@ fun box(): String {
 
     return (a as B).result
 }
+
+

@@ -8,3 +8,5 @@ class Outer {
 }
 
 fun box() = Package.Outer.Nested().O + Outer.Nested().K
+
+

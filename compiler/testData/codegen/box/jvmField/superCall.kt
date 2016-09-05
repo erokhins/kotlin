@@ -17,3 +17,5 @@ class B : A() {
 fun box(): String {
     return if (B().test() == "123") return "OK" else "fail"
 }
+
+

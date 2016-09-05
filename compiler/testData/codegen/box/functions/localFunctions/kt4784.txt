@@ -1,0 +1,50 @@
+MODULE <test-module>
+  FILE /kt4784.kt
+    CLASS CLASS T
+      CONSTRUCTOR public constructor T(/*0*/ value: kotlin.Int)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD value type=kotlin.Unit operator=null
+            receiver: THIS public open class T type=T
+            value: GET_VAR value type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=T
+      PROPERTY public final var value: kotlin.Int
+        EXPRESSION_BODY
+          GET_VAR value type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    FUN public fun plusAssign(): T
+      BLOCK_BODY
+        FUN local final operator fun T.plusAssign(/*0*/ s: kotlin.Int): kotlin.Unit
+          BLOCK_BODY
+            BLOCK type=kotlin.Unit operator=PLUSEQ
+              VAR val tmp0_this: T
+                $RECEIVER of: plusAssign type=T
+              CALL .<set-value> type=kotlin.Unit operator=PLUSEQ
+                $this: GET_VAR tmp0_this type=T operator=null
+                <set-?>: CALL .plus type=kotlin.Int operator=PLUSEQ
+                  $this: CALL .<get-value> type=kotlin.Int operator=PLUSEQ
+                    $this: GET_VAR tmp0_this type=T operator=null
+                  other: GET_VAR s type=kotlin.Int operator=null
+        VAR var t: T
+          CALL .<init> type=T operator=null
+            value: CONST Int type=kotlin.Int value='1'
+        CALL .plusAssign type=kotlin.Unit operator=PLUSEQ
+          $receiver: GET_VAR t type=T operator=PLUSEQ
+          s: CONST Int type=kotlin.Int value='1'
+        RETURN type=kotlin.Nothing from=plusAssign
+          GET_VAR t type=T operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val result: kotlin.Int
+          CALL .<get-value> type=kotlin.Int operator=GET_PROPERTY
+            $this: CALL .plusAssign type=T operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR result type=kotlin.Int operator=null
+              arg1: CONST Int type=kotlin.Int value='2'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 1: '
+              GET_VAR result type=kotlin.Int operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

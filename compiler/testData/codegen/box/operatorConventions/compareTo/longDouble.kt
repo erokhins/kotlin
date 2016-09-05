@@ -8,3 +8,5 @@ fun checkLess(x: Long, y: Double) = when {
 }
 
 fun box() = checkLess(0.toLong(), 0.5)
+
+

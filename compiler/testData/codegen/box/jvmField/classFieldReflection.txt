@@ -1,0 +1,151 @@
+MODULE <test-module>
+  FILE /classFieldReflection.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A(/*0*/ s1: kotlin.String, /*1*/ s2: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD s1 type=kotlin.Unit operator=null
+            receiver: THIS public final class A type=zzz.A
+            value: GET_VAR s1 type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          SET_BACKING_FIELD s2 type=kotlin.Unit operator=null
+            receiver: THIS public final class A type=zzz.A
+            value: GET_VAR s2 type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public final val s1: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR s1 type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final val s2: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR s2 type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY @kotlin.jvm.JvmField() public final var publicField: kotlin.String
+        EXPRESSION_BODY
+          CALL .<get-s1> type=kotlin.String operator=GET_PROPERTY
+            $this: THIS public final class A type=zzz.A
+      PROPERTY @kotlin.jvm.JvmField() internal final var internalField: kotlin.String
+        EXPRESSION_BODY
+          CALL .<get-s2> type=kotlin.String operator=GET_PROPERTY
+            $this: THIS public final class A type=zzz.A
+      FUN public final fun testAccessors(): kotlin.Unit
+        BLOCK_BODY
+          CALL .checkAccessor type=kotlin.Unit operator=null
+            prop: TYPE_OP operator=CAST typeOperand=kotlin.reflect.KMutableProperty1<zzz.A, kotlin.String>
+              CALL .firstOrNull type=kotlin.reflect.KCallable<*>? operator=null
+                $receiver: CALL .<get-members> type=kotlin.collections.Collection<kotlin.reflect.KCallable<*>> operator=GET_PROPERTY
+                  $this: CLASS_REFERENCE A type=kotlin.reflect.KClass<zzz.A>
+                predicate: BLOCK type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+                  FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KCallable<*>): kotlin.Boolean
+                    BLOCK_BODY
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                        CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                          arg0: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+                            $this: GET_VAR it type=kotlin.reflect.KCallable<*> operator=null
+                          arg1: CONST String type=kotlin.String value='publicField'
+                  CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+            value: CALL .<get-s1> type=kotlin.String operator=GET_PROPERTY
+              $this: THIS public final class A type=zzz.A
+            newValue: CONST String type=kotlin.String value='3'
+            receiver: THIS public final class A type=zzz.A
+          CALL .checkAccessor type=kotlin.Unit operator=null
+            prop: TYPE_OP operator=CAST typeOperand=kotlin.reflect.KMutableProperty1<zzz.A, kotlin.String>
+              CALL .firstOrNull type=kotlin.reflect.KCallable<*>? operator=null
+                $receiver: CALL .<get-members> type=kotlin.collections.Collection<kotlin.reflect.KCallable<*>> operator=GET_PROPERTY
+                  $this: CLASS_REFERENCE A type=kotlin.reflect.KClass<zzz.A>
+                predicate: BLOCK type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+                  FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KCallable<*>): kotlin.Boolean
+                    BLOCK_BODY
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                        CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                          arg0: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+                            $this: GET_VAR it type=kotlin.reflect.KCallable<*> operator=null
+                          arg1: CONST String type=kotlin.String value='internalField'
+                  CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+            value: CALL .<get-s2> type=kotlin.String operator=GET_PROPERTY
+              $this: THIS public final class A type=zzz.A
+            newValue: CONST String type=kotlin.String value='4'
+            receiver: THIS public final class A type=zzz.A
+    CLASS CLASS AWithCompanion
+      CONSTRUCTOR public constructor AWithCompanion()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=AWithCompanion
+      CLASS OBJECT Companion
+        CONSTRUCTOR private constructor Companion()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Companion
+        PROPERTY @kotlin.jvm.JvmField() public final var publicField: kotlin.String
+          EXPRESSION_BODY
+            CONST String type=kotlin.String value='1'
+        PROPERTY @kotlin.jvm.JvmField() internal final var internalField: kotlin.String
+          EXPRESSION_BODY
+            CONST String type=kotlin.String value='2'
+        FUN public final fun testAccessors(): kotlin.Unit
+          BLOCK_BODY
+            CALL .checkAccessor type=kotlin.Unit operator=null
+              prop: TYPE_OP operator=CAST typeOperand=kotlin.reflect.KMutableProperty1<zzz.AWithCompanion.Companion, kotlin.String>
+                CALL .firstOrNull type=kotlin.reflect.KCallable<*>? operator=null
+                  $receiver: CALL .<get-members> type=kotlin.collections.Collection<kotlin.reflect.KCallable<*>> operator=GET_PROPERTY
+                    $this: CLASS_REFERENCE Companion type=kotlin.reflect.KClass<zzz.AWithCompanion.Companion>
+                  predicate: BLOCK type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+                    FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KCallable<*>): kotlin.Boolean
+                      BLOCK_BODY
+                        RETURN type=kotlin.Nothing from=<anonymous>
+                          CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                            arg0: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+                              $this: GET_VAR it type=kotlin.reflect.KCallable<*> operator=null
+                            arg1: CONST String type=kotlin.String value='publicField'
+                    CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+              value: CONST String type=kotlin.String value='1'
+              newValue: CONST String type=kotlin.String value='3'
+              receiver: GET_OBJECT Companion type=zzz.AWithCompanion.Companion
+            CALL .checkAccessor type=kotlin.Unit operator=null
+              prop: TYPE_OP operator=CAST typeOperand=kotlin.reflect.KMutableProperty1<zzz.AWithCompanion.Companion, kotlin.String>
+                CALL .firstOrNull type=kotlin.reflect.KCallable<*>? operator=null
+                  $receiver: CALL .<get-members> type=kotlin.collections.Collection<kotlin.reflect.KCallable<*>> operator=GET_PROPERTY
+                    $this: CLASS_REFERENCE Companion type=kotlin.reflect.KClass<zzz.AWithCompanion.Companion>
+                  predicate: BLOCK type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+                    FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KCallable<*>): kotlin.Boolean
+                      BLOCK_BODY
+                        RETURN type=kotlin.Nothing from=<anonymous>
+                          CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                            arg0: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+                              $this: GET_VAR it type=kotlin.reflect.KCallable<*> operator=null
+                            arg1: CONST String type=kotlin.String value='internalField'
+                    CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+              value: CONST String type=kotlin.String value='2'
+              newValue: CONST String type=kotlin.String value='4'
+              receiver: GET_OBJECT Companion type=zzz.AWithCompanion.Companion
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .testAccessors type=kotlin.Unit operator=null
+          $this: CALL .<init> type=zzz.A operator=null
+            s1: CONST String type=kotlin.String value='1'
+            s2: CONST String type=kotlin.String value='2'
+        CALL .testAccessors type=kotlin.Unit operator=null
+          $this: GET_OBJECT Companion type=zzz.AWithCompanion.Companion
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'
+    FUN public fun </*0*/ T, /*1*/ R> checkAccessor(/*0*/ prop: kotlin.reflect.KMutableProperty1<T, R>, /*1*/ value: R, /*2*/ newValue: R, /*3*/ receiver: T): kotlin.Unit
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .get type=R operator=null
+            $this: GET_VAR prop type=kotlin.reflect.KMutableProperty1<T, R> operator=null
+            receiver: GET_VAR receiver type=T operator=null
+          actual: GET_VAR value type=R operator=null
+          message: STRING_CONCATENATION type=kotlin.String
+            CONST String type=kotlin.String value='Property '
+            GET_VAR prop type=kotlin.reflect.KMutableProperty1<T, R> operator=null
+            CONST String type=kotlin.String value=' has wrong value'
+        CALL .set type=kotlin.Unit operator=null
+          $this: GET_VAR prop type=kotlin.reflect.KMutableProperty1<T, R> operator=null
+          receiver: GET_VAR receiver type=T operator=null
+          value: GET_VAR newValue type=R operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .get type=R operator=null
+            $this: GET_VAR prop type=kotlin.reflect.KMutableProperty1<T, R> operator=null
+            receiver: GET_VAR receiver type=T operator=null
+          actual: GET_VAR newValue type=R operator=null
+          message: STRING_CONCATENATION type=kotlin.String
+            CONST String type=kotlin.String value='Property '
+            GET_VAR prop type=kotlin.reflect.KMutableProperty1<T, R> operator=null
+            CONST String type=kotlin.String value=' has wrong value'

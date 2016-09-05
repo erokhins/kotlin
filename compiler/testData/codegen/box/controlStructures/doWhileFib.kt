@@ -10,3 +10,5 @@ fun box(): String {
     
     return if (fy == 144) "OK" else "Fail $fx $fy"
 }
+
+

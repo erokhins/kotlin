@@ -11,3 +11,5 @@ fun box(): String {
    D().foo()
    return "OK"
 }
+
+

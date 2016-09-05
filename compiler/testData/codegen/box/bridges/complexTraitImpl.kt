@@ -32,3 +32,5 @@ fun box(): String {
     r += a.foo()[0]
     return if (r == "BBBBB") "OK" else "Fail: $r"
 }
+
+

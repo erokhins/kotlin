@@ -16,3 +16,5 @@ fun box(): String {
     assertEquals("Companion", C.Companion.result)
     return OK.result
 }
+
+

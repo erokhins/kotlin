@@ -7,3 +7,4 @@ fun box(): String {
     a.str = "OK"
     return a.str
 }
+

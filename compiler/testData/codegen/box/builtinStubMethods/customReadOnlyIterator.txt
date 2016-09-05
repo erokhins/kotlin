@@ -1,0 +1,65 @@
+MODULE <test-module>
+  FILE /customReadOnlyIterator.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public open override /*1*/ val size: kotlin.Int
+        PROPERTY_GETTER public open override /*1*/ fun <get-size>(): kotlin.Int
+          BLOCK_BODY
+            THROW type=kotlin.Nothing
+              CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun contains(/*0*/ element: kotlin.Char): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+              p0: CONST String type=kotlin.String value='not implemented'
+      FUN public open override /*1*/ fun containsAll(/*0*/ elements: kotlin.collections.Collection<kotlin.Char>): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+              p0: CONST String type=kotlin.String value='not implemented'
+      FUN public open override /*1*/ fun isEmpty(): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+              p0: CONST String type=kotlin.String value='not implemented'
+      FUN public open override /*1*/ fun iterator(): MyIterator
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=iterator
+            GET_OBJECT MyIterator type=MyIterator
+    CLASS OBJECT MyIterator
+      CONSTRUCTOR private constructor MyIterator()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=MyIterator
+      FUN public open override /*1*/ fun hasNext(): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=hasNext
+            CONST Boolean type=kotlin.Boolean value='true'
+      FUN public open override /*1*/ fun next(): kotlin.Char
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=next
+            CONST Char type=kotlin.Char value='a'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val it: MyIterator
+          CALL .iterator type=MyIterator operator=null
+            $this: CALL .<init> type=A operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .hasNext type=kotlin.Boolean operator=null
+              $this: GET_VAR it type=MyIterator operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 1'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .next type=kotlin.Char operator=null
+                $this: GET_VAR it type=MyIterator operator=null
+              arg1: CONST Char type=kotlin.Char value='a'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 2'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

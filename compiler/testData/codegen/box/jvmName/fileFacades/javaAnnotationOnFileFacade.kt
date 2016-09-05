@@ -18,3 +18,5 @@ public @interface StringHolder {
 
 fun box(): String =
         Class.forName("FileFacadeKt").getAnnotation(StringHolder::class.java)?.value ?: "null"
+
+

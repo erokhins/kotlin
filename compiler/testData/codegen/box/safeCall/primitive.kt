@@ -6,3 +6,5 @@ fun box(): String {
     42.toLong()?.bar()
     return "OK"
 }
+
+

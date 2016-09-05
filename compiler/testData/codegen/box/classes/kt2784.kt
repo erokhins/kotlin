@@ -8,3 +8,4 @@ fun box() : String {
     A
     return "OK"
 }
+

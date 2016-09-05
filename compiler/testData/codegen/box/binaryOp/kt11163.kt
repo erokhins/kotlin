@@ -10,3 +10,4 @@ fun foo(x: Int, y: Char): String {
 fun box(): String {
     return foo(42, 'O')
 }
+

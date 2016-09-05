@@ -22,3 +22,5 @@ fun box(): String {
     if (x6.toString() != "(true, true)") return "fail 6"
     return "OK"
 }
+
+

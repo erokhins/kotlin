@@ -10,3 +10,5 @@ fun box(): String {
     val x: Outer.Nested<String> = Outer.Nested("OK")
     return x.box()
 }
+
+

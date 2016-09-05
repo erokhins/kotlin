@@ -26,3 +26,5 @@ fun box(): String {
     testSafeRange(0.0, 1.0, "0.0..1.0", ::dougleRange)
     return "OK"
 }
+
+

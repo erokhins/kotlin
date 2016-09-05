@@ -23,3 +23,5 @@ fun box(): String {
     check(ClassWithGenericSuperInterface::class.java)
     return "OK"
 }
+
+

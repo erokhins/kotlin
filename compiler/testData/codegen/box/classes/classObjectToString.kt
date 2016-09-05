@@ -7,3 +7,5 @@ fun box() =
         "OK"
     else
         "Fail: $SomeClass"
+
+

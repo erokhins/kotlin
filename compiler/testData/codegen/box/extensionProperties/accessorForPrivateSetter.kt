@@ -19,3 +19,5 @@ class A {
 }
 
 fun box() = A().run()
+
+

@@ -10,3 +10,5 @@ fun box(): String {
     a[0]++
     return if (a[0] == 2) "OK" else "fail"
 }
+
+

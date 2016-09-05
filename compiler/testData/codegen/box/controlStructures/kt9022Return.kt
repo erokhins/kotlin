@@ -24,3 +24,4 @@ fun box(): String {
     if (testAnd() != false) return "fail 6"
     return "OK"
 }
+

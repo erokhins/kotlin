@@ -1,0 +1,73 @@
+MODULE <test-module>
+  FILE /objectVsClassInitialization_kt5291.kt
+    FUN public inline fun </*0*/ T> T.with(/*0*/ f: T.() -> kotlin.Unit): T
+      BLOCK_BODY
+        CALL .invoke type=kotlin.Unit operator=INVOKE
+          $this: GET_VAR f type=T.() -> kotlin.Unit operator=VARIABLE_AS_FUNCTION
+          $receiver: $RECEIVER of: with type=T
+        RETURN type=kotlin.Nothing from=with
+          $RECEIVER of: with type=T
+    CLASS CLASS Cls
+      CONSTRUCTOR public constructor Cls()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Cls
+      PROPERTY public final val string: kotlin.String = "Cls"
+        EXPRESSION_BODY
+          CONST String type=kotlin.String value='Cls'
+      PROPERTY public final val buffer: java.lang.StringBuilder
+        EXPRESSION_BODY
+          CALL .with type=java.lang.StringBuilder operator=null
+            $receiver: CALL .<init> type=java.lang.StringBuilder operator=null
+            f: BLOCK type=java.lang.StringBuilder.() -> kotlin.Unit operator=LAMBDA
+              FUN local final fun java.lang.StringBuilder.<anonymous>(): kotlin.Unit
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .append type=java.lang.StringBuilder! operator=null
+                      $this: $RECEIVER of: <anonymous> type=java.lang.StringBuilder
+                      p0: CALL .<get-string> type=kotlin.String operator=GET_PROPERTY
+                        $this: THIS public final class Cls type=Cls
+              CALLABLE_REFERENCE <anonymous> type=java.lang.StringBuilder.() -> kotlin.Unit operator=LAMBDA
+    CLASS OBJECT Obj
+      CONSTRUCTOR private constructor Obj()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Obj
+      PROPERTY public final val string: kotlin.String = "Obj"
+        EXPRESSION_BODY
+          CONST String type=kotlin.String value='Obj'
+      PROPERTY public final val buffer: java.lang.StringBuilder
+        EXPRESSION_BODY
+          CALL .with type=java.lang.StringBuilder operator=null
+            $receiver: CALL .<init> type=java.lang.StringBuilder operator=null
+            f: BLOCK type=java.lang.StringBuilder.() -> kotlin.Unit operator=LAMBDA
+              FUN local final fun java.lang.StringBuilder.<anonymous>(): kotlin.Unit
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .append type=java.lang.StringBuilder! operator=null
+                      $this: $RECEIVER of: <anonymous> type=java.lang.StringBuilder
+                      p0: CALL .<get-string> type=kotlin.String operator=GET_PROPERTY
+                        $this: THIS public object Obj type=Obj
+              CALLABLE_REFERENCE <anonymous> type=java.lang.StringBuilder.() -> kotlin.Unit operator=LAMBDA
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .toString type=kotlin.String operator=null
+                $this: CALL .<get-buffer> type=java.lang.StringBuilder operator=GET_PROPERTY
+                  $this: CALL .<init> type=Cls operator=null
+              arg1: CONST String type=kotlin.String value='Cls'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail class'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .toString type=kotlin.String operator=null
+                $this: CALL .<get-buffer> type=java.lang.StringBuilder operator=GET_PROPERTY
+                  $this: GET_OBJECT Obj type=Obj
+              arg1: CONST String type=kotlin.String value='Obj'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail object'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

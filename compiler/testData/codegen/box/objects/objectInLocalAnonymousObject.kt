@@ -8,3 +8,4 @@ fun box(): String {
 
     return foo.bar.baz
 }
+

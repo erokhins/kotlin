@@ -19,3 +19,4 @@ fun box(): String {
     val d = D()
     return if (d.attr {} == 2) "OK" else "fail"
 }
+

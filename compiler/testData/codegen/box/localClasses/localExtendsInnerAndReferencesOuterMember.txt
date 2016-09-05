@@ -1,0 +1,45 @@
+MODULE <test-module>
+  FILE /localExtendsInnerAndReferencesOuterMember.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public final fun box(): kotlin.String
+        BLOCK_BODY
+          CLASS CLASS Local
+            CONSTRUCTOR public constructor Local()
+              BLOCK_BODY
+                DELEGATING_CONSTRUCTOR_CALL Inner
+                  $this: THIS public final class A type=A
+                INSTANCE_INITIALIZER_CALL classDescriptor=Local
+            PROPERTY public final val u: kotlin.Int
+              EXPRESSION_BODY
+                CALL .foo type=kotlin.Int operator=null
+                  $this: THIS public final class A type=A
+          VAR val u: kotlin.Int
+            CALL .<get-u> type=kotlin.Int operator=GET_PROPERTY
+              $this: CALL .<init> type=A.box.Local operator=null
+          RETURN type=kotlin.Nothing from=box
+            WHEN type=kotlin.String operator=IF
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR u type=kotlin.Int operator=null
+                arg1: CONST Int type=kotlin.Int value='42'
+              then: CONST String type=kotlin.String value='OK'
+              else: STRING_CONCATENATION type=kotlin.String
+                CONST String type=kotlin.String value='Fail '
+                GET_VAR u type=kotlin.Int operator=null
+      CLASS CLASS Inner
+        CONSTRUCTOR public constructor Inner()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Inner
+      FUN public final fun foo(): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CONST Int type=kotlin.Int value='42'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .box type=kotlin.String operator=null
+            $this: CALL .<init> type=A operator=null

@@ -7,3 +7,5 @@ fun box(): String {
     Collections.sort(list, Comparator(comparatorFun))
     return if (list == expected) "OK" else list.toString()
 }
+
+

@@ -4,3 +4,5 @@ enum class State {
 }
 
 fun box() = "${State.O}${State.K}"
+
+

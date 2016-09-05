@@ -16,3 +16,4 @@ fun box(): String {
     test(true, 1)
     return "OK"
 }
+

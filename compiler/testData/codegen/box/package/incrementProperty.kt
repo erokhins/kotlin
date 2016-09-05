@@ -12,3 +12,5 @@ fun box(): String {
   s.increaseVitality(1000)
   return if (s.vitality == 11000) "OK" else "fail"
 }
+
+

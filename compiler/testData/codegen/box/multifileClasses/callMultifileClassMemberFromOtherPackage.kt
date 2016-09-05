@@ -21,3 +21,5 @@ fun bar(): String = foo()
 package a
 
 fun foo(): String = "OK"
+
+

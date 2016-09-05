@@ -1,0 +1,61 @@
+MODULE <test-module>
+  FILE /extensionClosure.kt
+    CLASS CLASS Point
+      CONSTRUCTOR public constructor Point(/*0*/ x: kotlin.Int, /*1*/ y: kotlin.Int)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD x type=kotlin.Unit operator=null
+            receiver: THIS public final class Point type=Point
+            value: GET_VAR x type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          SET_BACKING_FIELD y type=kotlin.Unit operator=null
+            receiver: THIS public final class Point type=Point
+            value: GET_VAR y type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Point
+      PROPERTY public final val x: kotlin.Int
+        EXPRESSION_BODY
+          GET_VAR x type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final val y: kotlin.Int
+        EXPRESSION_BODY
+          GET_VAR y type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val answer: Point
+          CALL .apply type=Point operator=null
+            arg: CALL .<init> type=Point operator=null
+              x: CONST Int type=kotlin.Int value='3'
+              y: CONST Int type=kotlin.Int value='5'
+            f: BLOCK type=Point.(kotlin.Int) -> Point operator=LAMBDA
+              FUN local final fun Point.<anonymous>(/*0*/ scalar: kotlin.Int): Point
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .<init> type=Point operator=null
+                      x: CALL .times type=kotlin.Int operator=MUL
+                        $this: CALL .<get-x> type=kotlin.Int operator=GET_PROPERTY
+                          $this: $RECEIVER of: <anonymous> type=Point
+                        other: GET_VAR scalar type=kotlin.Int operator=null
+                      y: CALL .times type=kotlin.Int operator=MUL
+                        $this: CALL .<get-y> type=kotlin.Int operator=GET_PROPERTY
+                          $this: $RECEIVER of: <anonymous> type=Point
+                        other: GET_VAR scalar type=kotlin.Int operator=null
+              CALLABLE_REFERENCE <anonymous> type=Point.(kotlin.Int) -> Point operator=LAMBDA
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: WHEN type=kotlin.Boolean operator=ANDAND
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: CALL .<get-x> type=kotlin.Int operator=GET_PROPERTY
+                  $this: GET_VAR answer type=Point operator=null
+                arg1: CONST Int type=kotlin.Int value='6'
+              then: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: CALL .<get-y> type=kotlin.Int operator=GET_PROPERTY
+                  $this: GET_VAR answer type=Point operator=null
+                arg1: CONST Int type=kotlin.Int value='10'
+              else: CONST Boolean type=kotlin.Boolean value='false'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='FAIL'
+    FUN public fun apply(/*0*/ arg: Point, /*1*/ f: Point.(kotlin.Int) -> Point): Point
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=apply
+          CALL .invoke type=Point operator=INVOKE
+            $this: GET_VAR f type=Point.(kotlin.Int) -> Point operator=VARIABLE_AS_FUNCTION
+            $receiver: GET_VAR arg type=Point operator=null
+            p2: CONST Int type=kotlin.Int value='2'

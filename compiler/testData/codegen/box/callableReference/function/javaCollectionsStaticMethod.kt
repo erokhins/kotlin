@@ -11,3 +11,5 @@ fun box(): String {
     (Collections::rotate)(numbers, 1)
     return if ("$numbers" == "[3, 1, 2]") "OK" else "Fail $numbers"
 }
+
+

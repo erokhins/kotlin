@@ -1,0 +1,23 @@
+MODULE <test-module>
+  FILE /localFunInsideLocalFun.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        FUN local final fun rec(/*0*/ n: kotlin.Int): kotlin.Unit
+          BLOCK_BODY
+            FUN local final fun x(/*0*/ m: kotlin.Int): kotlin.Unit
+              BLOCK_BODY
+                WHEN type=kotlin.Unit operator=IF
+                  if: CALL .GT0 type=kotlin.Boolean operator=GT
+                    arg0: CALL .compareTo type=kotlin.Int operator=GT
+                      $this: GET_VAR n type=kotlin.Int operator=null
+                      other: CONST Int type=kotlin.Int value='0'
+                  then: CALL .rec type=kotlin.Unit operator=null
+                    n: CALL .minus type=kotlin.Int operator=MINUS
+                      $this: GET_VAR n type=kotlin.Int operator=null
+                      other: CONST Int type=kotlin.Int value='1'
+            CALL .x type=kotlin.Unit operator=null
+              m: CONST Int type=kotlin.Int value='0'
+        CALL .rec type=kotlin.Unit operator=null
+          n: CONST Int type=kotlin.Int value='5'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

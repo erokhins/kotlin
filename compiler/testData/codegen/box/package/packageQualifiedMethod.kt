@@ -4,3 +4,5 @@ package Foo
 fun box(): String {
   return if (Foo.bar() == 610) "OK" else "fail"
 }
+
+

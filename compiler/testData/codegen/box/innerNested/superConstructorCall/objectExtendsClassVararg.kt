@@ -6,3 +6,5 @@ fun box(): String {
     return object : SomeClass(3.14, 42, "No", "OK", "Yes") {
     }.result()
 }
+
+

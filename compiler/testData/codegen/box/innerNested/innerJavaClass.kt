@@ -20,3 +20,5 @@ public class MyWallpaperService : JavaClass() {
 fun box(): String {
     return if (MyWallpaperService().onCreateInner() != null) return "OK" else "fail"
 }
+
+

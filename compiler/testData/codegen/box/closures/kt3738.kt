@@ -17,3 +17,5 @@ fun box(): String {
     B.D()
     return "OK"
 }
+
+

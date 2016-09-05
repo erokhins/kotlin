@@ -52,3 +52,5 @@ fun box() : String {
 
     return if (result == "1111111100") "OK" else "fail"
 }
+
+

@@ -1,0 +1,257 @@
+MODULE <test-module>
+  FILE /maxValueMinusTwoToMaxValue.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val list1: java.util.ArrayList<kotlin.Int>
+          CALL .<init> type=java.util.ArrayList<kotlin.Int> operator=null
+        VAR val range1: kotlin.ranges.IntRange
+          CALL .rangeTo type=kotlin.ranges.IntRange operator=RANGE
+            $this: CALL .minus type=kotlin.Int operator=MINUS
+              $this: GET_BACKING_FIELD MAX_VALUE type=kotlin.Int operator=GET_PROPERTY
+              other: CONST Int type=kotlin.Int value='2'
+            other: GET_BACKING_FIELD MAX_VALUE type=kotlin.Int operator=GET_PROPERTY
+        BLOCK type=kotlin.Unit operator=FOR_LOOP
+          VAR val tmp0_iterator: kotlin.collections.IntIterator
+            CALL .iterator type=kotlin.collections.IntIterator operator=FOR_LOOP_ITERATOR
+              $this: GET_VAR range1 type=kotlin.ranges.IntRange operator=null
+          WHILE label=null operator=FOR_LOOP_INNER_WHILE
+            condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+              $this: GET_VAR tmp0_iterator type=kotlin.collections.IntIterator operator=null
+            body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+              VAR val i: kotlin.Int
+                CALL .next type=kotlin.Int operator=FOR_LOOP_NEXT
+                  $this: GET_VAR tmp0_iterator type=kotlin.collections.IntIterator operator=null
+              BLOCK type=kotlin.Unit operator=null
+                CALL .add type=kotlin.Boolean operator=null
+                  $this: GET_VAR list1 type=java.util.ArrayList<kotlin.Int> operator=null
+                  element: GET_VAR i type=kotlin.Int operator=null
+                WHEN type=kotlin.Unit operator=IF
+                  if: CALL .GT0 type=kotlin.Boolean operator=GT
+                    arg0: CALL .compareTo type=kotlin.Int operator=GT
+                      $this: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                        $this: GET_VAR list1 type=java.util.ArrayList<kotlin.Int> operator=null
+                      other: CONST Int type=kotlin.Int value='23'
+                  then: BREAK label=null loop.label=null depth=0
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR list1 type=java.util.ArrayList<kotlin.Int> operator=null
+              arg1: CALL .listOf type=kotlin.collections.List<kotlin.Int> operator=null
+                elements: VARARG type=Array<out Int> varargElementType=Int
+                  CALL .minus type=kotlin.Int operator=MINUS
+                    $this: GET_BACKING_FIELD MAX_VALUE type=kotlin.Int operator=GET_PROPERTY
+                    other: CONST Int type=kotlin.Int value='2'
+                  CALL .minus type=kotlin.Int operator=MINUS
+                    $this: GET_BACKING_FIELD MAX_VALUE type=kotlin.Int operator=GET_PROPERTY
+                    other: CONST Int type=kotlin.Int value='1'
+                  GET_BACKING_FIELD MAX_VALUE type=kotlin.Int operator=GET_PROPERTY
+          then: BLOCK type=kotlin.Nothing operator=null
+            RETURN type=kotlin.Nothing from=box
+              STRING_CONCATENATION type=kotlin.String
+                CONST String type=kotlin.String value='Wrong elements for (MaxI - 2)..MaxI: '
+                GET_VAR list1 type=java.util.ArrayList<kotlin.Int> operator=null
+        VAR val list2: java.util.ArrayList<kotlin.Int>
+          CALL .<init> type=java.util.ArrayList<kotlin.Int> operator=null
+        VAR val range2: kotlin.ranges.IntRange
+          CALL .rangeTo type=kotlin.ranges.IntRange operator=RANGE
+            $this: CALL .toByte type=kotlin.Byte operator=null
+              $this: CALL .minus type=kotlin.Int operator=MINUS
+                $this: GET_BACKING_FIELD MAX_VALUE type=kotlin.Byte operator=GET_PROPERTY
+                other: CONST Int type=kotlin.Int value='2'
+            other: GET_BACKING_FIELD MAX_VALUE type=kotlin.Byte operator=GET_PROPERTY
+        BLOCK type=kotlin.Unit operator=FOR_LOOP
+          VAR val tmp1_iterator: kotlin.collections.IntIterator
+            CALL .iterator type=kotlin.collections.IntIterator operator=FOR_LOOP_ITERATOR
+              $this: GET_VAR range2 type=kotlin.ranges.IntRange operator=null
+          WHILE label=null operator=FOR_LOOP_INNER_WHILE
+            condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+              $this: GET_VAR tmp1_iterator type=kotlin.collections.IntIterator operator=null
+            body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+              VAR val i: kotlin.Int
+                CALL .next type=kotlin.Int operator=FOR_LOOP_NEXT
+                  $this: GET_VAR tmp1_iterator type=kotlin.collections.IntIterator operator=null
+              BLOCK type=kotlin.Unit operator=null
+                CALL .add type=kotlin.Boolean operator=null
+                  $this: GET_VAR list2 type=java.util.ArrayList<kotlin.Int> operator=null
+                  element: GET_VAR i type=kotlin.Int operator=null
+                WHEN type=kotlin.Unit operator=IF
+                  if: CALL .GT0 type=kotlin.Boolean operator=GT
+                    arg0: CALL .compareTo type=kotlin.Int operator=GT
+                      $this: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                        $this: GET_VAR list2 type=java.util.ArrayList<kotlin.Int> operator=null
+                      other: CONST Int type=kotlin.Int value='23'
+                  then: BREAK label=null loop.label=null depth=0
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR list2 type=java.util.ArrayList<kotlin.Int> operator=null
+              arg1: CALL .listOf type=kotlin.collections.List<kotlin.Int> operator=null
+                elements: VARARG type=Array<out Int> varargElementType=Int
+                  CALL .toInt type=kotlin.Int operator=null
+                    $this: CALL .minus type=kotlin.Int operator=MINUS
+                      $this: GET_BACKING_FIELD MAX_VALUE type=kotlin.Byte operator=GET_PROPERTY
+                      other: CONST Int type=kotlin.Int value='2'
+                  CALL .toInt type=kotlin.Int operator=null
+                    $this: CALL .minus type=kotlin.Int operator=MINUS
+                      $this: GET_BACKING_FIELD MAX_VALUE type=kotlin.Byte operator=GET_PROPERTY
+                      other: CONST Int type=kotlin.Int value='1'
+                  CALL .toInt type=kotlin.Int operator=null
+                    $this: GET_BACKING_FIELD MAX_VALUE type=kotlin.Byte operator=GET_PROPERTY
+          then: BLOCK type=kotlin.Nothing operator=null
+            RETURN type=kotlin.Nothing from=box
+              STRING_CONCATENATION type=kotlin.String
+                CONST String type=kotlin.String value='Wrong elements for (MaxB - 2).toByte()..MaxB: '
+                GET_VAR list2 type=java.util.ArrayList<kotlin.Int> operator=null
+        VAR val list3: java.util.ArrayList<kotlin.Int>
+          CALL .<init> type=java.util.ArrayList<kotlin.Int> operator=null
+        VAR val range3: kotlin.ranges.IntRange
+          CALL .rangeTo type=kotlin.ranges.IntRange operator=RANGE
+            $this: CALL .toShort type=kotlin.Short operator=null
+              $this: CALL .minus type=kotlin.Int operator=MINUS
+                $this: GET_BACKING_FIELD MAX_VALUE type=kotlin.Short operator=GET_PROPERTY
+                other: CONST Int type=kotlin.Int value='2'
+            other: GET_BACKING_FIELD MAX_VALUE type=kotlin.Short operator=GET_PROPERTY
+        BLOCK type=kotlin.Unit operator=FOR_LOOP
+          VAR val tmp2_iterator: kotlin.collections.IntIterator
+            CALL .iterator type=kotlin.collections.IntIterator operator=FOR_LOOP_ITERATOR
+              $this: GET_VAR range3 type=kotlin.ranges.IntRange operator=null
+          WHILE label=null operator=FOR_LOOP_INNER_WHILE
+            condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+              $this: GET_VAR tmp2_iterator type=kotlin.collections.IntIterator operator=null
+            body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+              VAR val i: kotlin.Int
+                CALL .next type=kotlin.Int operator=FOR_LOOP_NEXT
+                  $this: GET_VAR tmp2_iterator type=kotlin.collections.IntIterator operator=null
+              BLOCK type=kotlin.Unit operator=null
+                CALL .add type=kotlin.Boolean operator=null
+                  $this: GET_VAR list3 type=java.util.ArrayList<kotlin.Int> operator=null
+                  element: GET_VAR i type=kotlin.Int operator=null
+                WHEN type=kotlin.Unit operator=IF
+                  if: CALL .GT0 type=kotlin.Boolean operator=GT
+                    arg0: CALL .compareTo type=kotlin.Int operator=GT
+                      $this: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                        $this: GET_VAR list3 type=java.util.ArrayList<kotlin.Int> operator=null
+                      other: CONST Int type=kotlin.Int value='23'
+                  then: BREAK label=null loop.label=null depth=0
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR list3 type=java.util.ArrayList<kotlin.Int> operator=null
+              arg1: CALL .listOf type=kotlin.collections.List<kotlin.Int> operator=null
+                elements: VARARG type=Array<out Int> varargElementType=Int
+                  CALL .toInt type=kotlin.Int operator=null
+                    $this: CALL .minus type=kotlin.Int operator=MINUS
+                      $this: GET_BACKING_FIELD MAX_VALUE type=kotlin.Short operator=GET_PROPERTY
+                      other: CONST Int type=kotlin.Int value='2'
+                  CALL .toInt type=kotlin.Int operator=null
+                    $this: CALL .minus type=kotlin.Int operator=MINUS
+                      $this: GET_BACKING_FIELD MAX_VALUE type=kotlin.Short operator=GET_PROPERTY
+                      other: CONST Int type=kotlin.Int value='1'
+                  CALL .toInt type=kotlin.Int operator=null
+                    $this: GET_BACKING_FIELD MAX_VALUE type=kotlin.Short operator=GET_PROPERTY
+          then: BLOCK type=kotlin.Nothing operator=null
+            RETURN type=kotlin.Nothing from=box
+              STRING_CONCATENATION type=kotlin.String
+                CONST String type=kotlin.String value='Wrong elements for (MaxS - 2).toShort()..MaxS: '
+                GET_VAR list3 type=java.util.ArrayList<kotlin.Int> operator=null
+        VAR val list4: java.util.ArrayList<kotlin.Long>
+          CALL .<init> type=java.util.ArrayList<kotlin.Long> operator=null
+        VAR val range4: kotlin.ranges.LongRange
+          CALL .rangeTo type=kotlin.ranges.LongRange operator=RANGE
+            $this: CALL .toLong type=kotlin.Long operator=null
+              $this: CALL .minus type=kotlin.Long operator=MINUS
+                $this: GET_BACKING_FIELD MAX_VALUE type=kotlin.Long operator=GET_PROPERTY
+                other: CONST Int type=kotlin.Int value='2'
+            other: GET_BACKING_FIELD MAX_VALUE type=kotlin.Long operator=GET_PROPERTY
+        BLOCK type=kotlin.Unit operator=FOR_LOOP
+          VAR val tmp3_iterator: kotlin.collections.LongIterator
+            CALL .iterator type=kotlin.collections.LongIterator operator=FOR_LOOP_ITERATOR
+              $this: GET_VAR range4 type=kotlin.ranges.LongRange operator=null
+          WHILE label=null operator=FOR_LOOP_INNER_WHILE
+            condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+              $this: GET_VAR tmp3_iterator type=kotlin.collections.LongIterator operator=null
+            body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+              VAR val i: kotlin.Long
+                CALL .next type=kotlin.Long operator=FOR_LOOP_NEXT
+                  $this: GET_VAR tmp3_iterator type=kotlin.collections.LongIterator operator=null
+              BLOCK type=kotlin.Unit operator=null
+                CALL .add type=kotlin.Boolean operator=null
+                  $this: GET_VAR list4 type=java.util.ArrayList<kotlin.Long> operator=null
+                  element: GET_VAR i type=kotlin.Long operator=null
+                WHEN type=kotlin.Unit operator=IF
+                  if: CALL .GT0 type=kotlin.Boolean operator=GT
+                    arg0: CALL .compareTo type=kotlin.Int operator=GT
+                      $this: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                        $this: GET_VAR list4 type=java.util.ArrayList<kotlin.Long> operator=null
+                      other: CONST Int type=kotlin.Int value='23'
+                  then: BREAK label=null loop.label=null depth=0
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR list4 type=java.util.ArrayList<kotlin.Long> operator=null
+              arg1: CALL .listOf type=kotlin.collections.List<kotlin.Long> operator=null
+                elements: VARARG type=Array<out Long> varargElementType=Long
+                  CALL .toLong type=kotlin.Long operator=null
+                    $this: CALL .minus type=kotlin.Long operator=MINUS
+                      $this: GET_BACKING_FIELD MAX_VALUE type=kotlin.Long operator=GET_PROPERTY
+                      other: CONST Int type=kotlin.Int value='2'
+                  CALL .toLong type=kotlin.Long operator=null
+                    $this: CALL .minus type=kotlin.Long operator=MINUS
+                      $this: GET_BACKING_FIELD MAX_VALUE type=kotlin.Long operator=GET_PROPERTY
+                      other: CONST Int type=kotlin.Int value='1'
+                  GET_BACKING_FIELD MAX_VALUE type=kotlin.Long operator=GET_PROPERTY
+          then: BLOCK type=kotlin.Nothing operator=null
+            RETURN type=kotlin.Nothing from=box
+              STRING_CONCATENATION type=kotlin.String
+                CONST String type=kotlin.String value='Wrong elements for (MaxL - 2).toLong()..MaxL: '
+                GET_VAR list4 type=java.util.ArrayList<kotlin.Long> operator=null
+        VAR val list5: java.util.ArrayList<kotlin.Char>
+          CALL .<init> type=java.util.ArrayList<kotlin.Char> operator=null
+        VAR val range5: kotlin.ranges.CharRange
+          CALL .rangeTo type=kotlin.ranges.CharRange operator=RANGE
+            $this: CALL .minus type=kotlin.Char operator=MINUS
+              $this: GET_BACKING_FIELD MAX_VALUE type=kotlin.Char operator=GET_PROPERTY
+              other: CONST Int type=kotlin.Int value='2'
+            other: GET_BACKING_FIELD MAX_VALUE type=kotlin.Char operator=GET_PROPERTY
+        BLOCK type=kotlin.Unit operator=FOR_LOOP
+          VAR val tmp4_iterator: kotlin.collections.CharIterator
+            CALL .iterator type=kotlin.collections.CharIterator operator=FOR_LOOP_ITERATOR
+              $this: GET_VAR range5 type=kotlin.ranges.CharRange operator=null
+          WHILE label=null operator=FOR_LOOP_INNER_WHILE
+            condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+              $this: GET_VAR tmp4_iterator type=kotlin.collections.CharIterator operator=null
+            body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+              VAR val i: kotlin.Char
+                CALL .next type=kotlin.Char operator=FOR_LOOP_NEXT
+                  $this: GET_VAR tmp4_iterator type=kotlin.collections.CharIterator operator=null
+              BLOCK type=kotlin.Unit operator=null
+                CALL .add type=kotlin.Boolean operator=null
+                  $this: GET_VAR list5 type=java.util.ArrayList<kotlin.Char> operator=null
+                  element: GET_VAR i type=kotlin.Char operator=null
+                WHEN type=kotlin.Unit operator=IF
+                  if: CALL .GT0 type=kotlin.Boolean operator=GT
+                    arg0: CALL .compareTo type=kotlin.Int operator=GT
+                      $this: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                        $this: GET_VAR list5 type=java.util.ArrayList<kotlin.Char> operator=null
+                      other: CONST Int type=kotlin.Int value='23'
+                  then: BREAK label=null loop.label=null depth=0
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR list5 type=java.util.ArrayList<kotlin.Char> operator=null
+              arg1: CALL .listOf type=kotlin.collections.List<kotlin.Char> operator=null
+                elements: VARARG type=Array<out Char> varargElementType=Char
+                  CALL .minus type=kotlin.Char operator=MINUS
+                    $this: GET_BACKING_FIELD MAX_VALUE type=kotlin.Char operator=GET_PROPERTY
+                    other: CONST Int type=kotlin.Int value='2'
+                  CALL .minus type=kotlin.Char operator=MINUS
+                    $this: GET_BACKING_FIELD MAX_VALUE type=kotlin.Char operator=GET_PROPERTY
+                    other: CONST Int type=kotlin.Int value='1'
+                  GET_BACKING_FIELD MAX_VALUE type=kotlin.Char operator=GET_PROPERTY
+          then: BLOCK type=kotlin.Nothing operator=null
+            RETURN type=kotlin.Nothing from=box
+              STRING_CONCATENATION type=kotlin.String
+                CONST String type=kotlin.String value='Wrong elements for (MaxC - 2)..MaxC: '
+                GET_VAR list5 type=java.util.ArrayList<kotlin.Char> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

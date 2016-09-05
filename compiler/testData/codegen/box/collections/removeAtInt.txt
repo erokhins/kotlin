@@ -1,0 +1,96 @@
+MODULE <test-module>
+  FILE /test.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public open override /*1*/ val size: kotlin.Int
+        PROPERTY_GETTER public open override /*1*/ fun <get-size>(): kotlin.Int
+          BLOCK_BODY
+            THROW type=kotlin.Nothing
+              CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun isEmpty(): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun contains(/*0*/ o: kotlin.Int): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun containsAll(/*0*/ c: kotlin.collections.Collection<kotlin.Int>): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun get(/*0*/ index: kotlin.Int): kotlin.Int
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun indexOf(/*0*/ o: kotlin.Int): kotlin.Int
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun lastIndexOf(/*0*/ o: kotlin.Int): kotlin.Int
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun add(/*0*/ e: kotlin.Int): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun remove(/*0*/ o: kotlin.Int): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=remove
+            CONST Boolean type=kotlin.Boolean value='true'
+      FUN public open override /*1*/ fun removeAt(/*0*/ index: kotlin.Int): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=removeAt
+            CONST Int type=kotlin.Int value='123'
+      FUN public open override /*1*/ fun addAll(/*0*/ c: kotlin.collections.Collection<kotlin.Int>): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun addAll(/*0*/ index: kotlin.Int, /*1*/ c: kotlin.collections.Collection<kotlin.Int>): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun removeAll(/*0*/ c: kotlin.collections.Collection<kotlin.Int>): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun retainAll(/*0*/ c: kotlin.collections.Collection<kotlin.Int>): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun clear(): kotlin.Unit
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun set(/*0*/ index: kotlin.Int, /*1*/ element: kotlin.Int): kotlin.Int
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun add(/*0*/ index: kotlin.Int, /*1*/ element: kotlin.Int): kotlin.Unit
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun listIterator(): kotlin.collections.MutableListIterator<kotlin.Int>
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun listIterator(/*0*/ index: kotlin.Int): kotlin.collections.MutableListIterator<kotlin.Int>
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun subList(/*0*/ fromIndex: kotlin.Int, /*1*/ toIndex: kotlin.Int): kotlin.collections.MutableList<kotlin.Int>
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun iterator(): kotlin.collections.MutableIterator<kotlin.Int>
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+    FUN public fun box(): kotlin.String!
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .foo type=kotlin.String! operator=null

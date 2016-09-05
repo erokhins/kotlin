@@ -17,3 +17,4 @@ class Child : Father() {
 fun box(): String {
     return Child().test().work()
 }
+

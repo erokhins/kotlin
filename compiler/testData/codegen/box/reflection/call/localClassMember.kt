@@ -7,3 +7,5 @@ fun box(): String {
 
     return Local::result.call(Local(), "OK")
 }
+
+

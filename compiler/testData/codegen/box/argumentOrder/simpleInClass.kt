@@ -21,3 +21,4 @@ class Z(val p: String) {
         return a + b + c() + p;
     }
 }
+

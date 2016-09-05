@@ -1,0 +1,34 @@
+MODULE <test-module>
+  FILE /delegation.kt
+    CLASS INTERFACE A
+      FUN public abstract fun foo(): T
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+      FUN public open override /*1*/ fun foo(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CONST String type=kotlin.String value='OK'
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C(/*0*/ a: A<kotlin.String>)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      PROPERTY val `C$A$delegate`: A<kotlin.String>
+        EXPRESSION_BODY
+          GET_VAR a type=A<kotlin.String> operator=null
+      FUN public open override /*1*/ /*delegation*/ fun foo(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CALL .foo type=kotlin.String operator=null
+              $this: GET_VAR C$A$delegate type=A<kotlin.String> operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val a: A<kotlin.String>
+          CALL .<init> type=C operator=null
+            a: CALL .<init> type=B operator=null
+        RETURN type=kotlin.Nothing from=box
+          CALL .foo type=kotlin.String operator=null
+            $this: GET_VAR a type=A<kotlin.String> operator=null

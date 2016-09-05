@@ -5,3 +5,5 @@ class A() {
 }
 
 fun box() = if (A.value == 10) "OK" else "Fail ${A.value}"
+
+

@@ -1,0 +1,67 @@
+MODULE <test-module>
+  FILE /kt4173_3.kt
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C(/*0*/ s: kotlin.Int)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      FUN public final fun test(): kotlin.Unit
+        BLOCK_BODY
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B(/*0*/ x: kotlin.Int)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD x type=kotlin.Unit operator=null
+            receiver: THIS public final class B type=B
+            value: GET_VAR x type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+      PROPERTY public final var x: kotlin.Int
+        EXPRESSION_BODY
+          GET_VAR x type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public final fun foo(): kotlin.Unit
+        BLOCK_BODY
+          CLASS CLASS A
+            CONSTRUCTOR public constructor A(/*0*/ a: kotlin.Int)
+              BLOCK_BODY
+                DELEGATING_CONSTRUCTOR_CALL C
+                  s: CALL .invoke type=kotlin.Int operator=null
+                    $this: BLOCK type=() -> kotlin.Int operator=LAMBDA
+                      FUN local final fun <anonymous>(): kotlin.Int
+                        BLOCK_BODY
+                          RETURN type=kotlin.Nothing from=<anonymous>
+                            GET_VAR a type=kotlin.Int operator=null
+                      CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Int operator=LAMBDA
+                SET_BACKING_FIELD a type=kotlin.Unit operator=null
+                  receiver: THIS local final class A : C type=B.foo.A
+                  value: GET_VAR a type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+                INSTANCE_INITIALIZER_CALL classDescriptor=A
+            PROPERTY public final val a: kotlin.Int
+              EXPRESSION_BODY
+                GET_VAR a type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          CALL .test type=kotlin.Unit operator=null
+            $this: CALL .<init> type=B.foo.A operator=null
+              a: CONST Int type=kotlin.Int value='11'
+          CLASS CLASS B
+            CONSTRUCTOR public constructor B(/*0*/ a: kotlin.Int)
+              BLOCK_BODY
+                DELEGATING_CONSTRUCTOR_CALL C
+                  s: GET_VAR a type=kotlin.Int operator=null
+                SET_BACKING_FIELD a type=kotlin.Unit operator=null
+                  receiver: THIS local final class B : C type=B.foo.B
+                  value: GET_VAR a type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+                INSTANCE_INITIALIZER_CALL classDescriptor=B
+            PROPERTY public final val a: kotlin.Int
+              EXPRESSION_BODY
+                GET_VAR a type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          CALL .test type=kotlin.Unit operator=null
+            $this: CALL .<init> type=B.foo.B operator=null
+              a: CONST Int type=kotlin.Int value='11'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val b: B
+          CALL .<init> type=B operator=null
+            x: CONST Int type=kotlin.Int value='1'
+        CALL .foo type=kotlin.Unit operator=null
+          $this: GET_VAR b type=B operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

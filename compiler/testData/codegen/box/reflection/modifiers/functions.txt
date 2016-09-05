@@ -1,0 +1,167 @@
+MODULE <test-module>
+  FILE /functions.kt
+    FUN public inline fun inline(): kotlin.Unit
+      BLOCK_BODY
+    CLASS CLASS External
+      CONSTRUCTOR public constructor External()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=External
+      FUN public final external fun external(): kotlin.Unit
+    FUN public operator fun kotlin.Unit.invoke(): kotlin.Unit
+      BLOCK_BODY
+    FUN public infix fun kotlin.Unit.infix(/*0*/ unit: kotlin.Unit): kotlin.Unit
+      BLOCK_BODY
+    FUN public tailrec fun tailrec(): kotlin.Unit
+      BLOCK_BODY
+        CALL .tailrec type=kotlin.Unit operator=null
+    CLASS CLASS Suspend
+      CONSTRUCTOR public constructor Suspend()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Suspend
+      FUN public final suspend fun suspend(/*0*/ c: kotlin.coroutines.Continuation<kotlin.Unit>): kotlin.Unit
+        BLOCK_BODY
+    PROPERTY public val externalGetter: kotlin.Unit
+      EXPRESSION_BODY
+        GET_OBJECT Unit type=kotlin.Unit
+      PROPERTY_GETTER public external fun <get-externalGetter>(): kotlin.Unit
+    PROPERTY public var inlineProperty: kotlin.Unit
+      PROPERTY_GETTER public inline fun <get-inlineProperty>(): kotlin.Unit
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=<get-inlineProperty>
+            GET_OBJECT Unit type=kotlin.Unit
+      PROPERTY_SETTER public inline fun <set-inlineProperty>(/*0*/ value: kotlin.Unit): kotlin.Unit
+        BLOCK_BODY
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isInline> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE inline type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isExternal> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE inline type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isOperator> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE inline type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isInfix> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE inline type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isTailrec> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE inline type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isSuspend> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE inline type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isInline> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE external type=kotlin.reflect.KFunction1<External, kotlin.Unit> operator=null
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isExternal> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE external type=kotlin.reflect.KFunction1<External, kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isOperator> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE external type=kotlin.reflect.KFunction1<External, kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isInfix> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE external type=kotlin.reflect.KFunction1<External, kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isTailrec> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE external type=kotlin.reflect.KFunction1<External, kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isSuspend> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE external type=kotlin.reflect.KFunction1<External, kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isInline> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE invoke type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isExternal> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE invoke type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isOperator> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE invoke type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isInfix> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE invoke type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isTailrec> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE invoke type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isSuspend> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE invoke type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isInline> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE infix type=kotlin.reflect.KFunction1<kotlin.Unit, kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isExternal> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE infix type=kotlin.reflect.KFunction1<kotlin.Unit, kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isOperator> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE infix type=kotlin.reflect.KFunction1<kotlin.Unit, kotlin.Unit> operator=null
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isInfix> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE infix type=kotlin.reflect.KFunction1<kotlin.Unit, kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isTailrec> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE infix type=kotlin.reflect.KFunction1<kotlin.Unit, kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isSuspend> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE infix type=kotlin.reflect.KFunction1<kotlin.Unit, kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isInline> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE tailrec type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isExternal> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE tailrec type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isOperator> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE tailrec type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isInfix> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE tailrec type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isTailrec> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE tailrec type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isSuspend> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE tailrec type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isInline> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE suspend type=kotlin.reflect.KFunction2<Suspend, kotlin.coroutines.Continuation<kotlin.Unit>, kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isExternal> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE suspend type=kotlin.reflect.KFunction2<Suspend, kotlin.coroutines.Continuation<kotlin.Unit>, kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isOperator> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE suspend type=kotlin.reflect.KFunction2<Suspend, kotlin.coroutines.Continuation<kotlin.Unit>, kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isInfix> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE suspend type=kotlin.reflect.KFunction2<Suspend, kotlin.coroutines.Continuation<kotlin.Unit>, kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isTailrec> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE suspend type=kotlin.reflect.KFunction2<Suspend, kotlin.coroutines.Continuation<kotlin.Unit>, kotlin.Unit> operator=null
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isSuspend> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE suspend type=kotlin.reflect.KFunction2<Suspend, kotlin.coroutines.Continuation<kotlin.Unit>, kotlin.Unit> operator=null
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isExternal> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALL .<get-getter> type=kotlin.reflect.KProperty0.Getter<kotlin.Unit> operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE externalGetter type=kotlin.reflect.KProperty0<kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isInline> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALL .<get-getter> type=kotlin.reflect.KProperty0.Getter<kotlin.Unit> operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE externalGetter type=kotlin.reflect.KProperty0<kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isExternal> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALL .<get-getter> type=kotlin.reflect.KProperty0.Getter<kotlin.Unit> operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE inlineProperty type=kotlin.reflect.KMutableProperty0<kotlin.Unit> operator=null
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isInline> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALL .<get-getter> type=kotlin.reflect.KProperty0.Getter<kotlin.Unit> operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE inlineProperty type=kotlin.reflect.KMutableProperty0<kotlin.Unit> operator=null
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isInline> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALL .<get-setter> type=kotlin.reflect.KMutableProperty0.Setter<kotlin.Unit> operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE inlineProperty type=kotlin.reflect.KMutableProperty0<kotlin.Unit> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

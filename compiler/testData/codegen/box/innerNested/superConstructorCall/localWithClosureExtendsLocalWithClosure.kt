@@ -14,3 +14,5 @@ fun box(): String {
     val result = Derived(2).value()
     return if (result == "3142") "OK" else "Fail: $result"
 }
+
+

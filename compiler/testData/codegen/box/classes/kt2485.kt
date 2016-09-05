@@ -10,3 +10,5 @@ fun box() : String {
     f4(1 == 1)
     return "OK"
 }
+
+

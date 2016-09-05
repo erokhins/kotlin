@@ -13,3 +13,5 @@ class A {
 fun box(): String {
   return if(A().B().prop == 1) "OK" else "fail"
 }
+
+

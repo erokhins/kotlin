@@ -27,3 +27,5 @@ fun box(): String {
     test2()
     return "OK"
 }
+
+

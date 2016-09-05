@@ -7,3 +7,5 @@ class Test {
 fun Test.Nested.foo() = value
 
 fun box() = Test.Nested().foo()
+
+

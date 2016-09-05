@@ -1,0 +1,87 @@
+MODULE <test-module>
+  FILE /complexTraitImpl.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public abstract fun foo(): kotlin.collections.List<kotlin.String>
+    CLASS INTERFACE B
+      FUN public open fun foo(): java.util.ArrayList<kotlin.String>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CALL .<init> type=java.util.ArrayList<kotlin.String> operator=null
+              p0: CALL .asList type=kotlin.collections.(Mutable)List<kotlin.String!>! operator=null
+                p0: VARARG type=(kotlin.Array<(kotlin.String..kotlin.String?)>..kotlin.Array<out (kotlin.String..kotlin.String?)>?) varargElementType=(kotlin.String..kotlin.String?)
+                  CONST String type=kotlin.String value='B'
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL A
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      FUN public open override /*2*/ fun foo(): java.util.ArrayList<kotlin.String>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CALL .foo superQualifier=B type=java.util.ArrayList<kotlin.String> operator=null
+              $this: THIS public open class C : A, B type=B
+    CLASS INTERFACE D
+      FUN public abstract fun foo(): kotlin.collections.Collection<kotlin.String>
+    CLASS CLASS E
+      CONSTRUCTOR public constructor E()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL C
+          INSTANCE_INITIALIZER_CALL classDescriptor=E
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val e: E
+          CALL .<init> type=E operator=null
+        VAR var r: kotlin.String
+          CALL .get type=kotlin.String operator=GET_ARRAY_ELEMENT
+            $this: CALL .foo type=java.util.ArrayList<kotlin.String> operator=null
+              $this: GET_VAR e type=E operator=null
+            index: CONST Int type=kotlin.Int value='0'
+        VAR val d: D
+          GET_VAR e type=E operator=null
+        VAR val c: C
+          GET_VAR e type=E operator=null
+        VAR val b: B
+          GET_VAR e type=E operator=null
+        VAR val a: A
+          GET_VAR e type=E operator=null
+        SET_VAR r type=kotlin.Unit operator=PLUSEQ
+          CALL .plus type=kotlin.String operator=PLUSEQ
+            $this: GET_VAR r type=kotlin.String operator=PLUSEQ
+            other: CALL .next type=kotlin.String operator=null
+              $this: CALL .iterator type=kotlin.collections.Iterator<kotlin.String> operator=null
+                $this: CALL .foo type=kotlin.collections.Collection<kotlin.String> operator=null
+                  $this: GET_VAR d type=D operator=null
+        SET_VAR r type=kotlin.Unit operator=PLUSEQ
+          CALL .plus type=kotlin.String operator=PLUSEQ
+            $this: GET_VAR r type=kotlin.String operator=PLUSEQ
+            other: CALL .get type=kotlin.String operator=GET_ARRAY_ELEMENT
+              $this: CALL .foo type=java.util.ArrayList<kotlin.String> operator=null
+                $this: GET_VAR c type=C operator=null
+              index: CONST Int type=kotlin.Int value='0'
+        SET_VAR r type=kotlin.Unit operator=PLUSEQ
+          CALL .plus type=kotlin.String operator=PLUSEQ
+            $this: GET_VAR r type=kotlin.String operator=PLUSEQ
+            other: CALL .get type=kotlin.String operator=GET_ARRAY_ELEMENT
+              $this: CALL .foo type=java.util.ArrayList<kotlin.String> operator=null
+                $this: GET_VAR b type=B operator=null
+              index: CONST Int type=kotlin.Int value='0'
+        SET_VAR r type=kotlin.Unit operator=PLUSEQ
+          CALL .plus type=kotlin.String operator=PLUSEQ
+            $this: GET_VAR r type=kotlin.String operator=PLUSEQ
+            other: CALL .get type=kotlin.String operator=GET_ARRAY_ELEMENT
+              $this: CALL .foo type=kotlin.collections.List<kotlin.String> operator=null
+                $this: GET_VAR a type=A operator=null
+              index: CONST Int type=kotlin.Int value='0'
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: GET_VAR r type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='BBBBB'
+            then: CONST String type=kotlin.String value='OK'
+            else: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail: '
+              GET_VAR r type=kotlin.String operator=null

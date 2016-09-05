@@ -1,0 +1,179 @@
+MODULE <test-module>
+  FILE /collectionImpl.kt
+    CLASS CLASS A1
+      CONSTRUCTOR public constructor A1()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A1
+      PROPERTY public open override /*1*/ val size: kotlin.Int
+        PROPERTY_GETTER public open override /*1*/ fun <get-size>(): kotlin.Int
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-size>
+              CONST Int type=kotlin.Int value='56'
+      FUN public open override /*1*/ fun isEmpty(): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun contains(/*0*/ o: kotlin.String): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun iterator(): kotlin.collections.MutableIterator<kotlin.String>
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun containsAll(/*0*/ c: kotlin.collections.Collection<kotlin.String>): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun add(/*0*/ e: kotlin.String): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun remove(/*0*/ o: kotlin.String): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun addAll(/*0*/ c: kotlin.collections.Collection<kotlin.String>): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun removeAll(/*0*/ c: kotlin.collections.Collection<kotlin.String>): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun retainAll(/*0*/ c: kotlin.collections.Collection<kotlin.String>): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun clear(): kotlin.Unit
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+    CLASS CLASS A2
+      CONSTRUCTOR public constructor A2()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL AbstractCollection
+          INSTANCE_INITIALIZER_CALL classDescriptor=A2
+      PROPERTY public open override /*1*/ val size: kotlin.Int
+        PROPERTY_GETTER public open override /*1*/ fun <get-size>(): kotlin.Int
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-size>
+              CONST Int type=kotlin.Int value='56'
+      FUN public open override /*1*/ fun iterator(): kotlin.collections.MutableIterator<kotlin.String>
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+    CLASS CLASS A3
+      CONSTRUCTOR public constructor A3()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL ArrayList
+          INSTANCE_INITIALIZER_CALL classDescriptor=A3
+      PROPERTY public open override /*1*/ val size: kotlin.Int
+        PROPERTY_GETTER public open override /*1*/ fun <get-size>(): kotlin.Int
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-size>
+              CONST Int type=kotlin.Int value='56'
+    CLASS INTERFACE Sized
+      PROPERTY public abstract val size: kotlin.Int
+    CLASS CLASS A4
+      CONSTRUCTOR public constructor A4()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL ArrayList
+          INSTANCE_INITIALIZER_CALL classDescriptor=A4
+      PROPERTY public open override /*2*/ val size: kotlin.Int
+        PROPERTY_GETTER public open override /*2*/ fun <get-size>(): kotlin.Int
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-size>
+              CONST Int type=kotlin.Int value='56'
+    FUN public fun check56(/*0*/ x: kotlin.collections.Collection<kotlin.String>): kotlin.Unit
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_VAR x type=kotlin.collections.Collection<kotlin.String> operator=null
+              arg1: CONST Int type=kotlin.Int value='56'
+          then: THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.RuntimeException operator=null
+              p0: STRING_CONCATENATION type=kotlin.String
+                CONST String type=kotlin.String value='fail '
+                CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                  $this: GET_VAR x type=kotlin.collections.Collection<kotlin.String> operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val a1: A1
+          CALL .<init> type=A1 operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_VAR a1 type=A1 operator=null
+              arg1: CONST Int type=kotlin.Int value='56'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 1: '
+              CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_VAR a1 type=A1 operator=null
+        CALL .check56 type=kotlin.Unit operator=null
+          x: GET_VAR a1 type=A1 operator=null
+        VAR val a2: A2
+          CALL .<init> type=A2 operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_VAR a2 type=A2 operator=null
+              arg1: CONST Int type=kotlin.Int value='56'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 2: '
+              CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_VAR a2 type=A2 operator=null
+        CALL .check56 type=kotlin.Unit operator=null
+          x: GET_VAR a2 type=A2 operator=null
+        VAR val a3: A3
+          CALL .<init> type=A3 operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_VAR a3 type=A3 operator=null
+              arg1: CONST Int type=kotlin.Int value='56'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 3: '
+              CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_VAR a3 type=A3 operator=null
+        CALL .check56 type=kotlin.Unit operator=null
+          x: GET_VAR a3 type=A3 operator=null
+        VAR val a4: A4
+          CALL .<init> type=A4 operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_VAR a4 type=A4 operator=null
+              arg1: CONST Int type=kotlin.Int value='56'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 4: '
+              CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_VAR a4 type=A4 operator=null
+        CALL .check56 type=kotlin.Unit operator=null
+          x: GET_VAR a4 type=A4 operator=null
+        VAR val sized: Sized
+          GET_VAR a4 type=A4 operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_VAR sized type=Sized operator=null
+              arg1: CONST Int type=kotlin.Int value='56'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 5: '
+              CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_VAR a4 type=A4 operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

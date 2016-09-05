@@ -1,0 +1,38 @@
+MODULE <test-module>
+  FILE /newArrayInt.kt
+    FUN public inline fun </*0*/ reified T> createArray(/*0*/ n: kotlin.Int, /*1*/ crossinline block: () -> T): kotlin.Array<T>
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=createArray
+          CALL .<init> type=kotlin.Array<T> operator=null
+            size: GET_VAR n type=kotlin.Int operator=null
+            init: BLOCK type=(kotlin.Int) -> T operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.Int): T
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .invoke type=T operator=INVOKE
+                      $this: GET_VAR block type=() -> T operator=VARIABLE_AS_FUNCTION
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> T operator=LAMBDA
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val x: kotlin.Array<kotlin.Int>
+          CALL .createArray type=kotlin.Array<kotlin.Int> operator=null
+            n: CONST Int type=kotlin.Int value='5'
+            block: BLOCK type=() -> kotlin.Int operator=LAMBDA
+              FUN local final fun <anonymous>(): kotlin.Int
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CONST Int type=kotlin.Int value='3'
+              CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Int operator=LAMBDA
+        CALL .assert type=kotlin.Unit operator=null
+          value: CALL .all type=kotlin.Boolean operator=null
+            $receiver: GET_VAR x type=kotlin.Array<kotlin.Int> operator=null
+            predicate: BLOCK type=(kotlin.Int) -> kotlin.Boolean operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.Int): kotlin.Boolean
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                      arg0: GET_VAR it type=kotlin.Int operator=null
+                      arg1: CONST Int type=kotlin.Int value='3'
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> kotlin.Boolean operator=LAMBDA
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

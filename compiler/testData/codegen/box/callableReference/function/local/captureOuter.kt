@@ -10,3 +10,5 @@ fun box(): String {
     val f = Outer.Inner::foo
     return f(Outer().Inner())
 }
+
+

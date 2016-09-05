@@ -6,3 +6,5 @@ fun box(): String {
     val box: Box<Int> = Box<Int>(1)
     return if (box.value == 1) "OK" else "fail"
 }
+
+

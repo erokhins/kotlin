@@ -9,3 +9,5 @@ fun box(): String {
     assertEquals("ab", f.callBy(mapOf(f.parameters.first() to "a")))
     return "OK"
 }
+
+

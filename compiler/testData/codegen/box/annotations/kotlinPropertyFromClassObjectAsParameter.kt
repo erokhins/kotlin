@@ -43,3 +43,5 @@ class Foo {
         const val str: String = "str"
     }
 }
+
+

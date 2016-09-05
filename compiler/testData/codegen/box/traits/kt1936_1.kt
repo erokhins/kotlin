@@ -11,3 +11,5 @@ open class B(param : String) : MyTrait
 }
 
 fun box()= B("OK").foo()
+
+

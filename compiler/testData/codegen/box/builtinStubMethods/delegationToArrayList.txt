@@ -1,0 +1,367 @@
+MODULE <test-module>
+  FILE /delegationToArrayList.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A</*0*/ E>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY val `A$List$delegate`: java.util.ArrayList<E>
+        EXPRESSION_BODY
+          CALL .<init> type=java.util.ArrayList<E> operator=null
+      FUN public open override /*1*/ /*delegation*/ fun contains(/*0*/ element: E): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=contains
+            CALL .contains type=kotlin.Boolean operator=null
+              $this: GET_VAR A$List$delegate type=java.util.ArrayList<E> operator=null
+              element: GET_VAR element type=E operator=null
+      FUN public open override /*1*/ /*delegation*/ fun containsAll(/*0*/ elements: kotlin.collections.Collection<E>): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=containsAll
+            CALL .containsAll type=kotlin.Boolean operator=null
+              $this: GET_VAR A$List$delegate type=java.util.ArrayList<E> operator=null
+              elements: GET_VAR elements type=kotlin.collections.Collection<E> operator=null
+      FUN public open override /*1*/ /*delegation*/ fun get(/*0*/ index: kotlin.Int): E
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=get
+            CALL .get type=E operator=null
+              $this: GET_VAR A$List$delegate type=java.util.ArrayList<E> operator=null
+              index: GET_VAR index type=kotlin.Int operator=null
+      FUN public open override /*1*/ /*delegation*/ fun indexOf(/*0*/ element: E): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=indexOf
+            CALL .indexOf type=kotlin.Int operator=null
+              $this: GET_VAR A$List$delegate type=java.util.ArrayList<E> operator=null
+              element: GET_VAR element type=E operator=null
+      FUN public open override /*1*/ /*delegation*/ fun isEmpty(): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=isEmpty
+            CALL .isEmpty type=kotlin.Boolean operator=null
+              $this: GET_VAR A$List$delegate type=java.util.ArrayList<E> operator=null
+      FUN public open override /*1*/ /*delegation*/ fun iterator(): kotlin.collections.Iterator<E>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=iterator
+            CALL .iterator type=kotlin.collections.Iterator<E> operator=null
+              $this: GET_VAR A$List$delegate type=java.util.ArrayList<E> operator=null
+      FUN public open override /*1*/ /*delegation*/ fun lastIndexOf(/*0*/ element: E): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=lastIndexOf
+            CALL .lastIndexOf type=kotlin.Int operator=null
+              $this: GET_VAR A$List$delegate type=java.util.ArrayList<E> operator=null
+              element: GET_VAR element type=E operator=null
+      FUN public open override /*1*/ /*delegation*/ fun listIterator(): kotlin.collections.ListIterator<E>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=listIterator
+            CALL .listIterator type=kotlin.collections.ListIterator<E> operator=null
+              $this: GET_VAR A$List$delegate type=java.util.ArrayList<E> operator=null
+      FUN public open override /*1*/ /*delegation*/ fun listIterator(/*0*/ index: kotlin.Int): kotlin.collections.ListIterator<E>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=listIterator
+            CALL .listIterator type=kotlin.collections.ListIterator<E> operator=null
+              $this: GET_VAR A$List$delegate type=java.util.ArrayList<E> operator=null
+              index: GET_VAR index type=kotlin.Int operator=null
+      FUN public open override /*1*/ /*delegation*/ fun subList(/*0*/ fromIndex: kotlin.Int, /*1*/ toIndex: kotlin.Int): kotlin.collections.List<E>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=subList
+            CALL .subList type=kotlin.collections.List<E> operator=null
+              $this: GET_VAR A$List$delegate type=java.util.ArrayList<E> operator=null
+              fromIndex: GET_VAR fromIndex type=kotlin.Int operator=null
+              toIndex: GET_VAR toIndex type=kotlin.Int operator=null
+      PROPERTY public open override /*1*/ /*delegation*/ val size: kotlin.Int
+        PROPERTY_GETTER public open override /*1*/ /*delegation*/ fun <get-size>(): kotlin.Int
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-size>
+              CALL .<get-size> type=kotlin.Int operator=null
+                $this: GET_VAR A$List$delegate type=java.util.ArrayList<E> operator=null
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+      PROPERTY val `B$List$delegate`: A<kotlin.String>
+        EXPRESSION_BODY
+          CALL .<init> type=A<kotlin.String> operator=null
+      FUN public open override /*1*/ /*delegation*/ fun contains(/*0*/ element: kotlin.String): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=contains
+            CALL .contains type=kotlin.Boolean operator=null
+              $this: GET_VAR B$List$delegate type=A<kotlin.String> operator=null
+              element: GET_VAR element type=kotlin.String operator=null
+      FUN public open override /*1*/ /*delegation*/ fun containsAll(/*0*/ elements: kotlin.collections.Collection<kotlin.String>): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=containsAll
+            CALL .containsAll type=kotlin.Boolean operator=null
+              $this: GET_VAR B$List$delegate type=A<kotlin.String> operator=null
+              elements: GET_VAR elements type=kotlin.collections.Collection<kotlin.String> operator=null
+      FUN public open override /*1*/ /*delegation*/ fun get(/*0*/ index: kotlin.Int): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=get
+            CALL .get type=kotlin.String operator=null
+              $this: GET_VAR B$List$delegate type=A<kotlin.String> operator=null
+              index: GET_VAR index type=kotlin.Int operator=null
+      FUN public open override /*1*/ /*delegation*/ fun indexOf(/*0*/ element: kotlin.String): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=indexOf
+            CALL .indexOf type=kotlin.Int operator=null
+              $this: GET_VAR B$List$delegate type=A<kotlin.String> operator=null
+              element: GET_VAR element type=kotlin.String operator=null
+      FUN public open override /*1*/ /*delegation*/ fun isEmpty(): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=isEmpty
+            CALL .isEmpty type=kotlin.Boolean operator=null
+              $this: GET_VAR B$List$delegate type=A<kotlin.String> operator=null
+      FUN public open override /*1*/ /*delegation*/ fun iterator(): kotlin.collections.Iterator<kotlin.String>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=iterator
+            CALL .iterator type=kotlin.collections.Iterator<kotlin.String> operator=null
+              $this: GET_VAR B$List$delegate type=A<kotlin.String> operator=null
+      FUN public open override /*1*/ /*delegation*/ fun lastIndexOf(/*0*/ element: kotlin.String): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=lastIndexOf
+            CALL .lastIndexOf type=kotlin.Int operator=null
+              $this: GET_VAR B$List$delegate type=A<kotlin.String> operator=null
+              element: GET_VAR element type=kotlin.String operator=null
+      FUN public open override /*1*/ /*delegation*/ fun listIterator(): kotlin.collections.ListIterator<kotlin.String>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=listIterator
+            CALL .listIterator type=kotlin.collections.ListIterator<kotlin.String> operator=null
+              $this: GET_VAR B$List$delegate type=A<kotlin.String> operator=null
+      FUN public open override /*1*/ /*delegation*/ fun listIterator(/*0*/ index: kotlin.Int): kotlin.collections.ListIterator<kotlin.String>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=listIterator
+            CALL .listIterator type=kotlin.collections.ListIterator<kotlin.String> operator=null
+              $this: GET_VAR B$List$delegate type=A<kotlin.String> operator=null
+              index: GET_VAR index type=kotlin.Int operator=null
+      FUN public open override /*1*/ /*delegation*/ fun subList(/*0*/ fromIndex: kotlin.Int, /*1*/ toIndex: kotlin.Int): kotlin.collections.List<kotlin.String>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=subList
+            CALL .subList type=kotlin.collections.List<kotlin.String> operator=null
+              $this: GET_VAR B$List$delegate type=A<kotlin.String> operator=null
+              fromIndex: GET_VAR fromIndex type=kotlin.Int operator=null
+              toIndex: GET_VAR toIndex type=kotlin.Int operator=null
+      PROPERTY public open override /*1*/ /*delegation*/ val size: kotlin.Int
+        PROPERTY_GETTER public open override /*1*/ /*delegation*/ fun <get-size>(): kotlin.Int
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-size>
+              CALL .<get-size> type=kotlin.Int operator=null
+                $this: GET_VAR B$List$delegate type=A<kotlin.String> operator=null
+    FUN public fun expectUoe(/*0*/ block: () -> kotlin.Any): kotlin.Unit
+      BLOCK_BODY
+        TRY_CATCH type=kotlin.Unit
+          try: BLOCK type=kotlin.Nothing operator=null
+            CALL .invoke type=kotlin.Any operator=INVOKE
+              $this: GET_VAR block type=() -> kotlin.Any operator=VARIABLE_AS_FUNCTION
+            THROW type=kotlin.Nothing
+              CALL .<init> type=java.lang.AssertionError operator=null
+          catch e: BLOCK type=kotlin.Unit operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val a: java.util.List<kotlin.String>
+          TYPE_OP operator=CAST typeOperand=java.util.List<kotlin.String>
+            CALL .<init> type=A<kotlin.String> operator=null
+        CALL .expectUoe type=kotlin.Unit operator=null
+          block: BLOCK type=() -> kotlin.Boolean operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Boolean
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .add type=kotlin.Boolean operator=null
+                    $this: GET_VAR a type=java.util.List<kotlin.String> operator=null
+                    element: CONST String type=kotlin.String value=''
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Boolean operator=LAMBDA
+        CALL .expectUoe type=kotlin.Unit operator=null
+          block: BLOCK type=() -> kotlin.Boolean operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Boolean
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .remove type=kotlin.Boolean operator=null
+                    $this: GET_VAR a type=java.util.List<kotlin.String> operator=null
+                    element: CONST String type=kotlin.String value=''
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Boolean operator=LAMBDA
+        CALL .expectUoe type=kotlin.Unit operator=null
+          block: BLOCK type=() -> kotlin.Boolean operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Boolean
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .addAll type=kotlin.Boolean operator=null
+                    $this: GET_VAR a type=java.util.List<kotlin.String> operator=null
+                    elements: GET_VAR a type=java.util.List<kotlin.String> operator=null
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Boolean operator=LAMBDA
+        CALL .expectUoe type=kotlin.Unit operator=null
+          block: BLOCK type=() -> kotlin.Boolean operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Boolean
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .addAll type=kotlin.Boolean operator=null
+                    $this: GET_VAR a type=java.util.List<kotlin.String> operator=null
+                    p0: CONST Int type=kotlin.Int value='0'
+                    p1: GET_VAR a type=java.util.List<kotlin.String> operator=null
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Boolean operator=LAMBDA
+        CALL .expectUoe type=kotlin.Unit operator=null
+          block: BLOCK type=() -> kotlin.Boolean operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Boolean
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .removeAll type=kotlin.Boolean operator=null
+                    $this: GET_VAR a type=java.util.List<kotlin.String> operator=null
+                    elements: GET_VAR a type=java.util.List<kotlin.String> operator=null
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Boolean operator=LAMBDA
+        CALL .expectUoe type=kotlin.Unit operator=null
+          block: BLOCK type=() -> kotlin.Boolean operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Boolean
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .retainAll type=kotlin.Boolean operator=null
+                    $this: GET_VAR a type=java.util.List<kotlin.String> operator=null
+                    elements: GET_VAR a type=java.util.List<kotlin.String> operator=null
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Boolean operator=LAMBDA
+        CALL .expectUoe type=kotlin.Unit operator=null
+          block: BLOCK type=() -> kotlin.Unit operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Unit
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .clear type=kotlin.Unit operator=null
+                    $this: GET_VAR a type=java.util.List<kotlin.String> operator=null
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Unit operator=LAMBDA
+        CALL .expectUoe type=kotlin.Unit operator=null
+          block: BLOCK type=() -> kotlin.Unit operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Unit
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .add type=kotlin.Unit operator=null
+                    $this: GET_VAR a type=java.util.List<kotlin.String> operator=null
+                    p0: CONST Int type=kotlin.Int value='0'
+                    p1: CONST String type=kotlin.String value=''
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Unit operator=LAMBDA
+        CALL .expectUoe type=kotlin.Unit operator=null
+          block: BLOCK type=() -> kotlin.String! operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.String!
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .set type=kotlin.String! operator=null
+                    $this: GET_VAR a type=java.util.List<kotlin.String> operator=null
+                    p0: CONST Int type=kotlin.Int value='0'
+                    p1: CONST String type=kotlin.String value=''
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String! operator=LAMBDA
+        CALL .expectUoe type=kotlin.Unit operator=null
+          block: BLOCK type=() -> kotlin.String! operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.String!
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .remove type=kotlin.String! operator=null
+                    $this: GET_VAR a type=java.util.List<kotlin.String> operator=null
+                    p0: CONST Int type=kotlin.Int value='0'
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String! operator=LAMBDA
+        CALL .listIterator type=kotlin.collections.(Mutable)ListIterator<kotlin.String!>! operator=null
+          $this: GET_VAR a type=java.util.List<kotlin.String> operator=null
+        CALL .listIterator type=kotlin.collections.(Mutable)ListIterator<kotlin.String!>! operator=null
+          $this: GET_VAR a type=java.util.List<kotlin.String> operator=null
+          p0: CONST Int type=kotlin.Int value='0'
+        CALL .subList type=kotlin.collections.(Mutable)List<kotlin.String!>! operator=null
+          $this: GET_VAR a type=java.util.List<kotlin.String> operator=null
+          p0: CONST Int type=kotlin.Int value='0'
+          p1: CONST Int type=kotlin.Int value='0'
+        VAR val b: java.util.List<kotlin.String>
+          TYPE_OP operator=CAST typeOperand=java.util.List<kotlin.String>
+            CALL .<init> type=B operator=null
+        CALL .expectUoe type=kotlin.Unit operator=null
+          block: BLOCK type=() -> kotlin.Boolean operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Boolean
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .add type=kotlin.Boolean operator=null
+                    $this: GET_VAR b type=java.util.List<kotlin.String> operator=null
+                    element: CONST String type=kotlin.String value=''
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Boolean operator=LAMBDA
+        CALL .expectUoe type=kotlin.Unit operator=null
+          block: BLOCK type=() -> kotlin.Boolean operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Boolean
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .remove type=kotlin.Boolean operator=null
+                    $this: GET_VAR b type=java.util.List<kotlin.String> operator=null
+                    element: CONST String type=kotlin.String value=''
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Boolean operator=LAMBDA
+        CALL .expectUoe type=kotlin.Unit operator=null
+          block: BLOCK type=() -> kotlin.Boolean operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Boolean
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .addAll type=kotlin.Boolean operator=null
+                    $this: GET_VAR b type=java.util.List<kotlin.String> operator=null
+                    elements: GET_VAR b type=java.util.List<kotlin.String> operator=null
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Boolean operator=LAMBDA
+        CALL .expectUoe type=kotlin.Unit operator=null
+          block: BLOCK type=() -> kotlin.Boolean operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Boolean
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .addAll type=kotlin.Boolean operator=null
+                    $this: GET_VAR b type=java.util.List<kotlin.String> operator=null
+                    p0: CONST Int type=kotlin.Int value='0'
+                    p1: GET_VAR b type=java.util.List<kotlin.String> operator=null
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Boolean operator=LAMBDA
+        CALL .expectUoe type=kotlin.Unit operator=null
+          block: BLOCK type=() -> kotlin.Boolean operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Boolean
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .removeAll type=kotlin.Boolean operator=null
+                    $this: GET_VAR b type=java.util.List<kotlin.String> operator=null
+                    elements: GET_VAR b type=java.util.List<kotlin.String> operator=null
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Boolean operator=LAMBDA
+        CALL .expectUoe type=kotlin.Unit operator=null
+          block: BLOCK type=() -> kotlin.Boolean operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Boolean
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .retainAll type=kotlin.Boolean operator=null
+                    $this: GET_VAR b type=java.util.List<kotlin.String> operator=null
+                    elements: GET_VAR b type=java.util.List<kotlin.String> operator=null
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Boolean operator=LAMBDA
+        CALL .expectUoe type=kotlin.Unit operator=null
+          block: BLOCK type=() -> kotlin.Unit operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Unit
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .clear type=kotlin.Unit operator=null
+                    $this: GET_VAR b type=java.util.List<kotlin.String> operator=null
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Unit operator=LAMBDA
+        CALL .expectUoe type=kotlin.Unit operator=null
+          block: BLOCK type=() -> kotlin.Unit operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Unit
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .add type=kotlin.Unit operator=null
+                    $this: GET_VAR b type=java.util.List<kotlin.String> operator=null
+                    p0: CONST Int type=kotlin.Int value='0'
+                    p1: CONST String type=kotlin.String value=''
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Unit operator=LAMBDA
+        CALL .expectUoe type=kotlin.Unit operator=null
+          block: BLOCK type=() -> kotlin.String! operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.String!
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .set type=kotlin.String! operator=null
+                    $this: GET_VAR b type=java.util.List<kotlin.String> operator=null
+                    p0: CONST Int type=kotlin.Int value='0'
+                    p1: CONST String type=kotlin.String value=''
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String! operator=LAMBDA
+        CALL .expectUoe type=kotlin.Unit operator=null
+          block: BLOCK type=() -> kotlin.String! operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.String!
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .remove type=kotlin.String! operator=null
+                    $this: GET_VAR b type=java.util.List<kotlin.String> operator=null
+                    p0: CONST Int type=kotlin.Int value='0'
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String! operator=LAMBDA
+        CALL .listIterator type=kotlin.collections.(Mutable)ListIterator<kotlin.String!>! operator=null
+          $this: GET_VAR b type=java.util.List<kotlin.String> operator=null
+        CALL .listIterator type=kotlin.collections.(Mutable)ListIterator<kotlin.String!>! operator=null
+          $this: GET_VAR b type=java.util.List<kotlin.String> operator=null
+          p0: CONST Int type=kotlin.Int value='0'
+        CALL .subList type=kotlin.collections.(Mutable)List<kotlin.String!>! operator=null
+          $this: GET_VAR b type=java.util.List<kotlin.String> operator=null
+          p0: CONST Int type=kotlin.Int value='0'
+          p1: CONST Int type=kotlin.Int value='0'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

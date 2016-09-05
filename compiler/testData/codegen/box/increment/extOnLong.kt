@@ -6,3 +6,4 @@ fun box(): String {
     val y = x[0]++
     return if (y == 0L) "OK" else "Failed, y=$y"
 }
+

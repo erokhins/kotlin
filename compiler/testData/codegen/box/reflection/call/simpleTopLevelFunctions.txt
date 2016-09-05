@@ -1,0 +1,52 @@
+MODULE <test-module>
+  FILE /simpleTopLevelFunctions.kt
+    FUN public fun kotlin.String.foo(): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo
+          CALL .<get-length> type=kotlin.Int operator=GET_PROPERTY
+            $this: $RECEIVER of: foo type=kotlin.String
+    PROPERTY public var state: kotlin.String
+      EXPRESSION_BODY
+        CONST String type=kotlin.String value='Fail'
+    FUN public fun bar(/*0*/ result: kotlin.String): kotlin.Unit
+      BLOCK_BODY
+        CALL .<set-state> type=kotlin.Unit operator=EQ
+          <set-?>: GET_VAR result type=kotlin.String operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val f: kotlin.Int
+          CALL .call type=kotlin.Int operator=null
+            $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction1<kotlin.String, kotlin.Int> operator=null
+            args: VARARG type=Array<out Any?> varargElementType=Any?
+              CONST String type=kotlin.String value='abc'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR f type=kotlin.Int operator=null
+              arg1: CONST Int type=kotlin.Int value='3'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail: '
+              GET_VAR f type=kotlin.Int operator=null
+        TRY_CATCH type=kotlin.Unit
+          try: BLOCK type=kotlin.Nothing operator=null
+            CALL .call type=kotlin.Int operator=null
+              $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction1<kotlin.String, kotlin.Int> operator=null
+            RETURN type=kotlin.Nothing from=box
+              CONST String type=kotlin.String value='Fail: IllegalArgumentException should have been thrown'
+          catch e: BLOCK type=kotlin.Unit operator=null
+        TRY_CATCH type=kotlin.Unit
+          try: BLOCK type=kotlin.Nothing operator=null
+            CALL .call type=kotlin.Int operator=null
+              $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction1<kotlin.String, kotlin.Int> operator=null
+              args: VARARG type=Array<out Any?> varargElementType=Any?
+                CONST Int type=kotlin.Int value='42'
+            RETURN type=kotlin.Nothing from=box
+              CONST String type=kotlin.String value='Fail: IllegalArgumentException should have been thrown'
+          catch e: BLOCK type=kotlin.Unit operator=null
+        CALL .call type=kotlin.Unit operator=null
+          $this: CALLABLE_REFERENCE bar type=kotlin.reflect.KFunction1<kotlin.String, kotlin.Unit> operator=null
+          args: VARARG type=Array<out Any?> varargElementType=Any?
+            CONST String type=kotlin.String value='OK'
+        RETURN type=kotlin.Nothing from=box
+          CALL .<get-state> type=kotlin.String operator=GET_PROPERTY

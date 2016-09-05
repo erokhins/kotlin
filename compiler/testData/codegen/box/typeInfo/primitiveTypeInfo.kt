@@ -11,3 +11,5 @@ fun box(): String {
   val box = Box<Int>(1)
   return if (isIntBox(box)) "OK" else "fail"
 }
+
+

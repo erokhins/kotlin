@@ -26,3 +26,5 @@ public abstract class B(): A() {
 class C: B() {
     override fun test() = "OK"
 }
+
+

@@ -1,0 +1,89 @@
+MODULE <test-module>
+  FILE /kt4340.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public final var result: kotlin.Int
+        EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='0'
+      PROPERTY private final val kotlin.Int.times3: kotlin.Int
+        PROPERTY_GETTER private final fun kotlin.Int.<get-times3>(): kotlin.Int
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-times3>
+              CALL .times type=kotlin.Int operator=MUL
+                $this: $RECEIVER of: times3 type=kotlin.Int
+                other: CONST Int type=kotlin.Int value='3'
+      PROPERTY private final var kotlin.Int.times: kotlin.Int
+        PROPERTY_GETTER private final fun kotlin.Int.<get-times>(): kotlin.Int
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-times>
+              CALL .times type=kotlin.Int operator=MUL
+                $this: $RECEIVER of: times type=kotlin.Int
+                other: CONST Int type=kotlin.Int value='4'
+        PROPERTY_SETTER private final fun kotlin.Int.<set-times>(/*0*/ s: kotlin.Int): kotlin.Unit
+          BLOCK_BODY
+            CALL .<set-result> type=kotlin.Unit operator=EQ
+              $this: THIS public final class A type=A
+              <set-?>: CALL .times type=kotlin.Int operator=MUL
+                $this: $RECEIVER of: times type=kotlin.Int
+                other: GET_VAR s type=kotlin.Int operator=null
+      FUN public final fun test(/*0*/ p: kotlin.Int): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=test
+            CALL .invoke type=kotlin.Int operator=null
+              $this: BLOCK type=() -> kotlin.Int operator=LAMBDA
+                FUN local final fun <anonymous>(): kotlin.Int
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .<get-times3> type=kotlin.Int operator=GET_PROPERTY
+                        $this: THIS public final class A type=A
+                        $receiver: GET_VAR p type=kotlin.Int operator=null
+                CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Int operator=LAMBDA
+      FUN public final fun test2(/*0*/ p: kotlin.Int, /*1*/ s: kotlin.Int): kotlin.Int
+        BLOCK_BODY
+          CALL .invoke type=kotlin.Unit operator=null
+            $this: BLOCK type=() -> kotlin.Unit operator=LAMBDA
+              FUN local final fun <anonymous>(): kotlin.Unit
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .<set-times> type=kotlin.Unit operator=EQ
+                      $this: THIS public final class A type=A
+                      $receiver: GET_VAR p type=kotlin.Int operator=null
+                      s: GET_VAR s type=kotlin.Int operator=null
+              CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Unit operator=LAMBDA
+          RETURN type=kotlin.Nothing from=test2
+            CALL .<get-result> type=kotlin.Int operator=GET_PROPERTY
+              $this: THIS public final class A type=A
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR var result: kotlin.Int
+          CALL .test type=kotlin.Int operator=null
+            $this: CALL .<init> type=A operator=null
+            p: CONST Int type=kotlin.Int value='3'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR result type=kotlin.Int operator=null
+              arg1: CONST Int type=kotlin.Int value='9'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail1: '
+              GET_VAR result type=kotlin.Int operator=null
+        SET_VAR result type=kotlin.Unit operator=EQ
+          CALL .test2 type=kotlin.Int operator=null
+            $this: CALL .<init> type=A operator=null
+            p: CONST Int type=kotlin.Int value='2'
+            s: CONST Int type=kotlin.Int value='4'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR result type=kotlin.Int operator=null
+              arg1: CONST Int type=kotlin.Int value='8'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail2: '
+              GET_VAR result type=kotlin.Int operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -16,3 +16,5 @@ fun box(): String {
     if (P.w != P.u) return "Fail w"
     return "OK"
 }
+
+

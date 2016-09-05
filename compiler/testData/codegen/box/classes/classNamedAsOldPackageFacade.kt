@@ -5,3 +5,4 @@ class TestPackage {
 }
 
 fun box(): String = TestPackage().OK
+

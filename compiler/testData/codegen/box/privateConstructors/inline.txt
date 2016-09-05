@@ -1,0 +1,23 @@
+MODULE <test-module>
+  FILE /inline.kt
+    CLASS CLASS Outer
+      CONSTRUCTOR private constructor Outer()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Outer
+      CLASS OBJECT Companion
+        CONSTRUCTOR private constructor Companion()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Companion
+        FUN internal final inline fun foo(): Outer
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=foo
+              CALL .<init> type=Outer operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val outer: Outer
+          CALL .foo type=Outer operator=null
+            $this: GET_OBJECT Companion type=Outer.Companion
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

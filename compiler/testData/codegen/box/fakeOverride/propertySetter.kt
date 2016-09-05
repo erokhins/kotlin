@@ -16,3 +16,5 @@ fun box(): String {
     C().result = ""
     return "OK"
 }
+
+

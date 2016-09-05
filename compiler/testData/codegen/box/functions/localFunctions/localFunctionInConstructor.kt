@@ -13,3 +13,5 @@ class Test {
 fun box(): String {
     return if (Test().property == 10) "OK" else "fail"
 }
+
+

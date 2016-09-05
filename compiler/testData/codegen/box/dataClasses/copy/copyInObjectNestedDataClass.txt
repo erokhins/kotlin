@@ -1,0 +1,59 @@
+MODULE <test-module>
+  FILE /copyInObjectNestedDataClass.kt
+    CLASS CLASS Bar
+      CONSTRUCTOR public constructor Bar(/*0*/ name: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD name type=kotlin.Unit operator=null
+            receiver: THIS public final class Bar type=Bar
+            value: GET_VAR name type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Bar
+      PROPERTY public final val name: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR name type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    CLASS CLASS Foo
+      CONSTRUCTOR public constructor Foo()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Foo
+      FUN public abstract fun foo(): kotlin.String
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .foo type=kotlin.String operator=null
+            $this: BLOCK type=box.<no name provided> operator=OBJECT_LITERAL
+              CLASS CLASS <no name provided>
+                CONSTRUCTOR public constructor <no name provided>()
+                  BLOCK_BODY
+                    DELEGATING_CONSTRUCTOR_CALL Foo
+                    INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+                CLASS CLASS NestedFoo
+                  CONSTRUCTOR public constructor NestedFoo(/*0*/ bar: Bar)
+                    BLOCK_BODY
+                      DELEGATING_CONSTRUCTOR_CALL Any
+                      SET_BACKING_FIELD bar type=kotlin.Unit operator=null
+                        receiver: THIS local final inner class NestedFoo type=box.<no name provided>.NestedFoo
+                        value: GET_VAR bar type=Bar operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+                      INSTANCE_INITIALIZER_CALL classDescriptor=NestedFoo
+                  PROPERTY public final val bar: Bar
+                    EXPRESSION_BODY
+                      GET_VAR bar type=Bar operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+                  FUN public final fun copy(/*0*/ bar: Bar): box.<no name provided>.NestedFoo
+                    BLOCK_BODY
+                      RETURN type=kotlin.Nothing from=copy
+                        CALL .<init> type=box.<no name provided>.NestedFoo operator=null
+                          $this: THIS local final class <no name provided> : Foo type=box.<no name provided>
+                          bar: GET_VAR bar type=Bar operator=null
+                FUN public open override /*1*/ fun foo(): kotlin.String
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=foo
+                      CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+                        $this: CALL .<get-bar> type=Bar operator=GET_PROPERTY
+                          $this: CALL .copy type=box.<no name provided>.NestedFoo operator=null
+                            $this: CALL .<init> type=box.<no name provided>.NestedFoo operator=null
+                              $this: THIS local final class <no name provided> : Foo type=box.<no name provided>
+                              bar: CALL .<init> type=Bar operator=null
+                                name: CONST String type=kotlin.String value='Fail'
+                            bar: CALL .<init> type=Bar operator=null
+                              name: CONST String type=kotlin.String value='OK'
+              CALL .<init> type=box.<no name provided> operator=OBJECT_LITERAL

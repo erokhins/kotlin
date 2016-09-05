@@ -1,0 +1,56 @@
+MODULE <test-module>
+  FILE /empty.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val map: kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!>
+          BLOCK type=kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!> operator=EXCLEXCL
+            VAR val tmp0_notnull: kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!>
+              CALL .empty type=kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!> operator=null
+            WHEN type=kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!> operator=null
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_notnull type=kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!> operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+              else: GET_VAR tmp0_notnull type=kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Int type=kotlin.Int value='0'
+          actual: CALL .size type=kotlin.Int operator=null
+            $this: GET_VAR map type=kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .containsKey type=kotlin.Boolean operator=null
+            $this: GET_VAR map type=kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!> operator=null
+            key: CONST String type=kotlin.String value=''
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .containsKey type=kotlin.Boolean operator=null
+            $this: GET_VAR map type=kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!> operator=null
+            key: CONST String type=kotlin.String value='abacaba'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Null type=kotlin.Nothing? value='null'
+          actual: CALL .get type=kotlin.Any! operator=GET_ARRAY_ELEMENT
+            $this: GET_VAR map type=kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!> operator=null
+            key: CONST String type=kotlin.String value=''
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Null type=kotlin.Nothing? value='null'
+          actual: CALL .get type=kotlin.Any! operator=GET_ARRAY_ELEMENT
+            $this: GET_VAR map type=kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!> operator=null
+            key: CONST String type=kotlin.String value='lol'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_VAR map type=kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!> operator=null
+          actual: CALL .minus type=kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!> operator=null
+            $this: GET_VAR map type=kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!> operator=null
+            key: CONST String type=kotlin.String value=''
+        VAR val other: kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!>
+          BLOCK type=kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!> operator=EXCLEXCL
+            VAR val tmp1_notnull: kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!>
+              CALL .empty type=kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!> operator=null
+            WHEN type=kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!> operator=null
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp1_notnull type=kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!> operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+              else: GET_VAR tmp1_notnull type=kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_VAR map type=kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!> operator=null
+          actual: GET_VAR other type=kotlin.reflect.jvm.internal.pcollections.HashPMap<kotlin.String!, kotlin.Any!> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

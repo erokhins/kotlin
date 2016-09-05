@@ -1,0 +1,24 @@
+MODULE <test-module>
+  FILE /K.kt
+    FUN public fun nonNullString(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=nonNullString
+          CONST String type=kotlin.String value=''
+    FUN public fun nullableString(): kotlin.String?
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=nullableString
+          CONST String type=kotlin.String value=''
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertNotEquals type=kotlin.Unit operator=null
+          illegal: CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction0<kotlin.String!> operator=null
+          actual: CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE nonNullString type=kotlin.reflect.KFunction0<kotlin.String> operator=null
+        CALL .assertNotEquals type=kotlin.Unit operator=null
+          illegal: CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction0<kotlin.String!> operator=null
+          actual: CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE nullableString type=kotlin.reflect.KFunction0<kotlin.String?> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

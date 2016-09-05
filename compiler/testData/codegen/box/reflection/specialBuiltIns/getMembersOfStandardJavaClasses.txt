@@ -1,0 +1,27 @@
+MODULE <test-module>
+  FILE /getMembersOfStandardJavaClasses.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .map type=kotlin.collections.List<kotlin.collections.List<kotlin.String>> operator=null
+          $receiver: CALL .listOf type=kotlin.collections.List<kotlin.reflect.KClass<out kotlin.Any>> operator=null
+            elements: VARARG type=Array<out KClass<out Any>> varargElementType=KClass<out Any>
+              CLASS_REFERENCE ArrayList type=kotlin.reflect.KClass<java.util.ArrayList<*>>
+              CLASS_REFERENCE LinkedList type=kotlin.reflect.KClass<java.util.LinkedList<*>>
+              CLASS_REFERENCE AbstractList type=kotlin.reflect.KClass<java.util.AbstractList<*>>
+              CLASS_REFERENCE HashSet type=kotlin.reflect.KClass<java.util.HashSet<*>>
+              CLASS_REFERENCE TreeSet type=kotlin.reflect.KClass<java.util.TreeSet<*>>
+              CLASS_REFERENCE HashMap type=kotlin.reflect.KClass<java.util.HashMap<*, *>>
+              CLASS_REFERENCE TreeMap type=kotlin.reflect.KClass<java.util.TreeMap<*, *>>
+              CLASS_REFERENCE AbstractMap type=kotlin.reflect.KClass<java.util.AbstractMap<*, *>>
+              CLASS_REFERENCE SimpleEntry type=kotlin.reflect.KClass<java.util.AbstractMap.SimpleEntry<*, *>>
+          transform: BLOCK type=(kotlin.reflect.KClass<out kotlin.Any>) -> kotlin.collections.List<kotlin.String> operator=LAMBDA
+            FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KClass<out kotlin.Any>): kotlin.collections.List<kotlin.String>
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .map type=kotlin.collections.List<kotlin.String> operator=null
+                    $receiver: CALL .<get-members> type=kotlin.collections.Collection<kotlin.reflect.KCallable<*>> operator=GET_PROPERTY
+                      $this: GET_VAR it type=kotlin.reflect.KClass<out kotlin.Any> operator=null
+                    transform: CALLABLE_REFERENCE toString type=kotlin.reflect.KFunction1<kotlin.Any, kotlin.String> operator=null
+            CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KClass<out kotlin.Any>) -> kotlin.collections.List<kotlin.String> operator=LAMBDA
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

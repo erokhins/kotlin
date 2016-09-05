@@ -11,3 +11,5 @@ fun box(): String {
     val f = foo()
     return if (f == 14) "OK" else "Fail $f"
 }
+
+

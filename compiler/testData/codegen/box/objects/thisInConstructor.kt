@@ -8,3 +8,5 @@ open class B(open val v: String) {
 }
 
 fun box() = B("O").a("K").v
+
+

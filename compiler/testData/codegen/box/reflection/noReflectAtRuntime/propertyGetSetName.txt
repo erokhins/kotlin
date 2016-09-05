@@ -1,0 +1,118 @@
+MODULE <test-module>
+  FILE /propertyGetSetName.kt
+    CLASS CLASS Box
+      CONSTRUCTOR public constructor Box(/*0*/ value: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD value type=kotlin.Unit operator=null
+            receiver: THIS public final data class Box type=Box
+            value: GET_VAR value type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Box
+      PROPERTY public final val value: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR value type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public final operator /*synthesized*/ fun component1(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=component1
+            CALL .<get-value> type=kotlin.String operator=GET_PROPERTY
+              $this: THIS public final data class Box type=Box
+      FUN public final /*synthesized*/ fun copy(/*0*/ value: kotlin.String = ...): Box
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=copy
+            CALL .<init> type=Box operator=null
+              value: GET_VAR value type=kotlin.String operator=null
+      FUN public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=toString
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Box('
+              CONST String type=kotlin.String value='value='
+              CALL .<get-value> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public final data class Box type=Box
+              CONST String type=kotlin.String value=')'
+      FUN public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+        BLOCK_BODY
+          VAR val tmp0_result: kotlin.Int
+            CONST Int type=kotlin.Int value='0'
+          SET_VAR tmp0_result type=kotlin.Unit operator=EQ
+            CALL .hashCode type=kotlin.Int operator=null
+              $this: CALL .<get-value> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public final data class Box type=Box
+          RETURN type=kotlin.Nothing from=hashCode
+            GET_VAR tmp0_result type=kotlin.Int operator=null
+      FUN public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+        BLOCK_BODY
+          WHEN type=kotlin.Unit operator=null
+            if: CALL .EQEQEQ type=kotlin.Boolean operator=EQEQEQ
+              arg0: THIS public final data class Box type=Box
+              arg1: GET_VAR other type=kotlin.Any? operator=null
+            then: RETURN type=kotlin.Nothing from=equals
+              CONST Boolean type=kotlin.Boolean value='true'
+          WHEN type=kotlin.Unit operator=null
+            if: TYPE_OP operator=NOT_INSTANCEOF typeOperand=Box
+              GET_VAR other type=kotlin.Any? operator=null
+            then: RETURN type=kotlin.Nothing from=equals
+              CONST Boolean type=kotlin.Boolean value='false'
+          VAR val tmp0_other_with_cast: Box
+            TYPE_OP operator=CAST typeOperand=Box
+              GET_VAR other type=kotlin.Any? operator=null
+          WHEN type=kotlin.Unit operator=null
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .<get-value> type=kotlin.String operator=GET_PROPERTY
+                  $this: THIS public final data class Box type=Box
+                arg1: CALL .<get-value> type=kotlin.String operator=GET_PROPERTY
+                  $this: GET_VAR tmp0_other_with_cast type=Box operator=null
+            then: RETURN type=kotlin.Nothing from=equals
+              CONST Boolean type=kotlin.Boolean value='false'
+          RETURN type=kotlin.Nothing from=equals
+            CONST Boolean type=kotlin.Boolean value='true'
+    PROPERTY public var pr: Box
+      EXPRESSION_BODY
+        CALL .<init> type=Box operator=null
+          value: CONST String type=kotlin.String value='first'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val p: kotlin.reflect.KMutableProperty0<Box>
+          CALLABLE_REFERENCE pr type=kotlin.reflect.KMutableProperty0<Box> operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-value> type=kotlin.String operator=GET_PROPERTY
+                $this: CALL .get type=Box operator=null
+                  $this: GET_VAR p type=kotlin.reflect.KMutableProperty0<Box> operator=null
+              arg1: CONST String type=kotlin.String value='first'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail value 1: '
+              CALL .get type=Box operator=null
+                $this: GET_VAR p type=kotlin.reflect.KMutableProperty0<Box> operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR p type=kotlin.reflect.KMutableProperty0<Box> operator=null
+              arg1: CONST String type=kotlin.String value='pr'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail name: '
+              CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR p type=kotlin.reflect.KMutableProperty0<Box> operator=null
+        CALL .set type=kotlin.Unit operator=null
+          $this: GET_VAR p type=kotlin.reflect.KMutableProperty0<Box> operator=null
+          value: CALL .<init> type=Box operator=null
+            value: CONST String type=kotlin.String value='second'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-value> type=kotlin.String operator=GET_PROPERTY
+                $this: CALL .get type=Box operator=null
+                  $this: GET_VAR p type=kotlin.reflect.KMutableProperty0<Box> operator=null
+              arg1: CONST String type=kotlin.String value='second'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail value 2: '
+              CALL .get type=Box operator=null
+                $this: GET_VAR p type=kotlin.reflect.KMutableProperty0<Box> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -17,3 +17,5 @@ fun box(): String {
     (C.Companion::class.members.single { it.name == "bar" }).call(C.Companion)
     return "OK"
 }
+
+

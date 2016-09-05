@@ -12,3 +12,5 @@ fun box(): String {
     // setAccessible(false) should have no effect on the accessibility of a public reflection object
     return p.get(Result())
 }
+
+

@@ -1,0 +1,162 @@
+MODULE <test-module>
+  FILE /switchOptimizationTypes.kt
+    FUN public fun intFoo(/*0*/ x: kotlin.Int): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=intFoo
+          BLOCK type=kotlin.Int operator=WHEN
+            VAR val tmp0_subject: kotlin.Int
+              GET_VAR x type=kotlin.Int operator=null
+            WHEN type=kotlin.Int operator=WHEN
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_subject type=kotlin.Int operator=null
+                arg1: CONST Int type=kotlin.Int value='1'
+              then: CONST Int type=kotlin.Int value='5'
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_subject type=kotlin.Int operator=null
+                arg1: CONST Int type=kotlin.Int value='2'
+              then: CONST Int type=kotlin.Int value='6'
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_subject type=kotlin.Int operator=null
+                arg1: CONST Int type=kotlin.Int value='3'
+              then: CONST Int type=kotlin.Int value='7'
+              else: CONST Int type=kotlin.Int value='8'
+    FUN public fun shortFoo(/*0*/ x: kotlin.Short): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=shortFoo
+          BLOCK type=kotlin.Int operator=WHEN
+            VAR val tmp0_subject: kotlin.Short
+              GET_VAR x type=kotlin.Short operator=null
+            WHEN type=kotlin.Int operator=WHEN
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_subject type=kotlin.Short operator=null
+                arg1: CALL .toShort type=kotlin.Short operator=null
+                  $this: CONST Int type=kotlin.Int value='1'
+              then: CONST Int type=kotlin.Int value='5'
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_subject type=kotlin.Short operator=null
+                arg1: CALL .toShort type=kotlin.Short operator=null
+                  $this: CONST Int type=kotlin.Int value='2'
+              then: CONST Int type=kotlin.Int value='6'
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_subject type=kotlin.Short operator=null
+                arg1: CALL .toShort type=kotlin.Short operator=null
+                  $this: CONST Int type=kotlin.Int value='3'
+              then: CONST Int type=kotlin.Int value='7'
+              else: CONST Int type=kotlin.Int value='8'
+    FUN public fun byteFoo(/*0*/ x: kotlin.Byte): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=byteFoo
+          BLOCK type=kotlin.Int operator=WHEN
+            VAR val tmp0_subject: kotlin.Byte
+              GET_VAR x type=kotlin.Byte operator=null
+            WHEN type=kotlin.Int operator=WHEN
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_subject type=kotlin.Byte operator=null
+                arg1: CALL .toByte type=kotlin.Byte operator=null
+                  $this: CONST Int type=kotlin.Int value='1'
+              then: CONST Int type=kotlin.Int value='5'
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_subject type=kotlin.Byte operator=null
+                arg1: CALL .toByte type=kotlin.Byte operator=null
+                  $this: CONST Int type=kotlin.Int value='2'
+              then: CONST Int type=kotlin.Int value='6'
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_subject type=kotlin.Byte operator=null
+                arg1: CALL .toByte type=kotlin.Byte operator=null
+                  $this: CONST Int type=kotlin.Int value='3'
+              then: CONST Int type=kotlin.Int value='7'
+              else: CONST Int type=kotlin.Int value='8'
+    FUN public fun charFoo(/*0*/ x: kotlin.Char): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=charFoo
+          BLOCK type=kotlin.Int operator=WHEN
+            VAR val tmp0_subject: kotlin.Char
+              GET_VAR x type=kotlin.Char operator=null
+            WHEN type=kotlin.Int operator=WHEN
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_subject type=kotlin.Char operator=null
+                arg1: CONST Char type=kotlin.Char value='a'
+              then: CONST Int type=kotlin.Int value='5'
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_subject type=kotlin.Char operator=null
+                arg1: CONST Char type=kotlin.Char value='b'
+              then: CONST Int type=kotlin.Int value='6'
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_subject type=kotlin.Char operator=null
+                arg1: CONST Char type=kotlin.Char value='c'
+              then: CONST Int type=kotlin.Int value='7'
+              else: CONST Int type=kotlin.Int value='8'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR var result: kotlin.String
+          CALL .joinToString type=kotlin.String operator=null
+            $receiver: CALL .map type=kotlin.collections.List<kotlin.Int> operator=null
+              $receiver: CALL .rangeTo type=kotlin.ranges.IntRange operator=RANGE
+                $this: CONST Int type=kotlin.Int value='1'
+                other: CONST Int type=kotlin.Int value='4'
+              transform: CALLABLE_REFERENCE intFoo type=kotlin.reflect.KFunction1<kotlin.Int, kotlin.Int> operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR result type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='5, 6, 7, 8'
+          then: RETURN type=kotlin.Nothing from=box
+            CALL .plus type=kotlin.String operator=PLUS
+              $this: CONST String type=kotlin.String value='int:'
+              other: GET_VAR result type=kotlin.String operator=null
+        SET_VAR result type=kotlin.Unit operator=EQ
+          CALL .joinToString type=kotlin.String operator=null
+            $receiver: CALL .map type=kotlin.collections.List<kotlin.Int> operator=null
+              $receiver: CALL .listOf type=kotlin.collections.List<kotlin.Short> operator=null
+                elements: VARARG type=Array<out Short> varargElementType=Short
+                  CONST Short type=kotlin.Short value='1'
+                  CONST Short type=kotlin.Short value='2'
+                  CONST Short type=kotlin.Short value='3'
+                  CONST Short type=kotlin.Short value='4'
+              transform: CALLABLE_REFERENCE shortFoo type=kotlin.reflect.KFunction1<kotlin.Short, kotlin.Int> operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR result type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='5, 6, 7, 8'
+          then: RETURN type=kotlin.Nothing from=box
+            CALL .plus type=kotlin.String operator=PLUS
+              $this: CONST String type=kotlin.String value='short:'
+              other: GET_VAR result type=kotlin.String operator=null
+        SET_VAR result type=kotlin.Unit operator=EQ
+          CALL .joinToString type=kotlin.String operator=null
+            $receiver: CALL .map type=kotlin.collections.List<kotlin.Int> operator=null
+              $receiver: CALL .listOf type=kotlin.collections.List<kotlin.Byte> operator=null
+                elements: VARARG type=Array<out Byte> varargElementType=Byte
+                  CONST Byte type=kotlin.Byte value='1'
+                  CONST Byte type=kotlin.Byte value='2'
+                  CONST Byte type=kotlin.Byte value='3'
+                  CONST Byte type=kotlin.Byte value='4'
+              transform: CALLABLE_REFERENCE byteFoo type=kotlin.reflect.KFunction1<kotlin.Byte, kotlin.Int> operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR result type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='5, 6, 7, 8'
+          then: RETURN type=kotlin.Nothing from=box
+            CALL .plus type=kotlin.String operator=PLUS
+              $this: CONST String type=kotlin.String value='byte:'
+              other: GET_VAR result type=kotlin.String operator=null
+        SET_VAR result type=kotlin.Unit operator=EQ
+          CALL .joinToString type=kotlin.String operator=null
+            $receiver: CALL .map type=kotlin.collections.List<kotlin.Int> operator=null
+              $receiver: CALL .rangeTo type=kotlin.ranges.CharRange operator=RANGE
+                $this: CONST Char type=kotlin.Char value='a'
+                other: CONST Char type=kotlin.Char value='d'
+              transform: CALLABLE_REFERENCE charFoo type=kotlin.reflect.KFunction1<kotlin.Char, kotlin.Int> operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR result type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='5, 6, 7, 8'
+          then: RETURN type=kotlin.Nothing from=box
+            CALL .plus type=kotlin.String operator=PLUS
+              $this: CONST String type=kotlin.String value='int:'
+              other: GET_VAR result type=kotlin.String operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

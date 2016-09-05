@@ -16,3 +16,5 @@ object A {
 fun box(): String {
     return getA().a()
 }
+
+

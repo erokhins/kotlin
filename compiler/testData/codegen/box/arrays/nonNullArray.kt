@@ -6,3 +6,5 @@ class A() {
 }
 
 fun box() = if(A().test()[5].i == 5) "OK" else "fail"
+
+

@@ -26,3 +26,5 @@ fun box() : String {
     if (test5(Method2(), "s") != "s") return "fail5"
     return "OK"
 }
+
+

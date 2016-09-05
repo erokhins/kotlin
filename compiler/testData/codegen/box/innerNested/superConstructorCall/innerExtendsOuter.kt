@@ -13,3 +13,5 @@ open class Outer(vararg val chars: Char) {
 }
 
 fun box() = Outer('F', 'a', 'i', 'l').value()
+
+

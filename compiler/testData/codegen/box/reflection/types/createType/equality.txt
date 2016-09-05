@@ -1,0 +1,83 @@
+MODULE <test-module>
+  FILE /equality.kt
+    CLASS CLASS Foo
+      CONSTRUCTOR public constructor Foo</*0*/ T>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Foo
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .createType type=kotlin.reflect.KType operator=null
+            $receiver: CLASS_REFERENCE String type=kotlin.reflect.KClass<kotlin.String>
+          actual: CALL .createType type=kotlin.reflect.KType operator=null
+            $receiver: CLASS_REFERENCE String type=kotlin.reflect.KClass<kotlin.String>
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .createType type=kotlin.reflect.KType operator=null
+            $receiver: CLASS_REFERENCE Foo type=kotlin.reflect.KClass<Foo<*>>
+            arguments: CALL .listOf type=kotlin.collections.List<kotlin.reflect.KTypeProjection> operator=null
+              element: CALL .<get-STAR> type=kotlin.reflect.KTypeProjection operator=GET_PROPERTY
+                $this: GET_OBJECT Companion type=kotlin.reflect.KTypeProjection.Companion
+          actual: CALL .createType type=kotlin.reflect.KType operator=null
+            $receiver: CLASS_REFERENCE Foo type=kotlin.reflect.KClass<Foo<*>>
+            arguments: CALL .listOf type=kotlin.collections.List<kotlin.reflect.KTypeProjection> operator=null
+              element: CALL .<get-STAR> type=kotlin.reflect.KTypeProjection operator=GET_PROPERTY
+                $this: GET_OBJECT Companion type=kotlin.reflect.KTypeProjection.Companion
+        VAR val i: kotlin.reflect.KType
+          CALL .createType type=kotlin.reflect.KType operator=null
+            $receiver: CLASS_REFERENCE Int type=kotlin.reflect.KClass<kotlin.Int>
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .createType type=kotlin.reflect.KType operator=null
+            $receiver: CLASS_REFERENCE Foo type=kotlin.reflect.KClass<Foo<*>>
+            arguments: CALL .listOf type=kotlin.collections.List<kotlin.reflect.KTypeProjection> operator=null
+              element: CALL .invariant type=kotlin.reflect.KTypeProjection operator=null
+                $this: GET_OBJECT Companion type=kotlin.reflect.KTypeProjection.Companion
+                type: GET_VAR i type=kotlin.reflect.KType operator=null
+          actual: CALL .createType type=kotlin.reflect.KType operator=null
+            $receiver: CLASS_REFERENCE Foo type=kotlin.reflect.KClass<Foo<*>>
+            arguments: CALL .listOf type=kotlin.collections.List<kotlin.reflect.KTypeProjection> operator=null
+              element: CALL .invariant type=kotlin.reflect.KTypeProjection operator=null
+                $this: GET_OBJECT Companion type=kotlin.reflect.KTypeProjection.Companion
+                type: GET_VAR i type=kotlin.reflect.KType operator=null
+        CALL .assertNotEquals type=kotlin.Unit operator=null
+          illegal: CALL .createType type=kotlin.reflect.KType operator=null
+            $receiver: CLASS_REFERENCE Foo type=kotlin.reflect.KClass<Foo<*>>
+            arguments: CALL .listOf type=kotlin.collections.List<kotlin.reflect.KTypeProjection> operator=null
+              element: CALL .contravariant type=kotlin.reflect.KTypeProjection operator=null
+                $this: GET_OBJECT Companion type=kotlin.reflect.KTypeProjection.Companion
+                type: GET_VAR i type=kotlin.reflect.KType operator=null
+          actual: CALL .createType type=kotlin.reflect.KType operator=null
+            $receiver: CLASS_REFERENCE Foo type=kotlin.reflect.KClass<Foo<*>>
+            arguments: CALL .listOf type=kotlin.collections.List<kotlin.reflect.KTypeProjection> operator=null
+              element: CALL .covariant type=kotlin.reflect.KTypeProjection operator=null
+                $this: GET_OBJECT Companion type=kotlin.reflect.KTypeProjection.Companion
+                type: GET_VAR i type=kotlin.reflect.KType operator=null
+        CALL .assertNotEquals type=kotlin.Unit operator=null
+          illegal: CALL .createType type=kotlin.reflect.KType operator=null
+            $receiver: CLASS_REFERENCE Foo type=kotlin.reflect.KClass<Foo<*>>
+            arguments: CALL .listOf type=kotlin.collections.List<kotlin.reflect.KTypeProjection> operator=null
+              element: CALL .covariant type=kotlin.reflect.KTypeProjection operator=null
+                $this: GET_OBJECT Companion type=kotlin.reflect.KTypeProjection.Companion
+                type: CALL .createType type=kotlin.reflect.KType operator=null
+                  $receiver: CLASS_REFERENCE Any type=kotlin.reflect.KClass<kotlin.Any>
+                  nullable: CONST Boolean type=kotlin.Boolean value='true'
+          actual: CALL .createType type=kotlin.reflect.KType operator=null
+            $receiver: CLASS_REFERENCE Foo type=kotlin.reflect.KClass<Foo<*>>
+            arguments: CALL .listOf type=kotlin.collections.List<kotlin.reflect.KTypeProjection> operator=null
+              element: CALL .<get-STAR> type=kotlin.reflect.KTypeProjection operator=GET_PROPERTY
+                $this: GET_OBJECT Companion type=kotlin.reflect.KTypeProjection.Companion
+        CALL .assertNotEquals type=kotlin.Unit operator=null
+          illegal: CALL .createType type=kotlin.reflect.KType operator=null
+            $receiver: CLASS_REFERENCE Foo type=kotlin.reflect.KClass<Foo<*>>
+            arguments: CALL .listOf type=kotlin.collections.List<kotlin.reflect.KTypeProjection> operator=null
+              element: CALL .<get-STAR> type=kotlin.reflect.KTypeProjection operator=GET_PROPERTY
+                $this: GET_OBJECT Companion type=kotlin.reflect.KTypeProjection.Companion
+            nullable: CONST Boolean type=kotlin.Boolean value='false'
+          actual: CALL .createType type=kotlin.reflect.KType operator=null
+            $receiver: CLASS_REFERENCE Foo type=kotlin.reflect.KClass<Foo<*>>
+            arguments: CALL .listOf type=kotlin.collections.List<kotlin.reflect.KTypeProjection> operator=null
+              element: CALL .<get-STAR> type=kotlin.reflect.KTypeProjection operator=GET_PROPERTY
+                $this: GET_OBJECT Companion type=kotlin.reflect.KTypeProjection.Companion
+            nullable: CONST Boolean type=kotlin.Boolean value='true'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

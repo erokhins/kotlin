@@ -23,3 +23,5 @@ fun box(): String {
     if (a.foo() != 222) return "Fail 4"
     return "OK"
 }
+
+

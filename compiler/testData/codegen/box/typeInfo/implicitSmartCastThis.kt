@@ -11,3 +11,5 @@ fun box(): String {
     if (A().test() != 0) return "fail2"
     return "OK"
 }
+
+

@@ -92,3 +92,4 @@ fun box() : String {
     if (array2 != array2.test1()) return "fail on array of double []"
     return "OK"
 }
+

@@ -16,3 +16,5 @@ fun box() : String {
     if( checkA(Test.B)) return "fail"
     return "OK"
 }
+
+

@@ -97,3 +97,5 @@ abstract class KList : MutableList<String> {
 
 }
 fun box() = J.foo()
+
+

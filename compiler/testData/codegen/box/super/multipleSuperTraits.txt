@@ -1,0 +1,30 @@
+MODULE <test-module>
+  FILE /multipleSuperTraits.kt
+    CLASS INTERFACE T1
+      FUN public open fun foo(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CONST String type=kotlin.String value='O'
+    CLASS INTERFACE T2
+      FUN public open fun foo(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CONST String type=kotlin.String value='K'
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public open override /*2*/ fun foo(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CALL .plus type=kotlin.String operator=PLUS
+              $this: CALL .foo superQualifier=T1 type=kotlin.String operator=null
+                $this: THIS public final class A : T1, T2 type=T1
+              other: CALL .foo superQualifier=T2 type=kotlin.String operator=null
+                $this: THIS public final class A : T1, T2 type=T2
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .foo type=kotlin.String operator=null
+            $this: CALL .<init> type=A operator=null

@@ -18,3 +18,5 @@ fun box(): String {
     assertEquals(listOf(RuntimeAnno::class.java), ::box.annotations.map { it.annotationClass.java })
     return "OK"
 }
+
+

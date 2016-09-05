@@ -1,0 +1,56 @@
+MODULE <test-module>
+  FILE /kt4119.kt
+    FUN public fun foo(/*0*/ f: (kotlin.Int?) -> kotlin.Int): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo
+          CALL .invoke type=kotlin.Int operator=INVOKE
+            $this: GET_VAR f type=(kotlin.Int?) -> kotlin.Int operator=VARIABLE_AS_FUNCTION
+            p1: CONST Int type=kotlin.Int value='0'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        FUN local final operator infix fun kotlin.Int?.plus(/*0*/ a: kotlin.Int): kotlin.Int
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=plus
+              CALL .plus type=kotlin.Int operator=PLUS
+                $this: BLOCK type=kotlin.Int operator=EXCLEXCL
+                  VAR val tmp0_notnull: kotlin.Int
+                    GET_VAR a type=kotlin.Int operator=null
+                  WHEN type=kotlin.Int operator=null
+                    if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                      arg0: GET_VAR tmp0_notnull type=kotlin.Int operator=null
+                      arg1: CONST Null type=kotlin.Nothing? value='null'
+                    then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                    else: GET_VAR tmp0_notnull type=kotlin.Int operator=null
+                other: CONST Int type=kotlin.Int value='2'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .foo type=kotlin.Int operator=null
+                f: BLOCK type=(kotlin.Int?) -> kotlin.Int operator=LAMBDA
+                  FUN local final fun <anonymous>(/*0*/ it: kotlin.Int?): kotlin.Int
+                    BLOCK_BODY
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                        CALL .plus type=kotlin.Int operator=PLUS
+                          $receiver: GET_VAR it type=kotlin.Int? operator=null
+                          a: CONST Int type=kotlin.Int value='1'
+                  CALLABLE_REFERENCE <anonymous> type=(kotlin.Int?) -> kotlin.Int operator=LAMBDA
+              arg1: CONST Int type=kotlin.Int value='3'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail 1'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .foo type=kotlin.Int operator=null
+                f: BLOCK type=(kotlin.Int?) -> kotlin.Int operator=LAMBDA
+                  FUN local final fun <anonymous>(/*0*/ it: kotlin.Int?): kotlin.Int
+                    BLOCK_BODY
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                        CALL .plus type=kotlin.Int operator=null
+                          $receiver: GET_VAR it type=kotlin.Int? operator=null
+                          a: CONST Int type=kotlin.Int value='1'
+                  CALLABLE_REFERENCE <anonymous> type=(kotlin.Int?) -> kotlin.Int operator=LAMBDA
+              arg1: CONST Int type=kotlin.Int value='3'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail 2'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

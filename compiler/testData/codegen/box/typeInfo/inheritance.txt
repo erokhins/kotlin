@@ -1,0 +1,42 @@
+MODULE <test-module>
+  FILE /inheritance.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A</*0*/ T>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public final fun plus(/*0*/ e: T): B<T>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=plus
+            CALL .<init> type=B<T> operator=null
+              e: GET_VAR e type=T operator=null
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B</*0*/ T>(/*0*/ e: T)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL A
+          SET_BACKING_FIELD e type=kotlin.Unit operator=null
+            receiver: THIS public final class B</*0*/ T> : A<T> type=B<T>
+            value: GET_VAR e type=T operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+      PROPERTY public final val e: T
+        EXPRESSION_BODY
+          GET_VAR e type=T operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public final fun add(): B<T>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=add
+            CALL .<init> type=B<T> operator=null
+              e: CALL .<get-e> type=T operator=GET_PROPERTY
+                $this: THIS public final class B</*0*/ T> : A<T> type=B<T>
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CALL .<get-e> type=kotlin.String operator=GET_PROPERTY
+                $this: CALL .add type=B<kotlin.String> operator=null
+                  $this: CALL .plus type=B<kotlin.String> operator=null
+                    $this: CALL .<init> type=A<kotlin.String> operator=null
+                    e: CONST String type=kotlin.String value='239'
+              arg1: CONST String type=kotlin.String value='239'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='fail'

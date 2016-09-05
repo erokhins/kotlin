@@ -10,3 +10,5 @@ class A: B() {
 abstract class B {
         abstract var foo: Array<Int?>
 }
+
+

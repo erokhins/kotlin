@@ -16,3 +16,5 @@ fun box(): String {
     if (a.component1() != "OK") return "Fail 2"
     return c.component1()
 }
+
+

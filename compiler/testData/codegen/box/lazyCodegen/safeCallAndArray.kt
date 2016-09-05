@@ -9,3 +9,5 @@ fun box(): String? {
     val arrayList = arrayOf(c?.calc(), "")
     return arrayList[0]
 }
+
+

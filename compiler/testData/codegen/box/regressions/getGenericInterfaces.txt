@@ -1,0 +1,61 @@
+MODULE <test-module>
+  FILE /getGenericInterfaces.kt
+    CLASS CLASS SimpleClass
+      CONSTRUCTOR public constructor SimpleClass()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=SimpleClass
+    CLASS CLASS ClassWithNonGenericSuperInterface
+      CONSTRUCTOR public constructor ClassWithNonGenericSuperInterface()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=ClassWithNonGenericSuperInterface
+    CLASS CLASS ClassWithGenericSuperInterface
+      CONSTRUCTOR public constructor ClassWithGenericSuperInterface()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=ClassWithGenericSuperInterface
+      FUN public open override /*1*/ fun compare(/*0*/ a: kotlin.String, /*1*/ b: kotlin.String): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=compare
+            CONST Int type=kotlin.Int value='0'
+    FUN public fun check(/*0*/ klass: java.lang.Class<*>): kotlin.Unit
+      BLOCK_BODY
+        VAR val interfaces: kotlin.collections.List<java.lang.Class<*>!>
+          CALL .toList type=kotlin.collections.List<java.lang.Class<*>!> operator=null
+            $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.Array<out java.lang.Class<*>!>
+              CALL .getInterfaces type=kotlin.Array<(out) java.lang.Class<*>!>! operator=null
+                $this: GET_VAR klass type=java.lang.Class<*> operator=null
+        VAR val genericInterfaces: kotlin.collections.List<java.lang.reflect.Type!>
+          CALL .toList type=kotlin.collections.List<java.lang.reflect.Type!> operator=null
+            $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.Array<out java.lang.reflect.Type!>
+              CALL .getGenericInterfaces type=kotlin.Array<(out) java.lang.reflect.Type!>! operator=null
+                $this: GET_VAR klass type=java.lang.Class<*> operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_VAR interfaces type=kotlin.collections.List<java.lang.Class<*>!> operator=null
+              arg1: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_VAR genericInterfaces type=kotlin.collections.List<java.lang.reflect.Type!> operator=null
+          then: BLOCK type=kotlin.Nothing operator=null
+            THROW type=kotlin.Nothing
+              CALL .<init> type=java.lang.AssertionError operator=null
+                p0: STRING_CONCATENATION type=kotlin.String
+                  CONST String type=kotlin.String value='interfaces='
+                  GET_VAR interfaces type=kotlin.collections.List<java.lang.Class<*>!> operator=null
+                  CONST String type=kotlin.String value=', genericInterfaces='
+                  GET_VAR genericInterfaces type=kotlin.collections.List<java.lang.reflect.Type!> operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .check type=kotlin.Unit operator=null
+          klass: CALL .<get-java> type=java.lang.Class<SimpleClass> operator=GET_PROPERTY
+            $receiver: CLASS_REFERENCE SimpleClass type=kotlin.reflect.KClass<SimpleClass>
+        CALL .check type=kotlin.Unit operator=null
+          klass: CALL .<get-java> type=java.lang.Class<ClassWithNonGenericSuperInterface> operator=GET_PROPERTY
+            $receiver: CLASS_REFERENCE ClassWithNonGenericSuperInterface type=kotlin.reflect.KClass<ClassWithNonGenericSuperInterface>
+        CALL .check type=kotlin.Unit operator=null
+          klass: CALL .<get-java> type=java.lang.Class<ClassWithGenericSuperInterface> operator=GET_PROPERTY
+            $receiver: CLASS_REFERENCE ClassWithGenericSuperInterface type=kotlin.reflect.KClass<ClassWithGenericSuperInterface>
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

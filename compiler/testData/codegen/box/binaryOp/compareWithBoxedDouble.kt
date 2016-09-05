@@ -13,3 +13,4 @@ fun box(): String {
     val j = Holder(0.99)
     return if (j.value > 0) "OK" else "fail"
 }
+

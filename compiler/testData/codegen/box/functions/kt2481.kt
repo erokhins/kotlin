@@ -12,3 +12,5 @@ public class B(): A(){
         })()
     }
 }
+
+

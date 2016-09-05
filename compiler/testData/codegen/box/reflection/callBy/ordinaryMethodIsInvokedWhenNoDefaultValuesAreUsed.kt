@@ -19,3 +19,5 @@ fun box(): String {
     ::foo.callBy(mapOf(::foo.parameters.single() to "box"))
     return "OK"
 }
+
+

@@ -1,0 +1,38 @@
+MODULE <test-module>
+  FILE /objectExtendsLocalCaptureInSuperCall.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A(/*0*/ s: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD s type=kotlin.Unit operator=null
+            receiver: THIS public open class A type=A
+            value: GET_VAR s type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public final val s: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR s type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CLASS CLASS B
+          CONSTRUCTOR public constructor B()
+            BLOCK_BODY
+              DELEGATING_CONSTRUCTOR_CALL Any
+              INSTANCE_INITIALIZER_CALL classDescriptor=B
+          PROPERTY public final val result: kotlin.String = "OK"
+            EXPRESSION_BODY
+              CONST String type=kotlin.String value='OK'
+          PROPERTY public final val f: kotlin.String
+            EXPRESSION_BODY
+              CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+                $this: BLOCK type=box.B.f.<no name provided> operator=OBJECT_LITERAL
+                  CLASS CLASS <no name provided>
+                    CONSTRUCTOR public constructor <no name provided>()
+                      BLOCK_BODY
+                        DELEGATING_CONSTRUCTOR_CALL A
+                          s: CALL .<get-result> type=kotlin.String operator=GET_PROPERTY
+                            $this: THIS local final class B type=box.B
+                        INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+                  CALL .<init> type=box.B.f.<no name provided> operator=OBJECT_LITERAL
+        RETURN type=kotlin.Nothing from=box
+          CALL .<get-f> type=kotlin.String operator=GET_PROPERTY
+            $this: CALL .<init> type=box.B operator=null

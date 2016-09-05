@@ -4,3 +4,5 @@ class T(val f : () -> Any?) {
 fun box(): String {
     return T({ "OK" }).call() as String
 }
+
+

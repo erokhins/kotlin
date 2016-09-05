@@ -6,3 +6,5 @@ fun box(): String {
 	}
 	return if (foo(r) === r) "OK" else "Fail"
 }
+
+

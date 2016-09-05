@@ -56,3 +56,5 @@ open class KList<E> : List<E> {
 }
 
 fun box() = J.foo()
+
+

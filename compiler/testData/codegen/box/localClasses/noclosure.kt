@@ -9,3 +9,5 @@ fun box(): String {
 
     return K().o + Bar().k
 }
+
+

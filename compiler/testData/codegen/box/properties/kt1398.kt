@@ -5,3 +5,5 @@ class Foo(bar: String) : Base(bar) {
 }
 
 fun box() = Foo("ok").something()
+
+

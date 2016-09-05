@@ -1,0 +1,52 @@
+MODULE <test-module>
+  FILE /test.kt
+    CLASS CLASS Klass
+      CONSTRUCTOR public constructor Klass()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Klass
+      CLASS OBJECT Companion
+        CONSTRUCTOR private constructor Companion()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Companion
+        PROPERTY public const final val NAME: kotlin.String = "Klass"
+          EXPRESSION_BODY
+            CONST String type=kotlin.String value='Klass'
+        PROPERTY @kotlin.jvm.JvmField() public final val JVM_NAME: kotlin.String = "JvmKlass"
+          EXPRESSION_BODY
+            CONST String type=kotlin.String value='JvmKlass'
+    CLASS INTERFACE Trait
+      CLASS OBJECT Companion
+        CONSTRUCTOR private constructor Companion()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Companion
+        PROPERTY public const final val NAME: kotlin.String = "Trait"
+          EXPRESSION_BODY
+            CONST String type=kotlin.String value='Trait'
+    CLASS ENUM_CLASS Enoom
+      CONSTRUCTOR private constructor Enoom()
+        BLOCK_BODY
+          ENUM_CONSTRUCTOR_CALL Enum super
+          INSTANCE_INITIALIZER_CALL classDescriptor=Enoom
+      CLASS OBJECT Companion
+        CONSTRUCTOR private constructor Companion()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Companion
+        PROPERTY public const final val NAME: kotlin.String = "Enum"
+          EXPRESSION_BODY
+            CONST String type=kotlin.String value='Enum'
+        PROPERTY @kotlin.jvm.JvmField() public final val JVM_NAME: kotlin.String = "JvmEnum"
+          EXPRESSION_BODY
+            CONST String type=kotlin.String value='JvmEnum'
+      FUN public final /*synthesized*/ fun values(): kotlin.Array<Enoom>
+        SYNTHETIC_BODY kind=ENUM_VALUES
+      FUN public final /*synthesized*/ fun valueOf(/*0*/ value: kotlin.String): Enoom
+        SYNTHETIC_BODY kind=ENUM_VALUEOF
+    FUN public fun box(): kotlin.String!
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .test type=kotlin.String! operator=null
+            $this: CALL .<init> type=Test operator=null

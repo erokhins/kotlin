@@ -40,3 +40,5 @@ package test
 val y = 239
 
 const val MAGIC_NUMBER = 42
+
+

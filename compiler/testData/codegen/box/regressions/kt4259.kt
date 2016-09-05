@@ -6,3 +6,5 @@ fun box(): String {
     val c: Any? = o?.javaClass
     return if (c !=  null) "OK"  else "fail"
 }
+
+

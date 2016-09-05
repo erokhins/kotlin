@@ -7,3 +7,4 @@ fun test(i: Int): String {
 }
 
 fun box(): String = test(42)
+

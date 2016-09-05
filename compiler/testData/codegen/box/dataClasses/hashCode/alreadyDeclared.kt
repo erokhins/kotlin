@@ -5,3 +5,4 @@ data class A(val x: Int) {
 fun box(): String {
   return if (A(0).hashCode() == -3) "OK" else "fail"
 }
+

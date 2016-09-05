@@ -1,0 +1,110 @@
+MODULE <test-module>
+  FILE /cloneHierarchy.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public open override /*1*/ fun clone(): A
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=clone
+            TYPE_OP operator=CAST typeOperand=A
+              CALL .clone superQualifier=Cloneable type=kotlin.Any operator=null
+                $this: THIS public open class A : kotlin.Cloneable type=kotlin.Cloneable
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B(/*0*/ s: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL A
+          SET_BACKING_FIELD s type=kotlin.Unit operator=null
+            receiver: THIS public open class B : A type=B
+            value: GET_VAR s type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+      PROPERTY public final var s: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR s type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public open override /*1*/ fun clone(): B
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=clone
+            TYPE_OP operator=CAST typeOperand=B
+              CALL .clone superQualifier=A type=A operator=null
+                $this: THIS public open class B : A type=A
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C(/*0*/ s: kotlin.String, /*1*/ l: java.util.ArrayList<kotlin.Any>)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL B
+            s: GET_VAR s type=kotlin.String operator=null
+          SET_BACKING_FIELD l type=kotlin.Unit operator=null
+            receiver: THIS public open class C : B type=C
+            value: GET_VAR l type=java.util.ArrayList<kotlin.Any> operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      PROPERTY public final var l: java.util.ArrayList<kotlin.Any>
+        EXPRESSION_BODY
+          GET_VAR l type=java.util.ArrayList<kotlin.Any> operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public open override /*1*/ fun clone(): C
+        BLOCK_BODY
+          VAR val result: C
+            TYPE_OP operator=CAST typeOperand=C
+              CALL .clone superQualifier=B type=B operator=null
+                $this: THIS public open class C : B type=B
+          CALL .<set-l> type=kotlin.Unit operator=EQ
+            $this: GET_VAR result type=C operator=null
+            <set-?>: TYPE_OP operator=CAST typeOperand=java.util.ArrayList<kotlin.Any>
+              CALL .clone type=kotlin.Any operator=null
+                $this: CALL .<get-l> type=java.util.ArrayList<kotlin.Any> operator=GET_PROPERTY
+                  $this: THIS public open class C : B type=C
+          RETURN type=kotlin.Nothing from=clone
+            GET_VAR result type=C operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val l: java.util.ArrayList<kotlin.Any>
+          CALL .<init> type=java.util.ArrayList<kotlin.Any> operator=null
+        CALL .add type=kotlin.Boolean operator=null
+          $this: GET_VAR l type=java.util.ArrayList<kotlin.Any> operator=null
+          element: CONST Boolean type=kotlin.Boolean value='true'
+        VAR val c: C
+          CALL .<init> type=C operator=null
+            s: CONST String type=kotlin.String value='OK'
+            l: GET_VAR l type=java.util.ArrayList<kotlin.Any> operator=null
+        VAR val d: C
+          CALL .clone type=C operator=null
+            $this: GET_VAR c type=C operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR c type=C operator=null
+              arg1: CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR d type=C operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail s: '
+              CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR d type=C operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-l> type=java.util.ArrayList<kotlin.Any> operator=GET_PROPERTY
+                $this: GET_VAR c type=C operator=null
+              arg1: CALL .<get-l> type=java.util.ArrayList<kotlin.Any> operator=GET_PROPERTY
+                $this: GET_VAR d type=C operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail l: '
+              CALL .<get-l> type=java.util.ArrayList<kotlin.Any> operator=GET_PROPERTY
+                $this: GET_VAR d type=C operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .EQEQEQ type=kotlin.Boolean operator=EQEQEQ
+            arg0: CALL .<get-l> type=java.util.ArrayList<kotlin.Any> operator=GET_PROPERTY
+              $this: GET_VAR c type=C operator=null
+            arg1: CALL .<get-l> type=java.util.ArrayList<kotlin.Any> operator=GET_PROPERTY
+              $this: GET_VAR d type=C operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail list identity'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .EQEQEQ type=kotlin.Boolean operator=EQEQEQ
+            arg0: GET_VAR c type=C operator=null
+            arg1: GET_VAR d type=C operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail identity'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

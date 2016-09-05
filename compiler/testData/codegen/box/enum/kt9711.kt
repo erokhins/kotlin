@@ -11,3 +11,4 @@ enum class X {
 fun box(): String {
     return X.B.value()
 }
+

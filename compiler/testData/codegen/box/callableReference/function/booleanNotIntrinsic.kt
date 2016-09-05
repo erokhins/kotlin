@@ -3,3 +3,5 @@ fun box(): String {
     if ((Boolean::not)(false) != true) return "Fail 2"
     return "OK"
 }
+
+

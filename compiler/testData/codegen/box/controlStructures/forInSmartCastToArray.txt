@@ -1,0 +1,39 @@
+MODULE <test-module>
+  FILE /forInSmartCastToArray.kt
+    FUN public fun f(/*0*/ x: kotlin.Any?): kotlin.Any?
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: TYPE_OP operator=INSTANCEOF typeOperand=kotlin.Array<*>
+            GET_VAR x type=kotlin.Any? operator=null
+          then: BLOCK type=kotlin.Unit operator=null
+            BLOCK type=kotlin.Unit operator=FOR_LOOP
+              VAR val tmp0_iterator: kotlin.collections.Iterator<kotlin.Any?>
+                CALL .iterator type=kotlin.collections.Iterator<kotlin.Any?> operator=FOR_LOOP_ITERATOR
+                  $this: TYPE_OP operator=IMPLICIT_CAST typeOperand=kotlin.Array<out kotlin.Any?>
+                    GET_VAR x type=kotlin.Any? operator=null
+              WHILE label=null operator=FOR_LOOP_INNER_WHILE
+                condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+                  $this: GET_VAR tmp0_iterator type=kotlin.collections.Iterator<kotlin.Any?> operator=null
+                body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+                  VAR val i: kotlin.Any?
+                    CALL .next type=kotlin.Any? operator=FOR_LOOP_NEXT
+                      $this: GET_VAR tmp0_iterator type=kotlin.collections.Iterator<kotlin.Any?> operator=null
+                  BLOCK type=kotlin.Nothing operator=null
+                    RETURN type=kotlin.Nothing from=f
+                      GET_VAR i type=kotlin.Any? operator=null
+        RETURN type=kotlin.Nothing from=f
+          CONST String type=kotlin.String value='FAIL'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val a: kotlin.Array<kotlin.String>
+          TYPE_OP operator=CAST typeOperand=kotlin.Array<kotlin.String>
+            CALL .arrayOfNulls type=kotlin.Array<kotlin.String?> operator=null
+              size: CONST Int type=kotlin.Int value='1'
+        CALL .set type=kotlin.Unit operator=EQ
+          $this: GET_VAR a type=kotlin.Array<kotlin.String> operator=null
+          index: CONST Int type=kotlin.Int value='0'
+          value: CONST String type=kotlin.String value='OK'
+        RETURN type=kotlin.Nothing from=box
+          TYPE_OP operator=CAST typeOperand=kotlin.String
+            CALL .f type=kotlin.Any? operator=null
+              x: GET_VAR a type=kotlin.Array<kotlin.String> operator=null

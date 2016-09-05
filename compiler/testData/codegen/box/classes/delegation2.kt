@@ -22,3 +22,5 @@ fun box() : String {
     if(c.bar() != "bbb") return "fail"
     return "OK"
 }
+
+

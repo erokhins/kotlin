@@ -19,3 +19,5 @@ fun box(): String {
     val p = Value("O", "K")
     return p.additionalValue + p.additionalText
 }
+
+

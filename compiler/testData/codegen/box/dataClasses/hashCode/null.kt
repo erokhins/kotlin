@@ -14,3 +14,5 @@ fun box() : String {
    if( D(null).hashCode() != 0) "fail"
    return "OK"
 }
+
+

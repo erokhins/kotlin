@@ -5,3 +5,5 @@ class Outer {
 }
 
 fun box() = Outer().Inner().box()
+
+

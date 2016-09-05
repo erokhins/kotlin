@@ -8,3 +8,5 @@ fun checkLess(x: Boolean, y: Boolean) = when {
 }
 
 fun box() = checkLess(false, true)
+
+

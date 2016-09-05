@@ -1,0 +1,25 @@
+MODULE <test-module>
+  FILE /box.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .ok type=kotlin.String operator=null
+  FILE /part1.kt
+    FUN private fun overlapping(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=overlapping
+          CONST String type=kotlin.String value='oops #1'
+  FILE /part2.kt
+    FUN public fun overlapping(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=overlapping
+          CONST String type=kotlin.String value='OK'
+    FUN public fun ok(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=ok
+          CALL .overlapping type=kotlin.String operator=null
+  FILE /part3.kt
+    FUN private fun overlapping(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=overlapping
+          CONST String type=kotlin.String value='oops #2'

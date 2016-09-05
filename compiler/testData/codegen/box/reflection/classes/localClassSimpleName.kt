@@ -39,3 +39,5 @@ fun box(): String {
     LocalInConstructor()
     return "OK"
 }
+
+

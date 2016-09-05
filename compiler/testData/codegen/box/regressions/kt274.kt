@@ -13,3 +13,5 @@ fun box() : String {
     }
     return if(sum == 6) "OK" else "fail"
 }
+
+

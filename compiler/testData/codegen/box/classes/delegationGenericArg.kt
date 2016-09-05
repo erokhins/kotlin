@@ -10,3 +10,5 @@ fun box(): String {
     }
     return Derived(o).foo(42)
 }
+
+

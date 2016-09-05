@@ -1,0 +1,44 @@
+MODULE <test-module>
+  FILE /delegationGenericArg.kt
+    CLASS INTERFACE A
+      FUN public abstract fun foo(/*0*/ t: T): kotlin.String
+    CLASS CLASS Derived
+      CONSTRUCTOR public constructor Derived(/*0*/ a: A<kotlin.Int>)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Derived
+      PROPERTY val `Derived$A$delegate`: A<kotlin.Int>
+        EXPRESSION_BODY
+          GET_VAR a type=A<kotlin.Int> operator=null
+      FUN public open override /*1*/ /*delegation*/ fun foo(/*0*/ t: kotlin.Int): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CALL .foo type=kotlin.String operator=null
+              $this: GET_VAR Derived$A$delegate type=A<kotlin.Int> operator=null
+              t: GET_VAR t type=kotlin.Int operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val o: box.<no name provided>
+          BLOCK type=box.<no name provided> operator=OBJECT_LITERAL
+            CLASS CLASS <no name provided>
+              CONSTRUCTOR public constructor <no name provided>()
+                BLOCK_BODY
+                  DELEGATING_CONSTRUCTOR_CALL Any
+                  INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+              FUN public open override /*1*/ fun foo(/*0*/ t: kotlin.Int): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=foo
+                    WHEN type=kotlin.String operator=IF
+                      if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                        arg0: GET_VAR t type=kotlin.Int operator=null
+                        arg1: CONST Int type=kotlin.Int value='42'
+                      then: CONST String type=kotlin.String value='OK'
+                      else: STRING_CONCATENATION type=kotlin.String
+                        CONST String type=kotlin.String value='Fail '
+                        GET_VAR t type=kotlin.Int operator=null
+            CALL .<init> type=box.<no name provided> operator=OBJECT_LITERAL
+        RETURN type=kotlin.Nothing from=box
+          CALL .foo type=kotlin.String operator=null
+            $this: CALL .<init> type=Derived operator=null
+              a: GET_VAR o type=box.<no name provided> operator=null
+            t: CONST Int type=kotlin.Int value='42'

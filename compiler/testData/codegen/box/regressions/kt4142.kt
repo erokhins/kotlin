@@ -14,3 +14,5 @@ class C : B(), A {
 fun box(): String {
     return C().name
 }
+
+

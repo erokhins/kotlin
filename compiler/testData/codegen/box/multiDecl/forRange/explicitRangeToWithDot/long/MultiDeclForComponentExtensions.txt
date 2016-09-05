@@ -1,0 +1,11 @@
+MODULE <test-module>
+  FILE /MultiDeclForComponentExtensions.kt
+    FUN public fun f(/*0*/ l: kotlin.Long): kotlin.Unit
+      BLOCK_BODY
+        CALL .rangeTo type=kotlin.ranges.LongRange operator=null
+          $this: GET_VAR l type=kotlin.Long operator=null
+          other: GET_VAR l type=kotlin.Long operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

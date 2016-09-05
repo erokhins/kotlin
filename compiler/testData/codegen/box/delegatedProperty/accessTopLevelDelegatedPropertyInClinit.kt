@@ -13,3 +13,5 @@ val prop by Delegate()
 val a = prop
 
 fun box() = a
+
+

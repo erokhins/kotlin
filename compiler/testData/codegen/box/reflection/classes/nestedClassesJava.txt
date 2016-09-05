@@ -1,0 +1,31 @@
+MODULE <test-module>
+  FILE /K.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .listOf type=kotlin.collections.List<kotlin.String> operator=null
+            elements: VARARG type=Array<out String> varargElementType=String
+              CONST String type=kotlin.String value='Inner'
+              CONST String type=kotlin.String value='Nested'
+              CONST String type=kotlin.String value='PrivateNested'
+          actual: CALL .sorted type=kotlin.collections.List<kotlin.String> operator=null
+            $receiver: CALL .map type=kotlin.collections.List<kotlin.String> operator=null
+              $receiver: CALL .<get-nestedClasses> type=kotlin.collections.Collection<kotlin.reflect.KClass<*>> operator=GET_PROPERTY
+                $this: CLASS_REFERENCE J type=kotlin.reflect.KClass<J>
+              transform: BLOCK type=(kotlin.reflect.KClass<*>) -> kotlin.String operator=LAMBDA
+                FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KClass<*>): kotlin.String
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      BLOCK type=kotlin.String operator=EXCLEXCL
+                        VAR val tmp0_notnull: kotlin.String?
+                          CALL .<get-simpleName> type=kotlin.String? operator=GET_PROPERTY
+                            $this: GET_VAR it type=kotlin.reflect.KClass<*> operator=null
+                        WHEN type=kotlin.String operator=null
+                          if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                            arg0: GET_VAR tmp0_notnull type=kotlin.String? operator=null
+                            arg1: CONST Null type=kotlin.Nothing? value='null'
+                          then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                          else: GET_VAR tmp0_notnull type=kotlin.String? operator=null
+                CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KClass<*>) -> kotlin.String operator=LAMBDA
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

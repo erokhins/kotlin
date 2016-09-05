@@ -6,3 +6,5 @@ class Bar: Foo<String>() {
 }
 
 fun box() = Bar().hello("K")
+
+

@@ -1,0 +1,48 @@
+MODULE <test-module>
+  FILE /parametersToString.kt
+    FUN public fun kotlin.Int.foo(/*0*/ s: kotlin.String): kotlin.Unit
+      BLOCK_BODY
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public final fun bar(): kotlin.Unit
+        BLOCK_BODY
+    FUN public fun baz(/*0*/ name: kotlin.String): kotlin.Unit
+      BLOCK_BODY
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .listOf type=kotlin.collections.List<kotlin.String> operator=null
+            elements: VARARG type=Array<out String> varargElementType=String
+              STRING_CONCATENATION type=kotlin.String
+                CONST String type=kotlin.String value='extension receiver of '
+                CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction2<kotlin.Int, kotlin.String, kotlin.Unit> operator=null
+              STRING_CONCATENATION type=kotlin.String
+                CONST String type=kotlin.String value='parameter #1 s of '
+                CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction2<kotlin.Int, kotlin.String, kotlin.Unit> operator=null
+          actual: CALL .map type=kotlin.collections.List<kotlin.String> operator=null
+            $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction2<kotlin.Int, kotlin.String, kotlin.Unit> operator=null
+            transform: CALLABLE_REFERENCE toString type=kotlin.reflect.KFunction1<kotlin.Any, kotlin.String> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .listOf type=kotlin.collections.List<kotlin.String> operator=null
+            element: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='instance of '
+              CALLABLE_REFERENCE bar type=kotlin.reflect.KFunction1<A, kotlin.Unit> operator=null
+          actual: CALL .map type=kotlin.collections.List<kotlin.String> operator=null
+            $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE bar type=kotlin.reflect.KFunction1<A, kotlin.Unit> operator=null
+            transform: CALLABLE_REFERENCE toString type=kotlin.reflect.KFunction1<kotlin.Any, kotlin.String> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .listOf type=kotlin.collections.List<kotlin.String> operator=null
+            element: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='parameter #0 name of '
+              CALLABLE_REFERENCE baz type=kotlin.reflect.KFunction1<kotlin.String, kotlin.Unit> operator=null
+          actual: CALL .map type=kotlin.collections.List<kotlin.String> operator=null
+            $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE baz type=kotlin.reflect.KFunction1<kotlin.String, kotlin.Unit> operator=null
+            transform: CALLABLE_REFERENCE toString type=kotlin.reflect.KFunction1<kotlin.Any, kotlin.String> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

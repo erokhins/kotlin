@@ -12,3 +12,4 @@ fun box(): String  {
     if (FooImpl().foo(2.0) != 2.0) return "fail"
     return "OK"
 }
+

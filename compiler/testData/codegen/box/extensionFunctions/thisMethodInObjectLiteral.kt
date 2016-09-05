@@ -13,3 +13,4 @@ class Test {
 fun box() : String {
     return if (Test().box() == 2) "OK" else "fail"
 }
+

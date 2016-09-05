@@ -11,3 +11,5 @@ fun box(): String{
     if(d.f() != "D f") return "fail f"
     return "OK"
 }
+
+

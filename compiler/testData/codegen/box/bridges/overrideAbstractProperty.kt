@@ -8,3 +8,5 @@ public class Class: AbstractClass<String>() {
 }
 
 fun box(): String = Class().some
+
+

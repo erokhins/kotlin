@@ -6,3 +6,5 @@ fun box(): String {
     if (!(0 == x)) return "Fail $x"
     return "OK"
 }
+
+

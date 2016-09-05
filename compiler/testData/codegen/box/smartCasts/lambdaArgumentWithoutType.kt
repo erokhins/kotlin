@@ -10,3 +10,5 @@ val foo: Foo = run {
 }
 
 fun box() = foo.s
+
+

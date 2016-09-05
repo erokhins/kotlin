@@ -22,3 +22,5 @@ fun box(): String {
     a.foo(Child())
     return if (result == "BB") "OK" else "Fail: $result"
 }
+
+

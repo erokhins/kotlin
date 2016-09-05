@@ -16,3 +16,4 @@ object Outer: A(1) {
 fun box() : String {
     return if (Outer.O.foo() == 5) "OK" else "fail"
 }
+

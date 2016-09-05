@@ -1,0 +1,47 @@
+MODULE <test-module>
+  FILE /kt796_797.kt
+    FUN public operator fun </*0*/ T> kotlin.Array<T>?.get(/*0*/ i: kotlin.Int?): T
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=get
+          CALL .get type=T operator=null
+            $this: BLOCK type=kotlin.Array<T> operator=EXCLEXCL
+              VAR val tmp0_notnull: kotlin.Array<T>?
+                $RECEIVER of: get type=kotlin.Array<T>?
+              WHEN type=kotlin.Array<T> operator=null
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_notnull type=kotlin.Array<T>? operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                else: GET_VAR tmp0_notnull type=kotlin.Array<T>? operator=null
+            index: BLOCK type=kotlin.Int operator=EXCLEXCL
+              VAR val tmp1_notnull: kotlin.Int?
+                GET_VAR i type=kotlin.Int? operator=null
+              WHEN type=kotlin.Int operator=null
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp1_notnull type=kotlin.Int? operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                else: GET_VAR tmp1_notnull type=kotlin.Int? operator=null
+    FUN public fun </*0*/ T> array(/*0*/ vararg t: T /*kotlin.Array<out T>*/): kotlin.Array<T>
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=array
+          TYPE_OP operator=CAST typeOperand=kotlin.Array<T>
+            GET_VAR t type=kotlin.Array<out T> operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val a: kotlin.Array<kotlin.String>?
+          CALL .array type=kotlin.Array<kotlin.String> operator=null
+            t: VARARG type=Array<out String> varargElementType=String
+              CONST String type=kotlin.String value='Str'
+              CONST String type=kotlin.String value='Str2'
+        VAR val i: kotlin.Int? = 1
+          CONST Int type=kotlin.Int value='1'
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CALL .get type=kotlin.String operator=GET_ARRAY_ELEMENT
+                $receiver: GET_VAR a type=kotlin.Array<kotlin.String>? operator=null
+                i: GET_VAR i type=kotlin.Int? operator=null
+              arg1: CONST String type=kotlin.String value='Str2'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='fail'

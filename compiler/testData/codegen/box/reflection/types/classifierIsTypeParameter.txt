@@ -1,0 +1,85 @@
+MODULE <test-module>
+  FILE /classifierIsTypeParameter.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A</*0*/ U>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public final fun </*0*/ T> foo(): T
+        BLOCK_BODY
+          BLOCK type=kotlin.Nothing operator=EXCLEXCL
+            VAR val tmp0_notnull: kotlin.Nothing?
+              CONST Null type=kotlin.Nothing? value='null'
+            WHEN type=kotlin.Nothing operator=null
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_notnull type=kotlin.Nothing? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+              else: GET_VAR tmp0_notnull type=kotlin.Nothing? operator=null
+      FUN public final fun bar(): kotlin.Array<U>?
+        BLOCK_BODY
+          BLOCK type=kotlin.Nothing operator=EXCLEXCL
+            VAR val tmp0_notnull: kotlin.Nothing?
+              CONST Null type=kotlin.Nothing? value='null'
+            WHEN type=kotlin.Nothing operator=null
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_notnull type=kotlin.Nothing? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+              else: GET_VAR tmp0_notnull type=kotlin.Nothing? operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val t: kotlin.reflect.KType
+          CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+            $this: CALL .single type=kotlin.reflect.KCallable<*> operator=null
+              $receiver: CALL .<get-members> type=kotlin.collections.Collection<kotlin.reflect.KCallable<*>> operator=GET_PROPERTY
+                $this: CLASS_REFERENCE A type=kotlin.reflect.KClass<A<*>>
+              predicate: BLOCK type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+                FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KCallable<*>): kotlin.Boolean
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                        arg0: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+                          $this: GET_VAR it type=kotlin.reflect.KCallable<*> operator=null
+                        arg1: CONST String type=kotlin.String value='foo'
+                CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isMarkedNullable> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: GET_VAR t type=kotlin.reflect.KType operator=null
+        VAR val tc: kotlin.reflect.KClassifier?
+          CALL .<get-classifier> type=kotlin.reflect.KClassifier? operator=GET_PROPERTY
+            $this: GET_VAR t type=kotlin.reflect.KType operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: TYPE_OP operator=NOT_INSTANCEOF typeOperand=kotlin.reflect.KTypeParameter
+            GET_VAR tc type=kotlin.reflect.KClassifier? operator=null
+          then: CALL .fail type=kotlin.Nothing operator=null
+            message: CALL .toString type=kotlin.String operator=null
+              $receiver: GET_VAR tc type=kotlin.reflect.KClassifier? operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='T'
+          actual: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+            $this: TYPE_OP operator=IMPLICIT_CAST typeOperand=kotlin.reflect.KTypeParameter
+              GET_VAR tc type=kotlin.reflect.KClassifier? operator=null
+        VAR val u: kotlin.reflect.KType
+          CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+            $this: CALL .single type=kotlin.reflect.KCallable<*> operator=null
+              $receiver: CALL .<get-members> type=kotlin.collections.Collection<kotlin.reflect.KCallable<*>> operator=GET_PROPERTY
+                $this: CLASS_REFERENCE A type=kotlin.reflect.KClass<A<*>>
+              predicate: BLOCK type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+                FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KCallable<*>): kotlin.Boolean
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                        arg0: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+                          $this: GET_VAR it type=kotlin.reflect.KCallable<*> operator=null
+                        arg1: CONST String type=kotlin.String value='bar'
+                CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isMarkedNullable> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: GET_VAR u type=kotlin.reflect.KType operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CLASS_REFERENCE Array type=kotlin.reflect.KClass<kotlin.Array<kotlin.Any>>
+          actual: CALL .<get-classifier> type=kotlin.reflect.KClassifier? operator=GET_PROPERTY
+            $this: GET_VAR u type=kotlin.reflect.KType operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

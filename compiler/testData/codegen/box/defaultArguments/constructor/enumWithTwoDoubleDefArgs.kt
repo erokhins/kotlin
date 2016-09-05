@@ -12,3 +12,5 @@ fun box(): String {
     if (Foo.D.a != 2.0 || Foo.D.b != 1.0) return "fail"
     return "OK"
 }
+
+

@@ -1,0 +1,31 @@
+MODULE <test-module>
+  FILE /kt1054.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .and type=kotlin.Boolean operator=null
+              $this: CONST Boolean type=kotlin.Boolean value='true'
+              other: CONST Boolean type=kotlin.Boolean value='true'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='fail'
+    FUN public fun kotlin.Boolean.and(/*0*/ other: kotlin.Boolean): kotlin.Boolean
+      BLOCK_BODY
+        WHEN type=kotlin.Nothing operator=IF
+          if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+            arg0: GET_VAR other type=kotlin.Boolean operator=null
+            arg1: CONST Boolean type=kotlin.Boolean value='true'
+          then: BLOCK type=kotlin.Nothing operator=null
+            WHEN type=kotlin.Nothing operator=IF
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: $RECEIVER of: and type=kotlin.Boolean
+                arg1: CONST Boolean type=kotlin.Boolean value='true'
+              then: BLOCK type=kotlin.Nothing operator=null
+                RETURN type=kotlin.Nothing from=and
+                  CONST Boolean type=kotlin.Boolean value='true'
+              else: BLOCK type=kotlin.Nothing operator=null
+                RETURN type=kotlin.Nothing from=and
+                  CONST Boolean type=kotlin.Boolean value='false'
+          else: BLOCK type=kotlin.Nothing operator=null
+            RETURN type=kotlin.Nothing from=and
+              CONST Boolean type=kotlin.Boolean value='false'

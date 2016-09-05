@@ -14,3 +14,5 @@ class K
 fun box(): String =
         O::class.myjava1.getSimpleName() + K::class.myjava2.getSimpleName()
 
+
+

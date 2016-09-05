@@ -1,0 +1,53 @@
+MODULE <test-module>
+  FILE /kt8089.kt
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      CLASS OBJECT Companion
+        CONSTRUCTOR private constructor Companion()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Companion
+        PROPERTY private final val s: kotlin.String
+        PROPERTY private final var s2: kotlin.String
+        ANONYMOUS_INITIALIZER Companion
+          BLOCK_BODY
+            SET_BACKING_FIELD s type=kotlin.Unit operator=null
+              receiver: THIS public companion object Companion type=C.Companion
+              value: CONST String type=kotlin.String value='O'
+            CALL .<set-s2> type=kotlin.Unit operator=EQ
+              $this: THIS public companion object Companion type=C.Companion
+              <set-?>: CONST String type=kotlin.String value='O'
+        FUN public final fun foo(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=foo
+              CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public companion object Companion type=C.Companion
+        FUN public final fun foo2(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=foo2
+              CALL .<get-s2> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public companion object Companion type=C.Companion
+        FUN public final fun bar2(): kotlin.Unit
+          BLOCK_BODY
+            CALL .<set-s2> type=kotlin.Unit operator=EQ
+              $this: THIS public companion object Companion type=C.Companion
+              <set-?>: CONST String type=kotlin.String value='K'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .plus type=kotlin.String operator=PLUS
+            $this: CALL .foo type=kotlin.String operator=null
+              $this: GET_OBJECT Companion type=C.Companion
+            other: CALL .invoke type=kotlin.String operator=null
+              $this: BLOCK type=() -> kotlin.String operator=LAMBDA
+                FUN local final fun <anonymous>(): kotlin.String
+                  BLOCK_BODY
+                    CALL .bar2 type=kotlin.Unit operator=null
+                      $this: GET_OBJECT Companion type=C.Companion
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .foo2 type=kotlin.String operator=null
+                        $this: GET_OBJECT Companion type=C.Companion
+                CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA

@@ -1,0 +1,28 @@
+MODULE <test-module>
+  FILE /test.kt
+    CLASS CLASS X
+      CONSTRUCTOR public constructor X()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL A
+          INSTANCE_INITIALIZER_CALL classDescriptor=X
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val x: X
+          CALL .<init> type=X operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_VAR x type=X operator=null
+              arg1: CONST Int type=kotlin.Int value='56'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 1'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .contains type=kotlin.Boolean operator=null
+              $this: GET_VAR x type=X operator=null
+              element: CONST Null type=kotlin.Nothing? value='null'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 2'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

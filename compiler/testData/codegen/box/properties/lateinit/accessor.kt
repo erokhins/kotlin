@@ -18,3 +18,4 @@ fun box(): String {
     a.setMyStr()
     return a.getMyStr()
 }
+

@@ -28,3 +28,5 @@ fun box(): String {
     v1 += v2
     return if (v1.contents.size == 2 && v3.contents.size == 1) "OK" else "fail"
 }
+
+

@@ -1,0 +1,20 @@
+MODULE <test-module>
+  FILE /main.kt
+    CLASS CLASS MyMapEntry
+      CONSTRUCTOR public constructor MyMapEntry()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL MapEntryImpl
+          INSTANCE_INITIALIZER_CALL classDescriptor=MyMapEntry
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val b: MyMapEntry
+          CALL .<init> type=MyMapEntry operator=null
+        CALL .<get-key> type=kotlin.String! operator=GET_PROPERTY
+          $this: GET_VAR b type=MyMapEntry operator=null
+        CALL .<get-value> type=kotlin.String! operator=GET_PROPERTY
+          $this: GET_VAR b type=MyMapEntry operator=null
+        CALL .setValue type=kotlin.String! operator=null
+          $this: GET_VAR b type=MyMapEntry operator=null
+          newValue: CONST Null type=kotlin.Nothing? value='null'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -1,0 +1,102 @@
+MODULE <test-module>
+  FILE /delegates.kt
+    CLASS CLASS TestDelegate
+      CONSTRUCTOR public constructor TestDelegate</*0*/ T : kotlin.Any>(/*0*/ initializer: () -> T)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD initializer type=kotlin.Unit operator=null
+            receiver: THIS public open class TestDelegate</*0*/ T : kotlin.Any> type=TestDelegate<T>
+            value: GET_VAR initializer type=() -> T operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=TestDelegate
+      PROPERTY private final val initializer: () -> T
+        EXPRESSION_BODY
+          GET_VAR initializer type=() -> T operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY private final var value: T?
+        EXPRESSION_BODY
+          CONST Null type=kotlin.Nothing? value='null'
+      FUN public open operator fun getValue(/*0*/ thisRef: kotlin.Any?, /*1*/ desc: kotlin.reflect.KProperty<*>): T
+        BLOCK_BODY
+          WHEN type=kotlin.Unit operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CALL .<get-value> type=T? operator=GET_PROPERTY
+                $this: THIS public open class TestDelegate</*0*/ T : kotlin.Any> type=TestDelegate<T>
+              arg1: CONST Null type=kotlin.Nothing? value='null'
+            then: BLOCK type=kotlin.Unit operator=null
+              CALL .<set-value> type=kotlin.Unit operator=EQ
+                $this: THIS public open class TestDelegate</*0*/ T : kotlin.Any> type=TestDelegate<T>
+                <set-?>: CALL .invoke type=T operator=INVOKE
+                  $this: CALL .<get-initializer> type=() -> T operator=GET_PROPERTY
+                    $this: THIS public open class TestDelegate</*0*/ T : kotlin.Any> type=TestDelegate<T>
+          RETURN type=kotlin.Nothing from=getValue
+            BLOCK type=T operator=EXCLEXCL
+              VAR val tmp0_notnull: T?
+                CALL .<get-value> type=T? operator=GET_PROPERTY
+                  $this: THIS public open class TestDelegate</*0*/ T : kotlin.Any> type=TestDelegate<T>
+              WHEN type=T operator=null
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_notnull type=T? operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                else: GET_VAR tmp0_notnull type=T? operator=null
+      FUN public open operator fun setValue(/*0*/ thisRef: kotlin.Any?, /*1*/ desc: kotlin.reflect.KProperty<*>, /*2*/ svalue: T): kotlin.Unit
+        BLOCK_BODY
+          CALL .<set-value> type=kotlin.Unit operator=EQ
+            $this: THIS public open class TestDelegate</*0*/ T : kotlin.Any> type=TestDelegate<T>
+            <set-?>: GET_VAR svalue type=T operator=null
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+    PROPERTY public val A.s: kotlin.String
+      delegate: PROPERTY val `s$delegate`: TestDelegate<kotlin.String>
+        EXPRESSION_BODY
+          CALL .<init> type=TestDelegate<kotlin.String> operator=null
+            initializer: BLOCK type=() -> kotlin.String operator=LAMBDA
+              FUN local final fun <anonymous>(): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CONST String type=kotlin.String value='OK2'
+              CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+      PROPERTY_GETTER public fun A.<get-s>(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=<get-s>
+            CALL .getValue type=kotlin.String operator=null
+              $this: GET_BACKING_FIELD s$delegate type=TestDelegate<kotlin.String> operator=null
+              thisRef: $RECEIVER of: s type=A
+              desc: CALLABLE_REFERENCE s type=kotlin.reflect.KProperty1<A, kotlin.String> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+    PROPERTY public val B.s: kotlin.String
+      delegate: PROPERTY val `s$delegate`: TestDelegate<kotlin.String>
+        EXPRESSION_BODY
+          CALL .<init> type=TestDelegate<kotlin.String> operator=null
+            initializer: BLOCK type=() -> kotlin.String operator=LAMBDA
+              FUN local final fun <anonymous>(): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CONST String type=kotlin.String value='OK'
+              CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+      PROPERTY_GETTER public fun B.<get-s>(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=<get-s>
+            CALL .getValue type=kotlin.String operator=null
+              $this: GET_BACKING_FIELD s$delegate type=TestDelegate<kotlin.String> operator=null
+              thisRef: $RECEIVER of: s type=B
+              desc: CALLABLE_REFERENCE s type=kotlin.reflect.KProperty1<B, kotlin.String> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+                $receiver: CALL .<init> type=A operator=null
+              arg1: CONST String type=kotlin.String value='OK2'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail1'
+        RETURN type=kotlin.Nothing from=box
+          CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+            $receiver: CALL .<init> type=B operator=null

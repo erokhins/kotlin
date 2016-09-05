@@ -11,3 +11,5 @@ fun box(): String {
     assert(x.all { it == 3 })
     return "OK"
 }
+
+

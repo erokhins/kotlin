@@ -5,3 +5,4 @@ fun box(): String {
 
     return o.A().value
 }
+

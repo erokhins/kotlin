@@ -1,0 +1,137 @@
+MODULE <test-module>
+  FILE /classModality.kt
+    CLASS CLASS FinalClass
+      CONSTRUCTOR public constructor FinalClass()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=FinalClass
+      CLASS OBJECT Companion
+        CONSTRUCTOR private constructor Companion()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Companion
+    CLASS CLASS OpenClass
+      CONSTRUCTOR public constructor OpenClass()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=OpenClass
+    CLASS CLASS AbstractClass
+      CONSTRUCTOR public constructor AbstractClass()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=AbstractClass
+    CLASS INTERFACE Interface
+    CLASS ENUM_CLASS EnumClass
+      CONSTRUCTOR private constructor EnumClass()
+        BLOCK_BODY
+          ENUM_CONSTRUCTOR_CALL Enum super
+          INSTANCE_INITIALIZER_CALL classDescriptor=EnumClass
+      FUN public final /*synthesized*/ fun values(): kotlin.Array<EnumClass>
+        SYNTHETIC_BODY kind=ENUM_VALUES
+      FUN public final /*synthesized*/ fun valueOf(/*0*/ value: kotlin.String): EnumClass
+        SYNTHETIC_BODY kind=ENUM_VALUEOF
+    CLASS ENUM_CLASS EnumClassWithAbstractMember
+      CONSTRUCTOR private constructor EnumClassWithAbstractMember()
+        BLOCK_BODY
+          ENUM_CONSTRUCTOR_CALL Enum super
+          INSTANCE_INITIALIZER_CALL classDescriptor=EnumClassWithAbstractMember
+      FUN public abstract fun foo(): kotlin.Unit
+      FUN public final /*synthesized*/ fun values(): kotlin.Array<EnumClassWithAbstractMember>
+        SYNTHETIC_BODY kind=ENUM_VALUES
+      FUN public final /*synthesized*/ fun valueOf(/*0*/ value: kotlin.String): EnumClassWithAbstractMember
+        SYNTHETIC_BODY kind=ENUM_VALUEOF
+    CLASS ANNOTATION_CLASS AnnotationClass
+      CONSTRUCTOR public constructor AnnotationClass()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=AnnotationClass
+    CLASS OBJECT Object
+      CONSTRUCTOR private constructor Object()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Object
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isFinal> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE FinalClass type=kotlin.reflect.KClass<FinalClass>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isOpen> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE FinalClass type=kotlin.reflect.KClass<FinalClass>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isAbstract> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE FinalClass type=kotlin.reflect.KClass<FinalClass>
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isFinal> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE Companion type=kotlin.reflect.KClass<FinalClass.Companion>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isOpen> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE Companion type=kotlin.reflect.KClass<FinalClass.Companion>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isAbstract> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE Companion type=kotlin.reflect.KClass<FinalClass.Companion>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isFinal> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE OpenClass type=kotlin.reflect.KClass<OpenClass>
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isOpen> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE OpenClass type=kotlin.reflect.KClass<OpenClass>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isAbstract> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE OpenClass type=kotlin.reflect.KClass<OpenClass>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isFinal> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE AbstractClass type=kotlin.reflect.KClass<AbstractClass>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isOpen> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE AbstractClass type=kotlin.reflect.KClass<AbstractClass>
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isAbstract> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE AbstractClass type=kotlin.reflect.KClass<AbstractClass>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isFinal> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE Interface type=kotlin.reflect.KClass<Interface>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isOpen> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE Interface type=kotlin.reflect.KClass<Interface>
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isAbstract> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE Interface type=kotlin.reflect.KClass<Interface>
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isFinal> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE EnumClass type=kotlin.reflect.KClass<EnumClass>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isOpen> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE EnumClass type=kotlin.reflect.KClass<EnumClass>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isAbstract> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE EnumClass type=kotlin.reflect.KClass<EnumClass>
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isFinal> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE EnumClassWithAbstractMember type=kotlin.reflect.KClass<EnumClassWithAbstractMember>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isOpen> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE EnumClassWithAbstractMember type=kotlin.reflect.KClass<EnumClassWithAbstractMember>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isAbstract> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE EnumClassWithAbstractMember type=kotlin.reflect.KClass<EnumClassWithAbstractMember>
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isFinal> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE AnnotationClass type=kotlin.reflect.KClass<AnnotationClass>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isOpen> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE AnnotationClass type=kotlin.reflect.KClass<AnnotationClass>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isAbstract> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE AnnotationClass type=kotlin.reflect.KClass<AnnotationClass>
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isFinal> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE Object type=kotlin.reflect.KClass<Object>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isOpen> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE Object type=kotlin.reflect.KClass<Object>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isAbstract> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE Object type=kotlin.reflect.KClass<Object>
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

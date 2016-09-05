@@ -12,3 +12,4 @@ fun box(): String {
     if (y != 0) return "Fail y: $y"
     return "OK"
 }
+

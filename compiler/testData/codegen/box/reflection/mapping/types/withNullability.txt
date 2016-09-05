@@ -1,0 +1,48 @@
+MODULE <test-module>
+  FILE /withNullability.kt
+    FUN public fun nonNull(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=nonNull
+          CONST String type=kotlin.String value=''
+    FUN public fun nullable(): kotlin.String?
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=nullable
+          CONST String type=kotlin.String value=''
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val nonNull: kotlin.reflect.KType
+          CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE nonNull type=kotlin.reflect.KFunction0<kotlin.String> operator=null
+        VAR val nullable: kotlin.reflect.KType
+          CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE nullable type=kotlin.reflect.KFunction0<kotlin.String?> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: GET_VAR nullable type=kotlin.reflect.KType operator=null
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .withNullability type=kotlin.reflect.KType operator=null
+              $receiver: GET_VAR nullable type=kotlin.reflect.KType operator=null
+              nullable: CONST Boolean type=kotlin.Boolean value='false'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: GET_VAR nullable type=kotlin.reflect.KType operator=null
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .withNullability type=kotlin.reflect.KType operator=null
+              $receiver: GET_VAR nullable type=kotlin.reflect.KType operator=null
+              nullable: CONST Boolean type=kotlin.Boolean value='true'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: GET_VAR nonNull type=kotlin.reflect.KType operator=null
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .withNullability type=kotlin.reflect.KType operator=null
+              $receiver: GET_VAR nonNull type=kotlin.reflect.KType operator=null
+              nullable: CONST Boolean type=kotlin.Boolean value='false'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: GET_VAR nullable type=kotlin.reflect.KType operator=null
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .withNullability type=kotlin.reflect.KType operator=null
+              $receiver: GET_VAR nonNull type=kotlin.reflect.KType operator=null
+              nullable: CONST Boolean type=kotlin.Boolean value='true'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

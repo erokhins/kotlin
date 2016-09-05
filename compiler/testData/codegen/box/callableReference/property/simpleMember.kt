@@ -7,3 +7,5 @@ fun box(): String {
     if (p.name != "x") return "Fail 3"
     return "OK"
 }
+
+

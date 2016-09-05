@@ -17,3 +17,5 @@ fun box(): String {
 
     return Local().obj.result()
 }
+
+

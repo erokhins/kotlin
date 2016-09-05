@@ -9,3 +9,5 @@ val prop: Int by Delegate()
 fun box(): String {
   return if(prop == 1) "OK" else "fail"
 }
+
+

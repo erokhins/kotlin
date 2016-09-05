@@ -1,0 +1,46 @@
+MODULE <test-module>
+  FILE /Test1.kt
+    FUN public fun getX(): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=getX
+          CONST Int type=kotlin.Int value='1'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='getX'
+          actual: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE getX type=kotlin.reflect.KFunction0<kotlin.Int> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='getY'
+          actual: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE getY type=kotlin.reflect.KFunction0<kotlin.Int> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='getZ'
+          actual: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE getZ type=kotlin.reflect.KFunction1<kotlin.Int, kotlin.Int> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Int type=kotlin.Int value='1'
+          actual: CALL .call type=kotlin.Int operator=null
+            $this: CALLABLE_REFERENCE getX type=kotlin.reflect.KFunction0<kotlin.Int> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Int type=kotlin.Int value='239'
+          actual: CALL .call type=kotlin.Int operator=null
+            $this: CALLABLE_REFERENCE getY type=kotlin.reflect.KFunction0<kotlin.Int> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Int type=kotlin.Int value='42'
+          actual: CALL .callBy type=kotlin.Int operator=null
+            $this: CALLABLE_REFERENCE getZ type=kotlin.reflect.KFunction1<kotlin.Int, kotlin.Int> operator=null
+            args: CALL .emptyMap type=kotlin.collections.Map<kotlin.reflect.KParameter, kotlin.Any?> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'
+  FILE /Test2.kt
+    FUN public fun getY(): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=getY
+          CONST Int type=kotlin.Int value='239'
+    FUN public fun getZ(/*0*/ value: kotlin.Int = ...): kotlin.Int
+      value: EXPRESSION_BODY
+        CONST Int type=kotlin.Int value='42'
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=getZ
+          GET_VAR value type=kotlin.Int operator=null

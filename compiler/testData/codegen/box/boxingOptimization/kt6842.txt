@@ -1,0 +1,23 @@
+MODULE <test-module>
+  FILE /kt6842.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val x: kotlin.collections.List<kotlin.Long>
+          CALL .map type=kotlin.collections.List<kotlin.Long> operator=null
+            $receiver: CALL .rangeTo type=kotlin.ranges.LongRange operator=RANGE
+              $this: CONST Long type=kotlin.Long value='10'
+              other: CONST Int type=kotlin.Int value='50'
+            transform: BLOCK type=(kotlin.Long) -> kotlin.Long operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.Long): kotlin.Long
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .times type=kotlin.Long operator=MUL
+                      $this: GET_VAR it type=kotlin.Long operator=null
+                      other: CONST Long type=kotlin.Long value='40'
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.Long) -> kotlin.Long operator=LAMBDA
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Long type=kotlin.Long value='400'
+          actual: CALL .first type=kotlin.Long operator=null
+            $receiver: GET_VAR x type=kotlin.collections.List<kotlin.Long> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

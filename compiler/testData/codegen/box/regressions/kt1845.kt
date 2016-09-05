@@ -10,3 +10,5 @@ fun box(): String {
 // FILE: 2.kt
 
 public var v2: String = "V2"
+
+

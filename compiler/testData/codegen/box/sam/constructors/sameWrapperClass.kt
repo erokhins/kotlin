@@ -5,3 +5,5 @@ fun box(): String {
 
     return if (class1 == class2) "OK" else "$class1 $class2"
 }
+
+

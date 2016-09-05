@@ -18,3 +18,5 @@ fun box(): String {
     check2()
     return "OK"
 }
+
+

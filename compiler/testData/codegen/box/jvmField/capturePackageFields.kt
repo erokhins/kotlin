@@ -13,3 +13,5 @@ fun test(): String {
 fun box(): String {
     return if (test() == "123") return "OK" else "fail"
 }
+
+

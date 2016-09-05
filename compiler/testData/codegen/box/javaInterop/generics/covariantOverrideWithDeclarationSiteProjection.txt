@@ -1,0 +1,52 @@
+MODULE <test-module>
+  FILE /main.kt
+    CLASS CLASS OutPair
+      CONSTRUCTOR public constructor OutPair</*0*/ out X, /*1*/ out Y>(/*0*/ x: X, /*1*/ y: Y)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD x type=kotlin.Unit operator=null
+            receiver: THIS public final class OutPair</*0*/ out X, /*1*/ out Y> type=OutPair<X, Y>
+            value: GET_VAR x type=X operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          SET_BACKING_FIELD y type=kotlin.Unit operator=null
+            receiver: THIS public final class OutPair</*0*/ out X, /*1*/ out Y> type=OutPair<X, Y>
+            value: GET_VAR y type=Y operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=OutPair
+      PROPERTY public final val x: X
+        EXPRESSION_BODY
+          GET_VAR x type=X operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final val y: Y
+        EXPRESSION_BODY
+          GET_VAR y type=Y operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    CLASS CLASS In
+      CONSTRUCTOR public constructor In</*0*/ in Z>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=In
+      FUN public final fun make(/*0*/ x: Z): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=make
+            CALL .toString type=kotlin.String operator=null
+              $receiver: GET_VAR x type=Z operator=null
+    CLASS INTERFACE A
+      FUN public abstract fun foo(): OutPair<@kotlin.jvm.JvmWildcard() kotlin.CharSequence, @kotlin.jvm.JvmSuppressWildcards(suppress = false) kotlin.Number>
+      FUN public abstract fun bar(): In<@kotlin.jvm.JvmWildcard() kotlin.String>
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+      FUN public open override /*1*/ fun foo(): OutPair<kotlin.String, kotlin.Int>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CALL .<init> type=OutPair<kotlin.String, kotlin.Int> operator=null
+              x: CONST String type=kotlin.String value='OK'
+              y: CONST Int type=kotlin.Int value='123'
+      FUN public open override /*1*/ fun bar(): In<kotlin.Any>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=bar
+            CALL .<init> type=In<kotlin.Any> operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.String
+            CALL .test type=kotlin.String! operator=null

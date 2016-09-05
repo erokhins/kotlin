@@ -5,3 +5,5 @@ fun foo(): Int {
 }
 
 fun box(): String = if(foo() == 0) "OK" else "Fail"
+
+

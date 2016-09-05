@@ -8,3 +8,5 @@ fun box() : String {
     if("mama".toPrefixedString() != "mama") return "fail"
     return "OK"
 }
+
+

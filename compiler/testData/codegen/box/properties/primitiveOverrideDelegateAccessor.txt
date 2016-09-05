@@ -1,0 +1,68 @@
+MODULE <test-module>
+  FILE /primitiveOverrideDelegateAccessor.kt
+    CLASS CLASS Holder
+      CONSTRUCTOR public constructor Holder(/*0*/ value: kotlin.Int)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD value type=kotlin.Unit operator=null
+            receiver: THIS public final class Holder type=Holder
+            value: GET_VAR value type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Holder
+      PROPERTY public final var value: kotlin.Int
+        EXPRESSION_BODY
+          GET_VAR value type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public final operator fun getValue(/*0*/ that: kotlin.Any?, /*1*/ desc: kotlin.reflect.KProperty<*>): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getValue
+            CALL .<get-value> type=kotlin.Int operator=GET_PROPERTY
+              $this: THIS public final class Holder type=Holder
+      FUN public final operator fun setValue(/*0*/ that: kotlin.Any?, /*1*/ desc: kotlin.reflect.KProperty<*>, /*2*/ newValue: kotlin.Int): kotlin.Unit
+        BLOCK_BODY
+          CALL .<set-value> type=kotlin.Unit operator=EQ
+            $this: THIS public final class Holder type=Holder
+            <set-?>: GET_VAR newValue type=kotlin.Int operator=null
+    CLASS INTERFACE R
+      PROPERTY public abstract var value: T
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A(/*0*/ start: kotlin.Int)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public open override /*1*/ var value: kotlin.Int
+        delegate: PROPERTY val `value$delegate`: Holder
+          EXPRESSION_BODY
+            CALL .<init> type=Holder operator=null
+              value: GET_VAR start type=kotlin.Int operator=null
+        PROPERTY_GETTER public open override /*1*/ fun <get-value>(): kotlin.Int
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-value>
+              CALL .getValue type=kotlin.Int operator=null
+                $this: GET_BACKING_FIELD value$delegate type=Holder operator=null
+                  receiver: THIS public final class A : R<kotlin.Int> type=A
+                that: THIS public final class A : R<kotlin.Int> type=A
+                desc: CALLABLE_REFERENCE value type=kotlin.reflect.KMutableProperty1<A, kotlin.Int> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+        PROPERTY_SETTER public open override /*1*/ fun <set-value>(/*0*/ <set-?>: kotlin.Int): kotlin.Unit
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<set-value>
+              CALL .setValue type=kotlin.Unit operator=null
+                $this: GET_BACKING_FIELD value$delegate type=Holder operator=null
+                  receiver: THIS public final class A : R<kotlin.Int> type=A
+                that: THIS public final class A : R<kotlin.Int> type=A
+                desc: CALLABLE_REFERENCE value type=kotlin.reflect.KMutableProperty1<A, kotlin.Int> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+                newValue: GET_VAR <set-?> type=kotlin.Int operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val a: A
+          CALL .<init> type=A operator=null
+            start: CONST Int type=kotlin.Int value='239'
+        CALL .<set-value> type=kotlin.Unit operator=EQ
+          $this: GET_VAR a type=A operator=null
+          <set-?>: CONST Int type=kotlin.Int value='42'
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CALL .<get-value> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_VAR a type=A operator=null
+              arg1: CONST Int type=kotlin.Int value='42'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='Fail 1'

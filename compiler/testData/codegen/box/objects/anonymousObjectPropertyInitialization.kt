@@ -12,3 +12,5 @@ val o = object : T {
 }
 
 fun box() = o.foo()
+
+

@@ -1,0 +1,28 @@
+MODULE <test-module>
+  FILE /forEachBooleanArray.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        BLOCK type=kotlin.Unit operator=FOR_LOOP
+          VAR val tmp0_iterator: kotlin.collections.BooleanIterator
+            CALL .iterator type=kotlin.collections.BooleanIterator operator=FOR_LOOP_ITERATOR
+              $this: CALL .<init> type=kotlin.BooleanArray operator=null
+                size: CONST Int type=kotlin.Int value='5'
+          WHILE label=null operator=FOR_LOOP_INNER_WHILE
+            condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+              $this: GET_VAR tmp0_iterator type=kotlin.collections.BooleanIterator operator=null
+            body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+              VAR val x: kotlin.Boolean
+                CALL .next type=kotlin.Boolean operator=FOR_LOOP_NEXT
+                  $this: GET_VAR tmp0_iterator type=kotlin.collections.BooleanIterator operator=null
+              BLOCK type=kotlin.Unit operator=null
+                WHEN type=kotlin.Unit operator=IF
+                  if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+                    arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                      arg0: GET_VAR x type=kotlin.Boolean operator=null
+                      arg1: CONST Boolean type=kotlin.Boolean value='false'
+                  then: RETURN type=kotlin.Nothing from=box
+                    STRING_CONCATENATION type=kotlin.String
+                      CONST String type=kotlin.String value='Fail '
+                      GET_VAR x type=kotlin.Boolean operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

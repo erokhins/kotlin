@@ -1,0 +1,31 @@
+MODULE <test-module>
+  FILE /kt2395.kt
+    CLASS CLASS MyList
+      CONSTRUCTOR public constructor MyList()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL AbstractList
+          INSTANCE_INITIALIZER_CALL classDescriptor=MyList
+      FUN public final fun getModificationCount(): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getModificationCount
+            GET_BACKING_FIELD modCount type=kotlin.Int operator=GET_PROPERTY
+              receiver: THIS public final class MyList : java.util.AbstractList<kotlin.String> type=MyList
+      FUN public open override /*1*/ fun get(/*0*/ index: kotlin.Int): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=get
+            CONST String type=kotlin.String value=''
+      PROPERTY public open override /*1*/ val size: kotlin.Int
+        PROPERTY_GETTER public open override /*1*/ fun <get-size>(): kotlin.Int
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-size>
+              CONST Int type=kotlin.Int value='0'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CALL .getModificationCount type=kotlin.Int operator=null
+                $this: CALL .<init> type=MyList operator=null
+              arg1: CONST Int type=kotlin.Int value='0'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='fail'

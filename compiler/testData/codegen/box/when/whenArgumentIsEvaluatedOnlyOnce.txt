@@ -1,0 +1,38 @@
+MODULE <test-module>
+  FILE /whenArgumentIsEvaluatedOnlyOnce.kt
+    PROPERTY public var x: kotlin.Int
+      EXPRESSION_BODY
+        CONST Int type=kotlin.Int value='0'
+    FUN public fun inc(): kotlin.Int
+      BLOCK_BODY
+        BLOCK type=kotlin.Int operator=POSTFIX_INCR
+          BLOCK type=kotlin.Int operator=POSTFIX_INCR
+            VAR val tmp0: kotlin.Int
+              CALL .<get-x> type=kotlin.Int operator=POSTFIX_INCR
+            CALL .<set-x> type=kotlin.Unit operator=POSTFIX_INCR
+              <set-?>: CALL .inc type=kotlin.Int operator=POSTFIX_INCR
+                $this: GET_VAR tmp0 type=kotlin.Int operator=null
+            GET_VAR tmp0 type=kotlin.Int operator=null
+        RETURN type=kotlin.Nothing from=inc
+          CONST Int type=kotlin.Int value='0'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val al: java.util.ArrayList<kotlin.Int>
+          CALL .<init> type=java.util.ArrayList<kotlin.Int> operator=null
+        BLOCK type=kotlin.Unit operator=WHEN
+          VAR val tmp0_subject: kotlin.Int
+            CALL .inc type=kotlin.Int operator=null
+          WHEN type=kotlin.Unit operator=WHEN
+            if: CALL .contains type=kotlin.Boolean operator=IN
+              $this: GET_VAR al type=java.util.ArrayList<kotlin.Int> operator=null
+              element: GET_VAR tmp0_subject type=kotlin.Int operator=null
+            then: RETURN type=kotlin.Nothing from=box
+              CONST String type=kotlin.String value='fail 1'
+            else: BLOCK type=kotlin.Unit operator=null
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CALL .<get-x> type=kotlin.Int operator=GET_PROPERTY
+              arg1: CONST Int type=kotlin.Int value='1'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='fail 2'

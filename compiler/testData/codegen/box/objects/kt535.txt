@@ -1,0 +1,60 @@
+MODULE <test-module>
+  FILE /kt535.kt
+    CLASS CLASS Identifier
+      CONSTRUCTOR public constructor Identifier</*0*/ T>(/*0*/ t: T?, /*1*/ myHasDollar: kotlin.Boolean)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Identifier
+      PROPERTY private final val myT: T?
+      FUN public final fun getName(): T?
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getName
+            CALL .<get-myT> type=T? operator=GET_PROPERTY
+              $this: THIS public final class Identifier</*0*/ T> type=Identifier<T>
+      CLASS OBJECT Companion
+        CONSTRUCTOR private constructor Companion()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Companion
+        FUN public open fun </*0*/ T> init(/*0*/ name: T?): Identifier<T>
+          BLOCK_BODY
+            VAR val id: Identifier<T>
+              CALL .<init> type=Identifier<T> operator=null
+                t: GET_VAR name type=T? operator=null
+                myHasDollar: CONST Boolean type=kotlin.Boolean value='false'
+            RETURN type=kotlin.Nothing from=init
+              GET_VAR id type=Identifier<T> operator=null
+      ANONYMOUS_INITIALIZER Identifier
+        BLOCK_BODY
+          SET_BACKING_FIELD myT type=kotlin.Unit operator=null
+            receiver: THIS public final class Identifier</*0*/ T> type=Identifier<T>
+            value: GET_VAR t type=T? operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR var i3: Identifier<kotlin.String?>?
+          CALL .init type=Identifier<kotlin.String?> operator=null
+            $this: GET_OBJECT Companion type=Identifier.Companion
+            name: CONST String type=kotlin.String value='name'
+        BLOCK type=kotlin.Unit? operator=SAFE_CALL
+          VAR val tmp1_safe_receiver: java.io.PrintStream!
+            GET_BACKING_FIELD out type=java.io.PrintStream! operator=GET_PROPERTY
+          WHEN type=kotlin.Unit? operator=SAFE_CALL
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: GET_VAR tmp1_safe_receiver type=java.io.PrintStream! operator=null
+              arg1: CONST Null type=kotlin.Nothing? value='null'
+            then: CONST Null type=kotlin.Nothing? value='null'
+            else: CALL .println type=kotlin.Unit operator=null
+              $this: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.io.PrintStream
+                GET_VAR tmp1_safe_receiver type=java.io.PrintStream! operator=null
+              p0: BLOCK type=kotlin.String? operator=SAFE_CALL
+                VAR val tmp0_safe_receiver: Identifier<kotlin.String?>?
+                  GET_VAR i3 type=Identifier<kotlin.String?>? operator=null
+                WHEN type=kotlin.String? operator=SAFE_CALL
+                  if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                    arg0: GET_VAR tmp0_safe_receiver type=Identifier<kotlin.String?>? operator=null
+                    arg1: CONST Null type=kotlin.Nothing? value='null'
+                  then: CONST Null type=kotlin.Nothing? value='null'
+                  else: CALL .getName type=kotlin.String? operator=null
+                    $this: GET_VAR tmp0_safe_receiver type=Identifier<kotlin.String?>? operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

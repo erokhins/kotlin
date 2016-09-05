@@ -1,0 +1,69 @@
+MODULE <test-module>
+  FILE /delegation2.kt
+    CLASS INTERFACE Trait1
+      FUN public abstract fun foo(): kotlin.String
+    CLASS INTERFACE Trait2
+      FUN public abstract fun bar(): kotlin.String
+    CLASS CLASS T1
+      CONSTRUCTOR public constructor T1()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=T1
+      FUN public open override /*1*/ fun foo(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CONST String type=kotlin.String value='aaa'
+    CLASS CLASS T2
+      CONSTRUCTOR public constructor T2()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=T2
+      FUN public open override /*1*/ fun bar(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=bar
+            CONST String type=kotlin.String value='bbb'
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C(/*0*/ a: Trait1, /*1*/ b: Trait2)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      PROPERTY val `C$Trait1$delegate`: Trait1
+        EXPRESSION_BODY
+          GET_VAR a type=Trait1 operator=null
+      FUN public open override /*1*/ /*delegation*/ fun foo(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CALL .foo type=kotlin.String operator=null
+              $this: GET_VAR C$Trait1$delegate type=Trait1 operator=null
+      PROPERTY val `C$Trait2$delegate`: Trait2
+        EXPRESSION_BODY
+          GET_VAR b type=Trait2 operator=null
+      FUN public open override /*1*/ /*delegation*/ fun bar(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=bar
+            CALL .bar type=kotlin.String operator=null
+              $this: GET_VAR C$Trait2$delegate type=Trait2 operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val c: C
+          CALL .<init> type=C operator=null
+            a: CALL .<init> type=T1 operator=null
+            b: CALL .<init> type=T2 operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .foo type=kotlin.String operator=null
+                $this: GET_VAR c type=C operator=null
+              arg1: CONST String type=kotlin.String value='aaa'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .bar type=kotlin.String operator=null
+                $this: GET_VAR c type=C operator=null
+              arg1: CONST String type=kotlin.String value='bbb'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

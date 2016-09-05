@@ -1,0 +1,68 @@
+MODULE <test-module>
+  FILE /objectFunction.kt
+    CLASS OBJECT O
+      CONSTRUCTOR private constructor O()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=O
+      FUN @kotlin.jvm.JvmStatic() public final fun foo(/*0*/ s: kotlin.String): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CALL .<get-length> type=kotlin.Int operator=GET_PROPERTY
+              $this: GET_VAR s type=kotlin.String operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val foo: kotlin.reflect.KFunction<*>
+          TYPE_OP operator=CAST typeOperand=kotlin.reflect.KFunction<*>
+            CALL .single type=kotlin.reflect.KCallable<*> operator=null
+              $receiver: CALL .<get-members> type=kotlin.collections.Collection<kotlin.reflect.KCallable<*>> operator=GET_PROPERTY
+                $this: CLASS_REFERENCE O type=kotlin.reflect.KClass<O>
+              predicate: BLOCK type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+                FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KCallable<*>): kotlin.Boolean
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                        arg0: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+                          $this: GET_VAR it type=kotlin.reflect.KCallable<*> operator=null
+                        arg1: CONST String type=kotlin.String value='foo'
+                CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+        VAR val j: java.lang.reflect.Method
+          BLOCK type=java.lang.reflect.Method operator=ELVIS
+            VAR val tmp0_elvis_lhs: java.lang.reflect.Method?
+              CALL .<get-javaMethod> type=java.lang.reflect.Method? operator=GET_PROPERTY
+                $receiver: GET_VAR foo type=kotlin.reflect.KFunction<*> operator=null
+            WHEN type=java.lang.reflect.Method operator=null
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_elvis_lhs type=java.lang.reflect.Method? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: RETURN type=kotlin.Nothing from=box
+                CONST String type=kotlin.String value='Fail: no Java method found for O::foo'
+              else: GET_VAR tmp0_elvis_lhs type=java.lang.reflect.Method? operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Int type=kotlin.Int value='3'
+          actual: CALL .invoke type=kotlin.Any! operator=null
+            $this: GET_VAR j type=java.lang.reflect.Method operator=null
+            p0: CONST Null type=kotlin.Nothing? value='null'
+            p1: VARARG type=(kotlin.Array<(kotlin.Any..kotlin.Any?)>..kotlin.Array<out (kotlin.Any..kotlin.Any?)>?) varargElementType=(kotlin.Any..kotlin.Any?)
+              CONST String type=kotlin.String value='abc'
+        VAR val k: kotlin.reflect.KFunction<*>
+          BLOCK type=kotlin.reflect.KFunction<*> operator=ELVIS
+            VAR val tmp1_elvis_lhs: kotlin.reflect.KFunction<*>?
+              CALL .<get-kotlinFunction> type=kotlin.reflect.KFunction<*>? operator=GET_PROPERTY
+                $receiver: GET_VAR j type=java.lang.reflect.Method operator=null
+            WHEN type=kotlin.reflect.KFunction<*> operator=null
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp1_elvis_lhs type=kotlin.reflect.KFunction<*>? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: RETURN type=kotlin.Nothing from=box
+                CONST String type=kotlin.String value='Fail: no Kotlin function found for Java method O::foo'
+              else: GET_VAR tmp1_elvis_lhs type=kotlin.reflect.KFunction<*>? operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Int type=kotlin.Int value='3'
+          actual: CALL .call type=kotlin.Any? operator=null
+            $this: GET_VAR k type=kotlin.reflect.KFunction<*> operator=null
+            args: VARARG type=Array<out Any?> varargElementType=Any?
+              GET_OBJECT O type=O
+              CONST String type=kotlin.String value='def'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

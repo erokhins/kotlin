@@ -21,3 +21,5 @@ fun box(): String {
     assertEquals("(T) -> kotlin.collections.List<T>", Bar<Int>().lambda.toString())
     return "OK"
 }
+
+

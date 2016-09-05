@@ -10,3 +10,5 @@ class A {
 }
 
 fun box(): String = A().x.toString()
+
+

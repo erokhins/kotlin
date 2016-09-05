@@ -13,3 +13,5 @@ fun box(): String {
     val f = Foo(23, {x -> 2 * x})
     return if (f.next() == 46) "OK" else "fail"
 }
+
+

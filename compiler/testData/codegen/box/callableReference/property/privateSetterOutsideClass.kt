@@ -24,3 +24,5 @@ fun box(): String {
 
     return p1.get(Bar("OK"))
 }
+
+

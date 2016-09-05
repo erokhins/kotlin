@@ -1,0 +1,23 @@
+MODULE <test-module>
+  FILE /privateSetter.kt
+    CLASS CLASS My
+      CONSTRUCTOR public constructor My()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=My
+      PROPERTY public final lateinit var x: kotlin.String
+        PROPERTY_SETTER private final fun <set-x>(/*0*/ <set-?>: kotlin.String): kotlin.Unit
+      FUN public final fun init(): kotlin.Unit
+        BLOCK_BODY
+          CALL .<set-x> type=kotlin.Unit operator=EQ
+            $this: THIS public final class My type=My
+            <set-?>: CONST String type=kotlin.String value='OK'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val my: My
+          CALL .<init> type=My operator=null
+        CALL .init type=kotlin.Unit operator=null
+          $this: GET_VAR my type=My operator=null
+        RETURN type=kotlin.Nothing from=box
+          CALL .<get-x> type=kotlin.String operator=GET_PROPERTY
+            $this: GET_VAR my type=My operator=null

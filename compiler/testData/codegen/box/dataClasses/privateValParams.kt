@@ -11,3 +11,5 @@ fun box(): String {
     if (d1.foo() != d2.foo()) return "Fail foo"
     return "OK"
 }
+
+

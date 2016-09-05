@@ -7,3 +7,5 @@ fun box() : String {
   if((-+a) != -1) return "fail 4"
   return "OK"
 }
+
+

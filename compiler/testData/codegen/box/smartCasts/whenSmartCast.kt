@@ -7,3 +7,5 @@ fun baz(s: String?): Int {
 }
 
 fun box() = if (baz("abc") == 3 && baz("") == 3 && baz(null) == 0) "OK" else "FAIL"
+
+

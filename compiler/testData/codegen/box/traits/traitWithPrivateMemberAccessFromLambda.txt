@@ -1,0 +1,47 @@
+MODULE <test-module>
+  FILE /traitWithPrivateMemberAccessFromLambda.kt
+    CLASS INTERFACE Z
+      FUN public open fun testFun(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=testFun
+            CALL .invoke type=kotlin.String operator=null
+              $this: BLOCK type=() -> kotlin.String operator=LAMBDA
+                FUN local final fun <anonymous>(): kotlin.String
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .privateFun type=kotlin.String operator=null
+                        $this: THIS public interface Z type=Z
+                CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+      FUN public open fun testProperty(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=testProperty
+            CALL .invoke type=kotlin.String operator=null
+              $this: BLOCK type=() -> kotlin.String operator=LAMBDA
+                FUN local final fun <anonymous>(): kotlin.String
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .<get-privateProp> type=kotlin.String operator=GET_PROPERTY
+                        $this: THIS public interface Z type=Z
+                CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+      FUN private final fun privateFun(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=privateFun
+            CONST String type=kotlin.String value='O'
+      PROPERTY private final val privateProp: kotlin.String
+        PROPERTY_GETTER private final fun <get-privateProp>(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-privateProp>
+              CONST String type=kotlin.String value='K'
+    CLASS OBJECT Z2
+      CONSTRUCTOR private constructor Z2()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Z2
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .plus type=kotlin.String operator=PLUS
+            $this: CALL .testFun type=kotlin.String operator=null
+              $this: GET_OBJECT Z2 type=Z2
+            other: CALL .testProperty type=kotlin.String operator=null
+              $this: GET_OBJECT Z2 type=Z2

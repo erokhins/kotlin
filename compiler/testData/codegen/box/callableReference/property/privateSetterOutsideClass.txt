@@ -1,0 +1,50 @@
+MODULE <test-module>
+  FILE /privateSetterOutsideClass.kt
+    CLASS CLASS Bar
+      CONSTRUCTOR public constructor Bar(/*0*/ name: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Bar
+      PROPERTY public final var foo: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR name type=kotlin.String operator=null
+        PROPERTY_SETTER private final fun <set-foo>(/*0*/ <set-?>: kotlin.String): kotlin.Unit
+    CLASS CLASS Baz
+      CONSTRUCTOR public constructor Baz()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Bar
+            name: CONST String type=kotlin.String value=''
+          INSTANCE_INITIALIZER_CALL classDescriptor=Baz
+      FUN public final fun ref(): kotlin.reflect.KProperty1<Bar, kotlin.String>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=ref
+            CALLABLE_REFERENCE foo type=kotlin.reflect.KProperty1<Bar, kotlin.String> operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val p1: kotlin.reflect.KProperty1<Bar, kotlin.String>
+          CALLABLE_REFERENCE foo type=kotlin.reflect.KProperty1<Bar, kotlin.String> operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: TYPE_OP operator=INSTANCEOF typeOperand=kotlin.reflect.KMutableProperty<*>
+            GET_VAR p1 type=kotlin.reflect.KProperty1<Bar, kotlin.String> operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail: p1 is a KMutableProperty'
+        VAR val p2: kotlin.reflect.KProperty1<Bar, kotlin.String>
+          CALL .ref type=kotlin.reflect.KProperty1<Bar, kotlin.String> operator=null
+            $this: CALL .<init> type=Baz operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: TYPE_OP operator=INSTANCEOF typeOperand=kotlin.reflect.KMutableProperty<*>
+            GET_VAR p2 type=kotlin.reflect.KProperty1<Bar, kotlin.String> operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail: p2 is a KMutableProperty'
+        VAR val p3: kotlin.reflect.KProperty0<kotlin.String>
+          CALLABLE_REFERENCE foo type=kotlin.reflect.KProperty0<kotlin.String> operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: TYPE_OP operator=INSTANCEOF typeOperand=kotlin.reflect.KMutableProperty<*>
+            GET_VAR p3 type=kotlin.reflect.KProperty0<kotlin.String> operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail: p3 is a KMutableProperty'
+        RETURN type=kotlin.Nothing from=box
+          CALL .get type=kotlin.String operator=null
+            $this: GET_VAR p1 type=kotlin.reflect.KProperty1<Bar, kotlin.String> operator=null
+            receiver: CALL .<init> type=Bar operator=null
+              name: CONST String type=kotlin.String value='OK'

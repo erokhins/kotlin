@@ -1,0 +1,74 @@
+MODULE <test-module>
+  FILE /manyArgumentsOnlyOneDefault.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public final fun foo(/*0*/ p01: kotlin.Int, /*1*/ p02: kotlin.Int, /*2*/ p03: kotlin.Int, /*3*/ p04: kotlin.Int, /*4*/ p05: kotlin.Int, /*5*/ p06: kotlin.Int, /*6*/ p07: kotlin.Int, /*7*/ p08: kotlin.Int, /*8*/ p09: kotlin.Int, /*9*/ p10: kotlin.Int, /*10*/ p11: kotlin.Int, /*11*/ p12: kotlin.Int, /*12*/ p13: kotlin.Int, /*13*/ p14: kotlin.Int, /*14*/ p15: kotlin.Int, /*15*/ p16: kotlin.Int, /*16*/ p17: kotlin.Int, /*17*/ p18: kotlin.Int, /*18*/ p19: kotlin.Int, /*19*/ p20: kotlin.Int, /*20*/ p21: kotlin.Int, /*21*/ p22: kotlin.Int, /*22*/ p23: kotlin.Int, /*23*/ p24: kotlin.Int, /*24*/ p25: kotlin.Int, /*25*/ p26: kotlin.Int, /*26*/ p27: kotlin.Int, /*27*/ p28: kotlin.Int, /*28*/ p29: kotlin.Int, /*29*/ p30: kotlin.Int, /*30*/ p31: kotlin.Int, /*31*/ p32: kotlin.Int, /*32*/ p33: kotlin.Int, /*33*/ p34: kotlin.Int, /*34*/ p35: kotlin.Int, /*35*/ p36: kotlin.Int, /*36*/ p37: kotlin.Int, /*37*/ p38: kotlin.Int, /*38*/ p39: kotlin.Int, /*39*/ p40: kotlin.Int, /*40*/ p41: kotlin.Int, /*41*/ p42: kotlin.Int = ..., /*42*/ p43: kotlin.Int, /*43*/ p44: kotlin.Int, /*44*/ p45: kotlin.Int, /*45*/ p46: kotlin.Int, /*46*/ p47: kotlin.Int, /*47*/ p48: kotlin.Int, /*48*/ p49: kotlin.Int, /*49*/ p50: kotlin.Int, /*50*/ p51: kotlin.Int, /*51*/ p52: kotlin.Int, /*52*/ p53: kotlin.Int, /*53*/ p54: kotlin.Int, /*54*/ p55: kotlin.Int, /*55*/ p56: kotlin.Int, /*56*/ p57: kotlin.Int, /*57*/ p58: kotlin.Int, /*58*/ p59: kotlin.Int, /*59*/ p60: kotlin.Int, /*60*/ p61: kotlin.Int, /*61*/ p62: kotlin.Int, /*62*/ p63: kotlin.Int, /*63*/ p64: kotlin.Int, /*64*/ p65: kotlin.Int, /*65*/ p66: kotlin.Int, /*66*/ p67: kotlin.Int, /*67*/ p68: kotlin.Int, /*68*/ p69: kotlin.Int, /*69*/ p70: kotlin.Int): kotlin.Unit
+        p42: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='239'
+        BLOCK_BODY
+          CALL .assertEquals type=kotlin.Unit operator=null
+            expected: CONST Int type=kotlin.Int value='1'
+            actual: GET_VAR p01 type=kotlin.Int operator=null
+          CALL .assertEquals type=kotlin.Unit operator=null
+            expected: CONST Int type=kotlin.Int value='41'
+            actual: GET_VAR p41 type=kotlin.Int operator=null
+          CALL .assertEquals type=kotlin.Unit operator=null
+            expected: CONST Int type=kotlin.Int value='239'
+            actual: GET_VAR p42 type=kotlin.Int operator=null
+          CALL .assertEquals type=kotlin.Unit operator=null
+            expected: CONST Int type=kotlin.Int value='43'
+            actual: GET_VAR p43 type=kotlin.Int operator=null
+          CALL .assertEquals type=kotlin.Unit operator=null
+            expected: CONST Int type=kotlin.Int value='70'
+            actual: GET_VAR p70 type=kotlin.Int operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val f: kotlin.reflect.KCallable<*>
+          CALL .single type=kotlin.reflect.KCallable<*> operator=null
+            $receiver: CALL .<get-members> type=kotlin.collections.Collection<kotlin.reflect.KCallable<*>> operator=GET_PROPERTY
+              $this: CLASS_REFERENCE A type=kotlin.reflect.KClass<A>
+            predicate: BLOCK type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KCallable<*>): kotlin.Boolean
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                      arg0: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+                        $this: GET_VAR it type=kotlin.reflect.KCallable<*> operator=null
+                      arg1: CONST String type=kotlin.String value='foo'
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+        VAR val parameters: kotlin.collections.List<kotlin.reflect.KParameter>
+          CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+            $this: GET_VAR f type=kotlin.reflect.KCallable<*> operator=null
+        CALL .callBy type=kotlin.Any? operator=null
+          $this: GET_VAR f type=kotlin.reflect.KCallable<*> operator=null
+          args: CALL .mapOf type=kotlin.collections.Map<kotlin.reflect.KParameter, kotlin.Any> operator=null
+            pairs: VARARG type=Array<out Pair<KParameter, Any>> varargElementType=Pair<KParameter, Any>
+              CALL .to type=kotlin.Pair<kotlin.reflect.KParameter, A> operator=null
+                $receiver: CALL .first type=kotlin.reflect.KParameter operator=null
+                  $receiver: GET_VAR parameters type=kotlin.collections.List<kotlin.reflect.KParameter> operator=null
+                that: CALL .<init> type=A operator=null
+              SPREAD_ELEMENT
+                CALL .toTypedArray type=kotlin.Array<kotlin.Pair<kotlin.reflect.KParameter, kotlin.Int>> operator=null
+                  $receiver: CALL .map type=kotlin.collections.List<kotlin.Pair<kotlin.reflect.KParameter, kotlin.Int>> operator=null
+                    $receiver: CALL .plus type=kotlin.collections.List<kotlin.Int> operator=PLUS
+                      $receiver: CALL .rangeTo type=kotlin.ranges.IntRange operator=RANGE
+                        $this: CONST Int type=kotlin.Int value='1'
+                        other: CONST Int type=kotlin.Int value='41'
+                      elements: CALL .rangeTo type=kotlin.ranges.IntRange operator=RANGE
+                        $this: CONST Int type=kotlin.Int value='43'
+                        other: CONST Int type=kotlin.Int value='70'
+                    transform: BLOCK type=(kotlin.Int) -> kotlin.Pair<kotlin.reflect.KParameter, kotlin.Int> operator=LAMBDA
+                      FUN local final fun <anonymous>(/*0*/ i: kotlin.Int): kotlin.Pair<kotlin.reflect.KParameter, kotlin.Int>
+                        BLOCK_BODY
+                          RETURN type=kotlin.Nothing from=<anonymous>
+                            CALL .to type=kotlin.Pair<kotlin.reflect.KParameter, kotlin.Int> operator=null
+                              $receiver: CALL .get type=kotlin.reflect.KParameter operator=GET_ARRAY_ELEMENT
+                                $this: GET_VAR parameters type=kotlin.collections.List<kotlin.reflect.KParameter> operator=null
+                                index: GET_VAR i type=kotlin.Int operator=null
+                              that: GET_VAR i type=kotlin.Int operator=null
+                      CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> kotlin.Pair<kotlin.reflect.KParameter, kotlin.Int> operator=LAMBDA
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

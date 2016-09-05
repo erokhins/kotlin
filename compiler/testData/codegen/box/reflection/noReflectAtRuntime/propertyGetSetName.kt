@@ -14,3 +14,5 @@ fun box(): String {
     if (p.get().value != "second") return "Fail value 2: ${p.get()}"
     return "OK"
 }
+
+

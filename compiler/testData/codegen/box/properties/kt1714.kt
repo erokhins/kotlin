@@ -21,3 +21,5 @@ public fun box() : String {
     test(AImpl())
     return "OK"
 }
+
+

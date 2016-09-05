@@ -1,0 +1,37 @@
+MODULE <test-module>
+  FILE /extOnLong.kt
+    FUN public operator fun kotlin.Long.get(/*0*/ i: kotlin.Int): kotlin.Long
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=get
+          $RECEIVER of: get type=kotlin.Long
+    FUN public operator fun kotlin.Long.set(/*0*/ i: kotlin.Int, /*1*/ newValue: kotlin.Long): kotlin.Unit
+      BLOCK_BODY
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR var x: kotlin.Long
+          CONST Long type=kotlin.Long value='0'
+        VAR val y: kotlin.Long
+          BLOCK type=kotlin.Long operator=POSTFIX_INCR
+            VAR val tmp0_array: kotlin.Long
+              GET_VAR x type=kotlin.Long operator=null
+            VAR val tmp1_index0: kotlin.Int
+              CONST Int type=kotlin.Int value='0'
+            VAR val tmp2: kotlin.Long
+              CALL .get type=kotlin.Long operator=POSTFIX_INCR
+                $receiver: GET_VAR tmp0_array type=kotlin.Long operator=null
+                i: GET_VAR tmp1_index0 type=kotlin.Int operator=null
+            CALL .set type=kotlin.Unit operator=POSTFIX_INCR
+              $receiver: GET_VAR tmp0_array type=kotlin.Long operator=null
+              i: GET_VAR tmp1_index0 type=kotlin.Int operator=null
+              newValue: CALL .inc type=kotlin.Long operator=POSTFIX_INCR
+                $this: GET_VAR tmp2 type=kotlin.Long operator=null
+            GET_VAR tmp2 type=kotlin.Long operator=null
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: GET_VAR y type=kotlin.Long operator=null
+              arg1: CONST Long type=kotlin.Long value='0'
+            then: CONST String type=kotlin.String value='OK'
+            else: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Failed, y='
+              GET_VAR y type=kotlin.Long operator=null

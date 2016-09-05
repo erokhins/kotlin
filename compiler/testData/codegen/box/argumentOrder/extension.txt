@@ -1,0 +1,284 @@
+MODULE <test-module>
+  FILE /extension.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR var invokeOrder: kotlin.String
+          CONST String type=kotlin.String value=''
+        VAR val expectedResult: kotlin.String = "1.0_0_1_L"
+          CONST String type=kotlin.String value='1.0_0_1_L'
+        VAR val expectedInvokeOrder: kotlin.String = "1_0_L"
+          CONST String type=kotlin.String value='1_0_L'
+        VAR var l: kotlin.Long
+          CONST Long type=kotlin.Long value='1'
+        VAR var i: kotlin.Int
+          CONST Int type=kotlin.Int value='0'
+        VAR var result: kotlin.String
+          BLOCK type=kotlin.String operator=ARGUMENTS_REORDERING_FOR_CALL
+            VAR val tmp0_b: kotlin.Long
+              CALL .invoke type=kotlin.Long operator=null
+                $this: BLOCK type=() -> kotlin.Long operator=LAMBDA
+                  FUN local final fun <anonymous>(): kotlin.Long
+                    BLOCK_BODY
+                      SET_VAR invokeOrder type=kotlin.Unit operator=PLUSEQ
+                        CALL .plus type=kotlin.String operator=PLUSEQ
+                          $this: GET_VAR invokeOrder type=kotlin.String operator=PLUSEQ
+                          other: CONST String type=kotlin.String value='1_'
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                        GET_VAR l type=kotlin.Long operator=null
+                  CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Long operator=LAMBDA
+            VAR val tmp1_a: kotlin.Int
+              CALL .invoke type=kotlin.Int operator=null
+                $this: BLOCK type=() -> kotlin.Int operator=LAMBDA
+                  FUN local final fun <anonymous>(): kotlin.Int
+                    BLOCK_BODY
+                      SET_VAR invokeOrder type=kotlin.Unit operator=PLUSEQ
+                        CALL .plus type=kotlin.String operator=PLUSEQ
+                          $this: GET_VAR invokeOrder type=kotlin.String operator=PLUSEQ
+                          other: CONST String type=kotlin.String value='0_'
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                        GET_VAR i type=kotlin.Int operator=null
+                  CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Int operator=LAMBDA
+            VAR val tmp2_c: () -> kotlin.String
+              BLOCK type=() -> kotlin.String operator=LAMBDA
+                FUN local final fun <anonymous>(): kotlin.String
+                  BLOCK_BODY
+                    SET_VAR invokeOrder type=kotlin.Unit operator=PLUSEQ
+                      CALL .plus type=kotlin.String operator=PLUSEQ
+                        $this: GET_VAR invokeOrder type=kotlin.String operator=PLUSEQ
+                        other: CONST String type=kotlin.String value='L'
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CONST String type=kotlin.String value='L'
+                CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+            CALL .test type=kotlin.String operator=null
+              $receiver: CONST Double type=kotlin.Double value='1.0'
+              a: GET_VAR tmp1_a type=kotlin.Int operator=null
+              b: GET_VAR tmp0_b type=kotlin.Long operator=null
+              c: GET_VAR tmp2_c type=() -> kotlin.String operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: WHEN type=kotlin.Boolean operator=OROR
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: GET_VAR invokeOrder type=kotlin.String operator=null
+                arg1: GET_VAR expectedInvokeOrder type=kotlin.String operator=null
+            then: CONST Boolean type=kotlin.Boolean value='true'
+            else: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: GET_VAR result type=kotlin.String operator=null
+                arg1: GET_VAR expectedResult type=kotlin.String operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 1: '
+              GET_VAR invokeOrder type=kotlin.String operator=null
+              CONST String type=kotlin.String value=' != '
+              GET_VAR expectedInvokeOrder type=kotlin.String operator=null
+              CONST String type=kotlin.String value=' or '
+              GET_VAR result type=kotlin.String operator=null
+              CONST String type=kotlin.String value=' != '
+              GET_VAR expectedResult type=kotlin.String operator=null
+        SET_VAR invokeOrder type=kotlin.Unit operator=EQ
+          CONST String type=kotlin.String value=''
+        SET_VAR result type=kotlin.Unit operator=EQ
+          BLOCK type=kotlin.String operator=ARGUMENTS_REORDERING_FOR_CALL
+            VAR val tmp3_b: kotlin.Long
+              CALL .invoke type=kotlin.Long operator=null
+                $this: BLOCK type=() -> kotlin.Long operator=LAMBDA
+                  FUN local final fun <anonymous>(): kotlin.Long
+                    BLOCK_BODY
+                      SET_VAR invokeOrder type=kotlin.Unit operator=PLUSEQ
+                        CALL .plus type=kotlin.String operator=PLUSEQ
+                          $this: GET_VAR invokeOrder type=kotlin.String operator=PLUSEQ
+                          other: CONST String type=kotlin.String value='1_'
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                        GET_VAR l type=kotlin.Long operator=null
+                  CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Long operator=LAMBDA
+            VAR val tmp4_c: () -> kotlin.String
+              BLOCK type=() -> kotlin.String operator=LAMBDA
+                FUN local final fun <anonymous>(): kotlin.String
+                  BLOCK_BODY
+                    SET_VAR invokeOrder type=kotlin.Unit operator=PLUSEQ
+                      CALL .plus type=kotlin.String operator=PLUSEQ
+                        $this: GET_VAR invokeOrder type=kotlin.String operator=PLUSEQ
+                        other: CONST String type=kotlin.String value='L'
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CONST String type=kotlin.String value='L'
+                CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+            VAR val tmp5_a: kotlin.Int
+              CALL .invoke type=kotlin.Int operator=null
+                $this: BLOCK type=() -> kotlin.Int operator=LAMBDA
+                  FUN local final fun <anonymous>(): kotlin.Int
+                    BLOCK_BODY
+                      SET_VAR invokeOrder type=kotlin.Unit operator=PLUSEQ
+                        CALL .plus type=kotlin.String operator=PLUSEQ
+                          $this: GET_VAR invokeOrder type=kotlin.String operator=PLUSEQ
+                          other: CONST String type=kotlin.String value='0_'
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                        GET_VAR i type=kotlin.Int operator=null
+                  CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Int operator=LAMBDA
+            CALL .test type=kotlin.String operator=null
+              $receiver: CONST Double type=kotlin.Double value='1.0'
+              a: GET_VAR tmp5_a type=kotlin.Int operator=null
+              b: GET_VAR tmp3_b type=kotlin.Long operator=null
+              c: GET_VAR tmp4_c type=() -> kotlin.String operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: WHEN type=kotlin.Boolean operator=OROR
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: GET_VAR invokeOrder type=kotlin.String operator=null
+                arg1: GET_VAR expectedInvokeOrder type=kotlin.String operator=null
+            then: CONST Boolean type=kotlin.Boolean value='true'
+            else: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: GET_VAR result type=kotlin.String operator=null
+                arg1: GET_VAR expectedResult type=kotlin.String operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 2: '
+              GET_VAR invokeOrder type=kotlin.String operator=null
+              CONST String type=kotlin.String value=' != '
+              GET_VAR expectedInvokeOrder type=kotlin.String operator=null
+              CONST String type=kotlin.String value=' or '
+              GET_VAR result type=kotlin.String operator=null
+              CONST String type=kotlin.String value=' != '
+              GET_VAR expectedResult type=kotlin.String operator=null
+        SET_VAR invokeOrder type=kotlin.Unit operator=EQ
+          CONST String type=kotlin.String value=''
+        SET_VAR result type=kotlin.Unit operator=EQ
+          BLOCK type=kotlin.String operator=ARGUMENTS_REORDERING_FOR_CALL
+            VAR val tmp6_c: () -> kotlin.String
+              BLOCK type=() -> kotlin.String operator=LAMBDA
+                FUN local final fun <anonymous>(): kotlin.String
+                  BLOCK_BODY
+                    SET_VAR invokeOrder type=kotlin.Unit operator=PLUSEQ
+                      CALL .plus type=kotlin.String operator=PLUSEQ
+                        $this: GET_VAR invokeOrder type=kotlin.String operator=PLUSEQ
+                        other: CONST String type=kotlin.String value='L'
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CONST String type=kotlin.String value='L'
+                CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+            VAR val tmp7_b: kotlin.Long
+              CALL .invoke type=kotlin.Long operator=null
+                $this: BLOCK type=() -> kotlin.Long operator=LAMBDA
+                  FUN local final fun <anonymous>(): kotlin.Long
+                    BLOCK_BODY
+                      SET_VAR invokeOrder type=kotlin.Unit operator=PLUSEQ
+                        CALL .plus type=kotlin.String operator=PLUSEQ
+                          $this: GET_VAR invokeOrder type=kotlin.String operator=PLUSEQ
+                          other: CONST String type=kotlin.String value='1_'
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                        GET_VAR l type=kotlin.Long operator=null
+                  CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Long operator=LAMBDA
+            VAR val tmp8_a: kotlin.Int
+              CALL .invoke type=kotlin.Int operator=null
+                $this: BLOCK type=() -> kotlin.Int operator=LAMBDA
+                  FUN local final fun <anonymous>(): kotlin.Int
+                    BLOCK_BODY
+                      SET_VAR invokeOrder type=kotlin.Unit operator=PLUSEQ
+                        CALL .plus type=kotlin.String operator=PLUSEQ
+                          $this: GET_VAR invokeOrder type=kotlin.String operator=PLUSEQ
+                          other: CONST String type=kotlin.String value='0_'
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                        GET_VAR i type=kotlin.Int operator=null
+                  CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Int operator=LAMBDA
+            CALL .test type=kotlin.String operator=null
+              $receiver: CONST Double type=kotlin.Double value='1.0'
+              a: GET_VAR tmp8_a type=kotlin.Int operator=null
+              b: GET_VAR tmp7_b type=kotlin.Long operator=null
+              c: GET_VAR tmp6_c type=() -> kotlin.String operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: WHEN type=kotlin.Boolean operator=OROR
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: GET_VAR invokeOrder type=kotlin.String operator=null
+                arg1: GET_VAR expectedInvokeOrder type=kotlin.String operator=null
+            then: CONST Boolean type=kotlin.Boolean value='true'
+            else: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: GET_VAR result type=kotlin.String operator=null
+                arg1: GET_VAR expectedResult type=kotlin.String operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 3: '
+              GET_VAR invokeOrder type=kotlin.String operator=null
+              CONST String type=kotlin.String value=' != '
+              GET_VAR expectedInvokeOrder type=kotlin.String operator=null
+              CONST String type=kotlin.String value=' or '
+              GET_VAR result type=kotlin.String operator=null
+              CONST String type=kotlin.String value=' != '
+              GET_VAR expectedResult type=kotlin.String operator=null
+        SET_VAR invokeOrder type=kotlin.Unit operator=EQ
+          CONST String type=kotlin.String value=''
+        SET_VAR result type=kotlin.Unit operator=EQ
+          BLOCK type=kotlin.String operator=ARGUMENTS_REORDERING_FOR_CALL
+            VAR val tmp9_a: kotlin.Int
+              CALL .invoke type=kotlin.Int operator=null
+                $this: BLOCK type=() -> kotlin.Int operator=LAMBDA
+                  FUN local final fun <anonymous>(): kotlin.Int
+                    BLOCK_BODY
+                      SET_VAR invokeOrder type=kotlin.Unit operator=PLUSEQ
+                        CALL .plus type=kotlin.String operator=PLUSEQ
+                          $this: GET_VAR invokeOrder type=kotlin.String operator=PLUSEQ
+                          other: CONST String type=kotlin.String value='0_'
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                        GET_VAR i type=kotlin.Int operator=null
+                  CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Int operator=LAMBDA
+            VAR val tmp10_c: () -> kotlin.String
+              BLOCK type=() -> kotlin.String operator=LAMBDA
+                FUN local final fun <anonymous>(): kotlin.String
+                  BLOCK_BODY
+                    SET_VAR invokeOrder type=kotlin.Unit operator=PLUSEQ
+                      CALL .plus type=kotlin.String operator=PLUSEQ
+                        $this: GET_VAR invokeOrder type=kotlin.String operator=PLUSEQ
+                        other: CONST String type=kotlin.String value='L'
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CONST String type=kotlin.String value='L'
+                CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+            VAR val tmp11_b: kotlin.Long
+              CALL .invoke type=kotlin.Long operator=null
+                $this: BLOCK type=() -> kotlin.Long operator=LAMBDA
+                  FUN local final fun <anonymous>(): kotlin.Long
+                    BLOCK_BODY
+                      SET_VAR invokeOrder type=kotlin.Unit operator=PLUSEQ
+                        CALL .plus type=kotlin.String operator=PLUSEQ
+                          $this: GET_VAR invokeOrder type=kotlin.String operator=PLUSEQ
+                          other: CONST String type=kotlin.String value='1_'
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                        GET_VAR l type=kotlin.Long operator=null
+                  CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Long operator=LAMBDA
+            CALL .test type=kotlin.String operator=null
+              $receiver: CONST Double type=kotlin.Double value='1.0'
+              a: GET_VAR tmp9_a type=kotlin.Int operator=null
+              b: GET_VAR tmp11_b type=kotlin.Long operator=null
+              c: GET_VAR tmp10_c type=() -> kotlin.String operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: WHEN type=kotlin.Boolean operator=OROR
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: GET_VAR invokeOrder type=kotlin.String operator=null
+                arg1: CONST String type=kotlin.String value='0_1_L'
+            then: CONST Boolean type=kotlin.Boolean value='true'
+            else: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: GET_VAR result type=kotlin.String operator=null
+                arg1: GET_VAR expectedResult type=kotlin.String operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 4: '
+              GET_VAR invokeOrder type=kotlin.String operator=null
+              CONST String type=kotlin.String value=' != 0_1_L or '
+              GET_VAR result type=kotlin.String operator=null
+              CONST String type=kotlin.String value=' != '
+              GET_VAR expectedResult type=kotlin.String operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'
+    FUN public fun kotlin.Double.test(/*0*/ a: kotlin.Int, /*1*/ b: kotlin.Long, /*2*/ c: () -> kotlin.String): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=test
+          STRING_CONCATENATION type=kotlin.String
+            $RECEIVER of: test type=kotlin.Double
+            CONST String type=kotlin.String value='_'
+            GET_VAR a type=kotlin.Int operator=null
+            CONST String type=kotlin.String value='_'
+            GET_VAR b type=kotlin.Long operator=null
+            CONST String type=kotlin.String value='_'
+            CALL .invoke type=kotlin.String operator=INVOKE
+              $this: GET_VAR c type=() -> kotlin.String operator=VARIABLE_AS_FUNCTION

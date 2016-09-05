@@ -1,0 +1,19 @@
+MODULE <test-module>
+  FILE /kt2280.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        FUN local final fun rmrf(/*0*/ i: kotlin.Int): kotlin.Unit
+          BLOCK_BODY
+            WHEN type=kotlin.Unit operator=IF
+              if: CALL .GT0 type=kotlin.Boolean operator=GT
+                arg0: CALL .compareTo type=kotlin.Int operator=GT
+                  $this: GET_VAR i type=kotlin.Int operator=null
+                  other: CONST Int type=kotlin.Int value='0'
+              then: CALL .rmrf type=kotlin.Unit operator=null
+                i: CALL .minus type=kotlin.Int operator=MINUS
+                  $this: GET_VAR i type=kotlin.Int operator=null
+                  other: CONST Int type=kotlin.Int value='1'
+        CALL .rmrf type=kotlin.Unit operator=null
+          i: CONST Int type=kotlin.Int value='5'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

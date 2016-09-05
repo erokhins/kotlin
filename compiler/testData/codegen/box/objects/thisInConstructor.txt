@@ -1,0 +1,49 @@
+MODULE <test-module>
+  FILE /thisInConstructor.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A(/*0*/ v: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD v type=kotlin.Unit operator=null
+            receiver: THIS public open class A type=A
+            value: GET_VAR v type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public open val v: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR v type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B(/*0*/ v: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD v type=kotlin.Unit operator=null
+            receiver: THIS public open class B type=B
+            value: GET_VAR v type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+      PROPERTY public open val v: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR v type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public final fun a(/*0*/ newv: kotlin.String): A
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=a
+            BLOCK type=B.a.<no name provided> operator=OBJECT_LITERAL
+              CLASS CLASS <no name provided>
+                CONSTRUCTOR public constructor <no name provided>()
+                  BLOCK_BODY
+                    DELEGATING_CONSTRUCTOR_CALL A
+                      v: CONST String type=kotlin.String value='fail'
+                    INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+                PROPERTY public open override /*1*/ val v: kotlin.String
+                  EXPRESSION_BODY
+                    CALL .plus type=kotlin.String operator=PLUS
+                      $this: CALL .<get-v> type=kotlin.String operator=GET_PROPERTY
+                        $this: THIS public open class B type=B
+                      other: GET_VAR newv type=kotlin.String operator=null
+              CALL .<init> type=B.a.<no name provided> operator=OBJECT_LITERAL
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .<get-v> type=kotlin.String operator=GET_PROPERTY
+            $this: CALL .a type=A operator=null
+              $this: CALL .<init> type=B operator=null
+                v: CONST String type=kotlin.String value='O'
+              newv: CONST String type=kotlin.String value='K'

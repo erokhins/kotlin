@@ -28,3 +28,5 @@ fun print(message : String) { System.out?.print(message) }
 fun println(message : String) { System.out?.println(message) }
 operator fun StringBuilder.plusAssign(o : Any) { append(o) }
 val <T> Array<T>.isEmpty : Boolean get() = size == 0
+
+

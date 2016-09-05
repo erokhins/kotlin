@@ -10,3 +10,5 @@ fun box(): String {
     val c = A("OK")
     return c.component1()
 }
+
+

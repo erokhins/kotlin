@@ -20,3 +20,5 @@ public fun foo(): String = "O"
 // FILE: test.kt
 
 fun box(): String = Baz.baz()
+
+

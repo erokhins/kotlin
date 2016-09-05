@@ -10,3 +10,4 @@ fun box(): String {
     val b = A.B()
     return "OK"
 }
+

@@ -12,3 +12,5 @@ fun checkLess(x: A, y: A) = when {
 }
 
 fun box() = checkLess(A(0), A(1))
+
+

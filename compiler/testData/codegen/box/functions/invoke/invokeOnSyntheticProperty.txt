@@ -1,0 +1,15 @@
+MODULE <test-module>
+  FILE /main.kt
+    FUN public operator fun kotlin.String.invoke(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=invoke
+          CALL .plus type=kotlin.String operator=PLUS
+            $this: $RECEIVER of: invoke type=kotlin.String
+            other: CONST String type=kotlin.String value='K'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .invoke type=kotlin.String operator=INVOKE
+            $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.String
+              CALL .<get-o> type=kotlin.String! operator=GET_PROPERTY
+                $receiver: CALL .<init> type=JavaClass operator=null

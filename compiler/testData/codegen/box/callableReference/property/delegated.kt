@@ -22,3 +22,5 @@ fun box(): String {
     if (y != 2) return "Fail y: $y"
     return "OK"
 }
+
+

@@ -1,0 +1,41 @@
+MODULE <test-module>
+  FILE /privateToThisAccessors.kt
+    CLASS CLASS K
+      CONSTRUCTOR public constructor K</*0*/ in T : kotlin.String>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=K
+      PROPERTY private/*private to this*/ final var t: T
+        PROPERTY_GETTER private/*private to this*/ final fun <get-t>(): T
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-t>
+              TYPE_OP operator=CAST typeOperand=T
+                CONST String type=kotlin.String value='OK'
+        PROPERTY_SETTER private/*private to this*/ final fun <set-t>(/*0*/ value: T): kotlin.Unit
+          BLOCK_BODY
+      FUN public final fun run(): kotlin.String
+        BLOCK_BODY
+          VAR val p: kotlin.reflect.KMutableProperty1<K<kotlin.String>, kotlin.String>
+            TYPE_OP operator=CAST typeOperand=kotlin.reflect.KMutableProperty1<K<kotlin.String>, kotlin.String>
+              CALL .single type=kotlin.reflect.KProperty1<K<*>, *> operator=null
+                $receiver: CALL .<get-memberProperties> type=kotlin.collections.Collection<kotlin.reflect.KProperty1<K<*>, *>> operator=GET_PROPERTY
+                  $receiver: CLASS_REFERENCE K type=kotlin.reflect.KClass<K<*>>
+          CALL .<set-isAccessible> type=kotlin.Unit operator=EQ
+            $receiver: GET_VAR p type=kotlin.reflect.KMutableProperty1<K<kotlin.String>, kotlin.String> operator=null
+            value: CONST Boolean type=kotlin.Boolean value='true'
+          CALL .set type=kotlin.Unit operator=null
+            $this: GET_VAR p type=kotlin.reflect.KMutableProperty1<K<kotlin.String>, kotlin.String> operator=null
+            receiver: TYPE_OP operator=CAST typeOperand=K<kotlin.String>
+              THIS public final class K</*0*/ in T : kotlin.String> type=K<T>
+            value: CONST String type=kotlin.String value=''
+          RETURN type=kotlin.Nothing from=run
+            TYPE_OP operator=CAST typeOperand=kotlin.String
+              CALL .get type=kotlin.String operator=null
+                $this: GET_VAR p type=kotlin.reflect.KMutableProperty1<K<kotlin.String>, kotlin.String> operator=null
+                receiver: TYPE_OP operator=IMPLICIT_CAST typeOperand=K<kotlin.String>
+                  THIS public final class K</*0*/ in T : kotlin.String> type=K<T>
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .run type=kotlin.String operator=null
+            $this: CALL .<init> type=K<kotlin.String> operator=null

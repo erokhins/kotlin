@@ -1,0 +1,31 @@
+MODULE <test-module>
+  FILE /overflowChar.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val c1: kotlin.Char = \u0000 ('?')
+          CALL .toChar type=kotlin.Char operator=null
+            $this: CONST Int type=kotlin.Int value='0'
+        VAR val c2: kotlin.Char = \uFFFF ('?')
+          CALL .minus type=kotlin.Char operator=MINUS
+            $this: GET_VAR c1 type=kotlin.Char operator=null
+            other: CONST Int type=kotlin.Int value='1'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .LT0 type=kotlin.Boolean operator=LT
+            arg0: CALL .compareTo type=kotlin.Int operator=LT
+              $this: GET_VAR c2 type=kotlin.Char operator=null
+              other: GET_VAR c1 type=kotlin.Char operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail: 0.toChar() - 1 should overflow to positive.'
+        VAR val c3: kotlin.Char = \u0000 ('?')
+          CALL .plus type=kotlin.Char operator=PLUS
+            $this: GET_VAR c2 type=kotlin.Char operator=null
+            other: CONST Int type=kotlin.Int value='1'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .GT0 type=kotlin.Boolean operator=GT
+            arg0: CALL .compareTo type=kotlin.Int operator=GT
+              $this: GET_VAR c3 type=kotlin.Char operator=null
+              other: GET_VAR c2 type=kotlin.Char operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail: FFFF.toChar() + 1 should overflow to zero.'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

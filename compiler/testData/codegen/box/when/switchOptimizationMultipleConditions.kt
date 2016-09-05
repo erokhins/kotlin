@@ -15,3 +15,5 @@ fun box(): String {
     if (result != "4, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4") return result
     return "OK"
 }
+
+

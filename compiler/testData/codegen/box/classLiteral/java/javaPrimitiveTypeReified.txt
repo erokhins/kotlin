@@ -1,0 +1,77 @@
+MODULE <test-module>
+  FILE /javaPrimitiveTypeReified.kt
+    FUN public inline fun </*0*/ reified T : kotlin.Any> check(/*0*/ expected: kotlin.String): kotlin.Unit
+      BLOCK_BODY
+        VAR val clazz: java.lang.Class<T>
+          BLOCK type=java.lang.Class<T> operator=EXCLEXCL
+            VAR val tmp0_notnull: java.lang.Class<T>?
+              CALL .<get-javaPrimitiveType> type=java.lang.Class<T>? operator=GET_PROPERTY
+                $receiver: CLASS_REFERENCE T type=kotlin.reflect.KClass<T>
+            WHEN type=java.lang.Class<T> operator=null
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_notnull type=java.lang.Class<T>? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+              else: GET_VAR tmp0_notnull type=java.lang.Class<T>? operator=null
+        CALL .assert type=kotlin.Unit operator=null
+          value: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+            arg0: CALL .<get-canonicalName> type=kotlin.String! operator=GET_PROPERTY
+              $receiver: GET_VAR clazz type=java.lang.Class<T> operator=null
+            arg1: GET_VAR expected type=kotlin.String operator=null
+          lazyMessage: BLOCK type=() -> kotlin.String operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.String
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  STRING_CONCATENATION type=kotlin.String
+                    CONST String type=kotlin.String value='clazz name: '
+                    CALL .<get-canonicalName> type=kotlin.String! operator=GET_PROPERTY
+                      $receiver: GET_VAR clazz type=java.lang.Class<T> operator=null
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+    FUN public inline fun </*0*/ reified T : kotlin.Any> checkNull(): kotlin.Unit
+      BLOCK_BODY
+        VAR val clazz: java.lang.Class<T>?
+          CALL .<get-javaPrimitiveType> type=java.lang.Class<T>? operator=GET_PROPERTY
+            $receiver: CLASS_REFERENCE T type=kotlin.reflect.KClass<T>
+        CALL .assert type=kotlin.Unit operator=null
+          value: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+            arg0: GET_VAR clazz type=java.lang.Class<T>? operator=null
+            arg1: CONST Null type=kotlin.Nothing? value='null'
+          lazyMessage: BLOCK type=() -> kotlin.String operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.String
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  STRING_CONCATENATION type=kotlin.String
+                    CONST String type=kotlin.String value='clazz should be null: '
+                    CALL .<get-canonicalName> type=kotlin.String! operator=GET_PROPERTY
+                      $receiver: BLOCK type=java.lang.Class<T> operator=EXCLEXCL
+                        VAR val tmp0_notnull: java.lang.Class<T>?
+                          GET_VAR clazz type=java.lang.Class<T>? operator=null
+                        WHEN type=java.lang.Class<T> operator=null
+                          if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                            arg0: GET_VAR tmp0_notnull type=java.lang.Class<T>? operator=null
+                            arg1: CONST Null type=kotlin.Nothing? value='null'
+                          then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                          else: GET_VAR tmp0_notnull type=java.lang.Class<T>? operator=null
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .check type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='boolean'
+        CALL .check type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='char'
+        CALL .check type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='byte'
+        CALL .check type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='short'
+        CALL .check type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='int'
+        CALL .check type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='float'
+        CALL .check type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='long'
+        CALL .check type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='double'
+        CALL .checkNull type=kotlin.Unit operator=null
+        CALL .checkNull type=kotlin.Unit operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

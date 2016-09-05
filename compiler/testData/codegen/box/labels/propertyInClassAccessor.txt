@@ -1,0 +1,39 @@
+MODULE <test-module>
+  FILE /propertyInClassAccessor.kt
+    CLASS CLASS Test
+      CONSTRUCTOR public constructor Test()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Test
+      PROPERTY public final val kotlin.Int.innerGetter: kotlin.Int
+        PROPERTY_GETTER public final fun kotlin.Int.<get-innerGetter>(): kotlin.Int
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-innerGetter>
+              $RECEIVER of: innerGetter type=kotlin.Int
+      FUN public final fun test(): kotlin.Int
+        BLOCK_BODY
+          VAR val i: kotlin.Int = 1
+            CONST Int type=kotlin.Int value='1'
+          WHEN type=kotlin.Unit operator=IF
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .<get-innerGetter> type=kotlin.Int operator=GET_PROPERTY
+                  $this: THIS public final class Test type=Test
+                  $receiver: GET_VAR i type=kotlin.Int operator=null
+                arg1: CONST Int type=kotlin.Int value='1'
+            then: RETURN type=kotlin.Nothing from=test
+              CONST Int type=kotlin.Int value='0'
+          RETURN type=kotlin.Nothing from=test
+            CONST Int type=kotlin.Int value='1'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .test type=kotlin.Int operator=null
+                $this: CALL .<init> type=Test operator=null
+              arg1: CONST Int type=kotlin.Int value='1'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='inner getter or setter failed'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -15,3 +15,5 @@ fun box(): String {
     var r = c.foo() + b.foo() + a.foo()
     return if (r == "BBB") "OK" else "Fail: $r"
 }
+
+

@@ -9,3 +9,4 @@ class B() : A() {
 }
 
 fun box() = B().bar()
+

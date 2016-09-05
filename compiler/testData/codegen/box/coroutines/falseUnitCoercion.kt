@@ -22,3 +22,5 @@ fun box(): String {
     foo("OK")
     return result as String
 }
+
+

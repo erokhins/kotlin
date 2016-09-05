@@ -1,0 +1,94 @@
+MODULE <test-module>
+  FILE /memberFunctions.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public final fun foo(/*0*/ t: kotlin.Long?): kotlin.Long
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            BLOCK type=kotlin.Long operator=EXCLEXCL
+              VAR val tmp0_notnull: kotlin.Long?
+                GET_VAR t type=kotlin.Long? operator=null
+              WHEN type=kotlin.Long operator=null
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_notnull type=kotlin.Long? operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                else: GET_VAR tmp0_notnull type=kotlin.Long? operator=null
+    CLASS OBJECT O
+      CONSTRUCTOR private constructor O()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=O
+      FUN @kotlin.jvm.JvmStatic() public final fun bar(/*0*/ a: A): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=bar
+            CONST String type=kotlin.String value=''
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val foo: kotlin.reflect.KFunction2<A, kotlin.Long?, kotlin.Long>
+          CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction2<A, kotlin.Long?, kotlin.Long> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .listOf type=kotlin.collections.List<java.lang.Class<out kotlin.Any>> operator=null
+            elements: VARARG type=Array<out Class<out Any>> varargElementType=Class<out Any>
+              CALL .<get-java> type=java.lang.Class<A> operator=GET_PROPERTY
+                $receiver: CLASS_REFERENCE A type=kotlin.reflect.KClass<A>
+              CALL .<get-java> type=java.lang.Class<java.lang.Long> operator=GET_PROPERTY
+                $receiver: CLASS_REFERENCE Long type=kotlin.reflect.KClass<java.lang.Long>
+          actual: CALL .map type=kotlin.collections.List<java.lang.reflect.Type> operator=null
+            $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+              $this: GET_VAR foo type=kotlin.reflect.KFunction2<A, kotlin.Long?, kotlin.Long> operator=null
+            transform: BLOCK type=(kotlin.reflect.KParameter) -> java.lang.reflect.Type operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KParameter): java.lang.reflect.Type
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+                      $receiver: CALL .<get-type> type=kotlin.reflect.KType operator=GET_PROPERTY
+                        $this: GET_VAR it type=kotlin.reflect.KParameter operator=null
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KParameter) -> java.lang.reflect.Type operator=LAMBDA
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_BACKING_FIELD TYPE type=java.lang.Class<kotlin.Long!>! operator=GET_PROPERTY
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+              $this: GET_VAR foo type=kotlin.reflect.KFunction2<A, kotlin.Long?, kotlin.Long> operator=null
+        VAR val bar: kotlin.reflect.KCallable<*>
+          CALL .single type=kotlin.reflect.KCallable<*> operator=null
+            $receiver: CALL .<get-members> type=kotlin.collections.Collection<kotlin.reflect.KCallable<*>> operator=GET_PROPERTY
+              $this: CLASS_REFERENCE O type=kotlin.reflect.KClass<O>
+            predicate: BLOCK type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KCallable<*>): kotlin.Boolean
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                      arg0: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+                        $this: GET_VAR it type=kotlin.reflect.KCallable<*> operator=null
+                      arg1: CONST String type=kotlin.String value='bar'
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .listOf type=kotlin.collections.List<java.lang.Class<out kotlin.Any>> operator=null
+            elements: VARARG type=Array<out Class<out Any>> varargElementType=Class<out Any>
+              CALL .<get-java> type=java.lang.Class<O> operator=GET_PROPERTY
+                $receiver: CLASS_REFERENCE O type=kotlin.reflect.KClass<O>
+              CALL .<get-java> type=java.lang.Class<A> operator=GET_PROPERTY
+                $receiver: CLASS_REFERENCE A type=kotlin.reflect.KClass<A>
+          actual: CALL .map type=kotlin.collections.List<java.lang.reflect.Type> operator=null
+            $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+              $this: GET_VAR bar type=kotlin.reflect.KCallable<*> operator=null
+            transform: BLOCK type=(kotlin.reflect.KParameter) -> java.lang.reflect.Type operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KParameter): java.lang.reflect.Type
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+                      $receiver: CALL .<get-type> type=kotlin.reflect.KType operator=GET_PROPERTY
+                        $this: GET_VAR it type=kotlin.reflect.KParameter operator=null
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KParameter) -> java.lang.reflect.Type operator=LAMBDA
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .<get-java> type=java.lang.Class<kotlin.String> operator=GET_PROPERTY
+            $receiver: CLASS_REFERENCE String type=kotlin.reflect.KClass<kotlin.String>
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+              $this: GET_VAR bar type=kotlin.reflect.KCallable<*> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

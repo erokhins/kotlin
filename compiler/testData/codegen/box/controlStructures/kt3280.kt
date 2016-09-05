@@ -22,3 +22,5 @@ fun box(): String {
     bar()
     return "OK"
 }
+
+

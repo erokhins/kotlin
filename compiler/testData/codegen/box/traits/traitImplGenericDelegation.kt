@@ -16,3 +16,5 @@ fun box(): String {
     val x = C().foo("", 0)
     return if (x == null) "OK" else "Fail: $x"
 }
+
+

@@ -1,0 +1,30 @@
+MODULE <test-module>
+  FILE /K.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Null type=kotlin.Nothing? value='null'
+          actual: CALL .<get-visibility> type=kotlin.reflect.KVisibility? operator=GET_PROPERTY
+            $this: CLASS_REFERENCE J type=kotlin.reflect.KClass<J>
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Null type=kotlin.Nothing? value='null'
+          actual: CALL .<get-visibility> type=kotlin.reflect.KVisibility? operator=GET_PROPERTY
+            $this: CLASS_REFERENCE C type=kotlin.reflect.KClass<J.C>
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Null type=kotlin.Nothing? value='null'
+          actual: CALL .<get-visibility> type=kotlin.reflect.KVisibility? operator=GET_PROPERTY
+            $this: CLASS_REFERENCE D type=kotlin.reflect.KClass<J.D>
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Null type=kotlin.Nothing? value='null'
+          actual: CALL .<get-visibility> type=kotlin.reflect.KVisibility? operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction1<J, kotlin.Unit> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Null type=kotlin.Nothing? value='null'
+          actual: CALL .<get-visibility> type=kotlin.reflect.KVisibility? operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE bar type=kotlin.reflect.KFunction1<J, kotlin.Unit> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Null type=kotlin.Nothing? value='null'
+          actual: CALL .<get-visibility> type=kotlin.reflect.KVisibility? operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE baz type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

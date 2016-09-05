@@ -9,3 +9,5 @@ fun box(): String {
   return if (c is C) "OK" else "fail"
 }
 
+
+

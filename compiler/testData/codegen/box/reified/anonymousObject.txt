@@ -1,0 +1,35 @@
+MODULE <test-module>
+  FILE /anonymousObject.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public abstract fun f(): kotlin.String
+    FUN public inline fun </*0*/ reified T : kotlin.Any> foo(): A
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo
+          BLOCK type=foo.<no name provided><T> operator=OBJECT_LITERAL
+            CLASS CLASS <no name provided>
+              CONSTRUCTOR public constructor <no name provided>()
+                BLOCK_BODY
+                  DELEGATING_CONSTRUCTOR_CALL A
+                  INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+              FUN public open override /*1*/ fun f(): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=f
+                    TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.String
+                      CALL .getName type=kotlin.String! operator=null
+                        $this: CALL .<get-java> type=java.lang.Class<T> operator=GET_PROPERTY
+                          $receiver: CLASS_REFERENCE T type=kotlin.reflect.KClass<T>
+            CALL .<init> type=foo.<no name provided><T> operator=OBJECT_LITERAL
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val y: A
+          CALL .foo type=A operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='java.lang.String'
+          actual: CALL .f type=kotlin.String operator=null
+            $this: GET_VAR y type=A operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

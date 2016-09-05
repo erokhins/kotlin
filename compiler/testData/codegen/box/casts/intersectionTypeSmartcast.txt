@@ -1,0 +1,68 @@
+MODULE <test-module>
+  FILE /intersectionTypeSmartcast.kt
+    CLASS INTERFACE A
+      FUN public abstract fun foo(): kotlin.Any?
+    CLASS INTERFACE B
+      FUN public abstract fun foo(): kotlin.String
+    FUN public fun bar(/*0*/ x: kotlin.Any?): kotlin.String
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: TYPE_OP operator=INSTANCEOF typeOperand=A
+            GET_VAR x type=kotlin.Any? operator=null
+          then: BLOCK type=kotlin.Unit operator=null
+            VAR val k: kotlin.Any?
+              CALL .foo type=kotlin.Any? operator=null
+                $this: TYPE_OP operator=IMPLICIT_CAST typeOperand=A
+                  GET_VAR x type=kotlin.Any? operator=null
+            WHEN type=kotlin.Unit operator=IF
+              if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                  arg0: GET_VAR k type=kotlin.Any? operator=null
+                  arg1: CONST String type=kotlin.String value='OK'
+              then: RETURN type=kotlin.Nothing from=bar
+                CONST String type=kotlin.String value='fail 1'
+        WHEN type=kotlin.Unit operator=IF
+          if: TYPE_OP operator=INSTANCEOF typeOperand=B
+            GET_VAR x type=kotlin.Any? operator=null
+          then: BLOCK type=kotlin.Unit operator=null
+            VAR val k: kotlin.String
+              CALL .foo type=kotlin.String operator=null
+                $this: TYPE_OP operator=IMPLICIT_CAST typeOperand=B
+                  GET_VAR x type=kotlin.Any? operator=null
+            WHEN type=kotlin.Unit operator=IF
+              if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                  arg0: CALL .<get-length> type=kotlin.Int operator=GET_PROPERTY
+                    $this: GET_VAR k type=kotlin.String operator=null
+                  arg1: CONST Int type=kotlin.Int value='2'
+              then: RETURN type=kotlin.Nothing from=bar
+                CONST String type=kotlin.String value='fail 2'
+        WHEN type=kotlin.Unit operator=IF
+          if: WHEN type=kotlin.Boolean operator=ANDAND
+            if: TYPE_OP operator=INSTANCEOF typeOperand=A
+              GET_VAR x type=kotlin.Any? operator=null
+            then: TYPE_OP operator=INSTANCEOF typeOperand=B
+              GET_VAR x type=kotlin.Any? operator=null
+            else: CONST Boolean type=kotlin.Boolean value='false'
+          then: BLOCK type=kotlin.Nothing operator=null
+            RETURN type=kotlin.Nothing from=bar
+              CALL .foo type=kotlin.String operator=null
+                $this: TYPE_OP operator=IMPLICIT_CAST typeOperand=B
+                  GET_VAR x type=kotlin.Any? operator=null
+        RETURN type=kotlin.Nothing from=bar
+          CONST String type=kotlin.String value='fail 4'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .bar type=kotlin.String operator=null
+            x: BLOCK type=box.<no name provided> operator=OBJECT_LITERAL
+              CLASS CLASS <no name provided>
+                CONSTRUCTOR public constructor <no name provided>()
+                  BLOCK_BODY
+                    DELEGATING_CONSTRUCTOR_CALL Any
+                    INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+                FUN public open override /*2*/ fun foo(): kotlin.String
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=foo
+                      CONST String type=kotlin.String value='OK'
+              CALL .<init> type=box.<no name provided> operator=OBJECT_LITERAL

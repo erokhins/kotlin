@@ -16,3 +16,5 @@ fun box(): String {
     assertEquals("baz", Int::baz.name)
     return "OK"
 }
+
+

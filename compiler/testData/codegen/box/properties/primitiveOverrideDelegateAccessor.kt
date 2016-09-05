@@ -18,3 +18,5 @@ fun box(): String {
     a.value = 42
     return if (a.value == 42) "OK" else "Fail 1"
 }
+
+

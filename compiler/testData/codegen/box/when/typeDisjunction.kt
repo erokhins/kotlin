@@ -13,3 +13,5 @@ fun box() = if (foo("OK") == "OK" && foo(42) == "42" && foo(true) == "") "OK" el
 
 
 
+
+

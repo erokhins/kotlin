@@ -1,0 +1,40 @@
+MODULE <test-module>
+  FILE /implicitToGrandSon.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public open fun foo(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CONST String type=kotlin.String value='FAIL'
+      FUN public final fun bar(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=bar
+            WHEN type=kotlin.String operator=IF
+              if: TYPE_OP operator=INSTANCEOF typeOperand=C
+                THIS public open class A type=A
+              then: CALL .foo type=kotlin.String operator=null
+                $this: THIS public open class A type=A
+              else: CALL .foo type=kotlin.String operator=null
+                $this: THIS public open class A type=A
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL A
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL B
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      FUN public open override /*1*/ fun foo(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CONST String type=kotlin.String value='OK'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .bar type=kotlin.String operator=null
+            $this: CALL .<init> type=C operator=null

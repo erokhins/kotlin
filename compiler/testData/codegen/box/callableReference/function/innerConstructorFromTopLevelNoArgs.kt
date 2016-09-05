@@ -10,3 +10,5 @@ fun box(): String {
     if (result != 333) return "Fail $result"
     return "OK"
 }
+
+

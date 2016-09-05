@@ -27,3 +27,4 @@ fun test(a: A) : String {
         throw RuntimeException("fail")
     }
 }
+

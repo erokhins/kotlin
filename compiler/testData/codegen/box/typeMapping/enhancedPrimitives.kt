@@ -11,3 +11,5 @@ public class J {
 // FILE: box.kt
 
 fun box() = J.test(1)
+
+

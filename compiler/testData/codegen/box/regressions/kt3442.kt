@@ -6,3 +6,5 @@ fun box(): String {
     val oldValue = m.getOrPut("b", { "Foo" })
     return if (oldValue == "Foo") "OK" else "fail: $oldValue"
 }
+
+

@@ -1,0 +1,39 @@
+MODULE <test-module>
+  FILE /basicmethodSuperClass.kt
+    CLASS CLASS N
+      CONSTRUCTOR public constructor N()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL ArrayList
+          INSTANCE_INITIALIZER_CALL classDescriptor=N
+      FUN public open override /*1*/ fun add(/*0*/ el: kotlin.Any): kotlin.Boolean
+        BLOCK_BODY
+          WHEN type=kotlin.Unit operator=IF
+            if: CALL .not type=kotlin.Boolean operator=EXCL
+              $this: CALL .add superQualifier=ArrayList type=kotlin.Boolean operator=null
+                $this: THIS public final class N : java.util.ArrayList<kotlin.Any> type=java.util.ArrayList<kotlin.Any>
+                element: GET_VAR el type=kotlin.Any operator=null
+            then: BLOCK type=kotlin.Nothing operator=null
+              THROW type=kotlin.Nothing
+                CALL .<init> type=java.lang.Exception operator=null
+          RETURN type=kotlin.Nothing from=add
+            CONST Boolean type=kotlin.Boolean value='false'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val n: N
+          CALL .<init> type=N operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .add type=kotlin.Boolean operator=null
+            $this: GET_VAR n type=N operator=null
+            el: CONST String type=kotlin.String value='239'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+            arg0: CALL .get type=kotlin.Any operator=null
+              $this: GET_VAR n type=N operator=null
+              index: CONST Int type=kotlin.Int value='0'
+            arg1: CONST String type=kotlin.String value='239'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='OK'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='fail'

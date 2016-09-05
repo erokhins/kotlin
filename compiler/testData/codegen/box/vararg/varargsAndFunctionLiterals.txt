@@ -1,0 +1,80 @@
+MODULE <test-module>
+  FILE /varargsAndFunctionLiterals.kt
+    FUN public fun foo(/*0*/ a: kotlin.Int, /*1*/ vararg b: kotlin.Int /*kotlin.IntArray*/, /*2*/ f: (kotlin.IntArray) -> kotlin.String): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo
+          CALL .plus type=kotlin.String operator=PLUS
+            $this: CALL .plus type=kotlin.String operator=PLUS
+              $this: CALL .plus type=kotlin.String operator=PLUS
+                $this: CONST String type=kotlin.String value='test'
+                other: GET_VAR a type=kotlin.Int operator=null
+              other: CONST String type=kotlin.String value=' '
+            other: CALL .invoke type=kotlin.String operator=INVOKE
+              $this: GET_VAR f type=(kotlin.IntArray) -> kotlin.String operator=VARIABLE_AS_FUNCTION
+              p1: GET_VAR b type=kotlin.IntArray operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val test1: kotlin.String
+          CALL .foo type=kotlin.String operator=null
+            a: CONST Int type=kotlin.Int value='1'
+            f: BLOCK type=(kotlin.IntArray) -> kotlin.String operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ a: kotlin.IntArray): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .plus type=kotlin.String operator=PLUS
+                      $this: CONST String type=kotlin.String value=''
+                      other: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                        $this: GET_VAR a type=kotlin.IntArray operator=null
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.IntArray) -> kotlin.String operator=LAMBDA
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR test1 type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='test1 0'
+          then: RETURN type=kotlin.Nothing from=box
+            GET_VAR test1 type=kotlin.String operator=null
+        VAR val test2: kotlin.String
+          CALL .foo type=kotlin.String operator=null
+            a: CONST Int type=kotlin.Int value='2'
+            b: VARARG type=IntArray varargElementType=Int
+              CONST Int type=kotlin.Int value='2'
+            f: BLOCK type=(kotlin.IntArray) -> kotlin.String operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ a: kotlin.IntArray): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .plus type=kotlin.String operator=PLUS
+                      $this: CONST String type=kotlin.String value=''
+                      other: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                        $this: GET_VAR a type=kotlin.IntArray operator=null
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.IntArray) -> kotlin.String operator=LAMBDA
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR test2 type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='test2 1'
+          then: RETURN type=kotlin.Nothing from=box
+            GET_VAR test2 type=kotlin.String operator=null
+        VAR val test3: kotlin.String
+          CALL .foo type=kotlin.String operator=null
+            a: CONST Int type=kotlin.Int value='3'
+            b: VARARG type=IntArray varargElementType=Int
+              CONST Int type=kotlin.Int value='2'
+              CONST Int type=kotlin.Int value='3'
+            f: BLOCK type=(kotlin.IntArray) -> kotlin.String operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ a: kotlin.IntArray): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .plus type=kotlin.String operator=PLUS
+                      $this: CONST String type=kotlin.String value=''
+                      other: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                        $this: GET_VAR a type=kotlin.IntArray operator=null
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.IntArray) -> kotlin.String operator=LAMBDA
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR test3 type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='test3 2'
+          then: RETURN type=kotlin.Nothing from=box
+            GET_VAR test3 type=kotlin.String operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

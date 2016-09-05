@@ -1,0 +1,69 @@
+MODULE <test-module>
+  FILE /annotatedObjectLiteral.kt
+    CLASS ANNOTATION_CLASS Ann
+      CONSTRUCTOR public constructor Ann(/*0*/ v: kotlin.String = ...)
+        v: EXPRESSION_BODY
+          CONST String type=kotlin.String value='???'
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD v type=kotlin.Unit operator=null
+            receiver: THIS public final annotation class Ann : kotlin.Annotation type=Ann
+            value: GET_VAR v type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Ann
+      PROPERTY public final val v: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR v type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    CLASS CLASS My
+      CONSTRUCTOR public constructor My()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=My
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val v: box.<no name provided>
+          BLOCK type=box.<no name provided> operator=OBJECT_LITERAL
+            CLASS CLASS <no name provided>
+              CONSTRUCTOR public constructor <no name provided>()
+                BLOCK_BODY
+                  DELEGATING_CONSTRUCTOR_CALL My
+                  INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+            CALL .<init> type=box.<no name provided> operator=OBJECT_LITERAL
+        VAR val klass: java.lang.Class<box.<no name provided>>
+          CALL .<get-javaClass> type=java.lang.Class<box.<no name provided>> operator=GET_PROPERTY
+            $receiver: GET_VAR v type=box.<no name provided> operator=null
+        VAR val annotations: kotlin.collections.List<kotlin.Annotation!>
+          CALL .toList type=kotlin.collections.List<kotlin.Annotation!> operator=null
+            $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.Array<out kotlin.Annotation!>
+              CALL .<get-annotations> type=kotlin.Array<(out) kotlin.Annotation!>! operator=GET_PROPERTY
+                $receiver: GET_VAR klass type=java.lang.Class<box.<no name provided>> operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_VAR annotations type=kotlin.collections.List<kotlin.Annotation!> operator=null
+              arg1: CONST Int type=kotlin.Int value='2'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail annotations size is '
+              CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_VAR annotations type=kotlin.collections.List<kotlin.Annotation!> operator=null
+              CONST String type=kotlin.String value=': '
+              GET_VAR annotations type=kotlin.collections.List<kotlin.Annotation!> operator=null
+        VAR val annotation: Ann
+          BLOCK type=Ann operator=ELVIS
+            VAR val tmp0_elvis_lhs: Ann?
+              CALL .firstOrNull type=Ann? operator=null
+                $receiver: CALL .filterIsInstance type=kotlin.collections.List<Ann> operator=null
+                  $receiver: GET_VAR annotations type=kotlin.collections.List<kotlin.Annotation!> operator=null
+            WHEN type=Ann operator=null
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_elvis_lhs type=Ann? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: RETURN type=kotlin.Nothing from=box
+                STRING_CONCATENATION type=kotlin.String
+                  CONST String type=kotlin.String value='Fail no @Ann: '
+                  GET_VAR annotations type=kotlin.collections.List<kotlin.Annotation!> operator=null
+              else: GET_VAR tmp0_elvis_lhs type=Ann? operator=null
+        RETURN type=kotlin.Nothing from=box
+          CALL .<get-v> type=kotlin.String operator=GET_PROPERTY
+            $this: GET_VAR annotation type=Ann operator=null

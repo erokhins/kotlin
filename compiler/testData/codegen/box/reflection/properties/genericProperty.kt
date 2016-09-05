@@ -9,3 +9,5 @@ fun box(): String {
     assertEquals("val Box<T>.element: T", p.toString())
     return p.call(Box("OK"))
 }
+
+

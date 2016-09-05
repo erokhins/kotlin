@@ -1,0 +1,24 @@
+MODULE <test-module>
+  FILE /box.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .foo type=kotlin.String operator=null
+            body: BLOCK type=() -> kotlin.String operator=LAMBDA
+              FUN local final fun <anonymous>(): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CONST String type=kotlin.String value='OK'
+              CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+  FILE /foo.kt
+    FUN public inline fun foo(/*0*/ body: () -> kotlin.String): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo
+          CALL .zee type=kotlin.String operator=null
+            x: CALL .invoke type=kotlin.String operator=INVOKE
+              $this: GET_VAR body type=() -> kotlin.String operator=VARIABLE_AS_FUNCTION
+  FILE /zee.kt
+    FUN public fun zee(/*0*/ x: kotlin.String): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=zee
+          GET_VAR x type=kotlin.String operator=null

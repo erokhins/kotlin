@@ -8,3 +8,4 @@ fun box(): String {
   }
   return if (b) "OK" else "FAIL"
 }
+

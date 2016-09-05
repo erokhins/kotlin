@@ -11,3 +11,5 @@ fun box(): String {
   if (c.f != 610) return "fail"
   return "OK"
 }
+
+

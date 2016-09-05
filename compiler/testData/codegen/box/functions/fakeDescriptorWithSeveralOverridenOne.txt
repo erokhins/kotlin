@@ -1,0 +1,38 @@
+MODULE <test-module>
+  FILE /fakeDescriptorWithSeveralOverridenOne.kt
+    CLASS INTERFACE Named
+      FUN public abstract fun getName(): kotlin.String
+    CLASS INTERFACE MemberDescriptor
+    CLASS INTERFACE ClassifierDescriptor
+    CLASS INTERFACE ClassDescriptor
+    CLASS CLASS ClassDescriptorImpl
+      CONSTRUCTOR public constructor ClassDescriptorImpl()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=ClassDescriptorImpl
+      FUN public open override /*1*/ fun getName(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getName
+            CONST String type=kotlin.String value='OK'
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A(/*0*/ descriptor: ClassDescriptor)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD descriptor type=kotlin.Unit operator=null
+            receiver: THIS public final class A type=A
+            value: GET_VAR descriptor type=ClassDescriptor operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public final val descriptor: ClassDescriptor
+        EXPRESSION_BODY
+          GET_VAR descriptor type=ClassDescriptor operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final val result: kotlin.String
+        EXPRESSION_BODY
+          CALL .getName type=kotlin.String operator=null
+            $this: CALL .<get-descriptor> type=ClassDescriptor operator=GET_PROPERTY
+              $this: THIS public final class A type=A
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .<get-result> type=kotlin.String operator=GET_PROPERTY
+            $this: CALL .<init> type=A operator=null
+              descriptor: CALL .<init> type=ClassDescriptorImpl operator=null

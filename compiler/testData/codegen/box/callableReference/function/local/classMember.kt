@@ -6,3 +6,5 @@ fun box(): String {
     val ref = Local::foo
     return ref(Local())
 }
+
+

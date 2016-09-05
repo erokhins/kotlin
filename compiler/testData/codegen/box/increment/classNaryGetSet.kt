@@ -13,3 +13,5 @@ fun box(): String {
     val xx = A[1, 2, 3]++
     return if (xx != 0 || A.x != 1) "Failed" else "OK"
 }
+
+

@@ -13,3 +13,4 @@ object A {
 fun box(): String  {
    return A.test()
 }
+

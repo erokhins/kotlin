@@ -1,0 +1,37 @@
+MODULE <test-module>
+  FILE /companionPrivateFieldInsideLambda.kt
+    CLASS CLASS My
+      CONSTRUCTOR public constructor My()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=My
+      CLASS OBJECT Companion
+        CONSTRUCTOR private constructor Companion()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Companion
+        PROPERTY private final val my: kotlin.String = "O"
+          EXPRESSION_BODY
+            CONST String type=kotlin.String value='O'
+          PROPERTY_GETTER private final fun <get-my>(): kotlin.String
+            BLOCK_BODY
+              RETURN type=kotlin.Nothing from=<get-my>
+                CALL .plus type=kotlin.String operator=PLUS
+                  $this: CALL .invoke type=kotlin.String operator=null
+                    $this: BLOCK type=() -> kotlin.String operator=LAMBDA
+                      FUN local final fun <anonymous>(): kotlin.String
+                        BLOCK_BODY
+                          RETURN type=kotlin.Nothing from=<anonymous>
+                            GET_VAR field type=kotlin.String operator=null
+                      CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+                  other: CONST String type=kotlin.String value='K'
+        FUN public final fun getValue(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=getValue
+              CALL .<get-my> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public companion object Companion type=My.Companion
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .getValue type=kotlin.String operator=null
+            $this: GET_OBJECT Companion type=My.Companion

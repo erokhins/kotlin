@@ -7,3 +7,5 @@ data class Foo(val id: String) {
 fun box(): String {
     return Foo::id.call(Foo("OK"))
 }
+
+

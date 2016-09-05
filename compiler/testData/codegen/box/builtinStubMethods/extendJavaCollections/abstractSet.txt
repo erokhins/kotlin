@@ -1,0 +1,34 @@
+MODULE <test-module>
+  FILE /abstractSet.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL HashSet
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val a: A
+          CALL .<init> type=A operator=null
+        VAR val b: A
+          CALL .<init> type=A operator=null
+        CALL .iterator type=kotlin.collections.MutableIterator<kotlin.Long> operator=null
+          $this: GET_VAR a type=A operator=null
+        CALL .add type=kotlin.Boolean operator=null
+          $this: GET_VAR a type=A operator=null
+          element: CONST Long type=kotlin.Long value='0'
+        CALL .remove type=kotlin.Boolean operator=null
+          $this: GET_VAR a type=A operator=null
+          element: CONST Long type=kotlin.Long value='0'
+        CALL .addAll type=kotlin.Boolean operator=null
+          $this: GET_VAR a type=A operator=null
+          elements: GET_VAR b type=A operator=null
+        CALL .removeAll type=kotlin.Boolean operator=null
+          $this: GET_VAR a type=A operator=null
+          elements: GET_VAR b type=A operator=null
+        CALL .retainAll type=kotlin.Boolean operator=null
+          $this: GET_VAR a type=A operator=null
+          elements: GET_VAR b type=A operator=null
+        CALL .clear type=kotlin.Unit operator=null
+          $this: GET_VAR a type=A operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

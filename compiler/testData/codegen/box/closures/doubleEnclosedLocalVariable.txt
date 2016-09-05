@@ -1,0 +1,35 @@
+MODULE <test-module>
+  FILE /doubleEnclosedLocalVariable.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val cl: kotlin.Int = 39
+          CONST Int type=kotlin.Int value='39'
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CALL .sum type=kotlin.Int operator=null
+                arg: CONST Int type=kotlin.Int value='200'
+                f: BLOCK type=() -> kotlin.Int operator=LAMBDA
+                  FUN local final fun <anonymous>(): kotlin.Int
+                    BLOCK_BODY
+                      VAR val ff: () -> kotlin.Int
+                        BLOCK type=() -> kotlin.Int operator=LAMBDA
+                          FUN local final fun <anonymous>(): kotlin.Int
+                            BLOCK_BODY
+                              RETURN type=kotlin.Nothing from=<anonymous>
+                                GET_VAR cl type=kotlin.Int operator=null
+                          CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Int operator=LAMBDA
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                        CALL .invoke type=kotlin.Int operator=INVOKE
+                          $this: GET_VAR ff type=() -> kotlin.Int operator=VARIABLE_AS_FUNCTION
+                  CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Int operator=LAMBDA
+              arg1: CONST Int type=kotlin.Int value='239'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='FAIL'
+    FUN public fun sum(/*0*/ arg: kotlin.Int, /*1*/ f: () -> kotlin.Int): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=sum
+          CALL .plus type=kotlin.Int operator=PLUS
+            $this: GET_VAR arg type=kotlin.Int operator=null
+            other: CALL .invoke type=kotlin.Int operator=INVOKE
+              $this: GET_VAR f type=() -> kotlin.Int operator=VARIABLE_AS_FUNCTION

@@ -1,0 +1,119 @@
+MODULE <test-module>
+  FILE /generate.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val x: kotlin.String
+          CALL .joinToString type=kotlin.String operator=null
+            $receiver: CALL .gen type=kotlin.sequences.Sequence<kotlin.Int> operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR x type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='1, 2'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail1: '
+              GET_VAR x type=kotlin.String operator=null
+        VAR val y: kotlin.String
+          CALL .joinToString type=kotlin.String operator=null
+            $receiver: CALL .gen type=kotlin.sequences.Sequence<kotlin.Int> operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR y type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='-1'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail2: '
+              GET_VAR y type=kotlin.String operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'
+    PROPERTY public var was: kotlin.Boolean
+      EXPRESSION_BODY
+        CONST Boolean type=kotlin.Boolean value='false'
+    FUN public fun gen(): kotlin.sequences.Sequence<kotlin.Int>
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=gen
+          CALL .generate type=kotlin.sequences.Sequence<kotlin.Int> operator=null
+            c: TYPE_OP operator=IMPLICIT_CAST typeOperand=GeneratorController<kotlin.Int>.() -> kotlin.coroutines.Continuation<kotlin.Unit>
+              BLOCK type=GeneratorController<kotlin.Int>.() -> kotlin.Unit operator=LAMBDA
+                FUN local final fun GeneratorController<kotlin.Int>.<anonymous>(): kotlin.Unit
+                  BLOCK_BODY
+                    WHEN type=kotlin.Unit operator=IF
+                      if: CALL .<get-was> type=kotlin.Boolean operator=GET_PROPERTY
+                      then: BLOCK type=kotlin.Nothing operator=null
+                        CALL .yield type=kotlin.Unit operator=null
+                          $this: $RECEIVER of: <anonymous> type=GeneratorController<kotlin.Int>
+                          value: CONST Int type=kotlin.Int value='-1'
+                        RETURN type=kotlin.Nothing from=<anonymous>
+                    BLOCK type=kotlin.Unit operator=FOR_LOOP
+                      VAR val tmp0_iterator: kotlin.collections.IntIterator
+                        CALL .iterator type=kotlin.collections.IntIterator operator=FOR_LOOP_ITERATOR
+                          $this: CALL .rangeTo type=kotlin.ranges.IntRange operator=RANGE
+                            $this: CONST Int type=kotlin.Int value='1'
+                            other: CONST Int type=kotlin.Int value='2'
+                      WHILE label=null operator=FOR_LOOP_INNER_WHILE
+                        condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+                          $this: GET_VAR tmp0_iterator type=kotlin.collections.IntIterator operator=null
+                        body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+                          VAR val i: kotlin.Int
+                            CALL .next type=kotlin.Int operator=FOR_LOOP_NEXT
+                              $this: GET_VAR tmp0_iterator type=kotlin.collections.IntIterator operator=null
+                          BLOCK type=kotlin.Unit operator=null
+                            CALL .yield type=kotlin.Unit operator=null
+                              $this: $RECEIVER of: <anonymous> type=GeneratorController<kotlin.Int>
+                              value: GET_VAR i type=kotlin.Int operator=null
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .<set-was> type=kotlin.Unit operator=EQ
+                        <set-?>: CONST Boolean type=kotlin.Boolean value='true'
+                CALLABLE_REFERENCE <anonymous> type=GeneratorController<kotlin.Int>.() -> kotlin.Unit operator=LAMBDA
+    FUN public fun </*0*/ T> generate(/*0*/ coroutine c: GeneratorController<T>.() -> kotlin.coroutines.Continuation<kotlin.Unit>): kotlin.sequences.Sequence<T>
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=generate
+          BLOCK type=generate.<no name provided><T> operator=OBJECT_LITERAL
+            CLASS CLASS <no name provided>
+              CONSTRUCTOR public constructor <no name provided>()
+                BLOCK_BODY
+                  DELEGATING_CONSTRUCTOR_CALL Any
+                  INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+              FUN public open override /*1*/ fun iterator(): kotlin.collections.Iterator<T>
+                BLOCK_BODY
+                  VAR val iterator: GeneratorController<T>
+                    CALL .<init> type=GeneratorController<T> operator=null
+                  CALL .setNextStep type=kotlin.Unit operator=null
+                    $this: GET_VAR iterator type=GeneratorController<T> operator=null
+                    step: CALL .invoke type=kotlin.coroutines.Continuation<kotlin.Unit> operator=INVOKE
+                      $this: GET_VAR c type=GeneratorController<T>.() -> kotlin.coroutines.Continuation<kotlin.Unit> operator=VARIABLE_AS_FUNCTION
+                      p1: GET_VAR iterator type=GeneratorController<T> operator=null
+                  RETURN type=kotlin.Nothing from=iterator
+                    GET_VAR iterator type=GeneratorController<T> operator=null
+            CALL .<init> type=generate.<no name provided><T> operator=OBJECT_LITERAL
+    CLASS CLASS GeneratorController
+      CONSTRUCTOR public constructor GeneratorController</*0*/ T>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL AbstractIterator
+          INSTANCE_INITIALIZER_CALL classDescriptor=GeneratorController
+      PROPERTY private final lateinit var nextStep: kotlin.coroutines.Continuation<kotlin.Unit>
+      FUN protected open override /*1*/ fun computeNext(): kotlin.Unit
+        BLOCK_BODY
+          CALL .resume type=kotlin.Unit operator=null
+            $this: CALL .<get-nextStep> type=kotlin.coroutines.Continuation<kotlin.Unit> operator=GET_PROPERTY
+              $this: THIS public final class GeneratorController</*0*/ T> : kotlin.collections.AbstractIterator<T> type=GeneratorController<T>
+            data: GET_OBJECT Unit type=kotlin.Unit
+      FUN public final fun setNextStep(/*0*/ step: kotlin.coroutines.Continuation<kotlin.Unit>): kotlin.Unit
+        BLOCK_BODY
+          CALL .<set-nextStep> type=kotlin.Unit operator=EQ
+            $this: THIS public final class GeneratorController</*0*/ T> : kotlin.collections.AbstractIterator<T> type=GeneratorController<T>
+            <set-?>: GET_VAR step type=kotlin.coroutines.Continuation<kotlin.Unit> operator=null
+      FUN public final suspend fun yield(/*0*/ value: T, /*1*/ c: kotlin.coroutines.Continuation<kotlin.Unit>): kotlin.Unit
+        BLOCK_BODY
+          CALL .setNext type=kotlin.Unit operator=null
+            $this: THIS public final class GeneratorController</*0*/ T> : kotlin.collections.AbstractIterator<T> type=GeneratorController<T>
+            value: GET_VAR value type=T operator=null
+          CALL .setNextStep type=kotlin.Unit operator=null
+            $this: THIS public final class GeneratorController</*0*/ T> : kotlin.collections.AbstractIterator<T> type=GeneratorController<T>
+            step: GET_VAR c type=kotlin.coroutines.Continuation<kotlin.Unit> operator=null
+      FUN public final operator fun handleResult(/*0*/ result: kotlin.Unit, /*1*/ c: kotlin.coroutines.Continuation<kotlin.Nothing>): kotlin.Unit
+        BLOCK_BODY
+          CALL .done type=kotlin.Unit operator=null
+            $this: THIS public final class GeneratorController</*0*/ T> : kotlin.collections.AbstractIterator<T> type=GeneratorController<T>

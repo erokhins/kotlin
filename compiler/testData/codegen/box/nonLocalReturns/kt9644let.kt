@@ -10,3 +10,5 @@ fun box(): String {
     foo()
     return "OK"
 }
+
+

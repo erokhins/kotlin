@@ -1,0 +1,93 @@
+MODULE <test-module>
+  FILE /delegatedPropertySetter.kt
+    CLASS ANNOTATION_CLASS First
+      CONSTRUCTOR public constructor First()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=First
+    CLASS CLASS MyClass
+      CONSTRUCTOR public constructor MyClass()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=MyClass
+      PROPERTY public final var x: kotlin.String
+        delegate: PROPERTY val `x$delegate`: Delegate
+          EXPRESSION_BODY
+            CALL .<init> type=Delegate operator=null
+        PROPERTY_GETTER public final fun <get-x>(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-x>
+              CALL .getValue type=kotlin.String operator=null
+                $this: GET_BACKING_FIELD x$delegate type=Delegate operator=null
+                  receiver: THIS public final class MyClass type=MyClass
+                t: THIS public final class MyClass type=MyClass
+                p: CALLABLE_REFERENCE x type=kotlin.reflect.KMutableProperty1<MyClass, kotlin.String> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+        PROPERTY_SETTER @First() public final fun <set-x>(/*0*/ <set-?>: kotlin.String): kotlin.Unit
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<set-x>
+              CALL .setValue type=kotlin.Unit operator=null
+                $this: GET_BACKING_FIELD x$delegate type=Delegate operator=null
+                  receiver: THIS public final class MyClass type=MyClass
+                t: THIS public final class MyClass type=MyClass
+                p: CALLABLE_REFERENCE x type=kotlin.reflect.KMutableProperty1<MyClass, kotlin.String> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+                i: GET_VAR <set-?> type=kotlin.String operator=null
+    CLASS CLASS Delegate
+      CONSTRUCTOR public constructor Delegate()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Delegate
+      FUN public final operator fun getValue(/*0*/ t: kotlin.Any?, /*1*/ p: kotlin.reflect.KProperty<*>): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getValue
+            CONST String type=kotlin.String value='OK'
+      FUN public final operator fun setValue(/*0*/ t: kotlin.Any?, /*1*/ p: kotlin.reflect.KProperty<*>, /*2*/ i: kotlin.String): kotlin.Unit
+        BLOCK_BODY
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val e: java.lang.Class<MyClass>
+          CALL .<get-java> type=java.lang.Class<MyClass> operator=GET_PROPERTY
+            $receiver: CLASS_REFERENCE MyClass type=kotlin.reflect.KClass<MyClass>
+        VAR val e1: kotlin.Array<(out) kotlin.Annotation!>!
+          CALL .getAnnotations type=kotlin.Array<(out) kotlin.Annotation!>! operator=null
+            $this: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Method
+              CALL .getDeclaredMethod type=java.lang.reflect.Method! operator=null
+                $this: GET_VAR e type=java.lang.Class<MyClass> operator=null
+                p0: CONST String type=kotlin.String value='setX'
+                p1: VARARG type=(kotlin.Array<(java.lang.Class<*>..java.lang.Class<*>?)>..kotlin.Array<out (java.lang.Class<*>..java.lang.Class<*>?)>?) varargElementType=(java.lang.Class<*>..java.lang.Class<*>?)
+                  CALL .<get-java> type=java.lang.Class<kotlin.String> operator=GET_PROPERTY
+                    $receiver: CLASS_REFERENCE String type=kotlin.reflect.KClass<kotlin.String>
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                $this: TYPE_OP operator=IMPLICIT_CAST typeOperand=kotlin.Array<kotlin.Annotation!>
+                  TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.Array<out kotlin.Annotation!>
+                    GET_VAR e1 type=kotlin.Array<(out) kotlin.Annotation!>! operator=null
+              arg1: CONST Int type=kotlin.Int value='1'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail E1 size: '
+              CALL .toList type=kotlin.collections.List<kotlin.Annotation!> operator=null
+                $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.Array<out kotlin.Annotation!>
+                  GET_VAR e1 type=kotlin.Array<(out) kotlin.Annotation!>! operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-java> type=java.lang.Class<out kotlin.Annotation!> operator=GET_PROPERTY
+                $receiver: CALL .<get-annotationClass> type=kotlin.reflect.KClass<out kotlin.Annotation!> operator=GET_PROPERTY
+                  $receiver: CALL .get type=kotlin.Annotation! operator=GET_ARRAY_ELEMENT
+                    $this: TYPE_OP operator=IMPLICIT_CAST typeOperand=kotlin.Array<kotlin.Annotation!>
+                      TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.Array<out kotlin.Annotation!>
+                        GET_VAR e1 type=kotlin.Array<(out) kotlin.Annotation!>! operator=null
+                    index: CONST Int type=kotlin.Int value='0'
+              arg1: CALL .<get-java> type=java.lang.Class<First> operator=GET_PROPERTY
+                $receiver: CLASS_REFERENCE First type=kotlin.reflect.KClass<First>
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail: '
+              CALL .toList type=kotlin.collections.List<kotlin.Annotation!> operator=null
+                $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.Array<out kotlin.Annotation!>
+                  GET_VAR e1 type=kotlin.Array<(out) kotlin.Annotation!>! operator=null
+        RETURN type=kotlin.Nothing from=box
+          CALL .<get-x> type=kotlin.String operator=GET_PROPERTY
+            $this: CALL .<init> type=MyClass operator=null

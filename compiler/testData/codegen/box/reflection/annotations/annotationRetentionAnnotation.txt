@@ -1,0 +1,44 @@
+MODULE <test-module>
+  FILE /annotationRetentionAnnotation.kt
+    CLASS ANNOTATION_CLASS Anno
+      CONSTRUCTOR public constructor Anno()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Anno
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val a: kotlin.collections.List<kotlin.Annotation>
+          CALL .<get-annotations> type=kotlin.collections.List<kotlin.Annotation> operator=GET_PROPERTY
+            $this: CLASS_REFERENCE Anno type=kotlin.reflect.KClass<Anno>
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_VAR a type=kotlin.collections.List<kotlin.Annotation> operator=null
+              arg1: CONST Int type=kotlin.Int value='1'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail 1: '
+              GET_VAR a type=kotlin.collections.List<kotlin.Annotation> operator=null
+        VAR val ann: kotlin.annotation.Retention
+          BLOCK type=kotlin.annotation.Retention operator=ELVIS
+            VAR val tmp0_elvis_lhs: kotlin.annotation.Retention?
+              TYPE_OP operator=SAFE_CAST typeOperand=kotlin.annotation.Retention
+                CALL .single type=kotlin.Annotation operator=null
+                  $receiver: GET_VAR a type=kotlin.collections.List<kotlin.Annotation> operator=null
+            WHEN type=kotlin.annotation.Retention operator=null
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_elvis_lhs type=kotlin.annotation.Retention? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: RETURN type=kotlin.Nothing from=box
+                STRING_CONCATENATION type=kotlin.String
+                  CONST String type=kotlin.String value='Fail 2: '
+                  CALL .single type=kotlin.Annotation operator=null
+                    $receiver: GET_VAR a type=kotlin.collections.List<kotlin.Annotation> operator=null
+              else: GET_VAR tmp0_elvis_lhs type=kotlin.annotation.Retention? operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_ENUM_VALUE RUNTIME type=kotlin.annotation.AnnotationRetention
+          actual: CALL .<get-value> type=kotlin.annotation.AnnotationRetention operator=GET_PROPERTY
+            $this: GET_VAR ann type=kotlin.annotation.Retention operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

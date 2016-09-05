@@ -1,0 +1,37 @@
+MODULE <test-module>
+  FILE /MapEntryWithSetValue.kt
+    CLASS CLASS MyMapEntry
+      CONSTRUCTOR public constructor MyMapEntry</*0*/ K, /*1*/ V>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=MyMapEntry
+      FUN public open override /*1*/ fun hashCode(): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=hashCode
+            CONST Int type=kotlin.Int value='0'
+      FUN public open override /*1*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=equals
+            CONST Boolean type=kotlin.Boolean value='false'
+      PROPERTY public open override /*1*/ val key: K
+        PROPERTY_GETTER public open override /*1*/ fun <get-key>(): K
+          BLOCK_BODY
+            THROW type=kotlin.Nothing
+              CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      PROPERTY public open override /*1*/ val value: V
+        PROPERTY_GETTER public open override /*1*/ fun <get-value>(): V
+          BLOCK_BODY
+            THROW type=kotlin.Nothing
+              CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public final fun setValue(/*0*/ value: V): V
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=setValue
+            GET_VAR value type=V operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .setValue type=kotlin.Int! operator=null
+          $this: TYPE_OP operator=CAST typeOperand=java.util.Map.Entry<kotlin.String, kotlin.Int>
+            CALL .<init> type=MyMapEntry<kotlin.String, kotlin.Int> operator=null
+          p0: CONST Int type=kotlin.Int value='1'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

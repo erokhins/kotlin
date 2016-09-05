@@ -7,3 +7,4 @@ fun box(): String  {
     if (1.foo(2, "b") != 2) return "fail"
     return "OK"
 }
+

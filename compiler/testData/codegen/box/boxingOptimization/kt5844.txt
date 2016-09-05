@@ -1,0 +1,54 @@
+MODULE <test-module>
+  FILE /kt5844.kt
+    FUN public fun test1(): kotlin.Unit
+      BLOCK_BODY
+        VAR val u: kotlin.Any
+          BLOCK type=kotlin.Any operator=WHEN
+            VAR val tmp0_subject: kotlin.Boolean
+              CONST Boolean type=kotlin.Boolean value='true'
+            WHEN type=kotlin.Any operator=WHEN
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_subject type=kotlin.Boolean operator=null
+                arg1: CONST Boolean type=kotlin.Boolean value='true'
+              then: CONST Int type=kotlin.Int value='42'
+              else: CONST Double type=kotlin.Double value='1.0'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Int type=kotlin.Int value='42'
+          actual: GET_VAR u type=kotlin.Any operator=null
+    FUN public fun test2(): kotlin.Unit
+      BLOCK_BODY
+        VAR val u: kotlin.Any
+          CALL .let type=kotlin.Any operator=null
+            $receiver: CONST Long type=kotlin.Long value='1'
+            block: BLOCK type=(kotlin.Long) -> kotlin.Any operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.Long): kotlin.Any
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    BLOCK type=kotlin.Any operator=WHEN
+                      VAR val tmp0_subject: kotlin.Long
+                        GET_VAR it type=kotlin.Long operator=null
+                      WHEN type=kotlin.Any operator=WHEN
+                        if: TYPE_OP operator=INSTANCEOF typeOperand=kotlin.Long
+                          GET_VAR tmp0_subject type=kotlin.Long operator=null
+                        then: WHEN type=kotlin.Long operator=IF
+                          if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                            arg0: CALL .toLong type=kotlin.Long operator=null
+                              $this: GET_VAR it type=kotlin.Long operator=null
+                            arg1: CONST Long type=kotlin.Long value='2'
+                          then: CALL .toLong type=kotlin.Long operator=null
+                            $this: GET_VAR it type=kotlin.Long operator=null
+                          else: CALL .times type=kotlin.Long operator=MUL
+                            $this: GET_VAR it type=kotlin.Long operator=null
+                            other: CONST Long type=kotlin.Long value='2'
+                        else: CALL .toDouble type=kotlin.Double operator=null
+                          $this: GET_VAR it type=kotlin.Long operator=null
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.Long) -> kotlin.Any operator=LAMBDA
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Long type=kotlin.Long value='2'
+          actual: GET_VAR u type=kotlin.Any operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .test1 type=kotlin.Unit operator=null
+        CALL .test2 type=kotlin.Unit operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

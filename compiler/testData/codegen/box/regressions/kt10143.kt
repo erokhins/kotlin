@@ -31,3 +31,5 @@ fun box(): String {
     Derived()
     return "OK"
 }
+
+

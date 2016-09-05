@@ -11,3 +11,5 @@ fun box() : String {
     }
     return if (run() == 1 && b == 2) "OK" else "fail"
 }
+
+

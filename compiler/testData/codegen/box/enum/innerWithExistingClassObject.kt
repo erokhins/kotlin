@@ -6,3 +6,5 @@ class A {
 }
 
 fun box() = A.E.OK.toString()
+
+

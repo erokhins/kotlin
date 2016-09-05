@@ -97,3 +97,5 @@ open class KList<E> : MutableList<E> {
 }
 
 fun box() = J.foo()
+
+

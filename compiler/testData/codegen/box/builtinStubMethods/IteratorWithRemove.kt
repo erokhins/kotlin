@@ -9,3 +9,5 @@ fun box(): String {
     (MyIterator<String>("") as java.util.Iterator<String>).remove()
     return "OK"
 }
+
+

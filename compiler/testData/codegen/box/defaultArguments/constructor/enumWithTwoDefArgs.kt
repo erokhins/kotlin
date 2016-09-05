@@ -12,3 +12,5 @@ fun box(): String {
    if (Foo.D.a != 2 || Foo.D.b != "a") return "fail"
    return "OK"
 }
+
+

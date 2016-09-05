@@ -1,0 +1,57 @@
+MODULE <test-module>
+  FILE /sortListOfStrings.kt
+    FUN public fun sort(/*0*/ list: kotlin.collections.MutableList<kotlin.String>, /*1*/ comparator: (kotlin.String, kotlin.String) -> kotlin.Int): kotlin.Unit
+      BLOCK_BODY
+        CALL .sort type=kotlin.Unit operator=null
+          p0: GET_VAR list type=kotlin.collections.MutableList<kotlin.String> operator=null
+          p1: BLOCK type=sort.<no name provided> operator=OBJECT_LITERAL
+            CLASS CLASS <no name provided>
+              CONSTRUCTOR public constructor <no name provided>()
+                BLOCK_BODY
+                  DELEGATING_CONSTRUCTOR_CALL Any
+                  INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+              FUN public open override /*1*/ fun compare(/*0*/ p0: kotlin.String, /*1*/ p1: kotlin.String): kotlin.Int
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=compare
+                    CALL .invoke type=kotlin.Int operator=INVOKE
+                      $this: GET_VAR comparator type=(kotlin.String, kotlin.String) -> kotlin.Int operator=VARIABLE_AS_FUNCTION
+                      p1: GET_VAR p0 type=kotlin.String operator=null
+                      p2: GET_VAR p1 type=kotlin.String operator=null
+            CALL .<init> type=sort.<no name provided> operator=OBJECT_LITERAL
+    FUN public fun compare(/*0*/ s1: kotlin.String, /*1*/ s2: kotlin.String): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=compare
+          CALL .compareTo type=kotlin.Int operator=null
+            $this: GET_VAR s1 type=kotlin.String operator=null
+            other: GET_VAR s2 type=kotlin.String operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val l: java.util.ArrayList<kotlin.String!>
+          CALL .<init> type=java.util.ArrayList<kotlin.String!> operator=null
+            p0: CALL .asList type=kotlin.collections.(Mutable)List<kotlin.String!>! operator=null
+              p0: VARARG type=(kotlin.Array<(kotlin.String..kotlin.String?)>..kotlin.Array<out (kotlin.String..kotlin.String?)>?) varargElementType=(kotlin.String..kotlin.String?)
+                CONST String type=kotlin.String value='d'
+                CONST String type=kotlin.String value='b'
+                CONST String type=kotlin.String value='c'
+                CONST String type=kotlin.String value='e'
+                CONST String type=kotlin.String value='a'
+        CALL .sort type=kotlin.Unit operator=null
+          list: GET_VAR l type=java.util.ArrayList<kotlin.String!> operator=null
+          comparator: CALLABLE_REFERENCE compare type=kotlin.reflect.KFunction2<kotlin.String, kotlin.String, kotlin.Int> operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR l type=java.util.ArrayList<kotlin.String!> operator=null
+              arg1: CALL .asList type=kotlin.collections.(Mutable)List<kotlin.String!>! operator=null
+                p0: VARARG type=(kotlin.Array<(kotlin.String..kotlin.String?)>..kotlin.Array<out (kotlin.String..kotlin.String?)>?) varargElementType=(kotlin.String..kotlin.String?)
+                  CONST String type=kotlin.String value='a'
+                  CONST String type=kotlin.String value='b'
+                  CONST String type=kotlin.String value='c'
+                  CONST String type=kotlin.String value='d'
+                  CONST String type=kotlin.String value='e'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail: '
+              GET_VAR l type=java.util.ArrayList<kotlin.String!> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

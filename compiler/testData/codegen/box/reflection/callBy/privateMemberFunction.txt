@@ -1,0 +1,48 @@
+MODULE <test-module>
+  FILE /privateMemberFunction.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN private final fun foo(/*0*/ default: kotlin.Any? = ...): kotlin.Unit
+        default: EXPRESSION_BODY
+          THIS public final class A type=A
+        BLOCK_BODY
+      FUN public final fun f(): kotlin.reflect.KFunction2<A, kotlin.Any?, kotlin.Unit>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=f
+            CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction2<A, kotlin.Any?, kotlin.Unit> operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val a: A
+          CALL .<init> type=A operator=null
+        VAR val f: kotlin.reflect.KFunction2<A, kotlin.Any?, kotlin.Unit>
+          CALL .f type=kotlin.reflect.KFunction2<A, kotlin.Any?, kotlin.Unit> operator=null
+            $this: GET_VAR a type=A operator=null
+        TRY_CATCH type=kotlin.Unit
+          try: BLOCK type=kotlin.Nothing operator=null
+            CALL .callBy type=kotlin.Unit operator=null
+              $this: GET_VAR f type=kotlin.reflect.KFunction2<A, kotlin.Any?, kotlin.Unit> operator=null
+              args: CALL .mapOf type=kotlin.collections.Map<kotlin.reflect.KParameter, A> operator=null
+                pair: CALL .to type=kotlin.Pair<kotlin.reflect.KParameter, A> operator=null
+                  $receiver: CALL .first type=kotlin.reflect.KParameter operator=null
+                    $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+                      $this: GET_VAR f type=kotlin.reflect.KFunction2<A, kotlin.Any?, kotlin.Unit> operator=null
+                  that: GET_VAR a type=A operator=null
+            RETURN type=kotlin.Nothing from=box
+              CONST String type=kotlin.String value='Fail: IllegalCallableAccessException should have been thrown'
+          catch e: BLOCK type=kotlin.Unit operator=null
+        CALL .<set-isAccessible> type=kotlin.Unit operator=EQ
+          $receiver: GET_VAR f type=kotlin.reflect.KFunction2<A, kotlin.Any?, kotlin.Unit> operator=null
+          value: CONST Boolean type=kotlin.Boolean value='true'
+        CALL .callBy type=kotlin.Unit operator=null
+          $this: GET_VAR f type=kotlin.reflect.KFunction2<A, kotlin.Any?, kotlin.Unit> operator=null
+          args: CALL .mapOf type=kotlin.collections.Map<kotlin.reflect.KParameter, A> operator=null
+            pair: CALL .to type=kotlin.Pair<kotlin.reflect.KParameter, A> operator=null
+              $receiver: CALL .first type=kotlin.reflect.KParameter operator=null
+                $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+                  $this: GET_VAR f type=kotlin.reflect.KFunction2<A, kotlin.Any?, kotlin.Unit> operator=null
+              that: GET_VAR a type=A operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

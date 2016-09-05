@@ -1,0 +1,48 @@
+MODULE <test-module>
+  FILE /kt3298.kt
+    PROPERTY public var result: kotlin.String
+      EXPRESSION_BODY
+        CONST String type=kotlin.String value=''
+    FUN public fun result(/*0*/ r: kotlin.String): kotlin.Unit
+      BLOCK_BODY
+        CALL .<set-result> type=kotlin.Unit operator=EQ
+          <set-?>: GET_VAR r type=kotlin.String operator=null
+    CLASS OBJECT Foo
+      CONSTRUCTOR private constructor Foo()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Foo
+      FUN private final operator fun kotlin.String.unaryPlus(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=unaryPlus
+            CALL .plus type=kotlin.String operator=PLUS
+              $this: CALL .plus type=kotlin.String operator=PLUS
+                $this: CONST String type=kotlin.String value='('
+                other: $RECEIVER of: unaryPlus type=kotlin.String
+              other: CONST String type=kotlin.String value=')'
+      FUN public final fun foo(): kotlin.Unit
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CALL .invoke type=kotlin.Unit operator=null
+              $this: BLOCK type=() -> kotlin.Unit operator=LAMBDA
+                FUN local final fun <anonymous>(): kotlin.Unit
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .result type=kotlin.Unit operator=null
+                        r: CALL .unaryPlus type=kotlin.String operator=UPLUS
+                          $this: THIS public object Foo type=Foo
+                          $receiver: CONST String type=kotlin.String value='Stuff'
+                CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Unit operator=LAMBDA
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .foo type=kotlin.Unit operator=null
+          $this: GET_OBJECT Foo type=Foo
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CALL .<get-result> type=kotlin.String operator=GET_PROPERTY
+              arg1: CONST String type=kotlin.String value='(Stuff)'
+            then: CONST String type=kotlin.String value='OK'
+            else: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail '
+              CALL .<get-result> type=kotlin.String operator=GET_PROPERTY

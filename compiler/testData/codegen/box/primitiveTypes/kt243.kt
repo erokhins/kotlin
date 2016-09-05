@@ -6,3 +6,5 @@ fun box() : String {
     val l = java.util.Collections.emptyList<Int>()
     return "OK"
 }
+
+

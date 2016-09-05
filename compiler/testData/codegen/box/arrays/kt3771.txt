@@ -1,0 +1,23 @@
+MODULE <test-module>
+  FILE /kt3771.kt
+    FUN public fun fill(/*0*/ dest: kotlin.Array<in kotlin.String>, /*1*/ v: kotlin.String): kotlin.Unit
+      BLOCK_BODY
+        CALL .set type=kotlin.Unit operator=EQ
+          $this: GET_VAR dest type=kotlin.Array<in kotlin.String> operator=null
+          index: CONST Int type=kotlin.Int value='0'
+          value: GET_VAR v type=kotlin.String operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val s: kotlin.String = "bar"
+          CONST String type=kotlin.String value='bar'
+        VAR val any: kotlin.Array<kotlin.Any>
+          CALL .arrayOf type=kotlin.Array<kotlin.Any> operator=null
+            elements: VARARG type=Array<out Any> varargElementType=Any
+              CONST Int type=kotlin.Int value='1'
+              CONST String type=kotlin.String value='foo'
+              CONST Double type=kotlin.Double value='1.234'
+        CALL .fill type=kotlin.Unit operator=null
+          dest: GET_VAR any type=kotlin.Array<kotlin.Any> operator=null
+          v: GET_VAR s type=kotlin.String operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

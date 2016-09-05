@@ -7,3 +7,5 @@ fun box(): String {
    if (foo?.isOk()!!) return "OK"
    return "fail"
 }
+
+

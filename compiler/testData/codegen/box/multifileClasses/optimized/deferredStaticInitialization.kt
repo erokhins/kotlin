@@ -37,3 +37,4 @@ package a
 
 val X2: Nothing =
         throw AssertionError("X2 should not be initialized")
+

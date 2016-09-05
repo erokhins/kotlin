@@ -1,0 +1,53 @@
+MODULE <test-module>
+  FILE /kt2416.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .contains type=kotlin.Boolean operator=IN
+          $this: CALL .rangeTo type=kotlin.ranges.IntRange operator=RANGE
+            $this: CONST Int type=kotlin.Int value='0'
+            other: CONST Int type=kotlin.Int value='9'
+          value: CONST Int type=kotlin.Int value='9'
+        VAR val intRange: kotlin.ranges.IntRange
+          CALL .rangeTo type=kotlin.ranges.IntRange operator=RANGE
+            $this: CONST Int type=kotlin.Int value='0'
+            other: CONST Int type=kotlin.Int value='9'
+        CALL .contains type=kotlin.Boolean operator=IN
+          $this: GET_VAR intRange type=kotlin.ranges.IntRange operator=null
+          value: CONST Int type=kotlin.Int value='9'
+        VAR val charRange: kotlin.ranges.CharRange
+          CALL .rangeTo type=kotlin.ranges.CharRange operator=RANGE
+            $this: CONST Char type=kotlin.Char value='0'
+            other: CONST Char type=kotlin.Char value='9'
+        CALL .contains type=kotlin.Boolean operator=IN
+          $this: GET_VAR charRange type=kotlin.ranges.CharRange operator=null
+          value: CONST Char type=kotlin.Char value='9'
+        VAR val byteRange: kotlin.ranges.IntRange
+          CALL .rangeTo type=kotlin.ranges.IntRange operator=RANGE
+            $this: CALL .toByte type=kotlin.Byte operator=null
+              $this: CONST Int type=kotlin.Int value='0'
+            other: CALL .toByte type=kotlin.Byte operator=null
+              $this: CONST Int type=kotlin.Int value='9'
+        CALL .contains type=kotlin.Boolean operator=IN
+          $this: GET_VAR byteRange type=kotlin.ranges.IntRange operator=null
+          value: CONST Int type=kotlin.Int value='9'
+        VAR val longRange: kotlin.ranges.LongRange
+          CALL .rangeTo type=kotlin.ranges.LongRange operator=RANGE
+            $this: CALL .toLong type=kotlin.Long operator=null
+              $this: CONST Int type=kotlin.Int value='0'
+            other: CALL .toLong type=kotlin.Long operator=null
+              $this: CONST Int type=kotlin.Int value='9'
+        CALL .contains type=kotlin.Boolean operator=IN
+          $this: GET_VAR longRange type=kotlin.ranges.LongRange operator=null
+          value: CALL .toLong type=kotlin.Long operator=null
+            $this: CONST Int type=kotlin.Int value='9'
+        VAR val shortRange: kotlin.ranges.IntRange
+          CALL .rangeTo type=kotlin.ranges.IntRange operator=RANGE
+            $this: CALL .toShort type=kotlin.Short operator=null
+              $this: CONST Int type=kotlin.Int value='0'
+            other: CALL .toShort type=kotlin.Short operator=null
+              $this: CONST Int type=kotlin.Int value='9'
+        CALL .contains type=kotlin.Boolean operator=IN
+          $this: GET_VAR shortRange type=kotlin.ranges.IntRange operator=null
+          value: CONST Int type=kotlin.Int value='9'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

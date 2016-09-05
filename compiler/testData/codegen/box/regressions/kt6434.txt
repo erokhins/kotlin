@@ -1,0 +1,118 @@
+MODULE <test-module>
+  FILE /kt6434.kt
+    CLASS ENUM_CLASS E
+      CONSTRUCTOR private constructor E()
+        BLOCK_BODY
+          ENUM_CONSTRUCTOR_CALL Enum super
+          INSTANCE_INITIALIZER_CALL classDescriptor=E
+      ENUM_ENTRY enum entry VALUE
+        init: ENUM_CONSTRUCTOR_CALL E VALUE
+      ENUM_ENTRY enum entry VALUE2
+        init: ENUM_CONSTRUCTOR_CALL E VALUE2
+      FUN public final /*synthesized*/ fun values(): kotlin.Array<E>
+        SYNTHETIC_BODY kind=ENUM_VALUES
+      FUN public final /*synthesized*/ fun valueOf(/*0*/ value: kotlin.String): E
+        SYNTHETIC_BODY kind=ENUM_VALUEOF
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C(/*0*/ nums: kotlin.collections.Map<E, kotlin.Int>)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD nums type=kotlin.Unit operator=null
+            receiver: THIS public final class C type=C
+            value: GET_VAR nums type=kotlin.collections.Map<E, kotlin.Int> operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      PROPERTY public final val nums: kotlin.collections.Map<E, kotlin.Int>
+        EXPRESSION_BODY
+          GET_VAR nums type=kotlin.collections.Map<E, kotlin.Int> operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final val normalizedNums: kotlin.collections.Map<E, kotlin.Float>
+        EXPRESSION_BODY
+          CALL .loadNormalizedNums type=kotlin.collections.Map<E, kotlin.Float> operator=null
+            $this: THIS public final class C type=C
+      FUN private final fun loadNormalizedNums(): kotlin.collections.Map<E, kotlin.Float>
+        BLOCK_BODY
+          VAR val vals: kotlin.collections.Collection<kotlin.Int>
+            CALL .<get-values> type=kotlin.collections.Collection<kotlin.Int> operator=GET_PROPERTY
+              $this: CALL .<get-nums> type=kotlin.collections.Map<E, kotlin.Int> operator=GET_PROPERTY
+                $this: THIS public final class C type=C
+          VAR val min: kotlin.Int
+            BLOCK type=kotlin.Int operator=EXCLEXCL
+              VAR val tmp0_notnull: kotlin.Int?
+                CALL .min type=kotlin.Int? operator=null
+                  $receiver: GET_VAR vals type=kotlin.collections.Collection<kotlin.Int> operator=null
+              WHEN type=kotlin.Int operator=null
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_notnull type=kotlin.Int? operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                else: GET_VAR tmp0_notnull type=kotlin.Int? operator=null
+          VAR val max: kotlin.Int
+            BLOCK type=kotlin.Int operator=EXCLEXCL
+              VAR val tmp1_notnull: kotlin.Int?
+                CALL .max type=kotlin.Int? operator=null
+                  $receiver: GET_VAR vals type=kotlin.collections.Collection<kotlin.Int> operator=null
+              WHEN type=kotlin.Int operator=null
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp1_notnull type=kotlin.Int? operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                else: GET_VAR tmp1_notnull type=kotlin.Int? operator=null
+          VAR val rangeDiff: kotlin.Float
+            CALL .toFloat type=kotlin.Float operator=null
+              $this: CALL .minus type=kotlin.Int operator=MINUS
+                $this: GET_VAR max type=kotlin.Int operator=null
+                other: GET_VAR min type=kotlin.Int operator=null
+          VAR val normalizedNums: kotlin.collections.Map<E, kotlin.Float>
+            CALL .toMap type=kotlin.collections.Map<E, kotlin.Float> operator=null
+              $receiver: CALL .map type=kotlin.collections.List<kotlin.Pair<E, kotlin.Float>> operator=null
+                $receiver: CALL .<get-nums> type=kotlin.collections.Map<E, kotlin.Int> operator=GET_PROPERTY
+                  $this: THIS public final class C type=C
+                transform: BLOCK type=(kotlin.collections.Map.Entry<E, kotlin.Int>) -> kotlin.Pair<E, kotlin.Float> operator=LAMBDA
+                  FUN local final fun <anonymous>(/*0*/ kvp: kotlin.collections.Map.Entry<E, kotlin.Int>): kotlin.Pair<E, kotlin.Float>
+                    BLOCK_BODY
+                      BLOCK type=kotlin.Unit operator=DESTRUCTURING_DECLARATION
+                        VAR val tmp0_container: kotlin.collections.Map.Entry<E, kotlin.Int>
+                          GET_VAR kvp type=kotlin.collections.Map.Entry<E, kotlin.Int> operator=null
+                        VAR val e: E
+                          CALL .component1 type=E operator=COMPONENT_N(index=1)
+                            $receiver: GET_VAR tmp0_container type=kotlin.collections.Map.Entry<E, kotlin.Int> operator=null
+                        VAR val num: kotlin.Int
+                          CALL .component2 type=kotlin.Int operator=COMPONENT_N(index=2)
+                            $receiver: GET_VAR tmp0_container type=kotlin.collections.Map.Entry<E, kotlin.Int> operator=null
+                      VAR val normalized: kotlin.Float
+                        CALL .div type=kotlin.Float operator=DIV
+                          $this: CALL .minus type=kotlin.Int operator=MINUS
+                            $this: GET_VAR num type=kotlin.Int operator=null
+                            other: GET_VAR min type=kotlin.Int operator=null
+                          other: GET_VAR rangeDiff type=kotlin.Float operator=null
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                        CALL .<init> type=kotlin.Pair<E, kotlin.Float> operator=null
+                          first: GET_VAR e type=E operator=null
+                          second: GET_VAR normalized type=kotlin.Float operator=null
+                  CALLABLE_REFERENCE <anonymous> type=(kotlin.collections.Map.Entry<E, kotlin.Int>) -> kotlin.Pair<E, kotlin.Float> operator=LAMBDA
+          RETURN type=kotlin.Nothing from=loadNormalizedNums
+            GET_VAR normalizedNums type=kotlin.collections.Map<E, kotlin.Float> operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val res: kotlin.String
+          CALL .joinToString type=kotlin.String operator=null
+            $receiver: CALL .sorted type=kotlin.collections.List<kotlin.Float> operator=null
+              $receiver: CALL .<get-values> type=kotlin.collections.Collection<kotlin.Float> operator=GET_PROPERTY
+                $this: CALL .<get-normalizedNums> type=kotlin.collections.Map<E, kotlin.Float> operator=GET_PROPERTY
+                  $this: CALL .<init> type=C operator=null
+                    nums: CALL .hashMapOf type=java.util.HashMap<E, kotlin.Int> operator=null
+                      pairs: VARARG type=Array<out Pair<E, Int>> varargElementType=Pair<E, Int>
+                        CALL .to type=kotlin.Pair<E, kotlin.Int> operator=null
+                          $receiver: GET_ENUM_VALUE VALUE type=E
+                          that: CONST Int type=kotlin.Int value='11'
+                        CALL .to type=kotlin.Pair<E, kotlin.Int> operator=null
+                          $receiver: GET_ENUM_VALUE VALUE2 type=E
+                          that: CONST Int type=kotlin.Int value='12'
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CONST String type=kotlin.String value='0.0, 1.0'
+              arg1: GET_VAR res type=kotlin.String operator=null
+            then: CONST String type=kotlin.String value='OK'
+            else: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail '
+              GET_VAR res type=kotlin.String operator=null

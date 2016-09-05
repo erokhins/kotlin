@@ -6,3 +6,5 @@ fun box(): String {
     val ref = Id<String>::invoke
     return ref(Id<String>(), "OK")
 }
+
+

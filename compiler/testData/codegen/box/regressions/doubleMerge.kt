@@ -8,3 +8,5 @@ fun foo(): Double {
 }
 
 fun box() = if (foo() > 3.5) "OK" else "Fail"
+
+

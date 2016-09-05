@@ -13,3 +13,4 @@ object Bug {
 fun box(): String {
     return Bug.run().toString()
 }
+

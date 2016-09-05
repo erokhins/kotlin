@@ -7,3 +7,4 @@ fun test(str: String): String {
 }
 
 fun box(): String = test("OK")
+

@@ -14,3 +14,5 @@ fun box(): String {
     D().test(10)
     return "OK"
 }
+
+

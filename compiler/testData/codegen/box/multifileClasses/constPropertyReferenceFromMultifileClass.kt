@@ -23,3 +23,5 @@ annotation class A
 
 @A
 const val OK: String = "OK"
+
+

@@ -17,3 +17,5 @@ class C {
 fun box(): String {
     return Test.invokeMethodWithPublicField()
 }
+
+

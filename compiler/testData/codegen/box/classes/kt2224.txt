@@ -1,0 +1,171 @@
+MODULE <test-module>
+  FILE /kt2224.kt
+    CLASS INTERFACE A
+      FUN public abstract fun foo(): kotlin.Int
+    CLASS CLASS B1
+      CONSTRUCTOR public constructor B1()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=B1
+      FUN public open override /*1*/ fun foo(): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CONST Int type=kotlin.Int value='10'
+    CLASS CLASS B2
+      CONSTRUCTOR public constructor B2(/*0*/ z: kotlin.Int)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD z type=kotlin.Unit operator=null
+            receiver: THIS public final class B2 : A type=B2
+            value: GET_VAR z type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=B2
+      PROPERTY public final val z: kotlin.Int
+        EXPRESSION_BODY
+          GET_VAR z type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public open override /*1*/ fun foo(): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CALL .<get-z> type=kotlin.Int operator=GET_PROPERTY
+              $this: THIS public final class B2 : A type=B2
+    FUN public fun f1(/*0*/ b: B1): kotlin.Int
+      BLOCK_BODY
+        VAR val o: f1.<no name provided>
+          BLOCK type=f1.<no name provided> operator=OBJECT_LITERAL
+            CLASS CLASS <no name provided>
+              CONSTRUCTOR public constructor <no name provided>()
+                BLOCK_BODY
+                  DELEGATING_CONSTRUCTOR_CALL Any
+                  INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+              PROPERTY val `<no name provided>$A$delegate`: B1
+                EXPRESSION_BODY
+                  GET_VAR b type=B1 operator=null
+              FUN public open override /*1*/ /*delegation*/ fun foo(): kotlin.Int
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=foo
+                    CALL .foo type=kotlin.Int operator=null
+                      $this: GET_VAR <no name provided>$A$delegate type=B1 operator=null
+            CALL .<init> type=f1.<no name provided> operator=OBJECT_LITERAL
+        RETURN type=kotlin.Nothing from=f1
+          CALL .foo type=kotlin.Int operator=null
+            $this: GET_VAR o type=f1.<no name provided> operator=null
+    FUN public fun f2(/*0*/ b: B2): kotlin.Int
+      BLOCK_BODY
+        VAR val o: f2.<no name provided>
+          BLOCK type=f2.<no name provided> operator=OBJECT_LITERAL
+            CLASS CLASS <no name provided>
+              CONSTRUCTOR public constructor <no name provided>()
+                BLOCK_BODY
+                  DELEGATING_CONSTRUCTOR_CALL Any
+                  INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+              PROPERTY val `<no name provided>$A$delegate`: B2
+                EXPRESSION_BODY
+                  CALL .<init> type=B2 operator=null
+                    z: CALL .<get-z> type=kotlin.Int operator=GET_PROPERTY
+                      $this: GET_VAR b type=B2 operator=null
+              FUN public open override /*1*/ /*delegation*/ fun foo(): kotlin.Int
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=foo
+                    CALL .foo type=kotlin.Int operator=null
+                      $this: GET_VAR <no name provided>$A$delegate type=B2 operator=null
+            CALL .<init> type=f2.<no name provided> operator=OBJECT_LITERAL
+        RETURN type=kotlin.Nothing from=f2
+          CALL .foo type=kotlin.Int operator=null
+            $this: GET_VAR o type=f2.<no name provided> operator=null
+    FUN public fun f3(/*0*/ b: B2, /*1*/ mult: kotlin.Int): kotlin.Int
+      BLOCK_BODY
+        VAR val o: f3.<no name provided>
+          BLOCK type=f3.<no name provided> operator=OBJECT_LITERAL
+            CLASS CLASS <no name provided>
+              CONSTRUCTOR public constructor <no name provided>()
+                BLOCK_BODY
+                  DELEGATING_CONSTRUCTOR_CALL Any
+                  INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+              PROPERTY val `<no name provided>$A$delegate`: B2
+                EXPRESSION_BODY
+                  CALL .<init> type=B2 operator=null
+                    z: CALL .times type=kotlin.Int operator=MUL
+                      $this: GET_VAR mult type=kotlin.Int operator=null
+                      other: CALL .<get-z> type=kotlin.Int operator=GET_PROPERTY
+                        $this: GET_VAR b type=B2 operator=null
+              FUN public open override /*1*/ /*delegation*/ fun foo(): kotlin.Int
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=foo
+                    CALL .foo type=kotlin.Int operator=null
+                      $this: GET_VAR <no name provided>$A$delegate type=B2 operator=null
+            CALL .<init> type=f3.<no name provided> operator=OBJECT_LITERAL
+        RETURN type=kotlin.Nothing from=f3
+          CALL .foo type=kotlin.Int operator=null
+            $this: GET_VAR o type=f3.<no name provided> operator=null
+    FUN public fun f4(/*0*/ b: B1, /*1*/ x: kotlin.Int, /*2*/ y: kotlin.Int, /*3*/ z: kotlin.Int): kotlin.Int
+      BLOCK_BODY
+        VAR val o: f4.<no name provided>
+          BLOCK type=f4.<no name provided> operator=OBJECT_LITERAL
+            CLASS CLASS <no name provided>
+              CONSTRUCTOR public constructor <no name provided>()
+                BLOCK_BODY
+                  DELEGATING_CONSTRUCTOR_CALL Any
+                  INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+              PROPERTY val `<no name provided>$A$delegate`: B1
+                EXPRESSION_BODY
+                  GET_VAR b type=B1 operator=null
+              FUN public open override /*1*/ /*delegation*/ fun foo(): kotlin.Int
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=foo
+                    CALL .foo type=kotlin.Int operator=null
+                      $this: GET_VAR <no name provided>$A$delegate type=B1 operator=null
+              FUN public final fun bar(): kotlin.Int
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=bar
+                    CALL .plus type=kotlin.Int operator=PLUS
+                      $this: CALL .plus type=kotlin.Int operator=PLUS
+                        $this: GET_VAR x type=kotlin.Int operator=null
+                        other: GET_VAR y type=kotlin.Int operator=null
+                      other: GET_VAR z type=kotlin.Int operator=null
+            CALL .<init> type=f4.<no name provided> operator=OBJECT_LITERAL
+        RETURN type=kotlin.Nothing from=f4
+          CALL .foo type=kotlin.Int operator=null
+            $this: GET_VAR o type=f4.<no name provided> operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .f1 type=kotlin.Int operator=null
+                b: CALL .<init> type=B1 operator=null
+              arg1: CONST Int type=kotlin.Int value='10'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail #1'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .f2 type=kotlin.Int operator=null
+                b: CALL .<init> type=B2 operator=null
+                  z: CONST Int type=kotlin.Int value='239'
+              arg1: CONST Int type=kotlin.Int value='239'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail #2'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .f3 type=kotlin.Int operator=null
+                b: CALL .<init> type=B2 operator=null
+                  z: CONST Int type=kotlin.Int value='239'
+                mult: CONST Int type=kotlin.Int value='2'
+              arg1: CALL .times type=kotlin.Int operator=MUL
+                $this: CONST Int type=kotlin.Int value='239'
+                other: CONST Int type=kotlin.Int value='2'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail #3'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .f4 type=kotlin.Int operator=null
+                b: CALL .<init> type=B1 operator=null
+                x: CONST Int type=kotlin.Int value='1'
+                y: CONST Int type=kotlin.Int value='2'
+                z: CONST Int type=kotlin.Int value='3'
+              arg1: CONST Int type=kotlin.Int value='10'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail #4'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

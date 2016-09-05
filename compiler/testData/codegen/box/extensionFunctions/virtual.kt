@@ -22,3 +22,5 @@ class Handler() {
 }
 
 fun box() : String = if(Handler().test(Request("239")) == "239") "OK" else "fail"
+
+

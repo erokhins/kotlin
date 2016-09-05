@@ -16,3 +16,5 @@ fun box(): String {
     val str = a.joinToString(" ")
     return if (str == "ROCK PAPER SCISSORS LIZARD SPOCK") "OK" else "Fail: $str"
 }
+
+

@@ -5,3 +5,4 @@ fun box(): String {
     if (x != "1") return "Fail: $x}"
     return "OK"
 }
+

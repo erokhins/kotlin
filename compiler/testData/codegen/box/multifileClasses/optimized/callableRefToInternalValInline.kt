@@ -14,3 +14,4 @@ internal val ok = run { "OK" }
 
 internal inline fun okInline() =
         ::ok.get()
+

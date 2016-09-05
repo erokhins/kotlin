@@ -10,3 +10,4 @@ fun box() : String {
     var s = "11test"
     return if (++s == "done") "OK" else "FAIL"
 }
+

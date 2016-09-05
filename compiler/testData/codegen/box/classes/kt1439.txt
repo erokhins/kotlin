@@ -1,0 +1,36 @@
+MODULE <test-module>
+  FILE /kt1439.kt
+    CLASS CLASS MyClass
+      CONSTRUCTOR public constructor MyClass(/*0*/ fnc: () -> kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD fnc type=kotlin.Unit operator=null
+            receiver: THIS public final class MyClass type=MyClass
+            value: GET_VAR fnc type=() -> kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=MyClass
+      PROPERTY public final var fnc: () -> kotlin.String
+        EXPRESSION_BODY
+          GET_VAR fnc type=() -> kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public final fun test(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=test
+            CALL .invoke type=kotlin.String operator=INVOKE
+              $this: CALL .<get-fnc> type=() -> kotlin.String operator=GET_PROPERTY
+                $this: THIS public final class MyClass type=MyClass
+    FUN public fun printtest(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=printtest
+          CONST String type=kotlin.String value='OK'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR var c: MyClass
+          CALL .<init> type=MyClass operator=null
+            fnc: BLOCK type=() -> kotlin.String operator=LAMBDA
+              FUN local final fun <anonymous>(): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .printtest type=kotlin.String operator=null
+              CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+        RETURN type=kotlin.Nothing from=box
+          CALL .test type=kotlin.String operator=null
+            $this: GET_VAR c type=MyClass operator=null

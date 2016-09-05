@@ -17,3 +17,4 @@ class A {
 fun box() : String {
     return A().a
 }
+

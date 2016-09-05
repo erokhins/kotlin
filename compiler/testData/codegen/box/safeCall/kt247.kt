@@ -36,3 +36,5 @@ class E() {
     fun foo() = 1
     fun bar() = this
 }
+
+

@@ -13,3 +13,4 @@ fun box(): String {
     Foo("!")
     return "OK"
 }
+

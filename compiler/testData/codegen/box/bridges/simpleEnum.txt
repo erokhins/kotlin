@@ -1,0 +1,68 @@
+MODULE <test-module>
+  FILE /simpleEnum.kt
+    CLASS INTERFACE A
+      FUN public open fun foo(/*0*/ t: T): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CONST String type=kotlin.String value='A'
+    CLASS ENUM_CLASS Z
+      CONSTRUCTOR private constructor Z(/*0*/ aname: kotlin.String)
+        BLOCK_BODY
+          ENUM_CONSTRUCTOR_CALL Enum super
+          SET_BACKING_FIELD aname type=kotlin.Unit operator=null
+            receiver: THIS public final enum class Z : kotlin.Enum<Z>, A<kotlin.String> type=Z
+            value: GET_VAR aname type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Z
+      PROPERTY public final val aname: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR aname type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      ENUM_ENTRY enum entry Z1
+        init: ENUM_CONSTRUCTOR_CALL Z Z1
+          aname: CONST String type=kotlin.String value='Z1'
+      ENUM_ENTRY enum entry Z2
+        init: ENUM_CONSTRUCTOR_CALL Z Z2
+          aname: CONST String type=kotlin.String value='Z2'
+      FUN public open override /*1*/ fun foo(/*0*/ t: kotlin.String): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CALL .<get-aname> type=kotlin.String operator=GET_PROPERTY
+              $this: THIS public final enum class Z : kotlin.Enum<Z>, A<kotlin.String> type=Z
+      FUN public final /*synthesized*/ fun values(): kotlin.Array<Z>
+        SYNTHETIC_BODY kind=ENUM_VALUES
+      FUN public final /*synthesized*/ fun valueOf(/*0*/ value: kotlin.String): Z
+        SYNTHETIC_BODY kind=ENUM_VALUEOF
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=WHEN
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .foo type=kotlin.String operator=null
+                  $this: GET_ENUM_VALUE Z1 type=Z
+                  t: CONST String type=kotlin.String value=''
+                arg1: CONST String type=kotlin.String value='Z1'
+            then: CONST String type=kotlin.String value='Fail #1'
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .foo type=kotlin.String operator=null
+                  $this: GET_ENUM_VALUE Z2 type=Z
+                  t: CONST String type=kotlin.String value=''
+                arg1: CONST String type=kotlin.String value='Z2'
+            then: CONST String type=kotlin.String value='Fail #2'
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .foo type=kotlin.String operator=null
+                  $this: TYPE_OP operator=CAST typeOperand=A<kotlin.String>
+                    GET_ENUM_VALUE Z1 type=Z
+                  t: CONST String type=kotlin.String value=''
+                arg1: CONST String type=kotlin.String value='Z1'
+            then: CONST String type=kotlin.String value='Fail #3'
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .foo type=kotlin.String operator=null
+                  $this: TYPE_OP operator=CAST typeOperand=A<kotlin.String>
+                    GET_ENUM_VALUE Z2 type=Z
+                  t: CONST String type=kotlin.String value=''
+                arg1: CONST String type=kotlin.String value='Z2'
+            then: CONST String type=kotlin.String value='Fail #4'
+            else: CONST String type=kotlin.String value='OK'

@@ -127,3 +127,5 @@ fun Reader.forEachChar(body : (Char) -> Unit) {
         body(i.toChar())
     } while(true)
 }
+
+

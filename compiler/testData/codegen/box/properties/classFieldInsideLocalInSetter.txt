@@ -1,0 +1,45 @@
+MODULE <test-module>
+  FILE /classFieldInsideLocalInSetter.kt
+    CLASS CLASS My
+      CONSTRUCTOR public constructor My()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=My
+      PROPERTY public final var my: kotlin.String
+        EXPRESSION_BODY
+          CONST String type=kotlin.String value='U'
+        PROPERTY_GETTER public final fun <get-my>(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-my>
+              CALL .invoke type=kotlin.String operator=null
+                $this: BLOCK type=() -> kotlin.String operator=LAMBDA
+                  FUN local final fun <anonymous>(): kotlin.String
+                    BLOCK_BODY
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                        GET_VAR field type=kotlin.String operator=null
+                  CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+        PROPERTY_SETTER public final fun <set-my>(/*0*/ arg: kotlin.String): kotlin.Unit
+          BLOCK_BODY
+            CLASS CLASS Local
+              CONSTRUCTOR public constructor Local()
+                BLOCK_BODY
+                  DELEGATING_CONSTRUCTOR_CALL Any
+                  INSTANCE_INITIALIZER_CALL classDescriptor=Local
+              FUN public final fun foo(): kotlin.Unit
+                BLOCK_BODY
+                  SET_BACKING_FIELD my type=kotlin.Unit operator=EQ
+                    value: CALL .plus type=kotlin.String operator=PLUS
+                      $this: GET_VAR arg type=kotlin.String operator=null
+                      other: CONST String type=kotlin.String value='K'
+            CALL .foo type=kotlin.Unit operator=null
+              $this: CALL .<init> type=My.<set-my>.Local operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val m: My
+          CALL .<init> type=My operator=null
+        CALL .<set-my> type=kotlin.Unit operator=EQ
+          $this: GET_VAR m type=My operator=null
+          arg: CONST String type=kotlin.String value='O'
+        RETURN type=kotlin.Nothing from=box
+          CALL .<get-my> type=kotlin.String operator=GET_PROPERTY
+            $this: GET_VAR m type=My operator=null

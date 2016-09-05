@@ -29,3 +29,4 @@ fun box(): String {
 fun test(a: Int, b: Long, c: () -> String): String {
     return { "${a}_${b}_${c()}"} ()
 }
+

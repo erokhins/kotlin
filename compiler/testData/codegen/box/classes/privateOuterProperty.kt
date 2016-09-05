@@ -25,3 +25,5 @@ class C{
 }
 
 fun box() = if (C().foo() == 3) "OK" else "NOT OK"
+
+

@@ -17,3 +17,5 @@ class C<T> {
 fun box(): String {
     return Test.invokeMethodWithOverloads()
 }
+
+

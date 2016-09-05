@@ -3,3 +3,5 @@ object A {
 }
 
 fun box(): String = A.result()
+
+

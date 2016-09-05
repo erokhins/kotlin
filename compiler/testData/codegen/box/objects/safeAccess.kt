@@ -5,3 +5,5 @@ object Test {
 }
 
 fun box(): String = Test?.a
+
+

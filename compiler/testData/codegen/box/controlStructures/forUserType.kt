@@ -112,3 +112,5 @@ class MyCollection4() {
         operator fun hasNext() = k > 0
     }
 }
+
+

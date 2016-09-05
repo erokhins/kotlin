@@ -1,0 +1,37 @@
+MODULE <test-module>
+  FILE /nestedIntersection.kt
+    CLASS INTERFACE In
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+    FUN public inline fun </*0*/ reified T : kotlin.Any> select(/*0*/ x: T, /*1*/ y: T): kotlin.String!
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=select
+          CALL .<get-simpleName> type=kotlin.String! operator=GET_PROPERTY
+            $receiver: CALL .<get-java> type=java.lang.Class<T> operator=GET_PROPERTY
+              $receiver: CLASS_REFERENCE T type=kotlin.reflect.KClass<T>
+    FUN public fun foo(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo
+          TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.String
+            CALL .select type=kotlin.String! operator=null
+              x: CALL .<init> type=A operator=null
+              y: CALL .<init> type=B operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .foo type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='In'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

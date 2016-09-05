@@ -11,3 +11,5 @@ fun box(): String {
     s[1, -1] = "OK"
     return s[2, -2]
 }
+
+

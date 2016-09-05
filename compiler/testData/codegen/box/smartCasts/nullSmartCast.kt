@@ -6,3 +6,5 @@ fun foo(i: Int?): String {
 }
 
 fun box() = foo(null)
+
+

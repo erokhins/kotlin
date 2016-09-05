@@ -26,3 +26,5 @@ private fun foox(): String = "O"
 // FILE: test.kt
 
 fun box(): String = Baz.baz()
+
+

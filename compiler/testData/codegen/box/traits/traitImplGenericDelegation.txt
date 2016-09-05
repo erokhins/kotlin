@@ -1,0 +1,36 @@
+MODULE <test-module>
+  FILE /traitImplGenericDelegation.kt
+    CLASS INTERFACE A
+      FUN public open fun foo(/*0*/ t: T, /*1*/ u: U): V?
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CONST Null type=kotlin.Nothing? value='null'
+    CLASS INTERFACE B
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      FUN public open override /*1*/ fun foo(/*0*/ t: kotlin.String, /*1*/ u: kotlin.Int): java.lang.Runnable?
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CALL .foo superQualifier=B type=java.lang.Runnable? operator=null
+              $this: THIS public final class C : B<kotlin.String, java.lang.Runnable> type=B<kotlin.String, java.lang.Runnable>
+              t: GET_VAR t type=kotlin.String operator=null
+              u: GET_VAR u type=kotlin.Int operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val x: java.lang.Runnable?
+          CALL .foo type=java.lang.Runnable? operator=null
+            $this: CALL .<init> type=C operator=null
+            t: CONST String type=kotlin.String value=''
+            u: CONST Int type=kotlin.Int value='0'
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: GET_VAR x type=java.lang.Runnable? operator=null
+              arg1: CONST Null type=kotlin.Nothing? value='null'
+            then: CONST String type=kotlin.String value='OK'
+            else: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail: '
+              GET_VAR x type=java.lang.Runnable? operator=null

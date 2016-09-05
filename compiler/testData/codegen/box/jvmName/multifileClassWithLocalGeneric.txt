@@ -1,0 +1,54 @@
+MODULE <test-module>
+  FILE /multifileClassWithLocalGeneric.kt
+    FUN public fun foo(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo
+          CALL .bar type=kotlin.String operator=null
+    FUN public fun bar(): kotlin.String
+      BLOCK_BODY
+        CLASS CLASS LocalGeneric
+          CONSTRUCTOR public constructor LocalGeneric</*0*/ T>(/*0*/ x: T)
+            BLOCK_BODY
+              DELEGATING_CONSTRUCTOR_CALL Any
+              SET_BACKING_FIELD x type=kotlin.Unit operator=null
+                receiver: THIS local open class LocalGeneric</*0*/ T> type=test.bar.LocalGeneric<T>
+                value: GET_VAR x type=T operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+              INSTANCE_INITIALIZER_CALL classDescriptor=LocalGeneric
+          PROPERTY public final val x: T
+            EXPRESSION_BODY
+              GET_VAR x type=T operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+        CLASS CLASS Derived
+          CONSTRUCTOR public constructor Derived(/*0*/ x: kotlin.String)
+            BLOCK_BODY
+              DELEGATING_CONSTRUCTOR_CALL LocalGeneric
+                x: GET_VAR x type=kotlin.String operator=null
+              INSTANCE_INITIALIZER_CALL classDescriptor=Derived
+        FUN local final fun </*0*/ T> test.bar.LocalGeneric<T>.extFun(): test.bar.LocalGeneric<T>
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=extFun
+              $RECEIVER of: extFun type=test.bar.LocalGeneric<T>
+        FUN local final fun </*0*/ T> localFun(/*0*/ x: test.bar.LocalGeneric<T>): test.bar.LocalGeneric<T>
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=localFun
+              GET_VAR x type=test.bar.LocalGeneric<T> operator=null
+        CLASS CLASS Local3
+          CONSTRUCTOR public constructor Local3()
+            BLOCK_BODY
+              DELEGATING_CONSTRUCTOR_CALL Any
+              INSTANCE_INITIALIZER_CALL classDescriptor=Local3
+          FUN public final fun </*0*/ T> method(/*0*/ x: test.bar.LocalGeneric<T>): T
+            BLOCK_BODY
+              RETURN type=kotlin.Nothing from=method
+                CALL .<get-x> type=T operator=GET_PROPERTY
+                  $this: GET_VAR x type=test.bar.LocalGeneric<T> operator=null
+        RETURN type=kotlin.Nothing from=bar
+          CALL .method type=kotlin.String operator=null
+            $this: CALL .<init> type=test.bar.Local3 operator=null
+            x: CALL .extFun type=test.bar.LocalGeneric<kotlin.String> operator=null
+              $receiver: CALL .localFun type=test.bar.LocalGeneric<kotlin.String> operator=null
+                x: CALL .<init> type=test.bar.Derived operator=null
+                  x: CONST String type=kotlin.String value='OK'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .foo type=kotlin.String operator=null

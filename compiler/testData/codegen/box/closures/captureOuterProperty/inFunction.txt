@@ -1,0 +1,42 @@
+MODULE <test-module>
+  FILE /inFunction.kt
+    CLASS INTERFACE T
+      FUN public abstract fun result(): kotlin.String
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A(/*0*/ x: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD x type=kotlin.Unit operator=null
+            receiver: THIS public final class A type=A
+            value: GET_VAR x type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public final val x: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR x type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public final fun foo(): T
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            BLOCK type=A.foo.<no name provided> operator=OBJECT_LITERAL
+              CLASS CLASS <no name provided>
+                CONSTRUCTOR public constructor <no name provided>()
+                  BLOCK_BODY
+                    DELEGATING_CONSTRUCTOR_CALL Any
+                    INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+                FUN public final fun bar(): kotlin.String
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=bar
+                      CALL .<get-x> type=kotlin.String operator=GET_PROPERTY
+                        $this: THIS public final class A type=A
+                FUN public open override /*1*/ fun result(): kotlin.String
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=result
+                      CALL .bar type=kotlin.String operator=null
+                        $this: THIS local final class <no name provided> : T type=A.foo.<no name provided>
+              CALL .<init> type=A.foo.<no name provided> operator=OBJECT_LITERAL
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .result type=kotlin.String operator=null
+            $this: CALL .foo type=T operator=null
+              $this: CALL .<init> type=A operator=null
+                x: CONST String type=kotlin.String value='OK'

@@ -8,3 +8,5 @@ class Bar<T : String>: Foo() {
 }
 
 fun box() = Bar<String>().foo()
+
+

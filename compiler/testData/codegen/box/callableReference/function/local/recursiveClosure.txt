@@ -1,0 +1,25 @@
+MODULE <test-module>
+  FILE /recursiveClosure.kt
+    FUN public fun foo(/*0*/ until: kotlin.Int): kotlin.String
+      BLOCK_BODY
+        FUN local final fun bar(/*0*/ x: kotlin.Int): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=bar
+              WHEN type=kotlin.String operator=IF
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR x type=kotlin.Int operator=null
+                  arg1: GET_VAR until type=kotlin.Int operator=null
+                then: CONST String type=kotlin.String value='OK'
+                else: CALL .bar type=kotlin.String operator=null
+                  x: CALL .plus type=kotlin.Int operator=PLUS
+                    $this: GET_VAR x type=kotlin.Int operator=null
+                    other: CONST Int type=kotlin.Int value='1'
+        RETURN type=kotlin.Nothing from=foo
+          CALL .invoke type=kotlin.String operator=null
+            $this: CALLABLE_REFERENCE bar type=kotlin.reflect.KFunction1<kotlin.Int, kotlin.String> operator=null
+            p1: CONST Int type=kotlin.Int value='0'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .foo type=kotlin.String operator=null
+            until: CONST Int type=kotlin.Int value='10'

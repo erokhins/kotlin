@@ -1,0 +1,41 @@
+MODULE <test-module>
+  FILE /A.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN protected open fun test(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=test
+            CONST String type=kotlin.String value='FAIL (A)'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .invoke type=kotlin.String operator=INVOKE
+            $this: CALL .<get-value> type=() -> kotlin.String operator=GET_PROPERTY
+              $this: CALL .<init> type=second.C operator=null
+  FILE /B.kt
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL A
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+      PROPERTY public final val value: () -> kotlin.String
+        EXPRESSION_BODY
+          BLOCK type=() -> kotlin.String operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.String
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .test type=kotlin.String operator=null
+                    $this: THIS public abstract class B : first.A type=second.B
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL B
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      FUN protected open override /*1*/ fun test(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=test
+            CONST String type=kotlin.String value='OK'

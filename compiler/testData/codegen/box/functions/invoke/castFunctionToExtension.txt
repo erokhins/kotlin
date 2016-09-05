@@ -1,0 +1,44 @@
+MODULE <test-module>
+  FILE /castFunctionToExtension.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val f: (kotlin.String) -> kotlin.String
+          BLOCK type=(kotlin.String) -> kotlin.String operator=ANONYMOUS_FUNCTION
+            FUN local final fun <no name provided>(/*0*/ s: kotlin.String): kotlin.String
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<no name provided>
+                  GET_VAR s type=kotlin.String operator=null
+            CALLABLE_REFERENCE <no name provided> type=(kotlin.String) -> kotlin.String operator=ANONYMOUS_FUNCTION
+        VAR val g: kotlin.String.() -> kotlin.String
+          TYPE_OP operator=CAST typeOperand=kotlin.String.() -> kotlin.String
+            GET_VAR f type=(kotlin.String) -> kotlin.String operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .invoke type=kotlin.String operator=INVOKE
+                $this: GET_VAR g type=kotlin.String.() -> kotlin.String operator=VARIABLE_AS_FUNCTION
+                $receiver: CONST String type=kotlin.String value='OK'
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail 1'
+        VAR val h: kotlin.String.() -> kotlin.String
+          BLOCK type=kotlin.String.() -> kotlin.String operator=ANONYMOUS_FUNCTION
+            FUN local final fun kotlin.String.<no name provided>(): kotlin.String
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<no name provided>
+                  $RECEIVER of: <no name provided> type=kotlin.String
+            CALLABLE_REFERENCE <no name provided> type=kotlin.String.() -> kotlin.String operator=ANONYMOUS_FUNCTION
+        VAR val i: (kotlin.String) -> kotlin.String
+          TYPE_OP operator=CAST typeOperand=(kotlin.String) -> kotlin.String
+            GET_VAR h type=kotlin.String.() -> kotlin.String operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .invoke type=kotlin.String operator=INVOKE
+                $this: GET_VAR i type=(kotlin.String) -> kotlin.String operator=VARIABLE_AS_FUNCTION
+                p1: CONST String type=kotlin.String value='OK'
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail 2'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

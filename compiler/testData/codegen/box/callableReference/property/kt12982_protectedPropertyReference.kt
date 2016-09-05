@@ -10,3 +10,5 @@ fun box(): String {
     x.set(foo, 42)
     return if (x.get(foo) == 42) "OK" else "Fail"
 }
+
+

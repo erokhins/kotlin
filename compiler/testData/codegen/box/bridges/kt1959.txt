@@ -1,0 +1,23 @@
+MODULE <test-module>
+  FILE /kt1959.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A</*0*/ T>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public open fun f(/*0*/ args: kotlin.Array<T>): kotlin.Unit
+        BLOCK_BODY
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL A
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+      FUN public open override /*1*/ fun f(/*0*/ args: kotlin.Array<kotlin.String>): kotlin.Unit
+        BLOCK_BODY
+    FUN public fun main(/*0*/ args: kotlin.Array<kotlin.String>): kotlin.Unit
+      BLOCK_BODY
+        CALL .<init> type=B operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

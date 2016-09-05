@@ -1,0 +1,86 @@
+MODULE <test-module>
+  FILE /kt9712.kt
+    CLASS OBJECT X
+      CONSTRUCTOR private constructor X()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=X
+      PROPERTY public final var O: kotlin.String
+        delegate: PROPERTY val `O$delegate`: kotlin.properties.ReadWriteProperty<kotlin.Any?, kotlin.String>
+          EXPRESSION_BODY
+            CALL .observable type=kotlin.properties.ReadWriteProperty<kotlin.Any?, kotlin.String> operator=null
+              $this: GET_OBJECT Delegates type=kotlin.properties.Delegates
+              initialValue: CONST String type=kotlin.String value='O'
+              onChange: BLOCK type=(kotlin.reflect.KProperty<*>, kotlin.String, kotlin.String) -> kotlin.Unit operator=LAMBDA
+                FUN local final fun <anonymous>(/*0*/ prop: kotlin.reflect.KProperty<*>, /*1*/ old: kotlin.String, /*2*/ new: kotlin.String): kotlin.Unit
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KProperty<*>, kotlin.String, kotlin.String) -> kotlin.Unit operator=LAMBDA
+        PROPERTY_GETTER public final fun <get-O>(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-O>
+              CALL .getValue type=kotlin.String operator=null
+                $this: GET_BACKING_FIELD O$delegate type=kotlin.properties.ReadWriteProperty<kotlin.Any?, kotlin.String> operator=null
+                  receiver: THIS public object X type=X
+                thisRef: THIS public object X type=X
+                property: CALLABLE_REFERENCE O type=kotlin.reflect.KMutableProperty1<X, kotlin.String> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+        PROPERTY_SETTER private final fun <set-O>(/*0*/ <set-?>: kotlin.String): kotlin.Unit
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<set-O>
+              CALL .setValue type=kotlin.Unit operator=null
+                $this: GET_BACKING_FIELD O$delegate type=kotlin.properties.ReadWriteProperty<kotlin.Any?, kotlin.String> operator=null
+                  receiver: THIS public object X type=X
+                thisRef: THIS public object X type=X
+                property: CALLABLE_REFERENCE O type=kotlin.reflect.KMutableProperty1<X, kotlin.String> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+                value: GET_VAR <set-?> type=kotlin.String operator=null
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public final var K: kotlin.String
+        delegate: PROPERTY val `K$delegate`: kotlin.properties.ReadWriteProperty<kotlin.Any?, kotlin.String>
+          EXPRESSION_BODY
+            CALL .observable type=kotlin.properties.ReadWriteProperty<kotlin.Any?, kotlin.String> operator=null
+              $this: GET_OBJECT Delegates type=kotlin.properties.Delegates
+              initialValue: CONST String type=kotlin.String value=''
+              onChange: BLOCK type=(kotlin.reflect.KProperty<*>, kotlin.String, kotlin.String) -> kotlin.Unit operator=LAMBDA
+                FUN local final fun <anonymous>(/*0*/ prop: kotlin.reflect.KProperty<*>, /*1*/ old: kotlin.String, /*2*/ new: kotlin.String): kotlin.Unit
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KProperty<*>, kotlin.String, kotlin.String) -> kotlin.Unit operator=LAMBDA
+        PROPERTY_GETTER public final fun <get-K>(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-K>
+              CALL .getValue type=kotlin.String operator=null
+                $this: GET_BACKING_FIELD K$delegate type=kotlin.properties.ReadWriteProperty<kotlin.Any?, kotlin.String> operator=null
+                  receiver: THIS public open class A type=A
+                thisRef: THIS public open class A type=A
+                property: CALLABLE_REFERENCE K type=kotlin.reflect.KMutableProperty1<A, kotlin.String> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+        PROPERTY_SETTER protected final fun <set-K>(/*0*/ <set-?>: kotlin.String): kotlin.Unit
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<set-K>
+              CALL .setValue type=kotlin.Unit operator=null
+                $this: GET_BACKING_FIELD K$delegate type=kotlin.properties.ReadWriteProperty<kotlin.Any?, kotlin.String> operator=null
+                  receiver: THIS public open class A type=A
+                thisRef: THIS public open class A type=A
+                property: CALLABLE_REFERENCE K type=kotlin.reflect.KMutableProperty1<A, kotlin.String> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+                value: GET_VAR <set-?> type=kotlin.String operator=null
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL A
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+      ANONYMOUS_INITIALIZER B
+        BLOCK_BODY
+          CALL .<set-K> type=kotlin.Unit operator=EQ
+            $this: THIS public final class B : A type=B
+            <set-?>: CONST String type=kotlin.String value='K'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .plus type=kotlin.String operator=PLUS
+            $this: CALL .<get-O> type=kotlin.String operator=GET_PROPERTY
+              $this: GET_OBJECT X type=X
+            other: CALL .<get-K> type=kotlin.String operator=GET_PROPERTY
+              $this: CALL .<init> type=B operator=null

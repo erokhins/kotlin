@@ -21,3 +21,5 @@ fun box(): String {
     if (!Impl().bar) return "Fail get"
     return "OK"
 }
+
+

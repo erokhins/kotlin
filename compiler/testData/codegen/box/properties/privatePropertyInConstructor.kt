@@ -16,3 +16,5 @@ fun box(): String {
     A("abc", 3.14).foo()
     return "OK"
 }
+
+

@@ -29,3 +29,5 @@ fun box(): String {
     if (N().C().test4() != 100) return "test4 fail";
     return "OK";
 }
+
+

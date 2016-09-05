@@ -1,0 +1,37 @@
+MODULE <test-module>
+  FILE /localClassCaptureExtensionReceiver.kt
+    CLASS CLASS Outer
+      CONSTRUCTOR public constructor Outer()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Outer
+      FUN public final fun kotlin.String.id(): kotlin.String
+        BLOCK_BODY
+          CLASS CLASS Local
+            CONSTRUCTOR public constructor Local(/*0*/ unused: kotlin.Long)
+              BLOCK_BODY
+                DELEGATING_CONSTRUCTOR_CALL Any
+                INSTANCE_INITIALIZER_CALL classDescriptor=Local
+            FUN public final fun result(): kotlin.String
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=result
+                  $RECEIVER of: id type=kotlin.String
+            FUN public final fun outer(): Outer
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=outer
+                  THIS public final class Outer type=Outer
+          RETURN type=kotlin.Nothing from=id
+            CALL .result type=kotlin.String operator=null
+              $this: CALL .<init> type=Outer.id.Local operator=null
+                unused: CONST Long type=kotlin.Long value='42'
+      FUN public final fun result(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=result
+            CALL .id type=kotlin.String operator=null
+              $this: THIS public final class Outer type=Outer
+              $receiver: CONST String type=kotlin.String value='OK'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .result type=kotlin.String operator=null
+            $this: CALL .<init> type=Outer operator=null

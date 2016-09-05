@@ -66,3 +66,5 @@ fun box(): String {
 public fun checkVisibility(field: Field, visibility: Int) {
     assertNotEquals(field.modifiers and visibility, 0, "Field ${field} has wrong visibility")
 }
+
+

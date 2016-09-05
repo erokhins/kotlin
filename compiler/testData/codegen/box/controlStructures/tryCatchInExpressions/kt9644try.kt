@@ -19,3 +19,4 @@ fun box(): String {
     test1()
     return test2()
 }
+

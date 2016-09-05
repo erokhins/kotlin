@@ -13,3 +13,5 @@ fun box(): String {
     val s = txt.subSequence(0, 1)
     return if ("$s" == "h") "OK" else "Fail: $s"
 }
+
+

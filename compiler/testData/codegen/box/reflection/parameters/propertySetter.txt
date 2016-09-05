@@ -1,0 +1,42 @@
+MODULE <test-module>
+  FILE /propertySetter.kt
+    PROPERTY public var default: kotlin.Int
+      EXPRESSION_BODY
+        CONST Int type=kotlin.Int value='0'
+    PROPERTY public var defaultAnnotated: kotlin.Int
+      EXPRESSION_BODY
+        CONST Int type=kotlin.Int value='0'
+      PROPERTY_SETTER public fun <set-defaultAnnotated>(/*0*/ <set-?>: kotlin.Int): kotlin.Unit
+    PROPERTY public var custom: kotlin.Int
+      EXPRESSION_BODY
+        CONST Int type=kotlin.Int value='0'
+      PROPERTY_SETTER public fun <set-custom>(/*0*/ myName: kotlin.Int): kotlin.Unit
+        BLOCK_BODY
+    FUN public fun checkPropertySetterParam(/*0*/ property: kotlin.reflect.KMutableProperty<*>, /*1*/ name: kotlin.String?): kotlin.Unit
+      BLOCK_BODY
+        VAR val parameter: kotlin.reflect.KParameter
+          CALL .single type=kotlin.reflect.KParameter operator=null
+            $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+              $this: CALL .<get-setter> type=kotlin.reflect.KMutableProperty.Setter<out kotlin.Any?> operator=GET_PROPERTY
+                $this: GET_VAR property type=kotlin.reflect.KMutableProperty<*> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Int type=kotlin.Int value='0'
+          actual: CALL .<get-index> type=kotlin.Int operator=GET_PROPERTY
+            $this: GET_VAR parameter type=kotlin.reflect.KParameter operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_VAR name type=kotlin.String? operator=null
+          actual: CALL .<get-name> type=kotlin.String? operator=GET_PROPERTY
+            $this: GET_VAR parameter type=kotlin.reflect.KParameter operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .checkPropertySetterParam type=kotlin.Unit operator=null
+          property: CALLABLE_REFERENCE default type=kotlin.reflect.KMutableProperty0<kotlin.Int> operator=null
+          name: CONST Null type=kotlin.Nothing? value='null'
+        CALL .checkPropertySetterParam type=kotlin.Unit operator=null
+          property: CALLABLE_REFERENCE defaultAnnotated type=kotlin.reflect.KMutableProperty0<kotlin.Int> operator=null
+          name: CONST Null type=kotlin.Nothing? value='null'
+        CALL .checkPropertySetterParam type=kotlin.Unit operator=null
+          property: CALLABLE_REFERENCE custom type=kotlin.reflect.KMutableProperty0<kotlin.Int> operator=null
+          name: CONST String type=kotlin.String value='myName'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

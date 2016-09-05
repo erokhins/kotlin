@@ -31,3 +31,5 @@ fun box(): String {
     val test = JavaClass().test()
     return if (test == "OK10") "OK" else "fail : $test"
 }
+
+

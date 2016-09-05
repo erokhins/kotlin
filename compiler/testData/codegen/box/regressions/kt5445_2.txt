@@ -1,0 +1,26 @@
+MODULE <test-module>
+  FILE /1.kt
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL A
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      FUN public final fun a(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=a
+            CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+              $this: THIS public final class C : test.A type=test2.C
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .a type=kotlin.String operator=null
+            $this: CALL .<init> type=test2.C operator=null
+  FILE /2.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY @kotlin.jvm.JvmField() protected final val s: kotlin.String = "OK"
+        EXPRESSION_BODY
+          CONST String type=kotlin.String value='OK'

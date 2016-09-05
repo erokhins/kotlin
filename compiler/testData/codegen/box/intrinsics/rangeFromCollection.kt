@@ -4,3 +4,5 @@ fun box(): String {
     list[0].start
     return "OK"
 }
+
+

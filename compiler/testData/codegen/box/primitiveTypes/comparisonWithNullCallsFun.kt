@@ -11,3 +11,5 @@ fun box(): String {
     if (foo(null) == foo(null)) {}
     return if (entered == 4) "OK" else "Fail $entered"
 }
+
+

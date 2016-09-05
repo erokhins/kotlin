@@ -13,3 +13,5 @@ fun box(): String {
     if (x3[0][0][0] != 1) return "fail 3"
     return "OK"
 }
+
+

@@ -1,0 +1,75 @@
+MODULE <test-module>
+  FILE /kt3190.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val test: Cached<kotlin.Int, kotlin.Int>
+          CALL .<init> type=Cached<kotlin.Int, kotlin.Int> operator=null
+            generate: BLOCK type=(kotlin.Int) -> kotlin.Int operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.Int): kotlin.Int
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .plus type=kotlin.Int operator=PLUS
+                      $this: GET_VAR it type=kotlin.Int operator=null
+                      other: CONST Int type=kotlin.Int value='2'
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> kotlin.Int operator=LAMBDA
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CALL .invoke type=kotlin.Int operator=INVOKE
+                $this: GET_VAR test type=Cached<kotlin.Int, kotlin.Int> operator=VARIABLE_AS_FUNCTION
+                p1: CONST Int type=kotlin.Int value='1'
+              arg1: CONST Int type=kotlin.Int value='3'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='fail'
+    CLASS CLASS Cached
+      CONSTRUCTOR public constructor Cached</*0*/ K, /*1*/ V>(/*0*/ generate: (K) -> V)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD generate type=kotlin.Unit operator=null
+            receiver: THIS public final class Cached</*0*/ K, /*1*/ V> : (K) -> V type=Cached<K, V>
+            value: GET_VAR generate type=(K) -> V operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Cached
+      PROPERTY private final val generate: (K) -> V
+        EXPRESSION_BODY
+          GET_VAR generate type=(K) -> V operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final val store: java.util.HashMap<K, V>
+        EXPRESSION_BODY
+          CALL .<init> type=java.util.HashMap<K, V> operator=null
+      FUN public open override /*1*/ fun invoke(/*0*/ p1: K): V
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=invoke
+            CALL .getOrPut type=V operator=null
+              $receiver: CALL .<get-store> type=java.util.HashMap<K, V> operator=GET_PROPERTY
+                $this: THIS public final class Cached</*0*/ K, /*1*/ V> : (K) -> V type=Cached<K, V>
+              key: GET_VAR p1 type=K operator=null
+              defaultValue: BLOCK type=() -> V operator=LAMBDA
+                FUN local final fun <anonymous>(): V
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .invoke type=V operator=INVOKE
+                        $this: CALL .<get-generate> type=(K) -> V operator=GET_PROPERTY
+                          $this: THIS public final class Cached</*0*/ K, /*1*/ V> : (K) -> V type=Cached<K, V>
+                        p1: GET_VAR p1 type=K operator=null
+                CALLABLE_REFERENCE <anonymous> type=() -> V operator=LAMBDA
+    FUN public fun </*0*/ K, /*1*/ V> kotlin.collections.MutableMap<K, V>.getOrPut(/*0*/ key: K, /*1*/ defaultValue: () -> V): V
+      BLOCK_BODY
+        WHEN type=kotlin.Nothing operator=IF
+          if: CALL .containsKey type=kotlin.Boolean operator=null
+            $this: $RECEIVER of: getOrPut type=kotlin.collections.MutableMap<K, V>
+            key: GET_VAR key type=K operator=null
+          then: BLOCK type=kotlin.Nothing operator=null
+            RETURN type=kotlin.Nothing from=getOrPut
+              TYPE_OP operator=CAST typeOperand=V
+                CALL .get type=V? operator=null
+                  $this: $RECEIVER of: getOrPut type=kotlin.collections.MutableMap<K, V>
+                  key: GET_VAR key type=K operator=null
+          else: BLOCK type=kotlin.Nothing operator=null
+            VAR val answer: V
+              CALL .invoke type=V operator=INVOKE
+                $this: GET_VAR defaultValue type=() -> V operator=VARIABLE_AS_FUNCTION
+            CALL .put type=V? operator=null
+              $this: $RECEIVER of: getOrPut type=kotlin.collections.MutableMap<K, V>
+              key: GET_VAR key type=K operator=null
+              value: GET_VAR answer type=V operator=null
+            RETURN type=kotlin.Nothing from=getOrPut
+              GET_VAR answer type=V operator=null

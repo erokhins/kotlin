@@ -1,0 +1,115 @@
+MODULE <test-module>
+  FILE /isSubclassOfIsSuperclassOf.kt
+    CLASS CLASS Klass
+      CONSTRUCTOR public constructor Klass()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Klass
+    CLASS INTERFACE Interface
+    CLASS CLASS Bar
+      CONSTRUCTOR public constructor Bar()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Klass
+          INSTANCE_INITIALIZER_CALL classDescriptor=Bar
+    FUN public fun check(/*0*/ subclass: kotlin.reflect.KClass<*>, /*1*/ superclass: kotlin.reflect.KClass<*>, /*2*/ shouldBeSubclass: kotlin.Boolean): kotlin.Unit
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: GET_VAR shouldBeSubclass type=kotlin.Boolean operator=null
+          then: BLOCK type=kotlin.Unit operator=null
+            CALL .assertTrue type=kotlin.Unit operator=null
+              actual: CALL .isSubclassOf type=kotlin.Boolean operator=null
+                $receiver: GET_VAR subclass type=kotlin.reflect.KClass<*> operator=null
+                base: GET_VAR superclass type=kotlin.reflect.KClass<*> operator=null
+            CALL .assertTrue type=kotlin.Unit operator=null
+              actual: CALL .isSuperclassOf type=kotlin.Boolean operator=null
+                $receiver: GET_VAR superclass type=kotlin.reflect.KClass<*> operator=null
+                derived: GET_VAR subclass type=kotlin.reflect.KClass<*> operator=null
+          else: BLOCK type=kotlin.Unit operator=null
+            CALL .assertFalse type=kotlin.Unit operator=null
+              actual: CALL .isSubclassOf type=kotlin.Boolean operator=null
+                $receiver: GET_VAR subclass type=kotlin.reflect.KClass<*> operator=null
+                base: GET_VAR superclass type=kotlin.reflect.KClass<*> operator=null
+            CALL .assertFalse type=kotlin.Unit operator=null
+              actual: CALL .isSuperclassOf type=kotlin.Boolean operator=null
+                $receiver: GET_VAR superclass type=kotlin.reflect.KClass<*> operator=null
+                derived: GET_VAR subclass type=kotlin.reflect.KClass<*> operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .check type=kotlin.Unit operator=null
+          subclass: CLASS_REFERENCE Any type=kotlin.reflect.KClass<kotlin.Any>
+          superclass: CLASS_REFERENCE Any type=kotlin.reflect.KClass<kotlin.Any>
+          shouldBeSubclass: CONST Boolean type=kotlin.Boolean value='true'
+        CALL .check type=kotlin.Unit operator=null
+          subclass: CLASS_REFERENCE String type=kotlin.reflect.KClass<kotlin.String>
+          superclass: CLASS_REFERENCE Any type=kotlin.reflect.KClass<kotlin.Any>
+          shouldBeSubclass: CONST Boolean type=kotlin.Boolean value='true'
+        CALL .check type=kotlin.Unit operator=null
+          subclass: CLASS_REFERENCE Any type=kotlin.reflect.KClass<kotlin.Any>
+          superclass: CLASS_REFERENCE String type=kotlin.reflect.KClass<kotlin.String>
+          shouldBeSubclass: CONST Boolean type=kotlin.Boolean value='false'
+        CALL .check type=kotlin.Unit operator=null
+          subclass: CLASS_REFERENCE String type=kotlin.reflect.KClass<kotlin.String>
+          superclass: CLASS_REFERENCE String type=kotlin.reflect.KClass<kotlin.String>
+          shouldBeSubclass: CONST Boolean type=kotlin.Boolean value='true'
+        CALL .check type=kotlin.Unit operator=null
+          subclass: CLASS_REFERENCE Int type=kotlin.reflect.KClass<kotlin.Int>
+          superclass: CLASS_REFERENCE Int type=kotlin.reflect.KClass<kotlin.Int>
+          shouldBeSubclass: CONST Boolean type=kotlin.Boolean value='true'
+        CALL .check type=kotlin.Unit operator=null
+          subclass: CLASS_REFERENCE Int type=kotlin.reflect.KClass<kotlin.Int>
+          superclass: CLASS_REFERENCE Any type=kotlin.reflect.KClass<kotlin.Any>
+          shouldBeSubclass: CONST Boolean type=kotlin.Boolean value='true'
+        CALL .check type=kotlin.Unit operator=null
+          subclass: CLASS_REFERENCE List type=kotlin.reflect.KClass<kotlin.collections.List<*>>
+          superclass: CLASS_REFERENCE Collection type=kotlin.reflect.KClass<kotlin.collections.Collection<*>>
+          shouldBeSubclass: CONST Boolean type=kotlin.Boolean value='true'
+        CALL .check type=kotlin.Unit operator=null
+          subclass: CLASS_REFERENCE List type=kotlin.reflect.KClass<kotlin.collections.List<*>>
+          superclass: CLASS_REFERENCE Iterable type=kotlin.reflect.KClass<kotlin.collections.Iterable<*>>
+          shouldBeSubclass: CONST Boolean type=kotlin.Boolean value='true'
+        CALL .check type=kotlin.Unit operator=null
+          subclass: CLASS_REFERENCE Collection type=kotlin.reflect.KClass<kotlin.collections.Collection<*>>
+          superclass: CLASS_REFERENCE Iterable type=kotlin.reflect.KClass<kotlin.collections.Iterable<*>>
+          shouldBeSubclass: CONST Boolean type=kotlin.Boolean value='true'
+        CALL .check type=kotlin.Unit operator=null
+          subclass: CLASS_REFERENCE Set type=kotlin.reflect.KClass<kotlin.collections.Set<*>>
+          superclass: CLASS_REFERENCE List type=kotlin.reflect.KClass<kotlin.collections.List<*>>
+          shouldBeSubclass: CONST Boolean type=kotlin.Boolean value='false'
+        CALL .check type=kotlin.Unit operator=null
+          subclass: CLASS_REFERENCE Array type=kotlin.reflect.KClass<kotlin.Array<kotlin.String>>
+          superclass: CLASS_REFERENCE Array type=kotlin.reflect.KClass<kotlin.Array<kotlin.Any>>
+          shouldBeSubclass: CONST Boolean type=kotlin.Boolean value='false'
+        CALL .check type=kotlin.Unit operator=null
+          subclass: CLASS_REFERENCE Array type=kotlin.reflect.KClass<kotlin.Array<kotlin.Any>>
+          superclass: CLASS_REFERENCE Array type=kotlin.reflect.KClass<kotlin.Array<kotlin.String>>
+          shouldBeSubclass: CONST Boolean type=kotlin.Boolean value='false'
+        CALL .check type=kotlin.Unit operator=null
+          subclass: CLASS_REFERENCE Function3 type=kotlin.reflect.KClass<kotlin.Function3<*, *, *, *>>
+          superclass: CLASS_REFERENCE Function4 type=kotlin.reflect.KClass<kotlin.Function4<*, *, *, *, *>>
+          shouldBeSubclass: CONST Boolean type=kotlin.Boolean value='false'
+        CALL .check type=kotlin.Unit operator=null
+          subclass: CLASS_REFERENCE Function4 type=kotlin.reflect.KClass<kotlin.Function4<*, *, *, *, *>>
+          superclass: CLASS_REFERENCE Function3 type=kotlin.reflect.KClass<kotlin.Function3<*, *, *, *>>
+          shouldBeSubclass: CONST Boolean type=kotlin.Boolean value='false'
+        CALL .check type=kotlin.Unit operator=null
+          subclass: CLASS_REFERENCE Bar type=kotlin.reflect.KClass<Bar>
+          superclass: CLASS_REFERENCE Klass type=kotlin.reflect.KClass<Klass>
+          shouldBeSubclass: CONST Boolean type=kotlin.Boolean value='true'
+        CALL .check type=kotlin.Unit operator=null
+          subclass: CLASS_REFERENCE Bar type=kotlin.reflect.KClass<Bar>
+          superclass: CLASS_REFERENCE Interface type=kotlin.reflect.KClass<Interface<*>>
+          shouldBeSubclass: CONST Boolean type=kotlin.Boolean value='true'
+        CALL .check type=kotlin.Unit operator=null
+          subclass: CLASS_REFERENCE Klass type=kotlin.reflect.KClass<Klass>
+          superclass: CLASS_REFERENCE Bar type=kotlin.reflect.KClass<Bar>
+          shouldBeSubclass: CONST Boolean type=kotlin.Boolean value='false'
+        CALL .check type=kotlin.Unit operator=null
+          subclass: CLASS_REFERENCE Interface type=kotlin.reflect.KClass<Interface<*>>
+          superclass: CLASS_REFERENCE Bar type=kotlin.reflect.KClass<Bar>
+          shouldBeSubclass: CONST Boolean type=kotlin.Boolean value='false'
+        CALL .check type=kotlin.Unit operator=null
+          subclass: CLASS_REFERENCE Klass type=kotlin.reflect.KClass<Klass>
+          superclass: CLASS_REFERENCE Interface type=kotlin.reflect.KClass<Interface<*>>
+          shouldBeSubclass: CONST Boolean type=kotlin.Boolean value='false'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -1,0 +1,145 @@
+MODULE <test-module>
+  FILE /immutableRemove.kt
+    CLASS INTERFACE ImmutableCollection
+      FUN public abstract fun add(/*0*/ element: @kotlin.UnsafeVariance() E): ImmutableCollection<E>
+      FUN public abstract fun addAll(/*0*/ elements: kotlin.collections.Collection<@kotlin.UnsafeVariance() E>): ImmutableCollection<E>
+      FUN public abstract fun remove(/*0*/ element: @kotlin.UnsafeVariance() E): ImmutableCollection<E>
+    CLASS CLASS ImmutableCollectionmpl
+      CONSTRUCTOR public constructor ImmutableCollectionmpl</*0*/ E>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=ImmutableCollectionmpl
+      PROPERTY public open override /*1*/ val size: kotlin.Int
+        PROPERTY_GETTER public open override /*1*/ fun <get-size>(): kotlin.Int
+          BLOCK_BODY
+            THROW type=kotlin.Nothing
+              CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun contains(/*0*/ element: E): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+              p0: CONST String type=kotlin.String value='not implemented'
+      FUN public open override /*1*/ fun containsAll(/*0*/ elements: kotlin.collections.Collection<E>): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+              p0: CONST String type=kotlin.String value='not implemented'
+      FUN public open override /*1*/ fun isEmpty(): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+              p0: CONST String type=kotlin.String value='not implemented'
+      FUN public open override /*1*/ fun iterator(): kotlin.collections.Iterator<E>
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+              p0: CONST String type=kotlin.String value='not implemented'
+      FUN public open override /*1*/ fun add(/*0*/ element: E): ImmutableCollection<E>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=add
+            THIS public final class ImmutableCollectionmpl</*0*/ E> : ImmutableCollection<E> type=ImmutableCollectionmpl<E>
+      FUN public open override /*1*/ fun addAll(/*0*/ elements: kotlin.collections.Collection<E>): ImmutableCollection<E>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=addAll
+            THIS public final class ImmutableCollectionmpl</*0*/ E> : ImmutableCollection<E> type=ImmutableCollectionmpl<E>
+      FUN public open override /*1*/ fun remove(/*0*/ element: E): ImmutableCollection<E>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=remove
+            THIS public final class ImmutableCollectionmpl</*0*/ E> : ImmutableCollection<E> type=ImmutableCollectionmpl<E>
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val c: ImmutableCollectionmpl<kotlin.String>
+          CALL .<init> type=ImmutableCollectionmpl<kotlin.String> operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQEQ
+            arg0: CALL .EQEQEQ type=kotlin.Boolean operator=EXCLEQEQ
+              arg0: CALL .remove type=ImmutableCollection<kotlin.String> operator=null
+                $this: GET_VAR c type=ImmutableCollectionmpl<kotlin.String> operator=null
+                element: CONST String type=kotlin.String value=''
+              arg1: GET_VAR c type=ImmutableCollectionmpl<kotlin.String> operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 1'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQEQ
+            arg0: CALL .EQEQEQ type=kotlin.Boolean operator=EXCLEQEQ
+              arg0: CALL .add type=ImmutableCollection<kotlin.String> operator=null
+                $this: GET_VAR c type=ImmutableCollectionmpl<kotlin.String> operator=null
+                element: CONST String type=kotlin.String value=''
+              arg1: GET_VAR c type=ImmutableCollectionmpl<kotlin.String> operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 2'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQEQ
+            arg0: CALL .EQEQEQ type=kotlin.Boolean operator=EXCLEQEQ
+              arg0: CALL .addAll type=ImmutableCollection<kotlin.String> operator=null
+                $this: GET_VAR c type=ImmutableCollectionmpl<kotlin.String> operator=null
+                elements: CALL .<init> type=java.util.ArrayList<kotlin.String> operator=null
+              arg1: GET_VAR c type=ImmutableCollectionmpl<kotlin.String> operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 3'
+        VAR val method: java.lang.reflect.Method!
+          CALL .single type=java.lang.reflect.Method! operator=null
+            $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.Array<out java.lang.reflect.Method!>
+              CALL .<get-methods> type=kotlin.Array<(out) java.lang.reflect.Method!>! operator=GET_PROPERTY
+                $receiver: CALL .<get-javaClass> type=java.lang.Class<ImmutableCollectionmpl<kotlin.String>> operator=GET_PROPERTY
+                  $receiver: GET_VAR c type=ImmutableCollectionmpl<kotlin.String> operator=null
+            predicate: BLOCK type=(java.lang.reflect.Method!) -> kotlin.Boolean operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: java.lang.reflect.Method!): kotlin.Boolean
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    WHEN type=kotlin.Boolean operator=ANDAND
+                      if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                        arg0: CALL .<get-name> type=kotlin.String! operator=GET_PROPERTY
+                          $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Method
+                            GET_VAR it type=java.lang.reflect.Method! operator=null
+                        arg1: CONST String type=kotlin.String value='remove'
+                      then: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                        arg0: CALL .<get-returnType> type=java.lang.Class<*>! operator=GET_PROPERTY
+                          $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Method
+                            GET_VAR it type=java.lang.reflect.Method! operator=null
+                        arg1: CALL .<get-javaPrimitiveType> type=java.lang.Class<kotlin.Boolean>? operator=GET_PROPERTY
+                          $receiver: CLASS_REFERENCE Boolean type=kotlin.reflect.KClass<kotlin.Boolean>
+                      else: CONST Boolean type=kotlin.Boolean value='false'
+              CALLABLE_REFERENCE <anonymous> type=(java.lang.reflect.Method!) -> kotlin.Boolean operator=LAMBDA
+        TRY_CATCH type=kotlin.Unit
+          try: BLOCK type=kotlin.Nothing operator=null
+            CALL .invoke type=kotlin.Any! operator=null
+              $this: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Method
+                GET_VAR method type=java.lang.reflect.Method! operator=null
+              p0: GET_VAR c type=ImmutableCollectionmpl<kotlin.String> operator=null
+              p1: VARARG type=(kotlin.Array<(kotlin.Any..kotlin.Any?)>..kotlin.Array<out (kotlin.Any..kotlin.Any?)>?) varargElementType=(kotlin.Any..kotlin.Any?)
+                CONST String type=kotlin.String value=''
+            RETURN type=kotlin.Nothing from=box
+              CONST String type=kotlin.String value='fail 4'
+          catch e: BLOCK type=kotlin.Unit operator=null
+            WHEN type=kotlin.Unit operator=IF
+              if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                  arg0: CALL .<get-message> type=kotlin.String? operator=GET_PROPERTY
+                    $this: BLOCK type=kotlin.Throwable operator=EXCLEXCL
+                      VAR val tmp0_notnull: kotlin.Throwable?
+                        CALL .<get-cause> type=kotlin.Throwable? operator=GET_PROPERTY
+                          $this: GET_VAR e type=java.lang.reflect.InvocationTargetException operator=null
+                      WHEN type=kotlin.Throwable operator=null
+                        if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                          arg0: GET_VAR tmp0_notnull type=kotlin.Throwable? operator=null
+                          arg1: CONST Null type=kotlin.Nothing? value='null'
+                        then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                        else: GET_VAR tmp0_notnull type=kotlin.Throwable? operator=null
+                  arg1: CONST String type=kotlin.String value='Mutating immutable collection'
+              then: RETURN type=kotlin.Nothing from=box
+                STRING_CONCATENATION type=kotlin.String
+                  CONST String type=kotlin.String value='fail 5: '
+                  CALL .<get-message> type=kotlin.String? operator=GET_PROPERTY
+                    $this: BLOCK type=kotlin.Throwable operator=EXCLEXCL
+                      VAR val tmp1_notnull: kotlin.Throwable?
+                        CALL .<get-cause> type=kotlin.Throwable? operator=GET_PROPERTY
+                          $this: GET_VAR e type=java.lang.reflect.InvocationTargetException operator=null
+                      WHEN type=kotlin.Throwable operator=null
+                        if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                          arg0: GET_VAR tmp1_notnull type=kotlin.Throwable? operator=null
+                          arg1: CONST Null type=kotlin.Nothing? value='null'
+                        then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                        else: GET_VAR tmp1_notnull type=kotlin.Throwable? operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

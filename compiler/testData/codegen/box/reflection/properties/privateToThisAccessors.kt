@@ -17,3 +17,5 @@ class K<in T : String> {
 }
 
 fun box() = K<String>().run()
+
+

@@ -7,3 +7,5 @@ fun box(): String {
   if (6 in LongR()) return "fail 2"
   return "OK"
 }
+
+

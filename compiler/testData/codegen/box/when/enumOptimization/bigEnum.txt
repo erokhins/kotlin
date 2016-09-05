@@ -1,0 +1,183 @@
+MODULE <test-module>
+  FILE /bigEnum.kt
+    CLASS ENUM_CLASS BigEnum
+      CONSTRUCTOR private constructor BigEnum()
+        BLOCK_BODY
+          ENUM_CONSTRUCTOR_CALL Enum super
+          INSTANCE_INITIALIZER_CALL classDescriptor=BigEnum
+      ENUM_ENTRY enum entry ITEM1
+        init: ENUM_CONSTRUCTOR_CALL BigEnum ITEM1
+      ENUM_ENTRY enum entry ITEM2
+        init: ENUM_CONSTRUCTOR_CALL BigEnum ITEM2
+      ENUM_ENTRY enum entry ITEM3
+        init: ENUM_CONSTRUCTOR_CALL BigEnum ITEM3
+      ENUM_ENTRY enum entry ITEM4
+        init: ENUM_CONSTRUCTOR_CALL BigEnum ITEM4
+      ENUM_ENTRY enum entry ITEM5
+        init: ENUM_CONSTRUCTOR_CALL BigEnum ITEM5
+      ENUM_ENTRY enum entry ITEM6
+        init: ENUM_CONSTRUCTOR_CALL BigEnum ITEM6
+      ENUM_ENTRY enum entry ITEM7
+        init: ENUM_CONSTRUCTOR_CALL BigEnum ITEM7
+      ENUM_ENTRY enum entry ITEM8
+        init: ENUM_CONSTRUCTOR_CALL BigEnum ITEM8
+      ENUM_ENTRY enum entry ITEM9
+        init: ENUM_CONSTRUCTOR_CALL BigEnum ITEM9
+      ENUM_ENTRY enum entry ITEM10
+        init: ENUM_CONSTRUCTOR_CALL BigEnum ITEM10
+      ENUM_ENTRY enum entry ITEM11
+        init: ENUM_CONSTRUCTOR_CALL BigEnum ITEM11
+      ENUM_ENTRY enum entry ITEM12
+        init: ENUM_CONSTRUCTOR_CALL BigEnum ITEM12
+      ENUM_ENTRY enum entry ITEM13
+        init: ENUM_CONSTRUCTOR_CALL BigEnum ITEM13
+      ENUM_ENTRY enum entry ITEM14
+        init: ENUM_CONSTRUCTOR_CALL BigEnum ITEM14
+      ENUM_ENTRY enum entry ITEM15
+        init: ENUM_CONSTRUCTOR_CALL BigEnum ITEM15
+      ENUM_ENTRY enum entry ITEM16
+        init: ENUM_CONSTRUCTOR_CALL BigEnum ITEM16
+      ENUM_ENTRY enum entry ITEM17
+        init: ENUM_CONSTRUCTOR_CALL BigEnum ITEM17
+      ENUM_ENTRY enum entry ITEM18
+        init: ENUM_CONSTRUCTOR_CALL BigEnum ITEM18
+      ENUM_ENTRY enum entry ITEM19
+        init: ENUM_CONSTRUCTOR_CALL BigEnum ITEM19
+      ENUM_ENTRY enum entry ITEM20
+        init: ENUM_CONSTRUCTOR_CALL BigEnum ITEM20
+      FUN public final /*synthesized*/ fun values(): kotlin.Array<BigEnum>
+        SYNTHETIC_BODY kind=ENUM_VALUES
+      FUN public final /*synthesized*/ fun valueOf(/*0*/ value: kotlin.String): BigEnum
+        SYNTHETIC_BODY kind=ENUM_VALUEOF
+    FUN public fun bar1(/*0*/ x: BigEnum): kotlin.String
+      BLOCK_BODY
+        BLOCK type=kotlin.Nothing operator=WHEN
+          VAR val tmp0_subject: BigEnum
+            GET_VAR x type=BigEnum operator=null
+          WHEN type=kotlin.Nothing operator=WHEN
+            if: WHEN type=kotlin.Boolean operator=WHEN_COMMA
+              if: WHEN type=kotlin.Boolean operator=WHEN_COMMA
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_subject type=BigEnum operator=null
+                  arg1: GET_ENUM_VALUE ITEM1 type=BigEnum
+                then: CONST Boolean type=kotlin.Boolean value='true'
+                else: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_subject type=BigEnum operator=null
+                  arg1: GET_ENUM_VALUE ITEM2 type=BigEnum
+              then: CONST Boolean type=kotlin.Boolean value='true'
+              else: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_subject type=BigEnum operator=null
+                arg1: GET_ENUM_VALUE ITEM3 type=BigEnum
+            then: RETURN type=kotlin.Nothing from=bar1
+              CONST String type=kotlin.String value='123'
+            if: WHEN type=kotlin.Boolean operator=WHEN_COMMA
+              if: WHEN type=kotlin.Boolean operator=WHEN_COMMA
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_subject type=BigEnum operator=null
+                  arg1: GET_ENUM_VALUE ITEM4 type=BigEnum
+                then: CONST Boolean type=kotlin.Boolean value='true'
+                else: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_subject type=BigEnum operator=null
+                  arg1: GET_ENUM_VALUE ITEM5 type=BigEnum
+              then: CONST Boolean type=kotlin.Boolean value='true'
+              else: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_subject type=BigEnum operator=null
+                arg1: GET_ENUM_VALUE ITEM6 type=BigEnum
+            then: RETURN type=kotlin.Nothing from=bar1
+              CONST String type=kotlin.String value='456'
+        RETURN type=kotlin.Nothing from=bar1
+          CONST String type=kotlin.String value='-1'
+    FUN public fun bar2(/*0*/ x: BigEnum): kotlin.String
+      BLOCK_BODY
+        BLOCK type=kotlin.Nothing operator=WHEN
+          VAR val tmp0_subject: BigEnum
+            GET_VAR x type=BigEnum operator=null
+          WHEN type=kotlin.Nothing operator=WHEN
+            if: WHEN type=kotlin.Boolean operator=WHEN_COMMA
+              if: WHEN type=kotlin.Boolean operator=WHEN_COMMA
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_subject type=BigEnum operator=null
+                  arg1: GET_ENUM_VALUE ITEM7 type=BigEnum
+                then: CONST Boolean type=kotlin.Boolean value='true'
+                else: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_subject type=BigEnum operator=null
+                  arg1: GET_ENUM_VALUE ITEM8 type=BigEnum
+              then: CONST Boolean type=kotlin.Boolean value='true'
+              else: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_subject type=BigEnum operator=null
+                arg1: GET_ENUM_VALUE ITEM9 type=BigEnum
+            then: RETURN type=kotlin.Nothing from=bar2
+              CONST String type=kotlin.String value='789'
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: GET_VAR tmp0_subject type=BigEnum operator=null
+              arg1: GET_ENUM_VALUE ITEM10 type=BigEnum
+            then: RETURN type=kotlin.Nothing from=bar2
+              CONST String type=kotlin.String value='10'
+            if: WHEN type=kotlin.Boolean operator=WHEN_COMMA
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_subject type=BigEnum operator=null
+                arg1: GET_ENUM_VALUE ITEM11 type=BigEnum
+              then: CONST Boolean type=kotlin.Boolean value='true'
+              else: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_subject type=BigEnum operator=null
+                arg1: GET_ENUM_VALUE ITEM12 type=BigEnum
+            then: RETURN type=kotlin.Nothing from=bar2
+              CONST String type=kotlin.String value='1112'
+            else: RETURN type=kotlin.Nothing from=bar2
+              CONST String type=kotlin.String value='-1'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='123'
+          actual: CALL .bar1 type=kotlin.String operator=null
+            x: GET_ENUM_VALUE ITEM1 type=BigEnum
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='123'
+          actual: CALL .bar1 type=kotlin.String operator=null
+            x: GET_ENUM_VALUE ITEM2 type=BigEnum
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='123'
+          actual: CALL .bar1 type=kotlin.String operator=null
+            x: GET_ENUM_VALUE ITEM3 type=BigEnum
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='456'
+          actual: CALL .bar1 type=kotlin.String operator=null
+            x: GET_ENUM_VALUE ITEM4 type=BigEnum
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='456'
+          actual: CALL .bar1 type=kotlin.String operator=null
+            x: GET_ENUM_VALUE ITEM5 type=BigEnum
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='456'
+          actual: CALL .bar1 type=kotlin.String operator=null
+            x: GET_ENUM_VALUE ITEM6 type=BigEnum
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='-1'
+          actual: CALL .bar1 type=kotlin.String operator=null
+            x: GET_ENUM_VALUE ITEM7 type=BigEnum
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='789'
+          actual: CALL .bar2 type=kotlin.String operator=null
+            x: GET_ENUM_VALUE ITEM7 type=BigEnum
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='789'
+          actual: CALL .bar2 type=kotlin.String operator=null
+            x: GET_ENUM_VALUE ITEM8 type=BigEnum
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='789'
+          actual: CALL .bar2 type=kotlin.String operator=null
+            x: GET_ENUM_VALUE ITEM9 type=BigEnum
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='10'
+          actual: CALL .bar2 type=kotlin.String operator=null
+            x: GET_ENUM_VALUE ITEM10 type=BigEnum
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='1112'
+          actual: CALL .bar2 type=kotlin.String operator=null
+            x: GET_ENUM_VALUE ITEM11 type=BigEnum
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='1112'
+          actual: CALL .bar2 type=kotlin.String operator=null
+            x: GET_ENUM_VALUE ITEM12 type=BigEnum
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

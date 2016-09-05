@@ -11,3 +11,5 @@ open class A {
 
 
 fun box(): String = A().foo()
+
+

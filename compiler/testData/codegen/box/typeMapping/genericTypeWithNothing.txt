@@ -1,0 +1,325 @@
+MODULE <test-module>
+  FILE /genericTypeWithNothing.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A</*0*/ T>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B</*0*/ T, /*1*/ Y, /*2*/ U>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+    CLASS CLASS TestRaw
+      CONSTRUCTOR public constructor TestRaw()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=TestRaw
+      PROPERTY public final val a1: foo.A<kotlin.Nothing>
+        EXPRESSION_BODY
+          CALL .<init> type=foo.A<kotlin.Nothing> operator=null
+      PROPERTY public final val a2: foo.A<kotlin.Nothing>?
+        EXPRESSION_BODY
+          CALL .<init> type=foo.A<kotlin.Nothing> operator=null
+      PROPERTY public final val a3: foo.A<kotlin.Nothing?>
+        EXPRESSION_BODY
+          CALL .<init> type=foo.A<kotlin.Nothing?> operator=null
+      PROPERTY public final val a4: foo.A<kotlin.Nothing?>?
+        EXPRESSION_BODY
+          CALL .<init> type=foo.A<kotlin.Nothing?> operator=null
+      PROPERTY public final var b1: foo.B<kotlin.Nothing, kotlin.Int, kotlin.Int>
+        EXPRESSION_BODY
+          CALL .<init> type=foo.B<kotlin.Nothing, kotlin.Int, kotlin.Int> operator=null
+      PROPERTY public final var b2: foo.B<kotlin.String, kotlin.Nothing, kotlin.Int>
+        EXPRESSION_BODY
+          CALL .<init> type=foo.B<kotlin.String, kotlin.Nothing, kotlin.Int> operator=null
+      PROPERTY public final val l: kotlin.collections.List<kotlin.Nothing>
+        EXPRESSION_BODY
+          CALL .listOf type=kotlin.collections.List<kotlin.Nothing> operator=null
+      FUN public final fun test1(/*0*/ a: foo.A<kotlin.Nothing?>, /*1*/ b: foo.B<kotlin.Nothing, kotlin.String, foo.A<kotlin.Int>>): foo.A<kotlin.Nothing>?
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=test1
+            CALL .<init> type=foo.A<kotlin.Nothing> operator=null
+      FUN public final fun test2(/*0*/ a: foo.A<kotlin.Nothing?>?, /*1*/ b: foo.B<kotlin.Int, kotlin.String, kotlin.Nothing>): foo.B<kotlin.Int?, kotlin.Int?, kotlin.Nothing?>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=test2
+            CALL .<init> type=foo.B<kotlin.Int?, kotlin.Int?, kotlin.Nothing?> operator=null
+    CLASS CLASS TestNotRaw
+      CONSTRUCTOR public constructor TestNotRaw()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=TestNotRaw
+      PROPERTY public final val a1: foo.A<kotlin.String>
+        EXPRESSION_BODY
+          CALL .<init> type=foo.A<kotlin.String> operator=null
+      PROPERTY public final val a2: foo.A<foo.B<kotlin.Nothing, kotlin.Int, kotlin.Int>>?
+        EXPRESSION_BODY
+          CALL .<init> type=foo.A<foo.B<kotlin.Nothing, kotlin.Int, kotlin.Int>> operator=null
+      PROPERTY public final val a3: foo.A<kotlin.Int?>
+        EXPRESSION_BODY
+          CALL .<init> type=foo.A<kotlin.Int?> operator=null
+      PROPERTY public final val a4: foo.A<kotlin.Int?>?
+        EXPRESSION_BODY
+          CALL .<init> type=foo.A<kotlin.Int?> operator=null
+      PROPERTY public final var b1: foo.B<kotlin.Int, kotlin.Int, kotlin.Int>
+        EXPRESSION_BODY
+          CALL .<init> type=foo.B<kotlin.Int, kotlin.Int, kotlin.Int> operator=null
+      PROPERTY public final var b2: foo.B<kotlin.String, foo.A<kotlin.String>, kotlin.Int>
+        EXPRESSION_BODY
+          CALL .<init> type=foo.B<kotlin.String, foo.A<kotlin.String>, kotlin.Int> operator=null
+      PROPERTY public final val l: kotlin.collections.List<kotlin.String>
+        EXPRESSION_BODY
+          CALL .listOf type=kotlin.collections.List<kotlin.String> operator=null
+      FUN public final fun test1(/*0*/ a: foo.A<kotlin.Int?>, /*1*/ b: foo.B<kotlin.Int, kotlin.String, foo.A<kotlin.Int>>): foo.A<kotlin.Int>?
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=test1
+            CALL .<init> type=foo.A<kotlin.Int> operator=null
+      FUN public final fun test2(/*0*/ a: foo.A<kotlin.Int>?, /*1*/ b: foo.B<kotlin.Int, kotlin.String, foo.A<kotlin.Nothing>>): foo.B<kotlin.Int?, kotlin.Int?, kotlin.Int>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=test2
+            CALL .<init> type=foo.B<kotlin.Int?, kotlin.Int?, kotlin.Int> operator=null
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C</*0*/ T>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      PROPERTY public abstract val foo: foo.A<T>
+      FUN public abstract fun bar(): foo.A<T>?
+    CLASS CLASS C1
+      CONSTRUCTOR public constructor C1()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL C
+          INSTANCE_INITIALIZER_CALL classDescriptor=C1
+      PROPERTY public open override /*1*/ val foo: foo.A<kotlin.Nothing>
+        EXPRESSION_BODY
+          CALL .<init> type=foo.A<kotlin.Nothing> operator=null
+      FUN public open override /*1*/ fun bar(): foo.A<kotlin.Nothing>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=bar
+            CALL .<get-foo> type=foo.A<kotlin.Nothing> operator=GET_PROPERTY
+              $this: THIS public final class C1 : foo.C<kotlin.Nothing> type=foo.C1
+    CLASS CLASS C2
+      CONSTRUCTOR public constructor C2()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL C
+          INSTANCE_INITIALIZER_CALL classDescriptor=C2
+      PROPERTY public open override /*1*/ val foo: foo.A<kotlin.String>
+        EXPRESSION_BODY
+          CALL .<init> type=foo.A<kotlin.String> operator=null
+      FUN public open override /*1*/ fun bar(): foo.A<kotlin.String>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=bar
+            CALL .<get-foo> type=foo.A<kotlin.String> operator=GET_PROPERTY
+              $this: THIS public final class C2 : foo.C<kotlin.String> type=foo.C2
+    FUN public fun testAllDeclaredMembers(/*0*/ klass: kotlin.reflect.KClass<*>, /*1*/ expectedIsRaw: kotlin.Boolean): kotlin.String?
+      BLOCK_BODY
+        VAR val clazz: java.lang.Class<out kotlin.Any>
+          CALL .<get-java> type=java.lang.Class<out kotlin.Any> operator=GET_PROPERTY
+            $receiver: GET_VAR klass type=kotlin.reflect.KClass<*> operator=null
+        BLOCK type=kotlin.Unit operator=FOR_LOOP
+          VAR val tmp0_iterator: kotlin.collections.Iterator<java.lang.reflect.Field!>
+            CALL .iterator type=kotlin.collections.Iterator<java.lang.reflect.Field!> operator=FOR_LOOP_ITERATOR
+              $this: TYPE_OP operator=IMPLICIT_CAST typeOperand=kotlin.Array<java.lang.reflect.Field!>
+                TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.Array<out java.lang.reflect.Field!>
+                  CALL .<get-declaredFields> type=kotlin.Array<(out) java.lang.reflect.Field!>! operator=GET_PROPERTY
+                    $receiver: GET_VAR clazz type=java.lang.Class<out kotlin.Any> operator=null
+          WHILE label=null operator=FOR_LOOP_INNER_WHILE
+            condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+              $this: GET_VAR tmp0_iterator type=kotlin.collections.Iterator<java.lang.reflect.Field!> operator=null
+            body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+              VAR val it: java.lang.reflect.Field!
+                CALL .next type=java.lang.reflect.Field! operator=FOR_LOOP_NEXT
+                  $this: GET_VAR tmp0_iterator type=kotlin.collections.Iterator<java.lang.reflect.Field!> operator=null
+              BLOCK type=kotlin.Unit operator=null
+                WHEN type=kotlin.Unit operator=IF
+                  if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                    arg0: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                      arg0: CALL .<get-type> type=java.lang.Class<*>! operator=GET_PROPERTY
+                        $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Field
+                          GET_VAR it type=java.lang.reflect.Field! operator=null
+                      arg1: CALL .<get-genericType> type=java.lang.reflect.Type! operator=GET_PROPERTY
+                        $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Field
+                          GET_VAR it type=java.lang.reflect.Field! operator=null
+                    arg1: GET_VAR expectedIsRaw type=kotlin.Boolean operator=null
+                  then: RETURN type=kotlin.Nothing from=testAllDeclaredMembers
+                    STRING_CONCATENATION type=kotlin.String
+                      CONST String type=kotlin.String value='failed on field ''
+                      CALL .<get-simpleName> type=kotlin.String! operator=GET_PROPERTY
+                        $receiver: GET_VAR clazz type=java.lang.Class<out kotlin.Any> operator=null
+                      CONST String type=kotlin.String value='::'
+                      CALL .<get-name> type=kotlin.String! operator=GET_PROPERTY
+                        $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Field
+                          GET_VAR it type=java.lang.reflect.Field! operator=null
+                      CONST String type=kotlin.String value='''
+        BLOCK type=kotlin.Unit operator=FOR_LOOP
+          VAR val tmp1_iterator: kotlin.collections.Iterator<java.lang.reflect.Method!>
+            CALL .iterator type=kotlin.collections.Iterator<java.lang.reflect.Method!> operator=FOR_LOOP_ITERATOR
+              $this: TYPE_OP operator=IMPLICIT_CAST typeOperand=kotlin.Array<java.lang.reflect.Method!>
+                TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.Array<out java.lang.reflect.Method!>
+                  CALL .<get-declaredMethods> type=kotlin.Array<(out) java.lang.reflect.Method!>! operator=GET_PROPERTY
+                    $receiver: GET_VAR clazz type=java.lang.Class<out kotlin.Any> operator=null
+          WHILE label=null operator=FOR_LOOP_INNER_WHILE
+            condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+              $this: GET_VAR tmp1_iterator type=kotlin.collections.Iterator<java.lang.reflect.Method!> operator=null
+            body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+              VAR val m: java.lang.reflect.Method!
+                CALL .next type=java.lang.reflect.Method! operator=FOR_LOOP_NEXT
+                  $this: GET_VAR tmp1_iterator type=kotlin.collections.Iterator<java.lang.reflect.Method!> operator=null
+              BLOCK type=kotlin.Unit operator=null
+                BLOCK type=kotlin.Unit operator=FOR_LOOP
+                  VAR val tmp2_iterator: kotlin.collections.IntIterator
+                    CALL .iterator type=kotlin.collections.IntIterator operator=FOR_LOOP_ITERATOR
+                      $this: CALL .<get-indices> type=kotlin.ranges.IntRange operator=GET_PROPERTY
+                        $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.Array<out java.lang.Class<*>!>
+                          CALL .<get-parameterTypes> type=kotlin.Array<(out) java.lang.Class<*>!>! operator=GET_PROPERTY
+                            $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Method
+                              GET_VAR m type=java.lang.reflect.Method! operator=null
+                  WHILE label=null operator=FOR_LOOP_INNER_WHILE
+                    condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+                      $this: GET_VAR tmp2_iterator type=kotlin.collections.IntIterator operator=null
+                    body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+                      VAR val i: kotlin.Int
+                        CALL .next type=kotlin.Int operator=FOR_LOOP_NEXT
+                          $this: GET_VAR tmp2_iterator type=kotlin.collections.IntIterator operator=null
+                      BLOCK type=kotlin.Unit operator=null
+                        WHEN type=kotlin.Unit operator=IF
+                          if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                            arg0: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                              arg0: CALL .get type=java.lang.Class<*>! operator=GET_ARRAY_ELEMENT
+                                $this: TYPE_OP operator=IMPLICIT_CAST typeOperand=kotlin.Array<java.lang.Class<*>!>
+                                  TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.Array<out java.lang.Class<*>!>
+                                    CALL .<get-parameterTypes> type=kotlin.Array<(out) java.lang.Class<*>!>! operator=GET_PROPERTY
+                                      $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Method
+                                        GET_VAR m type=java.lang.reflect.Method! operator=null
+                                index: GET_VAR i type=kotlin.Int operator=null
+                              arg1: CALL .get type=java.lang.reflect.Type! operator=GET_ARRAY_ELEMENT
+                                $this: TYPE_OP operator=IMPLICIT_CAST typeOperand=kotlin.Array<java.lang.reflect.Type!>
+                                  TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.Array<out java.lang.reflect.Type!>
+                                    CALL .<get-genericParameterTypes> type=kotlin.Array<(out) java.lang.reflect.Type!>! operator=GET_PROPERTY
+                                      $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Method
+                                        GET_VAR m type=java.lang.reflect.Method! operator=null
+                                index: GET_VAR i type=kotlin.Int operator=null
+                            arg1: GET_VAR expectedIsRaw type=kotlin.Boolean operator=null
+                          then: RETURN type=kotlin.Nothing from=testAllDeclaredMembers
+                            STRING_CONCATENATION type=kotlin.String
+                              CONST String type=kotlin.String value='failed on type of param#'
+                              GET_VAR i type=kotlin.Int operator=null
+                              CONST String type=kotlin.String value=' of method ''
+                              CALL .<get-simpleName> type=kotlin.String! operator=GET_PROPERTY
+                                $receiver: GET_VAR clazz type=java.lang.Class<out kotlin.Any> operator=null
+                              CONST String type=kotlin.String value='::'
+                              CALL .<get-name> type=kotlin.String! operator=GET_PROPERTY
+                                $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Method
+                                  GET_VAR m type=java.lang.reflect.Method! operator=null
+                              CONST String type=kotlin.String value='''
+                WHEN type=kotlin.Unit operator=IF
+                  if: WHEN type=kotlin.Boolean operator=ANDAND
+                    if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+                      arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                        arg0: CALL .<get-returnType> type=java.lang.Class<*>! operator=GET_PROPERTY
+                          $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Method
+                            GET_VAR m type=java.lang.reflect.Method! operator=null
+                        arg1: GET_BACKING_FIELD TYPE type=java.lang.Class<java.lang.Void!>! operator=GET_PROPERTY
+                    then: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                      arg0: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                        arg0: CALL .<get-returnType> type=java.lang.Class<*>! operator=GET_PROPERTY
+                          $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Method
+                            GET_VAR m type=java.lang.reflect.Method! operator=null
+                        arg1: CALL .<get-genericReturnType> type=java.lang.reflect.Type! operator=GET_PROPERTY
+                          $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Method
+                            GET_VAR m type=java.lang.reflect.Method! operator=null
+                      arg1: GET_VAR expectedIsRaw type=kotlin.Boolean operator=null
+                    else: CONST Boolean type=kotlin.Boolean value='false'
+                  then: RETURN type=kotlin.Nothing from=testAllDeclaredMembers
+                    STRING_CONCATENATION type=kotlin.String
+                      CONST String type=kotlin.String value='failed on return type of method ''
+                      CALL .<get-simpleName> type=kotlin.String! operator=GET_PROPERTY
+                        $receiver: GET_VAR clazz type=java.lang.Class<out kotlin.Any> operator=null
+                      CONST String type=kotlin.String value='::'
+                      CALL .<get-name> type=kotlin.String! operator=GET_PROPERTY
+                        $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Method
+                          GET_VAR m type=java.lang.reflect.Method! operator=null
+                      CONST String type=kotlin.String value='''
+        RETURN type=kotlin.Nothing from=testAllDeclaredMembers
+          CONST Null type=kotlin.Nothing? value='null'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        BLOCK type=kotlin.String? operator=ELVIS
+          VAR val tmp1_elvis_lhs: kotlin.String?
+            CALL .testAllDeclaredMembers type=kotlin.String? operator=null
+              klass: CLASS_REFERENCE TestRaw type=kotlin.reflect.KClass<foo.TestRaw>
+              expectedIsRaw: CONST Boolean type=kotlin.Boolean value='true'
+          WHEN type=kotlin.String? operator=null
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: GET_VAR tmp1_elvis_lhs type=kotlin.String? operator=null
+              arg1: CONST Null type=kotlin.Nothing? value='null'
+            then: BLOCK type=kotlin.Nothing? operator=SAFE_CALL
+              VAR val tmp0_safe_receiver: kotlin.String?
+                CALL .testAllDeclaredMembers type=kotlin.String? operator=null
+                  klass: CLASS_REFERENCE TestNotRaw type=kotlin.reflect.KClass<foo.TestNotRaw>
+                  expectedIsRaw: CONST Boolean type=kotlin.Boolean value='false'
+              WHEN type=kotlin.Nothing? operator=SAFE_CALL
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_safe_receiver type=kotlin.String? operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: CONST Null type=kotlin.Nothing? value='null'
+                else: CALL .let type=kotlin.Nothing operator=null
+                  $this: GET_VAR tmp0_safe_receiver type=kotlin.String? operator=null
+                  block: BLOCK type=(kotlin.String) -> kotlin.Nothing operator=LAMBDA
+                    FUN local final fun <anonymous>(/*0*/ it: kotlin.String): kotlin.Nothing
+                      BLOCK_BODY
+                        RETURN type=kotlin.Nothing from=box
+                          GET_VAR it type=kotlin.String operator=null
+                    CALLABLE_REFERENCE <anonymous> type=(kotlin.String) -> kotlin.Nothing operator=LAMBDA
+            else: GET_VAR tmp1_elvis_lhs type=kotlin.String? operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-superclass> type=java.lang.Class<in foo.C1!>! operator=GET_PROPERTY
+                $receiver: CALL .<get-java> type=java.lang.Class<foo.C1> operator=GET_PROPERTY
+                  $receiver: CLASS_REFERENCE C1 type=kotlin.reflect.KClass<foo.C1>
+              arg1: CALL .<get-genericSuperclass> type=java.lang.reflect.Type! operator=GET_PROPERTY
+                $receiver: CALL .<get-java> type=java.lang.Class<foo.C1> operator=GET_PROPERTY
+                  $receiver: CLASS_REFERENCE C1 type=kotlin.reflect.KClass<foo.C1>
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='failed on C1 superclass'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+            arg0: CALL .<get-superclass> type=java.lang.Class<in foo.C2!>! operator=GET_PROPERTY
+              $receiver: CALL .<get-java> type=java.lang.Class<foo.C2> operator=GET_PROPERTY
+                $receiver: CLASS_REFERENCE C2 type=kotlin.reflect.KClass<foo.C2>
+            arg1: CALL .<get-genericSuperclass> type=java.lang.reflect.Type! operator=GET_PROPERTY
+              $receiver: CALL .<get-java> type=java.lang.Class<foo.C2> operator=GET_PROPERTY
+                $receiver: CLASS_REFERENCE C2 type=kotlin.reflect.KClass<foo.C2>
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='failed on C2 superclass'
+        BLOCK type=kotlin.String? operator=ELVIS
+          VAR val tmp3_elvis_lhs: kotlin.String?
+            CALL .testAllDeclaredMembers type=kotlin.String? operator=null
+              klass: CLASS_REFERENCE C1 type=kotlin.reflect.KClass<foo.C1>
+              expectedIsRaw: CONST Boolean type=kotlin.Boolean value='true'
+          WHEN type=kotlin.String? operator=null
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: GET_VAR tmp3_elvis_lhs type=kotlin.String? operator=null
+              arg1: CONST Null type=kotlin.Nothing? value='null'
+            then: BLOCK type=kotlin.Nothing? operator=SAFE_CALL
+              VAR val tmp2_safe_receiver: kotlin.String?
+                CALL .testAllDeclaredMembers type=kotlin.String? operator=null
+                  klass: CLASS_REFERENCE C2 type=kotlin.reflect.KClass<foo.C2>
+                  expectedIsRaw: CONST Boolean type=kotlin.Boolean value='false'
+              WHEN type=kotlin.Nothing? operator=SAFE_CALL
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp2_safe_receiver type=kotlin.String? operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: CONST Null type=kotlin.Nothing? value='null'
+                else: CALL .let type=kotlin.Nothing operator=null
+                  $this: GET_VAR tmp2_safe_receiver type=kotlin.String? operator=null
+                  block: BLOCK type=(kotlin.String) -> kotlin.Nothing operator=LAMBDA
+                    FUN local final fun <anonymous>(/*0*/ it: kotlin.String): kotlin.Nothing
+                      BLOCK_BODY
+                        RETURN type=kotlin.Nothing from=box
+                          GET_VAR it type=kotlin.String operator=null
+                    CALLABLE_REFERENCE <anonymous> type=(kotlin.String) -> kotlin.Nothing operator=LAMBDA
+            else: GET_VAR tmp3_elvis_lhs type=kotlin.String? operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

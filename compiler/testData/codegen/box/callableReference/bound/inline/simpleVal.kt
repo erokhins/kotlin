@@ -6,3 +6,5 @@ fun box(): String {
     val x = "OK"
     return go(x::id)
 }
+
+

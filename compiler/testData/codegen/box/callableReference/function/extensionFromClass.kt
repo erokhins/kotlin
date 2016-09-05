@@ -5,3 +5,5 @@ class A {
 fun A.foo(x: String) = x
 
 fun box() = A().result()
+
+

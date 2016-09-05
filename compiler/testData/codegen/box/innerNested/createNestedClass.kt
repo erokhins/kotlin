@@ -11,3 +11,5 @@ fun box(): String {
     val b2 = A.B2(A.B3(42, 42).y)
     return A.B4("OK").str
 }
+
+

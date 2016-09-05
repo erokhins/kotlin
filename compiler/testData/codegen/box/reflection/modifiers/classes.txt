@@ -1,0 +1,162 @@
+MODULE <test-module>
+  FILE /classes.kt
+    CLASS CLASS S
+      CONSTRUCTOR private constructor S()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=S
+      CLASS CLASS DataClass
+        CONSTRUCTOR public constructor DataClass(/*0*/ x: kotlin.Int)
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL S
+            SET_BACKING_FIELD x type=kotlin.Unit operator=null
+              receiver: THIS public final data class DataClass : S type=S.DataClass
+              value: GET_VAR x type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+            INSTANCE_INITIALIZER_CALL classDescriptor=DataClass
+        PROPERTY public final val x: kotlin.Int
+          EXPRESSION_BODY
+            GET_VAR x type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+        FUN public final operator /*synthesized*/ fun component1(): kotlin.Int
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=component1
+              CALL .<get-x> type=kotlin.Int operator=GET_PROPERTY
+                $this: THIS public final data class DataClass : S type=S.DataClass
+        FUN public final /*synthesized*/ fun copy(/*0*/ x: kotlin.Int = ...): S.DataClass
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=copy
+              CALL .<init> type=S.DataClass operator=null
+                x: GET_VAR x type=kotlin.Int operator=null
+        FUN public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=toString
+              STRING_CONCATENATION type=kotlin.String
+                CONST String type=kotlin.String value='DataClass('
+                CONST String type=kotlin.String value='x='
+                CALL .<get-x> type=kotlin.Int operator=GET_PROPERTY
+                  $this: THIS public final data class DataClass : S type=S.DataClass
+                CONST String type=kotlin.String value=')'
+        FUN public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+          BLOCK_BODY
+            VAR val tmp0_result: kotlin.Int
+              CONST Int type=kotlin.Int value='0'
+            SET_VAR tmp0_result type=kotlin.Unit operator=EQ
+              CALL .hashCode type=kotlin.Int operator=null
+                $this: CALL .<get-x> type=kotlin.Int operator=GET_PROPERTY
+                  $this: THIS public final data class DataClass : S type=S.DataClass
+            RETURN type=kotlin.Nothing from=hashCode
+              GET_VAR tmp0_result type=kotlin.Int operator=null
+        FUN public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+          BLOCK_BODY
+            WHEN type=kotlin.Unit operator=null
+              if: CALL .EQEQEQ type=kotlin.Boolean operator=EQEQEQ
+                arg0: THIS public final data class DataClass : S type=S.DataClass
+                arg1: GET_VAR other type=kotlin.Any? operator=null
+              then: RETURN type=kotlin.Nothing from=equals
+                CONST Boolean type=kotlin.Boolean value='true'
+            WHEN type=kotlin.Unit operator=null
+              if: TYPE_OP operator=NOT_INSTANCEOF typeOperand=S.DataClass
+                GET_VAR other type=kotlin.Any? operator=null
+              then: RETURN type=kotlin.Nothing from=equals
+                CONST Boolean type=kotlin.Boolean value='false'
+            VAR val tmp0_other_with_cast: S.DataClass
+              TYPE_OP operator=CAST typeOperand=S.DataClass
+                GET_VAR other type=kotlin.Any? operator=null
+            WHEN type=kotlin.Unit operator=null
+              if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                  arg0: CALL .<get-x> type=kotlin.Int operator=GET_PROPERTY
+                    $this: THIS public final data class DataClass : S type=S.DataClass
+                  arg1: CALL .<get-x> type=kotlin.Int operator=GET_PROPERTY
+                    $this: GET_VAR tmp0_other_with_cast type=S.DataClass operator=null
+              then: RETURN type=kotlin.Nothing from=equals
+                CONST Boolean type=kotlin.Boolean value='false'
+            RETURN type=kotlin.Nothing from=equals
+              CONST Boolean type=kotlin.Boolean value='true'
+      CLASS CLASS InnerClass
+        CONSTRUCTOR public constructor InnerClass()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=InnerClass
+      CLASS OBJECT Companion
+        CONSTRUCTOR private constructor Companion()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Companion
+      CLASS OBJECT NonCompanionObject
+        CONSTRUCTOR private constructor NonCompanionObject()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=NonCompanionObject
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isSealed> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE S type=kotlin.reflect.KClass<S>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isFinal> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE S type=kotlin.reflect.KClass<S>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isOpen> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE S type=kotlin.reflect.KClass<S>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isAbstract> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE S type=kotlin.reflect.KClass<S>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isData> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE S type=kotlin.reflect.KClass<S>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isInner> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE S type=kotlin.reflect.KClass<S>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isCompanion> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE S type=kotlin.reflect.KClass<S>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isSealed> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE DataClass type=kotlin.reflect.KClass<S.DataClass>
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isData> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE DataClass type=kotlin.reflect.KClass<S.DataClass>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isInner> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE DataClass type=kotlin.reflect.KClass<S.DataClass>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isCompanion> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE DataClass type=kotlin.reflect.KClass<S.DataClass>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isSealed> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE InnerClass type=kotlin.reflect.KClass<S.InnerClass>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isData> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE InnerClass type=kotlin.reflect.KClass<S.InnerClass>
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isInner> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE InnerClass type=kotlin.reflect.KClass<S.InnerClass>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isCompanion> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE InnerClass type=kotlin.reflect.KClass<S.InnerClass>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isSealed> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE Companion type=kotlin.reflect.KClass<S.Companion>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isData> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE Companion type=kotlin.reflect.KClass<S.Companion>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isInner> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE Companion type=kotlin.reflect.KClass<S.Companion>
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isCompanion> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE Companion type=kotlin.reflect.KClass<S.Companion>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isSealed> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE NonCompanionObject type=kotlin.reflect.KClass<S.NonCompanionObject>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isData> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE NonCompanionObject type=kotlin.reflect.KClass<S.NonCompanionObject>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isInner> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE NonCompanionObject type=kotlin.reflect.KClass<S.NonCompanionObject>
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isCompanion> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CLASS_REFERENCE NonCompanionObject type=kotlin.reflect.KClass<S.NonCompanionObject>
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -8,3 +8,5 @@ open class A {
 }
 
 fun box() = A.B().bar()
+
+

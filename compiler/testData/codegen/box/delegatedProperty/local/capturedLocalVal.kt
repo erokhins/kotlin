@@ -12,3 +12,5 @@ fun box(): String {
     val prop: Int by Delegate()
     return run { if (prop == 1) "OK" else "fail" }
 }
+
+

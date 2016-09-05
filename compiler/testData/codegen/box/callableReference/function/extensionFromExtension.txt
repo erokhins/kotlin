@@ -1,0 +1,23 @@
+MODULE <test-module>
+  FILE /extensionFromExtension.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+    FUN public fun A.foo(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo
+          CALL .invoke type=kotlin.String operator=null
+            $this: CALLABLE_REFERENCE bar type=kotlin.reflect.KFunction2<A, kotlin.String, kotlin.String> operator=null
+            p1: $RECEIVER of: foo type=A
+            p2: CONST String type=kotlin.String value='OK'
+    FUN public fun A.bar(/*0*/ x: kotlin.String): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=bar
+          GET_VAR x type=kotlin.String operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .foo type=kotlin.String operator=null
+            $receiver: CALL .<init> type=A operator=null

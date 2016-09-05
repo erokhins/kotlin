@@ -43,3 +43,5 @@ fun box(): String {
 
     return varWithCustomSetter
 }
+
+

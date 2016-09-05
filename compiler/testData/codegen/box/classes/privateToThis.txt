@@ -1,0 +1,40 @@
+MODULE <test-module>
+  FILE /privateToThis.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A</*0*/ in I>(/*0*/ init_o: I, /*1*/ init_k: I)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD init_k type=kotlin.Unit operator=null
+            receiver: THIS public final class A</*0*/ in I> type=A<I>
+            value: GET_VAR init_k type=I operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY private/*private to this*/ final val init_k: I
+        EXPRESSION_BODY
+          GET_VAR init_k type=I operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY private/*private to this*/ final val o: I
+        EXPRESSION_BODY
+          GET_VAR init_o type=I operator=null
+      FUN private/*private to this*/ final fun k(): I
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=k
+            CALL .<get-init_k> type=I operator=GET_PROPERTY
+              $this: THIS public final class A</*0*/ in I> type=A<I>
+      FUN public final fun getOk(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getOk
+            CALL .plus type=kotlin.String operator=PLUS
+              $this: CALL .toString type=kotlin.String operator=null
+                $receiver: CALL .<get-o> type=I operator=GET_PROPERTY
+                  $this: THIS public final class A</*0*/ in I> type=A<I>
+              other: CALL .toString type=kotlin.String operator=null
+                $receiver: CALL .k type=I operator=null
+                  $this: THIS public final class A</*0*/ in I> type=A<I>
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val a: A<kotlin.String>
+          CALL .<init> type=A<kotlin.String> operator=null
+            init_o: CONST String type=kotlin.String value='O'
+            init_k: CONST String type=kotlin.String value='K'
+        RETURN type=kotlin.Nothing from=box
+          CALL .getOk type=kotlin.String operator=null
+            $this: GET_VAR a type=A<kotlin.String> operator=null

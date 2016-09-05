@@ -15,3 +15,5 @@ fun box(): String {
     
     return if (sum == 0+1+2+3+4 && str == "01234") "OK" else "Fail ${sum} ${str}"
 }
+
+

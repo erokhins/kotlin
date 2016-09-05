@@ -13,3 +13,5 @@ class ComplexClass : Trait by SimpleClass() {
 }
 
 fun box() = ComplexClass().qux()
+
+

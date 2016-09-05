@@ -42,3 +42,5 @@ fun box(): String {
     if (f4(B1(), 1, 2, 3) != 10) return "fail #4"
     return "OK"
 }
+
+

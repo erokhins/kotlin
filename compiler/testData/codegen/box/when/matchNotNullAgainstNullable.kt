@@ -5,3 +5,5 @@ fun foo(i: Int, j: Int?): String =
     }
 
 fun box(): String = foo(0, 0)
+
+

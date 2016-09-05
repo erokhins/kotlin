@@ -6,3 +6,5 @@ fun box(): String {
   }
   return if (s == "12") "OK" else "fail: $s"
 }
+
+

@@ -11,3 +11,5 @@ fun box(): String {
     Foo.foo()
     return if (result == "(Stuff)") "OK" else "Fail $result"
 }
+
+

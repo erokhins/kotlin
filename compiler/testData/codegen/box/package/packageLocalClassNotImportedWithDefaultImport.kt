@@ -22,3 +22,5 @@ private class SomeClass
 package pack
 
 public open class SomeClass
+
+

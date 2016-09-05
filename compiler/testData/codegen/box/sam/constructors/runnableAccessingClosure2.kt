@@ -9,3 +9,4 @@ class Box(val s: String) {
 fun box(): String {
     return Box("OK").extract()
 }
+

@@ -11,3 +11,5 @@ fun box(): String {
     val m = c.javaClass.getMethod("foo")
     return m.invoke(c) as String
 }
+
+

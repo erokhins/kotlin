@@ -9,3 +9,4 @@ fun box(): String {
 }
 
 fun foo(l: Int) {}
+

@@ -1,0 +1,109 @@
+MODULE <test-module>
+  FILE /jvmAnnotationFlags.kt
+    CLASS CLASS CustomDelegate
+      CONSTRUCTOR public constructor CustomDelegate()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=CustomDelegate
+      FUN public final operator fun getValue(/*0*/ thisRef: kotlin.Any?, /*1*/ prop: kotlin.reflect.KProperty<*>): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getValue
+            CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+              $this: GET_VAR prop type=kotlin.reflect.KProperty<*> operator=null
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      PROPERTY @kotlin.jvm.Volatile() public final var vol: kotlin.Int
+        EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='1'
+      PROPERTY @kotlin.jvm.Transient() public final val tra: kotlin.Int = 1
+        EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='1'
+      PROPERTY @delegate:kotlin.jvm.Transient() public final val del: kotlin.String
+        delegate: PROPERTY val `del$delegate`: CustomDelegate
+          EXPRESSION_BODY
+            CALL .<init> type=CustomDelegate operator=null
+        PROPERTY_GETTER public final fun <get-del>(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-del>
+              CALL .getValue type=kotlin.String operator=null
+                $this: GET_BACKING_FIELD del$delegate type=CustomDelegate operator=null
+                  receiver: THIS public final class C type=C
+                thisRef: THIS public final class C type=C
+                prop: CALLABLE_REFERENCE del type=kotlin.reflect.KProperty1<C, kotlin.String> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+      FUN @kotlin.jvm.Strictfp() public final fun str(): kotlin.Unit
+        BLOCK_BODY
+      FUN @kotlin.jvm.Synchronized() public final fun sync(): kotlin.Unit
+        BLOCK_BODY
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val c: java.lang.Class<C>
+          CALL .<get-java> type=java.lang.Class<C> operator=GET_PROPERTY
+            $receiver: CLASS_REFERENCE C type=kotlin.reflect.KClass<C>
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+            arg0: CALL .and type=kotlin.Int operator=null
+              $this: CALL .getModifiers type=kotlin.Int operator=null
+                $this: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Field
+                  CALL .getDeclaredField type=java.lang.reflect.Field! operator=null
+                    $this: GET_VAR c type=java.lang.Class<C> operator=null
+                    p0: CONST String type=kotlin.String value='vol'
+              other: GET_BACKING_FIELD VOLATILE type=kotlin.Int operator=GET_PROPERTY
+            arg1: CONST Int type=kotlin.Int value='0'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail: volatile'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+            arg0: CALL .and type=kotlin.Int operator=null
+              $this: CALL .getModifiers type=kotlin.Int operator=null
+                $this: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Field
+                  CALL .getDeclaredField type=java.lang.reflect.Field! operator=null
+                    $this: GET_VAR c type=java.lang.Class<C> operator=null
+                    p0: CONST String type=kotlin.String value='tra'
+              other: GET_BACKING_FIELD TRANSIENT type=kotlin.Int operator=GET_PROPERTY
+            arg1: CONST Int type=kotlin.Int value='0'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail: transient'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+            arg0: CALL .and type=kotlin.Int operator=null
+              $this: CALL .getModifiers type=kotlin.Int operator=null
+                $this: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Field
+                  CALL .getDeclaredField type=java.lang.reflect.Field! operator=null
+                    $this: GET_VAR c type=java.lang.Class<C> operator=null
+                    p0: STRING_CONCATENATION type=kotlin.String
+                      CONST String type=kotlin.String value='del'
+                      CONST String type=kotlin.String value='$'
+                      CONST String type=kotlin.String value='delegate'
+              other: GET_BACKING_FIELD TRANSIENT type=kotlin.Int operator=GET_PROPERTY
+            arg1: CONST Int type=kotlin.Int value='0'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail: delegate transient'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+            arg0: CALL .and type=kotlin.Int operator=null
+              $this: CALL .getModifiers type=kotlin.Int operator=null
+                $this: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Method
+                  CALL .getDeclaredMethod type=java.lang.reflect.Method! operator=null
+                    $this: GET_VAR c type=java.lang.Class<C> operator=null
+                    p0: CONST String type=kotlin.String value='str'
+              other: GET_BACKING_FIELD STRICT type=kotlin.Int operator=GET_PROPERTY
+            arg1: CONST Int type=kotlin.Int value='0'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail: strict'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+            arg0: CALL .and type=kotlin.Int operator=null
+              $this: CALL .getModifiers type=kotlin.Int operator=null
+                $this: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Method
+                  CALL .getDeclaredMethod type=java.lang.reflect.Method! operator=null
+                    $this: GET_VAR c type=java.lang.Class<C> operator=null
+                    p0: CONST String type=kotlin.String value='sync'
+              other: GET_BACKING_FIELD SYNCHRONIZED type=kotlin.Int operator=GET_PROPERTY
+            arg1: CONST Int type=kotlin.Int value='0'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail: synchronized'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

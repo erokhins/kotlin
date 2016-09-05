@@ -16,3 +16,5 @@ fun box(): String {
     assert(x.all { it == "abc" })
     return "OK"
 }
+
+

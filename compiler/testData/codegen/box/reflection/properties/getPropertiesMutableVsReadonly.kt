@@ -19,3 +19,5 @@ fun box(): String {
     mutable.set(a, "OK")
     return mutable.get(a)
 }
+
+

@@ -1,0 +1,41 @@
+MODULE <test-module>
+  FILE /diamondPropertyAccessors.kt
+    CLASS INTERFACE A
+      PROPERTY public open var bar: kotlin.Boolean
+        PROPERTY_GETTER public open fun <get-bar>(): kotlin.Boolean
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-bar>
+              CONST Boolean type=kotlin.Boolean value='false'
+        PROPERTY_SETTER public open fun <set-bar>(/*0*/ value: kotlin.Boolean): kotlin.Unit
+          BLOCK_BODY
+            THROW type=kotlin.Nothing
+              CALL .<init> type=java.lang.AssertionError operator=null
+                p0: CONST String type=kotlin.String value='Fail set'
+    CLASS INTERFACE B
+    CLASS INTERFACE C
+      PROPERTY public open override /*1*/ var bar: kotlin.Boolean
+        PROPERTY_GETTER public open override /*1*/ fun <get-bar>(): kotlin.Boolean
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-bar>
+              CONST Boolean type=kotlin.Boolean value='true'
+        PROPERTY_SETTER public open override /*1*/ fun <set-bar>(/*0*/ value: kotlin.Boolean): kotlin.Unit
+          BLOCK_BODY
+    CLASS INTERFACE D
+    CLASS CLASS Impl
+      CONSTRUCTOR public constructor Impl()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Impl
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .<set-bar> type=kotlin.Unit operator=EQ
+          $this: CALL .<init> type=Impl operator=null
+          value: CONST Boolean type=kotlin.Boolean value='false'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .<get-bar> type=kotlin.Boolean operator=GET_PROPERTY
+              $this: CALL .<init> type=Impl operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail get'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

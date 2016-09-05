@@ -21,3 +21,5 @@ public open class B {
 public class BB : B() {
     public fun ok(): String = OK
 }
+
+

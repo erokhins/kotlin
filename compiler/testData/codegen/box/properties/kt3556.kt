@@ -8,3 +8,5 @@ class Test {
 }
 
 fun box() = if (Test().outer() == 1) "OK" else "fail"
+
+

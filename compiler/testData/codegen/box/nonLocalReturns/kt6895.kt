@@ -22,3 +22,5 @@ class UpdateableThing {
 fun box(): String {
     return UpdateableThing().performUpdates { "OK" }
 }
+
+

@@ -6,3 +6,4 @@ fun box(): String {
         A.V -> return "OK"
     }
 }
+

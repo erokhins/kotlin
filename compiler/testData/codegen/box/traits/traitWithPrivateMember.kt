@@ -24,3 +24,5 @@ fun box() : String {
     return Z2.testFun() + Z2.testProperty()
 }
 
+
+

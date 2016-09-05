@@ -7,3 +7,5 @@ class A {
 }
 
 fun box() = if (A().B().bar() == 42) "OK" else "Fail"
+
+

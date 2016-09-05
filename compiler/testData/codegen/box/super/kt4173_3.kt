@@ -25,3 +25,4 @@ fun box() : String {
     b.foo()
     return "OK"
 }
+

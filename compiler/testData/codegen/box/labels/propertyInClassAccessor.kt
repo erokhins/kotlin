@@ -15,3 +15,5 @@ fun box(): String {
     if (Test().test() != 1) return "inner getter or setter failed"
     return "OK"
 }
+
+

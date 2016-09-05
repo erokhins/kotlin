@@ -10,3 +10,5 @@ public fun box() : String {
 
     return if (j is Another && i is Derived) "OK" else "fail j = $j i = $i"
 }
+
+

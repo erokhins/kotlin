@@ -35,3 +35,5 @@ fun box(): String {
     testClass(Test.apply @Ann("OK") {}, "2")
     return "OK"
 }
+
+

@@ -11,3 +11,4 @@ open class B : A({ 1 foo 2} ())
 fun box(): String {
     return if (B().s == 3) "OK" else "Fail"
 }
+

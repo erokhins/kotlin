@@ -1,0 +1,60 @@
+MODULE <test-module>
+  FILE /capturePropertyInClosure.kt
+    CLASS CLASS Delegate
+      CONSTRUCTOR public constructor Delegate()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Delegate
+      PROPERTY public final var inner: kotlin.Int
+        EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='1'
+      FUN public final operator fun getValue(/*0*/ t: kotlin.Any?, /*1*/ p: kotlin.reflect.KProperty<*>): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getValue
+            CALL .<get-inner> type=kotlin.Int operator=GET_PROPERTY
+              $this: THIS public final class Delegate type=Delegate
+      FUN public final operator fun setValue(/*0*/ t: kotlin.Any?, /*1*/ p: kotlin.reflect.KProperty<*>, /*2*/ i: kotlin.Int): kotlin.Unit
+        BLOCK_BODY
+          CALL .<set-inner> type=kotlin.Unit operator=EQ
+            $this: THIS public final class Delegate type=Delegate
+            <set-?>: GET_VAR i type=kotlin.Int operator=null
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+      PROPERTY private final var value: kotlin.Int
+        delegate: PROPERTY val `value$delegate`: Delegate
+          EXPRESSION_BODY
+            CALL .<init> type=Delegate operator=null
+        PROPERTY_GETTER private final fun <get-value>(): kotlin.Int
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-value>
+              CALL .getValue type=kotlin.Int operator=null
+                $this: GET_BACKING_FIELD value$delegate type=Delegate operator=null
+                  receiver: THIS public final class B type=B
+                t: THIS public final class B type=B
+                p: CALLABLE_REFERENCE value type=kotlin.reflect.KMutableProperty1<B, kotlin.Int> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+        PROPERTY_SETTER private final fun <set-value>(/*0*/ <set-?>: kotlin.Int): kotlin.Unit
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<set-value>
+              CALL .setValue type=kotlin.Unit operator=null
+                $this: GET_BACKING_FIELD value$delegate type=Delegate operator=null
+                  receiver: THIS public final class B type=B
+                t: THIS public final class B type=B
+                p: CALLABLE_REFERENCE value type=kotlin.reflect.KMutableProperty1<B, kotlin.Int> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+                i: GET_VAR <set-?> type=kotlin.Int operator=null
+      FUN public final fun test(): kotlin.Unit
+        BLOCK_BODY
+          FUN local final fun foo(): kotlin.Unit
+            BLOCK_BODY
+              CALL .<set-value> type=kotlin.Unit operator=EQ
+                $this: THIS public final class B type=B
+                <set-?>: CONST Int type=kotlin.Int value='1'
+          CALL .foo type=kotlin.Unit operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .test type=kotlin.Unit operator=null
+          $this: CALL .<init> type=B operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

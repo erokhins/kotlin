@@ -28,3 +28,5 @@ fun box(): String {
     testClass(foo1( @Ann("OK") fun(@Ann("OK0") x: String) {} ), "2")
     return "OK"
 }
+
+

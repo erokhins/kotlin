@@ -1,0 +1,142 @@
+MODULE <test-module>
+  FILE /K.kt
+    CLASS CLASS K
+      CONSTRUCTOR public constructor K()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL J
+          INSTANCE_INITIALIZER_CALL classDescriptor=K
+      PROPERTY public final val publicMemberK: kotlin.String = ""
+        EXPRESSION_BODY
+          CONST String type=kotlin.String value=''
+      PROPERTY private final val privateMemberK: kotlin.String = ""
+        EXPRESSION_BODY
+          CONST String type=kotlin.String value=''
+      PROPERTY public final val kotlin.Any.publicMemberExtensionK: kotlin.String
+        PROPERTY_GETTER public final fun kotlin.Any.<get-publicMemberExtensionK>(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-publicMemberExtensionK>
+              CONST String type=kotlin.String value=''
+      PROPERTY private final val kotlin.Any.privateMemberExtensionK: kotlin.String
+        PROPERTY_GETTER private final fun kotlin.Any.<get-privateMemberExtensionK>(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-privateMemberExtensionK>
+              CONST String type=kotlin.String value=''
+    CLASS CLASS L
+      CONSTRUCTOR public constructor L()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL K
+          INSTANCE_INITIALIZER_CALL classDescriptor=L
+    FUN public fun kotlin.collections.Collection<kotlin.reflect.KProperty<*>>.names(): kotlin.collections.Set<kotlin.String>
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=names
+          CALL .toSet type=kotlin.collections.Set<kotlin.String> operator=null
+            $receiver: CALL .map type=kotlin.collections.List<kotlin.String> operator=null
+              $receiver: $RECEIVER of: names type=kotlin.collections.Collection<kotlin.reflect.KProperty<*>>
+              transform: BLOCK type=(kotlin.reflect.KProperty<*>) -> kotlin.String operator=LAMBDA
+                FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KProperty<*>): kotlin.String
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+                        $this: GET_VAR it type=kotlin.reflect.KProperty<*> operator=null
+                CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KProperty<*>) -> kotlin.String operator=LAMBDA
+    FUN public fun check(/*0*/ c: kotlin.collections.Collection<kotlin.reflect.KProperty<*>>, /*1*/ names: kotlin.collections.Set<kotlin.String>): kotlin.Unit
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_VAR names type=kotlin.collections.Set<kotlin.String> operator=null
+          actual: CALL .names type=kotlin.collections.Set<kotlin.String> operator=null
+            $receiver: GET_VAR c type=kotlin.collections.Collection<kotlin.reflect.KProperty<*>> operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val j: kotlin.reflect.KClass<J>
+          CLASS_REFERENCE J type=kotlin.reflect.KClass<J>
+        CALL .check type=kotlin.Unit operator=null
+          c: CALL .<get-staticProperties> type=kotlin.collections.Collection<kotlin.reflect.KProperty0<*>> operator=GET_PROPERTY
+            $receiver: GET_VAR j type=kotlin.reflect.KClass<J> operator=null
+          names: CALL .setOf type=kotlin.collections.Set<kotlin.String> operator=null
+            elements: VARARG type=Array<out String> varargElementType=String
+              CONST String type=kotlin.String value='publicStaticJ'
+              CONST String type=kotlin.String value='privateStaticJ'
+        CALL .check type=kotlin.Unit operator=null
+          c: CALL .<get-declaredMemberProperties> type=kotlin.collections.Collection<kotlin.reflect.KProperty1<J, *>> operator=GET_PROPERTY
+            $receiver: GET_VAR j type=kotlin.reflect.KClass<J> operator=null
+          names: CALL .setOf type=kotlin.collections.Set<kotlin.String> operator=null
+            elements: VARARG type=Array<out String> varargElementType=String
+              CONST String type=kotlin.String value='publicMemberJ'
+              CONST String type=kotlin.String value='privateMemberJ'
+        CALL .check type=kotlin.Unit operator=null
+          c: CALL .<get-declaredMemberExtensionProperties> type=kotlin.collections.Collection<kotlin.reflect.KProperty2<J, *, *>> operator=GET_PROPERTY
+            $receiver: GET_VAR j type=kotlin.reflect.KClass<J> operator=null
+          names: CALL .emptySet type=kotlin.collections.Set<kotlin.String> operator=null
+        CALL .check type=kotlin.Unit operator=null
+          c: CALL .<get-memberProperties> type=kotlin.collections.Collection<kotlin.reflect.KProperty1<J, *>> operator=GET_PROPERTY
+            $receiver: GET_VAR j type=kotlin.reflect.KClass<J> operator=null
+          names: CALL .names type=kotlin.collections.Set<kotlin.String> operator=null
+            $receiver: CALL .<get-declaredMemberProperties> type=kotlin.collections.Collection<kotlin.reflect.KProperty1<J, *>> operator=GET_PROPERTY
+              $receiver: GET_VAR j type=kotlin.reflect.KClass<J> operator=null
+        CALL .check type=kotlin.Unit operator=null
+          c: CALL .<get-memberExtensionProperties> type=kotlin.collections.Collection<kotlin.reflect.KProperty2<J, *, *>> operator=GET_PROPERTY
+            $receiver: GET_VAR j type=kotlin.reflect.KClass<J> operator=null
+          names: CALL .emptySet type=kotlin.collections.Set<kotlin.String> operator=null
+        VAR val k: kotlin.reflect.KClass<K>
+          CLASS_REFERENCE K type=kotlin.reflect.KClass<K>
+        CALL .check type=kotlin.Unit operator=null
+          c: CALL .<get-staticProperties> type=kotlin.collections.Collection<kotlin.reflect.KProperty0<*>> operator=GET_PROPERTY
+            $receiver: GET_VAR k type=kotlin.reflect.KClass<K> operator=null
+          names: CALL .emptySet type=kotlin.collections.Set<kotlin.String> operator=null
+        CALL .check type=kotlin.Unit operator=null
+          c: CALL .<get-declaredMemberProperties> type=kotlin.collections.Collection<kotlin.reflect.KProperty1<K, *>> operator=GET_PROPERTY
+            $receiver: GET_VAR k type=kotlin.reflect.KClass<K> operator=null
+          names: CALL .setOf type=kotlin.collections.Set<kotlin.String> operator=null
+            elements: VARARG type=Array<out String> varargElementType=String
+              CONST String type=kotlin.String value='publicMemberK'
+              CONST String type=kotlin.String value='privateMemberK'
+        CALL .check type=kotlin.Unit operator=null
+          c: CALL .<get-declaredMemberExtensionProperties> type=kotlin.collections.Collection<kotlin.reflect.KProperty2<K, *, *>> operator=GET_PROPERTY
+            $receiver: GET_VAR k type=kotlin.reflect.KClass<K> operator=null
+          names: CALL .setOf type=kotlin.collections.Set<kotlin.String> operator=null
+            elements: VARARG type=Array<out String> varargElementType=String
+              CONST String type=kotlin.String value='publicMemberExtensionK'
+              CONST String type=kotlin.String value='privateMemberExtensionK'
+        CALL .check type=kotlin.Unit operator=null
+          c: CALL .<get-memberProperties> type=kotlin.collections.Collection<kotlin.reflect.KProperty1<K, *>> operator=GET_PROPERTY
+            $receiver: GET_VAR k type=kotlin.reflect.KClass<K> operator=null
+          names: CALL .plus type=kotlin.collections.Set<kotlin.String> operator=PLUS
+            $receiver: CALL .setOf type=kotlin.collections.Set<kotlin.String> operator=null
+              element: CONST String type=kotlin.String value='publicMemberJ'
+            elements: CALL .names type=kotlin.collections.Set<kotlin.String> operator=null
+              $receiver: CALL .<get-declaredMemberProperties> type=kotlin.collections.Collection<kotlin.reflect.KProperty1<K, *>> operator=GET_PROPERTY
+                $receiver: GET_VAR k type=kotlin.reflect.KClass<K> operator=null
+        CALL .check type=kotlin.Unit operator=null
+          c: CALL .<get-memberExtensionProperties> type=kotlin.collections.Collection<kotlin.reflect.KProperty2<K, *, *>> operator=GET_PROPERTY
+            $receiver: GET_VAR k type=kotlin.reflect.KClass<K> operator=null
+          names: CALL .names type=kotlin.collections.Set<kotlin.String> operator=null
+            $receiver: CALL .<get-declaredMemberExtensionProperties> type=kotlin.collections.Collection<kotlin.reflect.KProperty2<K, *, *>> operator=GET_PROPERTY
+              $receiver: GET_VAR k type=kotlin.reflect.KClass<K> operator=null
+        VAR val l: kotlin.reflect.KClass<L>
+          CLASS_REFERENCE L type=kotlin.reflect.KClass<L>
+        CALL .check type=kotlin.Unit operator=null
+          c: CALL .<get-staticProperties> type=kotlin.collections.Collection<kotlin.reflect.KProperty0<*>> operator=GET_PROPERTY
+            $receiver: GET_VAR l type=kotlin.reflect.KClass<L> operator=null
+          names: CALL .emptySet type=kotlin.collections.Set<kotlin.String> operator=null
+        CALL .check type=kotlin.Unit operator=null
+          c: CALL .<get-declaredMemberProperties> type=kotlin.collections.Collection<kotlin.reflect.KProperty1<L, *>> operator=GET_PROPERTY
+            $receiver: GET_VAR l type=kotlin.reflect.KClass<L> operator=null
+          names: CALL .emptySet type=kotlin.collections.Set<kotlin.String> operator=null
+        CALL .check type=kotlin.Unit operator=null
+          c: CALL .<get-declaredMemberExtensionProperties> type=kotlin.collections.Collection<kotlin.reflect.KProperty2<L, *, *>> operator=GET_PROPERTY
+            $receiver: GET_VAR l type=kotlin.reflect.KClass<L> operator=null
+          names: CALL .emptySet type=kotlin.collections.Set<kotlin.String> operator=null
+        CALL .check type=kotlin.Unit operator=null
+          c: CALL .<get-memberProperties> type=kotlin.collections.Collection<kotlin.reflect.KProperty1<L, *>> operator=GET_PROPERTY
+            $receiver: GET_VAR l type=kotlin.reflect.KClass<L> operator=null
+          names: CALL .setOf type=kotlin.collections.Set<kotlin.String> operator=null
+            elements: VARARG type=Array<out String> varargElementType=String
+              CONST String type=kotlin.String value='publicMemberJ'
+              CONST String type=kotlin.String value='publicMemberK'
+        CALL .check type=kotlin.Unit operator=null
+          c: CALL .<get-memberExtensionProperties> type=kotlin.collections.Collection<kotlin.reflect.KProperty2<L, *, *>> operator=GET_PROPERTY
+            $receiver: GET_VAR l type=kotlin.reflect.KClass<L> operator=null
+          names: CALL .setOf type=kotlin.collections.Set<kotlin.String> operator=null
+            element: CONST String type=kotlin.String value='publicMemberExtensionK'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -11,3 +11,5 @@ fun box() : String {
     "lala" mustBe "lala"
     return "OK"
 }
+
+

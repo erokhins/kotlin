@@ -4,3 +4,5 @@
 fun OK() {}
 
 fun box() = ::OK.name
+
+

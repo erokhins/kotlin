@@ -13,3 +13,4 @@ fun <T, R> io(s: R, a: (R) -> T): T {
 fun box() : String {
     return io(("OK"), {it})
 }
+

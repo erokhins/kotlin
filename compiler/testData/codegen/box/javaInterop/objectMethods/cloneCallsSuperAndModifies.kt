@@ -14,3 +14,5 @@ fun box(): String {
     if (b.x != 239) return "Fail: b.x = ${b.x}"
     return "OK"
 }
+
+

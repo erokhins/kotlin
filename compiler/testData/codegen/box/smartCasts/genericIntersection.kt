@@ -7,3 +7,5 @@ fun <T> test(v: T): T {
 }
 
 fun box() = test("OK")
+
+

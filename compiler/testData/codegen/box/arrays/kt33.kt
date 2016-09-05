@@ -4,3 +4,5 @@ fun box () : String {
     s[0] += "bar"
     return if(s[0] == "foobar") "OK" else "fail"
 }
+
+

@@ -1,0 +1,51 @@
+MODULE <test-module>
+  FILE /withArguments.kt
+    CLASS CLASS Outer
+      CONSTRUCTOR private constructor Outer(/*0*/ s: kotlin.String, /*1*/ f: kotlin.Boolean = ...)
+        f: EXPRESSION_BODY
+          CONST Boolean type=kotlin.Boolean value='true'
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD s type=kotlin.Unit operator=null
+            receiver: THIS public open class Outer type=Outer
+            value: GET_VAR s type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          SET_BACKING_FIELD f type=kotlin.Unit operator=null
+            receiver: THIS public open class Outer type=Outer
+            value: GET_VAR f type=kotlin.Boolean operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Outer
+      PROPERTY public final val s: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR s type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final val f: kotlin.Boolean
+        EXPRESSION_BODY
+          GET_VAR f type=kotlin.Boolean operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      CLASS CLASS Inner
+        CONSTRUCTOR public constructor Inner()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Outer
+              s: CONST String type=kotlin.String value='xyz'
+            INSTANCE_INITIALIZER_CALL classDescriptor=Inner
+      CLASS CLASS Other
+        CONSTRUCTOR public constructor Other()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Outer
+              s: CONST String type=kotlin.String value='abc'
+              f: CONST Boolean type=kotlin.Boolean value='true'
+            INSTANCE_INITIALIZER_CALL classDescriptor=Other
+      CLASS CLASS Another
+        CONSTRUCTOR public constructor Another()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Outer
+              s: CONST String type=kotlin.String value=''
+              f: CONST Boolean type=kotlin.Boolean value='false'
+            INSTANCE_INITIALIZER_CALL classDescriptor=Another
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val outer: Outer.Inner
+          CALL .<init> type=Outer.Inner operator=null
+        VAR val other: Outer.Other
+          CALL .<init> type=Outer.Other operator=null
+        VAR val another: Outer.Another
+          CALL .<init> type=Outer.Another operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

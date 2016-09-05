@@ -6,3 +6,4 @@ infix fun Int.test(x : Int) : Int {
 }
 
 fun box() : String = if (10.test(10) == 1) "OK" else "FAIL"
+

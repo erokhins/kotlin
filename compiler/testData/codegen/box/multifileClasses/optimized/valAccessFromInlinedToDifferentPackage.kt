@@ -17,3 +17,4 @@ inline fun ok(block: () -> Unit): String {
     block()
     return O + K
 }
+

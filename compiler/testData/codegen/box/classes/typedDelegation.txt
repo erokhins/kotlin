@@ -1,0 +1,81 @@
+MODULE <test-module>
+  FILE /typedDelegation.kt
+    CLASS INTERFACE A
+      PROPERTY public abstract var zzzValue: T
+      FUN public abstract fun zzz(): T
+    CLASS CLASS Base
+      CONSTRUCTOR public constructor Base</*0*/ T>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Base
+      PROPERTY public open override /*1*/ var zzzValue: T?
+        EXPRESSION_BODY
+          CONST Null type=kotlin.Nothing? value='null'
+      FUN public open override /*1*/ fun zzz(): T?
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=zzz
+            CALL .<get-zzzValue> type=T? operator=GET_PROPERTY
+              $this: THIS public final class Base</*0*/ T> : A<T?> type=Base<T>
+    CLASS CLASS X
+      CONSTRUCTOR public constructor X()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=X
+      PROPERTY val `X$A$delegate`: Base<kotlin.String?>
+        EXPRESSION_BODY
+          CALL .<init> type=Base<kotlin.String?> operator=null
+      FUN public open override /*1*/ /*delegation*/ fun zzz(): kotlin.String?
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=zzz
+            CALL .zzz type=kotlin.String? operator=null
+              $this: GET_VAR X$A$delegate type=Base<kotlin.String?> operator=null
+      PROPERTY public open override /*1*/ /*delegation*/ var zzzValue: kotlin.String?
+        PROPERTY_GETTER public open override /*1*/ /*delegation*/ fun <get-zzzValue>(): kotlin.String?
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-zzzValue>
+              CALL .<get-zzzValue> type=kotlin.String? operator=null
+                $this: GET_VAR X$A$delegate type=Base<kotlin.String?> operator=null
+        PROPERTY_SETTER public open override /*1*/ /*delegation*/ fun <set-zzzValue>(/*0*/ <set-?>: kotlin.String?): kotlin.Unit
+          BLOCK_BODY
+            CALL .<set-zzzValue> type=kotlin.Unit operator=null
+              $this: GET_VAR X$A$delegate type=Base<kotlin.String?> operator=null
+              <set-?>: GET_VAR <set-?> type=kotlin.String? operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .zzz type=kotlin.String? operator=null
+          $this: TYPE_OP operator=CAST typeOperand=A<kotlin.String?>
+            CALL .<init> type=Base<kotlin.String?> operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .zzz type=kotlin.String? operator=null
+                $this: CALL .<init> type=X operator=null
+              arg1: CONST Null type=kotlin.Nothing? value='null'
+          then: BLOCK type=kotlin.Nothing operator=null
+            RETURN type=kotlin.Nothing from=box
+              CONST String type=kotlin.String value='Fail'
+        VAR val x: X
+          CALL .<init> type=X operator=null
+        CALL .<set-zzzValue> type=kotlin.Unit operator=EQ
+          $this: GET_VAR x type=X operator=null
+          <set-?>: CONST String type=kotlin.String value='aa'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-zzzValue> type=kotlin.String? operator=GET_PROPERTY
+                $this: GET_VAR x type=X operator=null
+              arg1: CONST String type=kotlin.String value='aa'
+          then: BLOCK type=kotlin.Nothing operator=null
+            RETURN type=kotlin.Nothing from=box
+              CONST String type=kotlin.String value='Fail 2'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .zzz type=kotlin.String? operator=null
+                $this: GET_VAR x type=X operator=null
+              arg1: CONST String type=kotlin.String value='aa'
+          then: BLOCK type=kotlin.Nothing operator=null
+            RETURN type=kotlin.Nothing from=box
+              CONST String type=kotlin.String value='Fail 3'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

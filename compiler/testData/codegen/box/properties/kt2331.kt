@@ -12,3 +12,5 @@ fun box() : String {
     p.foo()
     return if (p.x == 4) "OK" else "fail"
 }
+
+

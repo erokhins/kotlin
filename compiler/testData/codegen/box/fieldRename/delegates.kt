@@ -26,3 +26,5 @@ fun box() : String {
 
   return B().s
 }
+
+

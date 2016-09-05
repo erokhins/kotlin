@@ -4,3 +4,4 @@ fun box(): String {
     val x = f { this + it }
     return "OK"
 }
+

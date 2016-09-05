@@ -1,0 +1,38 @@
+MODULE <test-module>
+  FILE /falseSmartCast.kt
+    CLASS CLASS SuperFoo
+      CONSTRUCTOR public constructor SuperFoo()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=SuperFoo
+      FUN public final fun bar(): kotlin.String
+        BLOCK_BODY
+          WHEN type=kotlin.Unit operator=IF
+            if: TYPE_OP operator=INSTANCEOF typeOperand=Foo
+              THIS public open class SuperFoo type=SuperFoo
+            then: BLOCK type=kotlin.Nothing operator=null
+              CALL .superFoo type=kotlin.Unit operator=null
+                $this: TYPE_OP operator=IMPLICIT_CAST typeOperand=Foo
+                  THIS public open class SuperFoo type=SuperFoo
+              RETURN type=kotlin.Nothing from=bar
+                CALL .baz type=kotlin.String operator=null
+                  $this: THIS public open class SuperFoo type=SuperFoo
+          RETURN type=kotlin.Nothing from=bar
+            CALL .baz type=kotlin.String operator=null
+              $this: THIS public open class SuperFoo type=SuperFoo
+      FUN public final fun baz(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=baz
+            CONST String type=kotlin.String value='OK'
+    CLASS CLASS Foo
+      CONSTRUCTOR public constructor Foo()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL SuperFoo
+          INSTANCE_INITIALIZER_CALL classDescriptor=Foo
+      FUN public final fun superFoo(): kotlin.Unit
+        BLOCK_BODY
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .bar type=kotlin.String operator=null
+            $this: CALL .<init> type=Foo operator=null

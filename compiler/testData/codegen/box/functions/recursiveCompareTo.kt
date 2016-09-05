@@ -9,3 +9,4 @@ operator fun C.compareTo(o: C) : Int {
 }
 
 fun box() : String = if (C() > C()) "OK" else "FAIL"
+

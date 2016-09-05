@@ -10,3 +10,4 @@ class Test {
 fun box(): String {
   return if (Test().sayHello() == "hello") "OK" else "fail"
 }
+

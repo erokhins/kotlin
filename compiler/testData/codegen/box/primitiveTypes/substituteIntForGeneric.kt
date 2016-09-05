@@ -6,3 +6,5 @@ fun box(): String {
     val x: Any = foo()
     return if (x is Integer) "OK" else "Fail $x"
 }
+
+

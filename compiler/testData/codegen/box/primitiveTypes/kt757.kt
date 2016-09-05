@@ -7,3 +7,5 @@ fun box() : String {
     System.out?.println(x.inv())
     return if(x.inv() == -11.toLong()) "OK" else "fail"
 }
+
+

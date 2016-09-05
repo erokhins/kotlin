@@ -6,3 +6,5 @@ class A {
 }
 
 fun box() = A.values() + A.valueOf()
+
+

@@ -6,3 +6,5 @@ fun box(): String {
     }
     return if (y == 65) "OK" else "fail"
 }
+
+

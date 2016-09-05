@@ -25,3 +25,5 @@ fun ok() = overlapping()
 package a
 
 private fun overlapping() = "oops #2"
+
+

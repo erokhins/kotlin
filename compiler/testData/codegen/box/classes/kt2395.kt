@@ -11,3 +11,5 @@ class MyList(): AbstractList<String>() {
 fun box(): String {
     return if (MyList().getModificationCount() == 0) "OK" else "fail"
 }
+
+

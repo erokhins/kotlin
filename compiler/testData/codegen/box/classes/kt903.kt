@@ -23,3 +23,5 @@ public open class PerfectNumberFinder() {
 }
 
 fun box () = if (PerfectNumberFinder().isPerfect(28)) "OK" else "fail"
+
+

@@ -1,0 +1,37 @@
+MODULE <test-module>
+  FILE /kt4373.kt
+    CLASS INTERFACE Tr
+      PROPERTY public abstract val prop: T
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A(/*0*/ a: Tr<kotlin.Int>)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY val `A$Tr$delegate`: Tr<kotlin.Int>
+        EXPRESSION_BODY
+          GET_VAR a type=Tr<kotlin.Int> operator=null
+      PROPERTY public open override /*1*/ /*delegation*/ val prop: kotlin.Int
+        PROPERTY_GETTER public open override /*1*/ /*delegation*/ fun <get-prop>(): kotlin.Int
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-prop>
+              CALL .<get-prop> type=kotlin.Int operator=null
+                $this: GET_VAR A$Tr$delegate type=Tr<kotlin.Int> operator=null
+    FUN public fun eat(/*0*/ x: kotlin.Int): kotlin.Unit
+      BLOCK_BODY
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .eat type=kotlin.Unit operator=null
+          x: CALL .<get-prop> type=kotlin.Int operator=GET_PROPERTY
+            $this: CALL .<init> type=A operator=null
+              a: BLOCK type=box.<no name provided> operator=OBJECT_LITERAL
+                CLASS CLASS <no name provided>
+                  CONSTRUCTOR public constructor <no name provided>()
+                    BLOCK_BODY
+                      DELEGATING_CONSTRUCTOR_CALL Any
+                      INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+                  PROPERTY public open override /*1*/ val prop: kotlin.Int = 42
+                    EXPRESSION_BODY
+                      CONST Int type=kotlin.Int value='42'
+                CALL .<init> type=box.<no name provided> operator=OBJECT_LITERAL
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

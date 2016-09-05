@@ -27,3 +27,5 @@ public fun barx(): String = "K"
 // FILE: test.kt
 
 fun box(): String = Baz.baz()
+
+

@@ -18,3 +18,5 @@ class B: A
 fun box() : String {
     return B().test()!!
 }
+
+

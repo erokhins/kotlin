@@ -1,0 +1,33 @@
+MODULE <test-module>
+  FILE /topLevelFieldReference.kt
+    PROPERTY @kotlin.jvm.JvmField() public val publicField: kotlin.String = "1"
+      EXPRESSION_BODY
+        CONST String type=kotlin.String value='1'
+    PROPERTY @kotlin.jvm.JvmField() internal val internalField: kotlin.String = "2"
+      EXPRESSION_BODY
+        CONST String type=kotlin.String value='2'
+    FUN public fun testAccessors(): kotlin.Unit
+      BLOCK_BODY
+        VAR val kProperty: kotlin.reflect.KProperty0<kotlin.String>
+          CALLABLE_REFERENCE publicField type=kotlin.reflect.KProperty0<kotlin.String> operator=null
+        CALL .checkAccessor type=kotlin.Unit operator=null
+          prop: GET_VAR kProperty type=kotlin.reflect.KProperty0<kotlin.String> operator=null
+          value: CONST String type=kotlin.String value='1'
+        CALL .checkAccessor type=kotlin.Unit operator=null
+          prop: CALLABLE_REFERENCE internalField type=kotlin.reflect.KProperty0<kotlin.String> operator=null
+          value: CONST String type=kotlin.String value='2'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .testAccessors type=kotlin.Unit operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'
+    FUN public fun </*0*/ T, /*1*/ R> checkAccessor(/*0*/ prop: kotlin.reflect.KProperty0<T>, /*1*/ value: R): kotlin.Unit
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .get type=T operator=null
+            $this: GET_VAR prop type=kotlin.reflect.KProperty0<T> operator=null
+          actual: GET_VAR value type=R operator=null
+          message: STRING_CONCATENATION type=kotlin.String
+            CONST String type=kotlin.String value='Property '
+            GET_VAR prop type=kotlin.reflect.KProperty0<T> operator=null
+            CONST String type=kotlin.String value=' has wrong value'

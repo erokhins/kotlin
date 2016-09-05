@@ -66,3 +66,5 @@ abstract class A {
         get() = "A.property"
         set(value) { state += "A.property;" }
 }
+
+

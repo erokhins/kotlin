@@ -1,0 +1,244 @@
+MODULE <test-module>
+  FILE /stackOverflowOnCallFromGetValue.kt
+    CLASS OBJECT Delegate
+      CONSTRUCTOR private constructor Delegate()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Delegate
+      FUN public final operator fun getValue(/*0*/ t: kotlin.Any?, /*1*/ p: kotlin.reflect.KProperty<*>): kotlin.String
+        BLOCK_BODY
+          BLOCK type=kotlin.String? operator=SAFE_CALL
+            VAR val tmp0_safe_receiver: kotlin.reflect.KProperty0<kotlin.String>?
+              TYPE_OP operator=SAFE_CAST typeOperand=kotlin.reflect.KProperty0<kotlin.String>
+                GET_VAR p type=kotlin.reflect.KProperty<*> operator=null
+            WHEN type=kotlin.String? operator=SAFE_CALL
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_safe_receiver type=kotlin.reflect.KProperty0<kotlin.String>? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CONST Null type=kotlin.Nothing? value='null'
+              else: CALL .get type=kotlin.String operator=null
+                $this: GET_VAR tmp0_safe_receiver type=kotlin.reflect.KProperty0<kotlin.String>? operator=null
+          BLOCK type=kotlin.String? operator=SAFE_CALL
+            VAR val tmp1_safe_receiver: kotlin.reflect.KProperty1<O, kotlin.String>?
+              TYPE_OP operator=SAFE_CAST typeOperand=kotlin.reflect.KProperty1<O, kotlin.String>
+                GET_VAR p type=kotlin.reflect.KProperty<*> operator=null
+            WHEN type=kotlin.String? operator=SAFE_CALL
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp1_safe_receiver type=kotlin.reflect.KProperty1<O, kotlin.String>? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CONST Null type=kotlin.Nothing? value='null'
+              else: CALL .get type=kotlin.String operator=null
+                $this: GET_VAR tmp1_safe_receiver type=kotlin.reflect.KProperty1<O, kotlin.String>? operator=null
+                receiver: GET_OBJECT O type=O
+          BLOCK type=kotlin.String? operator=SAFE_CALL
+            VAR val tmp2_safe_receiver: kotlin.reflect.KProperty2<O, O, kotlin.String>?
+              TYPE_OP operator=SAFE_CAST typeOperand=kotlin.reflect.KProperty2<O, O, kotlin.String>
+                GET_VAR p type=kotlin.reflect.KProperty<*> operator=null
+            WHEN type=kotlin.String? operator=SAFE_CALL
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp2_safe_receiver type=kotlin.reflect.KProperty2<O, O, kotlin.String>? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CONST Null type=kotlin.Nothing? value='null'
+              else: CALL .get type=kotlin.String operator=null
+                $this: GET_VAR tmp2_safe_receiver type=kotlin.reflect.KProperty2<O, O, kotlin.String>? operator=null
+                receiver1: GET_OBJECT O type=O
+                receiver2: GET_OBJECT O type=O
+          RETURN type=kotlin.Nothing from=getValue
+            CONST String type=kotlin.String value='Fail'
+      FUN public final operator fun setValue(/*0*/ t: kotlin.Any?, /*1*/ p: kotlin.reflect.KProperty<*>, /*2*/ v: kotlin.String): kotlin.Unit
+        BLOCK_BODY
+          BLOCK type=kotlin.Unit? operator=SAFE_CALL
+            VAR val tmp0_safe_receiver: kotlin.reflect.KMutableProperty0<kotlin.String>?
+              TYPE_OP operator=SAFE_CAST typeOperand=kotlin.reflect.KMutableProperty0<kotlin.String>
+                GET_VAR p type=kotlin.reflect.KProperty<*> operator=null
+            WHEN type=kotlin.Unit? operator=SAFE_CALL
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_safe_receiver type=kotlin.reflect.KMutableProperty0<kotlin.String>? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CONST Null type=kotlin.Nothing? value='null'
+              else: CALL .set type=kotlin.Unit operator=null
+                $this: GET_VAR tmp0_safe_receiver type=kotlin.reflect.KMutableProperty0<kotlin.String>? operator=null
+                value: GET_VAR v type=kotlin.String operator=null
+          BLOCK type=kotlin.Unit? operator=SAFE_CALL
+            VAR val tmp1_safe_receiver: kotlin.reflect.KMutableProperty1<O, kotlin.String>?
+              TYPE_OP operator=SAFE_CAST typeOperand=kotlin.reflect.KMutableProperty1<O, kotlin.String>
+                GET_VAR p type=kotlin.reflect.KProperty<*> operator=null
+            WHEN type=kotlin.Unit? operator=SAFE_CALL
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp1_safe_receiver type=kotlin.reflect.KMutableProperty1<O, kotlin.String>? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CONST Null type=kotlin.Nothing? value='null'
+              else: CALL .set type=kotlin.Unit operator=null
+                $this: GET_VAR tmp1_safe_receiver type=kotlin.reflect.KMutableProperty1<O, kotlin.String>? operator=null
+                receiver: GET_OBJECT O type=O
+                value: GET_VAR v type=kotlin.String operator=null
+          BLOCK type=kotlin.Unit? operator=SAFE_CALL
+            VAR val tmp2_safe_receiver: kotlin.reflect.KMutableProperty2<O, O, kotlin.String>?
+              TYPE_OP operator=SAFE_CAST typeOperand=kotlin.reflect.KMutableProperty2<O, O, kotlin.String>
+                GET_VAR p type=kotlin.reflect.KProperty<*> operator=null
+            WHEN type=kotlin.Unit? operator=SAFE_CALL
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp2_safe_receiver type=kotlin.reflect.KMutableProperty2<O, O, kotlin.String>? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CONST Null type=kotlin.Nothing? value='null'
+              else: CALL .set type=kotlin.Unit operator=null
+                $this: GET_VAR tmp2_safe_receiver type=kotlin.reflect.KMutableProperty2<O, O, kotlin.String>? operator=null
+                receiver1: GET_OBJECT O type=O
+                receiver2: GET_OBJECT O type=O
+                value: GET_VAR v type=kotlin.String operator=null
+    PROPERTY public var topLevel: kotlin.String
+      delegate: PROPERTY val `topLevel$delegate`: Delegate
+        EXPRESSION_BODY
+          GET_OBJECT Delegate type=Delegate
+      PROPERTY_GETTER public fun <get-topLevel>(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=<get-topLevel>
+            CALL .getValue type=kotlin.String operator=null
+              $this: GET_BACKING_FIELD topLevel$delegate type=Delegate operator=null
+              t: CONST Null type=kotlin.Nothing? value='null'
+              p: CALLABLE_REFERENCE topLevel type=kotlin.reflect.KMutableProperty0<kotlin.String> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+      PROPERTY_SETTER public fun <set-topLevel>(/*0*/ <set-?>: kotlin.String): kotlin.Unit
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=<set-topLevel>
+            CALL .setValue type=kotlin.Unit operator=null
+              $this: GET_BACKING_FIELD topLevel$delegate type=Delegate operator=null
+              t: CONST Null type=kotlin.Nothing? value='null'
+              p: CALLABLE_REFERENCE topLevel type=kotlin.reflect.KMutableProperty0<kotlin.String> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+              v: GET_VAR <set-?> type=kotlin.String operator=null
+    CLASS OBJECT O
+      CONSTRUCTOR private constructor O()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=O
+      PROPERTY public final var member: kotlin.String
+        delegate: PROPERTY val `member$delegate`: Delegate
+          EXPRESSION_BODY
+            GET_OBJECT Delegate type=Delegate
+        PROPERTY_GETTER public final fun <get-member>(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-member>
+              CALL .getValue type=kotlin.String operator=null
+                $this: GET_BACKING_FIELD member$delegate type=Delegate operator=null
+                  receiver: THIS public object O type=O
+                t: THIS public object O type=O
+                p: CALLABLE_REFERENCE member type=kotlin.reflect.KMutableProperty1<O, kotlin.String> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+        PROPERTY_SETTER public final fun <set-member>(/*0*/ <set-?>: kotlin.String): kotlin.Unit
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<set-member>
+              CALL .setValue type=kotlin.Unit operator=null
+                $this: GET_BACKING_FIELD member$delegate type=Delegate operator=null
+                  receiver: THIS public object O type=O
+                t: THIS public object O type=O
+                p: CALLABLE_REFERENCE member type=kotlin.reflect.KMutableProperty1<O, kotlin.String> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+                v: GET_VAR <set-?> type=kotlin.String operator=null
+      PROPERTY public final var O.memExt: kotlin.String
+        delegate: PROPERTY val `memExt$delegate`: Delegate
+          EXPRESSION_BODY
+            GET_OBJECT Delegate type=Delegate
+        PROPERTY_GETTER public final fun O.<get-memExt>(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-memExt>
+              CALL .getValue type=kotlin.String operator=null
+                $this: GET_BACKING_FIELD memExt$delegate type=Delegate operator=null
+                  receiver: THIS public object O type=O
+                t: $RECEIVER of: memExt type=O
+                p: CALLABLE_REFERENCE memExt type=kotlin.reflect.KMutableProperty1<O, kotlin.String> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+        PROPERTY_SETTER public final fun O.<set-memExt>(/*0*/ <set-?>: kotlin.String): kotlin.Unit
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<set-memExt>
+              CALL .setValue type=kotlin.Unit operator=null
+                $this: GET_BACKING_FIELD memExt$delegate type=Delegate operator=null
+                  receiver: THIS public object O type=O
+                t: $RECEIVER of: memExt type=O
+                p: CALLABLE_REFERENCE memExt type=kotlin.reflect.KMutableProperty1<O, kotlin.String> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+                v: GET_VAR <set-?> type=kotlin.String operator=null
+    FUN public fun check(/*0*/ lambda: () -> kotlin.Unit): kotlin.Unit
+      BLOCK_BODY
+        TRY_CATCH type=kotlin.Unit
+          try: BLOCK type=kotlin.Unit operator=null
+            CALL .invoke type=kotlin.Unit operator=INVOKE
+              $this: GET_VAR lambda type=() -> kotlin.Unit operator=VARIABLE_AS_FUNCTION
+          catch e: BLOCK type=kotlin.Nothing operator=null
+            WHEN type=kotlin.Unit operator=IF
+              if: WHEN type=kotlin.Boolean operator=ANDAND
+                if: TYPE_OP operator=NOT_INSTANCEOF typeOperand=java.lang.reflect.InvocationTargetException
+                  GET_VAR e type=kotlin.Throwable operator=null
+                then: TYPE_OP operator=NOT_INSTANCEOF typeOperand=java.lang.StackOverflowError
+                  GET_VAR e type=kotlin.Throwable operator=null
+                else: CONST Boolean type=kotlin.Boolean value='false'
+              then: BLOCK type=kotlin.Nothing operator=null
+                THROW type=kotlin.Nothing
+                  CALL .<init> type=java.lang.AssertionError operator=null
+                    p0: CALL .plus type=kotlin.String operator=PLUS
+                      $this: CONST String type=kotlin.String value='The current implementation uses reflection to get the value of the property,'
+                      other: STRING_CONCATENATION type=kotlin.String
+                        CONST String type=kotlin.String value='so either InvocationTargetException or StackOverflowError should have happened, but was: '
+                        GET_VAR e type=kotlin.Throwable operator=null
+            RETURN type=kotlin.Nothing from=check
+        THROW type=kotlin.Nothing
+          CALL .<init> type=java.lang.AssertionError operator=null
+            p0: CALL .plus type=kotlin.String operator=PLUS
+              $this: CONST String type=kotlin.String value='Getting the property value with .get() from getValue() or setting it with .set() in setValue() '
+              other: CONST String type=kotlin.String value='is effectively an endless recursion and should fail'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .check type=kotlin.Unit operator=null
+          lambda: BLOCK type=() -> kotlin.Unit operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Unit
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .<get-topLevel> type=kotlin.String operator=GET_PROPERTY
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Unit operator=LAMBDA
+        CALL .check type=kotlin.Unit operator=null
+          lambda: BLOCK type=() -> kotlin.Unit operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Unit
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .<set-topLevel> type=kotlin.Unit operator=EQ
+                    <set-?>: CONST String type=kotlin.String value=''
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Unit operator=LAMBDA
+        CALL .check type=kotlin.Unit operator=null
+          lambda: BLOCK type=() -> kotlin.Unit operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Unit
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .<get-member> type=kotlin.String operator=GET_PROPERTY
+                    $this: GET_OBJECT O type=O
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Unit operator=LAMBDA
+        CALL .check type=kotlin.Unit operator=null
+          lambda: BLOCK type=() -> kotlin.Unit operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Unit
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .<set-member> type=kotlin.Unit operator=EQ
+                    $this: GET_OBJECT O type=O
+                    <set-?>: CONST String type=kotlin.String value=''
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Unit operator=LAMBDA
+        CALL .with type=kotlin.Unit operator=null
+          receiver: GET_OBJECT O type=O
+          block: BLOCK type=O.() -> kotlin.Unit operator=LAMBDA
+            FUN local final fun O.<anonymous>(): kotlin.Unit
+              BLOCK_BODY
+                CALL .check type=kotlin.Unit operator=null
+                  lambda: BLOCK type=() -> kotlin.Unit operator=LAMBDA
+                    FUN local final fun <anonymous>(): kotlin.Unit
+                      BLOCK_BODY
+                        RETURN type=kotlin.Nothing from=<anonymous>
+                          CALL .<get-memExt> type=kotlin.String operator=GET_PROPERTY
+                            $this: $RECEIVER of: <anonymous> type=O
+                            $receiver: GET_OBJECT O type=O
+                    CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Unit operator=LAMBDA
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .check type=kotlin.Unit operator=null
+                    lambda: BLOCK type=() -> kotlin.Unit operator=LAMBDA
+                      FUN local final fun <anonymous>(): kotlin.Unit
+                        BLOCK_BODY
+                          RETURN type=kotlin.Nothing from=<anonymous>
+                            CALL .<set-memExt> type=kotlin.Unit operator=EQ
+                              $this: $RECEIVER of: <anonymous> type=O
+                              $receiver: GET_OBJECT O type=O
+                              <set-?>: CONST String type=kotlin.String value=''
+                      CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Unit operator=LAMBDA
+            CALLABLE_REFERENCE <anonymous> type=O.() -> kotlin.Unit operator=LAMBDA
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

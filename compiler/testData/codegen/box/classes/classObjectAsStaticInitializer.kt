@@ -17,3 +17,5 @@ fun box(): String {
   if (global == 1) return "OK" else return "fail2: global = $global"
 }
 
+
+

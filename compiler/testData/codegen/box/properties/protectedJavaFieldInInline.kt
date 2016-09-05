@@ -17,3 +17,5 @@ class B : JavaClass() {
 }
 
 fun box() = B().bar()
+
+

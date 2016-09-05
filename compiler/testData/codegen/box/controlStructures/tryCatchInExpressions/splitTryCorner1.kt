@@ -9,3 +9,4 @@ fun shouldReturnFalse() : Boolean {
 
 fun box(): String =
         if (shouldReturnFalse()) "Failed" else "OK"
+

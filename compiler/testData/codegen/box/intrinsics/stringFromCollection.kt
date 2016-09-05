@@ -5,3 +5,5 @@ fun box(): String {
     list[0].length
     return "OK"
 }
+
+

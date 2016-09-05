@@ -16,3 +16,5 @@ fun box(): String {
     test(B())
     return "OK"
 }
+
+

@@ -1,0 +1,38 @@
+MODULE <test-module>
+  FILE /newArray.kt
+    FUN private fun </*0*/ T> upcast(/*0*/ value: T): T
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=upcast
+          GET_VAR value type=T operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .invoke type=kotlin.ByteArray operator=null
+          $this: CALL .upcast type=(kotlin.Int) -> kotlin.ByteArray operator=null
+            value: CALLABLE_REFERENCE <init> type=kotlin.reflect.KFunction1<kotlin.Int, kotlin.ByteArray> operator=null
+          p1: CONST Int type=kotlin.Int value='10'
+        CALL .invoke type=kotlin.IntArray operator=null
+          $this: CALL .upcast type=(kotlin.Int) -> kotlin.IntArray operator=null
+            value: CALLABLE_REFERENCE <init> type=kotlin.reflect.KFunction1<kotlin.Int, kotlin.IntArray> operator=null
+          p1: CONST Int type=kotlin.Int value='10'
+        CALL .invoke type=kotlin.ShortArray operator=null
+          $this: CALL .upcast type=(kotlin.Int) -> kotlin.ShortArray operator=null
+            value: CALLABLE_REFERENCE <init> type=kotlin.reflect.KFunction1<kotlin.Int, kotlin.ShortArray> operator=null
+          p1: CONST Int type=kotlin.Int value='10'
+        CALL .invoke type=kotlin.LongArray operator=null
+          $this: CALL .upcast type=(kotlin.Int) -> kotlin.LongArray operator=null
+            value: CALLABLE_REFERENCE <init> type=kotlin.reflect.KFunction1<kotlin.Int, kotlin.LongArray> operator=null
+          p1: CONST Int type=kotlin.Int value='10'
+        CALL .invoke type=kotlin.DoubleArray operator=null
+          $this: CALL .upcast type=(kotlin.Int) -> kotlin.DoubleArray operator=null
+            value: CALLABLE_REFERENCE <init> type=kotlin.reflect.KFunction1<kotlin.Int, kotlin.DoubleArray> operator=null
+          p1: CONST Int type=kotlin.Int value='10'
+        CALL .invoke type=kotlin.FloatArray operator=null
+          $this: CALL .upcast type=(kotlin.Int) -> kotlin.FloatArray operator=null
+            value: CALLABLE_REFERENCE <init> type=kotlin.reflect.KFunction1<kotlin.Int, kotlin.FloatArray> operator=null
+          p1: CONST Int type=kotlin.Int value='10'
+        CALL .invoke type=kotlin.BooleanArray operator=null
+          $this: CALL .upcast type=(kotlin.Int) -> kotlin.BooleanArray operator=null
+            value: CALLABLE_REFERENCE <init> type=kotlin.reflect.KFunction1<kotlin.Int, kotlin.BooleanArray> operator=null
+          p1: CONST Int type=kotlin.Int value='10'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -49,3 +49,5 @@ fun box(): String {
     if (!ok3()) return "Fail #3"
     return "OK"
 }
+
+

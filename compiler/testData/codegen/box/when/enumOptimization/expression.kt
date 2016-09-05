@@ -37,3 +37,5 @@ fun box() : String {
     assertEquals("autumn", bar2(Season.AUTUMN))
     return "OK"
 }
+
+

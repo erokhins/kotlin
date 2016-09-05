@@ -18,3 +18,5 @@ fun box(): String {
     C().foo = "OK"
     return C().foo
 }
+
+

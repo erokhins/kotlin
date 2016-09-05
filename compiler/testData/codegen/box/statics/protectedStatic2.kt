@@ -56,3 +56,5 @@ class Kotlin : Base.Derived() {
 fun box(): String {
     return Kotlin().doTest()
 }
+
+

@@ -13,3 +13,5 @@ fun box(): String {
     val c = A(object: B {}).c
     return if (c == 3) "OK" else "fail: $c"
 }
+
+

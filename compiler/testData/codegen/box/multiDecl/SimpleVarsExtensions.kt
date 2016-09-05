@@ -8,3 +8,5 @@ fun box() : String {
     a = b
     return if (a == 2 && b == 2) "OK" else "fail"
 }
+
+

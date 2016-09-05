@@ -15,3 +15,5 @@ inline fun bar(x: String): String =
 
 fun box(): String =
         bar("OK")
+
+

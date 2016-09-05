@@ -14,3 +14,5 @@ object A {
 fun box(): String {
     return A.Z.p
 }
+
+

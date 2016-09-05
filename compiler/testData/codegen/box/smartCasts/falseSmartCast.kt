@@ -15,3 +15,4 @@ class Foo : SuperFoo() {
 }
 
 fun box(): String = Foo().bar()
+

@@ -11,3 +11,4 @@ fun box(): String = ::OK.get()
 package a
 
 val OK = run { "OK" }
+

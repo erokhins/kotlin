@@ -5,3 +5,5 @@ fun box() : String {
 fun invoker(gen :  () -> String) : String {
     return gen()
 }
+
+

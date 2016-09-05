@@ -37,3 +37,4 @@ fun test1() : MyString {
 fun box(): String {
   return if (test1().toString() == "Try1Try2Finally2Finally1") "OK" else "fail: ${test1()}"
 }
+

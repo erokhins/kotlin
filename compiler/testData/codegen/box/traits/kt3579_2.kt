@@ -8,3 +8,5 @@ class MClass(val p: String) : First, Some<MClass>
 fun box(): String {
     return MClass("OK").p
 }
+
+

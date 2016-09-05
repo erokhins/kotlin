@@ -14,3 +14,5 @@ fun box() : String {
   val o = Outer()
   return if (o.x.name != "xyzzy") "fail" else "OK"
 }
+
+

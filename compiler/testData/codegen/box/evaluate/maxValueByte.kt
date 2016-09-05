@@ -23,3 +23,5 @@ fun box(): String {
     if (annotation.p5 != 2) return "fail 5, expected = ${2}, actual = ${annotation.p5}"
     return "OK"
 }
+
+

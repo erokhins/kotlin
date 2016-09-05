@@ -9,3 +9,5 @@ class B : T {
 }
 
 fun box() = B().C().bar()
+
+

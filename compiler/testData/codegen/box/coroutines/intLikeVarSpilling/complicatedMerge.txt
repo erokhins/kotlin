@@ -1,0 +1,57 @@
+MODULE <test-module>
+  FILE /complicatedMerge.kt
+    CLASS CLASS Controller
+      CONSTRUCTOR public constructor Controller()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Controller
+      FUN public final suspend fun suspendHere(/*0*/ x: kotlin.coroutines.Continuation<kotlin.Unit>): kotlin.Unit
+        BLOCK_BODY
+          CALL .resume type=kotlin.Unit operator=null
+            $this: GET_VAR x type=kotlin.coroutines.Continuation<kotlin.Unit> operator=null
+            data: GET_OBJECT Unit type=kotlin.Unit
+    FUN public fun builder(/*0*/ coroutine c: Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit>): kotlin.Unit
+      BLOCK_BODY
+        CALL .resume type=kotlin.Unit operator=null
+          $this: CALL .invoke type=kotlin.coroutines.Continuation<kotlin.Unit> operator=INVOKE
+            $this: GET_VAR c type=Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit> operator=VARIABLE_AS_FUNCTION
+            p1: CALL .<init> type=Controller operator=null
+          data: GET_OBJECT Unit type=kotlin.Unit
+    FUN public fun foo(): kotlin.Boolean
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo
+          CONST Boolean type=kotlin.Boolean value='true'
+    PROPERTY private var booleanResult: kotlin.Boolean
+      EXPRESSION_BODY
+        CONST Boolean type=kotlin.Boolean value='false'
+    FUN public fun setBooleanRes(/*0*/ x: kotlin.Boolean): kotlin.Unit
+      BLOCK_BODY
+        CALL .<set-booleanResult> type=kotlin.Unit operator=EQ
+          <set-?>: GET_VAR x type=kotlin.Boolean operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .builder type=kotlin.Unit operator=null
+          c: TYPE_OP operator=IMPLICIT_CAST typeOperand=Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit>
+            BLOCK type=Controller.() -> kotlin.Unit operator=LAMBDA
+              FUN local final fun Controller.<anonymous>(): kotlin.Unit
+                BLOCK_BODY
+                  VAR val x: kotlin.Boolean = true
+                    CONST Boolean type=kotlin.Boolean value='true'
+                  VAR val y: kotlin.Boolean = false
+                    CONST Boolean type=kotlin.Boolean value='false'
+                  CALL .suspendHere type=kotlin.Unit operator=null
+                    $this: $RECEIVER of: <anonymous> type=Controller
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .setBooleanRes type=kotlin.Unit operator=null
+                      x: WHEN type=kotlin.Boolean operator=IF
+                        if: CALL .foo type=kotlin.Boolean operator=null
+                        then: GET_VAR x type=kotlin.Boolean operator=null
+                        else: GET_VAR y type=kotlin.Boolean operator=null
+              CALLABLE_REFERENCE <anonymous> type=Controller.() -> kotlin.Unit operator=LAMBDA
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .<get-booleanResult> type=kotlin.Boolean operator=GET_PROPERTY
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 1'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

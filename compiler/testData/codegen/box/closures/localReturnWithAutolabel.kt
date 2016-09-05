@@ -17,3 +17,4 @@ fun box(): String {
 }
 
 fun <T> run1(f: () -> T): T { return f() }
+

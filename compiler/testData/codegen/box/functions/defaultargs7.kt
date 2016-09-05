@@ -3,3 +3,5 @@ class A(val expected: Int) {
 }
 
 fun box() = if (A(42).foo(1)) "OK" else "Fail"
+
+

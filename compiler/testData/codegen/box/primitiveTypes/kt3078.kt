@@ -5,3 +5,5 @@ fun box(): String {
     if (1.1.compareTo(1) <= 0) return "Fail #4"
     return "OK"
 }
+
+

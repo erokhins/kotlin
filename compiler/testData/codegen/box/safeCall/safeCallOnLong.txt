@@ -1,0 +1,38 @@
+MODULE <test-module>
+  FILE /safeCallOnLong.kt
+    FUN public fun f(/*0*/ b: kotlin.Long.(kotlin.Long) -> kotlin.Long): kotlin.Long
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=f
+          BLOCK type=kotlin.Long? operator=SAFE_CALL
+            VAR val tmp0_safe_receiver: kotlin.Long
+              CONST Long type=kotlin.Long value='1'
+            WHEN type=kotlin.Long? operator=SAFE_CALL
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_safe_receiver type=kotlin.Long operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CONST Null type=kotlin.Nothing? value='null'
+              else: CALL .invoke type=kotlin.Long operator=INVOKE
+                $this: GET_VAR b type=kotlin.Long.(kotlin.Long) -> kotlin.Long operator=VARIABLE_AS_FUNCTION
+                $receiver: GET_VAR tmp0_safe_receiver type=kotlin.Long operator=null
+                p2: CONST Long type=kotlin.Long value='2'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val x: kotlin.Long
+          CALL .f type=kotlin.Long operator=null
+            b: BLOCK type=kotlin.Long.(kotlin.Long) -> kotlin.Long operator=LAMBDA
+              FUN local final fun kotlin.Long.<anonymous>(/*0*/ it: kotlin.Long): kotlin.Long
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .plus type=kotlin.Long operator=PLUS
+                      $this: $RECEIVER of: <anonymous> type=kotlin.Long
+                      other: GET_VAR it type=kotlin.Long operator=null
+              CALLABLE_REFERENCE <anonymous> type=kotlin.Long.(kotlin.Long) -> kotlin.Long operator=LAMBDA
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: GET_VAR x type=kotlin.Long operator=null
+              arg1: CONST Long type=kotlin.Long value='3'
+            then: CONST String type=kotlin.String value='OK'
+            else: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail '
+              GET_VAR x type=kotlin.Long operator=null

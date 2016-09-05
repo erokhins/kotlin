@@ -7,3 +7,4 @@ fun box(): String {
     if (y != -1) return "Fail (y): $y}"
     return "OK"
 }
+

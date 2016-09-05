@@ -5,3 +5,5 @@ fun box() : String {
 fun apply(arg : String, f :  (p:String) -> String) : String {
     return f(arg)
 }
+
+

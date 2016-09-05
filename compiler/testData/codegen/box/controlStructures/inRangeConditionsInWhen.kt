@@ -6,3 +6,5 @@ fun box(): String {
         else -> return "fail"
     }
 }
+
+

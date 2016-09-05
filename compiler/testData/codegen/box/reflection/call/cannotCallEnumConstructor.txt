@@ -1,0 +1,29 @@
+MODULE <test-module>
+  FILE /cannotCallEnumConstructor.kt
+    CLASS ENUM_CLASS E
+      CONSTRUCTOR private constructor E()
+        BLOCK_BODY
+          ENUM_CONSTRUCTOR_CALL Enum super
+          INSTANCE_INITIALIZER_CALL classDescriptor=E
+      FUN public final /*synthesized*/ fun values(): kotlin.Array<E>
+        SYNTHETIC_BODY kind=ENUM_VALUES
+      FUN public final /*synthesized*/ fun valueOf(/*0*/ value: kotlin.String): E
+        SYNTHETIC_BODY kind=ENUM_VALUEOF
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        TRY_CATCH type=kotlin.Nothing
+          try: BLOCK type=kotlin.Nothing operator=null
+            VAR val c: kotlin.reflect.KFunction<E>
+              CALL .single type=kotlin.reflect.KFunction<E> operator=null
+                $receiver: CALL .<get-constructors> type=kotlin.collections.Collection<kotlin.reflect.KFunction<E>> operator=GET_PROPERTY
+                  $this: CLASS_REFERENCE E type=kotlin.reflect.KClass<E>
+            CALL .<set-isAccessible> type=kotlin.Unit operator=EQ
+              $receiver: GET_VAR c type=kotlin.reflect.KFunction<E> operator=null
+              value: CONST Boolean type=kotlin.Boolean value='true'
+            CALL .call type=E operator=null
+              $this: GET_VAR c type=kotlin.reflect.KFunction<E> operator=null
+            RETURN type=kotlin.Nothing from=box
+              CONST String type=kotlin.String value='Fail: constructing an enum class should not be allowed'
+          catch e: BLOCK type=kotlin.Nothing operator=null
+            RETURN type=kotlin.Nothing from=box
+              CONST String type=kotlin.String value='OK'

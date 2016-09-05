@@ -15,3 +15,4 @@ class Base {
     var count: Int = 0
         get() = field++
 }
+

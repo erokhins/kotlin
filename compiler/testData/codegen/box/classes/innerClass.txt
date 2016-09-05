@@ -1,0 +1,51 @@
+MODULE <test-module>
+  FILE /innerClass.kt
+    CLASS CLASS Outer
+      CONSTRUCTOR public constructor Outer(/*0*/ foo: java.lang.StringBuilder)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD foo type=kotlin.Unit operator=null
+            receiver: THIS public final class Outer type=Outer
+            value: GET_VAR foo type=java.lang.StringBuilder operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Outer
+      PROPERTY public final val foo: java.lang.StringBuilder
+        EXPRESSION_BODY
+          GET_VAR foo type=java.lang.StringBuilder operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      CLASS CLASS Inner
+        CONSTRUCTOR public constructor Inner()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Inner
+        FUN public final fun len(): kotlin.Int
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=len
+              CALL .<get-length> type=kotlin.Int operator=GET_PROPERTY
+                $this: CALL .<get-foo> type=java.lang.StringBuilder operator=GET_PROPERTY
+                  $this: THIS public final class Outer type=Outer
+      FUN public final fun test(): Outer.Inner
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=test
+            CALL .<init> type=Outer.Inner operator=null
+              $this: THIS public final class Outer type=Outer
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val sb: java.lang.StringBuilder
+          CALL .<init> type=java.lang.StringBuilder operator=null
+            p0: CONST String type=kotlin.String value='xyzzy'
+        VAR val o: Outer
+          CALL .<init> type=Outer operator=null
+            foo: GET_VAR sb type=java.lang.StringBuilder operator=null
+        VAR val i: Outer.Inner
+          CALL .test type=Outer.Inner operator=null
+            $this: GET_VAR o type=Outer operator=null
+        VAR val l: kotlin.Int
+          CALL .len type=kotlin.Int operator=null
+            $this: GET_VAR i type=Outer.Inner operator=null
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: GET_VAR l type=kotlin.Int operator=null
+                arg1: CONST Int type=kotlin.Int value='5'
+            then: CONST String type=kotlin.String value='fail'
+            else: CONST String type=kotlin.String value='OK'

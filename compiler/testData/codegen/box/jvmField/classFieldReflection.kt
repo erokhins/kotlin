@@ -43,3 +43,5 @@ public fun <T, R> checkAccessor(prop: KMutableProperty1<T, R>, value: R, newValu
     prop.set(receiver, newValue)
     assertEquals(prop.get(receiver), newValue, "Property ${prop} has wrong value")
 }
+
+

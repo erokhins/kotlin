@@ -11,3 +11,5 @@ fun f(p: Int?): Int {
 fun box(): String {
     return if (f(null) == 3) "OK" else "fail"
 }
+
+

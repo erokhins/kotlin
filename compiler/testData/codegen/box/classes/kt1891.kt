@@ -12,3 +12,5 @@ fun box(): String {
     list[17] = list[18]++
     return "OK"
 }
+
+

@@ -14,3 +14,5 @@ object C {
 }
 
 fun box() = C.g
+
+

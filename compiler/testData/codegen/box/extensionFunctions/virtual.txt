@@ -1,0 +1,58 @@
+MODULE <test-module>
+  FILE /virtual.kt
+    CLASS CLASS Request
+      CONSTRUCTOR public constructor Request(/*0*/ path: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD path type=kotlin.Unit operator=null
+            receiver: THIS public final class Request type=Request
+            value: GET_VAR path type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Request
+      PROPERTY public final val path: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR path type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    CLASS CLASS Handler
+      CONSTRUCTOR public constructor Handler()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Handler
+      FUN public final fun kotlin.Int.times(/*0*/ op: () -> kotlin.Unit): kotlin.Unit
+        BLOCK_BODY
+          BLOCK type=kotlin.Unit operator=FOR_LOOP
+            VAR val tmp0_iterator: kotlin.collections.IntIterator
+              CALL .iterator type=kotlin.collections.IntIterator operator=FOR_LOOP_ITERATOR
+                $this: CALL .rangeTo type=kotlin.ranges.IntRange operator=RANGE
+                  $this: CONST Int type=kotlin.Int value='0'
+                  other: $RECEIVER of: times type=kotlin.Int
+            WHILE label=null operator=FOR_LOOP_INNER_WHILE
+              condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+                $this: GET_VAR tmp0_iterator type=kotlin.collections.IntIterator operator=null
+              body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+                VAR val i: kotlin.Int
+                  CALL .next type=kotlin.Int operator=FOR_LOOP_NEXT
+                    $this: GET_VAR tmp0_iterator type=kotlin.collections.IntIterator operator=null
+                CALL .invoke type=kotlin.Unit operator=INVOKE
+                  $this: GET_VAR op type=() -> kotlin.Unit operator=VARIABLE_AS_FUNCTION
+      FUN public final fun Request.getPath(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getPath
+            CALL .<get-path> type=kotlin.String operator=GET_PROPERTY
+              $this: $RECEIVER of: getPath type=Request
+      FUN public final fun test(/*0*/ request: Request): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=test
+            CALL .getPath type=kotlin.String operator=null
+              $this: THIS public final class Handler type=Handler
+              $receiver: GET_VAR request type=Request operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CALL .test type=kotlin.String operator=null
+                $this: CALL .<init> type=Handler operator=null
+                request: CALL .<init> type=Request operator=null
+                  path: CONST String type=kotlin.String value='239'
+              arg1: CONST String type=kotlin.String value='239'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='fail'

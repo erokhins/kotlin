@@ -1,0 +1,19 @@
+MODULE <test-module>
+  FILE /closureWithParameter.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .apply type=kotlin.String operator=null
+            arg: CONST String type=kotlin.String value='OK'
+            f: BLOCK type=(kotlin.String) -> kotlin.String operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ arg: kotlin.String): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    GET_VAR arg type=kotlin.String operator=null
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.String) -> kotlin.String operator=LAMBDA
+    FUN public fun apply(/*0*/ arg: kotlin.String, /*1*/ f: (kotlin.String) -> kotlin.String): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=apply
+          CALL .invoke type=kotlin.String operator=INVOKE
+            $this: GET_VAR f type=(kotlin.String) -> kotlin.String operator=VARIABLE_AS_FUNCTION
+            p1: GET_VAR arg type=kotlin.String operator=null

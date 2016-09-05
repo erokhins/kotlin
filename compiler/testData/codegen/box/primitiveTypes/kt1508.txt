@@ -1,0 +1,24 @@
+MODULE <test-module>
+  FILE /kt1508.kt
+    FUN public fun test(/*0*/ n: kotlin.Number): kotlin.Long
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=test
+          CALL .plus type=kotlin.Long operator=PLUS
+            $this: CALL .toLong type=kotlin.Long operator=null
+              $this: CALL .toInt type=kotlin.Int operator=null
+                $this: GET_VAR n type=kotlin.Number operator=null
+            other: CALL .toLong type=kotlin.Long operator=null
+              $this: GET_VAR n type=kotlin.Number operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val n: kotlin.Number = 10
+          CONST Int type=kotlin.Int value='10'
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CALL .test type=kotlin.Long operator=null
+                n: GET_VAR n type=kotlin.Number operator=null
+              arg1: CALL .toLong type=kotlin.Long operator=null
+                $this: CONST Int type=kotlin.Int value='20'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='fail'

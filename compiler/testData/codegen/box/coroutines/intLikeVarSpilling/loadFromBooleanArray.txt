@@ -1,0 +1,54 @@
+MODULE <test-module>
+  FILE /loadFromBooleanArray.kt
+    CLASS CLASS Controller
+      CONSTRUCTOR public constructor Controller()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Controller
+      FUN public final suspend fun suspendHere(/*0*/ x: kotlin.coroutines.Continuation<kotlin.Unit>): kotlin.Unit
+        BLOCK_BODY
+          CALL .resume type=kotlin.Unit operator=null
+            $this: GET_VAR x type=kotlin.coroutines.Continuation<kotlin.Unit> operator=null
+            data: GET_OBJECT Unit type=kotlin.Unit
+    FUN public fun builder(/*0*/ coroutine c: Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit>): kotlin.Unit
+      BLOCK_BODY
+        CALL .resume type=kotlin.Unit operator=null
+          $this: CALL .invoke type=kotlin.coroutines.Continuation<kotlin.Unit> operator=INVOKE
+            $this: GET_VAR c type=Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit> operator=VARIABLE_AS_FUNCTION
+            p1: CALL .<init> type=Controller operator=null
+          data: GET_OBJECT Unit type=kotlin.Unit
+    PROPERTY private var booleanResult: kotlin.Boolean
+      EXPRESSION_BODY
+        CONST Boolean type=kotlin.Boolean value='false'
+    FUN public fun setBooleanRes(/*0*/ x: kotlin.Boolean): kotlin.Unit
+      BLOCK_BODY
+        CALL .<set-booleanResult> type=kotlin.Unit operator=EQ
+          <set-?>: GET_VAR x type=kotlin.Boolean operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .builder type=kotlin.Unit operator=null
+          c: TYPE_OP operator=IMPLICIT_CAST typeOperand=Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit>
+            BLOCK type=Controller.() -> kotlin.Unit operator=LAMBDA
+              FUN local final fun Controller.<anonymous>(): kotlin.Unit
+                BLOCK_BODY
+                  VAR val a: kotlin.BooleanArray
+                    CALL .booleanArrayOf type=kotlin.BooleanArray operator=null
+                      elements: VARARG type=BooleanArray varargElementType=Boolean
+                        CONST Boolean type=kotlin.Boolean value='true'
+                  VAR val x: kotlin.Boolean
+                    CALL .get type=kotlin.Boolean operator=GET_ARRAY_ELEMENT
+                      $this: GET_VAR a type=kotlin.BooleanArray operator=null
+                      index: CONST Int type=kotlin.Int value='0'
+                  CALL .suspendHere type=kotlin.Unit operator=null
+                    $this: $RECEIVER of: <anonymous> type=Controller
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .setBooleanRes type=kotlin.Unit operator=null
+                      x: GET_VAR x type=kotlin.Boolean operator=null
+              CALLABLE_REFERENCE <anonymous> type=Controller.() -> kotlin.Unit operator=LAMBDA
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .<get-booleanResult> type=kotlin.Boolean operator=GET_PROPERTY
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 1'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

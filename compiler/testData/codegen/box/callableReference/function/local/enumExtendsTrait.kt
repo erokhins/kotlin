@@ -9,3 +9,5 @@ enum class E : Named {
 fun box(): String {
     return E.OK.name
 }
+
+

@@ -16,3 +16,4 @@ fun box(): String {
     });
     return if (s.foo() == 1) "OK" else "fail"
 }
+

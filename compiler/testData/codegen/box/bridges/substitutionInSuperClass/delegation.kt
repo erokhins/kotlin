@@ -16,3 +16,5 @@ fun box(): String {
     val a: A<String> = d
     return a.id("OK")
 }
+
+

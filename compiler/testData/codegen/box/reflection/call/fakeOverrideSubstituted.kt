@@ -10,3 +10,5 @@ fun box(): String {
     val foo = B::class.members.single { it.name == "foo" }
     return foo.call(B("OK")) as String
 }
+
+

@@ -1,0 +1,34 @@
+MODULE <test-module>
+  FILE /genericSet.kt
+    CLASS CLASS Wrapper
+      CONSTRUCTOR public constructor Wrapper</*0*/ T>(/*0*/ x: T)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD x type=kotlin.Unit operator=null
+            receiver: THIS public final class Wrapper</*0*/ T> type=Wrapper<T>
+            value: GET_VAR x type=T operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Wrapper
+      PROPERTY public final var x: T
+        EXPRESSION_BODY
+          GET_VAR x type=T operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    FUN public inline fun </*0*/ reified T> change(/*0*/ w: Wrapper<T>, /*1*/ x: kotlin.Any?): kotlin.Unit
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: TYPE_OP operator=INSTANCEOF typeOperand=T
+            GET_VAR x type=kotlin.Any? operator=null
+          then: BLOCK type=kotlin.Unit operator=null
+            CALL .<set-x> type=kotlin.Unit operator=EQ
+              $this: GET_VAR w type=Wrapper<T> operator=null
+              <set-?>: TYPE_OP operator=IMPLICIT_CAST typeOperand=T
+                GET_VAR x type=kotlin.Any? operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val w: Wrapper<kotlin.String>
+          CALL .<init> type=Wrapper<kotlin.String> operator=null
+            x: CONST String type=kotlin.String value='FAIL'
+        CALL .change type=kotlin.Unit operator=null
+          w: GET_VAR w type=Wrapper<kotlin.String> operator=null
+          x: CONST String type=kotlin.String value='OK'
+        RETURN type=kotlin.Nothing from=box
+          CALL .<get-x> type=kotlin.String operator=GET_PROPERTY
+            $this: GET_VAR w type=Wrapper<kotlin.String> operator=null

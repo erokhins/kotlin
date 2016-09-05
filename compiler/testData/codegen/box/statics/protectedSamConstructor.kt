@@ -25,3 +25,5 @@ class A : JavaClass() {
 fun box(): String {
     return A().test()
 }
+
+

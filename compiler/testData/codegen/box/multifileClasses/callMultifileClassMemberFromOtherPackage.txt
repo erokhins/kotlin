@@ -1,0 +1,16 @@
+MODULE <test-module>
+  FILE /box.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .bar type=kotlin.String operator=null
+  FILE /caller.kt
+    FUN public fun bar(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=bar
+          CALL .foo type=kotlin.String operator=null
+  FILE /multifileClass.kt
+    FUN public fun foo(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo
+          CONST String type=kotlin.String value='OK'

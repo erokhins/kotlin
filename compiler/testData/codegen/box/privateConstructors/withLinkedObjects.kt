@@ -11,3 +11,4 @@ fun box(): String {
     val another = Outer.Another
     return "OK"
 }
+

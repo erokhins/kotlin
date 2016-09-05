@@ -14,3 +14,4 @@ fun box() : String {
     if (size != 0) return "fail: $size"
     return "OK"
 }
+

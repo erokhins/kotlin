@@ -15,3 +15,5 @@ internal class C(x: Int) : A by global {
 fun box(): String {
     return C().foo()
 }
+
+

@@ -1,0 +1,47 @@
+MODULE <test-module>
+  FILE /test.kt
+    CLASS CLASS KMap
+      CONSTRUCTOR public constructor KMap</*0*/ K, /*1*/ V>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=KMap
+      PROPERTY public open override /*1*/ val size: kotlin.Int
+        PROPERTY_GETTER public open override /*1*/ fun <get-size>(): kotlin.Int
+          BLOCK_BODY
+            THROW type=kotlin.Nothing
+              CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun isEmpty(): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun containsKey(/*0*/ key: K): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=containsKey
+            CONST Boolean type=kotlin.Boolean value='true'
+      FUN public open override /*1*/ fun containsValue(/*0*/ value: V): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=containsValue
+            CONST Boolean type=kotlin.Boolean value='true'
+      FUN public open override /*1*/ fun get(/*0*/ key: K): V?
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      PROPERTY public open override /*1*/ val keys: kotlin.collections.Set<K>
+        PROPERTY_GETTER public open override /*1*/ fun <get-keys>(): kotlin.collections.Set<K>
+          BLOCK_BODY
+            THROW type=kotlin.Nothing
+              CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      PROPERTY public open override /*1*/ val values: kotlin.collections.Collection<V>
+        PROPERTY_GETTER public open override /*1*/ fun <get-values>(): kotlin.collections.Collection<V>
+          BLOCK_BODY
+            THROW type=kotlin.Nothing
+              CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      PROPERTY public open override /*1*/ val entries: kotlin.collections.Set<kotlin.collections.Map.Entry<K, V>>
+        PROPERTY_GETTER public open override /*1*/ fun <get-entries>(): kotlin.collections.Set<kotlin.collections.Map.Entry<K, V>>
+          BLOCK_BODY
+            THROW type=kotlin.Nothing
+              CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+    FUN public fun box(): kotlin.String!
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .foo type=kotlin.String! operator=null

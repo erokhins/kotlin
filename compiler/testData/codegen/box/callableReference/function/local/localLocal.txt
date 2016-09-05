@@ -1,0 +1,20 @@
+MODULE <test-module>
+  FILE /localLocal.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        FUN local final fun foo(): kotlin.String
+          BLOCK_BODY
+            FUN local final fun bar(): kotlin.String
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=bar
+                  CONST String type=kotlin.String value='OK'
+            VAR val ref: kotlin.reflect.KFunction0<kotlin.String>
+              CALLABLE_REFERENCE bar type=kotlin.reflect.KFunction0<kotlin.String> operator=null
+            RETURN type=kotlin.Nothing from=foo
+              CALL .invoke type=kotlin.String operator=INVOKE
+                $this: GET_VAR ref type=kotlin.reflect.KFunction0<kotlin.String> operator=VARIABLE_AS_FUNCTION
+        VAR val ref: kotlin.reflect.KFunction0<kotlin.String>
+          CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction0<kotlin.String> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CALL .invoke type=kotlin.String operator=INVOKE
+            $this: GET_VAR ref type=kotlin.reflect.KFunction0<kotlin.String> operator=VARIABLE_AS_FUNCTION

@@ -7,3 +7,5 @@ public object Globals{
 fun box(): String {
     return Globals["test"]
 }
+
+

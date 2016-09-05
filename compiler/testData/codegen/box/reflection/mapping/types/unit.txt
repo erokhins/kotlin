@@ -1,0 +1,68 @@
+MODULE <test-module>
+  FILE /unit.kt
+    FUN public fun foo(/*0*/ unitParam: kotlin.Unit, /*1*/ nullableUnitParam: kotlin.Unit?): kotlin.Unit
+      BLOCK_BODY
+    PROPERTY public var bar: kotlin.Unit
+      EXPRESSION_BODY
+        GET_OBJECT Unit type=kotlin.Unit
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assert type=kotlin.Unit operator=null
+          value: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-java> type=java.lang.Class<kotlin.Unit> operator=GET_PROPERTY
+                $receiver: CLASS_REFERENCE Unit type=kotlin.reflect.KClass<kotlin.Unit>
+              arg1: GET_BACKING_FIELD TYPE type=java.lang.Class<java.lang.Void!>! operator=GET_PROPERTY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .<get-java> type=java.lang.Class<kotlin.Unit> operator=GET_PROPERTY
+            $receiver: CLASS_REFERENCE Unit type=kotlin.reflect.KClass<kotlin.Unit>
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .<get-type> type=kotlin.reflect.KType operator=GET_PROPERTY
+              $this: CALL .get type=kotlin.reflect.KParameter operator=GET_ARRAY_ELEMENT
+                $this: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+                  $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction2<kotlin.Unit, kotlin.Unit?, kotlin.Unit> operator=null
+                index: CONST Int type=kotlin.Int value='0'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .<get-java> type=java.lang.Class<kotlin.Unit> operator=GET_PROPERTY
+            $receiver: CLASS_REFERENCE Unit type=kotlin.reflect.KClass<kotlin.Unit>
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .<get-type> type=kotlin.reflect.KType operator=GET_PROPERTY
+              $this: CALL .get type=kotlin.reflect.KParameter operator=GET_ARRAY_ELEMENT
+                $this: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+                  $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction2<kotlin.Unit, kotlin.Unit?, kotlin.Unit> operator=null
+                index: CONST Int type=kotlin.Int value='1'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_BACKING_FIELD TYPE type=java.lang.Class<java.lang.Void!>! operator=GET_PROPERTY
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction2<kotlin.Unit, kotlin.Unit?, kotlin.Unit> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .<get-java> type=java.lang.Class<kotlin.Unit> operator=GET_PROPERTY
+            $receiver: CLASS_REFERENCE Unit type=kotlin.reflect.KClass<kotlin.Unit>
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE bar type=kotlin.reflect.KMutableProperty0<kotlin.Unit> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .<get-java> type=java.lang.Class<kotlin.Unit> operator=GET_PROPERTY
+            $receiver: CLASS_REFERENCE Unit type=kotlin.reflect.KClass<kotlin.Unit>
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+              $this: CALL .<get-getter> type=kotlin.reflect.KProperty0.Getter<kotlin.Unit> operator=GET_PROPERTY
+                $this: CALLABLE_REFERENCE bar type=kotlin.reflect.KMutableProperty0<kotlin.Unit> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .<get-java> type=java.lang.Class<kotlin.Unit> operator=GET_PROPERTY
+            $receiver: CLASS_REFERENCE Unit type=kotlin.reflect.KClass<kotlin.Unit>
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .<get-type> type=kotlin.reflect.KType operator=GET_PROPERTY
+              $this: CALL .single type=kotlin.reflect.KParameter operator=null
+                $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+                  $this: CALL .<get-setter> type=kotlin.reflect.KMutableProperty0.Setter<kotlin.Unit> operator=GET_PROPERTY
+                    $this: CALLABLE_REFERENCE bar type=kotlin.reflect.KMutableProperty0<kotlin.Unit> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_BACKING_FIELD TYPE type=java.lang.Class<java.lang.Void!>! operator=GET_PROPERTY
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+              $this: CALL .<get-setter> type=kotlin.reflect.KMutableProperty0.Setter<kotlin.Unit> operator=GET_PROPERTY
+                $this: CALLABLE_REFERENCE bar type=kotlin.reflect.KMutableProperty0<kotlin.Unit> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

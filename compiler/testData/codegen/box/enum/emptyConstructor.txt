@@ -1,0 +1,28 @@
+MODULE <test-module>
+  FILE /emptyConstructor.kt
+    CLASS ENUM_CLASS My
+      CONSTRUCTOR private constructor My(/*0*/ s: kotlin.String)
+        BLOCK_BODY
+          ENUM_CONSTRUCTOR_CALL Enum super
+          SET_BACKING_FIELD s type=kotlin.Unit operator=null
+            receiver: THIS public final enum class My : kotlin.Enum<test.My> type=test.My
+            value: GET_VAR s type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=My
+      PROPERTY public final val s: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR s type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      ENUM_ENTRY enum entry ENTRY
+        init: ENUM_CONSTRUCTOR_CALL My ENTRY
+      CONSTRUCTOR private constructor My()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL My
+            s: CONST String type=kotlin.String value='OK'
+      FUN public final /*synthesized*/ fun values(): kotlin.Array<test.My>
+        SYNTHETIC_BODY kind=ENUM_VALUES
+      FUN public final /*synthesized*/ fun valueOf(/*0*/ value: kotlin.String): test.My
+        SYNTHETIC_BODY kind=ENUM_VALUEOF
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+            $this: GET_ENUM_VALUE ENTRY type=test.My

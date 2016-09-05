@@ -15,3 +15,4 @@ private val a : Test = {
 fun box(): String {
     return a.invoke();
 }
+

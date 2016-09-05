@@ -28,3 +28,5 @@ fun box(): String {
     if (x[0] != 'A') return "fail 2"
     return "OK"
 }
+
+

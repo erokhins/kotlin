@@ -1,0 +1,57 @@
+MODULE <test-module>
+  FILE /deepInnerHierarchy.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A(/*0*/ s: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD s type=kotlin.Unit operator=null
+            receiver: THIS public open class A type=A
+            value: GET_VAR s type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public final val s: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR s type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      CLASS CLASS B
+        CONSTRUCTOR public constructor B(/*0*/ s: kotlin.String)
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL A
+              s: GET_VAR s type=kotlin.String operator=null
+            INSTANCE_INITIALIZER_CALL classDescriptor=B
+      CLASS CLASS C
+        CONSTRUCTOR public constructor C(/*0*/ s: kotlin.String, /*1*/ additional: kotlin.Double)
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL B
+              $this: THIS public open class A type=A
+              s: GET_VAR s type=kotlin.String operator=null
+            INSTANCE_INITIALIZER_CALL classDescriptor=C
+      CLASS CLASS D
+        CONSTRUCTOR public constructor D(/*0*/ other: kotlin.Int, /*1*/ another: kotlin.Long, /*2*/ s: kotlin.String)
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL C
+              $this: THIS public open class A type=A
+              s: GET_VAR s type=kotlin.String operator=null
+              additional: CALL .toDouble type=kotlin.Double operator=null
+                $this: GET_VAR another type=kotlin.Long operator=null
+            INSTANCE_INITIALIZER_CALL classDescriptor=D
+      CLASS CLASS E
+        CONSTRUCTOR public constructor E()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL D
+              $this: THIS public open class A type=A
+              other: CONST Int type=kotlin.Int value='0'
+              another: CONST Long type=kotlin.Long value='42'
+              s: CONST String type=kotlin.String value='OK'
+            INSTANCE_INITIALIZER_CALL classDescriptor=E
+      CLASS CLASS F
+        CONSTRUCTOR public constructor F()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL E
+              $this: THIS public open class A type=A
+            INSTANCE_INITIALIZER_CALL classDescriptor=F
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+            $this: CALL .<init> type=A.F operator=null
+              $this: CALL .<init> type=A operator=null
+                s: CONST String type=kotlin.String value='Fail'

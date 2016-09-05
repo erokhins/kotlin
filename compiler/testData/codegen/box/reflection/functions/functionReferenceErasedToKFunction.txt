@@ -1,0 +1,26 @@
+MODULE <test-module>
+  FILE /K.kt
+    CLASS CLASS K
+      CONSTRUCTOR public constructor K()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=K
+      FUN public final fun reverse(/*0*/ s: kotlin.String): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=reverse
+            CALL .reversed type=kotlin.String operator=null
+              $receiver: GET_VAR s type=kotlin.String operator=null
+      CLASS OBJECT Companion
+        CONSTRUCTOR private constructor Companion()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Companion
+        FUN public final fun getRef(): kotlin.reflect.KFunction2<K, kotlin.String, kotlin.String>
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=getRef
+              CALLABLE_REFERENCE reverse type=kotlin.reflect.KFunction2<K, kotlin.String, kotlin.String> operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.String
+            CALL .go type=kotlin.String! operator=null

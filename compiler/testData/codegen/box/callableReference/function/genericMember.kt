@@ -3,3 +3,5 @@ class A<T>(val t: T) {
 }
 
 fun box() = (A<String>::foo)(A("OK"))
+
+

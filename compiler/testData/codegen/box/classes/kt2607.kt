@@ -7,3 +7,5 @@ fun box() : String {
     }
     return o.C().foo()
 }
+
+

@@ -6,3 +6,4 @@ fun box(): String =
         catch (e: Exception) {
             try { "K" } catch (e: Exception) { "2" }
         }
+

@@ -16,3 +16,5 @@ fun box(): String {
     val x = C().foo()
     return if (x == 42) "OK" else "Fail: $x"
 }
+
+

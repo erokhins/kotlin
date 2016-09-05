@@ -19,3 +19,5 @@ fun box() : String {
   val c = SmartArrayList2()
   return if("239" == c.getOrNull(0, "239")) "OK" else "fail"
 }
+
+

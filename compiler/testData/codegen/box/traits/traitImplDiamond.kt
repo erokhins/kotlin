@@ -13,3 +13,5 @@ interface D : B, C
 class Impl : D
 
 fun box(): String = Impl().foo()
+
+

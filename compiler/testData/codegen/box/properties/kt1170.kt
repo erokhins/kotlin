@@ -14,3 +14,5 @@ fun box(): String {
     val r = Subclass().getKindValue() + Subclass().kind
     return if(r == "Subclass Subclass ") "OK" else "fail"
 }
+
+

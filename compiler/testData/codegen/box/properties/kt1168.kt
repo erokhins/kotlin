@@ -13,3 +13,5 @@ public class Subclass : BaseClass() {
 }
 
 fun box():String = if(Subclass().debug() == "Physical kind2") "OK" else "fail"
+
+

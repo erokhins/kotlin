@@ -12,3 +12,5 @@ fun box(): String {
     if (state != 2) return "Fail: $state"
     return "OK"
 }
+
+

@@ -20,3 +20,5 @@ fun box(): String {
     ap.set(a, A.B("OK"))
     return a.p!!.result
 }
+
+

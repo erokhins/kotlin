@@ -14,3 +14,5 @@ fun box(): String {
     if (jf is Function0<*>) return jfun()
     else return "Failed: jf is Function0<*>"
 }
+
+

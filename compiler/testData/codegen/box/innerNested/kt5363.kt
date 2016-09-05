@@ -11,3 +11,4 @@ class Outer {
 fun box(): String {
     return Outer.Nested().foo("OK")
 }
+

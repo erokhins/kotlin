@@ -16,3 +16,5 @@ fun box(): String {
     val c = C(10, 3)
     return if (c.child.toString() == "child13" && c.child.toString() == "child16" && c.child.toString() == "child19") "OK" else "fail"
 }
+
+

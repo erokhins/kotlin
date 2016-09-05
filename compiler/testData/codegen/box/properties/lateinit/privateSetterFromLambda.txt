@@ -1,0 +1,34 @@
+MODULE <test-module>
+  FILE /privateSetterFromLambda.kt
+    CLASS CLASS My
+      CONSTRUCTOR public constructor My()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=My
+      PROPERTY public final lateinit var x: kotlin.String
+        PROPERTY_SETTER private final fun <set-x>(/*0*/ <set-?>: kotlin.String): kotlin.Unit
+      FUN public final fun init(/*0*/ arg: kotlin.String, /*1*/ f: (kotlin.String) -> kotlin.String): kotlin.Unit
+        BLOCK_BODY
+          CALL .<set-x> type=kotlin.Unit operator=EQ
+            $this: THIS public final class My type=My
+            <set-?>: CALL .invoke type=kotlin.String operator=INVOKE
+              $this: GET_VAR f type=(kotlin.String) -> kotlin.String operator=VARIABLE_AS_FUNCTION
+              p1: GET_VAR arg type=kotlin.String operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val my: My
+          CALL .<init> type=My operator=null
+        CALL .init type=kotlin.Unit operator=null
+          $this: GET_VAR my type=My operator=null
+          arg: CONST String type=kotlin.String value='O'
+          f: BLOCK type=(kotlin.String) -> kotlin.String operator=LAMBDA
+            FUN local final fun <anonymous>(/*0*/ it: kotlin.String): kotlin.String
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .plus type=kotlin.String operator=PLUS
+                    $this: GET_VAR it type=kotlin.String operator=null
+                    other: CONST String type=kotlin.String value='K'
+            CALLABLE_REFERENCE <anonymous> type=(kotlin.String) -> kotlin.String operator=LAMBDA
+        RETURN type=kotlin.Nothing from=box
+          CALL .<get-x> type=kotlin.String operator=GET_PROPERTY
+            $this: GET_VAR my type=My operator=null

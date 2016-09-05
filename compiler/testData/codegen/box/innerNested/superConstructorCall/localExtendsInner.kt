@@ -21,3 +21,4 @@ open class Father(val param: String) {
 fun box(): String {
     return Father("fail").Child("OK").test().work()
 }
+

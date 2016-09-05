@@ -1,0 +1,109 @@
+MODULE <test-module>
+  FILE /invoke.kt
+    FUN public fun test1(/*0*/ predicate: (kotlin.Int) -> kotlin.Int, /*1*/ i: kotlin.Int): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=test1
+          CALL .invoke type=kotlin.Int operator=INVOKE
+            $this: GET_VAR predicate type=(kotlin.Int) -> kotlin.Int operator=VARIABLE_AS_FUNCTION
+            p1: GET_VAR i type=kotlin.Int operator=null
+    FUN public fun test2(/*0*/ predicate: (kotlin.Int) -> kotlin.Int, /*1*/ i: kotlin.Int): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=test2
+          CALL .invoke type=kotlin.Int operator=null
+            $this: GET_VAR predicate type=(kotlin.Int) -> kotlin.Int operator=null
+            p1: GET_VAR i type=kotlin.Int operator=null
+    CLASS CLASS Method
+      CONSTRUCTOR public constructor Method()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Method
+      FUN public final operator fun invoke(/*0*/ i: kotlin.Int): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=invoke
+            GET_VAR i type=kotlin.Int operator=null
+    FUN public fun test3(/*0*/ method: invoke.Method, /*1*/ i: kotlin.Int): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=test3
+          CALL .invoke type=kotlin.Int operator=null
+            $this: GET_VAR method type=invoke.Method operator=null
+            i: GET_VAR i type=kotlin.Int operator=null
+    FUN public fun test4(/*0*/ method: invoke.Method, /*1*/ i: kotlin.Int): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=test4
+          CALL .invoke type=kotlin.Int operator=INVOKE
+            $this: GET_VAR method type=invoke.Method operator=VARIABLE_AS_FUNCTION
+            i: GET_VAR i type=kotlin.Int operator=null
+    CLASS CLASS Method2
+      CONSTRUCTOR public constructor Method2()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Method2
+    FUN public operator fun invoke.Method2.invoke(/*0*/ s: kotlin.String): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=invoke
+          GET_VAR s type=kotlin.String operator=null
+    FUN public fun test5(/*0*/ method2: invoke.Method2, /*1*/ s: kotlin.String): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=test5
+          CALL .invoke type=kotlin.String operator=INVOKE
+            $receiver: GET_VAR method2 type=invoke.Method2 operator=VARIABLE_AS_FUNCTION
+            s: GET_VAR s type=kotlin.String operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .test1 type=kotlin.Int operator=null
+                predicate: BLOCK type=(kotlin.Int) -> kotlin.Int operator=LAMBDA
+                  FUN local final fun <anonymous>(/*0*/ it: kotlin.Int): kotlin.Int
+                    BLOCK_BODY
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                        GET_VAR it type=kotlin.Int operator=null
+                  CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> kotlin.Int operator=LAMBDA
+                i: CONST Int type=kotlin.Int value='1'
+              arg1: CONST Int type=kotlin.Int value='1'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 1'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .test2 type=kotlin.Int operator=null
+                predicate: BLOCK type=(kotlin.Int) -> kotlin.Int operator=LAMBDA
+                  FUN local final fun <anonymous>(/*0*/ it: kotlin.Int): kotlin.Int
+                    BLOCK_BODY
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                        GET_VAR it type=kotlin.Int operator=null
+                  CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> kotlin.Int operator=LAMBDA
+                i: CONST Int type=kotlin.Int value='2'
+              arg1: CONST Int type=kotlin.Int value='2'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 2'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .test3 type=kotlin.Int operator=null
+                method: CALL .<init> type=invoke.Method operator=null
+                i: CONST Int type=kotlin.Int value='3'
+              arg1: CONST Int type=kotlin.Int value='3'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 3'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .test4 type=kotlin.Int operator=null
+                method: CALL .<init> type=invoke.Method operator=null
+                i: CONST Int type=kotlin.Int value='4'
+              arg1: CONST Int type=kotlin.Int value='4'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 4'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .test5 type=kotlin.String operator=null
+                method2: CALL .<init> type=invoke.Method2 operator=null
+                s: CONST String type=kotlin.String value='s'
+              arg1: CONST String type=kotlin.String value='s'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail5'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -27,3 +27,5 @@ fun box() : String {
     val x = calc()
     return if (x == 4) "OK" else x.toString()
 }
+
+

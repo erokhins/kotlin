@@ -1,0 +1,20 @@
+MODULE <test-module>
+  FILE /matchNotNullAgainstNullable.kt
+    FUN public fun foo(/*0*/ i: kotlin.Int, /*1*/ j: kotlin.Int?): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo
+          BLOCK type=kotlin.String operator=WHEN
+            VAR val tmp0_subject: kotlin.Int
+              GET_VAR i type=kotlin.Int operator=null
+            WHEN type=kotlin.String operator=WHEN
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_subject type=kotlin.Int operator=null
+                arg1: GET_VAR j type=kotlin.Int? operator=null
+              then: CONST String type=kotlin.String value='OK'
+              else: CONST String type=kotlin.String value='Fail'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .foo type=kotlin.String operator=null
+            i: CONST Int type=kotlin.Int value='0'
+            j: CONST Int type=kotlin.Int value='0'

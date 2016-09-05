@@ -14,3 +14,5 @@ class A() {
 }
 
 fun box() = A().ok()
+
+

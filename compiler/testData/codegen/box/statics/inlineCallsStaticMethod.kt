@@ -25,3 +25,5 @@ public inline fun test(): String {
 fun box(): String {
     return test()
 }
+
+

@@ -13,3 +13,5 @@ fun box(): String {
     val argName = MyClass::class.java.getAnnotation(Ann::class.java).arg.simpleName ?: "fail 1"
     return argName
 }
+
+

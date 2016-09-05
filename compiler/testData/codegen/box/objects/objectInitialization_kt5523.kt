@@ -4,3 +4,5 @@ object A {
 }
 
 fun box() = A.b
+
+

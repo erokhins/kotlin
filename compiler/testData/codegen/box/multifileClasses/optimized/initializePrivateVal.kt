@@ -13,3 +13,4 @@ package a
 private val OK = run { "OK" }
 
 fun ok() = OK
+

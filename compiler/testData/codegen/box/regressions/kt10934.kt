@@ -36,3 +36,4 @@ sealed class Result<TInput, TValue> {
 }
 
 fun box() = "OK"
+

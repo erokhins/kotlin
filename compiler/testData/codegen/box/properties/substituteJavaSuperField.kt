@@ -17,3 +17,5 @@ fun box(): String {
     if (A().bar() != null) return "Fail 2"
     return "OK"
 }
+
+

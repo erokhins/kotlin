@@ -13,3 +13,5 @@ class A(val x: String) {
 }
 
 fun box() = A("OK").foo().result()
+
+

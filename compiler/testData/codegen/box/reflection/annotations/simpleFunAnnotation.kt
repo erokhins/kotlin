@@ -7,3 +7,5 @@ annotation class Simple(val value: String)
 fun box(): String {
     return (::box.annotations.single() as Simple).value
 }
+
+

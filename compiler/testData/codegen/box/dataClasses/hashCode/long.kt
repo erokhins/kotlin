@@ -5,3 +5,5 @@ fun box() : String {
    val v2 = (-10.toLong() as Long?)!!.hashCode()
    return if( v1 == v2 ) "OK" else "$v1 $v2"
 }
+
+

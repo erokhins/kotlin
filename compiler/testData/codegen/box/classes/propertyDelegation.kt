@@ -31,3 +31,5 @@ fun box() : String {
     if (!test(Derived2())) return "Fail #3"
     return "OK"
 }
+
+

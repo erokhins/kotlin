@@ -5,3 +5,5 @@ fun box(): String {
     when (A.X1) {}
     return "OK"
 }
+
+

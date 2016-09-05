@@ -9,3 +9,5 @@ class A
 fun box(): String {
     return (A::class.annotations.single() as Simple).value
 }
+
+

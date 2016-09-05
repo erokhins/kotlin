@@ -1,0 +1,82 @@
+MODULE <test-module>
+  FILE /isOptional.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public open fun foo(/*0*/ x: kotlin.Int, /*1*/ y: kotlin.Int = ...): kotlin.Unit
+        y: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='1'
+        BLOCK_BODY
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL A
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+      FUN public open override /*1*/ fun foo(/*0*/ x: kotlin.Int, /*1*/ y: kotlin.Int = ...): kotlin.Unit
+        BLOCK_BODY
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL A
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+    FUN public fun kotlin.Int.extFun(): kotlin.Unit
+      BLOCK_BODY
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .listOf type=kotlin.collections.List<kotlin.Boolean> operator=null
+            elements: VARARG type=Array<out Boolean> varargElementType=Boolean
+              CONST Boolean type=kotlin.Boolean value='false'
+              CONST Boolean type=kotlin.Boolean value='false'
+              CONST Boolean type=kotlin.Boolean value='true'
+          actual: CALL .map type=kotlin.collections.List<kotlin.Boolean> operator=null
+            $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction3<A, kotlin.Int, kotlin.Int, kotlin.Unit> operator=null
+            transform: BLOCK type=(kotlin.reflect.KParameter) -> kotlin.Boolean operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KParameter): kotlin.Boolean
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .<get-isOptional> type=kotlin.Boolean operator=GET_PROPERTY
+                      $this: GET_VAR it type=kotlin.reflect.KParameter operator=null
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KParameter) -> kotlin.Boolean operator=LAMBDA
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .listOf type=kotlin.collections.List<kotlin.Boolean> operator=null
+            elements: VARARG type=Array<out Boolean> varargElementType=Boolean
+              CONST Boolean type=kotlin.Boolean value='false'
+              CONST Boolean type=kotlin.Boolean value='false'
+              CONST Boolean type=kotlin.Boolean value='true'
+          actual: CALL .map type=kotlin.collections.List<kotlin.Boolean> operator=null
+            $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction3<B, kotlin.Int, kotlin.Int, kotlin.Unit> operator=null
+            transform: BLOCK type=(kotlin.reflect.KParameter) -> kotlin.Boolean operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KParameter): kotlin.Boolean
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .<get-isOptional> type=kotlin.Boolean operator=GET_PROPERTY
+                      $this: GET_VAR it type=kotlin.reflect.KParameter operator=null
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KParameter) -> kotlin.Boolean operator=LAMBDA
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .listOf type=kotlin.collections.List<kotlin.Boolean> operator=null
+            elements: VARARG type=Array<out Boolean> varargElementType=Boolean
+              CONST Boolean type=kotlin.Boolean value='false'
+              CONST Boolean type=kotlin.Boolean value='false'
+              CONST Boolean type=kotlin.Boolean value='true'
+          actual: CALL .map type=kotlin.collections.List<kotlin.Boolean> operator=null
+            $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction3<C, kotlin.Int, kotlin.Int, kotlin.Unit> operator=null
+            transform: BLOCK type=(kotlin.reflect.KParameter) -> kotlin.Boolean operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KParameter): kotlin.Boolean
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .<get-isOptional> type=kotlin.Boolean operator=GET_PROPERTY
+                      $this: GET_VAR it type=kotlin.reflect.KParameter operator=null
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KParameter) -> kotlin.Boolean operator=LAMBDA
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isOptional> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALL .single type=kotlin.reflect.KParameter operator=null
+              $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+                $this: CALLABLE_REFERENCE extFun type=kotlin.reflect.KFunction1<kotlin.Int, kotlin.Unit> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

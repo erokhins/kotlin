@@ -1,0 +1,84 @@
+MODULE <test-module>
+  FILE /Main.kt
+    CLASS CLASS Derived
+      CONSTRUCTOR public constructor Derived()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Outer
+          INSTANCE_INITIALIZER_CALL classDescriptor=Derived
+      ANONYMOUS_INITIALIZER Derived
+        BLOCK_BODY
+          CALL .my type=another.Outer.My operator=null
+            $this: THIS public final class Derived : another.Outer type=other.Derived
+            init: BLOCK type=another.Outer.My.() -> kotlin.Unit operator=LAMBDA
+              FUN local final fun another.Outer.My.<anonymous>(): kotlin.Unit
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .initStage type=another.Outer.Stage operator=null
+                      $this: $RECEIVER of: <anonymous> type=another.Outer.My
+                      f: BLOCK type=() -> kotlin.Unit operator=LAMBDA
+                        FUN local final fun <anonymous>(): kotlin.Unit
+                          BLOCK_BODY
+                            RETURN type=kotlin.Nothing from=<anonymous>
+                        CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Unit operator=LAMBDA
+              CALLABLE_REFERENCE <anonymous> type=another.Outer.My.() -> kotlin.Unit operator=LAMBDA
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .<init> type=other.Derived operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'
+  FILE /Outer.kt
+    CLASS CLASS Outer
+      CONSTRUCTOR public constructor Outer()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Outer
+      CLASS CLASS Stage
+        CONSTRUCTOR public constructor Stage(/*0*/ run: () -> kotlin.Unit)
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            SET_BACKING_FIELD run type=kotlin.Unit operator=null
+              receiver: THIS protected final class Stage type=another.Outer.Stage
+              value: GET_VAR run type=() -> kotlin.Unit operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+            INSTANCE_INITIALIZER_CALL classDescriptor=Stage
+        PROPERTY public final val run: () -> kotlin.Unit
+          EXPRESSION_BODY
+            GET_VAR run type=() -> kotlin.Unit operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      CLASS CLASS My
+        CONSTRUCTOR public constructor My(/*0*/ stage: another.Outer.Stage? = ...)
+          stage: EXPRESSION_BODY
+            CONST Null type=kotlin.Nothing? value='null'
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            SET_BACKING_FIELD stage type=kotlin.Unit operator=null
+              receiver: THIS protected final class My type=another.Outer.My
+              value: GET_VAR stage type=another.Outer.Stage? operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+            INSTANCE_INITIALIZER_CALL classDescriptor=My
+        PROPERTY public final var stage: another.Outer.Stage?
+          EXPRESSION_BODY
+            GET_VAR stage type=another.Outer.Stage? operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+        FUN public final fun initStage(/*0*/ f: () -> kotlin.Unit): another.Outer.Stage
+          BLOCK_BODY
+            CALL .<set-stage> type=kotlin.Unit operator=EQ
+              $this: THIS protected final class My type=another.Outer.My
+              <set-?>: CALL .<init> type=another.Outer.Stage operator=null
+                run: GET_VAR f type=() -> kotlin.Unit operator=null
+            RETURN type=kotlin.Nothing from=initStage
+              BLOCK type=another.Outer.Stage operator=EXCLEXCL
+                VAR val tmp0_notnull: another.Outer.Stage?
+                  CALL .<get-stage> type=another.Outer.Stage? operator=GET_PROPERTY
+                    $this: THIS protected final class My type=another.Outer.My
+                WHEN type=another.Outer.Stage operator=null
+                  if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                    arg0: GET_VAR tmp0_notnull type=another.Outer.Stage? operator=null
+                    arg1: CONST Null type=kotlin.Nothing? value='null'
+                  then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                  else: GET_VAR tmp0_notnull type=another.Outer.Stage? operator=null
+      FUN protected final fun my(/*0*/ init: another.Outer.My.() -> kotlin.Unit): another.Outer.My
+        BLOCK_BODY
+          VAR val result: another.Outer.My
+            CALL .<init> type=another.Outer.My operator=null
+          CALL .invoke type=kotlin.Unit operator=INVOKE
+            $this: GET_VAR init type=another.Outer.My.() -> kotlin.Unit operator=VARIABLE_AS_FUNCTION
+            $receiver: GET_VAR result type=another.Outer.My operator=null
+          RETURN type=kotlin.Nothing from=my
+            GET_VAR result type=another.Outer.My operator=null

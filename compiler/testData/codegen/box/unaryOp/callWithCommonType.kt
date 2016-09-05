@@ -6,3 +6,4 @@ fun box(): String {
 }
 
 fun foo(p: Any) = p is Byte
+

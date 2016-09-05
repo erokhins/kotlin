@@ -22,3 +22,5 @@ fun box(): String {
     if (res != "OK#OK#OK") return "fail: $res"
     return "OK"
 }
+
+

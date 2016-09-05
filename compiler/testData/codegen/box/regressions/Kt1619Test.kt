@@ -17,3 +17,5 @@ class Kt1619Test {
 fun box(): String {
    return if (Kt1619Test().testCollectionNotNullCanBeUsedForNullables() == 2) "OK" else "fail"
 }
+
+

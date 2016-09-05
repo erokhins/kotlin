@@ -1,0 +1,140 @@
+MODULE <test-module>
+  FILE /ListWithAllImplementations.kt
+    CLASS CLASS MyList
+      CONSTRUCTOR public constructor MyList</*0*/ T>(/*0*/ v: T)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD v type=kotlin.Unit operator=null
+            receiver: THIS public final class MyList</*0*/ T> : kotlin.collections.List<T> type=MyList<T>
+            value: GET_VAR v type=T operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=MyList
+      PROPERTY public final val v: T
+        EXPRESSION_BODY
+          GET_VAR v type=T operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public open override /*1*/ val size: kotlin.Int
+        PROPERTY_GETTER public open override /*1*/ fun <get-size>(): kotlin.Int
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-size>
+              CONST Int type=kotlin.Int value='0'
+      FUN public open override /*1*/ fun isEmpty(): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=isEmpty
+            CONST Boolean type=kotlin.Boolean value='true'
+      FUN public open override /*1*/ fun contains(/*0*/ o: T): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=contains
+            CONST Boolean type=kotlin.Boolean value='false'
+      FUN public open override /*1*/ fun iterator(): kotlin.collections.Iterator<T>
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.Error operator=null
+      FUN public open override /*1*/ fun containsAll(/*0*/ c: kotlin.collections.Collection<T>): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=containsAll
+            CONST Boolean type=kotlin.Boolean value='false'
+      FUN public open override /*1*/ fun get(/*0*/ index: kotlin.Int): T
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=get
+            CALL .<get-v> type=T operator=GET_PROPERTY
+              $this: THIS public final class MyList</*0*/ T> : kotlin.collections.List<T> type=MyList<T>
+      FUN public open override /*1*/ fun indexOf(/*0*/ o: T): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=indexOf
+            CONST Int type=kotlin.Int value='-1'
+      FUN public open override /*1*/ fun lastIndexOf(/*0*/ o: T): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=lastIndexOf
+            CONST Int type=kotlin.Int value='-1'
+      FUN public open override /*1*/ fun listIterator(): kotlin.collections.ListIterator<T>
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.Error operator=null
+      FUN public open override /*1*/ fun listIterator(/*0*/ index: kotlin.Int): kotlin.collections.ListIterator<T>
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.Error operator=null
+      FUN public open override /*1*/ fun subList(/*0*/ fromIndex: kotlin.Int, /*1*/ toIndex: kotlin.Int): kotlin.collections.List<T>
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.Error operator=null
+      FUN public open override /*1*/ fun hashCode(): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=hashCode
+            CONST Int type=kotlin.Int value='0'
+      FUN public open override /*1*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=equals
+            CONST Boolean type=kotlin.Boolean value='false'
+      FUN public final fun add(/*0*/ e: T): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=add
+            CONST Boolean type=kotlin.Boolean value='true'
+      FUN public final fun remove(/*0*/ o: T): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=remove
+            CONST Boolean type=kotlin.Boolean value='true'
+      FUN public final fun addAll(/*0*/ c: kotlin.collections.Collection<T>): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=addAll
+            CONST Boolean type=kotlin.Boolean value='true'
+      FUN public final fun addAll(/*0*/ index: kotlin.Int, /*1*/ c: kotlin.collections.Collection<T>): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=addAll
+            CONST Boolean type=kotlin.Boolean value='true'
+      FUN public final fun removeAll(/*0*/ c: kotlin.collections.Collection<T>): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=removeAll
+            CONST Boolean type=kotlin.Boolean value='true'
+      FUN public final fun retainAll(/*0*/ c: kotlin.collections.Collection<T>): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=retainAll
+            CONST Boolean type=kotlin.Boolean value='true'
+      FUN public final fun clear(): kotlin.Unit
+        BLOCK_BODY
+      FUN public final fun set(/*0*/ index: kotlin.Int, /*1*/ element: T): T
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=set
+            GET_VAR element type=T operator=null
+      FUN public final fun add(/*0*/ index: kotlin.Int, /*1*/ element: T): kotlin.Unit
+        BLOCK_BODY
+      FUN public final fun removeAt(/*0*/ index: kotlin.Int): T
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=removeAt
+            CALL .<get-v> type=T operator=GET_PROPERTY
+              $this: THIS public final class MyList</*0*/ T> : kotlin.collections.List<T> type=MyList<T>
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val list: java.util.List<kotlin.String>
+          TYPE_OP operator=CAST typeOperand=java.util.List<kotlin.String>
+            CALL .<init> type=MyList<kotlin.String> operator=null
+              v: CONST String type=kotlin.String value=''
+        CALL .add type=kotlin.Boolean operator=null
+          $this: GET_VAR list type=java.util.List<kotlin.String> operator=null
+          element: CONST String type=kotlin.String value=''
+        CALL .remove type=kotlin.Boolean operator=null
+          $this: GET_VAR list type=java.util.List<kotlin.String> operator=null
+          element: CONST String type=kotlin.String value=''
+        CALL .addAll type=kotlin.Boolean operator=null
+          $this: GET_VAR list type=java.util.List<kotlin.String> operator=null
+          elements: GET_VAR list type=java.util.List<kotlin.String> operator=null
+        CALL .removeAll type=kotlin.Boolean operator=null
+          $this: GET_VAR list type=java.util.List<kotlin.String> operator=null
+          elements: GET_VAR list type=java.util.List<kotlin.String> operator=null
+        CALL .retainAll type=kotlin.Boolean operator=null
+          $this: GET_VAR list type=java.util.List<kotlin.String> operator=null
+          elements: GET_VAR list type=java.util.List<kotlin.String> operator=null
+        CALL .clear type=kotlin.Unit operator=null
+          $this: GET_VAR list type=java.util.List<kotlin.String> operator=null
+        CALL .set type=kotlin.String! operator=null
+          $this: GET_VAR list type=java.util.List<kotlin.String> operator=null
+          p0: CONST Int type=kotlin.Int value='0'
+          p1: CONST String type=kotlin.String value=''
+        CALL .add type=kotlin.Unit operator=null
+          $this: GET_VAR list type=java.util.List<kotlin.String> operator=null
+          p0: CONST Int type=kotlin.Int value='0'
+          p1: CONST String type=kotlin.String value=''
+        CALL .remove type=kotlin.String! operator=null
+          $this: GET_VAR list type=java.util.List<kotlin.String> operator=null
+          p0: CONST Int type=kotlin.Int value='0'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

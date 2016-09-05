@@ -1,0 +1,35 @@
+MODULE <test-module>
+  FILE /kt2702.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A</*0*/ R>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public open fun foo(/*0*/ r: R): R
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            GET_VAR r type=R operator=null
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL A
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL B
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      FUN public open override /*1*/ fun foo(/*0*/ r: kotlin.String): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CALL .plus type=kotlin.String operator=PLUS
+              $this: CALL .foo superQualifier=B type=kotlin.String operator=null
+                $this: THIS public open class C : B type=B
+                r: GET_VAR r type=kotlin.String operator=null
+              other: CONST String type=kotlin.String value='K'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .foo type=kotlin.String operator=null
+            $this: CALL .<init> type=C operator=null
+            r: CONST String type=kotlin.String value='O'

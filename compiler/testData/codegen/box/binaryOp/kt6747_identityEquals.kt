@@ -7,3 +7,5 @@ class Test {
 }
 
 fun box(): String = Test().check("String")
+
+

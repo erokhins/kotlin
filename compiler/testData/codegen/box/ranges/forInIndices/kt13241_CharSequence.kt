@@ -16,3 +16,4 @@ fun box(): String {
     assertEquals(123, test("0000"))
     return "OK"
 }
+

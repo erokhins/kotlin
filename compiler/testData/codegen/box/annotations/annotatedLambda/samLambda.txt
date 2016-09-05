@@ -1,0 +1,107 @@
+MODULE <test-module>
+  FILE /test.kt
+    CLASS ANNOTATION_CLASS Ann
+      CONSTRUCTOR public constructor Ann(/*0*/ x: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD x type=kotlin.Unit operator=null
+            receiver: THIS @kotlin.annotation.Target(allowedTargets = {AnnotationTarget.FUNCTION}) @kotlin.annotation.Retention(value = AnnotationRetention.RUNTIME) public final annotation class Ann : kotlin.Annotation type=Ann
+            value: GET_VAR x type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Ann
+      PROPERTY public final val x: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR x type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    FUN public fun testMethod(/*0*/ method: java.lang.reflect.Method, /*1*/ name: kotlin.String): kotlin.Unit
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='OK'
+          actual: CALL .<get-x> type=kotlin.String operator=GET_PROPERTY
+            $this: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=Ann
+              CALL .getAnnotation type=Ann! operator=null
+                $this: GET_VAR method type=java.lang.reflect.Method operator=null
+                p0: CALL .<get-java> type=java.lang.Class<Ann> operator=GET_PROPERTY
+                  $receiver: CLASS_REFERENCE Ann type=kotlin.reflect.KClass<Ann>
+          message: STRING_CONCATENATION type=kotlin.String
+            CONST String type=kotlin.String value='On method of test named `'
+            GET_VAR name type=kotlin.String operator=null
+            CONST String type=kotlin.String value='`'
+        BLOCK type=kotlin.Unit operator=FOR_LOOP
+          VAR val tmp0_iterator: kotlin.collections.Iterator<kotlin.collections.IndexedValue<kotlin.Array<(out) kotlin.Annotation!>!>>
+            CALL .iterator type=kotlin.collections.Iterator<kotlin.collections.IndexedValue<kotlin.Array<(out) kotlin.Annotation!>!>> operator=FOR_LOOP_ITERATOR
+              $this: CALL .withIndex type=kotlin.collections.Iterable<kotlin.collections.IndexedValue<kotlin.Array<(out) kotlin.Annotation!>!>> operator=null
+                $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.Array<out kotlin.Array<(out) kotlin.Annotation!>!>
+                  CALL .getParameterAnnotations type=kotlin.Array<(out) kotlin.Array<(out) kotlin.Annotation!>!>! operator=null
+                    $this: GET_VAR method type=java.lang.reflect.Method operator=null
+          WHILE label=null operator=FOR_LOOP_INNER_WHILE
+            condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+              $this: GET_VAR tmp0_iterator type=kotlin.collections.Iterator<kotlin.collections.IndexedValue<kotlin.Array<(out) kotlin.Annotation!>!>> operator=null
+            body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+              VAR val tmp1_loop_parameter: kotlin.collections.IndexedValue<kotlin.Array<(out) kotlin.Annotation!>!>
+                CALL .next type=kotlin.collections.IndexedValue<kotlin.Array<(out) kotlin.Annotation!>!> operator=FOR_LOOP_NEXT
+                  $this: GET_VAR tmp0_iterator type=kotlin.collections.Iterator<kotlin.collections.IndexedValue<kotlin.Array<(out) kotlin.Annotation!>!>> operator=null
+              VAR val index: kotlin.Int
+                CALL .component1 type=kotlin.Int operator=COMPONENT_N(index=1)
+                  $this: GET_VAR tmp1_loop_parameter type=kotlin.collections.IndexedValue<kotlin.Array<(out) kotlin.Annotation!>!> operator=null
+              VAR val annotations: kotlin.Array<(out) kotlin.Annotation!>!
+                CALL .component2 type=kotlin.Array<(out) kotlin.Annotation!>! operator=COMPONENT_N(index=2)
+                  $this: GET_VAR tmp1_loop_parameter type=kotlin.collections.IndexedValue<kotlin.Array<(out) kotlin.Annotation!>!> operator=null
+              BLOCK type=kotlin.Unit operator=null
+                VAR val ann: Ann
+                  CALL .single type=Ann operator=null
+                    $receiver: CALL .filterIsInstance type=kotlin.collections.List<Ann> operator=null
+                      $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.Array<out kotlin.Annotation!>
+                        GET_VAR annotations type=kotlin.Array<(out) kotlin.Annotation!>! operator=null
+                CALL .assertEquals type=kotlin.Unit operator=null
+                  expected: STRING_CONCATENATION type=kotlin.String
+                    CONST String type=kotlin.String value='OK'
+                    GET_VAR index type=kotlin.Int operator=null
+                  actual: CALL .<get-x> type=kotlin.String operator=GET_PROPERTY
+                    $this: GET_VAR ann type=Ann operator=null
+                  message: STRING_CONCATENATION type=kotlin.String
+                    CONST String type=kotlin.String value='On parameter '
+                    GET_VAR index type=kotlin.Int operator=null
+                    CONST String type=kotlin.String value=' of test named `'
+                    GET_VAR name type=kotlin.String operator=null
+                    CONST String type=kotlin.String value='`'
+    FUN public fun testClass(/*0*/ clazz: java.lang.Class<*>, /*1*/ name: kotlin.String): kotlin.Unit
+      BLOCK_BODY
+        VAR val invokes: java.lang.reflect.Method!
+          CALL .single type=java.lang.reflect.Method! operator=null
+            $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.Array<out java.lang.reflect.Method!>
+              CALL .getDeclaredMethods type=kotlin.Array<(out) java.lang.reflect.Method!>! operator=null
+                $this: GET_VAR clazz type=java.lang.Class<*> operator=null
+            predicate: BLOCK type=(java.lang.reflect.Method!) -> kotlin.Boolean operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: java.lang.reflect.Method!): kotlin.Boolean
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .not type=kotlin.Boolean operator=EXCL
+                      $this: CALL .isBridge type=kotlin.Boolean operator=null
+                        $this: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Method
+                          GET_VAR it type=java.lang.reflect.Method! operator=null
+              CALLABLE_REFERENCE <anonymous> type=(java.lang.reflect.Method!) -> kotlin.Boolean operator=LAMBDA
+        CALL .testMethod type=kotlin.Unit operator=null
+          method: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Method
+            GET_VAR invokes type=java.lang.reflect.Method! operator=null
+          name: GET_VAR name type=kotlin.String operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .testClass type=kotlin.Unit operator=null
+          clazz: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.Class<*>
+            CALL .apply type=java.lang.Class<*>! operator=null
+              x: BLOCK type=() -> kotlin.Unit operator=LAMBDA
+                FUN @Ann(x = "OK") local final fun <anonymous>(): kotlin.Unit
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Unit operator=LAMBDA
+          name: CONST String type=kotlin.String value='1'
+        CALL .testClass type=kotlin.Unit operator=null
+          clazz: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.Class<*>
+            CALL .apply type=java.lang.Class<*>! operator=null
+              x: BLOCK type=() -> kotlin.Unit operator=LAMBDA
+                FUN @Ann(x = "OK") local final fun <anonymous>(): kotlin.Unit
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Unit operator=LAMBDA
+          name: CONST String type=kotlin.String value='2'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -14,3 +14,5 @@ class Delegate {
 val prop: String by Delegate()
 
 fun box() = if (prop == "val prop: kotlin.String") "OK" else "Fail: $prop"
+
+

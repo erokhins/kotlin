@@ -1,0 +1,52 @@
+MODULE <test-module>
+  FILE /kt2398.kt
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      CLASS OBJECT Obj
+        CONSTRUCTOR private constructor Obj()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Obj
+        PROPERTY public final val o: kotlin.String = "O"
+          EXPRESSION_BODY
+            CONST String type=kotlin.String value='O'
+        CLASS OBJECT InnerObj
+          CONSTRUCTOR private constructor InnerObj()
+            BLOCK_BODY
+              DELEGATING_CONSTRUCTOR_CALL Any
+              INSTANCE_INITIALIZER_CALL classDescriptor=InnerObj
+          FUN public final fun k(): kotlin.String
+            BLOCK_BODY
+              RETURN type=kotlin.Nothing from=k
+                CONST String type=kotlin.String value='K'
+        CLASS CLASS D
+          CONSTRUCTOR public constructor D()
+            BLOCK_BODY
+              DELEGATING_CONSTRUCTOR_CALL Any
+              INSTANCE_INITIALIZER_CALL classDescriptor=D
+          PROPERTY public final val ko: kotlin.String = "KO"
+            EXPRESSION_BODY
+              CONST String type=kotlin.String value='KO'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val res: kotlin.String
+          CALL .plus type=kotlin.String operator=PLUS
+            $this: CALL .plus type=kotlin.String operator=PLUS
+              $this: CALL .<get-o> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_OBJECT Obj type=C.Obj
+              other: CALL .k type=kotlin.String operator=null
+                $this: GET_OBJECT InnerObj type=C.Obj.InnerObj
+            other: CALL .<get-ko> type=kotlin.String operator=GET_PROPERTY
+              $this: CALL .<init> type=C.Obj.D operator=null
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: GET_VAR res type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='OKKO'
+            then: CONST String type=kotlin.String value='OK'
+            else: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail: '
+              GET_VAR res type=kotlin.String operator=null

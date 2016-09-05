@@ -1,0 +1,112 @@
+MODULE <test-module>
+  FILE /sameIndexRecursive.kt
+    FUN public inline fun </*0*/ reified T1, /*1*/ reified T2> createArray(/*0*/ n: kotlin.Int, /*1*/ crossinline block: () -> kotlin.Pair<T1, T2>): kotlin.Pair<kotlin.Array<T1>, kotlin.Array<T2>>
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=createArray
+          CALL .<init> type=kotlin.Pair<kotlin.Array<T1>, kotlin.Array<T2>> operator=null
+            first: CALL .<init> type=kotlin.Array<T1> operator=null
+              size: GET_VAR n type=kotlin.Int operator=null
+              init: BLOCK type=(kotlin.Int) -> T1 operator=LAMBDA
+                FUN local final fun <anonymous>(/*0*/ it: kotlin.Int): T1
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .<get-first> type=T1 operator=GET_PROPERTY
+                        $this: CALL .invoke type=kotlin.Pair<T1, T2> operator=INVOKE
+                          $this: GET_VAR block type=() -> kotlin.Pair<T1, T2> operator=VARIABLE_AS_FUNCTION
+                CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> T1 operator=LAMBDA
+            second: CALL .<init> type=kotlin.Array<T2> operator=null
+              size: GET_VAR n type=kotlin.Int operator=null
+              init: BLOCK type=(kotlin.Int) -> T2 operator=LAMBDA
+                FUN local final fun <anonymous>(/*0*/ it: kotlin.Int): T2
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .<get-second> type=T2 operator=GET_PROPERTY
+                        $this: CALL .invoke type=kotlin.Pair<T1, T2> operator=INVOKE
+                          $this: GET_VAR block type=() -> kotlin.Pair<T1, T2> operator=VARIABLE_AS_FUNCTION
+                CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> T2 operator=LAMBDA
+    FUN public inline fun </*0*/ T1, /*1*/ T2, /*2*/ T3, /*3*/ T4, /*4*/ T5, /*5*/ T6, /*6*/ reified R> recursive(/*0*/ crossinline block: () -> R): kotlin.Pair<kotlin.Array<R>, kotlin.Array<R>>
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=recursive
+          CALL .createArray type=kotlin.Pair<kotlin.Array<R>, kotlin.Array<R>> operator=null
+            n: CONST Int type=kotlin.Int value='5'
+            block: BLOCK type=() -> kotlin.Pair<R, R> operator=LAMBDA
+              FUN local final fun <anonymous>(): kotlin.Pair<R, R>
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .<init> type=kotlin.Pair<R, R> operator=null
+                      first: CALL .invoke type=R operator=INVOKE
+                        $this: GET_VAR block type=() -> R operator=VARIABLE_AS_FUNCTION
+                      second: CALL .invoke type=R operator=INVOKE
+                        $this: GET_VAR block type=() -> R operator=VARIABLE_AS_FUNCTION
+              CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Pair<R, R> operator=LAMBDA
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val y: kotlin.Pair<kotlin.Array<kotlin.Int>, kotlin.Array<kotlin.String>>
+          CALL .createArray type=kotlin.Pair<kotlin.Array<kotlin.Int>, kotlin.Array<kotlin.String>> operator=null
+            n: CONST Int type=kotlin.Int value='5'
+            block: BLOCK type=() -> kotlin.Pair<kotlin.Int, kotlin.String> operator=LAMBDA
+              FUN local final fun <anonymous>(): kotlin.Pair<kotlin.Int, kotlin.String>
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .<init> type=kotlin.Pair<kotlin.Int, kotlin.String> operator=null
+                      first: CONST Int type=kotlin.Int value='1'
+                      second: CONST String type=kotlin.String value='test'
+              CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Pair<kotlin.Int, kotlin.String> operator=LAMBDA
+        VAR val x: kotlin.Pair<kotlin.Array<kotlin.String>, kotlin.Array<kotlin.String>>
+          CALL .recursive type=kotlin.Pair<kotlin.Array<kotlin.String>, kotlin.Array<kotlin.String>> operator=null
+            block: BLOCK type=() -> kotlin.String operator=LAMBDA
+              FUN local final fun <anonymous>(): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CONST String type=kotlin.String value='abc'
+              CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+        CALL .assert type=kotlin.Unit operator=null
+          value: CALL .all type=kotlin.Boolean operator=null
+            $receiver: CALL .<get-first> type=kotlin.Array<kotlin.Int> operator=GET_PROPERTY
+              $this: GET_VAR y type=kotlin.Pair<kotlin.Array<kotlin.Int>, kotlin.Array<kotlin.String>> operator=null
+            predicate: BLOCK type=(kotlin.Int) -> kotlin.Boolean operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.Int): kotlin.Boolean
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                      arg0: GET_VAR it type=kotlin.Int operator=null
+                      arg1: CONST Int type=kotlin.Int value='1'
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> kotlin.Boolean operator=LAMBDA
+        CALL .assert type=kotlin.Unit operator=null
+          value: CALL .all type=kotlin.Boolean operator=null
+            $receiver: CALL .<get-second> type=kotlin.Array<kotlin.String> operator=GET_PROPERTY
+              $this: GET_VAR y type=kotlin.Pair<kotlin.Array<kotlin.Int>, kotlin.Array<kotlin.String>> operator=null
+            predicate: BLOCK type=(kotlin.String) -> kotlin.Boolean operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.String): kotlin.Boolean
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                      arg0: GET_VAR it type=kotlin.String operator=null
+                      arg1: CONST String type=kotlin.String value='test'
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.String) -> kotlin.Boolean operator=LAMBDA
+        CALL .assert type=kotlin.Unit operator=null
+          value: CALL .all type=kotlin.Boolean operator=null
+            $receiver: CALL .<get-first> type=kotlin.Array<kotlin.String> operator=GET_PROPERTY
+              $this: GET_VAR x type=kotlin.Pair<kotlin.Array<kotlin.String>, kotlin.Array<kotlin.String>> operator=null
+            predicate: BLOCK type=(kotlin.String) -> kotlin.Boolean operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.String): kotlin.Boolean
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                      arg0: GET_VAR it type=kotlin.String operator=null
+                      arg1: CONST String type=kotlin.String value='abc'
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.String) -> kotlin.Boolean operator=LAMBDA
+        CALL .assert type=kotlin.Unit operator=null
+          value: CALL .all type=kotlin.Boolean operator=null
+            $receiver: CALL .<get-second> type=kotlin.Array<kotlin.String> operator=GET_PROPERTY
+              $this: GET_VAR x type=kotlin.Pair<kotlin.Array<kotlin.String>, kotlin.Array<kotlin.String>> operator=null
+            predicate: BLOCK type=(kotlin.String) -> kotlin.Boolean operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.String): kotlin.Boolean
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                      arg0: GET_VAR it type=kotlin.String operator=null
+                      arg1: CONST String type=kotlin.String value='abc'
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.String) -> kotlin.Boolean operator=LAMBDA
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

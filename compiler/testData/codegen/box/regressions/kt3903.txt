@@ -1,0 +1,27 @@
+MODULE <test-module>
+  FILE /kt3903.kt
+    CLASS CLASS Foo
+      CONSTRUCTOR public constructor Foo()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Foo
+      FUN public final fun bar(): kotlin.String
+        BLOCK_BODY
+          FUN local final fun </*0*/ T> foo(/*0*/ t: () -> T): T
+            BLOCK_BODY
+              RETURN type=kotlin.Nothing from=foo
+                CALL .invoke type=T operator=INVOKE
+                  $this: GET_VAR t type=() -> T operator=VARIABLE_AS_FUNCTION
+          CALL .foo type=kotlin.Unit operator=null
+            t: BLOCK type=() -> kotlin.Unit operator=LAMBDA
+              FUN local final fun <anonymous>(): kotlin.Unit
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+              CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Unit operator=LAMBDA
+          RETURN type=kotlin.Nothing from=bar
+            CONST String type=kotlin.String value='OK'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .bar type=kotlin.String operator=null
+            $this: CALL .<init> type=Foo operator=null

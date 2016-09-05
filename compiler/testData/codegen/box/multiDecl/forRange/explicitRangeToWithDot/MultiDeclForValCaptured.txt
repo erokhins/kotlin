@@ -1,0 +1,165 @@
+MODULE <test-module>
+  FILE /MultiDeclForValCaptured.kt
+    CLASS CLASS Range
+      CONSTRUCTOR public constructor Range(/*0*/ from: C, /*1*/ to: C)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD from type=kotlin.Unit operator=null
+            receiver: THIS public final class Range type=Range
+            value: GET_VAR from type=C operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          SET_BACKING_FIELD to type=kotlin.Unit operator=null
+            receiver: THIS public final class Range type=Range
+            value: GET_VAR to type=C operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Range
+      PROPERTY public final val from: C
+        EXPRESSION_BODY
+          GET_VAR from type=C operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final val to: C
+        EXPRESSION_BODY
+          GET_VAR to type=C operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public final operator fun iterator(): It
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=iterator
+            CALL .<init> type=It operator=null
+              from: CALL .<get-from> type=C operator=GET_PROPERTY
+                $this: THIS public final class Range type=Range
+              to: CALL .<get-to> type=C operator=GET_PROPERTY
+                $this: THIS public final class Range type=Range
+    CLASS CLASS It
+      CONSTRUCTOR public constructor It(/*0*/ from: C, /*1*/ to: C)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD from type=kotlin.Unit operator=null
+            receiver: THIS public final class It type=It
+            value: GET_VAR from type=C operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          SET_BACKING_FIELD to type=kotlin.Unit operator=null
+            receiver: THIS public final class It type=It
+            value: GET_VAR to type=C operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=It
+      PROPERTY public final val from: C
+        EXPRESSION_BODY
+          GET_VAR from type=C operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final val to: C
+        EXPRESSION_BODY
+          GET_VAR to type=C operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final var c: kotlin.Int
+        EXPRESSION_BODY
+          CALL .<get-i> type=kotlin.Int operator=GET_PROPERTY
+            $this: CALL .<get-from> type=C operator=GET_PROPERTY
+              $this: THIS public final class It type=It
+      FUN public final operator fun next(): C
+        BLOCK_BODY
+          VAR val next: C
+            CALL .<init> type=C operator=null
+              i: CALL .<get-c> type=kotlin.Int operator=GET_PROPERTY
+                $this: THIS public final class It type=It
+          BLOCK type=kotlin.Int operator=POSTFIX_INCR
+            VAR val tmp0_this: It
+              THIS public final class It type=It
+            BLOCK type=kotlin.Int operator=POSTFIX_INCR
+              VAR val tmp1: kotlin.Int
+                CALL .<get-c> type=kotlin.Int operator=POSTFIX_INCR
+                  $this: GET_VAR tmp0_this type=It operator=null
+              CALL .<set-c> type=kotlin.Unit operator=POSTFIX_INCR
+                $this: GET_VAR tmp0_this type=It operator=null
+                <set-?>: CALL .inc type=kotlin.Int operator=POSTFIX_INCR
+                  $this: GET_VAR tmp1 type=kotlin.Int operator=null
+              GET_VAR tmp1 type=kotlin.Int operator=null
+          RETURN type=kotlin.Nothing from=next
+            GET_VAR next type=C operator=null
+      FUN public final operator fun hasNext(): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=hasNext
+            CALL .LTEQ0 type=kotlin.Boolean operator=LTEQ
+              arg0: CALL .compareTo type=kotlin.Int operator=LTEQ
+                $this: CALL .<get-c> type=kotlin.Int operator=GET_PROPERTY
+                  $this: THIS public final class It type=It
+                other: CALL .<get-i> type=kotlin.Int operator=GET_PROPERTY
+                  $this: CALL .<get-to> type=C operator=GET_PROPERTY
+                    $this: THIS public final class It type=It
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C(/*0*/ i: kotlin.Int)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD i type=kotlin.Unit operator=null
+            receiver: THIS public final class C type=C
+            value: GET_VAR i type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      PROPERTY public final val i: kotlin.Int
+        EXPRESSION_BODY
+          GET_VAR i type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public final operator fun component1(): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=component1
+            CALL .plus type=kotlin.Int operator=PLUS
+              $this: CALL .<get-i> type=kotlin.Int operator=GET_PROPERTY
+                $this: THIS public final class C type=C
+              other: CONST Int type=kotlin.Int value='1'
+      FUN public final operator fun component2(): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=component2
+            CALL .plus type=kotlin.Int operator=PLUS
+              $this: CALL .<get-i> type=kotlin.Int operator=GET_PROPERTY
+                $this: THIS public final class C type=C
+              other: CONST Int type=kotlin.Int value='2'
+      FUN public final fun rangeTo(/*0*/ c: C): Range
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=rangeTo
+            CALL .<init> type=Range operator=null
+              from: THIS public final class C type=C
+              to: GET_VAR c type=C operator=null
+    FUN public fun doTest(): kotlin.String
+      BLOCK_BODY
+        VAR var s: kotlin.String
+          CONST String type=kotlin.String value=''
+        BLOCK type=kotlin.Unit operator=FOR_LOOP
+          VAR val tmp0_iterator: It
+            CALL .iterator type=It operator=FOR_LOOP_ITERATOR
+              $this: CALL .rangeTo type=Range operator=null
+                $this: CALL .<init> type=C operator=null
+                  i: CONST Int type=kotlin.Int value='0'
+                c: CALL .<init> type=C operator=null
+                  i: CONST Int type=kotlin.Int value='2'
+          WHILE label=null operator=FOR_LOOP_INNER_WHILE
+            condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+              $this: GET_VAR tmp0_iterator type=It operator=null
+            body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+              VAR val tmp1_loop_parameter: C
+                CALL .next type=C operator=FOR_LOOP_NEXT
+                  $this: GET_VAR tmp0_iterator type=It operator=null
+              VAR val a: kotlin.Int
+                CALL .component1 type=kotlin.Int operator=COMPONENT_N(index=1)
+                  $this: GET_VAR tmp1_loop_parameter type=C operator=null
+              VAR val b: kotlin.Int
+                CALL .component2 type=kotlin.Int operator=COMPONENT_N(index=2)
+                  $this: GET_VAR tmp1_loop_parameter type=C operator=null
+              BLOCK type=kotlin.Unit operator=null
+                SET_VAR s type=kotlin.Unit operator=PLUSEQ
+                  CALL .plus type=kotlin.String operator=PLUSEQ
+                    $this: GET_VAR s type=kotlin.String operator=PLUSEQ
+                    other: CALL .invoke type=kotlin.String operator=null
+                      $this: BLOCK type=() -> kotlin.String operator=LAMBDA
+                        FUN local final fun <anonymous>(): kotlin.String
+                          BLOCK_BODY
+                            RETURN type=kotlin.Nothing from=<anonymous>
+                              STRING_CONCATENATION type=kotlin.String
+                                GET_VAR a type=kotlin.Int operator=null
+                                CONST String type=kotlin.String value=':'
+                                GET_VAR b type=kotlin.Int operator=null
+                                CONST String type=kotlin.String value=';'
+                        CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+        RETURN type=kotlin.Nothing from=doTest
+          GET_VAR s type=kotlin.String operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val s: kotlin.String
+          CALL .doTest type=kotlin.String operator=null
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: GET_VAR s type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='1:2;2:3;3:4;'
+            then: CONST String type=kotlin.String value='OK'
+            else: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail: '
+              GET_VAR s type=kotlin.String operator=null

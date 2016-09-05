@@ -7,3 +7,4 @@ class B() : Function0<Boolean> {
 }
 
 fun box() = if (B().foo()) "OK" else "fail"
+

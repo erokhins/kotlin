@@ -1,0 +1,295 @@
+MODULE <test-module>
+  FILE /suspendInTheMiddleOfObjectConstruction.kt
+    CLASS CLASS Controller
+      CONSTRUCTOR public constructor Controller()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Controller
+      FUN public final suspend fun suspendHere(/*0*/ x: kotlin.coroutines.Continuation<kotlin.String>): kotlin.Unit
+        BLOCK_BODY
+          CALL .resume type=kotlin.Unit operator=null
+            $this: GET_VAR x type=kotlin.coroutines.Continuation<kotlin.String> operator=null
+            data: CONST String type=kotlin.String value='K'
+      FUN public final suspend fun suspendWithArgument(/*0*/ v: kotlin.String, /*1*/ x: kotlin.coroutines.Continuation<kotlin.String>): kotlin.Unit
+        BLOCK_BODY
+          CALL .resume type=kotlin.Unit operator=null
+            $this: GET_VAR x type=kotlin.coroutines.Continuation<kotlin.String> operator=null
+            data: GET_VAR v type=kotlin.String operator=null
+      FUN public final suspend fun suspendWithDouble(/*0*/ v: kotlin.Double, /*1*/ x: kotlin.coroutines.Continuation<kotlin.Double>): kotlin.Unit
+        BLOCK_BODY
+          CALL .resume type=kotlin.Unit operator=null
+            $this: GET_VAR x type=kotlin.coroutines.Continuation<kotlin.Double> operator=null
+            data: GET_VAR v type=kotlin.Double operator=null
+    FUN public fun builder(/*0*/ coroutine c: Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit>): kotlin.Unit
+      BLOCK_BODY
+        CALL .resume type=kotlin.Unit operator=null
+          $this: CALL .invoke type=kotlin.coroutines.Continuation<kotlin.Unit> operator=INVOKE
+            $this: GET_VAR c type=Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit> operator=VARIABLE_AS_FUNCTION
+            p1: CALL .<init> type=Controller operator=null
+          data: GET_OBJECT Unit type=kotlin.Unit
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A(/*0*/ first: kotlin.String, /*1*/ second: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD first type=kotlin.Unit operator=null
+            receiver: THIS public final class A type=A
+            value: GET_VAR first type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          SET_BACKING_FIELD second type=kotlin.Unit operator=null
+            receiver: THIS public final class A type=A
+            value: GET_VAR second type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public final val first: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR first type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final val second: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR second type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public open override /*1*/ fun toString(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=toString
+            STRING_CONCATENATION type=kotlin.String
+              CALL .<get-first> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public final class A type=A
+              CALL .<get-second> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public final class A type=A
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B(/*0*/ first: kotlin.String, /*1*/ second: kotlin.String, /*2*/ third: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD first type=kotlin.Unit operator=null
+            receiver: THIS public final class B type=B
+            value: GET_VAR first type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          SET_BACKING_FIELD second type=kotlin.Unit operator=null
+            receiver: THIS public final class B type=B
+            value: GET_VAR second type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          SET_BACKING_FIELD third type=kotlin.Unit operator=null
+            receiver: THIS public final class B type=B
+            value: GET_VAR third type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+      PROPERTY public final val first: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR first type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final val second: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR second type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final val third: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR third type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public open override /*1*/ fun toString(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=toString
+            STRING_CONCATENATION type=kotlin.String
+              CALL .<get-first> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public final class B type=B
+              CALL .<get-second> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public final class B type=B
+              CALL .<get-third> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public final class B type=B
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C(/*0*/ first: kotlin.Long, /*1*/ second: kotlin.Double, /*2*/ third: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD first type=kotlin.Unit operator=null
+            receiver: THIS public final class C type=C
+            value: GET_VAR first type=kotlin.Long operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          SET_BACKING_FIELD second type=kotlin.Unit operator=null
+            receiver: THIS public final class C type=C
+            value: GET_VAR second type=kotlin.Double operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          SET_BACKING_FIELD third type=kotlin.Unit operator=null
+            receiver: THIS public final class C type=C
+            value: GET_VAR third type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      PROPERTY public final val first: kotlin.Long
+        EXPRESSION_BODY
+          GET_VAR first type=kotlin.Long operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final val second: kotlin.Double
+        EXPRESSION_BODY
+          GET_VAR second type=kotlin.Double operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final val third: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR third type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public open override /*1*/ fun toString(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=toString
+            STRING_CONCATENATION type=kotlin.String
+              CALL .<get-first> type=kotlin.Long operator=GET_PROPERTY
+                $this: THIS public final class C type=C
+              CONST String type=kotlin.String value='#'
+              CALL .<get-second> type=kotlin.Double operator=GET_PROPERTY
+                $this: THIS public final class C type=C
+              CONST String type=kotlin.String value='#'
+              CALL .<get-third> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public final class C type=C
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR var result: kotlin.String
+          CONST String type=kotlin.String value='OK'
+        CALL .builder type=kotlin.Unit operator=null
+          c: TYPE_OP operator=IMPLICIT_CAST typeOperand=Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit>
+            BLOCK type=Controller.() -> kotlin.Unit operator=LAMBDA
+              FUN local final fun Controller.<anonymous>(): kotlin.Unit
+                BLOCK_BODY
+                  VAR var local: kotlin.Any
+                    CALL .<init> type=A operator=null
+                      first: CONST String type=kotlin.String value='O'
+                      second: CALL .suspendHere type=kotlin.String operator=null
+                        $this: $RECEIVER of: <anonymous> type=Controller
+                  WHEN type=kotlin.Unit operator=IF
+                    if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+                      arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                        arg0: CALL .toString type=kotlin.String operator=null
+                          $this: GET_VAR local type=kotlin.Any operator=null
+                        arg1: CONST String type=kotlin.String value='OK'
+                    then: BLOCK type=kotlin.Nothing operator=null
+                      SET_VAR result type=kotlin.Unit operator=EQ
+                        STRING_CONCATENATION type=kotlin.String
+                          CONST String type=kotlin.String value='fail 1: '
+                          GET_VAR local type=kotlin.Any operator=null
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                  SET_VAR local type=kotlin.Unit operator=EQ
+                    CALL .<init> type=A operator=null
+                      first: CALL .suspendWithArgument type=kotlin.String operator=null
+                        $this: $RECEIVER of: <anonymous> type=Controller
+                        v: CONST String type=kotlin.String value='O'
+                      second: CALL .suspendHere type=kotlin.String operator=null
+                        $this: $RECEIVER of: <anonymous> type=Controller
+                  WHEN type=kotlin.Unit operator=IF
+                    if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+                      arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                        arg0: CALL .toString type=kotlin.String operator=null
+                          $this: GET_VAR local type=kotlin.Any operator=null
+                        arg1: CONST String type=kotlin.String value='OK'
+                    then: BLOCK type=kotlin.Nothing operator=null
+                      SET_VAR result type=kotlin.Unit operator=EQ
+                        STRING_CONCATENATION type=kotlin.String
+                          CONST String type=kotlin.String value='fail 2: '
+                          GET_VAR local type=kotlin.Any operator=null
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                  SET_VAR local type=kotlin.Unit operator=EQ
+                    CALL .<init> type=B operator=null
+                      first: CONST String type=kotlin.String value='#'
+                      second: CALL .suspendWithArgument type=kotlin.String operator=null
+                        $this: $RECEIVER of: <anonymous> type=Controller
+                        v: CONST String type=kotlin.String value='O'
+                      third: CALL .suspendHere type=kotlin.String operator=null
+                        $this: $RECEIVER of: <anonymous> type=Controller
+                  WHEN type=kotlin.Unit operator=IF
+                    if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+                      arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                        arg0: CALL .toString type=kotlin.String operator=null
+                          $this: GET_VAR local type=kotlin.Any operator=null
+                        arg1: CONST String type=kotlin.String value='#OK'
+                    then: BLOCK type=kotlin.Nothing operator=null
+                      SET_VAR result type=kotlin.Unit operator=EQ
+                        STRING_CONCATENATION type=kotlin.String
+                          CONST String type=kotlin.String value='fail 3: '
+                          GET_VAR local type=kotlin.Any operator=null
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                  SET_VAR local type=kotlin.Unit operator=EQ
+                    CALL .<init> type=B operator=null
+                      first: CALL .suspendWithArgument type=kotlin.String operator=null
+                        $this: $RECEIVER of: <anonymous> type=Controller
+                        v: CONST String type=kotlin.String value='#'
+                      second: CONST String type=kotlin.String value='O'
+                      third: CALL .suspendHere type=kotlin.String operator=null
+                        $this: $RECEIVER of: <anonymous> type=Controller
+                  WHEN type=kotlin.Unit operator=IF
+                    if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+                      arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                        arg0: CALL .toString type=kotlin.String operator=null
+                          $this: GET_VAR local type=kotlin.Any operator=null
+                        arg1: CONST String type=kotlin.String value='#OK'
+                    then: BLOCK type=kotlin.Nothing operator=null
+                      SET_VAR result type=kotlin.Unit operator=EQ
+                        STRING_CONCATENATION type=kotlin.String
+                          CONST String type=kotlin.String value='fail 4: '
+                          GET_VAR local type=kotlin.Any operator=null
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                  SET_VAR local type=kotlin.Unit operator=EQ
+                    CALL .<init> type=B operator=null
+                      first: CONST String type=kotlin.String value='#'
+                      second: CALL .toString type=kotlin.String operator=null
+                        $this: CALL .<init> type=B operator=null
+                          first: CONST String type=kotlin.String value=''
+                          second: CONST String type=kotlin.String value='O'
+                          third: CALL .suspendWithArgument type=kotlin.String operator=null
+                            $this: $RECEIVER of: <anonymous> type=Controller
+                            v: CONST String type=kotlin.String value=''
+                      third: CALL .suspendHere type=kotlin.String operator=null
+                        $this: $RECEIVER of: <anonymous> type=Controller
+                  WHEN type=kotlin.Unit operator=IF
+                    if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+                      arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                        arg0: CALL .toString type=kotlin.String operator=null
+                          $this: GET_VAR local type=kotlin.Any operator=null
+                        arg1: CONST String type=kotlin.String value='#OK'
+                    then: BLOCK type=kotlin.Nothing operator=null
+                      SET_VAR result type=kotlin.Unit operator=EQ
+                        STRING_CONCATENATION type=kotlin.String
+                          CONST String type=kotlin.String value='fail 5: '
+                          GET_VAR local type=kotlin.Any operator=null
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                  VAR val condition: kotlin.Boolean
+                    CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                      arg0: CALL .toString type=kotlin.String operator=null
+                        $this: GET_VAR local type=kotlin.Any operator=null
+                      arg1: CONST String type=kotlin.String value='#OK'
+                  SET_VAR local type=kotlin.Unit operator=EQ
+                    CALL .<init> type=B operator=null
+                      first: WHEN type=kotlin.String operator=IF
+                        if: CALL .not type=kotlin.Boolean operator=EXCL
+                          $this: GET_VAR condition type=kotlin.Boolean operator=null
+                        then: CONST String type=kotlin.String value='1'
+                        else: CALL .suspendWithArgument type=kotlin.String operator=null
+                          $this: $RECEIVER of: <anonymous> type=Controller
+                          v: CONST String type=kotlin.String value='#'
+                      second: WHEN type=kotlin.String operator=IF
+                        if: GET_VAR condition type=kotlin.Boolean operator=null
+                        then: CALL .suspendWithArgument type=kotlin.String operator=null
+                          $this: $RECEIVER of: <anonymous> type=Controller
+                          v: CONST String type=kotlin.String value='O'
+                        else: CONST String type=kotlin.String value='2'
+                      third: WHEN type=kotlin.String operator=IF
+                        if: GET_VAR condition type=kotlin.Boolean operator=null
+                        then: CALL .suspendHere type=kotlin.String operator=null
+                          $this: $RECEIVER of: <anonymous> type=Controller
+                        else: CALL .suspendWithArgument type=kotlin.String operator=null
+                          $this: $RECEIVER of: <anonymous> type=Controller
+                          v: CONST String type=kotlin.String value='3'
+                  WHEN type=kotlin.Unit operator=IF
+                    if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+                      arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                        arg0: CALL .toString type=kotlin.String operator=null
+                          $this: GET_VAR local type=kotlin.Any operator=null
+                        arg1: CONST String type=kotlin.String value='#OK'
+                    then: BLOCK type=kotlin.Nothing operator=null
+                      SET_VAR result type=kotlin.Unit operator=EQ
+                        STRING_CONCATENATION type=kotlin.String
+                          CONST String type=kotlin.String value='fail 5: '
+                          GET_VAR local type=kotlin.Any operator=null
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                  SET_VAR local type=kotlin.Unit operator=EQ
+                    CALL .<init> type=C operator=null
+                      first: CONST Long type=kotlin.Long value='1234567890123'
+                      second: CALL .suspendWithDouble type=kotlin.Double operator=null
+                        $this: $RECEIVER of: <anonymous> type=Controller
+                        v: CONST Double type=kotlin.Double value='3.14'
+                      third: CALL .suspendWithArgument type=kotlin.String operator=null
+                        $this: $RECEIVER of: <anonymous> type=Controller
+                        v: CONST String type=kotlin.String value='OK'
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    WHEN type=kotlin.Unit operator=IF
+                      if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+                        arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                          arg0: CALL .toString type=kotlin.String operator=null
+                            $this: GET_VAR local type=kotlin.Any operator=null
+                          arg1: CONST String type=kotlin.String value='1234567890123#3.14#OK'
+                      then: BLOCK type=kotlin.Nothing operator=null
+                        SET_VAR result type=kotlin.Unit operator=EQ
+                          STRING_CONCATENATION type=kotlin.String
+                            CONST String type=kotlin.String value='fail 5: '
+                            GET_VAR local type=kotlin.Any operator=null
+                        RETURN type=kotlin.Nothing from=<anonymous>
+              CALLABLE_REFERENCE <anonymous> type=Controller.() -> kotlin.Unit operator=LAMBDA
+        RETURN type=kotlin.Nothing from=box
+          GET_VAR result type=kotlin.String operator=null

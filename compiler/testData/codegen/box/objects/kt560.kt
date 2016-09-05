@@ -26,3 +26,5 @@ fun box() : String {
     AllEvenNum.main(arrayOfNulls<String>(0))
     return "OK"
 }
+
+

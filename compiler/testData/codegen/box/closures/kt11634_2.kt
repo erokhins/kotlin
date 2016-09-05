@@ -25,3 +25,4 @@ class AWrapperFabric : AFabric() {
 fun box(): String {
     return AWrapperFabric().createMyA().foo()
 }
+

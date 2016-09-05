@@ -11,3 +11,5 @@ fun box() : String {
 fun apply(arg:Point, f :  Point.(scalar : Int) -> Point) : Point {
     return arg.f(2)
 }
+
+

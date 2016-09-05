@@ -12,3 +12,5 @@ fun box(): String {
 
     return "${State.O.name}${State.K.name}"
 }
+
+

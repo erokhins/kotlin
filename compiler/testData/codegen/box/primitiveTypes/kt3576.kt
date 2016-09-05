@@ -7,3 +7,4 @@ fun box(): String {
   return if (TestObject.testFloat.equals(0.9999.toFloat())
       && TestObject.otherFloat.equals(1.01.toFloat())) "OK" else "fail"
 }
+

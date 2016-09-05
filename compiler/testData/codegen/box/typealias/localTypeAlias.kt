@@ -14,3 +14,4 @@ fun box(): String {
     typealias OK = OkHost
     return id(OK.value)
 }
+

@@ -18,3 +18,5 @@ fun box(): String {
     if (foo.result != 42) return "Fail: ${foo.result}"
     return "OK"
 }
+
+

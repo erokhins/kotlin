@@ -15,3 +15,4 @@ fun box(): String {
         "OK"
     else "Failed, test=$test"
 }
+

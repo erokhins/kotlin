@@ -13,3 +13,5 @@ fun box(): String {
     val a: A<String> = Z()
     return a.foo
 }
+
+

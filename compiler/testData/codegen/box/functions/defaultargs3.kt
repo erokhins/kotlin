@@ -13,3 +13,5 @@ fun box() : String {
     if(C().testReceiver() != "111 222") return "fail"
     return "OK"
 }
+
+

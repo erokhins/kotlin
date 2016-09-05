@@ -31,3 +31,5 @@ fun box(): String {
     if (extractor.intValue() != 42) return "FAIL"
     return "OK"
 }
+
+

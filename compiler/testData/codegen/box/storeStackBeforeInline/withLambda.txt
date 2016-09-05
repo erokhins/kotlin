@@ -1,0 +1,41 @@
+MODULE <test-module>
+  FILE /withLambda.kt
+    FUN public inline fun bar(/*0*/ x: kotlin.String, /*1*/ block: (kotlin.String) -> kotlin.String): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=bar
+          CALL .plus type=kotlin.String operator=PLUS
+            $this: CONST String type=kotlin.String value='def'
+            other: CALL .invoke type=kotlin.String operator=INVOKE
+              $this: GET_VAR block type=(kotlin.String) -> kotlin.String operator=VARIABLE_AS_FUNCTION
+              p1: GET_VAR x type=kotlin.String operator=null
+    FUN public fun foobar(/*0*/ x: kotlin.String, /*1*/ y: kotlin.String, /*2*/ z: kotlin.String): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foobar
+          CALL .plus type=kotlin.String operator=PLUS
+            $this: CALL .plus type=kotlin.String operator=PLUS
+              $this: GET_VAR x type=kotlin.String operator=null
+              other: GET_VAR y type=kotlin.String operator=null
+            other: GET_VAR z type=kotlin.String operator=null
+    FUN public fun foo(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo
+          CALL .foobar type=kotlin.String operator=null
+            x: CONST String type=kotlin.String value='abc'
+            y: CALL .bar type=kotlin.String operator=null
+              x: CONST String type=kotlin.String value='ghi'
+              block: BLOCK type=(kotlin.String) -> kotlin.String operator=LAMBDA
+                FUN local final fun <anonymous>(/*0*/ x: kotlin.String): kotlin.String
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .plus type=kotlin.String operator=PLUS
+                        $this: GET_VAR x type=kotlin.String operator=null
+                        other: CONST String type=kotlin.String value='jkl'
+                CALLABLE_REFERENCE <anonymous> type=(kotlin.String) -> kotlin.String operator=LAMBDA
+            z: CONST String type=kotlin.String value='mno'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='abcdefghijklmno'
+          actual: CALL .foo type=kotlin.String operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

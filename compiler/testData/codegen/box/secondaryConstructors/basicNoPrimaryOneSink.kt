@@ -39,3 +39,5 @@ fun box(): String {
     if (sideEffects != "first#second") return "fail3-sideEffects: ${sideEffects}"
     return "OK"
 }
+
+

@@ -1,0 +1,43 @@
+MODULE <test-module>
+  FILE /traitImplInheritsTraitImpl.kt
+    CLASS INTERFACE A
+      FUN public open fun foo(): kotlin.Any
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CONST String type=kotlin.String value='A'
+    CLASS INTERFACE B
+      FUN public open override /*1*/ fun foo(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CONST String type=kotlin.String value='B'
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val c: C
+          CALL .<init> type=C operator=null
+        VAR val b: B
+          GET_VAR c type=C operator=null
+        VAR val a: A
+          GET_VAR c type=C operator=null
+        VAR var r: kotlin.String
+          CALL .plus type=kotlin.String operator=PLUS
+            $this: CALL .plus type=kotlin.String operator=PLUS
+              $this: CALL .foo type=kotlin.String operator=null
+                $this: GET_VAR c type=C operator=null
+              other: CALL .foo type=kotlin.String operator=null
+                $this: GET_VAR b type=B operator=null
+            other: CALL .foo type=kotlin.Any operator=null
+              $this: GET_VAR a type=A operator=null
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: GET_VAR r type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='BBB'
+            then: CONST String type=kotlin.String value='OK'
+            else: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail: '
+              GET_VAR r type=kotlin.String operator=null

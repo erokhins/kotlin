@@ -11,3 +11,5 @@ fun box(): String {
         result += " "
     return if (result == "   ") "OK" else result
 }
+
+

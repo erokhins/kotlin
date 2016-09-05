@@ -17,3 +17,5 @@ fun box() : String {
   val l = i.len()
   return if (l != 5) "fail" else "OK"
 }
+
+

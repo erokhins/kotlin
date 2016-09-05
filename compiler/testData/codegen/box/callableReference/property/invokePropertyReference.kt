@@ -29,3 +29,5 @@ fun box(): String {
     (A::ext)(A())
     return if (state == "123") "OK" else "Fail $state"
 }
+
+

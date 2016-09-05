@@ -1,0 +1,40 @@
+MODULE <test-module>
+  FILE /useReflectionOnKProperty.kt
+    CLASS CLASS Delegate
+      CONSTRUCTOR public constructor Delegate()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Delegate
+      FUN public final operator fun getValue(/*0*/ t: kotlin.Any?, /*1*/ p: kotlin.reflect.KProperty<*>): kotlin.String
+        BLOCK_BODY
+          CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+            $this: GET_VAR p type=kotlin.reflect.KProperty<*> operator=null
+          CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+            $this: GET_VAR p type=kotlin.reflect.KProperty<*> operator=null
+          CALL .<get-annotations> type=kotlin.collections.List<kotlin.Annotation> operator=GET_PROPERTY
+            $this: GET_VAR p type=kotlin.reflect.KProperty<*> operator=null
+          RETURN type=kotlin.Nothing from=getValue
+            CALL .toString type=kotlin.String operator=null
+              $this: GET_VAR p type=kotlin.reflect.KProperty<*> operator=null
+    PROPERTY public val prop: kotlin.String
+      delegate: PROPERTY val `prop$delegate`: Delegate
+        EXPRESSION_BODY
+          CALL .<init> type=Delegate operator=null
+      PROPERTY_GETTER public fun <get-prop>(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=<get-prop>
+            CALL .getValue type=kotlin.String operator=null
+              $this: GET_BACKING_FIELD prop$delegate type=Delegate operator=null
+              t: CONST Null type=kotlin.Nothing? value='null'
+              p: CALLABLE_REFERENCE prop type=kotlin.reflect.KProperty0<kotlin.String> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CALL .<get-prop> type=kotlin.String operator=GET_PROPERTY
+              arg1: CONST String type=kotlin.String value='val prop: kotlin.String'
+            then: CONST String type=kotlin.String value='OK'
+            else: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail: '
+              CALL .<get-prop> type=kotlin.String operator=GET_PROPERTY

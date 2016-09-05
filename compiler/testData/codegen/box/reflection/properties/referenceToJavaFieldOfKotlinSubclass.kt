@@ -13,3 +13,5 @@ fun box(): String {
     val a = J()
     return if (f.get(a) == 42) "OK" else "Fail: ${f.get(a)}"
 }
+
+

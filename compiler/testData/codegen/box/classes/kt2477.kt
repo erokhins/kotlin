@@ -21,3 +21,5 @@ open class D: C(), A, B {
 fun box() : String {
     return D().c
 }
+
+

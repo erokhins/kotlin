@@ -20,3 +20,5 @@ fun box(): String {
     if (N().C().test6() != 700) return "test6 fail";
     return "OK";
 }
+
+

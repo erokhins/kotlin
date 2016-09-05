@@ -1,0 +1,82 @@
+MODULE <test-module>
+  FILE /differentErasureInSuperClassComplex.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A</*0*/ T>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public final fun foo(/*0*/ x: T): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CONST String type=kotlin.String value='O'
+      FUN public final fun foo(/*0*/ x: A<T>): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CONST String type=kotlin.String value='K'
+    CLASS INTERFACE C
+      FUN public abstract fun foo(/*0*/ x: E): kotlin.String
+      FUN public abstract fun foo(/*0*/ x: A<E>): kotlin.String
+    CLASS INTERFACE D
+      FUN public abstract fun foo(/*0*/ x: A<A<kotlin.String>>): kotlin.String
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL A
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val x: A<kotlin.String>
+          CALL .<init> type=A<kotlin.String> operator=null
+        VAR val y: A<A<kotlin.String>>
+          CALL .<init> type=A<A<kotlin.String>> operator=null
+        VAR val b: B
+          CALL .<init> type=B operator=null
+        VAR val bResult: kotlin.String
+          CALL .plus type=kotlin.String operator=PLUS
+            $this: CALL .foo type=kotlin.String operator=null
+              $this: GET_VAR b type=B operator=null
+              x: GET_VAR x type=A<kotlin.String> operator=null
+            other: CALL .foo type=kotlin.String operator=null
+              $this: GET_VAR b type=B operator=null
+              x: GET_VAR y type=A<A<kotlin.String>> operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR bResult type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 1: '
+              GET_VAR bResult type=kotlin.String operator=null
+        VAR val c: C<A<kotlin.String>>
+          CALL .<init> type=B operator=null
+        VAR val cResult: kotlin.String
+          CALL .plus type=kotlin.String operator=PLUS
+            $this: CALL .foo type=kotlin.String operator=null
+              $this: GET_VAR c type=C<A<kotlin.String>> operator=null
+              x: GET_VAR x type=A<kotlin.String> operator=null
+            other: CALL .foo type=kotlin.String operator=null
+              $this: GET_VAR c type=C<A<kotlin.String>> operator=null
+              x: GET_VAR y type=A<A<kotlin.String>> operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR cResult type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 2: '
+              GET_VAR cResult type=kotlin.String operator=null
+        VAR val d: D
+          CALL .<init> type=B operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .foo type=kotlin.String operator=null
+                $this: GET_VAR d type=D operator=null
+                x: GET_VAR y type=A<A<kotlin.String>> operator=null
+              arg1: CONST String type=kotlin.String value='K'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 3'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

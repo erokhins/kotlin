@@ -1,0 +1,46 @@
+MODULE <test-module>
+  FILE /kt3551.kt
+    CLASS CLASS Identifier
+      CONSTRUCTOR public constructor Identifier()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Identifier
+      PROPERTY private final var myNullable: kotlin.Boolean
+        EXPRESSION_BODY
+          CONST Boolean type=kotlin.Boolean value='false'
+        PROPERTY_SETTER private final fun <set-myNullable>(/*0*/ l: kotlin.Boolean): kotlin.Unit
+          BLOCK_BODY
+      FUN public final fun getValue(): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getValue
+            CALL .<get-myNullable> type=kotlin.Boolean operator=GET_PROPERTY
+              $this: THIS public final class Identifier type=Identifier
+      CLASS OBJECT Companion
+        CONSTRUCTOR private constructor Companion()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Companion
+        FUN public final fun init(/*0*/ isNullable: kotlin.Boolean): Identifier
+          BLOCK_BODY
+            VAR val id: Identifier
+              CALL .<init> type=Identifier operator=null
+            CALL .<set-myNullable> type=kotlin.Unit operator=EQ
+              $this: GET_VAR id type=Identifier operator=null
+              l: GET_VAR isNullable type=kotlin.Boolean operator=null
+            RETURN type=kotlin.Nothing from=init
+              GET_VAR id type=Identifier operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val id: Identifier
+          CALL .init type=Identifier operator=null
+            $this: GET_OBJECT Companion type=Identifier.Companion
+            isNullable: CONST Boolean type=kotlin.Boolean value='true'
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CALL .getValue type=kotlin.Boolean operator=null
+                $this: GET_VAR id type=Identifier operator=null
+              arg1: CONST Boolean type=kotlin.Boolean value='false'
+            then: RETURN type=kotlin.Nothing from=box
+              CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='fail'

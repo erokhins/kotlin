@@ -1,0 +1,48 @@
+MODULE <test-module>
+  FILE /kt1918.kt
+    CLASS CLASS Bar
+      CONSTRUCTOR public constructor Bar()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Bar
+    CLASS INTERFACE Foo
+      FUN public abstract fun xyzzy(/*0*/ x: kotlin.Any?): kotlin.String
+    FUN public fun buildFoo(/*0*/ bar: Bar.() -> kotlin.Unit): Foo
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=buildFoo
+          BLOCK type=buildFoo.<no name provided> operator=OBJECT_LITERAL
+            CLASS CLASS <no name provided>
+              CONSTRUCTOR public constructor <no name provided>()
+                BLOCK_BODY
+                  DELEGATING_CONSTRUCTOR_CALL Any
+                  INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+              FUN public open override /*1*/ fun xyzzy(/*0*/ x: kotlin.Any?): kotlin.String
+                BLOCK_BODY
+                  BLOCK type=kotlin.Unit? operator=SAFE_CALL
+                    VAR val tmp0_safe_receiver: Bar?
+                      TYPE_OP operator=SAFE_CAST typeOperand=Bar
+                        GET_VAR x type=kotlin.Any? operator=null
+                    WHEN type=kotlin.Unit? operator=SAFE_CALL
+                      if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                        arg0: GET_VAR tmp0_safe_receiver type=Bar? operator=null
+                        arg1: CONST Null type=kotlin.Nothing? value='null'
+                      then: CONST Null type=kotlin.Nothing? value='null'
+                      else: CALL .invoke type=kotlin.Unit operator=INVOKE
+                        $this: GET_VAR bar type=Bar.() -> kotlin.Unit operator=VARIABLE_AS_FUNCTION
+                        $receiver: GET_VAR tmp0_safe_receiver type=Bar? operator=null
+                  RETURN type=kotlin.Nothing from=xyzzy
+                    CONST String type=kotlin.String value='OK'
+            CALL .<init> type=buildFoo.<no name provided> operator=OBJECT_LITERAL
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val foo: Foo
+          CALL .buildFoo type=Foo operator=null
+            bar: BLOCK type=Bar.() -> kotlin.Unit operator=LAMBDA
+              FUN local final fun Bar.<anonymous>(): kotlin.Unit
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+              CALLABLE_REFERENCE <anonymous> type=Bar.() -> kotlin.Unit operator=LAMBDA
+        RETURN type=kotlin.Nothing from=box
+          CALL .xyzzy type=kotlin.String operator=null
+            $this: GET_VAR foo type=Foo operator=null
+            x: CALL .<init> type=Bar operator=null

@@ -13,3 +13,5 @@ class A : B("OK") {
 }
 
 fun box() = A().foo().result()
+
+

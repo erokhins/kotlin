@@ -21,3 +21,5 @@ fun box(): String {
 
     return if (class1 != class2) "OK" else "Same class: $class1"
 }
+
+

@@ -11,3 +11,5 @@ class A : T1, T2 {
 }
 
 fun box() = A().foo()
+
+

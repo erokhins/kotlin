@@ -5,3 +5,5 @@ fun box() = ok()
 // FILE: 2.kt
 
 fun ok(res: String = "OK") = res
+
+

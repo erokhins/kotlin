@@ -17,3 +17,5 @@ fun box() : String {
     if(C().bar2(10) != 10) return "fail"
     return "OK"
 }
+
+

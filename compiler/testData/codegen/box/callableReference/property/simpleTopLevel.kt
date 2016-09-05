@@ -8,3 +8,5 @@ fun box(): String {
     if (property.name != "foo") return "Fail name: ${property.name}"
     return "OK"
 }
+
+

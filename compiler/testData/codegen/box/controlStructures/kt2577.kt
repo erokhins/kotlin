@@ -10,3 +10,5 @@ fun foo(): Int {
 }
 
 fun box() = if (foo() == 1) "OK" else "Fail"
+
+

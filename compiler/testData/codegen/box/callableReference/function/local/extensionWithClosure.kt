@@ -9,3 +9,5 @@ fun box(): String {
     f(A())
     return result
 }
+
+

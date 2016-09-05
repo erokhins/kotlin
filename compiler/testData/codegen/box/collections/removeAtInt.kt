@@ -102,3 +102,5 @@ open class A : MutableList<Int> {
 }
 
 fun box() = J.foo()
+
+

@@ -1,0 +1,122 @@
+MODULE <test-module>
+  FILE /prefixIncDec.kt
+    PROPERTY public var inc: kotlin.Int
+      EXPRESSION_BODY
+        CONST Int type=kotlin.Int value='0'
+    PROPERTY public var propInc: kotlin.Int
+      EXPRESSION_BODY
+        CONST Int type=kotlin.Int value='0'
+      PROPERTY_GETTER public fun <get-propInc>(): kotlin.Int
+        BLOCK_BODY
+          BLOCK type=kotlin.Int operator=PREFIX_INCR
+            BLOCK type=kotlin.Int operator=PREFIX_INCR
+              VAR val tmp0: kotlin.Int
+                CALL .inc type=kotlin.Int operator=PREFIX_INCR
+                  $this: CALL .<get-inc> type=kotlin.Int operator=PREFIX_INCR
+              CALL .<set-inc> type=kotlin.Unit operator=PREFIX_INCR
+                <set-?>: GET_VAR tmp0 type=kotlin.Int operator=null
+              GET_VAR tmp0 type=kotlin.Int operator=null
+          RETURN type=kotlin.Nothing from=<get-propInc>
+            GET_VAR field type=kotlin.Int operator=null
+      PROPERTY_SETTER public fun <set-propInc>(/*0*/ a: kotlin.Int): kotlin.Unit
+        BLOCK_BODY
+          BLOCK type=kotlin.Int operator=PREFIX_INCR
+            BLOCK type=kotlin.Int operator=PREFIX_INCR
+              VAR val tmp0: kotlin.Int
+                CALL .inc type=kotlin.Int operator=PREFIX_INCR
+                  $this: CALL .<get-inc> type=kotlin.Int operator=PREFIX_INCR
+              CALL .<set-inc> type=kotlin.Unit operator=PREFIX_INCR
+                <set-?>: GET_VAR tmp0 type=kotlin.Int operator=null
+              GET_VAR tmp0 type=kotlin.Int operator=null
+          SET_BACKING_FIELD propInc type=kotlin.Unit operator=EQ
+            value: GET_VAR a type=kotlin.Int operator=null
+    PROPERTY public var dec: kotlin.Int
+      EXPRESSION_BODY
+        CONST Int type=kotlin.Int value='0'
+    PROPERTY public var propDec: kotlin.Int
+      EXPRESSION_BODY
+        CONST Int type=kotlin.Int value='0'
+      PROPERTY_GETTER public fun <get-propDec>(): kotlin.Int
+        BLOCK_BODY
+          BLOCK type=kotlin.Int operator=PREFIX_DECR
+            BLOCK type=kotlin.Int operator=PREFIX_DECR
+              VAR val tmp0: kotlin.Int
+                CALL .dec type=kotlin.Int operator=PREFIX_DECR
+                  $this: CALL .<get-dec> type=kotlin.Int operator=PREFIX_DECR
+              CALL .<set-dec> type=kotlin.Unit operator=PREFIX_DECR
+                <set-?>: GET_VAR tmp0 type=kotlin.Int operator=null
+              GET_VAR tmp0 type=kotlin.Int operator=null
+          RETURN type=kotlin.Nothing from=<get-propDec>
+            GET_VAR field type=kotlin.Int operator=null
+      PROPERTY_SETTER public fun <set-propDec>(/*0*/ a: kotlin.Int): kotlin.Unit
+        BLOCK_BODY
+          BLOCK type=kotlin.Int operator=PREFIX_DECR
+            BLOCK type=kotlin.Int operator=PREFIX_DECR
+              VAR val tmp0: kotlin.Int
+                CALL .dec type=kotlin.Int operator=PREFIX_DECR
+                  $this: CALL .<get-dec> type=kotlin.Int operator=PREFIX_DECR
+              CALL .<set-dec> type=kotlin.Unit operator=PREFIX_DECR
+                <set-?>: GET_VAR tmp0 type=kotlin.Int operator=null
+              GET_VAR tmp0 type=kotlin.Int operator=null
+          SET_BACKING_FIELD propDec type=kotlin.Unit operator=EQ
+            value: GET_VAR a type=kotlin.Int operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        BLOCK type=kotlin.Int operator=PREFIX_INCR
+          BLOCK type=kotlin.Int operator=PREFIX_INCR
+            VAR val tmp0: kotlin.Int
+              CALL .inc type=kotlin.Int operator=PREFIX_INCR
+                $this: CALL .<get-propInc> type=kotlin.Int operator=PREFIX_INCR
+            CALL .<set-propInc> type=kotlin.Unit operator=PREFIX_INCR
+              a: GET_VAR tmp0 type=kotlin.Int operator=null
+            GET_VAR tmp0 type=kotlin.Int operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-inc> type=kotlin.Int operator=GET_PROPERTY
+              arg1: CONST Int type=kotlin.Int value='3'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail in prefix increment: '
+              CALL .<get-inc> type=kotlin.Int operator=GET_PROPERTY
+              CONST String type=kotlin.String value=' != 3'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-propInc> type=kotlin.Int operator=GET_PROPERTY
+              arg1: CONST Int type=kotlin.Int value='1'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail in prefix increment: '
+              CALL .<get-propInc> type=kotlin.Int operator=GET_PROPERTY
+              CONST String type=kotlin.String value=' != 1'
+        BLOCK type=kotlin.Int operator=PREFIX_DECR
+          BLOCK type=kotlin.Int operator=PREFIX_DECR
+            VAR val tmp1: kotlin.Int
+              CALL .dec type=kotlin.Int operator=PREFIX_DECR
+                $this: CALL .<get-propDec> type=kotlin.Int operator=PREFIX_DECR
+            CALL .<set-propDec> type=kotlin.Unit operator=PREFIX_DECR
+              a: GET_VAR tmp1 type=kotlin.Int operator=null
+            GET_VAR tmp1 type=kotlin.Int operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-dec> type=kotlin.Int operator=GET_PROPERTY
+              arg1: CONST Int type=kotlin.Int value='-3'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail in prefix decrement: '
+              CALL .<get-dec> type=kotlin.Int operator=GET_PROPERTY
+              CONST String type=kotlin.String value=' != -3'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-propDec> type=kotlin.Int operator=GET_PROPERTY
+              arg1: CONST Int type=kotlin.Int value='-1'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail in prefix decrement: '
+              CALL .<get-propDec> type=kotlin.Int operator=GET_PROPERTY
+              CONST String type=kotlin.String value=' != -1'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -1,0 +1,42 @@
+MODULE <test-module>
+  FILE /abstractList.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL AbstractList
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public open override /*1*/ fun get(/*0*/ index: kotlin.Int): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=get
+            CONST String type=kotlin.String value=''
+      PROPERTY public open override /*1*/ val size: kotlin.Int
+        PROPERTY_GETTER public open override /*1*/ fun <get-size>(): kotlin.Int
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-size>
+              CONST Int type=kotlin.Int value='0'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val a: A
+          CALL .<init> type=A operator=null
+        VAR val b: A
+          CALL .<init> type=A operator=null
+        CALL .addAll type=kotlin.Boolean operator=null
+          $this: GET_VAR a type=A operator=null
+          elements: GET_VAR b type=A operator=null
+        CALL .addAll type=kotlin.Boolean operator=null
+          $this: GET_VAR a type=A operator=null
+          index: CONST Int type=kotlin.Int value='0'
+          elements: GET_VAR b type=A operator=null
+        CALL .removeAll type=kotlin.Boolean operator=null
+          $this: GET_VAR a type=A operator=null
+          elements: GET_VAR b type=A operator=null
+        CALL .retainAll type=kotlin.Boolean operator=null
+          $this: GET_VAR a type=A operator=null
+          elements: GET_VAR b type=A operator=null
+        CALL .clear type=kotlin.Unit operator=null
+          $this: GET_VAR a type=A operator=null
+        CALL .remove type=kotlin.Boolean operator=null
+          $this: GET_VAR a type=A operator=null
+          element: CONST String type=kotlin.String value=''
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

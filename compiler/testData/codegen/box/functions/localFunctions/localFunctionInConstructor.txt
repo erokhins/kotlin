@@ -1,0 +1,27 @@
+MODULE <test-module>
+  FILE /localFunctionInConstructor.kt
+    CLASS CLASS Test
+      CONSTRUCTOR public constructor Test()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Test
+      PROPERTY public final val property: kotlin.Int
+      ANONYMOUS_INITIALIZER Test
+        BLOCK_BODY
+          FUN local final fun local(): kotlin.Int
+            BLOCK_BODY
+              RETURN type=kotlin.Nothing from=local
+                CONST Int type=kotlin.Int value='10'
+          SET_BACKING_FIELD property type=kotlin.Unit operator=null
+            receiver: THIS public final class Test type=Test
+            value: CALL .local type=kotlin.Int operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CALL .<get-property> type=kotlin.Int operator=GET_PROPERTY
+                $this: CALL .<init> type=Test operator=null
+              arg1: CONST Int type=kotlin.Int value='10'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='fail'

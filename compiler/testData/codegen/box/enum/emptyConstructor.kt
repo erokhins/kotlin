@@ -6,3 +6,5 @@ enum class My(val s: String) {
 }
 
 fun box() = My.ENTRY.s
+
+

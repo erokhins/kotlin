@@ -41,3 +41,5 @@ fun box(): String {
     if (Test.baz() != "OK") return "Fail baz"
     return "OK"
 }
+
+

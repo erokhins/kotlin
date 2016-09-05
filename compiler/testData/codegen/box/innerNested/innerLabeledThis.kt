@@ -9,3 +9,5 @@ class Outer {
 }
 
 fun box() = Outer().Inner().O() + Outer().Inner().K
+
+

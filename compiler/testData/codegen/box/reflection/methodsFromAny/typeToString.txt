@@ -1,0 +1,94 @@
+MODULE <test-module>
+  FILE /typeToString.kt
+    FUN public fun kotlin.String?.foo(/*0*/ x: kotlin.Int, /*1*/ y: kotlin.Array<kotlin.Int>, /*2*/ z: kotlin.IntArray, /*3*/ w: kotlin.collections.List<kotlin.collections.Map<kotlin.Any, A<*>>>): kotlin.Unit
+      BLOCK_BODY
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A</*0*/ T>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public final fun </*0*/ U> bar(/*0*/ t: T, /*1*/ u: U): T?
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=bar
+            CONST Null type=kotlin.Nothing? value='null'
+    FUN public fun baz(/*0*/ inProjection: A<in kotlin.Number>, /*1*/ outProjection: A<out kotlin.Number>): kotlin.Unit
+      BLOCK_BODY
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .listOf type=kotlin.collections.List<kotlin.String> operator=null
+            elements: VARARG type=Array<out String> varargElementType=String
+              CONST String type=kotlin.String value='kotlin.String?'
+              CONST String type=kotlin.String value='kotlin.Int'
+              CONST String type=kotlin.String value='kotlin.Array<kotlin.Int>'
+              CONST String type=kotlin.String value='kotlin.IntArray'
+              CONST String type=kotlin.String value='kotlin.collections.List<kotlin.collections.Map<kotlin.Any, A<*>>>'
+          actual: CALL .map type=kotlin.collections.List<kotlin.String> operator=null
+            $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction5<kotlin.String?, kotlin.Int, kotlin.Array<kotlin.Int>, kotlin.IntArray, kotlin.collections.List<kotlin.collections.Map<kotlin.Any, A<*>>>, kotlin.Unit> operator=null
+            transform: BLOCK type=(kotlin.reflect.KParameter) -> kotlin.String operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KParameter): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .toString type=kotlin.String operator=null
+                      $this: CALL .<get-type> type=kotlin.reflect.KType operator=GET_PROPERTY
+                        $this: GET_VAR it type=kotlin.reflect.KParameter operator=null
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KParameter) -> kotlin.String operator=LAMBDA
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='kotlin.Unit'
+          actual: CALL .toString type=kotlin.String operator=null
+            $this: CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction5<kotlin.String?, kotlin.Int, kotlin.Array<kotlin.Int>, kotlin.IntArray, kotlin.collections.List<kotlin.collections.Map<kotlin.Any, A<*>>>, kotlin.Unit> operator=null
+        VAR val bar: kotlin.reflect.KCallable<*>
+          CALL .single type=kotlin.reflect.KCallable<*> operator=null
+            $receiver: CALL .<get-members> type=kotlin.collections.Collection<kotlin.reflect.KCallable<*>> operator=GET_PROPERTY
+              $this: CLASS_REFERENCE A type=kotlin.reflect.KClass<A<*>>
+            predicate: BLOCK type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KCallable<*>): kotlin.Boolean
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                      arg0: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+                        $this: GET_VAR it type=kotlin.reflect.KCallable<*> operator=null
+                      arg1: CONST String type=kotlin.String value='bar'
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .listOf type=kotlin.collections.List<kotlin.String> operator=null
+            elements: VARARG type=Array<out String> varargElementType=String
+              CONST String type=kotlin.String value='A<T>'
+              CONST String type=kotlin.String value='T'
+              CONST String type=kotlin.String value='U'
+          actual: CALL .map type=kotlin.collections.List<kotlin.String> operator=null
+            $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+              $this: GET_VAR bar type=kotlin.reflect.KCallable<*> operator=null
+            transform: BLOCK type=(kotlin.reflect.KParameter) -> kotlin.String operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KParameter): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .toString type=kotlin.String operator=null
+                      $this: CALL .<get-type> type=kotlin.reflect.KType operator=GET_PROPERTY
+                        $this: GET_VAR it type=kotlin.reflect.KParameter operator=null
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KParameter) -> kotlin.String operator=LAMBDA
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='T?'
+          actual: CALL .toString type=kotlin.String operator=null
+            $this: CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+              $this: GET_VAR bar type=kotlin.reflect.KCallable<*> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .listOf type=kotlin.collections.List<kotlin.String> operator=null
+            elements: VARARG type=Array<out String> varargElementType=String
+              CONST String type=kotlin.String value='A<in kotlin.Number>'
+              CONST String type=kotlin.String value='A<out kotlin.Number>'
+          actual: CALL .map type=kotlin.collections.List<kotlin.String> operator=null
+            $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE baz type=kotlin.reflect.KFunction2<A<in kotlin.Number>, A<out kotlin.Number>, kotlin.Unit> operator=null
+            transform: BLOCK type=(kotlin.reflect.KParameter) -> kotlin.String operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KParameter): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .toString type=kotlin.String operator=null
+                      $this: CALL .<get-type> type=kotlin.reflect.KType operator=GET_PROPERTY
+                        $this: GET_VAR it type=kotlin.reflect.KParameter operator=null
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KParameter) -> kotlin.String operator=LAMBDA
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

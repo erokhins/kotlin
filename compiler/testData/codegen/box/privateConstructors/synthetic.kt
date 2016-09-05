@@ -26,3 +26,5 @@ fun box(): String {
     PrivateConstructor.Nested()
     return "OK"
 }
+
+

@@ -1,0 +1,76 @@
+MODULE <test-module>
+  FILE /iteratingOverHashMap.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .testIteratingOverMap1 type=kotlin.Boolean operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 1'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .testIteratingOverMap2 type=kotlin.Boolean operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 2'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'
+    FUN public fun testIteratingOverMap1(): kotlin.Boolean
+      BLOCK_BODY
+        VAR val map: java.util.HashMap<kotlin.String, kotlin.Int>
+          CALL .<init> type=java.util.HashMap<kotlin.String, kotlin.Int> operator=null
+        CALL .put type=kotlin.Int? operator=null
+          $this: GET_VAR map type=java.util.HashMap<kotlin.String, kotlin.Int> operator=null
+          key: CONST String type=kotlin.String value='a'
+          value: CONST Int type=kotlin.Int value='1'
+        BLOCK type=kotlin.Unit operator=FOR_LOOP
+          VAR val tmp0_iterator: kotlin.collections.MutableIterator<kotlin.collections.MutableMap.MutableEntry<kotlin.String, kotlin.Int>>
+            CALL .iterator type=kotlin.collections.MutableIterator<kotlin.collections.MutableMap.MutableEntry<kotlin.String, kotlin.Int>> operator=FOR_LOOP_ITERATOR
+              $this: CALL .<get-entries> type=kotlin.collections.MutableSet<kotlin.collections.MutableMap.MutableEntry<kotlin.String, kotlin.Int>> operator=GET_PROPERTY
+                $this: GET_VAR map type=java.util.HashMap<kotlin.String, kotlin.Int> operator=null
+          WHILE label=null operator=FOR_LOOP_INNER_WHILE
+            condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+              $this: GET_VAR tmp0_iterator type=kotlin.collections.MutableIterator<kotlin.collections.MutableMap.MutableEntry<kotlin.String, kotlin.Int>> operator=null
+            body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+              VAR val entry: kotlin.collections.MutableMap.MutableEntry<kotlin.String, kotlin.Int>
+                CALL .next type=kotlin.collections.MutableMap.MutableEntry<kotlin.String, kotlin.Int> operator=FOR_LOOP_NEXT
+                  $this: GET_VAR tmp0_iterator type=kotlin.collections.MutableIterator<kotlin.collections.MutableMap.MutableEntry<kotlin.String, kotlin.Int>> operator=null
+              BLOCK type=kotlin.Int operator=null
+                CALL .setValue type=kotlin.Int operator=null
+                  $this: GET_VAR entry type=kotlin.collections.MutableMap.MutableEntry<kotlin.String, kotlin.Int> operator=null
+                  newValue: CONST Int type=kotlin.Int value='2'
+        RETURN type=kotlin.Nothing from=testIteratingOverMap1
+          CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+            arg0: CALL .get type=kotlin.Int? operator=null
+              $this: GET_VAR map type=java.util.HashMap<kotlin.String, kotlin.Int> operator=null
+              key: CONST String type=kotlin.String value='a'
+            arg1: CONST Int type=kotlin.Int value='2'
+    FUN public fun testIteratingOverMap2(): kotlin.Boolean
+      BLOCK_BODY
+        VAR val map: kotlin.collections.MutableMap<kotlin.String, kotlin.Int>
+          CALL .<init> type=java.util.HashMap<kotlin.String, kotlin.Int> operator=null
+        CALL .put type=kotlin.Int? operator=null
+          $this: GET_VAR map type=kotlin.collections.MutableMap<kotlin.String, kotlin.Int> operator=null
+          key: CONST String type=kotlin.String value='a'
+          value: CONST Int type=kotlin.Int value='1'
+        BLOCK type=kotlin.Unit operator=FOR_LOOP
+          VAR val tmp0_iterator: kotlin.collections.MutableIterator<kotlin.collections.MutableMap.MutableEntry<kotlin.String, kotlin.Int>>
+            CALL .iterator type=kotlin.collections.MutableIterator<kotlin.collections.MutableMap.MutableEntry<kotlin.String, kotlin.Int>> operator=FOR_LOOP_ITERATOR
+              $this: CALL .<get-entries> type=kotlin.collections.MutableSet<kotlin.collections.MutableMap.MutableEntry<kotlin.String, kotlin.Int>> operator=GET_PROPERTY
+                $this: GET_VAR map type=kotlin.collections.MutableMap<kotlin.String, kotlin.Int> operator=null
+          WHILE label=null operator=FOR_LOOP_INNER_WHILE
+            condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+              $this: GET_VAR tmp0_iterator type=kotlin.collections.MutableIterator<kotlin.collections.MutableMap.MutableEntry<kotlin.String, kotlin.Int>> operator=null
+            body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+              VAR val entry: kotlin.collections.MutableMap.MutableEntry<kotlin.String, kotlin.Int>
+                CALL .next type=kotlin.collections.MutableMap.MutableEntry<kotlin.String, kotlin.Int> operator=FOR_LOOP_NEXT
+                  $this: GET_VAR tmp0_iterator type=kotlin.collections.MutableIterator<kotlin.collections.MutableMap.MutableEntry<kotlin.String, kotlin.Int>> operator=null
+              BLOCK type=kotlin.Int operator=null
+                CALL .setValue type=kotlin.Int operator=null
+                  $this: GET_VAR entry type=kotlin.collections.MutableMap.MutableEntry<kotlin.String, kotlin.Int> operator=null
+                  newValue: CONST Int type=kotlin.Int value='2'
+        RETURN type=kotlin.Nothing from=testIteratingOverMap2
+          CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+            arg0: CALL .get type=kotlin.Int? operator=null
+              $this: GET_VAR map type=kotlin.collections.MutableMap<kotlin.String, kotlin.Int> operator=null
+              key: CONST String type=kotlin.String value='a'
+            arg1: CONST Int type=kotlin.Int value='2'

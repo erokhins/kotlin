@@ -9,3 +9,5 @@ public class Some private constructor(val v: String) {
 }
 
 fun box() = Some.init("OK").v
+
+

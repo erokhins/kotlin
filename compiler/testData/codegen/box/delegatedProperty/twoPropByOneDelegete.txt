@@ -1,0 +1,80 @@
+MODULE <test-module>
+  FILE /twoPropByOneDelegete.kt
+    CLASS CLASS Delegate
+      CONSTRUCTOR public constructor Delegate</*0*/ T>(/*0*/ f: (T) -> kotlin.Int)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD f type=kotlin.Unit operator=null
+            receiver: THIS public final class Delegate</*0*/ T> type=Delegate<T>
+            value: GET_VAR f type=(T) -> kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Delegate
+      PROPERTY public final val f: (T) -> kotlin.Int
+        EXPRESSION_BODY
+          GET_VAR f type=(T) -> kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public final operator fun getValue(/*0*/ t: T, /*1*/ p: kotlin.reflect.KProperty<*>): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getValue
+            CALL .invoke type=kotlin.Int operator=INVOKE
+              $this: CALL .<get-f> type=(T) -> kotlin.Int operator=GET_PROPERTY
+                $this: THIS public final class Delegate</*0*/ T> type=Delegate<T>
+              p1: GET_VAR t type=T operator=null
+    PROPERTY public val p: Delegate<A>
+      EXPRESSION_BODY
+        CALL .<init> type=Delegate<A> operator=null
+          f: BLOCK type=(A) -> kotlin.Int operator=LAMBDA
+            FUN local final fun <anonymous>(/*0*/ t: A): kotlin.Int
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .foo type=kotlin.Int operator=null
+                    $this: GET_VAR t type=A operator=null
+            CALLABLE_REFERENCE <anonymous> type=(A) -> kotlin.Int operator=LAMBDA
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A(/*0*/ i: kotlin.Int)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD i type=kotlin.Unit operator=null
+            receiver: THIS public final class A type=A
+            value: GET_VAR i type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public final val i: kotlin.Int
+        EXPRESSION_BODY
+          GET_VAR i type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final val prop: kotlin.Int
+        delegate: PROPERTY val `prop$delegate`: Delegate<A>
+          EXPRESSION_BODY
+            CALL .<get-p> type=Delegate<A> operator=GET_PROPERTY
+        PROPERTY_GETTER public final fun <get-prop>(): kotlin.Int
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-prop>
+              CALL .getValue type=kotlin.Int operator=null
+                $this: GET_BACKING_FIELD prop$delegate type=Delegate<A> operator=null
+                  receiver: THIS public final class A type=A
+                t: THIS public final class A type=A
+                p: CALLABLE_REFERENCE prop type=kotlin.reflect.KProperty1<A, kotlin.Int> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+      FUN public final fun foo(): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CALL .<get-i> type=kotlin.Int operator=GET_PROPERTY
+              $this: THIS public final class A type=A
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-prop> type=kotlin.Int operator=GET_PROPERTY
+                $this: CALL .<init> type=A operator=null
+                  i: CONST Int type=kotlin.Int value='1'
+              arg1: CONST Int type=kotlin.Int value='1'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail get1'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-prop> type=kotlin.Int operator=GET_PROPERTY
+                $this: CALL .<init> type=A operator=null
+                  i: CONST Int type=kotlin.Int value='10'
+              arg1: CONST Int type=kotlin.Int value='10'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail get2'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

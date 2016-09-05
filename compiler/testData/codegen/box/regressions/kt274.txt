@@ -1,0 +1,43 @@
+MODULE <test-module>
+  FILE /kt274.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val vector: java.util.Vector<kotlin.Int>
+          CALL .<init> type=java.util.Vector<kotlin.Int> operator=null
+        CALL .add type=kotlin.Boolean operator=null
+          $this: GET_VAR vector type=java.util.Vector<kotlin.Int> operator=null
+          element: CONST Int type=kotlin.Int value='1'
+        CALL .add type=kotlin.Boolean operator=null
+          $this: GET_VAR vector type=java.util.Vector<kotlin.Int> operator=null
+          element: CONST Int type=kotlin.Int value='2'
+        CALL .add type=kotlin.Boolean operator=null
+          $this: GET_VAR vector type=java.util.Vector<kotlin.Int> operator=null
+          element: CONST Int type=kotlin.Int value='3'
+        VAR var sum: kotlin.Int
+          CONST Int type=kotlin.Int value='0'
+        BLOCK type=kotlin.Unit operator=FOR_LOOP
+          VAR val tmp0_iterator: kotlin.collections.Iterator<kotlin.Int!>
+            CALL .iterator type=kotlin.collections.Iterator<kotlin.Int!> operator=FOR_LOOP_ITERATOR
+              $receiver: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.util.Enumeration<kotlin.Int!>
+                CALL .elements type=java.util.Enumeration<kotlin.Int!>! operator=null
+                  $this: GET_VAR vector type=java.util.Vector<kotlin.Int> operator=null
+          WHILE label=null operator=FOR_LOOP_INNER_WHILE
+            condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+              $this: GET_VAR tmp0_iterator type=kotlin.collections.Iterator<kotlin.Int!> operator=null
+            body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+              VAR val e: kotlin.Int!
+                CALL .next type=kotlin.Int! operator=FOR_LOOP_NEXT
+                  $this: GET_VAR tmp0_iterator type=kotlin.collections.Iterator<kotlin.Int!> operator=null
+              BLOCK type=kotlin.Unit operator=null
+                SET_VAR sum type=kotlin.Unit operator=PLUSEQ
+                  CALL .plus type=kotlin.Int operator=PLUSEQ
+                    $this: GET_VAR sum type=kotlin.Int operator=PLUSEQ
+                    other: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.Int
+                      GET_VAR e type=kotlin.Int! operator=null
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: GET_VAR sum type=kotlin.Int operator=null
+              arg1: CONST Int type=kotlin.Int value='6'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='fail'

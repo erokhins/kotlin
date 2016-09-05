@@ -13,3 +13,5 @@ fun box(): String {
     assertTrue(A::class.members.single { it.name == "reified" }.typeParameters.single().isReified)
     return "OK"
 }
+
+

@@ -12,3 +12,5 @@ fun box(): String {
     val c = (C::class.java.getConstructor(String::class.java).newInstance("O"))
     return c.status
 }
+
+

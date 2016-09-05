@@ -11,3 +11,5 @@ fun x(y : String) : A = A(y)
 fun foo() = x("aaa")[42] { "$s!!" }
 
 fun box() = if (foo() == "aaa + 42!!") "OK" else "fail"
+
+

@@ -1,0 +1,18 @@
+MODULE <test-module>
+  FILE /mapPut.kt
+    FUN public fun </*0*/ K : kotlin.Any, /*1*/ V : kotlin.Any> foo(/*0*/ k: K, /*1*/ v: V): kotlin.Unit
+      BLOCK_BODY
+        VAR val map: java.util.HashMap<K, V>
+          CALL .<init> type=java.util.HashMap<K, V> operator=null
+        VAR val old: V?
+          CALL .put type=V? operator=null
+            $this: GET_VAR map type=java.util.HashMap<K, V> operator=null
+            key: GET_VAR k type=K operator=null
+            value: GET_VAR v type=V operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .foo type=kotlin.Unit operator=null
+          k: CONST String type=kotlin.String value=''
+          v: CONST String type=kotlin.String value=''
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

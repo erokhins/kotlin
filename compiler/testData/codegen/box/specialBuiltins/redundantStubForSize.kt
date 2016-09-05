@@ -26,3 +26,5 @@ fun box(): String {
     if (A2().size != 56) return "fail 1"
     return "OK"
 }
+
+

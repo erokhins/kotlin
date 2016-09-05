@@ -32,3 +32,4 @@ fun test(a: A) : String {
     }
     return "fail"
 }
+

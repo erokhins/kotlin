@@ -7,3 +7,5 @@ fun box() : String {
 //    i = i + 1  //this way it works
     return if (i == 2) "OK" else "fail"
 }
+
+

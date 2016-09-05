@@ -7,3 +7,5 @@ fun box() : String {
     map["239"] = "932"
     return if(map["239"] == "932") "OK" else "fail"
 }
+
+

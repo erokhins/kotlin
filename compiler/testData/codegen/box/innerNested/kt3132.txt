@@ -1,0 +1,25 @@
+MODULE <test-module>
+  FILE /kt3132.kt
+    CLASS CLASS Test
+      CONSTRUCTOR public constructor Test()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Test
+      CLASS INTERFACE Foo
+      CLASS CLASS FooImplNested
+        CONSTRUCTOR public constructor FooImplNested()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=FooImplNested
+      CLASS CLASS FooImplInner
+        CONSTRUCTOR public constructor FooImplInner()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=FooImplInner
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .<init> type=Test.FooImplInner operator=null
+          $this: CALL .<init> type=Test operator=null
+        CALL .<init> type=Test.FooImplNested operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

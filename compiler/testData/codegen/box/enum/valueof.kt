@@ -9,3 +9,5 @@ fun box() = if(
   && Color.values()[0] == Color.RED
   && Color.values()[1] == Color.BLUE
   ) "OK" else "fail"
+
+

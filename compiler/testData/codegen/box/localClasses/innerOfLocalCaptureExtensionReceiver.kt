@@ -13,3 +13,5 @@ fun String.bar(): String {
 }
 
 fun box() = "OK".bar()
+
+

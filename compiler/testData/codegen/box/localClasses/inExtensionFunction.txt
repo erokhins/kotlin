@@ -1,0 +1,31 @@
+MODULE <test-module>
+  FILE /inExtensionFunction.kt
+    FUN public fun test.A.a(): kotlin.String
+      BLOCK_BODY
+        CLASS CLASS B
+          CONSTRUCTOR public constructor B()
+            BLOCK_BODY
+              DELEGATING_CONSTRUCTOR_CALL Any
+              INSTANCE_INITIALIZER_CALL classDescriptor=B
+          PROPERTY public final val b: kotlin.String
+            PROPERTY_GETTER public final fun <get-b>(): kotlin.String
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<get-b>
+                  CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+                    $this: $RECEIVER of: a type=test.A
+        RETURN type=kotlin.Nothing from=a
+          CALL .<get-b> type=kotlin.String operator=GET_PROPERTY
+            $this: CALL .<init> type=test.a.B operator=null
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public final val s: kotlin.String = "OK"
+        EXPRESSION_BODY
+          CONST String type=kotlin.String value='OK'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .a type=kotlin.String operator=null
+            $receiver: CALL .<init> type=test.A operator=null

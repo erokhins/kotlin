@@ -15,3 +15,5 @@ fun box(): String {
     assertEquals(listOf("r"), allProps.map { it.name })
     return allProps.single().get(Sub("OK")) as String
 }
+
+

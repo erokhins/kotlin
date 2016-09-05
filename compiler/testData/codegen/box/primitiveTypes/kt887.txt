@@ -1,0 +1,35 @@
+MODULE <test-module>
+  FILE /kt887.kt
+    CLASS CLASS Book
+      CONSTRUCTOR public constructor Book(/*0*/ name: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD name type=kotlin.Unit operator=null
+            receiver: THIS public final class Book : kotlin.Comparable<Book> type=Book
+            value: GET_VAR name type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Book
+      PROPERTY public final val name: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR name type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public open override /*1*/ fun compareTo(/*0*/ other: Book): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=compareTo
+            CALL .compareTo type=kotlin.Int operator=null
+              $this: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public final class Book : kotlin.Comparable<Book> type=Book
+              other: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR other type=Book operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .compareTo type=kotlin.Int operator=null
+                  $this: CALL .<init> type=Book operator=null
+                    name: CONST String type=kotlin.String value='239'
+                  other: CALL .<init> type=Book operator=null
+                    name: CONST String type=kotlin.String value='932'
+                arg1: CONST Int type=kotlin.Int value='0'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='fail'

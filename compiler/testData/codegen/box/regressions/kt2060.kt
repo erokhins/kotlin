@@ -26,3 +26,5 @@ public abstract class ClassWithInternals {
 
    public abstract fun start() : Unit;
 }
+
+

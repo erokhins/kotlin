@@ -1,0 +1,47 @@
+MODULE <test-module>
+  FILE /kt3927.kt
+    CLASS CLASS Base
+      CONSTRUCTOR public constructor Base()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Base
+      CLASS CLASS Inner
+        CONSTRUCTOR public constructor Inner()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Inner
+        FUN public final fun o(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=o
+              CONST String type=kotlin.String value='O'
+        FUN public final fun k(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=k
+              CONST String type=kotlin.String value='K'
+    CLASS CLASS Child
+      CONSTRUCTOR public constructor Child()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Base
+          INSTANCE_INITIALIZER_CALL classDescriptor=Child
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR var result: kotlin.String
+          CONST String type=kotlin.String value=''
+        SET_VAR result type=kotlin.Unit operator=PLUSEQ
+          CALL .plus type=kotlin.String operator=PLUSEQ
+            $this: GET_VAR result type=kotlin.String operator=PLUSEQ
+            other: CALL .o type=kotlin.String operator=null
+              $this: CALL .<init> type=Base.Inner operator=null
+                $this: CALL .<init> type=Child operator=null
+        FUN local final fun Child.f(): kotlin.Unit
+          BLOCK_BODY
+            SET_VAR result type=kotlin.Unit operator=PLUSEQ
+              CALL .plus type=kotlin.String operator=PLUSEQ
+                $this: GET_VAR result type=kotlin.String operator=PLUSEQ
+                other: CALL .k type=kotlin.String operator=null
+                  $this: CALL .<init> type=Base.Inner operator=null
+                    $this: $RECEIVER of: f type=Child
+        CALL .f type=kotlin.Unit operator=null
+          $receiver: CALL .<init> type=Child operator=null
+        RETURN type=kotlin.Nothing from=box
+          GET_VAR result type=kotlin.String operator=null

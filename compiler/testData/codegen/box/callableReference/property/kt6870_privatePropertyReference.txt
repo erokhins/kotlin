@@ -1,0 +1,56 @@
+MODULE <test-module>
+  FILE /kt6870_privatePropertyReference.kt
+    CLASS CLASS Test
+      CONSTRUCTOR public constructor Test()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Test
+      PROPERTY private final var iv: kotlin.Int
+        EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='1'
+      FUN public final fun exec(): kotlin.Unit
+        BLOCK_BODY
+          VAR val t: Test.exec.<no name provided>
+            BLOCK type=Test.exec.<no name provided> operator=OBJECT_LITERAL
+              CLASS CLASS <no name provided>
+                CONSTRUCTOR public constructor <no name provided>()
+                  BLOCK_BODY
+                    DELEGATING_CONSTRUCTOR_CALL Thread
+                    INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+                FUN public open override /*1*/ fun run(): kotlin.Unit
+                  BLOCK_BODY
+                    CALL .get type=kotlin.Int operator=null
+                      $this: CALLABLE_REFERENCE iv type=kotlin.reflect.KMutableProperty1<Test, kotlin.Int> operator=null
+                      receiver: THIS public final class Test type=Test
+                    CALL .set type=kotlin.Unit operator=null
+                      $this: CALLABLE_REFERENCE iv type=kotlin.reflect.KMutableProperty1<Test, kotlin.Int> operator=null
+                      receiver: THIS public final class Test type=Test
+                      value: CONST Int type=kotlin.Int value='2'
+              CALL .<init> type=Test.exec.<no name provided> operator=OBJECT_LITERAL
+          CALL .start type=kotlin.Unit operator=null
+            $this: GET_VAR t type=Test.exec.<no name provided> operator=null
+          CALL .join type=kotlin.Unit operator=null
+            $this: GET_VAR t type=Test.exec.<no name provided> operator=null
+            p0: CONST Long type=kotlin.Long value='1000'
+      FUN public final fun result(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=result
+            WHEN type=kotlin.String operator=IF
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: CALL .<get-iv> type=kotlin.Int operator=GET_PROPERTY
+                  $this: THIS public final class Test type=Test
+                arg1: CONST Int type=kotlin.Int value='2'
+              then: CONST String type=kotlin.String value='OK'
+              else: STRING_CONCATENATION type=kotlin.String
+                CONST String type=kotlin.String value='Fail '
+                CALL .<get-iv> type=kotlin.Int operator=GET_PROPERTY
+                  $this: THIS public final class Test type=Test
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val t: Test
+          CALL .<init> type=Test operator=null
+        CALL .exec type=kotlin.Unit operator=null
+          $this: GET_VAR t type=Test operator=null
+        RETURN type=kotlin.Nothing from=box
+          CALL .result type=kotlin.String operator=null
+            $this: GET_VAR t type=Test operator=null

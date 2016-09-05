@@ -3,3 +3,5 @@ fun box() = when {
         1 >= 1 -> "OK"
         else -> "else"
     }
+
+

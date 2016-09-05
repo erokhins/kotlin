@@ -12,3 +12,5 @@ class Outer {
 }
 
 fun box() = Outer().result()
+
+

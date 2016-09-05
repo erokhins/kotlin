@@ -18,3 +18,5 @@ class C {
 }
 
 fun box() = C().bar()
+
+

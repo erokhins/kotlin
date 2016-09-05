@@ -14,3 +14,5 @@ fun box(): String {
     val b = arrayOfNulls<Int>(1) as Array<Int>
     return checkLess(a, b)
 }
+
+

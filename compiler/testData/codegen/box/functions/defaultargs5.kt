@@ -11,3 +11,5 @@ fun box() : String {
     if(C().foo2(10) != 10) return "fail"
     return "OK"
 }
+
+

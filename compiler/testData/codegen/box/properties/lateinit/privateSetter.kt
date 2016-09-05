@@ -10,3 +10,5 @@ fun box(): String {
     my.init()
     return my.x
 }
+
+

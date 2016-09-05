@@ -14,3 +14,5 @@ annotation class Ann(val i: Int)
 
 const val i2: Int = 1
 const val i: Int = i2
+
+

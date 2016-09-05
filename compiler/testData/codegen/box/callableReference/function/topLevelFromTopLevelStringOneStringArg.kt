@@ -4,3 +4,5 @@ fun box(): String {
     val x = ::foo
     return x("OK")
 }
+
+

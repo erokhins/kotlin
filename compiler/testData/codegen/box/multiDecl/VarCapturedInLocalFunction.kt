@@ -13,3 +13,4 @@ fun box() : String {
     local()
     return if (a == 3 && b == 2) "OK" else "fail"
 }
+

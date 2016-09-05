@@ -14,3 +14,4 @@ fun box(): String {
     bar(3)
     return "OK"
 }
+

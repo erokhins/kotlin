@@ -19,3 +19,5 @@ fun B.test(): String {
 }
 
 fun box(): String = B().test()
+
+

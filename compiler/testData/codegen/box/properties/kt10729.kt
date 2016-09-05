@@ -18,3 +18,4 @@ fun box(): String {
 
     return IntentionsBundle.message2("O")
 }
+

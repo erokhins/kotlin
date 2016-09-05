@@ -17,3 +17,5 @@ interface  T {
 abstract class KC: T {}
 
 fun box() = ExtendsKCWithT.bar()
+
+

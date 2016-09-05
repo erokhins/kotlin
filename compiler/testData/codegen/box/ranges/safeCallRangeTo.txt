@@ -1,0 +1,191 @@
+MODULE <test-module>
+  FILE /safeCallRangeTo.kt
+    FUN public fun charRange(/*0*/ x: kotlin.Char?, /*1*/ y: kotlin.Char): kotlin.ranges.CharRange?
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=charRange
+          BLOCK type=kotlin.ranges.CharRange? operator=SAFE_CALL
+            VAR val tmp0_safe_receiver: kotlin.Char?
+              GET_VAR x type=kotlin.Char? operator=null
+            WHEN type=kotlin.ranges.CharRange? operator=SAFE_CALL
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_safe_receiver type=kotlin.Char? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CONST Null type=kotlin.Nothing? value='null'
+              else: CALL .rangeTo type=kotlin.ranges.CharRange operator=null
+                $this: GET_VAR tmp0_safe_receiver type=kotlin.Char? operator=null
+                other: GET_VAR y type=kotlin.Char operator=null
+    FUN public fun byteRange(/*0*/ x: kotlin.Byte?, /*1*/ y: kotlin.Byte): kotlin.ranges.IntRange?
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=byteRange
+          BLOCK type=kotlin.ranges.IntRange? operator=SAFE_CALL
+            VAR val tmp0_safe_receiver: kotlin.Byte?
+              GET_VAR x type=kotlin.Byte? operator=null
+            WHEN type=kotlin.ranges.IntRange? operator=SAFE_CALL
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_safe_receiver type=kotlin.Byte? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CONST Null type=kotlin.Nothing? value='null'
+              else: CALL .rangeTo type=kotlin.ranges.IntRange operator=null
+                $this: GET_VAR tmp0_safe_receiver type=kotlin.Byte? operator=null
+                other: GET_VAR y type=kotlin.Byte operator=null
+    FUN public fun shortRange(/*0*/ x: kotlin.Short?, /*1*/ y: kotlin.Short): kotlin.ranges.IntRange?
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=shortRange
+          BLOCK type=kotlin.ranges.IntRange? operator=SAFE_CALL
+            VAR val tmp0_safe_receiver: kotlin.Short?
+              GET_VAR x type=kotlin.Short? operator=null
+            WHEN type=kotlin.ranges.IntRange? operator=SAFE_CALL
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_safe_receiver type=kotlin.Short? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CONST Null type=kotlin.Nothing? value='null'
+              else: CALL .rangeTo type=kotlin.ranges.IntRange operator=null
+                $this: GET_VAR tmp0_safe_receiver type=kotlin.Short? operator=null
+                other: GET_VAR y type=kotlin.Short operator=null
+    FUN public fun intRange(/*0*/ x: kotlin.Int?, /*1*/ y: kotlin.Int): kotlin.ranges.IntRange?
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=intRange
+          BLOCK type=kotlin.ranges.IntRange? operator=SAFE_CALL
+            VAR val tmp0_safe_receiver: kotlin.Int?
+              GET_VAR x type=kotlin.Int? operator=null
+            WHEN type=kotlin.ranges.IntRange? operator=SAFE_CALL
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_safe_receiver type=kotlin.Int? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CONST Null type=kotlin.Nothing? value='null'
+              else: CALL .rangeTo type=kotlin.ranges.IntRange operator=null
+                $this: GET_VAR tmp0_safe_receiver type=kotlin.Int? operator=null
+                other: GET_VAR y type=kotlin.Int operator=null
+    FUN public fun longRange(/*0*/ x: kotlin.Long?, /*1*/ y: kotlin.Long): kotlin.ranges.LongRange?
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=longRange
+          BLOCK type=kotlin.ranges.LongRange? operator=SAFE_CALL
+            VAR val tmp0_safe_receiver: kotlin.Long?
+              GET_VAR x type=kotlin.Long? operator=null
+            WHEN type=kotlin.ranges.LongRange? operator=SAFE_CALL
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_safe_receiver type=kotlin.Long? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CONST Null type=kotlin.Nothing? value='null'
+              else: CALL .rangeTo type=kotlin.ranges.LongRange operator=null
+                $this: GET_VAR tmp0_safe_receiver type=kotlin.Long? operator=null
+                other: GET_VAR y type=kotlin.Long operator=null
+    FUN public fun floatRange(/*0*/ x: kotlin.Float?, /*1*/ y: kotlin.Float): kotlin.ranges.ClosedRange<kotlin.Float>?
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=floatRange
+          BLOCK type=kotlin.ranges.ClosedRange<kotlin.Float>? operator=SAFE_CALL
+            VAR val tmp0_safe_receiver: kotlin.Float?
+              GET_VAR x type=kotlin.Float? operator=null
+            WHEN type=kotlin.ranges.ClosedRange<kotlin.Float>? operator=SAFE_CALL
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_safe_receiver type=kotlin.Float? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CONST Null type=kotlin.Nothing? value='null'
+              else: CALL .rangeTo type=kotlin.ranges.ClosedRange<kotlin.Float> operator=null
+                $this: GET_VAR tmp0_safe_receiver type=kotlin.Float? operator=null
+                that: GET_VAR y type=kotlin.Float operator=null
+    FUN public fun dougleRange(/*0*/ x: kotlin.Double?, /*1*/ y: kotlin.Double): kotlin.ranges.ClosedRange<kotlin.Double>?
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=dougleRange
+          BLOCK type=kotlin.ranges.ClosedRange<kotlin.Double>? operator=SAFE_CALL
+            VAR val tmp0_safe_receiver: kotlin.Double?
+              GET_VAR x type=kotlin.Double? operator=null
+            WHEN type=kotlin.ranges.ClosedRange<kotlin.Double>? operator=SAFE_CALL
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_safe_receiver type=kotlin.Double? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CONST Null type=kotlin.Nothing? value='null'
+              else: CALL .rangeTo type=kotlin.ranges.ClosedRange<kotlin.Double> operator=null
+                $this: GET_VAR tmp0_safe_receiver type=kotlin.Double? operator=null
+                that: GET_VAR y type=kotlin.Double operator=null
+    FUN public inline fun </*0*/ reified T, /*1*/ R> testSafeRange(/*0*/ x: T, /*1*/ y: T, /*2*/ expectStr: kotlin.String, /*3*/ safeRange: (T?, T) -> R?): kotlin.Unit
+      BLOCK_BODY
+        VAR val rNull: R?
+          CALL .invoke type=R? operator=INVOKE
+            $this: GET_VAR safeRange type=(T?, T) -> R? operator=VARIABLE_AS_FUNCTION
+            p1: CONST Null type=kotlin.Nothing? value='null'
+            p2: GET_VAR y type=T operator=null
+        CALL .assert type=kotlin.Unit operator=null
+          value: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+            arg0: GET_VAR rNull type=R? operator=null
+            arg1: CONST Null type=kotlin.Nothing? value='null'
+          lazyMessage: BLOCK type=() -> kotlin.String operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.String
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  STRING_CONCATENATION type=kotlin.String
+                    CALL .<get-simpleName> type=kotlin.String? operator=GET_PROPERTY
+                      $this: CLASS_REFERENCE T type=kotlin.reflect.KClass<T>
+                    CONST String type=kotlin.String value=': Expected: null, got '
+                    GET_VAR rNull type=R? operator=null
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+        VAR val rxy: R?
+          CALL .invoke type=R? operator=INVOKE
+            $this: GET_VAR safeRange type=(T?, T) -> R? operator=VARIABLE_AS_FUNCTION
+            p1: GET_VAR x type=T operator=null
+            p2: GET_VAR y type=T operator=null
+        CALL .assert type=kotlin.Unit operator=null
+          value: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+            arg0: BLOCK type=kotlin.String? operator=SAFE_CALL
+              VAR val tmp0_safe_receiver: R?
+                GET_VAR rxy type=R? operator=null
+              WHEN type=kotlin.String? operator=SAFE_CALL
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_safe_receiver type=R? operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: CONST Null type=kotlin.Nothing? value='null'
+                else: CALL .toString type=kotlin.String operator=null
+                  $this: TYPE_OP operator=IMPLICIT_CAST typeOperand=kotlin.Any
+                    GET_VAR tmp0_safe_receiver type=R? operator=null
+            arg1: GET_VAR expectStr type=kotlin.String operator=null
+          lazyMessage: BLOCK type=() -> kotlin.String operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.String
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  STRING_CONCATENATION type=kotlin.String
+                    CALL .<get-simpleName> type=kotlin.String? operator=GET_PROPERTY
+                      $this: CLASS_REFERENCE T type=kotlin.reflect.KClass<T>
+                    CONST String type=kotlin.String value=': Expected: '
+                    GET_VAR expectStr type=kotlin.String operator=null
+                    CONST String type=kotlin.String value=', got '
+                    GET_VAR rxy type=R? operator=null
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .testSafeRange type=kotlin.Unit operator=null
+          x: CONST Char type=kotlin.Char value='0'
+          y: CONST Char type=kotlin.Char value='1'
+          expectStr: CONST String type=kotlin.String value='0..1'
+          safeRange: CALLABLE_REFERENCE charRange type=kotlin.reflect.KFunction2<kotlin.Char?, kotlin.Char, kotlin.ranges.CharRange?> operator=null
+        CALL .testSafeRange type=kotlin.Unit operator=null
+          x: CONST Byte type=kotlin.Byte value='0'
+          y: CONST Byte type=kotlin.Byte value='1'
+          expectStr: CONST String type=kotlin.String value='0..1'
+          safeRange: CALLABLE_REFERENCE byteRange type=kotlin.reflect.KFunction2<kotlin.Byte?, kotlin.Byte, kotlin.ranges.IntRange?> operator=null
+        CALL .testSafeRange type=kotlin.Unit operator=null
+          x: CONST Short type=kotlin.Short value='0'
+          y: CONST Short type=kotlin.Short value='1'
+          expectStr: CONST String type=kotlin.String value='0..1'
+          safeRange: CALLABLE_REFERENCE shortRange type=kotlin.reflect.KFunction2<kotlin.Short?, kotlin.Short, kotlin.ranges.IntRange?> operator=null
+        CALL .testSafeRange type=kotlin.Unit operator=null
+          x: CONST Int type=kotlin.Int value='0'
+          y: CONST Int type=kotlin.Int value='1'
+          expectStr: CONST String type=kotlin.String value='0..1'
+          safeRange: CALLABLE_REFERENCE intRange type=kotlin.reflect.KFunction2<kotlin.Int?, kotlin.Int, kotlin.ranges.IntRange?> operator=null
+        CALL .testSafeRange type=kotlin.Unit operator=null
+          x: CONST Long type=kotlin.Long value='0'
+          y: CONST Long type=kotlin.Long value='1'
+          expectStr: CONST String type=kotlin.String value='0..1'
+          safeRange: CALLABLE_REFERENCE longRange type=kotlin.reflect.KFunction2<kotlin.Long?, kotlin.Long, kotlin.ranges.LongRange?> operator=null
+        CALL .testSafeRange type=kotlin.Unit operator=null
+          x: CONST Float type=kotlin.Float value='0.0'
+          y: CONST Float type=kotlin.Float value='1.0'
+          expectStr: CONST String type=kotlin.String value='0.0..1.0'
+          safeRange: CALLABLE_REFERENCE floatRange type=kotlin.reflect.KFunction2<kotlin.Float?, kotlin.Float, kotlin.ranges.ClosedRange<kotlin.Float>?> operator=null
+        CALL .testSafeRange type=kotlin.Unit operator=null
+          x: CONST Double type=kotlin.Double value='0.0'
+          y: CONST Double type=kotlin.Double value='1.0'
+          expectStr: CONST String type=kotlin.String value='0.0..1.0'
+          safeRange: CALLABLE_REFERENCE dougleRange type=kotlin.reflect.KFunction2<kotlin.Double?, kotlin.Double, kotlin.ranges.ClosedRange<kotlin.Double>?> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

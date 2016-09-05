@@ -1,0 +1,33 @@
+MODULE <test-module>
+  FILE /kt2626.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .toString type=kotlin.String operator=null
+            $this: GET_ENUM_VALUE OK type=example2.Context.OsType
+    CLASS OBJECT Context
+      CONSTRUCTOR private constructor Context()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Context
+      CLASS ENUM_CLASS OsType
+        CONSTRUCTOR private constructor OsType()
+          BLOCK_BODY
+            ENUM_CONSTRUCTOR_CALL Enum super
+            INSTANCE_INITIALIZER_CALL classDescriptor=OsType
+        ENUM_ENTRY enum entry WIN2000
+          init: ENUM_CONSTRUCTOR_CALL OsType WIN2000
+        ENUM_ENTRY enum entry WINDOWS
+          init: ENUM_CONSTRUCTOR_CALL OsType WINDOWS
+        ENUM_ENTRY enum entry MACOSX
+          init: ENUM_CONSTRUCTOR_CALL OsType MACOSX
+        ENUM_ENTRY enum entry LINUX
+          init: ENUM_CONSTRUCTOR_CALL OsType LINUX
+        ENUM_ENTRY enum entry OTHER
+          init: ENUM_CONSTRUCTOR_CALL OsType OTHER
+        ENUM_ENTRY enum entry OK
+          init: ENUM_CONSTRUCTOR_CALL OsType OK
+        FUN public final /*synthesized*/ fun values(): kotlin.Array<example2.Context.OsType>
+          SYNTHETIC_BODY kind=ENUM_VALUES
+        FUN public final /*synthesized*/ fun valueOf(/*0*/ value: kotlin.String): example2.Context.OsType
+          SYNTHETIC_BODY kind=ENUM_VALUEOF

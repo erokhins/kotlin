@@ -6,3 +6,4 @@ fun box(): String {
     if (x != 2) return "Fail: $x}"
     return "OK"
 }
+

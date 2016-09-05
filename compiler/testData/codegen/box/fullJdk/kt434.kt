@@ -13,3 +13,5 @@ fun String.decodeURI(encoding : String) : String? =
 fun box() : String {
     return if("hhh".decodeURI("") == null) "OK" else "fail"
 }
+
+

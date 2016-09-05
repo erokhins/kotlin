@@ -1,0 +1,49 @@
+MODULE <test-module>
+  FILE /classesWithoutConstructors.kt
+    CLASS INTERFACE Interface
+    CLASS ANNOTATION_CLASS Anno
+      CONSTRUCTOR public constructor Anno(/*0*/ x: kotlin.Int)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD x type=kotlin.Unit operator=null
+            receiver: THIS public final annotation class Anno : kotlin.Annotation type=Anno
+            value: GET_VAR x type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Anno
+      PROPERTY public final val x: kotlin.Int
+        EXPRESSION_BODY
+          GET_VAR x type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    CLASS OBJECT Obj
+      CONSTRUCTOR private constructor Obj()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Obj
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      CLASS OBJECT Companion
+        CONSTRUCTOR private constructor Companion()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Companion
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .isEmpty type=kotlin.Boolean operator=null
+            $this: CALL .<get-constructors> type=kotlin.collections.Collection<kotlin.reflect.KFunction<Interface>> operator=GET_PROPERTY
+              $this: CLASS_REFERENCE Interface type=kotlin.reflect.KClass<Interface>
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .isEmpty type=kotlin.Boolean operator=null
+            $this: CALL .<get-constructors> type=kotlin.collections.Collection<kotlin.reflect.KFunction<Anno>> operator=GET_PROPERTY
+              $this: CLASS_REFERENCE Anno type=kotlin.reflect.KClass<Anno>
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .isEmpty type=kotlin.Boolean operator=null
+            $this: CALL .<get-constructors> type=kotlin.collections.Collection<kotlin.reflect.KFunction<Obj>> operator=GET_PROPERTY
+              $this: CLASS_REFERENCE Obj type=kotlin.reflect.KClass<Obj>
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .isEmpty type=kotlin.Boolean operator=null
+            $this: CALL .<get-constructors> type=kotlin.collections.Collection<kotlin.reflect.KFunction<C.Companion>> operator=GET_PROPERTY
+              $this: CLASS_REFERENCE Companion type=kotlin.reflect.KClass<C.Companion>
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

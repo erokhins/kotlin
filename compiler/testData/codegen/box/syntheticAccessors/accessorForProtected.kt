@@ -36,3 +36,5 @@ class B: A() {
         return a()
     }
 }
+
+

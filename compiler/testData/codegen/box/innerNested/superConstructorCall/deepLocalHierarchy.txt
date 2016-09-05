@@ -1,0 +1,54 @@
+MODULE <test-module>
+  FILE /deepLocalHierarchy.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CLASS CLASS L1
+          CONSTRUCTOR public constructor L1()
+            BLOCK_BODY
+              DELEGATING_CONSTRUCTOR_CALL Any
+              INSTANCE_INITIALIZER_CALL classDescriptor=L1
+          FUN public abstract fun foo(): kotlin.String
+        CLASS CLASS L2
+          CONSTRUCTOR public constructor L2(/*0*/ s: kotlin.String)
+            BLOCK_BODY
+              DELEGATING_CONSTRUCTOR_CALL L1
+              SET_BACKING_FIELD s type=kotlin.Unit operator=null
+                receiver: THIS local open class L2 : box.L1 type=box.L2
+                value: GET_VAR s type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+              INSTANCE_INITIALIZER_CALL classDescriptor=L2
+          PROPERTY public final val s: kotlin.String
+            EXPRESSION_BODY
+              GET_VAR s type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          FUN public open override /*1*/ fun foo(): kotlin.String
+            BLOCK_BODY
+              RETURN type=kotlin.Nothing from=foo
+                CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+                  $this: THIS local open class L2 : box.L1 type=box.L2
+        CLASS CLASS L3
+          CONSTRUCTOR public constructor L3(/*0*/ unused: kotlin.Double, /*1*/ value: kotlin.String = ...)
+            value: EXPRESSION_BODY
+              CONST String type=kotlin.String value='OK'
+            BLOCK_BODY
+              DELEGATING_CONSTRUCTOR_CALL L2
+                s: GET_VAR value type=kotlin.String operator=null
+              INSTANCE_INITIALIZER_CALL classDescriptor=L3
+        CLASS CLASS L4
+          CONSTRUCTOR public constructor L4(/*0*/ i: kotlin.Int, /*1*/ j: kotlin.Long, /*2*/ z: kotlin.Boolean, /*3*/ l: box.L3)
+            BLOCK_BODY
+              DELEGATING_CONSTRUCTOR_CALL L3
+                unused: CONST Double type=kotlin.Double value='3.14'
+              INSTANCE_INITIALIZER_CALL classDescriptor=L4
+        CLASS CLASS L5
+          CONSTRUCTOR public constructor L5()
+            BLOCK_BODY
+              DELEGATING_CONSTRUCTOR_CALL L4
+                i: CONST Int type=kotlin.Int value='0'
+                j: CONST Long type=kotlin.Long value='0'
+                z: CONST Boolean type=kotlin.Boolean value='false'
+                l: CALL .<init> type=box.L3 operator=null
+                  unused: CONST Double type=kotlin.Double value='2.71'
+                  value: CONST String type=kotlin.String value='Fail'
+              INSTANCE_INITIALIZER_CALL classDescriptor=L5
+        RETURN type=kotlin.Nothing from=box
+          CALL .foo type=kotlin.String operator=null
+            $this: CALL .<init> type=box.L5 operator=null

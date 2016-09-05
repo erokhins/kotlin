@@ -13,3 +13,5 @@ private fun foo(a: A?, aOther: A?): A {
 }
 
 fun box() = foo(A("???"), A("OK")).s
+
+

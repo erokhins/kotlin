@@ -15,3 +15,4 @@ class Tester() {
 }
 
 fun box() = Tester().box()
+

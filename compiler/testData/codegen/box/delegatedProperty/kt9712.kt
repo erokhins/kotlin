@@ -22,3 +22,5 @@ class B : A() {
 
 fun box(): String =
         X.O + B().K
+
+

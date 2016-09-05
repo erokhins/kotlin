@@ -9,3 +9,5 @@ fun box(): String {
     val instance = Local()
     return member(instance)
 }
+
+

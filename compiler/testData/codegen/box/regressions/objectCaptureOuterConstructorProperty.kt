@@ -27,3 +27,5 @@ fun box(): String {
     ZippingStream(EmptyStream, EmptyStream).iterator().hasNext()
     return "OK"
 }
+
+

@@ -1,0 +1,35 @@
+MODULE <test-module>
+  FILE /splitTry.kt
+    FUN public inline fun test(/*0*/ s: () -> kotlin.Int): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=test
+          TRY_CATCH type=kotlin.Int
+            try: BLOCK type=kotlin.Int operator=null
+              VAR val i: kotlin.Int
+                CALL .invoke type=kotlin.Int operator=INVOKE
+                  $this: GET_VAR s type=() -> kotlin.Int operator=VARIABLE_AS_FUNCTION
+              CALL .plus type=kotlin.Int operator=PLUS
+                $this: GET_VAR i type=kotlin.Int operator=null
+                other: CONST Int type=kotlin.Int value='10'
+            finally: BLOCK type=kotlin.Int operator=null
+              CONST Int type=kotlin.Int value='0'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .test type=kotlin.Int operator=null
+          s: BLOCK type=() -> kotlin.Int operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Int
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  TRY_CATCH type=kotlin.Int
+                    try: BLOCK type=kotlin.Nothing operator=null
+                      VAR val p: kotlin.Int = 1
+                        CONST Int type=kotlin.Int value='1'
+                      RETURN type=kotlin.Nothing from=box
+                        CONST String type=kotlin.String value='OK'
+                    catch e: BLOCK type=kotlin.Int operator=null
+                      CONST Int type=kotlin.Int value='-2'
+                    finally: BLOCK type=kotlin.Int operator=null
+                      CONST Int type=kotlin.Int value='-3'
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Int operator=LAMBDA
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='Failed'

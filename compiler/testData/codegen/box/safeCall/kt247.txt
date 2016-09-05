@@ -1,0 +1,183 @@
+MODULE <test-module>
+  FILE /kt247.kt
+    FUN public fun t1(): kotlin.Boolean
+      BLOCK_BODY
+        VAR val s1: kotlin.String? = "sff"
+          CONST String type=kotlin.String value='sff'
+        VAR val s2: kotlin.String? = null
+          CONST Null type=kotlin.Nothing? value='null'
+        RETURN type=kotlin.Nothing from=t1
+          WHEN type=kotlin.Boolean operator=ANDAND
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: BLOCK type=kotlin.Int? operator=SAFE_CALL
+                VAR val tmp0_safe_receiver: kotlin.String?
+                  GET_VAR s1 type=kotlin.String? operator=null
+                WHEN type=kotlin.Int? operator=SAFE_CALL
+                  if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                    arg0: GET_VAR tmp0_safe_receiver type=kotlin.String? operator=null
+                    arg1: CONST Null type=kotlin.Nothing? value='null'
+                  then: CONST Null type=kotlin.Nothing? value='null'
+                  else: CALL .<get-length> type=kotlin.Int operator=GET_PROPERTY
+                    $this: GET_VAR tmp0_safe_receiver type=kotlin.String? operator=null
+              arg1: CONST Int type=kotlin.Int value='3'
+            then: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: BLOCK type=kotlin.Int? operator=SAFE_CALL
+                VAR val tmp1_safe_receiver: kotlin.String?
+                  GET_VAR s2 type=kotlin.String? operator=null
+                WHEN type=kotlin.Int? operator=SAFE_CALL
+                  if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                    arg0: GET_VAR tmp1_safe_receiver type=kotlin.String? operator=null
+                    arg1: CONST Null type=kotlin.Nothing? value='null'
+                  then: CONST Null type=kotlin.Nothing? value='null'
+                  else: CALL .<get-length> type=kotlin.Int operator=GET_PROPERTY
+                    $this: GET_VAR tmp1_safe_receiver type=kotlin.String? operator=null
+              arg1: CONST Null type=kotlin.Nothing? value='null'
+            else: CONST Boolean type=kotlin.Boolean value='false'
+    FUN public fun t2(): kotlin.Boolean
+      BLOCK_BODY
+        VAR val c1: C?
+          CALL .<init> type=C operator=null
+            x: CONST Int type=kotlin.Int value='1'
+        VAR val c2: C? = null
+          CONST Null type=kotlin.Nothing? value='null'
+        RETURN type=kotlin.Nothing from=t2
+          WHEN type=kotlin.Boolean operator=ANDAND
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: BLOCK type=kotlin.Int? operator=SAFE_CALL
+                VAR val tmp0_safe_receiver: C?
+                  GET_VAR c1 type=C? operator=null
+                WHEN type=kotlin.Int? operator=SAFE_CALL
+                  if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                    arg0: GET_VAR tmp0_safe_receiver type=C? operator=null
+                    arg1: CONST Null type=kotlin.Nothing? value='null'
+                  then: CONST Null type=kotlin.Nothing? value='null'
+                  else: CALL .<get-x> type=kotlin.Int operator=GET_PROPERTY
+                    $this: GET_VAR tmp0_safe_receiver type=C? operator=null
+              arg1: CONST Int type=kotlin.Int value='1'
+            then: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: BLOCK type=kotlin.Int? operator=SAFE_CALL
+                VAR val tmp1_safe_receiver: C?
+                  GET_VAR c2 type=C? operator=null
+                WHEN type=kotlin.Int? operator=SAFE_CALL
+                  if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                    arg0: GET_VAR tmp1_safe_receiver type=C? operator=null
+                    arg1: CONST Null type=kotlin.Nothing? value='null'
+                  then: CONST Null type=kotlin.Nothing? value='null'
+                  else: CALL .<get-x> type=kotlin.Int operator=GET_PROPERTY
+                    $this: GET_VAR tmp1_safe_receiver type=C? operator=null
+              arg1: CONST Null type=kotlin.Nothing? value='null'
+            else: CONST Boolean type=kotlin.Boolean value='false'
+    FUN public fun t3(): kotlin.Unit
+      BLOCK_BODY
+        VAR val d: D
+          CALL .<init> type=D operator=null
+            s: CONST String type=kotlin.String value='s'
+        VAR val x: kotlin.String
+          BLOCK type=kotlin.String? operator=SAFE_CALL
+            VAR val tmp0_safe_receiver: D
+              GET_VAR d type=D operator=null
+            WHEN type=kotlin.String? operator=SAFE_CALL
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_safe_receiver type=D operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CONST Null type=kotlin.Nothing? value='null'
+              else: CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR tmp0_safe_receiver type=D operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: BLOCK type=kotlin.String? operator=SAFE_CALL
+                VAR val tmp1_safe_receiver: D
+                  GET_VAR d type=D operator=null
+                WHEN type=kotlin.String? operator=SAFE_CALL
+                  if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                    arg0: GET_VAR tmp1_safe_receiver type=D operator=null
+                    arg1: CONST Null type=kotlin.Nothing? value='null'
+                  then: CONST Null type=kotlin.Nothing? value='null'
+                  else: CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+                    $this: GET_VAR tmp1_safe_receiver type=D operator=null
+              arg1: CONST String type=kotlin.String value='s'
+          then: THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.AssertionError operator=null
+    FUN public fun t4(): kotlin.Unit
+      BLOCK_BODY
+        VAR val e: E?
+          CALL .<init> type=E operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: BLOCK type=E? operator=SAFE_CALL
+                VAR val tmp0_safe_receiver: E?
+                  GET_VAR e type=E? operator=null
+                WHEN type=E? operator=SAFE_CALL
+                  if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                    arg0: GET_VAR tmp0_safe_receiver type=E? operator=null
+                    arg1: CONST Null type=kotlin.Nothing? value='null'
+                  then: CONST Null type=kotlin.Nothing? value='null'
+                  else: CALL .bar type=E operator=null
+                    $this: GET_VAR tmp0_safe_receiver type=E? operator=null
+              arg1: GET_VAR e type=E? operator=null
+          then: THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.AssertionError operator=null
+        VAR val x: kotlin.Int?
+          BLOCK type=kotlin.Int? operator=SAFE_CALL
+            VAR val tmp1_safe_receiver: E?
+              GET_VAR e type=E? operator=null
+            WHEN type=kotlin.Int? operator=SAFE_CALL
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp1_safe_receiver type=E? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CONST Null type=kotlin.Nothing? value='null'
+              else: CALL .foo type=kotlin.Int operator=null
+                $this: GET_VAR tmp1_safe_receiver type=E? operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .t1 type=kotlin.Boolean operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .t2 type=kotlin.Boolean operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail'
+        CALL .t3 type=kotlin.Unit operator=null
+        CALL .t4 type=kotlin.Unit operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C(/*0*/ x: kotlin.Int)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD x type=kotlin.Unit operator=null
+            receiver: THIS public final class C type=C
+            value: GET_VAR x type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      PROPERTY public final val x: kotlin.Int
+        EXPRESSION_BODY
+          GET_VAR x type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    CLASS CLASS D
+      CONSTRUCTOR public constructor D(/*0*/ s: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD s type=kotlin.Unit operator=null
+            receiver: THIS public final class D type=D
+            value: GET_VAR s type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=D
+      PROPERTY public final val s: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR s type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    CLASS CLASS E
+      CONSTRUCTOR public constructor E()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=E
+      FUN public final fun foo(): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CONST Int type=kotlin.Int value='1'
+      FUN public final fun bar(): E
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=bar
+            THIS public final class E type=E

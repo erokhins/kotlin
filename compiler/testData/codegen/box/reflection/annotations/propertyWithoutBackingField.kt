@@ -9,3 +9,5 @@ val property: String
 fun box(): String {
     return (::property.annotations.single() as Ann).value
 }
+
+

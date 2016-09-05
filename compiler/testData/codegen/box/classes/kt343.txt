@@ -1,0 +1,61 @@
+MODULE <test-module>
+  FILE /kt343.kt
+    FUN public fun launch(/*0*/ f: () -> kotlin.Unit): kotlin.Unit
+      BLOCK_BODY
+        CALL .invoke type=kotlin.Unit operator=INVOKE
+          $this: GET_VAR f type=() -> kotlin.Unit operator=VARIABLE_AS_FUNCTION
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val list: java.util.ArrayList<kotlin.Int>
+          CALL .<init> type=java.util.ArrayList<kotlin.Int> operator=null
+        VAR val foo: () -> kotlin.Unit
+          BLOCK type=() -> kotlin.Unit operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Unit
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .add type=kotlin.Boolean operator=null
+                    $this: GET_VAR list type=java.util.ArrayList<kotlin.Int> operator=null
+                    element: CONST Int type=kotlin.Int value='2'
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Unit operator=LAMBDA
+        CALL .invoke type=kotlin.Unit operator=INVOKE
+          $this: GET_VAR foo type=() -> kotlin.Unit operator=VARIABLE_AS_FUNCTION
+        CALL .launch type=kotlin.Unit operator=null
+          f: BLOCK type=() -> kotlin.Unit operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Unit
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .add type=kotlin.Boolean operator=null
+                    $this: GET_VAR list type=java.util.ArrayList<kotlin.Int> operator=null
+                    element: CONST Int type=kotlin.Int value='3'
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Unit operator=LAMBDA
+        VAR val bar: () -> kotlin.Unit
+          BLOCK type=() -> kotlin.Unit operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Unit
+              BLOCK_BODY
+                VAR val x: kotlin.Int = 1
+                  CONST Int type=kotlin.Int value='1'
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Unit operator=LAMBDA
+        CALL .invoke type=kotlin.Unit operator=INVOKE
+          $this: GET_VAR bar type=() -> kotlin.Unit operator=VARIABLE_AS_FUNCTION
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: WHEN type=kotlin.Boolean operator=ANDAND
+              if: WHEN type=kotlin.Boolean operator=ANDAND
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                    $this: GET_VAR list type=java.util.ArrayList<kotlin.Int> operator=null
+                  arg1: CONST Int type=kotlin.Int value='2'
+                then: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: CALL .get type=kotlin.Int operator=null
+                    $this: GET_VAR list type=java.util.ArrayList<kotlin.Int> operator=null
+                    index: CONST Int type=kotlin.Int value='0'
+                  arg1: CONST Int type=kotlin.Int value='2'
+                else: CONST Boolean type=kotlin.Boolean value='false'
+              then: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: CALL .get type=kotlin.Int operator=null
+                  $this: GET_VAR list type=java.util.ArrayList<kotlin.Int> operator=null
+                  index: CONST Int type=kotlin.Int value='1'
+                arg1: CONST Int type=kotlin.Int value='3'
+              else: CONST Boolean type=kotlin.Boolean value='false'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='fail'

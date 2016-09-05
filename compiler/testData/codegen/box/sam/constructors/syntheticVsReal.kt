@@ -10,3 +10,4 @@ fun box(): String {
     Runnable { global = "FAIL" } .run()
     return global
 }
+

@@ -1,0 +1,156 @@
+MODULE <test-module>
+  FILE /privateValParams.kt
+    CLASS CLASS D
+      CONSTRUCTOR public constructor D(/*0*/ x: kotlin.Long, /*1*/ y: kotlin.Char)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD x type=kotlin.Unit operator=null
+            receiver: THIS public final data class D type=D
+            value: GET_VAR x type=kotlin.Long operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          SET_BACKING_FIELD y type=kotlin.Unit operator=null
+            receiver: THIS public final data class D type=D
+            value: GET_VAR y type=kotlin.Char operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=D
+      PROPERTY private final val x: kotlin.Long
+        EXPRESSION_BODY
+          GET_VAR x type=kotlin.Long operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY private final val y: kotlin.Char
+        EXPRESSION_BODY
+          GET_VAR y type=kotlin.Char operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public final fun foo(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            STRING_CONCATENATION type=kotlin.String
+              CALL .component1 type=kotlin.Long operator=null
+                $this: THIS public final data class D type=D
+              CALL .component2 type=kotlin.Char operator=null
+                $this: THIS public final data class D type=D
+      FUN private final operator /*synthesized*/ fun component1(): kotlin.Long
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=component1
+            CALL .<get-x> type=kotlin.Long operator=GET_PROPERTY
+              $this: THIS public final data class D type=D
+      FUN private final operator /*synthesized*/ fun component2(): kotlin.Char
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=component2
+            CALL .<get-y> type=kotlin.Char operator=GET_PROPERTY
+              $this: THIS public final data class D type=D
+      FUN public final /*synthesized*/ fun copy(/*0*/ x: kotlin.Long = ..., /*1*/ y: kotlin.Char = ...): D
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=copy
+            CALL .<init> type=D operator=null
+              x: GET_VAR x type=kotlin.Long operator=null
+              y: GET_VAR y type=kotlin.Char operator=null
+      FUN public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=toString
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='D('
+              CONST String type=kotlin.String value='x='
+              CALL .<get-x> type=kotlin.Long operator=GET_PROPERTY
+                $this: THIS public final data class D type=D
+              CONST String type=kotlin.String value=', '
+              CONST String type=kotlin.String value='y='
+              CALL .<get-y> type=kotlin.Char operator=GET_PROPERTY
+                $this: THIS public final data class D type=D
+              CONST String type=kotlin.String value=')'
+      FUN public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+        BLOCK_BODY
+          VAR val tmp0_result: kotlin.Int
+            CONST Int type=kotlin.Int value='0'
+          SET_VAR tmp0_result type=kotlin.Unit operator=EQ
+            CALL .hashCode type=kotlin.Int operator=null
+              $this: CALL .<get-x> type=kotlin.Long operator=GET_PROPERTY
+                $this: THIS public final data class D type=D
+          SET_VAR tmp0_result type=kotlin.Unit operator=EQ
+            CALL .plus type=kotlin.Int operator=null
+              $this: CALL .times type=kotlin.Int operator=null
+                $this: GET_VAR tmp0_result type=kotlin.Int operator=null
+                other: CONST Int type=kotlin.Int value='31'
+              other: CALL .hashCode type=kotlin.Int operator=null
+                $this: CALL .<get-y> type=kotlin.Char operator=GET_PROPERTY
+                  $this: THIS public final data class D type=D
+          RETURN type=kotlin.Nothing from=hashCode
+            GET_VAR tmp0_result type=kotlin.Int operator=null
+      FUN public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+        BLOCK_BODY
+          WHEN type=kotlin.Unit operator=null
+            if: CALL .EQEQEQ type=kotlin.Boolean operator=EQEQEQ
+              arg0: THIS public final data class D type=D
+              arg1: GET_VAR other type=kotlin.Any? operator=null
+            then: RETURN type=kotlin.Nothing from=equals
+              CONST Boolean type=kotlin.Boolean value='true'
+          WHEN type=kotlin.Unit operator=null
+            if: TYPE_OP operator=NOT_INSTANCEOF typeOperand=D
+              GET_VAR other type=kotlin.Any? operator=null
+            then: RETURN type=kotlin.Nothing from=equals
+              CONST Boolean type=kotlin.Boolean value='false'
+          VAR val tmp0_other_with_cast: D
+            TYPE_OP operator=CAST typeOperand=D
+              GET_VAR other type=kotlin.Any? operator=null
+          WHEN type=kotlin.Unit operator=null
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .<get-x> type=kotlin.Long operator=GET_PROPERTY
+                  $this: THIS public final data class D type=D
+                arg1: CALL .<get-x> type=kotlin.Long operator=GET_PROPERTY
+                  $this: GET_VAR tmp0_other_with_cast type=D operator=null
+            then: RETURN type=kotlin.Nothing from=equals
+              CONST Boolean type=kotlin.Boolean value='false'
+          WHEN type=kotlin.Unit operator=null
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .<get-y> type=kotlin.Char operator=GET_PROPERTY
+                  $this: THIS public final data class D type=D
+                arg1: CALL .<get-y> type=kotlin.Char operator=GET_PROPERTY
+                  $this: GET_VAR tmp0_other_with_cast type=D operator=null
+            then: RETURN type=kotlin.Nothing from=equals
+              CONST Boolean type=kotlin.Boolean value='false'
+          RETURN type=kotlin.Nothing from=equals
+            CONST Boolean type=kotlin.Boolean value='true'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val d1: D
+          CALL .<init> type=D operator=null
+            x: CONST Long type=kotlin.Long value='42'
+            y: CONST Char type=kotlin.Char value='a'
+        VAR val d2: D
+          CALL .<init> type=D operator=null
+            x: CONST Long type=kotlin.Long value='42'
+            y: CONST Char type=kotlin.Char value='a'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR d1 type=D operator=null
+              arg1: GET_VAR d2 type=D operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail equals'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .hashCode type=kotlin.Int operator=null
+                $this: GET_VAR d1 type=D operator=null
+              arg1: CALL .hashCode type=kotlin.Int operator=null
+                $this: GET_VAR d2 type=D operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail hashCode'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .toString type=kotlin.String operator=null
+                $this: GET_VAR d1 type=D operator=null
+              arg1: CALL .toString type=kotlin.String operator=null
+                $this: GET_VAR d2 type=D operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail toString'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .foo type=kotlin.String operator=null
+                $this: GET_VAR d1 type=D operator=null
+              arg1: CALL .foo type=kotlin.String operator=null
+                $this: GET_VAR d2 type=D operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail foo'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -11,3 +11,4 @@ class Foo {
 }
 
 fun box(): String = Foo.prop
+

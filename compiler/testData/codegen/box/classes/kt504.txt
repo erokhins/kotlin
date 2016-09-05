@@ -1,0 +1,31 @@
+MODULE <test-module>
+  FILE /kt504.kt
+    CLASS CLASS Identifier
+      CONSTRUCTOR public constructor Identifier()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Identifier
+      PROPERTY private final var myNullable: kotlin.Boolean
+        EXPRESSION_BODY
+          CONST Boolean type=kotlin.Boolean value='true'
+      CLASS OBJECT Companion
+        CONSTRUCTOR private constructor Companion()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Companion
+        FUN public open fun init(/*0*/ isNullable: kotlin.Boolean): mult_constructors_3_bug.Identifier
+          BLOCK_BODY
+            VAR val id: mult_constructors_3_bug.Identifier
+              CALL .<init> type=mult_constructors_3_bug.Identifier operator=null
+            CALL .<set-myNullable> type=kotlin.Unit operator=EQ
+              $this: GET_VAR id type=mult_constructors_3_bug.Identifier operator=null
+              <set-?>: GET_VAR isNullable type=kotlin.Boolean operator=null
+            RETURN type=kotlin.Nothing from=init
+              GET_VAR id type=mult_constructors_3_bug.Identifier operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .init type=mult_constructors_3_bug.Identifier operator=null
+          $this: GET_OBJECT Companion type=mult_constructors_3_bug.Identifier.Companion
+          isNullable: CONST Boolean type=kotlin.Boolean value='true'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

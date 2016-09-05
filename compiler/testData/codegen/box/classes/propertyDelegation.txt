@@ -1,0 +1,99 @@
+MODULE <test-module>
+  FILE /propertyDelegation.kt
+    CLASS CLASS Base
+      CONSTRUCTOR public constructor Base()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Base
+      PROPERTY public final val plain: kotlin.Int = 239
+        EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='239'
+      PROPERTY public final val read: kotlin.Int
+        PROPERTY_GETTER public final fun <get-read>(): kotlin.Int
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-read>
+              CONST Int type=kotlin.Int value='239'
+      PROPERTY public final var readwrite: kotlin.Int
+        EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='0'
+        PROPERTY_GETTER public final fun <get-readwrite>(): kotlin.Int
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-readwrite>
+              CALL .plus type=kotlin.Int operator=PLUS
+                $this: GET_VAR field type=kotlin.Int operator=null
+                other: CONST Int type=kotlin.Int value='1'
+        PROPERTY_SETTER public final fun <set-readwrite>(/*0*/ n: kotlin.Int): kotlin.Unit
+          BLOCK_BODY
+            SET_BACKING_FIELD readwrite type=kotlin.Unit operator=EQ
+              value: GET_VAR n type=kotlin.Int operator=null
+    CLASS INTERFACE Abstract
+    CLASS CLASS Derived1
+      CONSTRUCTOR public constructor Derived1()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Base
+          INSTANCE_INITIALIZER_CALL classDescriptor=Derived1
+    CLASS CLASS Derived2
+      CONSTRUCTOR public constructor Derived2()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Base
+          INSTANCE_INITIALIZER_CALL classDescriptor=Derived2
+    FUN public fun code(/*0*/ s: Base): kotlin.Int
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-plain> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_VAR s type=Base operator=null
+              arg1: CONST Int type=kotlin.Int value='239'
+          then: RETURN type=kotlin.Nothing from=code
+            CONST Int type=kotlin.Int value='1'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-read> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_VAR s type=Base operator=null
+              arg1: CONST Int type=kotlin.Int value='239'
+          then: RETURN type=kotlin.Nothing from=code
+            CONST Int type=kotlin.Int value='2'
+        CALL .<set-readwrite> type=kotlin.Unit operator=EQ
+          $this: GET_VAR s type=Base operator=null
+          n: CONST Int type=kotlin.Int value='238'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-readwrite> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_VAR s type=Base operator=null
+              arg1: CONST Int type=kotlin.Int value='239'
+          then: RETURN type=kotlin.Nothing from=code
+            CONST Int type=kotlin.Int value='3'
+        RETURN type=kotlin.Nothing from=code
+          CONST Int type=kotlin.Int value='0'
+    FUN public fun test(/*0*/ s: Base): kotlin.Boolean
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=test
+          CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+            arg0: CALL .code type=kotlin.Int operator=null
+              s: GET_VAR s type=Base operator=null
+            arg1: CONST Int type=kotlin.Int value='0'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .test type=kotlin.Boolean operator=null
+              s: CALL .<init> type=Base operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail #1'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .test type=kotlin.Boolean operator=null
+              s: CALL .<init> type=Derived1 operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail #2'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .test type=kotlin.Boolean operator=null
+              s: CALL .<init> type=Derived2 operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail #3'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

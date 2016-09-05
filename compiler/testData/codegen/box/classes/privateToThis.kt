@@ -9,3 +9,5 @@ fun box(): String {
     val a = A("O", "K")
     return a.getOk()
 }
+
+

@@ -1,0 +1,41 @@
+MODULE <test-module>
+  FILE /privateInInlineNested.kt
+    PROPERTY private val prop: kotlin.String = "O"
+      EXPRESSION_BODY
+        CONST String type=kotlin.String value='O'
+    FUN private fun test(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=test
+          CONST String type=kotlin.String value='K'
+    FUN internal inline fun call(/*0*/ p: () -> kotlin.String): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=call
+          CALL .invoke type=kotlin.String operator=INVOKE
+            $this: GET_VAR p type=() -> kotlin.String operator=VARIABLE_AS_FUNCTION
+    FUN internal inline fun inlineFun(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=inlineFun
+          CALL .call type=kotlin.String operator=null
+            p: BLOCK type=() -> kotlin.String operator=LAMBDA
+              FUN local final fun <anonymous>(): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .run type=kotlin.String operator=null
+                      $this: BLOCK type=test.inlineFun.<anonymous>.<no name provided> operator=OBJECT_LITERAL
+                        CLASS CLASS <no name provided>
+                          CONSTRUCTOR public constructor <no name provided>()
+                            BLOCK_BODY
+                              DELEGATING_CONSTRUCTOR_CALL Any
+                              INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+                          FUN public final fun run(): kotlin.String
+                            BLOCK_BODY
+                              RETURN type=kotlin.Nothing from=run
+                                CALL .plus type=kotlin.String operator=PLUS
+                                  $this: CALL .<get-prop> type=kotlin.String operator=GET_PROPERTY
+                                  other: CALL .test type=kotlin.String operator=null
+                        CALL .<init> type=test.inlineFun.<anonymous>.<no name provided> operator=OBJECT_LITERAL
+              CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .inlineFun type=kotlin.String operator=null

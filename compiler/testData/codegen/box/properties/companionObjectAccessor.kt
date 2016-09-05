@@ -25,3 +25,5 @@ class B {
 fun box(): String {
     return if (J.f() == A.i1 + A.i2 + B.i1 + B.i2) "OK" else "Fail: ${J.f()}"
 }
+
+

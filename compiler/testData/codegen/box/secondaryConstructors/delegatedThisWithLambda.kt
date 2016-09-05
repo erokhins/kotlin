@@ -7,3 +7,4 @@ fun box(): String {
     if (result != 23) return "fail: $result"
     return "OK"
 }
+

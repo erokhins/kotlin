@@ -4,3 +4,5 @@ fun box() : String {
     if(a === a) return "OK"
     return "fail 2"
 }
+
+

@@ -9,3 +9,5 @@ class Foo {
 fun box(): String {
     return Foo().bar()
 }
+
+

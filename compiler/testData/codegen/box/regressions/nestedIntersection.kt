@@ -14,3 +14,5 @@ fun box(): String {
     if (foo() != "In") return "fail"
     return "OK"
 }
+
+

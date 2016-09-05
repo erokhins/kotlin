@@ -6,3 +6,5 @@ fun box() : String {
     if(!(f.equals(f))) return "fail 3"
     return "OK"
 }
+
+

@@ -16,3 +16,5 @@ fun box(): String {
     val abc = A.B.C()
     return "OK"
 }
+
+

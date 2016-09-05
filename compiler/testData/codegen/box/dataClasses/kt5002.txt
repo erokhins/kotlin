@@ -1,0 +1,142 @@
+MODULE <test-module>
+  FILE /kt5002.kt
+    CLASS CLASS Pair
+      CONSTRUCTOR public constructor Pair</*0*/ out A, /*1*/ out B>(/*0*/ first: A, /*1*/ second: B)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD first type=kotlin.Unit operator=null
+            receiver: THIS public final data class Pair</*0*/ out A, /*1*/ out B> : java.io.Serializable type=Pair<A, B>
+            value: GET_VAR first type=A operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          SET_BACKING_FIELD second type=kotlin.Unit operator=null
+            receiver: THIS public final data class Pair</*0*/ out A, /*1*/ out B> : java.io.Serializable type=Pair<A, B>
+            value: GET_VAR second type=B operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Pair
+      PROPERTY public final val first: A
+        EXPRESSION_BODY
+          GET_VAR first type=A operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final val second: B
+        EXPRESSION_BODY
+          GET_VAR second type=B operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public final operator /*synthesized*/ fun component1(): A
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=component1
+            CALL .<get-first> type=A operator=GET_PROPERTY
+              $this: THIS public final data class Pair</*0*/ out A, /*1*/ out B> : java.io.Serializable type=Pair<A, B>
+      FUN public final operator /*synthesized*/ fun component2(): B
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=component2
+            CALL .<get-second> type=B operator=GET_PROPERTY
+              $this: THIS public final data class Pair</*0*/ out A, /*1*/ out B> : java.io.Serializable type=Pair<A, B>
+      FUN public final /*synthesized*/ fun copy(/*0*/ first: A = ..., /*1*/ second: B = ...): Pair<A, B>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=copy
+            CALL .<init> type=Pair<A, B> operator=null
+              first: GET_VAR first type=A operator=null
+              second: GET_VAR second type=B operator=null
+      FUN public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=toString
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Pair('
+              CONST String type=kotlin.String value='first='
+              CALL .<get-first> type=A operator=GET_PROPERTY
+                $this: THIS public final data class Pair</*0*/ out A, /*1*/ out B> : java.io.Serializable type=Pair<A, B>
+              CONST String type=kotlin.String value=', '
+              CONST String type=kotlin.String value='second='
+              CALL .<get-second> type=B operator=GET_PROPERTY
+                $this: THIS public final data class Pair</*0*/ out A, /*1*/ out B> : java.io.Serializable type=Pair<A, B>
+              CONST String type=kotlin.String value=')'
+      FUN public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+        BLOCK_BODY
+          VAR val tmp0_result: kotlin.Int
+            CONST Int type=kotlin.Int value='0'
+          SET_VAR tmp0_result type=kotlin.Unit operator=EQ
+            CALL .hashCode type=kotlin.Int operator=null
+              $this: TYPE_OP operator=IMPLICIT_CAST typeOperand=kotlin.Any
+                CALL .<get-first> type=A operator=GET_PROPERTY
+                  $this: THIS public final data class Pair</*0*/ out A, /*1*/ out B> : java.io.Serializable type=Pair<A, B>
+          SET_VAR tmp0_result type=kotlin.Unit operator=EQ
+            CALL .plus type=kotlin.Int operator=null
+              $this: CALL .times type=kotlin.Int operator=null
+                $this: GET_VAR tmp0_result type=kotlin.Int operator=null
+                other: CONST Int type=kotlin.Int value='31'
+              other: CALL .hashCode type=kotlin.Int operator=null
+                $this: TYPE_OP operator=IMPLICIT_CAST typeOperand=kotlin.Any
+                  CALL .<get-second> type=B operator=GET_PROPERTY
+                    $this: THIS public final data class Pair</*0*/ out A, /*1*/ out B> : java.io.Serializable type=Pair<A, B>
+          RETURN type=kotlin.Nothing from=hashCode
+            GET_VAR tmp0_result type=kotlin.Int operator=null
+      FUN public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+        BLOCK_BODY
+          WHEN type=kotlin.Unit operator=null
+            if: CALL .EQEQEQ type=kotlin.Boolean operator=EQEQEQ
+              arg0: THIS public final data class Pair</*0*/ out A, /*1*/ out B> : java.io.Serializable type=Pair<A, B>
+              arg1: GET_VAR other type=kotlin.Any? operator=null
+            then: RETURN type=kotlin.Nothing from=equals
+              CONST Boolean type=kotlin.Boolean value='true'
+          WHEN type=kotlin.Unit operator=null
+            if: TYPE_OP operator=NOT_INSTANCEOF typeOperand=Pair<A, B>
+              GET_VAR other type=kotlin.Any? operator=null
+            then: RETURN type=kotlin.Nothing from=equals
+              CONST Boolean type=kotlin.Boolean value='false'
+          VAR val tmp0_other_with_cast: Pair<A, B>
+            TYPE_OP operator=CAST typeOperand=Pair<A, B>
+              GET_VAR other type=kotlin.Any? operator=null
+          WHEN type=kotlin.Unit operator=null
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .<get-first> type=A operator=GET_PROPERTY
+                  $this: THIS public final data class Pair</*0*/ out A, /*1*/ out B> : java.io.Serializable type=Pair<A, B>
+                arg1: CALL .<get-first> type=A operator=GET_PROPERTY
+                  $this: GET_VAR tmp0_other_with_cast type=Pair<A, B> operator=null
+            then: RETURN type=kotlin.Nothing from=equals
+              CONST Boolean type=kotlin.Boolean value='false'
+          WHEN type=kotlin.Unit operator=null
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .<get-second> type=B operator=GET_PROPERTY
+                  $this: THIS public final data class Pair</*0*/ out A, /*1*/ out B> : java.io.Serializable type=Pair<A, B>
+                arg1: CALL .<get-second> type=B operator=GET_PROPERTY
+                  $this: GET_VAR tmp0_other_with_cast type=Pair<A, B> operator=null
+            then: RETURN type=kotlin.Nothing from=equals
+              CONST Boolean type=kotlin.Boolean value='false'
+          RETURN type=kotlin.Nothing from=equals
+            CONST Boolean type=kotlin.Boolean value='true'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val p: Pair<kotlin.Int, kotlin.String>
+          CALL .<init> type=Pair<kotlin.Int, kotlin.String> operator=null
+            first: CONST Int type=kotlin.Int value='42'
+            second: CONST String type=kotlin.String value='OK'
+        VAR val q: Pair<kotlin.Int, kotlin.String>
+          CALL .<init> type=Pair<kotlin.Int, kotlin.String> operator=null
+            first: CONST Int type=kotlin.Int value='42'
+            second: CONST String type=kotlin.String value='OK'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR p type=Pair<kotlin.Int, kotlin.String> operator=null
+              arg1: GET_VAR q type=Pair<kotlin.Int, kotlin.String> operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail equals'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .hashCode type=kotlin.Int operator=null
+                $this: GET_VAR p type=Pair<kotlin.Int, kotlin.String> operator=null
+              arg1: CALL .hashCode type=kotlin.Int operator=null
+                $this: GET_VAR q type=Pair<kotlin.Int, kotlin.String> operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail hashCode'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .toString type=kotlin.String operator=null
+                $this: GET_VAR p type=Pair<kotlin.Int, kotlin.String> operator=null
+              arg1: CALL .toString type=kotlin.String operator=null
+                $this: GET_VAR q type=Pair<kotlin.Int, kotlin.String> operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail toString'
+        RETURN type=kotlin.Nothing from=box
+          CALL .<get-second> type=kotlin.String operator=GET_PROPERTY
+            $this: GET_VAR p type=Pair<kotlin.Int, kotlin.String> operator=null

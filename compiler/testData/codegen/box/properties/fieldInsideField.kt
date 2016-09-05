@@ -11,3 +11,4 @@ val my: String = "O"
     }.foo()
 
 fun box() = my
+

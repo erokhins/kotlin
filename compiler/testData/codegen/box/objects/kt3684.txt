@@ -1,0 +1,36 @@
+MODULE <test-module>
+  FILE /kt3684.kt
+    CLASS CLASS X
+      CONSTRUCTOR public constructor X(/*0*/ n: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD n type=kotlin.Unit operator=null
+            receiver: THIS public open class X type=X
+            value: GET_VAR n type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=X
+      PROPERTY private final val n: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR n type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public final fun foo(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CALL .print type=kotlin.String operator=null
+              $this: BLOCK type=X.foo.<no name provided> operator=OBJECT_LITERAL
+                CLASS CLASS <no name provided>
+                  CONSTRUCTOR public constructor <no name provided>()
+                    BLOCK_BODY
+                      DELEGATING_CONSTRUCTOR_CALL X
+                        n: CONST String type=kotlin.String value='inner'
+                      INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+                  FUN public final fun print(): kotlin.String
+                    BLOCK_BODY
+                      RETURN type=kotlin.Nothing from=print
+                        CALL .<get-n> type=kotlin.String operator=GET_PROPERTY
+                          $this: THIS public open class X type=X
+                CALL .<init> type=X.foo.<no name provided> operator=OBJECT_LITERAL
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .foo type=kotlin.String operator=null
+            $this: CALL .<init> type=X operator=null
+              n: CONST String type=kotlin.String value='OK'

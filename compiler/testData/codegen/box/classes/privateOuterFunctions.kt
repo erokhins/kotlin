@@ -29,3 +29,5 @@ class C {
 }
 
 fun box() = C().foo()
+
+

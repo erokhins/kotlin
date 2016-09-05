@@ -8,3 +8,4 @@ public open class Outer private constructor(val s: String) {
 fun box(): String {
     return Outer.test().s
 }
+

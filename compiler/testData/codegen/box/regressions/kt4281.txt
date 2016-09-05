@@ -1,0 +1,38 @@
+MODULE <test-module>
+  FILE /kt4281.kt
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      FUN public final fun test(/*0*/ x: kotlin.Int): kotlin.Unit
+        BLOCK_BODY
+          WHEN type=kotlin.Unit operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: GET_VAR x type=kotlin.Int operator=null
+              arg1: CONST Int type=kotlin.Int value='0'
+            then: RETURN type=kotlin.Nothing from=test
+          WHEN type=kotlin.Unit operator=IF
+            if: TYPE_OP operator=INSTANCEOF typeOperand=D
+              THIS public abstract class C type=C
+            then: BLOCK type=kotlin.Unit operator=null
+              VAR val d: D
+                TYPE_OP operator=IMPLICIT_CAST typeOperand=D
+                  THIS public abstract class C type=C
+              CALL .test type=kotlin.Unit operator=null
+                $this: GET_VAR d type=D operator=null
+                x: CALL .minus type=kotlin.Int operator=MINUS
+                  $this: GET_VAR x type=kotlin.Int operator=null
+                  other: CONST Int type=kotlin.Int value='1'
+    CLASS CLASS D
+      CONSTRUCTOR public constructor D()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL C
+          INSTANCE_INITIALIZER_CALL classDescriptor=D
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .test type=kotlin.Unit operator=null
+          $this: CALL .<init> type=D operator=null
+          x: CONST Int type=kotlin.Int value='10'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

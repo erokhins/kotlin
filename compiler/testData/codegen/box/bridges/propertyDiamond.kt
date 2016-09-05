@@ -16,3 +16,5 @@ fun box(): String {
     val a: A<String, String> = D()
     return a.o + a.k
 }
+
+

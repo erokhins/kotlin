@@ -13,3 +13,5 @@ class KHolder {
 typealias KHolderAlias = KHolder
 
 fun box(): String = OHolderAlias.O + KHolderAlias.K
+
+

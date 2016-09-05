@@ -12,3 +12,5 @@ fun box(): String {
     assertEquals(1, foo())
     return "OK"
 }
+
+

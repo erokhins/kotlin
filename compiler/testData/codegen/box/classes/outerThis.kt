@@ -10,3 +10,5 @@ fun box() : String {
   val o = Outer()
   return if (o === o.x.outer) "OK" else "fail"
 }
+
+

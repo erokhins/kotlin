@@ -10,3 +10,5 @@ fun box(): String = Test.test
 
 public var OK: String = "OK"
     private set
+
+

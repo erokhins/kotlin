@@ -15,3 +15,5 @@ private val reallyOk = run { "OK" }
 class OK() {
     val ok = reallyOk
 }
+
+

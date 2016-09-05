@@ -10,3 +10,5 @@ fun box(): String {
     if (foo(2) != "something") return "Fail 2"
     return "OK"
 }
+
+

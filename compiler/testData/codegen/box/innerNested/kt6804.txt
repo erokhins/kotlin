@@ -1,0 +1,30 @@
+MODULE <test-module>
+  FILE /kt6804.kt
+    CLASS CLASS Outer
+      CONSTRUCTOR public constructor Outer()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Outer
+      CLASS CLASS Nested
+        CONSTRUCTOR public constructor Nested()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Nested
+        FUN public final fun fn(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=fn
+              CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public companion object Companion type=Outer.Companion
+      CLASS OBJECT Companion
+        CONSTRUCTOR private constructor Companion()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Companion
+        PROPERTY private final val s: kotlin.String = "OK"
+          EXPRESSION_BODY
+            CONST String type=kotlin.String value='OK'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .fn type=kotlin.String operator=null
+            $this: CALL .<init> type=Outer.Nested operator=null

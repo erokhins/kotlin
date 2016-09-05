@@ -34,3 +34,5 @@ abstract public class O2dScriptAction<T : Actor> {
     protected fun calc(): T? = null
 
 }
+
+

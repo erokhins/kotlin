@@ -17,3 +17,5 @@ fun box(): String {
     if ((a as C).foo() != "A") return "Fail 3"
     return "OK"
 }
+
+

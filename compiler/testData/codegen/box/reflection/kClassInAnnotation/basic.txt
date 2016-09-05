@@ -1,0 +1,44 @@
+MODULE <test-module>
+  FILE /basic.kt
+    CLASS ANNOTATION_CLASS Ann
+      CONSTRUCTOR public constructor Ann(/*0*/ arg: kotlin.reflect.KClass<*>)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD arg type=kotlin.Unit operator=null
+            receiver: THIS @kotlin.annotation.Retention(value = AnnotationRetention.RUNTIME) public final annotation class Ann : kotlin.Annotation type=Ann
+            value: GET_VAR arg type=kotlin.reflect.KClass<*> operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Ann
+      PROPERTY public final val arg: kotlin.reflect.KClass<*>
+        EXPRESSION_BODY
+          GET_VAR arg type=kotlin.reflect.KClass<*> operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    CLASS CLASS OK
+      CONSTRUCTOR public constructor OK()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=OK
+    CLASS CLASS MyClass
+      CONSTRUCTOR public constructor MyClass()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=MyClass
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val argName: kotlin.String
+          BLOCK type=kotlin.String operator=ELVIS
+            VAR val tmp0_elvis_lhs: kotlin.String?
+              CALL .<get-simpleName> type=kotlin.String? operator=GET_PROPERTY
+                $this: CALL .<get-arg> type=kotlin.reflect.KClass<*> operator=GET_PROPERTY
+                  $this: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=Ann
+                    CALL .getAnnotation type=Ann! operator=null
+                      $this: CALL .<get-java> type=java.lang.Class<MyClass> operator=GET_PROPERTY
+                        $receiver: CLASS_REFERENCE MyClass type=kotlin.reflect.KClass<MyClass>
+                      p0: CALL .<get-java> type=java.lang.Class<Ann> operator=GET_PROPERTY
+                        $receiver: CLASS_REFERENCE Ann type=kotlin.reflect.KClass<Ann>
+            WHEN type=kotlin.String operator=null
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_elvis_lhs type=kotlin.String? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CONST String type=kotlin.String value='fail 1'
+              else: GET_VAR tmp0_elvis_lhs type=kotlin.String? operator=null
+        RETURN type=kotlin.Nothing from=box
+          GET_VAR argName type=kotlin.String operator=null

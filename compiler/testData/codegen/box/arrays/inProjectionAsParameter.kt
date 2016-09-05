@@ -7,3 +7,4 @@ fun box() : String {
     test(x)
     return x[0][0] as String
 }
+

@@ -1,0 +1,71 @@
+MODULE <test-module>
+  FILE /kt10136.kt
+    CLASS ANNOTATION_CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+    CLASS ANNOTATION_CLASS B
+      CONSTRUCTOR public constructor B(/*0*/ items: kotlin.Array<A> = ...)
+        items: EXPRESSION_BODY
+          CALL .arrayOf type=kotlin.Array<A> operator=null
+            elements: VARARG type=Array<out A> varargElementType=A
+              CALL .<init> type=A operator=null
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD items type=kotlin.Unit operator=null
+            receiver: THIS @kotlin.annotation.Target(allowedTargets = {AnnotationTarget.CLASS}) @kotlin.annotation.Retention(value = AnnotationRetention.RUNTIME) public final annotation class B : kotlin.Annotation type=B
+            value: GET_VAR items type=kotlin.Array<A> operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+      PROPERTY public final val items: kotlin.Array<A>
+        EXPRESSION_BODY
+          GET_VAR items type=kotlin.Array<A> operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val bClass: java.lang.Class<B>
+          CALL .<get-java> type=java.lang.Class<B> operator=GET_PROPERTY
+            $receiver: CLASS_REFERENCE B type=kotlin.reflect.KClass<B>
+        VAR val cClass: java.lang.Class<C>
+          CALL .<get-java> type=java.lang.Class<C> operator=GET_PROPERTY
+            $receiver: CLASS_REFERENCE C type=kotlin.reflect.KClass<C>
+        VAR val items: kotlin.Array<A>
+          CALL .<get-items> type=kotlin.Array<A> operator=GET_PROPERTY
+            $this: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=B
+              CALL .getAnnotation type=B! operator=null
+                $this: GET_VAR cClass type=java.lang.Class<C> operator=null
+                p0: GET_VAR bClass type=java.lang.Class<B> operator=null
+        CALL .assert type=kotlin.Unit operator=null
+          value: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+            arg0: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+              $this: GET_VAR items type=kotlin.Array<A> operator=null
+            arg1: CONST Int type=kotlin.Int value='1'
+          lazyMessage: BLOCK type=() -> kotlin.String operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.String
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  STRING_CONCATENATION type=kotlin.String
+                    CONST String type=kotlin.String value='Expected: [A()], got '
+                    CALL .asList type=kotlin.collections.List<A> operator=null
+                      $receiver: GET_VAR items type=kotlin.Array<A> operator=null
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+        CALL .assert type=kotlin.Unit operator=null
+          value: TYPE_OP operator=INSTANCEOF typeOperand=A
+            CALL .get type=A operator=GET_ARRAY_ELEMENT
+              $this: GET_VAR items type=kotlin.Array<A> operator=null
+              index: CONST Int type=kotlin.Int value='0'
+          lazyMessage: BLOCK type=() -> kotlin.String operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.String
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  STRING_CONCATENATION type=kotlin.String
+                    CONST String type=kotlin.String value='Expected: [A()], got '
+                    CALL .asList type=kotlin.collections.List<A> operator=null
+                      $receiver: GET_VAR items type=kotlin.Array<A> operator=null
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

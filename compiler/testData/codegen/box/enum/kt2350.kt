@@ -5,3 +5,5 @@ enum class A(val b: String) {
 }
 
 fun box()= A.E1.t()
+
+

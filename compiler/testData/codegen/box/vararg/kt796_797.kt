@@ -6,3 +6,5 @@ fun box() : String {
     val i : Int? = 1
     return if(a[i] == "Str2") "OK" else "fail"
 }
+
+

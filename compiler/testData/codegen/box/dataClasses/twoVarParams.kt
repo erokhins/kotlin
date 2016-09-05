@@ -7,3 +7,5 @@ fun box(): String {
     a.y = "O" + a.component2()
     return if (a.component1() == 42) a.component2() else a.component1().toString()
 }
+
+

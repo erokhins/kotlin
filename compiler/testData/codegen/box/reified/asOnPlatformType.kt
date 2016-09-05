@@ -30,3 +30,5 @@ fun box(): String {
 inline fun <reified T> T.foo(): T = this as T
 
 inline fun <reified T> T.fooN(): T? = this as T?
+
+

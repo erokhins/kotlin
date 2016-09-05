@@ -26,3 +26,5 @@ fun box(): String {
     assertToString("var test.B.mem: kotlin.String", B::mem)
     return "OK"
 }
+
+

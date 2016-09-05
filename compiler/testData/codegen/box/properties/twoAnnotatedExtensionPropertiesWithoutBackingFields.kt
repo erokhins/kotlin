@@ -7,3 +7,5 @@ annotation class Anno
     get() = 42
 
 fun box() = if (42.foo == 42 && "OK".foo == 42) "OK" else "Fail"
+
+

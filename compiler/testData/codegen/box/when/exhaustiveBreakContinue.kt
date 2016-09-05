@@ -12,3 +12,4 @@ fun foo(arr: Array<Color>): Color {
 }
 
 fun box() = if (foo(arrayOf(Color.BLUE, Color.GREEN)) == Color.GREEN) "OK" else "FAIL"
+

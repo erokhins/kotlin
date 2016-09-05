@@ -13,3 +13,5 @@ fun box() : String {
   var m = Test()
   return if((m.i)++ == 5 && ++(m.i) == 7 && m.tt() == 26) "OK" else "fail"
 }
+
+

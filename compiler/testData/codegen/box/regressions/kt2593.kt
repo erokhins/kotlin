@@ -8,3 +8,5 @@ fun foo() {
 }
 
 fun box() = "OK"
+
+

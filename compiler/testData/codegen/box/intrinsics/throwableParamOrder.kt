@@ -15,3 +15,4 @@ fun box(): String {
     if (res != "TM") return "Wrong argument calculation order: $res"
     return z.message!!
 }
+

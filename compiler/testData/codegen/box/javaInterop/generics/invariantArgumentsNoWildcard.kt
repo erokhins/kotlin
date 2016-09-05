@@ -19,3 +19,5 @@ fun bar(inv: Inv<Pair<CharSequence, CharSequence>>) = inv.x.x.toString() + inv.x
 fun box(): String {
     return JavaClass.test();
 }
+
+

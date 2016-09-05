@@ -16,3 +16,4 @@ fun box(): String {
     m.my = "O"
     return m.my
 }
+

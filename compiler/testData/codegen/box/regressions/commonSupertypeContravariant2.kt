@@ -7,3 +7,5 @@ fun <T> select(x: T, y: T) = x ?: y
 fun foobar(a: A, b: B) = select(a, b)
 
 fun box() = "OK"
+
+

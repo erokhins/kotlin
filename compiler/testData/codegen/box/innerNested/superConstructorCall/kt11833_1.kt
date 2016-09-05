@@ -15,3 +15,4 @@ class Child : Father() {
 fun box(): String {
     return Child().ChildInClass.work()
 }
+

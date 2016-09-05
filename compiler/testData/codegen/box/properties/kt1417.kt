@@ -7,3 +7,5 @@ class B(value: String) : A(value) {
 }
 
 fun box() = if (B("4").toString() == "B(4)") "OK" else "fail"
+
+

@@ -11,3 +11,4 @@ class B : A<String>() {
 fun box(): String {
     return B().test("OK")
 }
+

@@ -26,3 +26,5 @@ fun box() : String {
     C().foo()
     return "OK"
 }
+
+

@@ -11,3 +11,5 @@ class DelegateTest(): FooTrait by FooDelegate() {
 }
 
 fun box()  = DelegateTest().test()
+
+

@@ -26,3 +26,4 @@ open class Derived1 (p: String): Base(p) {
 fun box(): String {
     return Derived1("OK").Derived2("fail").x.foo()
 }
+

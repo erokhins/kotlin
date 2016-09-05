@@ -24,3 +24,5 @@ fun box(): String {
     if (result != "OK1") return "Fail: $result"
     return "OK"
 }
+
+

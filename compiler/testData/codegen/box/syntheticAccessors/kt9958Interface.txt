@@ -1,0 +1,36 @@
+MODULE <test-module>
+  FILE /a.kt
+    CLASS INTERFACE B
+      CLASS OBJECT Companion
+        CONSTRUCTOR private constructor Companion()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL A
+            INSTANCE_INITIALIZER_CALL classDescriptor=Companion
+      FUN public open fun test(): kotlin.Unit
+        BLOCK_BODY
+          CALL .foo type=kotlin.Unit operator=null
+            $this: THIS public companion object Companion : b.A type=a.B.Companion
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .test type=kotlin.Unit operator=null
+          $this: CALL .<init> type=a.C operator=null
+        RETURN type=kotlin.Nothing from=box
+          CALL .<get-result> type=kotlin.String operator=GET_PROPERTY
+  FILE /b.kt
+    PROPERTY public var result: kotlin.String
+      EXPRESSION_BODY
+        CONST String type=kotlin.String value='fail'
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN protected final fun foo(): kotlin.Unit
+        BLOCK_BODY
+          CALL .<set-result> type=kotlin.Unit operator=EQ
+            <set-?>: CONST String type=kotlin.String value='OK'

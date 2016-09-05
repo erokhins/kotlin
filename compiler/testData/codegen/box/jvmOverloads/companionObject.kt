@@ -12,3 +12,5 @@ fun box(): String {
     val m = C::class.java.getMethod("foo", String::class.java)
     return m.invoke(null, "O") as String
 }
+
+

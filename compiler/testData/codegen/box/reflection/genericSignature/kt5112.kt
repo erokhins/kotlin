@@ -26,3 +26,5 @@ fun box(): String {
     if (genericTypeInClass.toString() != "test.G<java.lang.String>") return "fail1: genericTypeInClass"
     return "OK"
 }
+
+

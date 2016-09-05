@@ -21,3 +21,5 @@ fun box(): String {
     if (result3 != "OK") return "fail: test3"
     return "OK"
 }
+
+

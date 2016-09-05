@@ -5,3 +5,5 @@ fun A.a(newv: String) = object: A("fail") {
 }
 
 fun box() = A("O").a("K").v
+
+

@@ -10,3 +10,4 @@ fun box(): String {
 
     return if (result == 15) "OK" else "fail: $result"
 }
+

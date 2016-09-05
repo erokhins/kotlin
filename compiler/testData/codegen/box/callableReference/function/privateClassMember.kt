@@ -5,3 +5,5 @@ class A {
 }
 
 fun box() = A().bar()
+
+

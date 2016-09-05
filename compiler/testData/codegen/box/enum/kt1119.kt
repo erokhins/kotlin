@@ -10,3 +10,5 @@ enum class Direction() {
 }
 
 fun box() = Direction.NORTH.f()
+
+

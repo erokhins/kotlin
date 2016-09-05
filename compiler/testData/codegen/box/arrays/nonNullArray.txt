@@ -1,0 +1,43 @@
+MODULE <test-module>
+  FILE /nonNullArray.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      CLASS CLASS B
+        CONSTRUCTOR public constructor B(/*0*/ i: kotlin.Int)
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            SET_BACKING_FIELD i type=kotlin.Unit operator=null
+              receiver: THIS public final class B type=A.B
+              value: GET_VAR i type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+            INSTANCE_INITIALIZER_CALL classDescriptor=B
+        PROPERTY public final val i: kotlin.Int
+          EXPRESSION_BODY
+            GET_VAR i type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public final fun test(): kotlin.Array<A.B>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=test
+            CALL .<init> type=kotlin.Array<A.B> operator=null
+              size: CONST Int type=kotlin.Int value='10'
+              init: BLOCK type=(kotlin.Int) -> A.B operator=LAMBDA
+                FUN local final fun <anonymous>(/*0*/ it: kotlin.Int): A.B
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .<init> type=A.B operator=null
+                        i: GET_VAR it type=kotlin.Int operator=null
+                CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> A.B operator=LAMBDA
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CALL .<get-i> type=kotlin.Int operator=GET_PROPERTY
+                $this: CALL .get type=A.B operator=GET_ARRAY_ELEMENT
+                  $this: CALL .test type=kotlin.Array<A.B> operator=null
+                    $this: CALL .<init> type=A operator=null
+                  index: CONST Int type=kotlin.Int value='5'
+              arg1: CONST Int type=kotlin.Int value='5'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='fail'

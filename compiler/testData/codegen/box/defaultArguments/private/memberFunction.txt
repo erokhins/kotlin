@@ -1,0 +1,28 @@
+MODULE <test-module>
+  FILE /memberFunction.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN private final fun foo(/*0*/ result: kotlin.String = ...): kotlin.String
+        result: EXPRESSION_BODY
+          CONST String type=kotlin.String value='OK'
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            GET_VAR result type=kotlin.String operator=null
+      CLASS OBJECT Companion
+        CONSTRUCTOR private constructor Companion()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Companion
+        FUN public final fun bar(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=bar
+              CALL .foo type=kotlin.String operator=null
+                $this: CALL .<init> type=A operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .bar type=kotlin.String operator=null
+            $this: GET_OBJECT Companion type=A.Companion

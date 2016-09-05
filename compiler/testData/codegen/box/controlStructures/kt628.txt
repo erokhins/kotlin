@@ -1,0 +1,282 @@
+MODULE <test-module>
+  FILE /kt628.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public final fun action(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=action
+            CONST String type=kotlin.String value='OK'
+      FUN public final infix fun infix(/*0*/ a: kotlin.String): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=infix
+            CALL .plus type=kotlin.String operator=PLUS
+              $this: CONST String type=kotlin.String value='O'
+              other: GET_VAR a type=kotlin.String operator=null
+      PROPERTY public final val property: kotlin.String = "OK"
+        EXPRESSION_BODY
+          CONST String type=kotlin.String value='OK'
+      PROPERTY public final val a: A
+        PROPERTY_GETTER public final fun <get-a>(): A
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-a>
+              CALL .<init> type=A operator=null
+    FUN public fun test1(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=test1
+          CALL .<get-property> type=kotlin.String operator=GET_PROPERTY
+            $this: BLOCK type=A operator=EXCLEXCL
+              VAR val tmp0_notnull: A
+                CALL .<init> type=A operator=null
+              WHEN type=A operator=null
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_notnull type=A operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                else: GET_VAR tmp0_notnull type=A operator=null
+    FUN public fun test2(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=test2
+          CALL .<get-property> type=kotlin.String operator=GET_PROPERTY
+            $this: BLOCK type=A operator=EXCLEXCL
+              VAR val tmp0_notnull: A?
+                TYPE_OP operator=CAST typeOperand=A?
+                  CALL .<init> type=A operator=null
+              WHEN type=A operator=null
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_notnull type=A? operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                else: GET_VAR tmp0_notnull type=A? operator=null
+    FUN public fun test3(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=test3
+          CALL .action type=kotlin.String operator=null
+            $this: BLOCK type=A operator=EXCLEXCL
+              VAR val tmp0_notnull: A
+                CALL .<init> type=A operator=null
+              WHEN type=A operator=null
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_notnull type=A operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                else: GET_VAR tmp0_notnull type=A operator=null
+    FUN public fun test4(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=test4
+          CALL .action type=kotlin.String operator=null
+            $this: BLOCK type=A operator=EXCLEXCL
+              VAR val tmp0_notnull: A?
+                TYPE_OP operator=CAST typeOperand=A?
+                  CALL .<init> type=A operator=null
+              WHEN type=A operator=null
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_notnull type=A? operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                else: GET_VAR tmp0_notnull type=A? operator=null
+    FUN public fun test5(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=test5
+          CALL .action type=kotlin.String operator=null
+            $this: BLOCK type=A operator=EXCLEXCL
+              VAR val tmp0_notnull: A?
+                TYPE_OP operator=CAST typeOperand=A?
+                  CONST Null type=kotlin.Nothing? value='null'
+              WHEN type=A operator=null
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_notnull type=A? operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                else: GET_VAR tmp0_notnull type=A? operator=null
+    FUN public fun test6(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=test6
+          CALL .action type=kotlin.String operator=null
+            $this: BLOCK type=A operator=EXCLEXCL
+              VAR val tmp0_notnull: A
+                CALL .<get-a> type=A operator=GET_PROPERTY
+                  $this: CALL .<get-a> type=A operator=GET_PROPERTY
+                    $this: CALL .<init> type=A operator=null
+              WHEN type=A operator=null
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_notnull type=A operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                else: GET_VAR tmp0_notnull type=A operator=null
+    FUN public fun test7(): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=test7
+          CALL .plus type=kotlin.Int operator=null
+            $this: BLOCK type=kotlin.Int operator=EXCLEXCL
+              VAR val tmp0_notnull: kotlin.Int
+                CONST Int type=kotlin.Int value='10'
+              WHEN type=kotlin.Int operator=null
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_notnull type=kotlin.Int operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                else: GET_VAR tmp0_notnull type=kotlin.Int operator=null
+            other: CONST Int type=kotlin.Int value='11'
+    FUN public fun test8(): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=test8
+          CALL .plus type=kotlin.Int operator=null
+            $this: BLOCK type=kotlin.Int operator=EXCLEXCL
+              VAR val tmp0_notnull: kotlin.Int?
+                TYPE_OP operator=CAST typeOperand=kotlin.Int?
+                  CONST Int type=kotlin.Int value='10'
+              WHEN type=kotlin.Int operator=null
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_notnull type=kotlin.Int? operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                else: GET_VAR tmp0_notnull type=kotlin.Int? operator=null
+            other: CONST Int type=kotlin.Int value='11'
+    FUN public fun test9(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=test9
+          CALL .infix type=kotlin.String operator=null
+            $this: BLOCK type=A operator=EXCLEXCL
+              VAR val tmp0_notnull: A
+                CALL .<init> type=A operator=null
+              WHEN type=A operator=null
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_notnull type=A operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                else: GET_VAR tmp0_notnull type=A operator=null
+            a: CONST String type=kotlin.String value='K'
+    FUN public fun test10(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=test10
+          CALL .infix type=kotlin.String operator=null
+            $this: BLOCK type=A operator=EXCLEXCL
+              VAR val tmp0_notnull: A?
+                TYPE_OP operator=CAST typeOperand=A?
+                  CALL .<init> type=A operator=null
+              WHEN type=A operator=null
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_notnull type=A? operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                else: GET_VAR tmp0_notnull type=A? operator=null
+            a: CONST String type=kotlin.String value='K'
+    FUN public fun test11(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=test11
+          CALL .infix type=kotlin.String operator=null
+            $this: BLOCK type=A operator=EXCLEXCL
+              VAR val tmp0_notnull: A?
+                TYPE_OP operator=CAST typeOperand=A?
+                  CALL .<init> type=A operator=null
+              WHEN type=A operator=null
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_notnull type=A? operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                else: GET_VAR tmp0_notnull type=A? operator=null
+            a: CONST String type=kotlin.String value='K'
+    FUN public fun test12(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=test12
+          CALL .infix type=kotlin.String operator=null
+            $this: BLOCK type=A operator=EXCLEXCL
+              VAR val tmp0_notnull: A
+                CALL .<init> type=A operator=null
+              WHEN type=A operator=null
+                if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_notnull type=A operator=null
+                  arg1: CONST Null type=kotlin.Nothing? value='null'
+                then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+                else: GET_VAR tmp0_notnull type=A operator=null
+            a: CONST String type=kotlin.String value='K'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .test1 type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .test2 type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .test3 type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .test4 type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail'
+        TRY_CATCH type=kotlin.Unit
+          try: BLOCK type=kotlin.Nothing operator=null
+            CALL .test5 type=kotlin.String operator=null
+            RETURN type=kotlin.Nothing from=box
+              CONST String type=kotlin.String value='fail'
+          catch e: BLOCK type=kotlin.Unit operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .test6 type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .test7 type=kotlin.Int operator=null
+              arg1: CONST Int type=kotlin.Int value='21'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .test8 type=kotlin.Int operator=null
+              arg1: CONST Int type=kotlin.Int value='21'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .test9 type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .test10 type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .test11 type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .test12 type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

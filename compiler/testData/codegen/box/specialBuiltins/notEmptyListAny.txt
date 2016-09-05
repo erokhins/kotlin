@@ -1,0 +1,162 @@
+MODULE <test-module>
+  FILE /notEmptyListAny.kt
+    CLASS OBJECT NotEmptyList
+      CONSTRUCTOR private constructor NotEmptyList()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=NotEmptyList
+      FUN public open override /*1*/ fun contains(/*0*/ element: kotlin.Any): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=contains
+            CONST Boolean type=kotlin.Boolean value='true'
+      FUN public open override /*1*/ fun indexOf(/*0*/ element: kotlin.Any): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=indexOf
+            CONST Int type=kotlin.Int value='0'
+      FUN public open override /*1*/ fun lastIndexOf(/*0*/ element: kotlin.Any): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=lastIndexOf
+            CONST Int type=kotlin.Int value='0'
+      FUN public open override /*1*/ fun remove(/*0*/ element: kotlin.Any): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=remove
+            CONST Boolean type=kotlin.Boolean value='true'
+      PROPERTY public open override /*1*/ val size: kotlin.Int
+        PROPERTY_GETTER public open override /*1*/ fun <get-size>(): kotlin.Int
+          BLOCK_BODY
+            THROW type=kotlin.Nothing
+              CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun containsAll(/*0*/ elements: kotlin.collections.Collection<kotlin.Any>): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=containsAll
+            CALL .isEmpty type=kotlin.Boolean operator=null
+              $this: GET_VAR elements type=kotlin.collections.Collection<kotlin.Any> operator=null
+      FUN public open override /*1*/ fun isEmpty(): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun get(/*0*/ index: kotlin.Int): kotlin.Any
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun add(/*0*/ element: kotlin.Any): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun addAll(/*0*/ elements: kotlin.collections.Collection<kotlin.Any>): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun addAll(/*0*/ index: kotlin.Int, /*1*/ elements: kotlin.collections.Collection<kotlin.Any>): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun removeAll(/*0*/ elements: kotlin.collections.Collection<kotlin.Any>): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun retainAll(/*0*/ elements: kotlin.collections.Collection<kotlin.Any>): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun clear(): kotlin.Unit
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun set(/*0*/ index: kotlin.Int, /*1*/ element: kotlin.Any): kotlin.Any
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun add(/*0*/ index: kotlin.Int, /*1*/ element: kotlin.Any): kotlin.Unit
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun removeAt(/*0*/ index: kotlin.Int): kotlin.Any
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun listIterator(): kotlin.collections.MutableListIterator<kotlin.Any>
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun listIterator(/*0*/ index: kotlin.Int): kotlin.collections.MutableListIterator<kotlin.Any>
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun subList(/*0*/ fromIndex: kotlin.Int, /*1*/ toIndex: kotlin.Int): kotlin.collections.MutableList<kotlin.Any>
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun iterator(): kotlin.collections.MutableIterator<kotlin.Any>
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val n: kotlin.collections.MutableList<kotlin.Any?>
+          TYPE_OP operator=CAST typeOperand=kotlin.collections.MutableList<kotlin.Any?>
+            GET_OBJECT NotEmptyList type=NotEmptyList
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .contains type=kotlin.Boolean operator=null
+            $this: GET_VAR n type=kotlin.collections.MutableList<kotlin.Any?> operator=null
+            element: CONST Null type=kotlin.Nothing? value='null'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 1'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .indexOf type=kotlin.Int operator=null
+                $this: GET_VAR n type=kotlin.collections.MutableList<kotlin.Any?> operator=null
+                element: CONST Null type=kotlin.Nothing? value='null'
+              arg1: CONST Int type=kotlin.Int value='-1'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 2'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .lastIndexOf type=kotlin.Int operator=null
+                $this: GET_VAR n type=kotlin.collections.MutableList<kotlin.Any?> operator=null
+                element: CONST Null type=kotlin.Nothing? value='null'
+              arg1: CONST Int type=kotlin.Int value='-1'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 3'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .contains type=kotlin.Boolean operator=null
+              $this: GET_VAR n type=kotlin.collections.MutableList<kotlin.Any?> operator=null
+              element: CONST String type=kotlin.String value=''
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 3'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .indexOf type=kotlin.Int operator=null
+                $this: GET_VAR n type=kotlin.collections.MutableList<kotlin.Any?> operator=null
+                element: CONST String type=kotlin.String value=''
+              arg1: CONST Int type=kotlin.Int value='0'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 4'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .lastIndexOf type=kotlin.Int operator=null
+                $this: GET_VAR n type=kotlin.collections.MutableList<kotlin.Any?> operator=null
+                element: CONST String type=kotlin.String value=''
+              arg1: CONST Int type=kotlin.Int value='0'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 5'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .remove type=kotlin.Boolean operator=null
+            $this: GET_VAR n type=kotlin.collections.MutableList<kotlin.Any?> operator=null
+            element: CONST Null type=kotlin.Nothing? value='null'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 6'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .remove type=kotlin.Boolean operator=null
+              $this: GET_VAR n type=kotlin.collections.MutableList<kotlin.Any?> operator=null
+              element: CONST String type=kotlin.String value=''
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 7'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

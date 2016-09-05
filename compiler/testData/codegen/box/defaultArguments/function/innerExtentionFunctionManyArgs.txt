@@ -1,0 +1,900 @@
+MODULE <test-module>
+  FILE /innerExtentionFunctionManyArgs.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public final fun kotlin.Int.foo(/*0*/ a: kotlin.Int = ..., /*1*/ b: kotlin.Int = ..., /*2*/ c: kotlin.Int = ..., /*3*/ d: kotlin.Int = ..., /*4*/ e: kotlin.Int = ..., /*5*/ f: kotlin.Int = ..., /*6*/ g: kotlin.Int = ..., /*7*/ h: kotlin.Int = ..., /*8*/ i: kotlin.Int = ..., /*9*/ j: kotlin.Int = ..., /*10*/ k: kotlin.Int = ..., /*11*/ l: kotlin.Int = ..., /*12*/ m: kotlin.Int = ..., /*13*/ n: kotlin.Int = ..., /*14*/ o: kotlin.Int = ..., /*15*/ p: kotlin.Int = ..., /*16*/ q: kotlin.Int = ..., /*17*/ r: kotlin.Int = ..., /*18*/ s: kotlin.Int = ..., /*19*/ t: kotlin.Int = ..., /*20*/ u: kotlin.Int = ..., /*21*/ v: kotlin.Int = ..., /*22*/ w: kotlin.Int = ..., /*23*/ x: kotlin.Int = ..., /*24*/ y: kotlin.Int = ..., /*25*/ z: kotlin.Int = ..., /*26*/ aa: kotlin.Int = ..., /*27*/ bb: kotlin.Int = ..., /*28*/ cc: kotlin.Int = ..., /*29*/ dd: kotlin.Int = ..., /*30*/ ee: kotlin.Int = ..., /*31*/ ff: kotlin.Int = ...): kotlin.String
+        a: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='1'
+        b: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='2'
+        c: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='3'
+        d: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='4'
+        e: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='5'
+        f: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='6'
+        g: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='7'
+        h: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='8'
+        i: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='9'
+        j: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='10'
+        k: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='11'
+        l: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='12'
+        m: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='13'
+        n: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='14'
+        o: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='15'
+        p: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='16'
+        q: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='17'
+        r: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='18'
+        s: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='19'
+        t: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='20'
+        u: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='21'
+        v: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='22'
+        w: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='23'
+        x: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='24'
+        y: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='25'
+        z: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='26'
+        aa: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='27'
+        bb: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='28'
+        cc: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='29'
+        dd: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='30'
+        ee: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='31'
+        ff: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='32'
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            STRING_CONCATENATION type=kotlin.String
+              GET_VAR a type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR b type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR c type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR d type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR e type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR f type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR g type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR h type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR i type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR j type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR k type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR l type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR m type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR n type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR o type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR p type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR q type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR r type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR s type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR t type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR u type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR v type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR w type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR x type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR y type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR z type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR aa type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR bb type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR cc type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR dd type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR ee type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=' '
+              GET_VAR ff type=kotlin.Int operator=null
+      FUN public final fun kotlin.String.bar(/*0*/ a: kotlin.Int = ..., /*1*/ b: kotlin.Int = ..., /*2*/ c: kotlin.Int = ..., /*3*/ d: kotlin.Int = ..., /*4*/ e: kotlin.Int = ..., /*5*/ f: kotlin.Int = ..., /*6*/ g: kotlin.Int = ..., /*7*/ h: kotlin.Int = ..., /*8*/ i: kotlin.Int = ..., /*9*/ j: kotlin.Int = ..., /*10*/ k: kotlin.Int = ..., /*11*/ l: kotlin.Int = ..., /*12*/ m: kotlin.Int = ..., /*13*/ n: kotlin.Int = ..., /*14*/ o: kotlin.Int = ..., /*15*/ p: kotlin.Int = ..., /*16*/ q: kotlin.Int = ..., /*17*/ r: kotlin.Int = ..., /*18*/ s: kotlin.Int = ..., /*19*/ t: kotlin.Int = ..., /*20*/ u: kotlin.Int = ..., /*21*/ v: kotlin.Int = ..., /*22*/ w: kotlin.Int = ..., /*23*/ x: kotlin.Int = ..., /*24*/ y: kotlin.Int = ..., /*25*/ z: kotlin.Int = ..., /*26*/ aa: kotlin.Int = ..., /*27*/ bb: kotlin.Int = ..., /*28*/ cc: kotlin.Int = ..., /*29*/ dd: kotlin.Int = ..., /*30*/ ee: kotlin.Int = ..., /*31*/ ff: kotlin.Int = ..., /*32*/ gg: kotlin.Int = ..., /*33*/ hh: kotlin.Int = ..., /*34*/ ii: kotlin.Int = ..., /*35*/ jj: kotlin.Int = ..., /*36*/ kk: kotlin.Int = ..., /*37*/ ll: kotlin.Int = ..., /*38*/ mm: kotlin.Int = ..., /*39*/ nn: kotlin.Int = ...): kotlin.String
+        a: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='1'
+        b: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='2'
+        c: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='3'
+        d: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='4'
+        e: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='5'
+        f: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='6'
+        g: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='7'
+        h: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='8'
+        i: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='9'
+        j: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='10'
+        k: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='11'
+        l: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='12'
+        m: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='13'
+        n: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='14'
+        o: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='15'
+        p: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='16'
+        q: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='17'
+        r: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='18'
+        s: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='19'
+        t: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='20'
+        u: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='21'
+        v: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='22'
+        w: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='23'
+        x: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='24'
+        y: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='25'
+        z: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='26'
+        aa: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='27'
+        bb: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='28'
+        cc: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='29'
+        dd: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='30'
+        ee: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='31'
+        ff: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='32'
+        gg: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='33'
+        hh: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='34'
+        ii: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='35'
+        jj: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='36'
+        kk: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='37'
+        ll: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='38'
+        mm: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='39'
+        nn: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='40'
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=bar
+            CALL .plus type=kotlin.String operator=PLUS
+              $this: STRING_CONCATENATION type=kotlin.String
+                GET_VAR a type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR b type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR c type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR d type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR e type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR f type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR g type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR h type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR i type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR j type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR k type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR l type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR m type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR n type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR o type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR p type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR q type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR r type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR s type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR t type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR u type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR v type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR w type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR x type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR y type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR z type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR aa type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR bb type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR cc type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR dd type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR ee type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR ff type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+              other: STRING_CONCATENATION type=kotlin.String
+                GET_VAR gg type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR hh type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR ii type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR jj type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR kk type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR ll type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR mm type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR nn type=kotlin.Int operator=null
+      FUN public final fun kotlin.Char.baz(/*0*/ a: kotlin.Int = ..., /*1*/ b: kotlin.Int = ..., /*2*/ c: kotlin.Int = ..., /*3*/ d: kotlin.Int = ..., /*4*/ e: kotlin.Int = ..., /*5*/ f: kotlin.Int = ..., /*6*/ g: kotlin.Int = ..., /*7*/ h: kotlin.Int = ..., /*8*/ i: kotlin.Int = ..., /*9*/ j: kotlin.Int = ..., /*10*/ k: kotlin.Int = ..., /*11*/ l: kotlin.Int = ..., /*12*/ m: kotlin.Int = ..., /*13*/ n: kotlin.Int = ..., /*14*/ o: kotlin.Int = ..., /*15*/ p: kotlin.Int = ..., /*16*/ q: kotlin.Int = ..., /*17*/ r: kotlin.Int = ..., /*18*/ s: kotlin.Int = ..., /*19*/ t: kotlin.Int = ..., /*20*/ u: kotlin.Int = ..., /*21*/ v: kotlin.Int = ..., /*22*/ w: kotlin.Int = ..., /*23*/ x: kotlin.Int = ..., /*24*/ y: kotlin.Int = ..., /*25*/ z: kotlin.Int = ..., /*26*/ aa: kotlin.Int = ..., /*27*/ bb: kotlin.Int = ..., /*28*/ cc: kotlin.Int = ..., /*29*/ dd: kotlin.Int = ..., /*30*/ ee: kotlin.Int = ..., /*31*/ ff: kotlin.Int = ..., /*32*/ gg: kotlin.Int = ..., /*33*/ hh: kotlin.Int = ..., /*34*/ ii: kotlin.Int = ..., /*35*/ jj: kotlin.Int = ..., /*36*/ kk: kotlin.Int = ..., /*37*/ ll: kotlin.Int = ..., /*38*/ mm: kotlin.Int = ..., /*39*/ nn: kotlin.Int = ..., /*40*/ oo: kotlin.Int = ..., /*41*/ pp: kotlin.Int = ..., /*42*/ qq: kotlin.Int = ..., /*43*/ rr: kotlin.Int = ..., /*44*/ ss: kotlin.Int = ..., /*45*/ tt: kotlin.Int = ..., /*46*/ uu: kotlin.Int = ..., /*47*/ vv: kotlin.Int = ..., /*48*/ ww: kotlin.Int = ..., /*49*/ xx: kotlin.Int = ..., /*50*/ yy: kotlin.Int = ..., /*51*/ zz: kotlin.Int = ..., /*52*/ aaa: kotlin.Int = ..., /*53*/ bbb: kotlin.Int = ..., /*54*/ ccc: kotlin.Int = ..., /*55*/ ddd: kotlin.Int = ..., /*56*/ eee: kotlin.Int = ..., /*57*/ fff: kotlin.Int = ..., /*58*/ ggg: kotlin.Int = ..., /*59*/ hhh: kotlin.Int = ..., /*60*/ iii: kotlin.Int = ..., /*61*/ jjj: kotlin.Int = ..., /*62*/ kkk: kotlin.Int = ..., /*63*/ lll: kotlin.Int = ..., /*64*/ mmm: kotlin.Int = ..., /*65*/ nnn: kotlin.Int = ..., /*66*/ ooo: kotlin.Int = ..., /*67*/ ppp: kotlin.Int = ..., /*68*/ qqq: kotlin.Int = ..., /*69*/ rrr: kotlin.Int = ...): kotlin.String
+        a: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='1'
+        b: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='2'
+        c: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='3'
+        d: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='4'
+        e: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='5'
+        f: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='6'
+        g: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='7'
+        h: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='8'
+        i: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='9'
+        j: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='10'
+        k: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='11'
+        l: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='12'
+        m: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='13'
+        n: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='14'
+        o: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='15'
+        p: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='16'
+        q: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='17'
+        r: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='18'
+        s: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='19'
+        t: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='20'
+        u: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='21'
+        v: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='22'
+        w: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='23'
+        x: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='24'
+        y: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='25'
+        z: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='26'
+        aa: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='27'
+        bb: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='28'
+        cc: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='29'
+        dd: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='30'
+        ee: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='31'
+        ff: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='32'
+        gg: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='33'
+        hh: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='34'
+        ii: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='35'
+        jj: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='36'
+        kk: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='37'
+        ll: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='38'
+        mm: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='39'
+        nn: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='40'
+        oo: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='41'
+        pp: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='42'
+        qq: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='43'
+        rr: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='44'
+        ss: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='45'
+        tt: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='46'
+        uu: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='47'
+        vv: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='48'
+        ww: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='49'
+        xx: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='50'
+        yy: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='51'
+        zz: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='52'
+        aaa: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='53'
+        bbb: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='54'
+        ccc: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='55'
+        ddd: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='56'
+        eee: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='57'
+        fff: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='58'
+        ggg: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='59'
+        hhh: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='60'
+        iii: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='61'
+        jjj: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='62'
+        kkk: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='63'
+        lll: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='64'
+        mmm: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='65'
+        nnn: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='66'
+        ooo: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='67'
+        ppp: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='68'
+        qqq: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='69'
+        rrr: EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='70'
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=baz
+            CALL .plus type=kotlin.String operator=PLUS
+              $this: CALL .plus type=kotlin.String operator=PLUS
+                $this: STRING_CONCATENATION type=kotlin.String
+                  GET_VAR a type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR b type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR c type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR d type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR e type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR f type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR g type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR h type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR i type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR j type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR k type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR l type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR m type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR n type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR o type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR p type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR q type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR r type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR s type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR t type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR u type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR v type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR w type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR x type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR y type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR z type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR aa type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR bb type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR cc type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR dd type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR ee type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR ff type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR gg type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR hh type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR ii type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR jj type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR kk type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                other: STRING_CONCATENATION type=kotlin.String
+                  GET_VAR ll type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR mm type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR nn type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR oo type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR pp type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR qq type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR rr type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR ss type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR tt type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR uu type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR vv type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR ww type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR xx type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR yy type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR zz type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR aaa type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR bbb type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR ccc type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR ddd type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR eee type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR fff type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR ggg type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR hhh type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR iii type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR jjj type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR kkk type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+                  GET_VAR lll type=kotlin.Int operator=null
+                  CONST String type=kotlin.String value=' '
+              other: STRING_CONCATENATION type=kotlin.String
+                GET_VAR mmm type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR nnn type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR ooo type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR ppp type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR qqq type=kotlin.Int operator=null
+                CONST String type=kotlin.String value=' '
+                GET_VAR rrr type=kotlin.Int operator=null
+      FUN public final fun test(): kotlin.String
+        BLOCK_BODY
+          VAR val test1: kotlin.String
+            CALL .foo type=kotlin.String operator=null
+              $this: THIS public final class A type=A
+              $receiver: CONST Int type=kotlin.Int value='1'
+              a: CONST Int type=kotlin.Int value='4'
+              e: CONST Int type=kotlin.Int value='8'
+              f: CONST Int type=kotlin.Int value='15'
+              w: CONST Int type=kotlin.Int value='16'
+              aa: CONST Int type=kotlin.Int value='23'
+              ff: CONST Int type=kotlin.Int value='42'
+          VAR val test2: kotlin.String
+            CALL .foo type=kotlin.String operator=null
+              $this: THIS public final class A type=A
+              $receiver: CONST Int type=kotlin.Int value='1'
+          VAR val test3: kotlin.String
+            CALL .foo type=kotlin.String operator=null
+              $this: THIS public final class A type=A
+              $receiver: CONST Int type=kotlin.Int value='1'
+              a: CONST Int type=kotlin.Int value='32'
+              b: CONST Int type=kotlin.Int value='31'
+              c: CONST Int type=kotlin.Int value='30'
+              d: CONST Int type=kotlin.Int value='29'
+              e: CONST Int type=kotlin.Int value='28'
+              f: CONST Int type=kotlin.Int value='27'
+              g: CONST Int type=kotlin.Int value='26'
+              h: CONST Int type=kotlin.Int value='25'
+              i: CONST Int type=kotlin.Int value='24'
+              j: CONST Int type=kotlin.Int value='23'
+              k: CONST Int type=kotlin.Int value='22'
+              l: CONST Int type=kotlin.Int value='21'
+              m: CONST Int type=kotlin.Int value='20'
+              n: CONST Int type=kotlin.Int value='19'
+              o: CONST Int type=kotlin.Int value='18'
+              p: CONST Int type=kotlin.Int value='17'
+              q: CONST Int type=kotlin.Int value='16'
+              r: CONST Int type=kotlin.Int value='15'
+              s: CONST Int type=kotlin.Int value='14'
+              t: CONST Int type=kotlin.Int value='13'
+              u: CONST Int type=kotlin.Int value='12'
+              v: CONST Int type=kotlin.Int value='11'
+              w: CONST Int type=kotlin.Int value='10'
+              x: CONST Int type=kotlin.Int value='9'
+              y: CONST Int type=kotlin.Int value='8'
+              z: CONST Int type=kotlin.Int value='7'
+              aa: CONST Int type=kotlin.Int value='6'
+              bb: CONST Int type=kotlin.Int value='5'
+              cc: CONST Int type=kotlin.Int value='4'
+              dd: CONST Int type=kotlin.Int value='3'
+              ee: CONST Int type=kotlin.Int value='2'
+              ff: CONST Int type=kotlin.Int value='1'
+          WHEN type=kotlin.Unit operator=IF
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: GET_VAR test1 type=kotlin.String operator=null
+                arg1: CONST String type=kotlin.String value='4 2 3 4 8 15 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 16 24 25 26 23 28 29 30 31 42'
+            then: BLOCK type=kotlin.Nothing operator=null
+              RETURN type=kotlin.Nothing from=test
+                STRING_CONCATENATION type=kotlin.String
+                  CONST String type=kotlin.String value='test1 = '
+                  GET_VAR test1 type=kotlin.String operator=null
+          WHEN type=kotlin.Unit operator=IF
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: GET_VAR test2 type=kotlin.String operator=null
+                arg1: CONST String type=kotlin.String value='1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32'
+            then: BLOCK type=kotlin.Nothing operator=null
+              RETURN type=kotlin.Nothing from=test
+                STRING_CONCATENATION type=kotlin.String
+                  CONST String type=kotlin.String value='test2 = '
+                  GET_VAR test2 type=kotlin.String operator=null
+          WHEN type=kotlin.Unit operator=IF
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: GET_VAR test3 type=kotlin.String operator=null
+                arg1: CONST String type=kotlin.String value='32 31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1'
+            then: BLOCK type=kotlin.Nothing operator=null
+              RETURN type=kotlin.Nothing from=test
+                STRING_CONCATENATION type=kotlin.String
+                  CONST String type=kotlin.String value='test3 = '
+                  GET_VAR test3 type=kotlin.String operator=null
+          VAR val test4: kotlin.String
+            CALL .bar type=kotlin.String operator=null
+              $this: THIS public final class A type=A
+              $receiver: CONST String type=kotlin.String value=''
+              a: CONST Int type=kotlin.Int value='54'
+              b: CONST Int type=kotlin.Int value='217'
+              h: CONST Int type=kotlin.Int value='236'
+              l: CONST Int type=kotlin.Int value='18'
+              q: CONST Int type=kotlin.Int value='3216'
+              u: CONST Int type=kotlin.Int value='8'
+              aa: CONST Int type=kotlin.Int value='22'
+              ff: CONST Int type=kotlin.Int value='33'
+              jj: CONST Int type=kotlin.Int value='44'
+              mm: CONST Int type=kotlin.Int value='55'
+          VAR val test5: kotlin.String
+            CALL .bar type=kotlin.String operator=null
+              $this: THIS public final class A type=A
+              $receiver: CONST String type=kotlin.String value=''
+          VAR val test6: kotlin.String
+            CALL .bar type=kotlin.String operator=null
+              $this: THIS public final class A type=A
+              $receiver: CONST String type=kotlin.String value=''
+              a: CONST Int type=kotlin.Int value='40'
+              b: CONST Int type=kotlin.Int value='39'
+              c: CONST Int type=kotlin.Int value='38'
+              d: CONST Int type=kotlin.Int value='37'
+              e: CONST Int type=kotlin.Int value='36'
+              f: CONST Int type=kotlin.Int value='35'
+              g: CONST Int type=kotlin.Int value='34'
+              h: CONST Int type=kotlin.Int value='33'
+              i: CONST Int type=kotlin.Int value='32'
+              j: CONST Int type=kotlin.Int value='31'
+              k: CONST Int type=kotlin.Int value='30'
+              l: CONST Int type=kotlin.Int value='29'
+              m: CONST Int type=kotlin.Int value='28'
+              n: CONST Int type=kotlin.Int value='27'
+              o: CONST Int type=kotlin.Int value='26'
+              p: CONST Int type=kotlin.Int value='25'
+              q: CONST Int type=kotlin.Int value='24'
+              r: CONST Int type=kotlin.Int value='23'
+              s: CONST Int type=kotlin.Int value='22'
+              t: CONST Int type=kotlin.Int value='21'
+              u: CONST Int type=kotlin.Int value='20'
+              v: CONST Int type=kotlin.Int value='19'
+              w: CONST Int type=kotlin.Int value='18'
+              x: CONST Int type=kotlin.Int value='17'
+              y: CONST Int type=kotlin.Int value='16'
+              z: CONST Int type=kotlin.Int value='15'
+              aa: CONST Int type=kotlin.Int value='14'
+              bb: CONST Int type=kotlin.Int value='13'
+              cc: CONST Int type=kotlin.Int value='12'
+              dd: CONST Int type=kotlin.Int value='11'
+              ee: CONST Int type=kotlin.Int value='10'
+              ff: CONST Int type=kotlin.Int value='9'
+              gg: CONST Int type=kotlin.Int value='8'
+              hh: CONST Int type=kotlin.Int value='7'
+              ii: CONST Int type=kotlin.Int value='6'
+              jj: CONST Int type=kotlin.Int value='5'
+              kk: CONST Int type=kotlin.Int value='4'
+              ll: CONST Int type=kotlin.Int value='3'
+              mm: CONST Int type=kotlin.Int value='2'
+              nn: CONST Int type=kotlin.Int value='1'
+          WHEN type=kotlin.Unit operator=IF
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: GET_VAR test4 type=kotlin.String operator=null
+                arg1: CONST String type=kotlin.String value='54 217 3 4 5 6 7 236 9 10 11 18 13 14 15 16 3216 18 19 20 8 22 23 24 25 26 22 28 29 30 31 33 33 34 35 44 37 38 55 40'
+            then: BLOCK type=kotlin.Nothing operator=null
+              RETURN type=kotlin.Nothing from=test
+                STRING_CONCATENATION type=kotlin.String
+                  CONST String type=kotlin.String value='test4 = '
+                  GET_VAR test4 type=kotlin.String operator=null
+          WHEN type=kotlin.Unit operator=IF
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: GET_VAR test5 type=kotlin.String operator=null
+                arg1: CONST String type=kotlin.String value='1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40'
+            then: BLOCK type=kotlin.Nothing operator=null
+              RETURN type=kotlin.Nothing from=test
+                STRING_CONCATENATION type=kotlin.String
+                  CONST String type=kotlin.String value='test5 = '
+                  GET_VAR test5 type=kotlin.String operator=null
+          WHEN type=kotlin.Unit operator=IF
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: GET_VAR test6 type=kotlin.String operator=null
+                arg1: CONST String type=kotlin.String value='40 39 38 37 36 35 34 33 32 31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1'
+            then: BLOCK type=kotlin.Nothing operator=null
+              RETURN type=kotlin.Nothing from=test
+                STRING_CONCATENATION type=kotlin.String
+                  CONST String type=kotlin.String value='test6 = '
+                  GET_VAR test6 type=kotlin.String operator=null
+          VAR val test7: kotlin.String
+            CALL .baz type=kotlin.String operator=null
+              $this: THIS public final class A type=A
+              $receiver: CONST Char type=kotlin.Char value='a'
+              a: CONST Int type=kotlin.Int value='5'
+              f: CONST Int type=kotlin.Int value='3'
+              w: CONST Int type=kotlin.Int value='1'
+              aa: CONST Int type=kotlin.Int value='71'
+              nn: CONST Int type=kotlin.Int value='2'
+              qq: CONST Int type=kotlin.Int value='15'
+              ww: CONST Int type=kotlin.Int value='97'
+              aaa: CONST Int type=kotlin.Int value='261258'
+              iii: CONST Int type=kotlin.Int value='3'
+              nnn: CONST Int type=kotlin.Int value='8'
+              rrr: CONST Int type=kotlin.Int value='7'
+          VAR val test8: kotlin.String
+            CALL .baz type=kotlin.String operator=null
+              $this: THIS public final class A type=A
+              $receiver: CONST Char type=kotlin.Char value='a'
+          VAR val test9: kotlin.String
+            CALL .baz type=kotlin.String operator=null
+              $this: THIS public final class A type=A
+              $receiver: CONST Char type=kotlin.Char value='a'
+              a: CONST Int type=kotlin.Int value='70'
+              b: CONST Int type=kotlin.Int value='69'
+              c: CONST Int type=kotlin.Int value='68'
+              d: CONST Int type=kotlin.Int value='67'
+              e: CONST Int type=kotlin.Int value='66'
+              f: CONST Int type=kotlin.Int value='65'
+              g: CONST Int type=kotlin.Int value='64'
+              h: CONST Int type=kotlin.Int value='63'
+              i: CONST Int type=kotlin.Int value='62'
+              j: CONST Int type=kotlin.Int value='61'
+              k: CONST Int type=kotlin.Int value='60'
+              l: CONST Int type=kotlin.Int value='59'
+              m: CONST Int type=kotlin.Int value='58'
+              n: CONST Int type=kotlin.Int value='57'
+              o: CONST Int type=kotlin.Int value='56'
+              p: CONST Int type=kotlin.Int value='55'
+              q: CONST Int type=kotlin.Int value='54'
+              r: CONST Int type=kotlin.Int value='53'
+              s: CONST Int type=kotlin.Int value='52'
+              t: CONST Int type=kotlin.Int value='51'
+              u: CONST Int type=kotlin.Int value='50'
+              v: CONST Int type=kotlin.Int value='49'
+              w: CONST Int type=kotlin.Int value='48'
+              x: CONST Int type=kotlin.Int value='47'
+              y: CONST Int type=kotlin.Int value='46'
+              z: CONST Int type=kotlin.Int value='45'
+              aa: CONST Int type=kotlin.Int value='44'
+              bb: CONST Int type=kotlin.Int value='43'
+              cc: CONST Int type=kotlin.Int value='42'
+              dd: CONST Int type=kotlin.Int value='41'
+              ee: CONST Int type=kotlin.Int value='40'
+              ff: CONST Int type=kotlin.Int value='39'
+              gg: CONST Int type=kotlin.Int value='38'
+              hh: CONST Int type=kotlin.Int value='37'
+              ii: CONST Int type=kotlin.Int value='36'
+              jj: CONST Int type=kotlin.Int value='35'
+              kk: CONST Int type=kotlin.Int value='34'
+              ll: CONST Int type=kotlin.Int value='33'
+              mm: CONST Int type=kotlin.Int value='32'
+              nn: CONST Int type=kotlin.Int value='31'
+              oo: CONST Int type=kotlin.Int value='30'
+              pp: CONST Int type=kotlin.Int value='29'
+              qq: CONST Int type=kotlin.Int value='28'
+              rr: CONST Int type=kotlin.Int value='27'
+              ss: CONST Int type=kotlin.Int value='26'
+              tt: CONST Int type=kotlin.Int value='25'
+              uu: CONST Int type=kotlin.Int value='24'
+              vv: CONST Int type=kotlin.Int value='23'
+              ww: CONST Int type=kotlin.Int value='22'
+              xx: CONST Int type=kotlin.Int value='21'
+              yy: CONST Int type=kotlin.Int value='20'
+              zz: CONST Int type=kotlin.Int value='19'
+              aaa: CONST Int type=kotlin.Int value='18'
+              bbb: CONST Int type=kotlin.Int value='17'
+              ccc: CONST Int type=kotlin.Int value='16'
+              ddd: CONST Int type=kotlin.Int value='15'
+              eee: CONST Int type=kotlin.Int value='14'
+              fff: CONST Int type=kotlin.Int value='13'
+              ggg: CONST Int type=kotlin.Int value='12'
+              hhh: CONST Int type=kotlin.Int value='11'
+              iii: CONST Int type=kotlin.Int value='10'
+              jjj: CONST Int type=kotlin.Int value='9'
+              kkk: CONST Int type=kotlin.Int value='8'
+              lll: CONST Int type=kotlin.Int value='7'
+              mmm: CONST Int type=kotlin.Int value='6'
+              nnn: CONST Int type=kotlin.Int value='5'
+              ooo: CONST Int type=kotlin.Int value='4'
+              ppp: CONST Int type=kotlin.Int value='3'
+              qqq: CONST Int type=kotlin.Int value='2'
+              rrr: CONST Int type=kotlin.Int value='1'
+          WHEN type=kotlin.Unit operator=IF
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: GET_VAR test7 type=kotlin.String operator=null
+                arg1: CALL .plus type=kotlin.String operator=PLUS
+                  $this: CONST String type=kotlin.String value='5 2 3 4 5 3 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 1 24 25 26 71 28 29 30 31 32 33 34 35 36 37 38 39 2 41 42 15 '
+                  other: CONST String type=kotlin.String value='44 45 46 47 48 97 50 51 52 261258 54 55 56 57 58 59 60 3 62 63 64 65 8 67 68 69 7'
+            then: BLOCK type=kotlin.Nothing operator=null
+              RETURN type=kotlin.Nothing from=test
+                STRING_CONCATENATION type=kotlin.String
+                  CONST String type=kotlin.String value='test7 = '
+                  GET_VAR test7 type=kotlin.String operator=null
+          WHEN type=kotlin.Unit operator=IF
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: GET_VAR test8 type=kotlin.String operator=null
+                arg1: CALL .plus type=kotlin.String operator=PLUS
+                  $this: CONST String type=kotlin.String value='1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 '
+                  other: CONST String type=kotlin.String value='43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70'
+            then: BLOCK type=kotlin.Nothing operator=null
+              RETURN type=kotlin.Nothing from=test
+                STRING_CONCATENATION type=kotlin.String
+                  CONST String type=kotlin.String value='test8 = '
+                  GET_VAR test8 type=kotlin.String operator=null
+          WHEN type=kotlin.Unit operator=IF
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: GET_VAR test9 type=kotlin.String operator=null
+                arg1: CALL .plus type=kotlin.String operator=PLUS
+                  $this: CONST String type=kotlin.String value='70 69 68 67 66 65 64 63 62 61 60 59 58 57 56 55 54 53 52 51 50 49 48 47 46 45 44 43 42 41 40 39 38 37 36 35 34 33 32 '
+                  other: CONST String type=kotlin.String value='31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1'
+            then: BLOCK type=kotlin.Nothing operator=null
+              RETURN type=kotlin.Nothing from=test
+                STRING_CONCATENATION type=kotlin.String
+                  CONST String type=kotlin.String value='test9 = '
+                  GET_VAR test9 type=kotlin.String operator=null
+          RETURN type=kotlin.Nothing from=test
+            CONST String type=kotlin.String value='OK'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .test type=kotlin.String operator=null
+            $this: CALL .<init> type=A operator=null

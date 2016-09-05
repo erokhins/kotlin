@@ -1,0 +1,43 @@
+MODULE <test-module>
+  FILE /kt257.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A</*0*/ T>(/*0*/ t: T)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD t type=kotlin.Unit operator=null
+            receiver: THIS public final class A</*0*/ T> type=A<T>
+            value: GET_VAR t type=T operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public final var t: T
+        EXPRESSION_BODY
+          GET_VAR t type=T operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B</*0*/ R>(/*0*/ r: R)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD r type=kotlin.Unit operator=null
+            receiver: THIS public final class B</*0*/ R> type=B<R>
+            value: GET_VAR r type=R operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+      PROPERTY public final val r: R
+        EXPRESSION_BODY
+          GET_VAR r type=R operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val ai: A<kotlin.Int>
+          CALL .<init> type=A<kotlin.Int> operator=null
+            t: CONST Int type=kotlin.Int value='1'
+        VAR val aai: A<A<kotlin.Int>>
+          CALL .<init> type=A<A<kotlin.Int>> operator=null
+            t: GET_VAR ai type=A<kotlin.Int> operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-t> type=kotlin.Int operator=GET_PROPERTY
+                $this: CALL .<get-t> type=A<kotlin.Int> operator=GET_PROPERTY
+                  $this: GET_VAR aai type=A<A<kotlin.Int>> operator=null
+              arg1: CONST Int type=kotlin.Int value='1'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -13,3 +13,5 @@ fun box(): String {
     if (result != 6) return "fail: $result"
     return "OK"
 }
+
+

@@ -24,3 +24,5 @@ class Test : First() {
 fun box(): String {
     return Test().doTest()
 }
+
+

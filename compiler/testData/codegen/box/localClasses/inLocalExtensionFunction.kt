@@ -22,3 +22,4 @@ class A(val s: String) {
 fun box() : String {
     return C("K").test(A("O"))
 }
+

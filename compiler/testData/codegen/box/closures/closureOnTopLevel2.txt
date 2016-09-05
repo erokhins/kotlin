@@ -1,0 +1,78 @@
+MODULE <test-module>
+  FILE /closureOnTopLevel2.kt
+    PROPERTY public val p: kotlin.String
+      EXPRESSION_BODY
+        CALL .invoke type=kotlin.String operator=null
+          $this: BLOCK type=() -> kotlin.String operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.String
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CONST String type=kotlin.String value='OK'
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+    PROPERTY public val getter: kotlin.String
+      PROPERTY_GETTER public fun <get-getter>(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=<get-getter>
+            CALL .invoke type=kotlin.String operator=null
+              $this: BLOCK type=() -> kotlin.String operator=LAMBDA
+                FUN local final fun <anonymous>(): kotlin.String
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CONST String type=kotlin.String value='OK'
+                CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+    FUN public fun f(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=f
+          CALL .invoke type=kotlin.String operator=null
+            $this: BLOCK type=() -> kotlin.String operator=LAMBDA
+              FUN local final fun <anonymous>(): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CONST String type=kotlin.String value='OK'
+              CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+    PROPERTY public val obj: () -> kotlin.String
+      EXPRESSION_BODY
+        BLOCK type=obj.<no name provided> operator=OBJECT_LITERAL
+          CLASS CLASS <no name provided>
+            CONSTRUCTOR public constructor <no name provided>()
+              BLOCK_BODY
+                DELEGATING_CONSTRUCTOR_CALL Any
+                INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+            FUN public open override /*1*/ fun invoke(): kotlin.String
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=invoke
+                  CONST String type=kotlin.String value='OK'
+          CALL .<init> type=obj.<no name provided> operator=OBJECT_LITERAL
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-p> type=kotlin.String operator=GET_PROPERTY
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='FAIL'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-getter> type=kotlin.String operator=GET_PROPERTY
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='FAIL'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .f type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='FAIL'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .invoke type=kotlin.String operator=INVOKE
+                $this: CALL .<get-obj> type=() -> kotlin.String operator=GET_PROPERTY
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='FAIL'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

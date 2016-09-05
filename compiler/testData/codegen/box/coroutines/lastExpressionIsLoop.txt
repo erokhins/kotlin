@@ -1,0 +1,162 @@
+MODULE <test-module>
+  FILE /lastExpressionIsLoop.kt
+    CLASS CLASS Controller
+      CONSTRUCTOR public constructor Controller()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Controller
+      PROPERTY public final var result: kotlin.String
+        EXPRESSION_BODY
+          CONST String type=kotlin.String value=''
+      PROPERTY public final var ok: kotlin.Boolean
+        EXPRESSION_BODY
+          CONST Boolean type=kotlin.Boolean value='false'
+      FUN public final suspend fun suspendHere(/*0*/ v: kotlin.String, /*1*/ x: kotlin.coroutines.Continuation<kotlin.Unit>): kotlin.Unit
+        BLOCK_BODY
+          BLOCK type=kotlin.Unit operator=PLUSEQ
+            VAR val tmp0_this: Controller
+              THIS public final class Controller type=Controller
+            CALL .<set-result> type=kotlin.Unit operator=PLUSEQ
+              $this: GET_VAR tmp0_this type=Controller operator=null
+              <set-?>: CALL .plus type=kotlin.String operator=PLUSEQ
+                $this: CALL .<get-result> type=kotlin.String operator=PLUSEQ
+                  $this: GET_VAR tmp0_this type=Controller operator=null
+                other: GET_VAR v type=kotlin.String operator=null
+          CALL .resume type=kotlin.Unit operator=null
+            $this: GET_VAR x type=kotlin.coroutines.Continuation<kotlin.Unit> operator=null
+            data: GET_OBJECT Unit type=kotlin.Unit
+      FUN public final operator fun handleResult(/*0*/ u: kotlin.Unit, /*1*/ v: kotlin.coroutines.Continuation<kotlin.Nothing>): kotlin.Unit
+        BLOCK_BODY
+          CALL .<set-ok> type=kotlin.Unit operator=EQ
+            $this: THIS public final class Controller type=Controller
+            <set-?>: CONST Boolean type=kotlin.Boolean value='true'
+    FUN public fun builder(/*0*/ coroutine c: Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit>): kotlin.String
+      BLOCK_BODY
+        VAR val controller: Controller
+          CALL .<init> type=Controller operator=null
+        CALL .resume type=kotlin.Unit operator=null
+          $this: CALL .invoke type=kotlin.coroutines.Continuation<kotlin.Unit> operator=INVOKE
+            $this: GET_VAR c type=Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit> operator=VARIABLE_AS_FUNCTION
+            p1: GET_VAR controller type=Controller operator=null
+          data: GET_OBJECT Unit type=kotlin.Unit
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .<get-ok> type=kotlin.Boolean operator=GET_PROPERTY
+              $this: GET_VAR controller type=Controller operator=null
+          then: THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.RuntimeException operator=null
+              p0: CONST String type=kotlin.String value='Fail ok'
+        RETURN type=kotlin.Nothing from=builder
+          CALL .<get-result> type=kotlin.String operator=GET_PROPERTY
+            $this: GET_VAR controller type=Controller operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val r1: kotlin.String
+          CALL .builder type=kotlin.String operator=null
+            c: TYPE_OP operator=IMPLICIT_CAST typeOperand=Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit>
+              BLOCK type=Controller.() -> kotlin.Unit operator=LAMBDA
+                FUN local final fun Controller.<anonymous>(): kotlin.Unit
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      BLOCK type=kotlin.Unit operator=FOR_LOOP
+                        VAR val tmp0_iterator: kotlin.collections.IntIterator
+                          CALL .iterator type=kotlin.collections.IntIterator operator=FOR_LOOP_ITERATOR
+                            $this: CALL .rangeTo type=kotlin.ranges.IntRange operator=RANGE
+                              $this: CONST Int type=kotlin.Int value='5'
+                              other: CONST Int type=kotlin.Int value='6'
+                        WHILE label=null operator=FOR_LOOP_INNER_WHILE
+                          condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+                            $this: GET_VAR tmp0_iterator type=kotlin.collections.IntIterator operator=null
+                          body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+                            VAR val i: kotlin.Int
+                              CALL .next type=kotlin.Int operator=FOR_LOOP_NEXT
+                                $this: GET_VAR tmp0_iterator type=kotlin.collections.IntIterator operator=null
+                            BLOCK type=kotlin.Unit operator=null
+                              CALL .suspendHere type=kotlin.Unit operator=null
+                                $this: $RECEIVER of: <anonymous> type=Controller
+                                v: CALL .toString type=kotlin.String operator=null
+                                  $this: GET_VAR i type=kotlin.Int operator=null
+                CALLABLE_REFERENCE <anonymous> type=Controller.() -> kotlin.Unit operator=LAMBDA
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR r1 type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='56'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 1: '
+              GET_VAR r1 type=kotlin.String operator=null
+        VAR val r2: kotlin.String
+          CALL .builder type=kotlin.String operator=null
+            c: TYPE_OP operator=IMPLICIT_CAST typeOperand=Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit>
+              BLOCK type=Controller.() -> kotlin.Unit operator=LAMBDA
+                FUN local final fun Controller.<anonymous>(): kotlin.Unit
+                  BLOCK_BODY
+                    VAR var i: kotlin.Int
+                      CONST Int type=kotlin.Int value='7'
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      WHILE label=null operator=WHILE_LOOP
+                        condition: CALL .LTEQ0 type=kotlin.Boolean operator=LTEQ
+                          arg0: CALL .compareTo type=kotlin.Int operator=LTEQ
+                            $this: GET_VAR i type=kotlin.Int operator=null
+                            other: CONST Int type=kotlin.Int value='8'
+                        body: BLOCK type=kotlin.Int operator=null
+                          CALL .suspendHere type=kotlin.Unit operator=null
+                            $this: $RECEIVER of: <anonymous> type=Controller
+                            v: CALL .toString type=kotlin.String operator=null
+                              $this: GET_VAR i type=kotlin.Int operator=null
+                          BLOCK type=kotlin.Int operator=POSTFIX_INCR
+                            VAR val tmp0: kotlin.Int
+                              GET_VAR i type=kotlin.Int operator=POSTFIX_INCR
+                            SET_VAR i type=kotlin.Unit operator=POSTFIX_INCR
+                              CALL .inc type=kotlin.Int operator=POSTFIX_INCR
+                                $this: GET_VAR tmp0 type=kotlin.Int operator=null
+                            GET_VAR tmp0 type=kotlin.Int operator=null
+                CALLABLE_REFERENCE <anonymous> type=Controller.() -> kotlin.Unit operator=LAMBDA
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR r2 type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='78'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 2: '
+              GET_VAR r2 type=kotlin.String operator=null
+        VAR val r3: kotlin.String
+          CALL .builder type=kotlin.String operator=null
+            c: TYPE_OP operator=IMPLICIT_CAST typeOperand=Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit>
+              BLOCK type=Controller.() -> kotlin.Unit operator=LAMBDA
+                FUN local final fun Controller.<anonymous>(): kotlin.Unit
+                  BLOCK_BODY
+                    VAR var i: kotlin.Int
+                      CONST Int type=kotlin.Int value='9'
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      DO_WHILE label=null operator=DO_WHILE_LOOP
+                        body: BLOCK type=kotlin.Unit operator=null
+                          CALL .suspendHere type=kotlin.Unit operator=null
+                            $this: $RECEIVER of: <anonymous> type=Controller
+                            v: CALL .toString type=kotlin.String operator=null
+                              $this: GET_VAR i type=kotlin.Int operator=null
+                          BLOCK type=kotlin.Int operator=POSTFIX_INCR
+                            VAR val tmp0: kotlin.Int
+                              GET_VAR i type=kotlin.Int operator=POSTFIX_INCR
+                            SET_VAR i type=kotlin.Unit operator=POSTFIX_INCR
+                              CALL .inc type=kotlin.Int operator=POSTFIX_INCR
+                                $this: GET_VAR tmp0 type=kotlin.Int operator=null
+                            GET_VAR tmp0 type=kotlin.Int operator=null
+                        condition: CALL .LTEQ0 type=kotlin.Boolean operator=LTEQ
+                          arg0: CALL .compareTo type=kotlin.Int operator=LTEQ
+                            $this: GET_VAR i type=kotlin.Int operator=null
+                            other: CONST Int type=kotlin.Int value='10'
+                CALLABLE_REFERENCE <anonymous> type=Controller.() -> kotlin.Unit operator=LAMBDA
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR r3 type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='910'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 3: '
+              GET_VAR r3 type=kotlin.String operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

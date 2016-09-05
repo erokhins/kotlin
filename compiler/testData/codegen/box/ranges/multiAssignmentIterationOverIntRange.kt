@@ -21,3 +21,5 @@ fun box(): String {
     if (squares != arrayListOf(1, 4, 9)) return "FAIL: $squares"
     return "OK"
 }
+
+

@@ -17,3 +17,5 @@ fun box(): String {
     val element = JetLabelReferenceExpression().getReferencedNameElement()
     return if (element is JetOperationReferenceExpression) "OK" else "fail"
 }
+
+

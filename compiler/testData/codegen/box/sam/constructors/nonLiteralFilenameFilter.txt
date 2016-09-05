@@ -1,0 +1,50 @@
+MODULE <test-module>
+  FILE /nonLiteralFilenameFilter.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val ACCEPT_NAME: kotlin.String = "test"
+          CONST String type=kotlin.String value='test'
+        VAR val WRONG_NAME: kotlin.String = "wrong"
+          CONST String type=kotlin.String value='wrong'
+        VAR val f: (java.io.File?) -> kotlin.Boolean
+          BLOCK type=(java.io.File?) -> kotlin.Boolean operator=LAMBDA
+            FUN local final fun <anonymous>(/*0*/ file: java.io.File?): kotlin.Boolean
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                    arg0: GET_VAR ACCEPT_NAME type=kotlin.String operator=null
+                    arg1: BLOCK type=kotlin.String? operator=SAFE_CALL
+                      VAR val tmp0_safe_receiver: java.io.File?
+                        GET_VAR file type=java.io.File? operator=null
+                      WHEN type=kotlin.String? operator=SAFE_CALL
+                        if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                          arg0: GET_VAR tmp0_safe_receiver type=java.io.File? operator=null
+                          arg1: CONST Null type=kotlin.Nothing? value='null'
+                        then: CONST Null type=kotlin.Nothing? value='null'
+                        else: CALL .getName type=kotlin.String! operator=null
+                          $this: GET_VAR tmp0_safe_receiver type=java.io.File? operator=null
+            CALLABLE_REFERENCE <anonymous> type=(java.io.File?) -> kotlin.Boolean operator=LAMBDA
+        VAR val filter: java.io.FileFilter
+          CALL .FileFilter type=java.io.FileFilter operator=null
+            function: GET_VAR f type=(java.io.File?) -> kotlin.Boolean operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .accept type=kotlin.Boolean operator=null
+              $this: GET_VAR filter type=java.io.FileFilter operator=null
+              p0: CALL .<init> type=java.io.File operator=null
+                p0: GET_VAR ACCEPT_NAME type=kotlin.String operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Wrong answer for '
+              GET_VAR ACCEPT_NAME type=kotlin.String operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .accept type=kotlin.Boolean operator=null
+            $this: GET_VAR filter type=java.io.FileFilter operator=null
+            p0: CALL .<init> type=java.io.File operator=null
+              p0: GET_VAR WRONG_NAME type=kotlin.String operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Wrong answer for '
+              GET_VAR WRONG_NAME type=kotlin.String operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

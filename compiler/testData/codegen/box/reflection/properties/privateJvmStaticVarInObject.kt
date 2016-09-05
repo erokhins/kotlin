@@ -25,3 +25,5 @@ fun box(): String {
     p.set(Obj, "OK")
     return p.get(Obj)
 }
+
+

@@ -67,3 +67,4 @@ fun <T> test3(vararg p: T): String {
     }
     return result
 }
+

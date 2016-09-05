@@ -6,3 +6,5 @@ fun box(): String {
     val (result) = a
     return result
 }
+
+

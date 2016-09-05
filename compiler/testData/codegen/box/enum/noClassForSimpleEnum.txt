@@ -1,0 +1,44 @@
+MODULE <test-module>
+  FILE /noClassForSimpleEnum.kt
+    CLASS ENUM_CLASS State
+      CONSTRUCTOR private constructor State()
+        BLOCK_BODY
+          ENUM_CONSTRUCTOR_CALL Enum super
+          INSTANCE_INITIALIZER_CALL classDescriptor=State
+      ENUM_ENTRY enum entry O
+        init: ENUM_CONSTRUCTOR_CALL State O
+      ENUM_ENTRY enum entry K
+        init: ENUM_CONSTRUCTOR_CALL State K
+      FUN public final /*synthesized*/ fun values(): kotlin.Array<State>
+        SYNTHETIC_BODY kind=ENUM_VALUES
+      FUN public final /*synthesized*/ fun valueOf(/*0*/ value: kotlin.String): State
+        SYNTHETIC_BODY kind=ENUM_VALUEOF
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val field: java.lang.reflect.Field!
+          CALL .getField type=java.lang.reflect.Field! operator=null
+            $this: CALL .<get-java> type=java.lang.Class<State> operator=GET_PROPERTY
+              $receiver: CLASS_REFERENCE State type=kotlin.reflect.KClass<State>
+            p0: CONST String type=kotlin.String value='O'
+        VAR val className: kotlin.String!
+          CALL .<get-name> type=kotlin.String! operator=GET_PROPERTY
+            $receiver: CALL .<get-javaClass> type=java.lang.Class<kotlin.Any!> operator=GET_PROPERTY
+              $receiver: CALL .get type=kotlin.Any! operator=null
+                $this: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Field
+                  GET_VAR field type=java.lang.reflect.Field! operator=null
+                p0: CONST Null type=kotlin.Nothing? value='null'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR className type=kotlin.String! operator=null
+              arg1: CONST String type=kotlin.String value='State'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail: '
+              GET_VAR className type=kotlin.String! operator=null
+        RETURN type=kotlin.Nothing from=box
+          STRING_CONCATENATION type=kotlin.String
+            CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+              $this: GET_ENUM_VALUE O type=State
+            CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+              $this: GET_ENUM_VALUE K type=State

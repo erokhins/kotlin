@@ -17,3 +17,4 @@ inline internal fun inlineFun(): String {
 fun box(): String {
     return inlineFun();
 }
+

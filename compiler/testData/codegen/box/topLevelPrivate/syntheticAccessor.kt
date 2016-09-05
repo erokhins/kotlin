@@ -9,3 +9,4 @@ fun box(): String {
         prop + test()
     }()
 }
+

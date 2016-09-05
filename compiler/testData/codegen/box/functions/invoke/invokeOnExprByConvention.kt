@@ -18,3 +18,4 @@ fun box(): String {
     if ({ -> A()}()(37) != "#37") return "fail7"
     return "OK"
 }
+

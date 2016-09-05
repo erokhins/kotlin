@@ -1,0 +1,33 @@
+MODULE <test-module>
+  FILE /shared.kt
+    FUN public infix fun </*0*/ T> T.mustBe(/*0*/ t: T): kotlin.Unit
+      BLOCK_BODY
+        CALL .assert type=kotlin.Unit operator=null
+          message: STRING_CONCATENATION type=kotlin.String
+            $RECEIVER of: mustBe type=T
+            CONST String type=kotlin.String value=' must be '
+            GET_VAR t type=T operator=null
+          condition: BLOCK type=() -> kotlin.Boolean operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Boolean
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                    arg0: $RECEIVER of: mustBe type=T
+                    arg1: GET_VAR t type=T operator=null
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Boolean operator=LAMBDA
+    FUN public inline fun assert(/*0*/ message: kotlin.String, /*1*/ condition: () -> kotlin.Boolean): kotlin.Unit
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .invoke type=kotlin.Boolean operator=INVOKE
+              $this: GET_VAR condition type=() -> kotlin.Boolean operator=VARIABLE_AS_FUNCTION
+          then: THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.AssertionError operator=null
+              p0: GET_VAR message type=kotlin.String operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .mustBe type=kotlin.Unit operator=null
+          $receiver: CONST String type=kotlin.String value='lala'
+          t: CONST String type=kotlin.String value='lala'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

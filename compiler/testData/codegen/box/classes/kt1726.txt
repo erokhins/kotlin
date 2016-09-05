@@ -1,0 +1,54 @@
+MODULE <test-module>
+  FILE /kt1726.kt
+    CLASS CLASS Foo
+      CONSTRUCTOR public constructor Foo(/*0*/ state: kotlin.Int, /*1*/ f: (kotlin.Int) -> kotlin.Int)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD state type=kotlin.Unit operator=null
+            receiver: THIS public final class Foo type=Foo
+            value: GET_VAR state type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          SET_BACKING_FIELD f type=kotlin.Unit operator=null
+            receiver: THIS public final class Foo type=Foo
+            value: GET_VAR f type=(kotlin.Int) -> kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Foo
+      PROPERTY public final var state: kotlin.Int
+        EXPRESSION_BODY
+          GET_VAR state type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final val f: (kotlin.Int) -> kotlin.Int
+        EXPRESSION_BODY
+          GET_VAR f type=(kotlin.Int) -> kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public final fun next(): kotlin.Int
+        BLOCK_BODY
+          VAR val nextState: kotlin.Int
+            CALL .invoke type=kotlin.Int operator=INVOKE
+              $this: CALL .<get-f> type=(kotlin.Int) -> kotlin.Int operator=GET_PROPERTY
+                $this: THIS public final class Foo type=Foo
+              p1: CALL .<get-state> type=kotlin.Int operator=GET_PROPERTY
+                $this: THIS public final class Foo type=Foo
+          CALL .<set-state> type=kotlin.Unit operator=EQ
+            $this: THIS public final class Foo type=Foo
+            <set-?>: GET_VAR nextState type=kotlin.Int operator=null
+          RETURN type=kotlin.Nothing from=next
+            CALL .<get-state> type=kotlin.Int operator=GET_PROPERTY
+              $this: THIS public final class Foo type=Foo
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val f: Foo
+          CALL .<init> type=Foo operator=null
+            state: CONST Int type=kotlin.Int value='23'
+            f: BLOCK type=(kotlin.Int) -> kotlin.Int operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ x: kotlin.Int): kotlin.Int
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .times type=kotlin.Int operator=MUL
+                      $this: CONST Int type=kotlin.Int value='2'
+                      other: GET_VAR x type=kotlin.Int operator=null
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> kotlin.Int operator=LAMBDA
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CALL .next type=kotlin.Int operator=null
+                $this: GET_VAR f type=Foo operator=null
+              arg1: CONST Int type=kotlin.Int value='46'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='fail'

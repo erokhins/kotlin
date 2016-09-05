@@ -9,3 +9,5 @@ open class Derived : A by Base("OK")
 class Z : Derived()
 
 fun box() = Z().result
+
+

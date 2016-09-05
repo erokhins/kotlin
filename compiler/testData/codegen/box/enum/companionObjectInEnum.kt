@@ -20,3 +20,5 @@ fun box(): String {
     if (Game.scissors != Game.SCISSORS) return "Fail 6"
     return "OK"
 }
+
+

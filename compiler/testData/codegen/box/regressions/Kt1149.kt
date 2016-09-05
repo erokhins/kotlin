@@ -19,3 +19,5 @@ fun box(): String {
     list.forEach{ it.foo() }
     return if ("anonymous.foo()" == res[0]) "OK" else "fail"
 }
+
+

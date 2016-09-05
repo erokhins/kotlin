@@ -66,3 +66,5 @@ fun box(): String {
 
     return J.foo();
 }
+
+

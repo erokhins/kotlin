@@ -62,3 +62,5 @@ fun box() : String {
         res += x
     return if (res == 10100) "OK" else "fail"
 }
+
+

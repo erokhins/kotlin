@@ -9,3 +9,5 @@ fun <T> select(x: T, y: T): T = x ?: y
 fun foobar(e: En<*>) = select(A(), e)
 
 fun box() = "OK"
+
+

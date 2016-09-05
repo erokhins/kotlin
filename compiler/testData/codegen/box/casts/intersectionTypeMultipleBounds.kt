@@ -20,3 +20,4 @@ class C : A, B {
 }
 
 fun box(): String = bar(C())
+

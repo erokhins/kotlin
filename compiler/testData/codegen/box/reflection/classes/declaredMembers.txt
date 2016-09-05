@@ -1,0 +1,76 @@
+MODULE <test-module>
+  FILE /K.kt
+    CLASS CLASS K
+      CONSTRUCTOR public constructor K()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL J
+          INSTANCE_INITIALIZER_CALL classDescriptor=K
+      FUN public open fun publicKFun(): kotlin.Unit
+        BLOCK_BODY
+      FUN private final fun privateKFun(): kotlin.Unit
+        BLOCK_BODY
+      PROPERTY public final var publicKProp: kotlin.Unit
+        EXPRESSION_BODY
+          GET_OBJECT Unit type=kotlin.Unit
+      PROPERTY private final val privateKProp: kotlin.Unit
+        EXPRESSION_BODY
+          GET_OBJECT Unit type=kotlin.Unit
+    CLASS CLASS L
+      CONSTRUCTOR public constructor L()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL K
+          INSTANCE_INITIALIZER_CALL classDescriptor=L
+      FUN public final fun publicLFun(): kotlin.Unit
+        BLOCK_BODY
+      FUN private final fun privateLFun(): kotlin.Unit
+        BLOCK_BODY
+      PROPERTY public final val publicLProp: kotlin.Unit
+        EXPRESSION_BODY
+          GET_OBJECT Unit type=kotlin.Unit
+      PROPERTY private final var privateLProp: kotlin.Unit
+        EXPRESSION_BODY
+          GET_OBJECT Unit type=kotlin.Unit
+    FUN public inline fun </*0*/ reified T> test(/*0*/ vararg names: kotlin.String /*kotlin.Array<out kotlin.String>*/): kotlin.Unit
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .toSet type=kotlin.collections.Set<kotlin.String> operator=null
+            $receiver: GET_VAR names type=kotlin.Array<out kotlin.String> operator=null
+          actual: CALL .toSet type=kotlin.collections.Set<kotlin.String> operator=null
+            $receiver: CALL .map type=kotlin.collections.List<kotlin.String> operator=null
+              $receiver: CALL .<get-declaredMembers> type=kotlin.collections.Collection<kotlin.reflect.KCallable<*>> operator=GET_PROPERTY
+                $receiver: CLASS_REFERENCE T type=kotlin.reflect.KClass<T>
+              transform: BLOCK type=(kotlin.reflect.KCallable<*>) -> kotlin.String operator=LAMBDA
+                FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KCallable<*>): kotlin.String
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+                        $this: GET_VAR it type=kotlin.reflect.KCallable<*> operator=null
+                CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KCallable<*>) -> kotlin.String operator=LAMBDA
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .test type=kotlin.Unit operator=null
+          names: VARARG type=Array<out String> varargElementType=String
+            CONST String type=kotlin.String value='publicStaticI'
+            CONST String type=kotlin.String value='publicMemberI'
+            CONST String type=kotlin.String value='privateStaticI'
+            CONST String type=kotlin.String value='privateMemberI'
+        CALL .test type=kotlin.Unit operator=null
+          names: VARARG type=Array<out String> varargElementType=String
+            CONST String type=kotlin.String value='publicStaticJ'
+            CONST String type=kotlin.String value='publicMemberJ'
+            CONST String type=kotlin.String value='privateStaticJ'
+            CONST String type=kotlin.String value='privateMemberJ'
+        CALL .test type=kotlin.Unit operator=null
+          names: VARARG type=Array<out String> varargElementType=String
+            CONST String type=kotlin.String value='publicKFun'
+            CONST String type=kotlin.String value='privateKFun'
+            CONST String type=kotlin.String value='publicKProp'
+            CONST String type=kotlin.String value='privateKProp'
+        CALL .test type=kotlin.Unit operator=null
+          names: VARARG type=Array<out String> varargElementType=String
+            CONST String type=kotlin.String value='publicLFun'
+            CONST String type=kotlin.String value='privateLFun'
+            CONST String type=kotlin.String value='publicLProp'
+            CONST String type=kotlin.String value='privateLProp'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -8,3 +8,5 @@ fun foo(): Long {
 }
 
 fun box() = if (foo() == 4L) "OK" else "Fail"
+
+

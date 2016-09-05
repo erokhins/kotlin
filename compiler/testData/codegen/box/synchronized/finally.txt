@@ -1,0 +1,44 @@
+MODULE <test-module>
+  FILE /finally.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val obj: java.lang.Object
+          TYPE_OP operator=CAST typeOperand=java.lang.Object
+            CONST String type=kotlin.String value=''
+        VAR val e: java.lang.IllegalArgumentException
+          CALL .<init> type=java.lang.IllegalArgumentException operator=null
+        TRY_CATCH type=kotlin.Unit
+          try: BLOCK type=kotlin.Nothing operator=null
+            CALL .synchronized type=kotlin.Nothing operator=null
+              lock: GET_VAR obj type=java.lang.Object operator=null
+              block: BLOCK type=() -> kotlin.Nothing operator=LAMBDA
+                FUN local final fun <anonymous>(): kotlin.Nothing
+                  BLOCK_BODY
+                    THROW type=kotlin.Nothing
+                      GET_VAR e type=java.lang.IllegalArgumentException operator=null
+                CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Nothing operator=LAMBDA
+          catch caught: BLOCK type=kotlin.Unit operator=null
+            WHEN type=kotlin.Unit operator=IF
+              if: CALL .NOT type=kotlin.Boolean operator=EXCLEQEQ
+                arg0: CALL .EQEQEQ type=kotlin.Boolean operator=EXCLEQEQ
+                  arg0: GET_VAR caught type=kotlin.Throwable operator=null
+                  arg1: GET_VAR e type=java.lang.IllegalArgumentException operator=null
+              then: RETURN type=kotlin.Nothing from=box
+                STRING_CONCATENATION type=kotlin.String
+                  CONST String type=kotlin.String value='Fail: '
+                  GET_VAR caught type=kotlin.Throwable operator=null
+            CALL .assertThatThreadDoesNotOwnMonitor type=kotlin.Unit operator=null
+              obj: GET_VAR obj type=java.lang.Object operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'
+    FUN public fun assertThatThreadDoesNotOwnMonitor(/*0*/ obj: java.lang.Object): kotlin.Unit
+      BLOCK_BODY
+        TRY_CATCH type=kotlin.Unit
+          try: BLOCK type=kotlin.Nothing operator=null
+            CALL .wait type=kotlin.Unit operator=null
+              $this: GET_VAR obj type=java.lang.Object operator=null
+              p0: CONST Long type=kotlin.Long value='1'
+            THROW type=kotlin.Nothing
+              CALL .<init> type=java.lang.IllegalStateException operator=null
+                p0: CONST String type=kotlin.String value='Not owning a monitor!'
+          catch e: BLOCK type=kotlin.Unit operator=null

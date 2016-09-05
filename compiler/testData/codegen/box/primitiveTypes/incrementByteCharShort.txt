@@ -1,0 +1,68 @@
+MODULE <test-module>
+  FILE /incrementByteCharShort.kt
+    FUN public fun byteArg(/*0*/ b: kotlin.Byte): kotlin.Unit
+      BLOCK_BODY
+    FUN public fun charArg(/*0*/ c: kotlin.Char): kotlin.Unit
+      BLOCK_BODY
+    FUN public fun shortArg(/*0*/ s: kotlin.Short): kotlin.Unit
+      BLOCK_BODY
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR var b: kotlin.Byte
+          CALL .toByte type=kotlin.Byte operator=null
+            $this: CONST Int type=kotlin.Int value='42'
+        BLOCK type=kotlin.Byte operator=POSTFIX_INCR
+          VAR val tmp0: kotlin.Byte
+            GET_VAR b type=kotlin.Byte operator=POSTFIX_INCR
+          SET_VAR b type=kotlin.Unit operator=POSTFIX_INCR
+            CALL .inc type=kotlin.Byte operator=POSTFIX_INCR
+              $this: GET_VAR tmp0 type=kotlin.Byte operator=null
+          GET_VAR tmp0 type=kotlin.Byte operator=null
+        BLOCK type=kotlin.Byte operator=PREFIX_INCR
+          VAR val tmp1: kotlin.Byte
+            CALL .inc type=kotlin.Byte operator=PREFIX_INCR
+              $this: GET_VAR b type=kotlin.Byte operator=PREFIX_INCR
+          SET_VAR b type=kotlin.Unit operator=PREFIX_INCR
+            GET_VAR tmp1 type=kotlin.Byte operator=null
+          GET_VAR tmp1 type=kotlin.Byte operator=null
+        CALL .byteArg type=kotlin.Unit operator=null
+          b: GET_VAR b type=kotlin.Byte operator=null
+        VAR var c: kotlin.Char
+          CONST Char type=kotlin.Char value='x'
+        BLOCK type=kotlin.Char operator=POSTFIX_INCR
+          VAR val tmp2: kotlin.Char
+            GET_VAR c type=kotlin.Char operator=POSTFIX_INCR
+          SET_VAR c type=kotlin.Unit operator=POSTFIX_INCR
+            CALL .inc type=kotlin.Char operator=POSTFIX_INCR
+              $this: GET_VAR tmp2 type=kotlin.Char operator=null
+          GET_VAR tmp2 type=kotlin.Char operator=null
+        BLOCK type=kotlin.Char operator=PREFIX_INCR
+          VAR val tmp3: kotlin.Char
+            CALL .inc type=kotlin.Char operator=PREFIX_INCR
+              $this: GET_VAR c type=kotlin.Char operator=PREFIX_INCR
+          SET_VAR c type=kotlin.Unit operator=PREFIX_INCR
+            GET_VAR tmp3 type=kotlin.Char operator=null
+          GET_VAR tmp3 type=kotlin.Char operator=null
+        CALL .charArg type=kotlin.Unit operator=null
+          c: GET_VAR c type=kotlin.Char operator=null
+        VAR var s: kotlin.Short
+          CALL .toShort type=kotlin.Short operator=null
+            $this: CONST Int type=kotlin.Int value='239'
+        BLOCK type=kotlin.Short operator=POSTFIX_INCR
+          VAR val tmp4: kotlin.Short
+            GET_VAR s type=kotlin.Short operator=POSTFIX_INCR
+          SET_VAR s type=kotlin.Unit operator=POSTFIX_INCR
+            CALL .inc type=kotlin.Short operator=POSTFIX_INCR
+              $this: GET_VAR tmp4 type=kotlin.Short operator=null
+          GET_VAR tmp4 type=kotlin.Short operator=null
+        BLOCK type=kotlin.Short operator=PREFIX_INCR
+          VAR val tmp5: kotlin.Short
+            CALL .inc type=kotlin.Short operator=PREFIX_INCR
+              $this: GET_VAR s type=kotlin.Short operator=PREFIX_INCR
+          SET_VAR s type=kotlin.Unit operator=PREFIX_INCR
+            GET_VAR tmp5 type=kotlin.Short operator=null
+          GET_VAR tmp5 type=kotlin.Short operator=null
+        CALL .shortArg type=kotlin.Unit operator=null
+          s: GET_VAR s type=kotlin.Short operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

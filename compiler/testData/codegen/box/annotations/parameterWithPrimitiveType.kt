@@ -27,3 +27,5 @@ fun box(): String {
 }
 
 @Ann(1, 1, 1, 1.0.toFloat(), 1.0, 1, 'c', true) class MyClass
+
+

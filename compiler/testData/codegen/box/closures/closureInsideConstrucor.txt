@@ -1,0 +1,23 @@
+MODULE <test-module>
+  FILE /closureInsideConstrucor.kt
+    CLASS CLASS KModel
+      CONSTRUCTOR public constructor KModel()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=KModel
+      PROPERTY public final val sourcesInfo: kotlin.String
+      ANONYMOUS_INITIALIZER KModel
+        BLOCK_BODY
+          FUN local final fun relativePath(/*0*/ psiFile: kotlin.String): kotlin.String
+            BLOCK_BODY
+              RETURN type=kotlin.Nothing from=relativePath
+                GET_VAR psiFile type=kotlin.String operator=null
+          SET_BACKING_FIELD sourcesInfo type=kotlin.Unit operator=null
+            receiver: THIS public open class KModel type=KModel
+            value: CALL .relativePath type=kotlin.String operator=null
+              psiFile: CONST String type=kotlin.String value='OK'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .<get-sourcesInfo> type=kotlin.String operator=GET_PROPERTY
+            $this: CALL .<init> type=KModel operator=null

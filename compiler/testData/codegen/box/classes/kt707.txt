@@ -1,0 +1,59 @@
+MODULE <test-module>
+  FILE /kt707.kt
+    CLASS CLASS List
+      CONSTRUCTOR public constructor List</*0*/ T>(/*0*/ head: T, /*1*/ tail: List<T>? = ...)
+        tail: EXPRESSION_BODY
+          CONST Null type=kotlin.Nothing? value='null'
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD head type=kotlin.Unit operator=null
+            receiver: THIS public final class List</*0*/ T> type=List<T>
+            value: GET_VAR head type=T operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          SET_BACKING_FIELD tail type=kotlin.Unit operator=null
+            receiver: THIS public final class List</*0*/ T> type=List<T>
+            value: GET_VAR tail type=List<T>? operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=List
+      PROPERTY public final val head: T
+        EXPRESSION_BODY
+          GET_VAR head type=T operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final val tail: List<T>?
+        EXPRESSION_BODY
+          GET_VAR tail type=List<T>? operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    FUN public fun </*0*/ T> List<T>.mapHead(/*0*/ f: (T) -> T): List<T>
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=mapHead
+          CALL .<init> type=List<T> operator=null
+            head: CALL .invoke type=T operator=INVOKE
+              $this: GET_VAR f type=(T) -> T operator=VARIABLE_AS_FUNCTION
+              p1: CALL .<get-head> type=T operator=GET_PROPERTY
+                $this: $RECEIVER of: mapHead type=List<T>
+            tail: CONST Null type=kotlin.Nothing? value='null'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val a: kotlin.Int
+          CALL .<get-head> type=kotlin.Int operator=GET_PROPERTY
+            $this: CALL .mapHead type=List<kotlin.Int> operator=null
+              $receiver: CALL .<init> type=List<kotlin.Int> operator=null
+                head: CONST Int type=kotlin.Int value='1'
+              f: BLOCK type=(kotlin.Int) -> kotlin.Int operator=LAMBDA
+                FUN local final fun <anonymous>(/*0*/ it: kotlin.Int): kotlin.Int
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .times type=kotlin.Int operator=MUL
+                        $this: GET_VAR it type=kotlin.Int operator=null
+                        other: CONST Int type=kotlin.Int value='2'
+                CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> kotlin.Int operator=LAMBDA
+        BLOCK type=kotlin.Unit? operator=SAFE_CALL
+          VAR val tmp0_safe_receiver: java.io.PrintStream!
+            GET_BACKING_FIELD out type=java.io.PrintStream! operator=GET_PROPERTY
+          WHEN type=kotlin.Unit? operator=SAFE_CALL
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: GET_VAR tmp0_safe_receiver type=java.io.PrintStream! operator=null
+              arg1: CONST Null type=kotlin.Nothing? value='null'
+            then: CONST Null type=kotlin.Nothing? value='null'
+            else: CALL .println type=kotlin.Unit operator=null
+              $this: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.io.PrintStream
+                GET_VAR tmp0_safe_receiver type=java.io.PrintStream! operator=null
+              p0: GET_VAR a type=kotlin.Int operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -27,3 +27,5 @@ fun box(): String {
     assertEquals("A<java.lang.String>", y.javaClass.getGenericSuperclass()?.toString())
     return "OK"
 }
+
+

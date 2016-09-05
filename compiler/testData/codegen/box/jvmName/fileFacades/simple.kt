@@ -15,3 +15,5 @@ public fun foo(): String = "OK"
 // FILE: simple.kt
 
 fun box(): String = Bar.bar()
+
+

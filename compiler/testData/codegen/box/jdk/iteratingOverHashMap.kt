@@ -23,3 +23,4 @@ fun testIteratingOverMap2() : Boolean {
     }
     return map.get("a") == 2
 }
+

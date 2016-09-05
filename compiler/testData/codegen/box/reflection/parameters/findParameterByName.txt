@@ -1,0 +1,29 @@
+MODULE <test-module>
+  FILE /K.kt
+    FUN public fun foo(/*0*/ x: kotlin.Int): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo
+          GET_VAR x type=kotlin.Int operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .single type=kotlin.reflect.KParameter operator=null
+            $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction1<kotlin.Int, kotlin.Int> operator=null
+          actual: CALL .findParameterByName type=kotlin.reflect.KParameter? operator=null
+            $receiver: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction1<kotlin.Int, kotlin.Int> operator=null
+            name: CONST String type=kotlin.String value='x'
+        CALL .assertNull type=kotlin.Unit operator=null
+          actual: CALL .findParameterByName type=kotlin.reflect.KParameter? operator=null
+            $receiver: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction1<kotlin.Int, kotlin.Int> operator=null
+            name: CONST String type=kotlin.String value='y'
+        CALL .assertNull type=kotlin.Unit operator=null
+          actual: CALL .findParameterByName type=kotlin.reflect.KParameter? operator=null
+            $receiver: CALLABLE_REFERENCE bar type=kotlin.reflect.KFunction2<J, kotlin.Int, kotlin.Unit> operator=null
+            name: CONST String type=kotlin.String value='x'
+        CALL .assertNull type=kotlin.Unit operator=null
+          actual: CALL .findParameterByName type=kotlin.reflect.KParameter? operator=null
+            $receiver: CALLABLE_REFERENCE bar type=kotlin.reflect.KFunction2<J, kotlin.Int, kotlin.Unit> operator=null
+            name: CONST String type=kotlin.String value='y'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -25,3 +25,5 @@ fun box(): String {
     if (result != 10+20+30+40) return "Fail: $result"
     return "OK"
 }
+
+

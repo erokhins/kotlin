@@ -11,3 +11,4 @@ fun box(): String = OK
 package a
 
 val OK: String by lazy { "OK" }
+

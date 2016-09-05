@@ -10,3 +10,5 @@ object A {
 fun box(): String {
     return A.B.z
 }
+
+

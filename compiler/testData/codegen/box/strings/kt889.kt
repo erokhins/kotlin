@@ -7,3 +7,5 @@ fun box() : String {
    val s = "${1 + "a"}"
    return if(s == "a") "OK" else "fail"
 }
+
+

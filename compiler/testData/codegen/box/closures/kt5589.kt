@@ -3,3 +3,4 @@ fun box(): String {
     fun bar(y: String = x): String = y
     return bar()
 }
+

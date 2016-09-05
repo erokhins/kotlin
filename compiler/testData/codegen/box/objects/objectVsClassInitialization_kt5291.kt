@@ -22,3 +22,5 @@ fun box(): String {
     if (Obj.buffer.toString() != "Obj") return "Fail object"
     return "OK"
 }
+
+

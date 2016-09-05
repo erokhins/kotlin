@@ -15,3 +15,5 @@ fun box(): String {
     B(1).foo()
     return "OK"
 }
+
+

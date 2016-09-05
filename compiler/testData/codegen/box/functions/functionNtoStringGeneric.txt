@@ -1,0 +1,67 @@
+MODULE <test-module>
+  FILE /functionNtoStringGeneric.kt
+    FUN public fun </*0*/ T> bar(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=bar
+          CALL .toString type=kotlin.String operator=null
+            $this: BLOCK type=(T) -> T operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ t: T): T
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    GET_VAR t type=T operator=null
+              CALLABLE_REFERENCE <anonymous> type=(T) -> T operator=LAMBDA
+    CLASS CLASS Baz
+      CONSTRUCTOR public constructor Baz</*0*/ T, /*1*/ V>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Baz
+      FUN public final fun </*0*/ V : T> baz(/*0*/ v: V): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=baz
+            CALL .toString type=kotlin.String operator=null
+              $this: BLOCK type=(kotlin.collections.List<T>) -> V operator=ANONYMOUS_FUNCTION
+                FUN local final fun <no name provided>(/*0*/ t: kotlin.collections.List<T>): V
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<no name provided>
+                      GET_VAR v type=V operator=null
+                CALLABLE_REFERENCE <no name provided> type=(kotlin.collections.List<T>) -> V operator=ANONYMOUS_FUNCTION
+    CLASS CLASS Foo
+      CONSTRUCTOR public constructor Foo</*0*/ T, /*1*/ U : kotlin.collections.List<T>>(/*0*/ lambda: (T) -> U)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD lambda type=kotlin.Unit operator=null
+            receiver: THIS public open class Foo</*0*/ T, /*1*/ U : kotlin.collections.List<T>> type=Foo<T, U>
+            value: GET_VAR lambda type=(T) -> U operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Foo
+      PROPERTY public final val lambda: (T) -> U
+        EXPRESSION_BODY
+          GET_VAR lambda type=(T) -> U operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    CLASS CLASS Bar
+      CONSTRUCTOR public constructor Bar</*0*/ T>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Foo
+            lambda: BLOCK type=(T) -> kotlin.collections.List<T> operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: T): kotlin.collections.List<T>
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .listOf type=kotlin.collections.List<T> operator=null
+                      element: GET_VAR it type=T operator=null
+              CALLABLE_REFERENCE <anonymous> type=(T) -> kotlin.collections.List<T> operator=LAMBDA
+          INSTANCE_INITIALIZER_CALL classDescriptor=Bar
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='(T) -> T'
+          actual: CALL .bar type=kotlin.String operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='(kotlin.collections.List<T>) -> V'
+          actual: CALL .baz type=kotlin.String operator=null
+            $this: CALL .<init> type=Baz<kotlin.String, kotlin.Int> operator=null
+            v: CONST String type=kotlin.String value=''
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='(T) -> kotlin.collections.List<T>'
+          actual: CALL .toString type=kotlin.String operator=null
+            $this: CALL .<get-lambda> type=(kotlin.Int) -> kotlin.collections.List<kotlin.Int> operator=GET_PROPERTY
+              $this: CALL .<init> type=Bar<kotlin.Int> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -9,3 +9,4 @@ fun box(): String {
     A[0] += 1
     return "OK"
 }
+

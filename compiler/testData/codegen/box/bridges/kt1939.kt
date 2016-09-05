@@ -10,3 +10,5 @@ class Bar: Foo<String>(), Tr {
 }
 
 fun box(): String = if (Bar().hello("Reg") == "Hi Reg") "OK" else "Fail"
+
+

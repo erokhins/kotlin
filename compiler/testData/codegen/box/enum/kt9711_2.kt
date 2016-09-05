@@ -16,3 +16,4 @@ enum class IssueState {
 fun box(): String {
     return IssueState.FIXED.ToString()
 }
+

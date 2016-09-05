@@ -19,3 +19,4 @@ class X {
 fun box(): String {
     return X().test()
 }
+

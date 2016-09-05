@@ -21,3 +21,5 @@ class A(val descriptor : ClassDescriptor) {
 fun box(): String {
     return A(ClassDescriptorImpl()).result
 }
+
+

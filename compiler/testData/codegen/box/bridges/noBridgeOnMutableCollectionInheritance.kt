@@ -22,3 +22,5 @@ fun box(): String {
     r += a.foo().iterator().next()
     return if (r == "CCC") "OK" else "Fail: $r"
 }
+
+

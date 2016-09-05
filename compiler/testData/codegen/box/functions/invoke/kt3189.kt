@@ -13,3 +13,4 @@ class Bad(val a: () -> Int) {
 
     operator fun invoke(): Int = 2
 }
+

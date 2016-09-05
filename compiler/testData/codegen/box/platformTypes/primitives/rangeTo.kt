@@ -8,3 +8,4 @@ fun box(): String {
     if (sb.toString() != "23") return "Fail: $sb}"
     return "OK"
 }
+

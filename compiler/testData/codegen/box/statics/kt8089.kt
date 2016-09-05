@@ -19,3 +19,4 @@ class C {
 fun box(): String {
     return C.foo() + {C.bar2(); C.foo2()}()
 }
+

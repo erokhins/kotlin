@@ -11,3 +11,5 @@ open class A(val s: String) {
 }
 
 fun box(): String = A("Fail").F().s
+
+

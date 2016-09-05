@@ -7,3 +7,5 @@ fun foo(b: Boolean) =
 
 fun box(): String = if (foo(false) == 0 && foo(true) == 1) "OK" else "Fail"
 
+
+

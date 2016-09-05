@@ -1,0 +1,64 @@
+MODULE <test-module>
+  FILE /hashMap.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val map: kotlin.collections.MutableMap<kotlin.String, kotlin.Int>
+          CALL .<init> type=java.util.HashMap<kotlin.String, kotlin.Int> operator=null
+        CALL .put type=kotlin.Int? operator=null
+          $this: GET_VAR map type=kotlin.collections.MutableMap<kotlin.String, kotlin.Int> operator=null
+          key: CONST String type=kotlin.String value='a'
+          value: CONST Int type=kotlin.Int value='1'
+        CALL .put type=kotlin.Int? operator=null
+          $this: GET_VAR map type=kotlin.collections.MutableMap<kotlin.String, kotlin.Int> operator=null
+          key: CONST String type=kotlin.String value='bb'
+          value: CONST Int type=kotlin.Int value='2'
+        CALL .put type=kotlin.Int? operator=null
+          $this: GET_VAR map type=kotlin.collections.MutableMap<kotlin.String, kotlin.Int> operator=null
+          key: CONST String type=kotlin.String value='ccc'
+          value: CONST Int type=kotlin.Int value='3'
+        CALL .put type=kotlin.Int? operator=null
+          $this: GET_VAR map type=kotlin.collections.MutableMap<kotlin.String, kotlin.Int> operator=null
+          key: CONST String type=kotlin.String value='dddd'
+          value: CONST Int type=kotlin.Int value='4'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .get type=kotlin.Int? operator=null
+                $this: GET_VAR map type=kotlin.collections.MutableMap<kotlin.String, kotlin.Int> operator=null
+                key: CONST String type=kotlin.String value='a'
+              arg1: CONST Int type=kotlin.Int value='1'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 1'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_VAR map type=kotlin.collections.MutableMap<kotlin.String, kotlin.Int> operator=null
+              arg1: CONST Int type=kotlin.Int value='4'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 2'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .get type=kotlin.Int? operator=null
+                $this: GET_VAR map type=kotlin.collections.MutableMap<kotlin.String, kotlin.Int> operator=null
+                key: CONST String type=kotlin.String value='eeeee'
+              arg1: CONST Null type=kotlin.Nothing? value='null'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 3'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .not type=kotlin.Boolean operator=EXCL
+            $this: CALL .containsKey type=kotlin.Boolean operator=null
+              $this: GET_VAR map type=kotlin.collections.MutableMap<kotlin.String, kotlin.Int> operator=null
+              key: CONST String type=kotlin.String value='bb'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 4'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .contains type=kotlin.Boolean operator=null
+            $this: CALL .<get-keys> type=kotlin.collections.MutableSet<kotlin.String> operator=GET_PROPERTY
+              $this: GET_VAR map type=kotlin.collections.MutableMap<kotlin.String, kotlin.Int> operator=null
+            element: CONST String type=kotlin.String value='ffffff'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 5'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

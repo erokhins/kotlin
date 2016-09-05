@@ -1,0 +1,69 @@
+MODULE <test-module>
+  FILE /privateSetterKPropertyIsNotMutable.kt
+    CLASS OBJECT Delegate
+      CONSTRUCTOR private constructor Delegate()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Delegate
+      FUN public final operator fun getValue(/*0*/ thiz: My, /*1*/ property: kotlin.reflect.KProperty<*>): kotlin.String
+        BLOCK_BODY
+          WHEN type=kotlin.Unit operator=IF
+            if: TYPE_OP operator=NOT_INSTANCEOF typeOperand=kotlin.reflect.KMutableProperty<*>
+              GET_VAR property type=kotlin.reflect.KProperty<*> operator=null
+            then: RETURN type=kotlin.Nothing from=getValue
+              CONST String type=kotlin.String value='Fail: property is not a KMutableProperty'
+          TYPE_OP operator=CAST typeOperand=kotlin.reflect.KMutableProperty1<My, kotlin.String>
+            GET_VAR property type=kotlin.reflect.KProperty<*> operator=null
+          TRY_CATCH type=kotlin.Unit
+            try: BLOCK type=kotlin.Nothing operator=null
+              CALL .set type=kotlin.Unit operator=null
+                $this: TYPE_OP operator=IMPLICIT_CAST typeOperand=kotlin.reflect.KMutableProperty1<My, kotlin.String>
+                  GET_VAR property type=kotlin.reflect.KProperty<*> operator=null
+                receiver: GET_VAR thiz type=My operator=null
+                value: CONST String type=kotlin.String value=''
+              RETURN type=kotlin.Nothing from=getValue
+                CONST String type=kotlin.String value='Fail: property.set should cause IllegalCallableAccessException'
+            catch e: BLOCK type=kotlin.Unit operator=null
+          CALL .<set-accessible> type=kotlin.Unit operator=EQ
+            $receiver: GET_VAR property type=kotlin.reflect.KProperty<*> operator=null
+            value: CONST Boolean type=kotlin.Boolean value='true'
+          CALL .set type=kotlin.Unit operator=null
+            $this: TYPE_OP operator=IMPLICIT_CAST typeOperand=kotlin.reflect.KMutableProperty1<My, kotlin.String>
+              GET_VAR property type=kotlin.reflect.KProperty<*> operator=null
+            receiver: GET_VAR thiz type=My operator=null
+            value: CONST String type=kotlin.String value=''
+          RETURN type=kotlin.Nothing from=getValue
+            CONST String type=kotlin.String value='OK'
+      FUN public final operator fun setValue(/*0*/ thiz: My, /*1*/ property: kotlin.reflect.KProperty<*>, /*2*/ value: kotlin.String): kotlin.Unit
+        BLOCK_BODY
+    CLASS CLASS My
+      CONSTRUCTOR public constructor My()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=My
+      PROPERTY public final var delegate: kotlin.String
+        delegate: PROPERTY val `delegate$delegate`: Delegate
+          EXPRESSION_BODY
+            GET_OBJECT Delegate type=Delegate
+        PROPERTY_GETTER public final fun <get-delegate>(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-delegate>
+              CALL .getValue type=kotlin.String operator=null
+                $this: GET_BACKING_FIELD delegate$delegate type=Delegate operator=null
+                  receiver: THIS public final class My type=My
+                thiz: THIS public final class My type=My
+                property: CALLABLE_REFERENCE delegate type=kotlin.reflect.KMutableProperty1<My, kotlin.String> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+        PROPERTY_SETTER private final fun <set-delegate>(/*0*/ <set-?>: kotlin.String): kotlin.Unit
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<set-delegate>
+              CALL .setValue type=kotlin.Unit operator=null
+                $this: GET_BACKING_FIELD delegate$delegate type=Delegate operator=null
+                  receiver: THIS public final class My type=My
+                thiz: THIS public final class My type=My
+                property: CALLABLE_REFERENCE delegate type=kotlin.reflect.KMutableProperty1<My, kotlin.String> operator=PROPERTY_REFERENCE_FOR_DELEGATE
+                value: GET_VAR <set-?> type=kotlin.String operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .<get-delegate> type=kotlin.String operator=GET_PROPERTY
+            $this: CALL .<init> type=My operator=null

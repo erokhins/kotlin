@@ -9,3 +9,4 @@ fun box(): String {
 
     return if (result == 6) "OK" else "fail: $result"
 }
+

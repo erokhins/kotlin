@@ -1,0 +1,121 @@
+MODULE <test-module>
+  FILE /lambdaParameters.kt
+    CLASS CLASS Controller
+      CONSTRUCTOR public constructor Controller()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Controller
+      FUN public final suspend fun suspendHere(/*0*/ v: kotlin.String, /*1*/ x: kotlin.coroutines.Continuation<kotlin.String>): kotlin.Unit
+        BLOCK_BODY
+          CALL .resume type=kotlin.Unit operator=null
+            $this: GET_VAR x type=kotlin.coroutines.Continuation<kotlin.String> operator=null
+            data: GET_VAR v type=kotlin.String operator=null
+    FUN public fun builder(/*0*/ coroutine c: Controller.(kotlin.Long, kotlin.String) -> kotlin.coroutines.Continuation<kotlin.Unit>): kotlin.Unit
+      BLOCK_BODY
+        CALL .resume type=kotlin.Unit operator=null
+          $this: CALL .invoke type=kotlin.coroutines.Continuation<kotlin.Unit> operator=INVOKE
+            $this: GET_VAR c type=Controller.(kotlin.Long, kotlin.String) -> kotlin.coroutines.Continuation<kotlin.Unit> operator=VARIABLE_AS_FUNCTION
+            p1: CALL .<init> type=Controller operator=null
+            p2: CONST Long type=kotlin.Long value='56'
+            p3: CONST String type=kotlin.String value='OK'
+          data: GET_OBJECT Unit type=kotlin.Unit
+    FUN public fun noinline(/*0*/ l: () -> kotlin.String): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=noinline
+          CALL .invoke type=kotlin.String operator=INVOKE
+            $this: GET_VAR l type=() -> kotlin.String operator=VARIABLE_AS_FUNCTION
+    FUN public inline fun inline(/*0*/ l: () -> kotlin.String): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=inline
+          CALL .invoke type=kotlin.String operator=INVOKE
+            $this: GET_VAR l type=() -> kotlin.String operator=VARIABLE_AS_FUNCTION
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR var result: kotlin.String
+          CONST String type=kotlin.String value=''
+        CALL .builder type=kotlin.Unit operator=null
+          c: TYPE_OP operator=IMPLICIT_CAST typeOperand=Controller.(kotlin.Long, kotlin.String) -> kotlin.coroutines.Continuation<kotlin.Unit>
+            BLOCK type=Controller.(kotlin.Long, kotlin.String) -> kotlin.Unit operator=LAMBDA
+              FUN local final fun Controller.<anonymous>(/*0*/ l: kotlin.Long, /*1*/ s: kotlin.String): kotlin.Unit
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    SET_VAR result type=kotlin.Unit operator=EQ
+                      CALL .suspendHere type=kotlin.String operator=null
+                        $this: $RECEIVER of: <anonymous> type=Controller
+                        v: CALL .plus type=kotlin.String operator=PLUS
+                          $this: CALL .plus type=kotlin.String operator=PLUS
+                            $this: GET_VAR s type=kotlin.String operator=null
+                            other: CONST String type=kotlin.String value='#'
+                          other: GET_VAR l type=kotlin.Long operator=null
+              CALLABLE_REFERENCE <anonymous> type=Controller.(kotlin.Long, kotlin.String) -> kotlin.Unit operator=LAMBDA
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR result type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='OK#56'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 1: '
+              GET_VAR result type=kotlin.String operator=null
+        CALL .builder type=kotlin.Unit operator=null
+          c: TYPE_OP operator=IMPLICIT_CAST typeOperand=Controller.(kotlin.Long, kotlin.String) -> kotlin.coroutines.Continuation<kotlin.Unit>
+            BLOCK type=Controller.(kotlin.Long, kotlin.String) -> kotlin.Unit operator=LAMBDA
+              FUN local final fun Controller.<anonymous>(/*0*/ l: kotlin.Long, /*1*/ s: kotlin.String): kotlin.Unit
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    SET_VAR result type=kotlin.Unit operator=EQ
+                      CALL .suspendHere type=kotlin.String operator=null
+                        $this: $RECEIVER of: <anonymous> type=Controller
+                        v: CALL .noinline type=kotlin.String operator=null
+                          l: BLOCK type=() -> kotlin.String operator=LAMBDA
+                            FUN local final fun <anonymous>(): kotlin.String
+                              BLOCK_BODY
+                                RETURN type=kotlin.Nothing from=<anonymous>
+                                  CALL .plus type=kotlin.String operator=PLUS
+                                    $this: CALL .plus type=kotlin.String operator=PLUS
+                                      $this: GET_VAR s type=kotlin.String operator=null
+                                      other: CONST String type=kotlin.String value='#'
+                                    other: GET_VAR l type=kotlin.Long operator=null
+                            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+              CALLABLE_REFERENCE <anonymous> type=Controller.(kotlin.Long, kotlin.String) -> kotlin.Unit operator=LAMBDA
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR result type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='OK#56'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 2: '
+              GET_VAR result type=kotlin.String operator=null
+        CALL .builder type=kotlin.Unit operator=null
+          c: TYPE_OP operator=IMPLICIT_CAST typeOperand=Controller.(kotlin.Long, kotlin.String) -> kotlin.coroutines.Continuation<kotlin.Unit>
+            BLOCK type=Controller.(kotlin.Long, kotlin.String) -> kotlin.Unit operator=LAMBDA
+              FUN local final fun Controller.<anonymous>(/*0*/ l: kotlin.Long, /*1*/ s: kotlin.String): kotlin.Unit
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    SET_VAR result type=kotlin.Unit operator=EQ
+                      CALL .suspendHere type=kotlin.String operator=null
+                        $this: $RECEIVER of: <anonymous> type=Controller
+                        v: CALL .inline type=kotlin.String operator=null
+                          l: BLOCK type=() -> kotlin.String operator=LAMBDA
+                            FUN local final fun <anonymous>(): kotlin.String
+                              BLOCK_BODY
+                                RETURN type=kotlin.Nothing from=<anonymous>
+                                  CALL .plus type=kotlin.String operator=PLUS
+                                    $this: CALL .plus type=kotlin.String operator=PLUS
+                                      $this: GET_VAR s type=kotlin.String operator=null
+                                      other: CONST String type=kotlin.String value='#'
+                                    other: GET_VAR l type=kotlin.Long operator=null
+                            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+              CALLABLE_REFERENCE <anonymous> type=Controller.(kotlin.Long, kotlin.String) -> kotlin.Unit operator=LAMBDA
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR result type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='OK#56'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 3: '
+              GET_VAR result type=kotlin.String operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

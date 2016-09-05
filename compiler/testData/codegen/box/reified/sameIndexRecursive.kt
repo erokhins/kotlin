@@ -20,3 +20,5 @@ fun box(): String {
     assert(x.second.all { it == "abc" })
     return "OK"
 }
+
+

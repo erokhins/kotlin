@@ -6,3 +6,4 @@ fun box(): String {
   val a = A(0)
   return if (a.equals(a)) "fail" else "OK"
 }
+

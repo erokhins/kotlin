@@ -10,3 +10,5 @@ fun box(): String {
     val r = 1.toByte().toEnum(clazz)
     return if (r == Letters.B) "OK" else "Fail: $r"
 }
+
+

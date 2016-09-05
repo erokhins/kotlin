@@ -24,3 +24,5 @@ fun box() : String {
     assertEquals("abcdefghi", foo())
     return "OK"
 }
+
+

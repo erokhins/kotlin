@@ -1,0 +1,53 @@
+MODULE <test-module>
+  FILE /main.kt
+    CLASS CLASS Pair
+      CONSTRUCTOR public constructor Pair</*0*/ out X, /*1*/ out Y>(/*0*/ x: X, /*1*/ y: Y)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD x type=kotlin.Unit operator=null
+            receiver: THIS public final class Pair</*0*/ out X, /*1*/ out Y> type=Pair<X, Y>
+            value: GET_VAR x type=X operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          SET_BACKING_FIELD y type=kotlin.Unit operator=null
+            receiver: THIS public final class Pair</*0*/ out X, /*1*/ out Y> type=Pair<X, Y>
+            value: GET_VAR y type=Y operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Pair
+      PROPERTY public final val x: X
+        EXPRESSION_BODY
+          GET_VAR x type=X operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final val y: Y
+        EXPRESSION_BODY
+          GET_VAR y type=Y operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    CLASS CLASS Inv
+      CONSTRUCTOR public constructor Inv</*0*/ T>(/*0*/ x: T)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD x type=kotlin.Unit operator=null
+            receiver: THIS public final class Inv</*0*/ T> type=Inv<T>
+            value: GET_VAR x type=T operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Inv
+      PROPERTY public final val x: T
+        EXPRESSION_BODY
+          GET_VAR x type=T operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+    FUN public fun foo(): Inv<Pair<kotlin.CharSequence, kotlin.CharSequence>>
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo
+          CALL .<init> type=Inv<Pair<kotlin.CharSequence, kotlin.CharSequence>> operator=null
+            x: CALL .<init> type=Pair<kotlin.String, kotlin.String> operator=null
+              x: CONST String type=kotlin.String value='O'
+              y: CONST String type=kotlin.String value='K'
+    FUN public fun bar(/*0*/ inv: Inv<Pair<kotlin.CharSequence, kotlin.CharSequence>>): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=bar
+          CALL .plus type=kotlin.String operator=PLUS
+            $this: CALL .toString type=kotlin.String operator=null
+              $this: CALL .<get-x> type=kotlin.CharSequence operator=GET_PROPERTY
+                $this: CALL .<get-x> type=Pair<kotlin.CharSequence, kotlin.CharSequence> operator=GET_PROPERTY
+                  $this: GET_VAR inv type=Inv<Pair<kotlin.CharSequence, kotlin.CharSequence>> operator=null
+            other: CALL .<get-y> type=kotlin.CharSequence operator=GET_PROPERTY
+              $this: CALL .<get-x> type=Pair<kotlin.CharSequence, kotlin.CharSequence> operator=GET_PROPERTY
+                $this: GET_VAR inv type=Inv<Pair<kotlin.CharSequence, kotlin.CharSequence>> operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.String
+            CALL .test type=kotlin.String! operator=null

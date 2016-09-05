@@ -6,3 +6,5 @@ fun box() : String {
 fun sum(arg:Int, f :  () -> Int) : Int {
     return arg + f()
 }
+
+

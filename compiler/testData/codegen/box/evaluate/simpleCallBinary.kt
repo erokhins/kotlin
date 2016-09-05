@@ -26,3 +26,5 @@ fun box(): String {
     if (annotation.p5 != prop5) return "fail 5, expected = ${prop5}, actual = ${annotation.p5}"
     return "OK"
 }
+
+

@@ -19,3 +19,5 @@ fun box(): String {
     if (a.get(0) != "StringList.get()") return "Fail #3"
     return "OK"
 }
+
+

@@ -15,3 +15,5 @@ class A {
 }
 
 fun box(): String = A().bar().toString()
+
+

@@ -1,0 +1,33 @@
+MODULE <test-module>
+  FILE /threeLevelsDifferentSignatures.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        FUN local final fun foo(/*0*/ x: kotlin.Int, /*1*/ s: kotlin.String): kotlin.String
+          BLOCK_BODY
+            FUN local final fun bar(/*0*/ y: kotlin.Int): kotlin.Unit
+              BLOCK_BODY
+                FUN local final fun baz(/*0*/ z: kotlin.Int, /*1*/ k: kotlin.Int): kotlin.Unit
+                  BLOCK_BODY
+                    CALL .foo type=kotlin.String operator=null
+                      x: CALL .plus type=kotlin.Int operator=PLUS
+                        $this: CALL .minus type=kotlin.Int operator=MINUS
+                          $this: GET_VAR x type=kotlin.Int operator=null
+                          other: CONST Int type=kotlin.Int value='1'
+                        other: GET_VAR k type=kotlin.Int operator=null
+                      s: CONST String type=kotlin.String value='Fail'
+                CALL .baz type=kotlin.Unit operator=null
+                  z: GET_VAR y type=kotlin.Int operator=null
+                  k: CONST Int type=kotlin.Int value='0'
+            WHEN type=kotlin.Unit operator=IF
+              if: CALL .GT0 type=kotlin.Boolean operator=GT
+                arg0: CALL .compareTo type=kotlin.Int operator=GT
+                  $this: GET_VAR x type=kotlin.Int operator=null
+                  other: CONST Int type=kotlin.Int value='0'
+              then: CALL .bar type=kotlin.Unit operator=null
+                y: GET_VAR x type=kotlin.Int operator=null
+            RETURN type=kotlin.Nothing from=foo
+              GET_VAR s type=kotlin.String operator=null
+        RETURN type=kotlin.Nothing from=box
+          CALL .foo type=kotlin.String operator=null
+            x: CONST Int type=kotlin.Int value='1'
+            s: CONST String type=kotlin.String value='OK'

@@ -1,0 +1,37 @@
+MODULE <test-module>
+  FILE /nothisnoclosure.kt
+    FUN public fun foo(/*0*/ x: kotlin.Int): kotlin.Unit
+      BLOCK_BODY
+    FUN public fun loop(/*0*/ times: kotlin.Int): kotlin.Unit
+      BLOCK_BODY
+        VAR var left: kotlin.Int
+          GET_VAR times type=kotlin.Int operator=null
+        WHILE label=null operator=WHILE_LOOP
+          condition: CALL .GT0 type=kotlin.Boolean operator=GT
+            arg0: CALL .compareTo type=kotlin.Int operator=GT
+              $this: GET_VAR left type=kotlin.Int operator=null
+              other: CONST Int type=kotlin.Int value='0'
+          body: BLOCK type=kotlin.Unit operator=null
+            VAR val u: (kotlin.Int) -> kotlin.Unit
+              BLOCK type=(kotlin.Int) -> kotlin.Unit operator=LAMBDA
+                FUN local final fun <anonymous>(/*0*/ it: kotlin.Int): kotlin.Unit
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .foo type=kotlin.Unit operator=null
+                        x: GET_VAR it type=kotlin.Int operator=null
+                CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> kotlin.Unit operator=LAMBDA
+            CALL .invoke type=kotlin.Unit operator=INVOKE
+              $this: GET_VAR u type=(kotlin.Int) -> kotlin.Unit operator=VARIABLE_AS_FUNCTION
+              p1: BLOCK type=kotlin.Int operator=POSTFIX_DECR
+                VAR val tmp0: kotlin.Int
+                  GET_VAR left type=kotlin.Int operator=POSTFIX_DECR
+                SET_VAR left type=kotlin.Unit operator=POSTFIX_DECR
+                  CALL .dec type=kotlin.Int operator=POSTFIX_DECR
+                    $this: GET_VAR tmp0 type=kotlin.Int operator=null
+                GET_VAR tmp0 type=kotlin.Int operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .loop type=kotlin.Unit operator=null
+          times: CONST Int type=kotlin.Int value='5'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -11,3 +11,5 @@ public class Class: AbstractClass<String>() {
         get() = "OK"
 
 }
+
+

@@ -16,3 +16,4 @@ fun box(): String {
     val a = A()
     return a.getMyStr()
 }
+

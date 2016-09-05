@@ -7,3 +7,5 @@ class C : Tr<String> {
 }
 
 fun box() = C().v
+
+

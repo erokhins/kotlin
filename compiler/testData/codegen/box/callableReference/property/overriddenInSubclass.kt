@@ -7,3 +7,5 @@ class Derived : Base() {
 }
 
 fun box() = (Base::foo).get(Derived())
+
+

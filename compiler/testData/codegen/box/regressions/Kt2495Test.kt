@@ -15,3 +15,5 @@ fun box(): String {
     val result = f(list.iterator())
     return if (6 == result) "OK" else "fail"
 }
+
+

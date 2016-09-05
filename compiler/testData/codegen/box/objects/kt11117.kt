@@ -14,3 +14,4 @@ fun A.test(): String {
 fun box(): String {
     return A("O").test()
 }
+

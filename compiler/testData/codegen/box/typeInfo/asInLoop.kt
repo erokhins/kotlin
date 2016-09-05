@@ -8,3 +8,5 @@ fun foo(args: Array<String>) {
 }
 
 fun box() = "OK"
+
+

@@ -1,0 +1,118 @@
+MODULE <test-module>
+  FILE /nonTrivialMemberInSuperClass.kt
+    CLASS CLASS Base
+      CONSTRUCTOR public constructor Base()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Base
+      FUN public open override /*1*/ fun toString(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=toString
+            CONST String type=kotlin.String value='Fail'
+      FUN public open override /*1*/ fun hashCode(): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=hashCode
+            CONST Int type=kotlin.Int value='-42'
+      FUN public open override /*1*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=equals
+            CONST Boolean type=kotlin.Boolean value='false'
+    CLASS CLASS DataClass
+      CONSTRUCTOR public constructor DataClass(/*0*/ field: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Base
+          SET_BACKING_FIELD field type=kotlin.Unit operator=null
+            receiver: THIS public final data class DataClass : Base type=DataClass
+            value: GET_VAR field type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=DataClass
+      PROPERTY public final val field: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR field type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public final operator /*synthesized*/ fun component1(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=component1
+            CALL .<get-field> type=kotlin.String operator=GET_PROPERTY
+              $this: THIS public final data class DataClass : Base type=DataClass
+      FUN public final /*synthesized*/ fun copy(/*0*/ field: kotlin.String = ...): DataClass
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=copy
+            CALL .<init> type=DataClass operator=null
+              field: GET_VAR field type=kotlin.String operator=null
+      FUN public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=toString
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='DataClass('
+              CONST String type=kotlin.String value='field='
+              CALL .<get-field> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public final data class DataClass : Base type=DataClass
+              CONST String type=kotlin.String value=')'
+      FUN public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+        BLOCK_BODY
+          VAR val tmp0_result: kotlin.Int
+            CONST Int type=kotlin.Int value='0'
+          SET_VAR tmp0_result type=kotlin.Unit operator=EQ
+            CALL .hashCode type=kotlin.Int operator=null
+              $this: CALL .<get-field> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public final data class DataClass : Base type=DataClass
+          RETURN type=kotlin.Nothing from=hashCode
+            GET_VAR tmp0_result type=kotlin.Int operator=null
+      FUN public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+        BLOCK_BODY
+          WHEN type=kotlin.Unit operator=null
+            if: CALL .EQEQEQ type=kotlin.Boolean operator=EQEQEQ
+              arg0: THIS public final data class DataClass : Base type=DataClass
+              arg1: GET_VAR other type=kotlin.Any? operator=null
+            then: RETURN type=kotlin.Nothing from=equals
+              CONST Boolean type=kotlin.Boolean value='true'
+          WHEN type=kotlin.Unit operator=null
+            if: TYPE_OP operator=NOT_INSTANCEOF typeOperand=DataClass
+              GET_VAR other type=kotlin.Any? operator=null
+            then: RETURN type=kotlin.Nothing from=equals
+              CONST Boolean type=kotlin.Boolean value='false'
+          VAR val tmp0_other_with_cast: DataClass
+            TYPE_OP operator=CAST typeOperand=DataClass
+              GET_VAR other type=kotlin.Any? operator=null
+          WHEN type=kotlin.Unit operator=null
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .<get-field> type=kotlin.String operator=GET_PROPERTY
+                  $this: THIS public final data class DataClass : Base type=DataClass
+                arg1: CALL .<get-field> type=kotlin.String operator=GET_PROPERTY
+                  $this: GET_VAR tmp0_other_with_cast type=DataClass operator=null
+            then: RETURN type=kotlin.Nothing from=equals
+              CONST Boolean type=kotlin.Boolean value='false'
+          RETURN type=kotlin.Nothing from=equals
+            CONST Boolean type=kotlin.Boolean value='true'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val d: DataClass
+          CALL .<init> type=DataClass operator=null
+            field: CONST String type=kotlin.String value='x'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .toString type=kotlin.String operator=null
+                $this: GET_VAR d type=DataClass operator=null
+              arg1: CONST String type=kotlin.String value='DataClass(field=x)'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail toString'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .hashCode type=kotlin.Int operator=null
+                $this: GET_VAR d type=DataClass operator=null
+              arg1: CALL .hashCode type=kotlin.Int operator=null
+                $this: CONST String type=kotlin.String value='x'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail hashCode'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+            arg0: CALL .equals type=kotlin.Boolean operator=null
+              $this: GET_VAR d type=DataClass operator=null
+              other: GET_VAR d type=DataClass operator=null
+            arg1: CONST Boolean type=kotlin.Boolean value='false'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail equals'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

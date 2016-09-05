@@ -1,0 +1,135 @@
+MODULE <test-module>
+  FILE /nestedReifiedSignature.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A</*0*/ T1, /*1*/ T2, /*2*/ T3>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+    FUN public inline fun </*0*/ reified T, /*1*/ reified R> foo(): kotlin.Array<A<*, *, *>>
+      BLOCK_BODY
+        VAR val x: foo.<no name provided><T, R>
+          BLOCK type=foo.<no name provided><T, R> operator=OBJECT_LITERAL
+            CLASS CLASS <no name provided>
+              CONSTRUCTOR public constructor <no name provided>()
+                BLOCK_BODY
+                  DELEGATING_CONSTRUCTOR_CALL Any
+                  INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+              FUN public final inline fun </*0*/ reified T1, /*1*/ reified T> bar(): A<*, *, *>
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=bar
+                    BLOCK type=foo.<no name provided>.bar.<no name provided><T1, T, T, R> operator=OBJECT_LITERAL
+                      CLASS CLASS <no name provided>
+                        CONSTRUCTOR public constructor <no name provided>()
+                          BLOCK_BODY
+                            DELEGATING_CONSTRUCTOR_CALL A
+                            INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+                      CALL .<init> type=foo.<no name provided>.bar.<no name provided><T1, T, T, R> operator=OBJECT_LITERAL
+              FUN public final fun f1(): A<*, *, *>
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=f1
+                    CALL .bar type=A<*, *, *> operator=null
+                      $this: THIS local final class <no name provided> type=foo.<no name provided><T, R>
+              FUN public final fun f2(): A<*, *, *>
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=f2
+                    CALL .bar type=A<*, *, *> operator=null
+                      $this: THIS local final class <no name provided> type=foo.<no name provided><T, R>
+              FUN public final fun f3(): A<*, *, *>
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=f3
+                    CALL .bar type=A<*, *, *> operator=null
+                      $this: THIS local final class <no name provided> type=foo.<no name provided><T, R>
+              FUN public final fun f4(): A<*, *, *>
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=f4
+                    CALL .bar type=A<*, *, *> operator=null
+                      $this: THIS local final class <no name provided> type=foo.<no name provided><T, R>
+            CALL .<init> type=foo.<no name provided><T, R> operator=OBJECT_LITERAL
+        RETURN type=kotlin.Nothing from=foo
+          CALL .arrayOf type=kotlin.Array<A<*, *, *>> operator=null
+            elements: VARARG type=Array<out A<*, *, *>> varargElementType=A<*, *, *>
+              CALL .f1 type=A<*, *, *> operator=null
+                $this: GET_VAR x type=foo.<no name provided><T, R> operator=null
+              CALL .f2 type=A<*, *, *> operator=null
+                $this: GET_VAR x type=foo.<no name provided><T, R> operator=null
+              CALL .f3 type=A<*, *, *> operator=null
+                $this: GET_VAR x type=foo.<no name provided><T, R> operator=null
+              CALL .f4 type=A<*, *, *> operator=null
+                $this: GET_VAR x type=foo.<no name provided><T, R> operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val result: kotlin.Array<A<*, *, *>>
+          CALL .foo type=kotlin.Array<A<*, *, *>> operator=null
+        VAR val expected: kotlin.collections.List<kotlin.String>
+          CALL .map type=kotlin.collections.List<kotlin.String> operator=null
+            $receiver: CALL .arrayOf type=kotlin.Array<kotlin.Triple<kotlin.String, kotlin.String, kotlin.String>> operator=null
+              elements: VARARG type=Array<out Triple<String, String, String>> varargElementType=Triple<String, String, String>
+                CALL .<init> type=kotlin.Triple<kotlin.String, kotlin.String, kotlin.String> operator=null
+                  first: CONST String type=kotlin.String value='java.lang.Double'
+                  second: CONST String type=kotlin.String value='java.lang.Integer'
+                  third: CONST String type=kotlin.String value='java.lang.Integer'
+                CALL .<init> type=kotlin.Triple<kotlin.String, kotlin.String, kotlin.String> operator=null
+                  first: CONST String type=kotlin.String value='java.lang.Integer'
+                  second: CONST String type=kotlin.String value='java.lang.Double'
+                  third: CONST String type=kotlin.String value='java.lang.Integer'
+                CALL .<init> type=kotlin.Triple<kotlin.String, kotlin.String, kotlin.String> operator=null
+                  first: CONST String type=kotlin.String value='java.lang.Boolean'
+                  second: CONST String type=kotlin.String value='java.lang.Double'
+                  third: CONST String type=kotlin.String value='java.lang.Integer'
+                CALL .<init> type=kotlin.Triple<kotlin.String, kotlin.String, kotlin.String> operator=null
+                  first: CONST String type=kotlin.String value='java.lang.Double'
+                  second: CONST String type=kotlin.String value='java.lang.Boolean'
+                  third: CONST String type=kotlin.String value='java.lang.Integer'
+            transform: BLOCK type=(kotlin.Triple<kotlin.String, kotlin.String, kotlin.String>) -> kotlin.String operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.Triple<kotlin.String, kotlin.String, kotlin.String>): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    STRING_CONCATENATION type=kotlin.String
+                      CONST String type=kotlin.String value='A<'
+                      CALL .<get-first> type=kotlin.String operator=GET_PROPERTY
+                        $this: GET_VAR it type=kotlin.Triple<kotlin.String, kotlin.String, kotlin.String> operator=null
+                      CONST String type=kotlin.String value=', '
+                      CALL .<get-second> type=kotlin.String operator=GET_PROPERTY
+                        $this: GET_VAR it type=kotlin.Triple<kotlin.String, kotlin.String, kotlin.String> operator=null
+                      CONST String type=kotlin.String value=', '
+                      CALL .<get-third> type=kotlin.String operator=GET_PROPERTY
+                        $this: GET_VAR it type=kotlin.Triple<kotlin.String, kotlin.String, kotlin.String> operator=null
+                      CONST String type=kotlin.String value='>'
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.Triple<kotlin.String, kotlin.String, kotlin.String>) -> kotlin.String operator=LAMBDA
+        BLOCK type=kotlin.Unit operator=FOR_LOOP
+          VAR val tmp0_iterator: kotlin.collections.IntIterator
+            CALL .iterator type=kotlin.collections.IntIterator operator=FOR_LOOP_ITERATOR
+              $this: CALL .<get-indices> type=kotlin.ranges.IntRange operator=GET_PROPERTY
+                $receiver: GET_VAR expected type=kotlin.collections.List<kotlin.String> operator=null
+          WHILE label=null operator=FOR_LOOP_INNER_WHILE
+            condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+              $this: GET_VAR tmp0_iterator type=kotlin.collections.IntIterator operator=null
+            body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+              VAR val i: kotlin.Int
+                CALL .next type=kotlin.Int operator=FOR_LOOP_NEXT
+                  $this: GET_VAR tmp0_iterator type=kotlin.collections.IntIterator operator=null
+              BLOCK type=kotlin.Unit operator=null
+                CALL .assertEquals type=kotlin.Unit operator=null
+                  expected: CALL .get type=kotlin.String operator=GET_ARRAY_ELEMENT
+                    $this: GET_VAR expected type=kotlin.collections.List<kotlin.String> operator=null
+                    index: GET_VAR i type=kotlin.Int operator=null
+                  actual: BLOCK type=kotlin.String? operator=SAFE_CALL
+                    VAR val tmp1_safe_receiver: java.lang.reflect.Type!
+                      CALL .getGenericSuperclass type=java.lang.reflect.Type! operator=null
+                        $this: CALL .<get-javaClass> type=java.lang.Class<A<*, *, *>> operator=GET_PROPERTY
+                          $receiver: CALL .get type=A<*, *, *> operator=GET_ARRAY_ELEMENT
+                            $this: GET_VAR result type=kotlin.Array<A<*, *, *>> operator=null
+                            index: GET_VAR i type=kotlin.Int operator=null
+                    WHEN type=kotlin.String? operator=SAFE_CALL
+                      if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                        arg0: GET_VAR tmp1_safe_receiver type=java.lang.reflect.Type! operator=null
+                        arg1: CONST Null type=kotlin.Nothing? value='null'
+                      then: CONST Null type=kotlin.Nothing? value='null'
+                      else: CALL .toString type=kotlin.String operator=null
+                        $this: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=java.lang.reflect.Type
+                          GET_VAR tmp1_safe_receiver type=java.lang.reflect.Type! operator=null
+                  message: STRING_CONCATENATION type=kotlin.String
+                    GET_VAR i type=kotlin.Int operator=null
+                    CONST String type=kotlin.String value='-th element'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

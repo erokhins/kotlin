@@ -12,3 +12,4 @@ fun log(message: String) {
     val value = (System.getProperty("boxtest.log") ?: "") + message
     System.setProperty("boxtest.log", value)
 }
+

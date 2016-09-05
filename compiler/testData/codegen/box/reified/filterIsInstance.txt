@@ -1,0 +1,60 @@
+MODULE <test-module>
+  FILE /filterIsInstance.kt
+    FUN public inline fun </*0*/ reified T> kotlin.Array<kotlin.Any>.filterIsInstance(): kotlin.collections.List<T>
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=filterIsInstance
+          CALL .map type=kotlin.collections.List<T> operator=null
+            $receiver: CALL .filter type=kotlin.collections.List<kotlin.Any> operator=null
+              $receiver: $RECEIVER of: filterIsInstance type=kotlin.Array<kotlin.Any>
+              predicate: BLOCK type=(kotlin.Any) -> kotlin.Boolean operator=LAMBDA
+                FUN local final fun <anonymous>(/*0*/ it: kotlin.Any): kotlin.Boolean
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      TYPE_OP operator=INSTANCEOF typeOperand=T
+                        GET_VAR it type=kotlin.Any operator=null
+                CALLABLE_REFERENCE <anonymous> type=(kotlin.Any) -> kotlin.Boolean operator=LAMBDA
+            transform: BLOCK type=(kotlin.Any) -> T operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.Any): T
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    TYPE_OP operator=CAST typeOperand=T
+                      GET_VAR it type=kotlin.Any operator=null
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.Any) -> T operator=LAMBDA
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val src: kotlin.Array<kotlin.Any>
+          CALL .arrayOf type=kotlin.Array<kotlin.Any> operator=null
+            elements: VARARG type=Array<out Any> varargElementType=Any
+              CONST Int type=kotlin.Int value='1'
+              CONST Int type=kotlin.Int value='2'
+              CALL .toDouble type=kotlin.Double operator=null
+                $this: CONST Int type=kotlin.Int value='3'
+              CONST String type=kotlin.String value='abc'
+              CONST String type=kotlin.String value='cde'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .arrayListOf type=java.util.ArrayList<kotlin.Int> operator=null
+            elements: VARARG type=Array<out Int> varargElementType=Int
+              CONST Int type=kotlin.Int value='1'
+              CONST Int type=kotlin.Int value='2'
+          actual: CALL .filterIsInstance type=kotlin.collections.List<kotlin.Int> operator=null
+            $receiver: GET_VAR src type=kotlin.Array<kotlin.Any> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .arrayListOf type=java.util.ArrayList<kotlin.Double> operator=null
+            elements: VARARG type=Array<out Double> varargElementType=Double
+              CONST Double type=kotlin.Double value='3.0'
+          actual: CALL .filterIsInstance type=kotlin.collections.List<kotlin.Double> operator=null
+            $receiver: GET_VAR src type=kotlin.Array<kotlin.Any> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .arrayListOf type=java.util.ArrayList<kotlin.String> operator=null
+            elements: VARARG type=Array<out String> varargElementType=String
+              CONST String type=kotlin.String value='abc'
+              CONST String type=kotlin.String value='cde'
+          actual: CALL .filterIsInstance type=kotlin.collections.List<kotlin.String> operator=null
+            $receiver: GET_VAR src type=kotlin.Array<kotlin.Any> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .toList type=kotlin.collections.List<kotlin.Any> operator=null
+            $receiver: GET_VAR src type=kotlin.Array<kotlin.Any> operator=null
+          actual: CALL .filterIsInstance type=kotlin.collections.List<kotlin.Any> operator=null
+            $receiver: GET_VAR src type=kotlin.Array<kotlin.Any> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

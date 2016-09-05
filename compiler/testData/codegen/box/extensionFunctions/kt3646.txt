@@ -1,0 +1,34 @@
+MODULE <test-module>
+  FILE /kt3646.kt
+    FUN public fun test(/*0*/ cl: kotlin.Int.() -> kotlin.Int): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=test
+          CALL .invoke type=kotlin.Int operator=INVOKE
+            $this: GET_VAR cl type=kotlin.Int.() -> kotlin.Int operator=VARIABLE_AS_FUNCTION
+            $receiver: CONST Int type=kotlin.Int value='11'
+    CLASS CLASS Foo
+      CONSTRUCTOR public constructor Foo()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Foo
+      PROPERTY public final val a: kotlin.Int
+        EXPRESSION_BODY
+          CALL .test type=kotlin.Int operator=null
+            cl: BLOCK type=kotlin.Int.() -> kotlin.Int operator=LAMBDA
+              FUN local final fun kotlin.Int.<anonymous>(): kotlin.Int
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    $RECEIVER of: <anonymous> type=kotlin.Int
+              CALLABLE_REFERENCE <anonymous> type=kotlin.Int.() -> kotlin.Int operator=LAMBDA
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-a> type=kotlin.Int operator=GET_PROPERTY
+                $this: CALL .<init> type=Foo operator=null
+              arg1: CONST Int type=kotlin.Int value='11'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

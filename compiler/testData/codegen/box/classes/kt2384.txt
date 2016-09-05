@@ -1,0 +1,36 @@
+MODULE <test-module>
+  FILE /kt2384.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      CLASS OBJECT Companion
+        CONSTRUCTOR private constructor Companion()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Companion
+        PROPERTY public final val b: kotlin.Int = 0
+          EXPRESSION_BODY
+            CONST Int type=kotlin.Int value='0'
+        PROPERTY public final val c: kotlin.Int = 0
+          EXPRESSION_BODY
+            CALL .<get-b> type=kotlin.Int operator=GET_PROPERTY
+              $this: THIS public companion object Companion type=A.Companion
+        ANONYMOUS_INITIALIZER Companion
+          BLOCK_BODY
+            VAR val d: kotlin.Int = 0
+              CALL .<get-b> type=kotlin.Int operator=GET_PROPERTY
+                $this: THIS public companion object Companion type=A.Companion
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .<init> type=A operator=null
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CALL .<get-c> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_OBJECT Companion type=A.Companion
+              arg1: CALL .<get-b> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_OBJECT Companion type=A.Companion
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='Fail'

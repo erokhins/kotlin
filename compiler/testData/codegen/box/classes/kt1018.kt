@@ -10,3 +10,5 @@ public class StockMarketTableModel() {
 }
 
 fun box() : String = if(StockMarketTableModel().getColumnCount()==10) "OK" else "fail"
+
+

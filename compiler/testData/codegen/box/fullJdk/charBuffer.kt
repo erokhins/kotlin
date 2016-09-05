@@ -9,3 +9,5 @@ fun box(): String {
     val k = (cb as CharSequence).get(0)
     return o.toString() + k
 }
+
+

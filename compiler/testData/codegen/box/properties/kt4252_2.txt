@@ -1,0 +1,96 @@
+MODULE <test-module>
+  FILE /kt4252_2.kt
+    CLASS CLASS Foo
+      CONSTRUCTOR public constructor Foo()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Foo
+      CLASS OBJECT Companion
+        CONSTRUCTOR private constructor Companion()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Companion
+        PROPERTY public final val bar: kotlin.String = "OK"
+          EXPRESSION_BODY
+            CONST String type=kotlin.String value='OK'
+        PROPERTY public final var boo: kotlin.String
+          EXPRESSION_BODY
+            CONST String type=kotlin.String value='FAIL'
+      PROPERTY public final val a: kotlin.String = "OK"
+        EXPRESSION_BODY
+          CALL .<get-bar> type=kotlin.String operator=GET_PROPERTY
+            $this: THIS public companion object Companion type=Foo.Companion
+      PROPERTY public final var b: kotlin.String
+        EXPRESSION_BODY
+          CALL .<get-bar> type=kotlin.String operator=GET_PROPERTY
+            $this: GET_OBJECT Companion type=Foo.Companion
+      PROPERTY public final val c: kotlin.String
+      PROPERTY public final var d: kotlin.String
+      ANONYMOUS_INITIALIZER Foo
+        BLOCK_BODY
+          SET_BACKING_FIELD c type=kotlin.Unit operator=null
+            receiver: THIS public final class Foo type=Foo
+            value: CALL .<get-bar> type=kotlin.String operator=GET_PROPERTY
+              $this: THIS public companion object Companion type=Foo.Companion
+          CALL .<set-d> type=kotlin.Unit operator=EQ
+            $this: THIS public final class Foo type=Foo
+            <set-?>: CALL .<get-bar> type=kotlin.String operator=GET_PROPERTY
+              $this: GET_OBJECT Companion type=Foo.Companion
+          CALL .<set-boo> type=kotlin.Unit operator=EQ
+            $this: THIS public companion object Companion type=Foo.Companion
+            <set-?>: CONST String type=kotlin.String value='O'
+          BLOCK type=kotlin.Unit operator=PLUSEQ
+            VAR val tmp0_this: Foo.Companion
+              GET_OBJECT Companion type=Foo.Companion
+            CALL .<set-boo> type=kotlin.Unit operator=PLUSEQ
+              $this: GET_VAR tmp0_this type=Foo.Companion operator=null
+              <set-?>: CALL .plus type=kotlin.String operator=PLUSEQ
+                $this: CALL .<get-boo> type=kotlin.String operator=PLUSEQ
+                  $this: GET_VAR tmp0_this type=Foo.Companion operator=null
+                other: CONST String type=kotlin.String value='K'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val foo: Foo
+          CALL .<init> type=Foo operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-a> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR foo type=Foo operator=null
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='foo.a != OK'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-b> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR foo type=Foo operator=null
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='foo.b != OK'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-c> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR foo type=Foo operator=null
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='foo.c != OK'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-d> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR foo type=Foo operator=null
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='foo.d != OK'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-boo> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_OBJECT Companion type=Foo.Companion
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Foo.boo != OK'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

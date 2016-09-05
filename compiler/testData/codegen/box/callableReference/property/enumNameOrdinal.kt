@@ -9,3 +9,5 @@ fun box(): String {
     if (n != 0) return "Fail $n"
     return "OK"
 }
+
+

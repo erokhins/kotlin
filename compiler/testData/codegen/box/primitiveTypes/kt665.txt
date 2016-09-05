@@ -1,0 +1,35 @@
+MODULE <test-module>
+  FILE /kt665.kt
+    FUN public fun f(/*0*/ x: kotlin.Long, /*1*/ zzz: kotlin.Long = ...): kotlin.Long
+      zzz: EXPRESSION_BODY
+        CONST Long type=kotlin.Long value='1'
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=f
+          WHEN type=kotlin.Long operator=IF
+            if: CALL .LTEQ0 type=kotlin.Boolean operator=LTEQ
+              arg0: CALL .compareTo type=kotlin.Int operator=LTEQ
+                $this: GET_VAR x type=kotlin.Long operator=null
+                other: CONST Int type=kotlin.Int value='1'
+            then: GET_VAR zzz type=kotlin.Long operator=null
+            else: CALL .f type=kotlin.Long operator=null
+              x: CALL .minus type=kotlin.Long operator=MINUS
+                $this: GET_VAR x type=kotlin.Long operator=null
+                other: CONST Int type=kotlin.Int value='1'
+              zzz: CALL .times type=kotlin.Long operator=MUL
+                $this: GET_VAR x type=kotlin.Long operator=null
+                other: GET_VAR zzz type=kotlin.Long operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val six: kotlin.Long = 6.toLong()
+          CONST Long type=kotlin.Long value='6'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .f type=kotlin.Long operator=null
+                x: GET_VAR six type=kotlin.Long operator=null
+              arg1: CALL .toLong type=kotlin.Long operator=null
+                $this: CONST Int type=kotlin.Int value='720'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

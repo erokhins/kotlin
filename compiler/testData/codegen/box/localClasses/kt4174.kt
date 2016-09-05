@@ -23,3 +23,5 @@ fun box(): String {
     if (b.foo() != "OK") return "fail: ${b.foo()}"
     return b.foo2()
 }
+
+

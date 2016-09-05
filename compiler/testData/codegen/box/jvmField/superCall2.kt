@@ -20,3 +20,5 @@ open class C : B() {
 fun box(): String {
     return if (C().test() == "123") return "OK" else "fail"
 }
+
+

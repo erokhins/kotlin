@@ -6,3 +6,5 @@ fun foo(i: Int) : Int =
     }
 
 fun box() : String = if (foo(1) == 1) "OK" else "fail"
+
+

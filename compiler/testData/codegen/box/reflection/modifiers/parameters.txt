@@ -1,0 +1,91 @@
+MODULE <test-module>
+  FILE /parameters.kt
+    FUN public inline fun kotlin.Unit.foo(/*0*/ crossinline crossinline: () -> kotlin.Unit, /*1*/ noinline coroutine x: kotlin.Unit.() -> kotlin.coroutines.Continuation<kotlin.Unit>, /*2*/ vararg vararg: kotlin.Unit /*kotlin.Array<out kotlin.Unit>*/): kotlin.Unit
+      BLOCK_BODY
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val p: kotlin.collections.List<kotlin.reflect.KParameter>
+          CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction3<() -> kotlin.Unit, kotlin.Unit.() -> kotlin.coroutines.Continuation<kotlin.Unit>, kotlin.Array<out kotlin.Unit>, kotlin.Unit> operator=null
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isNoinline> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALL .get type=kotlin.reflect.KParameter operator=GET_ARRAY_ELEMENT
+              $this: GET_VAR p type=kotlin.collections.List<kotlin.reflect.KParameter> operator=null
+              index: CONST Int type=kotlin.Int value='0'
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isCrossinline> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALL .get type=kotlin.reflect.KParameter operator=GET_ARRAY_ELEMENT
+              $this: GET_VAR p type=kotlin.collections.List<kotlin.reflect.KParameter> operator=null
+              index: CONST Int type=kotlin.Int value='0'
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isVararg> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALL .get type=kotlin.reflect.KParameter operator=GET_ARRAY_ELEMENT
+              $this: GET_VAR p type=kotlin.collections.List<kotlin.reflect.KParameter> operator=null
+              index: CONST Int type=kotlin.Int value='0'
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isCoroutine> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALL .get type=kotlin.reflect.KParameter operator=GET_ARRAY_ELEMENT
+              $this: GET_VAR p type=kotlin.collections.List<kotlin.reflect.KParameter> operator=null
+              index: CONST Int type=kotlin.Int value='0'
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isNoinline> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALL .get type=kotlin.reflect.KParameter operator=GET_ARRAY_ELEMENT
+              $this: GET_VAR p type=kotlin.collections.List<kotlin.reflect.KParameter> operator=null
+              index: CONST Int type=kotlin.Int value='1'
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isCrossinline> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALL .get type=kotlin.reflect.KParameter operator=GET_ARRAY_ELEMENT
+              $this: GET_VAR p type=kotlin.collections.List<kotlin.reflect.KParameter> operator=null
+              index: CONST Int type=kotlin.Int value='1'
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isVararg> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALL .get type=kotlin.reflect.KParameter operator=GET_ARRAY_ELEMENT
+              $this: GET_VAR p type=kotlin.collections.List<kotlin.reflect.KParameter> operator=null
+              index: CONST Int type=kotlin.Int value='1'
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isCoroutine> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALL .get type=kotlin.reflect.KParameter operator=GET_ARRAY_ELEMENT
+              $this: GET_VAR p type=kotlin.collections.List<kotlin.reflect.KParameter> operator=null
+              index: CONST Int type=kotlin.Int value='1'
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isNoinline> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALL .get type=kotlin.reflect.KParameter operator=GET_ARRAY_ELEMENT
+              $this: GET_VAR p type=kotlin.collections.List<kotlin.reflect.KParameter> operator=null
+              index: CONST Int type=kotlin.Int value='2'
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isCrossinline> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALL .get type=kotlin.reflect.KParameter operator=GET_ARRAY_ELEMENT
+              $this: GET_VAR p type=kotlin.collections.List<kotlin.reflect.KParameter> operator=null
+              index: CONST Int type=kotlin.Int value='2'
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isVararg> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALL .get type=kotlin.reflect.KParameter operator=GET_ARRAY_ELEMENT
+              $this: GET_VAR p type=kotlin.collections.List<kotlin.reflect.KParameter> operator=null
+              index: CONST Int type=kotlin.Int value='2'
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isCoroutine> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALL .get type=kotlin.reflect.KParameter operator=GET_ARRAY_ELEMENT
+              $this: GET_VAR p type=kotlin.collections.List<kotlin.reflect.KParameter> operator=null
+              index: CONST Int type=kotlin.Int value='2'
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isNoinline> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALL .get type=kotlin.reflect.KParameter operator=GET_ARRAY_ELEMENT
+              $this: GET_VAR p type=kotlin.collections.List<kotlin.reflect.KParameter> operator=null
+              index: CONST Int type=kotlin.Int value='3'
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isCrossinline> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALL .get type=kotlin.reflect.KParameter operator=GET_ARRAY_ELEMENT
+              $this: GET_VAR p type=kotlin.collections.List<kotlin.reflect.KParameter> operator=null
+              index: CONST Int type=kotlin.Int value='3'
+        CALL .assertTrue type=kotlin.Unit operator=null
+          actual: CALL .<get-isVararg> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALL .get type=kotlin.reflect.KParameter operator=GET_ARRAY_ELEMENT
+              $this: GET_VAR p type=kotlin.collections.List<kotlin.reflect.KParameter> operator=null
+              index: CONST Int type=kotlin.Int value='3'
+        CALL .assertFalse type=kotlin.Unit operator=null
+          actual: CALL .<get-isCoroutine> type=kotlin.Boolean operator=GET_PROPERTY
+            $this: CALL .get type=kotlin.reflect.KParameter operator=GET_ARRAY_ELEMENT
+              $this: GET_VAR p type=kotlin.collections.List<kotlin.reflect.KParameter> operator=null
+              index: CONST Int type=kotlin.Int value='3'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

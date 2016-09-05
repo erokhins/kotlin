@@ -72,3 +72,5 @@ fun box(): String {
     if (intResult[0] != 1) return "fail 5"
     return "OK"
 }
+
+

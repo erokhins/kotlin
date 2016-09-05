@@ -11,3 +11,5 @@ class AImpl {
 fun box(): String {
     return if(AImpl().prop == 1) "OK" else "fail"
 }
+
+

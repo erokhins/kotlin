@@ -6,3 +6,5 @@ fun box(): String {
     foo<Int?>(null)
     return "OK"
 }
+
+

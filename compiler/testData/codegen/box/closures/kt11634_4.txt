@@ -1,0 +1,81 @@
+MODULE <test-module>
+  FILE /kt11634_4.kt
+    CLASS INTERFACE A
+      FUN public abstract fun foo(): kotlin.String
+    CLASS CLASS Base
+      CONSTRUCTOR public constructor Base(/*0*/ p: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD p type=kotlin.Unit operator=null
+            receiver: THIS public open class Base type=Base
+            value: GET_VAR p type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=Base
+      PROPERTY public final val p: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR p type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public open val a: A
+        EXPRESSION_BODY
+          BLOCK type=Base.a.<no name provided> operator=OBJECT_LITERAL
+            CLASS CLASS <no name provided>
+              CONSTRUCTOR public constructor <no name provided>()
+                BLOCK_BODY
+                  DELEGATING_CONSTRUCTOR_CALL Any
+                  INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+              FUN public open override /*1*/ fun foo(): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=foo
+                    CALL .<get-p> type=kotlin.String operator=GET_PROPERTY
+                      $this: THIS public open class Base type=Base
+            CALL .<init> type=Base.a.<no name provided> operator=OBJECT_LITERAL
+    CLASS CLASS Derived1
+      CONSTRUCTOR public constructor Derived1(/*0*/ p: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Base
+            p: GET_VAR p type=kotlin.String operator=null
+          INSTANCE_INITIALIZER_CALL classDescriptor=Derived1
+      PROPERTY public open override /*1*/ val a: A
+        EXPRESSION_BODY
+          BLOCK type=Derived1.a.<no name provided> operator=OBJECT_LITERAL
+            CLASS CLASS <no name provided>
+              CONSTRUCTOR public constructor <no name provided>()
+                BLOCK_BODY
+                  DELEGATING_CONSTRUCTOR_CALL Any
+                  INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+              FUN public open override /*1*/ fun foo(): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=foo
+                    CONST String type=kotlin.String value='fail'
+            CALL .<init> type=Derived1.a.<no name provided> operator=OBJECT_LITERAL
+      CLASS CLASS Derived2
+        CONSTRUCTOR public constructor Derived2(/*0*/ p: kotlin.String)
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Base
+              p: GET_VAR p type=kotlin.String operator=null
+            INSTANCE_INITIALIZER_CALL classDescriptor=Derived2
+        PROPERTY public final val x: A
+          EXPRESSION_BODY
+            BLOCK type=Derived1.Derived2.x.<no name provided> operator=OBJECT_LITERAL
+              CLASS CLASS <no name provided>
+                CONSTRUCTOR public constructor <no name provided>()
+                  BLOCK_BODY
+                    DELEGATING_CONSTRUCTOR_CALL Any
+                    INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+                PROPERTY val `<no name provided>$A$delegate`: A
+                  EXPRESSION_BODY
+                    CALL .<get-a> superQualifier=Base type=A operator=GET_PROPERTY
+                      $this: THIS public open class Derived1 : Base type=Base
+                FUN public open override /*1*/ /*delegation*/ fun foo(): kotlin.String
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=foo
+                      CALL .foo type=kotlin.String operator=null
+                        $this: GET_VAR <no name provided>$A$delegate type=A operator=null
+              CALL .<init> type=Derived1.Derived2.x.<no name provided> operator=OBJECT_LITERAL
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .foo type=kotlin.String operator=null
+            $this: CALL .<get-x> type=A operator=GET_PROPERTY
+              $this: CALL .<init> type=Derived1.Derived2 operator=null
+                $this: CALL .<init> type=Derived1 operator=null
+                  p: CONST String type=kotlin.String value='OK'
+                p: CONST String type=kotlin.String value='fail'

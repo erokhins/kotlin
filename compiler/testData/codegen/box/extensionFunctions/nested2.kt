@@ -6,3 +6,5 @@ fun box() : String {
 
   return if("27" == 5.op2(10)) "OK" else "fail"
 }
+
+

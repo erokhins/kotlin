@@ -1,0 +1,67 @@
+MODULE <test-module>
+  FILE /test.kt
+    CLASS CLASS MySet
+      CONSTRUCTOR public constructor MySet()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=MySet
+      PROPERTY public open override /*1*/ val size: kotlin.Int
+        PROPERTY_GETTER public open override /*1*/ fun <get-size>(): kotlin.Int
+          BLOCK_BODY
+            THROW type=kotlin.Nothing
+              CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun isEmpty(): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun contains(/*0*/ o: kotlin.String): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun iterator(): kotlin.collections.Iterator<kotlin.String>
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+      FUN public open override /*1*/ fun containsAll(/*0*/ c: kotlin.collections.Collection<kotlin.String>): kotlin.Boolean
+        BLOCK_BODY
+          THROW type=kotlin.Nothing
+            CALL .<init> type=java.lang.UnsupportedOperationException operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val mySet: MySet
+          CALL .<init> type=MySet operator=null
+        CALL .contains type=kotlin.Boolean operator=null
+          $this: GET_VAR mySet type=MySet operator=null
+          o: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.String
+            CALL .nullValue type=kotlin.String! operator=null
+        CALL .contains type=kotlin.Boolean operator=IN
+          $this: GET_VAR mySet type=MySet operator=null
+          o: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.String
+            CALL .nullValue type=kotlin.String! operator=null
+        VAR val set: kotlin.collections.Set<kotlin.String>
+          GET_VAR mySet type=MySet operator=null
+        CALL .contains type=kotlin.Boolean operator=null
+          $this: GET_VAR set type=kotlin.collections.Set<kotlin.String> operator=null
+          element: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.String
+            CALL .nullValue type=kotlin.String! operator=null
+        CALL .contains type=kotlin.Boolean operator=IN
+          $this: GET_VAR set type=kotlin.collections.Set<kotlin.String> operator=null
+          element: TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.String
+            CALL .nullValue type=kotlin.String! operator=null
+        VAR val anySet: kotlin.collections.Set<kotlin.Any?>
+          TYPE_OP operator=CAST typeOperand=kotlin.collections.Set<kotlin.Any?>
+            GET_VAR mySet type=MySet operator=null
+        CALL .contains type=kotlin.Boolean operator=null
+          $this: GET_VAR anySet type=kotlin.collections.Set<kotlin.Any?> operator=null
+          element: CALL .nullValue type=kotlin.String! operator=null
+        CALL .contains type=kotlin.Boolean operator=null
+          $this: GET_VAR anySet type=kotlin.collections.Set<kotlin.Any?> operator=null
+          element: CONST Null type=kotlin.Nothing? value='null'
+        CALL .contains type=kotlin.Boolean operator=IN
+          $this: GET_VAR anySet type=kotlin.collections.Set<kotlin.Any?> operator=null
+          element: CALL .nullValue type=kotlin.String! operator=null
+        CALL .contains type=kotlin.Boolean operator=IN
+          $this: GET_VAR anySet type=kotlin.collections.Set<kotlin.Any?> operator=null
+          element: CONST Null type=kotlin.Nothing? value='null'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

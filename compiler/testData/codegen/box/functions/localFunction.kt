@@ -44,3 +44,5 @@ fun box() : String {
 
     return if(seed == 30) "OK" else seed.toString()
 }
+
+

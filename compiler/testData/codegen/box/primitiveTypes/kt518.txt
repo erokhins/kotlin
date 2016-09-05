@@ -1,0 +1,39 @@
+MODULE <test-module>
+  FILE /kt518.kt
+    FUN public fun foo(/*0*/ i: kotlin.Int?, /*1*/ a: kotlin.Any?): kotlin.Unit
+      BLOCK_BODY
+        BLOCK type=kotlin.Int? operator=SAFE_CALL
+          VAR val tmp0_safe_receiver: kotlin.Int?
+            GET_VAR i type=kotlin.Int? operator=null
+          WHEN type=kotlin.Int? operator=SAFE_CALL
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: GET_VAR tmp0_safe_receiver type=kotlin.Int? operator=null
+              arg1: CONST Null type=kotlin.Nothing? value='null'
+            then: CONST Null type=kotlin.Nothing? value='null'
+            else: CALL .plus type=kotlin.Int operator=null
+              $this: GET_VAR tmp0_safe_receiver type=kotlin.Int? operator=null
+              other: CONST Int type=kotlin.Int value='1'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR i type=kotlin.Int? operator=null
+              arg1: CONST Null type=kotlin.Nothing? value='null'
+          then: BLOCK type=kotlin.Unit operator=null
+            CALL .plus type=kotlin.Int operator=PLUS
+              $this: GET_VAR i type=kotlin.Int? operator=null
+              other: CONST Int type=kotlin.Int value='1'
+            WHEN type=kotlin.Unit operator=IF
+              if: TYPE_OP operator=INSTANCEOF typeOperand=kotlin.String
+                GET_VAR a type=kotlin.Any? operator=null
+              then: BLOCK type=kotlin.Char operator=null
+                CALL .get type=kotlin.Char operator=GET_ARRAY_ELEMENT
+                  $this: TYPE_OP operator=IMPLICIT_CAST typeOperand=kotlin.String
+                    GET_VAR a type=kotlin.Any? operator=null
+                  index: CONST Int type=kotlin.Int value='0'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .foo type=kotlin.Unit operator=null
+          i: CONST Int type=kotlin.Int value='2'
+          a: CONST String type=kotlin.String value='239'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

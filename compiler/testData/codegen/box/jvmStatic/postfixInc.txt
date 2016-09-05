@@ -1,0 +1,226 @@
+MODULE <test-module>
+  FILE /postfixInc.kt
+    CLASS OBJECT A
+      CONSTRUCTOR private constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY @kotlin.jvm.JvmStatic() public final var a: kotlin.Int
+        EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='1'
+      PROPERTY public final var b: kotlin.Int
+        EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='1'
+        PROPERTY_GETTER @kotlin.jvm.JvmStatic() public final fun <get-b>(): kotlin.Int
+      PROPERTY public final var c: kotlin.Int
+        EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='1'
+        PROPERTY_SETTER @kotlin.jvm.JvmStatic() public final fun <set-c>(/*0*/ <set-?>: kotlin.Int): kotlin.Unit
+    PROPERTY public var holder: kotlin.String
+      EXPRESSION_BODY
+        CONST String type=kotlin.String value=''
+    FUN public fun getA(): A
+      BLOCK_BODY
+        BLOCK type=kotlin.Unit operator=PLUSEQ
+          CALL .<set-holder> type=kotlin.Unit operator=PLUSEQ
+            <set-?>: CALL .plus type=kotlin.String operator=PLUSEQ
+              $this: CALL .<get-holder> type=kotlin.String operator=PLUSEQ
+              other: CONST String type=kotlin.String value='getA()'
+        RETURN type=kotlin.Nothing from=getA
+          GET_OBJECT A type=A
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR var p: kotlin.Int
+          BLOCK type=kotlin.Int operator=POSTFIX_INCR
+            VAR val tmp0_this: A
+              GET_OBJECT A type=A
+            BLOCK type=kotlin.Int operator=POSTFIX_INCR
+              VAR val tmp1: kotlin.Int
+                CALL .<get-a> type=kotlin.Int operator=POSTFIX_INCR
+                  $this: GET_VAR tmp0_this type=A operator=null
+              CALL .<set-a> type=kotlin.Unit operator=POSTFIX_INCR
+                $this: GET_VAR tmp0_this type=A operator=null
+                <set-?>: CALL .inc type=kotlin.Int operator=POSTFIX_INCR
+                  $this: GET_VAR tmp1 type=kotlin.Int operator=null
+              GET_VAR tmp1 type=kotlin.Int operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: WHEN type=kotlin.Boolean operator=OROR
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: GET_VAR p type=kotlin.Int operator=null
+                arg1: CONST Int type=kotlin.Int value='1'
+            then: CONST Boolean type=kotlin.Boolean value='true'
+            else: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .<get-a> type=kotlin.Int operator=GET_PROPERTY
+                  $this: GET_OBJECT A type=A
+                arg1: CONST Int type=kotlin.Int value='2'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 1'
+        SET_VAR p type=kotlin.Unit operator=EQ
+          BLOCK type=kotlin.Int operator=POSTFIX_INCR
+            VAR val tmp2_this: A
+              GET_OBJECT A type=A
+            BLOCK type=kotlin.Int operator=POSTFIX_INCR
+              VAR val tmp3: kotlin.Int
+                CALL .<get-b> type=kotlin.Int operator=POSTFIX_INCR
+                  $this: GET_VAR tmp2_this type=A operator=null
+              CALL .<set-b> type=kotlin.Unit operator=POSTFIX_INCR
+                $this: GET_VAR tmp2_this type=A operator=null
+                <set-?>: CALL .inc type=kotlin.Int operator=POSTFIX_INCR
+                  $this: GET_VAR tmp3 type=kotlin.Int operator=null
+              GET_VAR tmp3 type=kotlin.Int operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: WHEN type=kotlin.Boolean operator=OROR
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: GET_VAR p type=kotlin.Int operator=null
+                arg1: CONST Int type=kotlin.Int value='1'
+            then: CONST Boolean type=kotlin.Boolean value='true'
+            else: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .<get-b> type=kotlin.Int operator=GET_PROPERTY
+                  $this: GET_OBJECT A type=A
+                arg1: CONST Int type=kotlin.Int value='2'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 2'
+        SET_VAR p type=kotlin.Unit operator=EQ
+          BLOCK type=kotlin.Int operator=POSTFIX_INCR
+            VAR val tmp4_this: A
+              GET_OBJECT A type=A
+            BLOCK type=kotlin.Int operator=POSTFIX_INCR
+              VAR val tmp5: kotlin.Int
+                CALL .<get-c> type=kotlin.Int operator=POSTFIX_INCR
+                  $this: GET_VAR tmp4_this type=A operator=null
+              CALL .<set-c> type=kotlin.Unit operator=POSTFIX_INCR
+                $this: GET_VAR tmp4_this type=A operator=null
+                <set-?>: CALL .inc type=kotlin.Int operator=POSTFIX_INCR
+                  $this: GET_VAR tmp5 type=kotlin.Int operator=null
+              GET_VAR tmp5 type=kotlin.Int operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: WHEN type=kotlin.Boolean operator=OROR
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: GET_VAR p type=kotlin.Int operator=null
+                arg1: CONST Int type=kotlin.Int value='1'
+            then: CONST Boolean type=kotlin.Boolean value='true'
+            else: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .<get-c> type=kotlin.Int operator=GET_PROPERTY
+                  $this: GET_OBJECT A type=A
+                arg1: CONST Int type=kotlin.Int value='2'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail 3'
+        SET_VAR p type=kotlin.Unit operator=EQ
+          BLOCK type=kotlin.Int operator=POSTFIX_INCR
+            VAR val tmp6_this: A
+              CALL .getA type=A operator=null
+            BLOCK type=kotlin.Int operator=POSTFIX_INCR
+              VAR val tmp7: kotlin.Int
+                CALL .<get-a> type=kotlin.Int operator=POSTFIX_INCR
+                  $this: GET_VAR tmp6_this type=A operator=null
+              CALL .<set-a> type=kotlin.Unit operator=POSTFIX_INCR
+                $this: GET_VAR tmp6_this type=A operator=null
+                <set-?>: CALL .inc type=kotlin.Int operator=POSTFIX_INCR
+                  $this: GET_VAR tmp7 type=kotlin.Int operator=null
+              GET_VAR tmp7 type=kotlin.Int operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: WHEN type=kotlin.Boolean operator=OROR
+            if: WHEN type=kotlin.Boolean operator=OROR
+              if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                  arg0: GET_VAR p type=kotlin.Int operator=null
+                  arg1: CONST Int type=kotlin.Int value='2'
+              then: CONST Boolean type=kotlin.Boolean value='true'
+              else: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                  arg0: CALL .<get-a> type=kotlin.Int operator=GET_PROPERTY
+                    $this: GET_OBJECT A type=A
+                  arg1: CONST Int type=kotlin.Int value='3'
+            then: CONST Boolean type=kotlin.Boolean value='true'
+            else: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .<get-holder> type=kotlin.String operator=GET_PROPERTY
+                arg1: CONST String type=kotlin.String value='getA()'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 4: '
+              CALL .<get-holder> type=kotlin.String operator=GET_PROPERTY
+        CALL .<set-holder> type=kotlin.Unit operator=EQ
+          <set-?>: CONST String type=kotlin.String value=''
+        SET_VAR p type=kotlin.Unit operator=EQ
+          BLOCK type=kotlin.Int operator=POSTFIX_INCR
+            VAR val tmp8_this: A
+              CALL .getA type=A operator=null
+            BLOCK type=kotlin.Int operator=POSTFIX_INCR
+              VAR val tmp9: kotlin.Int
+                CALL .<get-b> type=kotlin.Int operator=POSTFIX_INCR
+                  $this: GET_VAR tmp8_this type=A operator=null
+              CALL .<set-b> type=kotlin.Unit operator=POSTFIX_INCR
+                $this: GET_VAR tmp8_this type=A operator=null
+                <set-?>: CALL .inc type=kotlin.Int operator=POSTFIX_INCR
+                  $this: GET_VAR tmp9 type=kotlin.Int operator=null
+              GET_VAR tmp9 type=kotlin.Int operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: WHEN type=kotlin.Boolean operator=OROR
+            if: WHEN type=kotlin.Boolean operator=OROR
+              if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                  arg0: GET_VAR p type=kotlin.Int operator=null
+                  arg1: CONST Int type=kotlin.Int value='2'
+              then: CONST Boolean type=kotlin.Boolean value='true'
+              else: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                  arg0: CALL .<get-b> type=kotlin.Int operator=GET_PROPERTY
+                    $this: GET_OBJECT A type=A
+                  arg1: CONST Int type=kotlin.Int value='3'
+            then: CONST Boolean type=kotlin.Boolean value='true'
+            else: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .<get-holder> type=kotlin.String operator=GET_PROPERTY
+                arg1: CONST String type=kotlin.String value='getA()'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 5: '
+              CALL .<get-holder> type=kotlin.String operator=GET_PROPERTY
+        CALL .<set-holder> type=kotlin.Unit operator=EQ
+          <set-?>: CONST String type=kotlin.String value=''
+        SET_VAR p type=kotlin.Unit operator=EQ
+          BLOCK type=kotlin.Int operator=POSTFIX_INCR
+            VAR val tmp10_this: A
+              CALL .getA type=A operator=null
+            BLOCK type=kotlin.Int operator=POSTFIX_INCR
+              VAR val tmp11: kotlin.Int
+                CALL .<get-c> type=kotlin.Int operator=POSTFIX_INCR
+                  $this: GET_VAR tmp10_this type=A operator=null
+              CALL .<set-c> type=kotlin.Unit operator=POSTFIX_INCR
+                $this: GET_VAR tmp10_this type=A operator=null
+                <set-?>: CALL .inc type=kotlin.Int operator=POSTFIX_INCR
+                  $this: GET_VAR tmp11 type=kotlin.Int operator=null
+              GET_VAR tmp11 type=kotlin.Int operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: WHEN type=kotlin.Boolean operator=OROR
+            if: WHEN type=kotlin.Boolean operator=OROR
+              if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                  arg0: GET_VAR p type=kotlin.Int operator=null
+                  arg1: CONST Int type=kotlin.Int value='2'
+              then: CONST Boolean type=kotlin.Boolean value='true'
+              else: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                  arg0: CALL .<get-c> type=kotlin.Int operator=GET_PROPERTY
+                    $this: GET_OBJECT A type=A
+                  arg1: CONST Int type=kotlin.Int value='3'
+            then: CONST Boolean type=kotlin.Boolean value='true'
+            else: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .<get-holder> type=kotlin.String operator=GET_PROPERTY
+                arg1: CONST String type=kotlin.String value='getA()'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 6: '
+              CALL .<get-holder> type=kotlin.String operator=GET_PROPERTY
+        CALL .<set-holder> type=kotlin.Unit operator=EQ
+          <set-?>: CONST String type=kotlin.String value=''
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -11,3 +11,5 @@ class MyFactory() : Factory {
 }
 
 fun box() : String = MyFactory().create().code
+
+

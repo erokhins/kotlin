@@ -13,3 +13,4 @@ class My {
 }
 
 fun box() = My().my
+

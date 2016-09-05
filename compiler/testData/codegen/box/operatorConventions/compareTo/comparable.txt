@@ -1,0 +1,88 @@
+MODULE <test-module>
+  FILE /comparable.kt
+    CLASS INTERFACE A
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B(/*0*/ x: kotlin.Int)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD x type=kotlin.Unit operator=null
+            receiver: THIS public final class B : A type=B
+            value: GET_VAR x type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+      PROPERTY public final val x: kotlin.Int
+        EXPRESSION_BODY
+          GET_VAR x type=kotlin.Int operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public open override /*1*/ fun compareTo(/*0*/ other: A): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=compareTo
+            CALL .compareTo type=kotlin.Int operator=null
+              $this: CALL .<get-x> type=kotlin.Int operator=GET_PROPERTY
+                $this: THIS public final class B : A type=B
+              other: CALL .<get-x> type=kotlin.Int operator=GET_PROPERTY
+                $this: TYPE_OP operator=CAST typeOperand=B
+                  GET_VAR other type=A operator=null
+    FUN public fun checkLess(/*0*/ x: A, /*1*/ y: A): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=checkLess
+          WHEN type=kotlin.String operator=WHEN
+            if: CALL .GTEQ0 type=kotlin.Boolean operator=GTEQ
+              arg0: CALL .compareTo type=kotlin.Int operator=GTEQ
+                $this: GET_VAR x type=A operator=null
+                other: GET_VAR y type=A operator=null
+            then: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail '
+              GET_VAR x type=A operator=null
+              CONST String type=kotlin.String value=' >= '
+              GET_VAR y type=A operator=null
+            if: CALL .not type=kotlin.Boolean operator=EXCL
+              $this: CALL .LT0 type=kotlin.Boolean operator=LT
+                arg0: CALL .compareTo type=kotlin.Int operator=LT
+                  $this: GET_VAR x type=A operator=null
+                  other: GET_VAR y type=A operator=null
+            then: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail !('
+              GET_VAR x type=A operator=null
+              CONST String type=kotlin.String value=' < '
+              GET_VAR y type=A operator=null
+              CONST String type=kotlin.String value=')'
+            if: CALL .not type=kotlin.Boolean operator=EXCL
+              $this: CALL .LTEQ0 type=kotlin.Boolean operator=LTEQ
+                arg0: CALL .compareTo type=kotlin.Int operator=LTEQ
+                  $this: GET_VAR x type=A operator=null
+                  other: GET_VAR y type=A operator=null
+            then: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail !('
+              GET_VAR x type=A operator=null
+              CONST String type=kotlin.String value=' <= '
+              GET_VAR y type=A operator=null
+              CONST String type=kotlin.String value=')'
+            if: CALL .GT0 type=kotlin.Boolean operator=GT
+              arg0: CALL .compareTo type=kotlin.Int operator=GT
+                $this: GET_VAR x type=A operator=null
+                other: GET_VAR y type=A operator=null
+            then: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail '
+              GET_VAR x type=A operator=null
+              CONST String type=kotlin.String value=' > '
+              GET_VAR y type=A operator=null
+            if: CALL .GTEQ0 type=kotlin.Boolean operator=GTEQ
+              arg0: CALL .compareTo type=kotlin.Int operator=GTEQ
+                $this: CALL .compareTo type=kotlin.Int operator=null
+                  $this: GET_VAR x type=A operator=null
+                  other: GET_VAR y type=A operator=null
+                other: CONST Int type=kotlin.Int value='0'
+            then: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail '
+              GET_VAR x type=A operator=null
+              CONST String type=kotlin.String value='.compareTo('
+              GET_VAR y type=A operator=null
+              CONST String type=kotlin.String value=') >= 0'
+            else: CONST String type=kotlin.String value='OK'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .checkLess type=kotlin.String operator=null
+            x: CALL .<init> type=B operator=null
+              x: CONST Int type=kotlin.Int value='0'
+            y: CALL .<init> type=B operator=null
+              x: CONST Int type=kotlin.Int value='1'

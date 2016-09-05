@@ -12,3 +12,5 @@ fun box(): String {
     val a: A<String> = C(B())
     return a.foo()
 }
+
+

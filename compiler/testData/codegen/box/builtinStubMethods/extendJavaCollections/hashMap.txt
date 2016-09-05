@@ -1,0 +1,33 @@
+MODULE <test-module>
+  FILE /hashMap.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL HashMap
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val a: A
+          CALL .<init> type=A operator=null
+        VAR val b: A
+          CALL .<init> type=A operator=null
+        CALL .put type=kotlin.Double? operator=null
+          $this: GET_VAR a type=A operator=null
+          key: CONST String type=kotlin.String value=''
+          value: CONST Double type=kotlin.Double value='0.0'
+        CALL .remove type=kotlin.Double? operator=null
+          $this: GET_VAR a type=A operator=null
+          key: CONST String type=kotlin.String value=''
+        CALL .putAll type=kotlin.Unit operator=null
+          $this: GET_VAR a type=A operator=null
+          from: GET_VAR b type=A operator=null
+        CALL .clear type=kotlin.Unit operator=null
+          $this: GET_VAR a type=A operator=null
+        CALL .<get-keys> type=kotlin.collections.MutableSet<kotlin.String> operator=GET_PROPERTY
+          $this: GET_VAR a type=A operator=null
+        CALL .<get-values> type=kotlin.collections.MutableCollection<kotlin.Double> operator=GET_PROPERTY
+          $this: GET_VAR a type=A operator=null
+        CALL .<get-entries> type=kotlin.collections.MutableSet<kotlin.collections.MutableMap.MutableEntry<kotlin.String, kotlin.Double>> operator=GET_PROPERTY
+          $this: GET_VAR a type=A operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

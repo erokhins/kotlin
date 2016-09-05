@@ -4,3 +4,4 @@ fun box(): String {
     foo() as Unit
     return "OK"
 }
+

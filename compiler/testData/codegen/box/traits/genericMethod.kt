@@ -19,3 +19,4 @@ open class C : B(), A<Any> {
 fun box() : String {
     return C().a() as String
 }
+

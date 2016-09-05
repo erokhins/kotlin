@@ -8,3 +8,5 @@ fun bar(): String = qux()
 fun qux(): String = "OK"
 
 fun box(): String = foo()
+
+

@@ -6,3 +6,5 @@ fun box(): String {
     if (a.component2() != 3) return "Fail: ${a.component2()}"
     return "OK"
 }
+
+

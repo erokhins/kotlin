@@ -1,0 +1,33 @@
+MODULE <test-module>
+  FILE /kt1535.kt
+    CLASS CLASS Works
+      CONSTRUCTOR public constructor Works()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Works
+      FUN public open override /*1*/ fun invoke(): kotlin.Any
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=invoke
+            TYPE_OP operator=CAST typeOperand=kotlin.Any
+              CONST String type=kotlin.String value='Works'
+    CLASS CLASS Broken
+      CONSTRUCTOR public constructor Broken()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Broken
+      FUN public open override /*1*/ fun invoke(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=invoke
+            CONST String type=kotlin.String value='Broken'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val works1: () -> kotlin.Any
+          CALL .<init> type=Works operator=null
+        CALL .invoke type=kotlin.Any operator=INVOKE
+          $this: GET_VAR works1 type=() -> kotlin.Any operator=VARIABLE_AS_FUNCTION
+        VAR val broken1: () -> kotlin.String
+          CALL .<init> type=Broken operator=null
+        CALL .invoke type=kotlin.String operator=INVOKE
+          $this: GET_VAR broken1 type=() -> kotlin.String operator=VARIABLE_AS_FUNCTION
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

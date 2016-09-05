@@ -8,3 +8,5 @@ class Bar(): Foo() {
 }
 
 fun box() = Bar().foo()
+
+

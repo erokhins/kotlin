@@ -10,3 +10,5 @@ fun box() : String {
     val answer = m(5)
     return if (answer.x == 10 && answer.y == 15) "OK" else "FAIL"
 }
+
+

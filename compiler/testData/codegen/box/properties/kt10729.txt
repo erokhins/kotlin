@@ -1,0 +1,54 @@
+MODULE <test-module>
+  FILE /kt10729.kt
+    CLASS CLASS IntentionsBundle
+      CONSTRUCTOR public constructor IntentionsBundle()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=IntentionsBundle
+      CLASS OBJECT Companion
+        CONSTRUCTOR private constructor Companion()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Companion
+        FUN public final fun message(/*0*/ key: kotlin.String): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=message
+              CALL .plus type=kotlin.String operator=PLUS
+                $this: GET_VAR key type=kotlin.String operator=null
+                other: CALL .<get-BUNDLE> type=kotlin.String operator=GET_PROPERTY
+                  $this: THIS public companion object Companion type=IntentionsBundle.Companion
+        FUN public final fun message2(/*0*/ key: kotlin.String): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=message2
+              CALL .invoke type=kotlin.String operator=null
+                $this: BLOCK type=() -> kotlin.String operator=LAMBDA
+                  FUN local final fun <anonymous>(): kotlin.String
+                    BLOCK_BODY
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                        CALL .plus type=kotlin.String operator=PLUS
+                          $this: GET_VAR key type=kotlin.String operator=null
+                          other: CALL .<get-BUNDLE> type=kotlin.String operator=GET_PROPERTY
+                            $this: THIS public companion object Companion type=IntentionsBundle.Companion
+                  CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+        PROPERTY private const final val BUNDLE: kotlin.String = "K"
+          EXPRESSION_BODY
+            CONST String type=kotlin.String value='K'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .message type=kotlin.String operator=null
+                $this: GET_OBJECT Companion type=IntentionsBundle.Companion
+                key: CONST String type=kotlin.String value='O'
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 1: '
+              CALL .message type=kotlin.String operator=null
+                $this: GET_OBJECT Companion type=IntentionsBundle.Companion
+                key: CONST String type=kotlin.String value='O'
+        RETURN type=kotlin.Nothing from=box
+          CALL .message2 type=kotlin.String operator=null
+            $this: GET_OBJECT Companion type=IntentionsBundle.Companion
+            key: CONST String type=kotlin.String value='O'

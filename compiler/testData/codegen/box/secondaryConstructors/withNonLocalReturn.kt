@@ -22,3 +22,5 @@ fun box(): String {
     if (a2.prop != 2) return "fail2: ${a2.prop}"
     return "OK"
 }
+
+

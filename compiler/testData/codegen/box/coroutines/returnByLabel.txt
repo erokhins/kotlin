@@ -1,0 +1,59 @@
+MODULE <test-module>
+  FILE /returnByLabel.kt
+    CLASS CLASS Controller
+      CONSTRUCTOR public constructor Controller()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Controller
+      PROPERTY public final var res: kotlin.Int
+        EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='0'
+      FUN public final suspend fun suspendHere(/*0*/ x: kotlin.coroutines.Continuation<kotlin.String>): kotlin.Unit
+        BLOCK_BODY
+          CALL .resume type=kotlin.Unit operator=null
+            $this: GET_VAR x type=kotlin.coroutines.Continuation<kotlin.String> operator=null
+            data: CONST String type=kotlin.String value='OK'
+      FUN public final operator fun handleResult(/*0*/ x: kotlin.Int, /*1*/ y: kotlin.coroutines.Continuation<kotlin.Nothing>): kotlin.Unit
+        BLOCK_BODY
+          CALL .<set-res> type=kotlin.Unit operator=EQ
+            $this: THIS public final class Controller type=Controller
+            <set-?>: GET_VAR x type=kotlin.Int operator=null
+    FUN public fun builder(/*0*/ coroutine c: Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit>): kotlin.Int
+      BLOCK_BODY
+        VAR val controller: Controller
+          CALL .<init> type=Controller operator=null
+        CALL .resume type=kotlin.Unit operator=null
+          $this: CALL .invoke type=kotlin.coroutines.Continuation<kotlin.Unit> operator=INVOKE
+            $this: GET_VAR c type=Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit> operator=VARIABLE_AS_FUNCTION
+            p1: GET_VAR controller type=Controller operator=null
+          data: GET_OBJECT Unit type=kotlin.Unit
+        RETURN type=kotlin.Nothing from=builder
+          CALL .<get-res> type=kotlin.Int operator=GET_PROPERTY
+            $this: GET_VAR controller type=Controller operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR var result: kotlin.String
+          CONST String type=kotlin.String value=''
+        VAR val handledResult: kotlin.Int
+          CALL .builder type=kotlin.Int operator=null
+            c: TYPE_OP operator=IMPLICIT_CAST typeOperand=Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit>
+              BLOCK type=Controller.() -> kotlin.Int operator=LAMBDA
+                FUN local final fun Controller.<anonymous>(): kotlin.Int
+                  BLOCK_BODY
+                    SET_VAR result type=kotlin.Unit operator=EQ
+                      CALL .suspendHere type=kotlin.String operator=null
+                        $this: $RECEIVER of: <anonymous> type=Controller
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CONST Int type=kotlin.Int value='56'
+                CALLABLE_REFERENCE <anonymous> type=Controller.() -> kotlin.Int operator=LAMBDA
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR handledResult type=kotlin.Int operator=null
+              arg1: CONST Int type=kotlin.Int value='56'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 1: '
+              GET_VAR handledResult type=kotlin.Int operator=null
+        RETURN type=kotlin.Nothing from=box
+          GET_VAR result type=kotlin.String operator=null

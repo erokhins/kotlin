@@ -16,3 +16,5 @@ fun box() : String {
     assertEquals(6, foo())
     return "OK"
 }
+
+

@@ -1,0 +1,99 @@
+MODULE <test-module>
+  FILE /cloneableClassWithoutClone.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A(/*0*/ s: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD s type=kotlin.Unit operator=null
+            receiver: THIS public final data class A : kotlin.Cloneable type=A
+            value: GET_VAR s type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public final val s: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR s type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public final fun externalClone(): A
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=externalClone
+            TYPE_OP operator=CAST typeOperand=A
+              CALL .clone type=kotlin.Any operator=null
+                $this: THIS public final data class A : kotlin.Cloneable type=A
+      FUN public final operator /*synthesized*/ fun component1(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=component1
+            CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+              $this: THIS public final data class A : kotlin.Cloneable type=A
+      FUN public final /*synthesized*/ fun copy(/*0*/ s: kotlin.String = ...): A
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=copy
+            CALL .<init> type=A operator=null
+              s: GET_VAR s type=kotlin.String operator=null
+      FUN public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=toString
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='A('
+              CONST String type=kotlin.String value='s='
+              CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public final data class A : kotlin.Cloneable type=A
+              CONST String type=kotlin.String value=')'
+      FUN public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+        BLOCK_BODY
+          VAR val tmp0_result: kotlin.Int
+            CONST Int type=kotlin.Int value='0'
+          SET_VAR tmp0_result type=kotlin.Unit operator=EQ
+            CALL .hashCode type=kotlin.Int operator=null
+              $this: CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+                $this: THIS public final data class A : kotlin.Cloneable type=A
+          RETURN type=kotlin.Nothing from=hashCode
+            GET_VAR tmp0_result type=kotlin.Int operator=null
+      FUN public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+        BLOCK_BODY
+          WHEN type=kotlin.Unit operator=null
+            if: CALL .EQEQEQ type=kotlin.Boolean operator=EQEQEQ
+              arg0: THIS public final data class A : kotlin.Cloneable type=A
+              arg1: GET_VAR other type=kotlin.Any? operator=null
+            then: RETURN type=kotlin.Nothing from=equals
+              CONST Boolean type=kotlin.Boolean value='true'
+          WHEN type=kotlin.Unit operator=null
+            if: TYPE_OP operator=NOT_INSTANCEOF typeOperand=A
+              GET_VAR other type=kotlin.Any? operator=null
+            then: RETURN type=kotlin.Nothing from=equals
+              CONST Boolean type=kotlin.Boolean value='false'
+          VAR val tmp0_other_with_cast: A
+            TYPE_OP operator=CAST typeOperand=A
+              GET_VAR other type=kotlin.Any? operator=null
+          WHEN type=kotlin.Unit operator=null
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+                  $this: THIS public final data class A : kotlin.Cloneable type=A
+                arg1: CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+                  $this: GET_VAR tmp0_other_with_cast type=A operator=null
+            then: RETURN type=kotlin.Nothing from=equals
+              CONST Boolean type=kotlin.Boolean value='false'
+          RETURN type=kotlin.Nothing from=equals
+            CONST Boolean type=kotlin.Boolean value='true'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val a: A
+          CALL .<init> type=A operator=null
+            s: CONST String type=kotlin.String value='OK'
+        VAR val b: A
+          CALL .externalClone type=A operator=null
+            $this: GET_VAR a type=A operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR a type=A operator=null
+              arg1: GET_VAR b type=A operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail equals'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .EQEQEQ type=kotlin.Boolean operator=EQEQEQ
+            arg0: GET_VAR a type=A operator=null
+            arg1: GET_VAR b type=A operator=null
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail identity'
+        RETURN type=kotlin.Nothing from=box
+          CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+            $this: GET_VAR b type=A operator=null

@@ -11,3 +11,5 @@ fun box() : String {
   val f = bar.test()
   return if (f == "xyzzy") "OK" else "fail"
 }
+
+

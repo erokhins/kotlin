@@ -1,0 +1,64 @@
+MODULE <test-module>
+  FILE /arrayConvention.kt
+    PROPERTY public var result: kotlin.String
+      EXPRESSION_BODY
+        CONST String type=kotlin.String value='fail'
+    FUN private operator fun X.get(/*0*/ name: kotlin.String): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=get
+          CALL .plus type=kotlin.String operator=PLUS
+            $this: GET_VAR name type=kotlin.String operator=null
+            other: CONST String type=kotlin.String value='K'
+    FUN private operator fun X.set(/*0*/ name: kotlin.String, /*1*/ v: kotlin.String): kotlin.Unit
+      BLOCK_BODY
+        CALL .<set-result> type=kotlin.Unit operator=EQ
+          <set-?>: GET_VAR v type=kotlin.String operator=null
+    CLASS CLASS X
+      CONSTRUCTOR public constructor X()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=X
+      FUN public final fun test(): kotlin.String
+        BLOCK_BODY
+          WHEN type=kotlin.Unit operator=IF
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .get type=kotlin.String operator=GET_ARRAY_ELEMENT
+                  $receiver: THIS public final class X type=X
+                  name: CONST String type=kotlin.String value='O'
+                arg1: CONST String type=kotlin.String value='OK'
+            then: RETURN type=kotlin.Nothing from=test
+              STRING_CONCATENATION type=kotlin.String
+                CONST String type=kotlin.String value='fail 1: '
+                CALL .get type=kotlin.String operator=GET_ARRAY_ELEMENT
+                  $receiver: THIS public final class X type=X
+                  name: CONST String type=kotlin.String value='O'
+          BLOCK type=kotlin.Unit operator=PLUSEQ
+            VAR val tmp0_array: X
+              THIS public final class X type=X
+            VAR val tmp1_index0: kotlin.String
+              CONST String type=kotlin.String value='O'
+            CALL .set type=kotlin.Unit operator=PLUSEQ
+              $receiver: GET_VAR tmp0_array type=X operator=null
+              name: GET_VAR tmp1_index0 type=kotlin.String operator=null
+              v: CALL .plus type=kotlin.String operator=PLUSEQ
+                $this: CALL .get type=kotlin.String operator=PLUSEQ
+                  $receiver: GET_VAR tmp0_array type=X operator=null
+                  name: GET_VAR tmp1_index0 type=kotlin.String operator=null
+                other: CONST String type=kotlin.String value='K'
+          WHEN type=kotlin.Unit operator=IF
+            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                arg0: CALL .<get-result> type=kotlin.String operator=GET_PROPERTY
+                arg1: CONST String type=kotlin.String value='OKK'
+            then: RETURN type=kotlin.Nothing from=test
+              STRING_CONCATENATION type=kotlin.String
+                CONST String type=kotlin.String value='fail 2: '
+                CALL .<get-result> type=kotlin.String operator=GET_PROPERTY
+          RETURN type=kotlin.Nothing from=test
+            CONST String type=kotlin.String value='OK'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .test type=kotlin.String operator=null
+            $this: CALL .<init> type=X operator=null

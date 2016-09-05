@@ -23,3 +23,4 @@ fun box(): String {
     val s = MyClass(Z("OK"))
     return s.test()
 }
+

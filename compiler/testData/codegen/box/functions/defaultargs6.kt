@@ -5,3 +5,5 @@ interface A {
 class B : A {}
 
 fun box() = if (B().foo(1) == 42) "OK" else "Fail"
+
+

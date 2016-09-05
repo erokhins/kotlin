@@ -29,3 +29,5 @@ class A {
 fun box() : String {
     return "OK"
 }
+
+

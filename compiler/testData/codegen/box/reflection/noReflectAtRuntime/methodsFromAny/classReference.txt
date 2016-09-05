@@ -1,0 +1,47 @@
+MODULE <test-module>
+  FILE /classReference.kt
+    CLASS CLASS M
+      CONSTRUCTOR public constructor M()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=M
+    FUN public fun check(/*0*/ x: kotlin.reflect.KClass<*>): kotlin.Unit
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_VAR x type=kotlin.reflect.KClass<*> operator=null
+          actual: CALL .<get-kotlin> type=kotlin.reflect.KClass<out kotlin.Any> operator=GET_PROPERTY
+            $receiver: CALL .<get-java> type=java.lang.Class<out kotlin.Any> operator=GET_PROPERTY
+              $receiver: GET_VAR x type=kotlin.reflect.KClass<*> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .hashCode type=kotlin.Int operator=null
+            $this: GET_VAR x type=kotlin.reflect.KClass<*> operator=null
+          actual: CALL .hashCode type=kotlin.Int operator=null
+            $this: CALL .<get-kotlin> type=kotlin.reflect.KClass<out kotlin.Any> operator=GET_PROPERTY
+              $receiver: CALL .<get-java> type=java.lang.Class<out kotlin.Any> operator=GET_PROPERTY
+                $receiver: GET_VAR x type=kotlin.reflect.KClass<*> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .plus type=kotlin.String operator=PLUS
+            $this: CALL .toString type=kotlin.String operator=null
+              $this: CALL .<get-java> type=java.lang.Class<out kotlin.Any> operator=GET_PROPERTY
+                $receiver: GET_VAR x type=kotlin.reflect.KClass<*> operator=null
+            other: CONST String type=kotlin.String value=' (Kotlin reflection is not available)'
+          actual: CALL .toString type=kotlin.String operator=null
+            $this: GET_VAR x type=kotlin.reflect.KClass<*> operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .check type=kotlin.Unit operator=null
+          x: CLASS_REFERENCE M type=kotlin.reflect.KClass<M>
+        CALL .check type=kotlin.Unit operator=null
+          x: CLASS_REFERENCE String type=kotlin.reflect.KClass<kotlin.String>
+        CALL .check type=kotlin.Unit operator=null
+          x: CLASS_REFERENCE Error type=kotlin.reflect.KClass<kotlin.Error /* = java.lang.Error */>
+        CALL .check type=kotlin.Unit operator=null
+          x: CLASS_REFERENCE Int type=kotlin.reflect.KClass<kotlin.Int>
+        CALL .check type=kotlin.Unit operator=null
+          x: CLASS_REFERENCE Integer type=kotlin.reflect.KClass<java.lang.Integer>
+        CALL .check type=kotlin.Unit operator=null
+          x: CLASS_REFERENCE MutableList type=kotlin.reflect.KClass<kotlin.collections.MutableList<*>>
+        CALL .check type=kotlin.Unit operator=null
+          x: CLASS_REFERENCE Array type=kotlin.reflect.KClass<kotlin.Array<kotlin.String>>
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

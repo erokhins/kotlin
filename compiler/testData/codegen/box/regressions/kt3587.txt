@@ -1,0 +1,25 @@
+MODULE <test-module>
+  FILE /kt3587.kt
+    CLASS CLASS Variable
+      CONSTRUCTOR public constructor Variable()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Variable
+      PROPERTY public final val lightVar: LightVariable
+        EXPRESSION_BODY
+          WHEN type=LightVariable operator=IF
+            if: TYPE_OP operator=INSTANCEOF typeOperand=LightVariable
+              THIS public open class Variable type=Variable
+            then: TYPE_OP operator=IMPLICIT_CAST typeOperand=LightVariable
+              THIS public open class Variable type=Variable
+            else: CALL .<init> type=LightVariable operator=null
+    CLASS CLASS LightVariable
+      CONSTRUCTOR public constructor LightVariable()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Variable
+          INSTANCE_INITIALIZER_CALL classDescriptor=LightVariable
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .<init> type=Variable operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

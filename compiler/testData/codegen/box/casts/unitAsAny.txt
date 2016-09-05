@@ -1,0 +1,21 @@
+MODULE <test-module>
+  FILE /unitAsAny.kt
+    FUN public fun println(/*0*/ s: kotlin.String): kotlin.Unit
+      BLOCK_BODY
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val x: kotlin.Any
+          TYPE_OP operator=CAST typeOperand=kotlin.Any
+            CALL .println type=kotlin.Unit operator=null
+              s: CONST String type=kotlin.String value=':Hi!'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR x type=kotlin.Any operator=null
+              arg1: GET_OBJECT Unit type=kotlin.Unit
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail: '
+              GET_VAR x type=kotlin.Any operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -1,0 +1,52 @@
+MODULE <test-module>
+  FILE /kotlin.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY @kotlin.jvm.JvmField() public final var foo: kotlin.String
+        EXPRESSION_BODY
+          CONST String type=kotlin.String value='fail'
+      CLASS OBJECT Companion
+        CONSTRUCTOR private constructor Companion()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL JavaBaseClass
+            INSTANCE_INITIALIZER_CALL classDescriptor=Companion
+        FUN @kotlin.jvm.JvmStatic() public final fun test(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=test
+              CALL .runSlowly type=kotlin.String operator=null
+                f: BLOCK type=() -> kotlin.String! operator=LAMBDA
+                  FUN local final fun <anonymous>(): kotlin.String!
+                    BLOCK_BODY
+                      CALL .<set-foo> type=kotlin.Unit operator=EQ
+                        $receiver: THIS public companion object Companion : JavaBaseClass type=z.A.Companion
+                        <set-?>: CONST String type=kotlin.String value='OK'
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                        CALL .<get-foo> type=kotlin.String! operator=GET_PROPERTY
+                          $receiver: THIS public companion object Companion : JavaBaseClass type=z.A.Companion
+                  CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String! operator=LAMBDA
+    FUN public fun runSlowly(/*0*/ f: () -> kotlin.String): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=runSlowly
+          CALL .invoke type=kotlin.String operator=INVOKE
+            $this: GET_VAR f type=() -> kotlin.String operator=VARIABLE_AS_FUNCTION
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val a: z.A
+          CALL .<init> type=z.A operator=null
+        CALL .<set-foo> type=kotlin.Unit operator=EQ
+          $this: GET_VAR a type=z.A operator=null
+          <set-?>: CONST String type=kotlin.String value='Kotlin'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-foo> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR a type=z.A operator=null
+              arg1: CONST String type=kotlin.String value='Kotlin'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail'
+        RETURN type=kotlin.Nothing from=box
+          CALL .test type=kotlin.String operator=null
+            $this: GET_OBJECT Companion type=z.A.Companion

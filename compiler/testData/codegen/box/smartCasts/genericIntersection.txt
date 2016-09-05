@@ -1,0 +1,22 @@
+MODULE <test-module>
+  FILE /genericIntersection.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+    FUN public fun </*0*/ T> test(/*0*/ v: T): T
+      BLOCK_BODY
+        VAR val a: T
+          WHEN type=T operator=IF
+            if: TYPE_OP operator=NOT_INSTANCEOF typeOperand=A
+              GET_VAR v type=T operator=null
+            then: GET_VAR v type=T operator=null
+            else: GET_VAR v type=T operator=null
+        RETURN type=kotlin.Nothing from=test
+          GET_VAR a type=T operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .test type=kotlin.String operator=null
+            v: CONST String type=kotlin.String value='OK'

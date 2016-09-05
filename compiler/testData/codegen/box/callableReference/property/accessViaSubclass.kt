@@ -7,3 +7,5 @@ class Derived : Base()
 fun box(): String {
     return (Base::result).get(Derived())
 }
+
+

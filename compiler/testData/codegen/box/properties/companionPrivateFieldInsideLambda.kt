@@ -8,3 +8,4 @@ class My {
 }
 
 fun box() = My.getValue()
+

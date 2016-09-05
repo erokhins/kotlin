@@ -7,3 +7,5 @@ enum class A() {
 fun f(a: A) = a.t()
 
 fun box()= f(A.ENTRY)
+
+

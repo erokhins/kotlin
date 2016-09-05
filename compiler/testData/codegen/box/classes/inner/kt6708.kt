@@ -10,3 +10,4 @@ fun box(): String {
     B().InnerB()
     return "OK"
 }
+

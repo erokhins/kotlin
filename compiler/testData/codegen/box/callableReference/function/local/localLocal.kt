@@ -8,3 +8,5 @@ fun box(): String {
     val ref = ::foo
     return ref()
 }
+
+

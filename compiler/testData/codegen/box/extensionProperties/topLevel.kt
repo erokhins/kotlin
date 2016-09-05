@@ -4,3 +4,5 @@ val Int.foo: String
 fun box(): String {
     return 1.foo
 }
+
+

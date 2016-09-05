@@ -3,3 +3,5 @@ class Book(val name: String) : Comparable<Book> {
 }
 
 fun box() = if(Book("239").compareTo(Book("932")) != 0) "OK" else "fail"
+
+

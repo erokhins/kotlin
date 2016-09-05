@@ -1,0 +1,11 @@
+MODULE <test-module>
+  FILE /stringPlusOnlyWorksOnString.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR var x: kotlin.collections.MutableCollection<kotlin.Int>
+          CALL .<init> type=java.util.ArrayList<kotlin.Int> operator=null
+        CALL .plus type=kotlin.collections.List<kotlin.Int> operator=PLUS
+          $receiver: GET_VAR x type=kotlin.collections.MutableCollection<kotlin.Int> operator=null
+          elements: CALL .<init> type=java.util.ArrayList<kotlin.Int> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -1,0 +1,31 @@
+MODULE <test-module>
+  FILE /kt1939.kt
+    CLASS CLASS Foo
+      CONSTRUCTOR public constructor Foo</*0*/ T>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Foo
+      FUN public final fun hello(/*0*/ id: T): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=hello
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Hi '
+              GET_VAR id type=T operator=null
+    CLASS INTERFACE Tr
+      FUN public abstract fun hello(/*0*/ s: kotlin.String): kotlin.String
+    CLASS CLASS Bar
+      CONSTRUCTOR public constructor Bar()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Foo
+          INSTANCE_INITIALIZER_CALL classDescriptor=Bar
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CALL .hello type=kotlin.String operator=null
+                $this: CALL .<init> type=Bar operator=null
+                id: CONST String type=kotlin.String value='Reg'
+              arg1: CONST String type=kotlin.String value='Hi Reg'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='Fail'

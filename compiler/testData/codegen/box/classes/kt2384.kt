@@ -13,3 +13,5 @@ fun box(): String {
     A()
     return if (A.c == A.b) "OK" else "Fail"
 }
+
+

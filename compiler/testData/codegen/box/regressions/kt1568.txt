@@ -1,0 +1,15 @@
+MODULE <test-module>
+  FILE /kt1568.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val i: kotlin.Int = 1
+          CONST Int type=kotlin.Int value='1'
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CALL .getSimpleName type=kotlin.String! operator=null
+                $this: CALL .<get-javaClass> type=java.lang.Class<kotlin.Int> operator=GET_PROPERTY
+                  $receiver: GET_VAR i type=kotlin.Int operator=null
+              arg1: CONST String type=kotlin.String value='int'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='fail'

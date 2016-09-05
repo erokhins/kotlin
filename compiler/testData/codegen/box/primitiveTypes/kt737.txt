@@ -1,0 +1,26 @@
+MODULE <test-module>
+  FILE /kt737.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .compareTo type=kotlin.Int operator=null
+                $this: CONST Int type=kotlin.Int value='3'
+                other: CONST Int type=kotlin.Int value='2'
+              arg1: CONST Int type=kotlin.Int value='1'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail #1'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .GTEQ0 type=kotlin.Boolean operator=GTEQ
+            arg0: CALL .compareTo type=kotlin.Int operator=GTEQ
+              $this: CALL .compareTo type=kotlin.Int operator=null
+                $this: CALL .toByte type=kotlin.Byte operator=null
+                  $this: CONST Int type=kotlin.Int value='5'
+                other: CALL .toLong type=kotlin.Long operator=null
+                  $this: CONST Int type=kotlin.Int value='10'
+              other: CONST Int type=kotlin.Int value='0'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='Fail #2'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

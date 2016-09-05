@@ -8,3 +8,5 @@ fun box() : String {
     return if (local() != 1) "fail" else "OK"
 }
 
+
+

@@ -29,3 +29,5 @@ fun box() : String {
     assertEquals("other", foo(A.Companion.Season.AUTUMN))
     return "OK"
 }
+
+

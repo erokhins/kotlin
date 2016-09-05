@@ -16,3 +16,4 @@ fun box(): String {
     assertEquals(123, test(intArrayOf(0, 0, 0, 0)))
     return "OK"
 }
+

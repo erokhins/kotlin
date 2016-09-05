@@ -13,3 +13,4 @@ private operator fun MyString.plus(suffix: String) : MyString =  MyString("${thi
 fun box(): String {
     return Greeter.sayHello("O")
 }
+

@@ -1,0 +1,36 @@
+MODULE <test-module>
+  FILE /valuesInsideEnum.kt
+    CLASS ENUM_CLASS Variants
+      CONSTRUCTOR private constructor Variants()
+        BLOCK_BODY
+          ENUM_CONSTRUCTOR_CALL Enum super
+          INSTANCE_INITIALIZER_CALL classDescriptor=Variants
+      ENUM_ENTRY enum entry O
+        init: ENUM_CONSTRUCTOR_CALL Variants O
+      ENUM_ENTRY enum entry K
+        init: ENUM_CONSTRUCTOR_CALL Variants K
+      CLASS OBJECT Companion
+        CONSTRUCTOR private constructor Companion()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Companion
+        PROPERTY public final val valueStr: kotlin.String
+          EXPRESSION_BODY
+            CALL .plus type=kotlin.String operator=PLUS
+              $this: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+                $this: CALL .get type=Variants operator=GET_ARRAY_ELEMENT
+                  $this: CALL .values type=kotlin.Array<Variants> operator=null
+                  index: CONST Int type=kotlin.Int value='0'
+              other: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+                $this: CALL .get type=Variants operator=GET_ARRAY_ELEMENT
+                  $this: CALL .values type=kotlin.Array<Variants> operator=null
+                  index: CONST Int type=kotlin.Int value='1'
+      FUN public final /*synthesized*/ fun values(): kotlin.Array<Variants>
+        SYNTHETIC_BODY kind=ENUM_VALUES
+      FUN public final /*synthesized*/ fun valueOf(/*0*/ value: kotlin.String): Variants
+        SYNTHETIC_BODY kind=ENUM_VALUEOF
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .<get-valueStr> type=kotlin.String operator=GET_PROPERTY
+            $this: GET_OBJECT Companion type=Variants.Companion

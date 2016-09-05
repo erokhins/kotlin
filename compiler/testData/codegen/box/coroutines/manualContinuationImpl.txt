@@ -1,0 +1,68 @@
+MODULE <test-module>
+  FILE /manualContinuationImpl.kt
+    CLASS CLASS Controller
+      CONSTRUCTOR public constructor Controller()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Controller
+      FUN public final suspend fun suspendHere(/*0*/ x: kotlin.coroutines.Continuation<kotlin.String>): kotlin.Unit
+        BLOCK_BODY
+          CALL .resume type=kotlin.Unit operator=null
+            $this: GET_VAR x type=kotlin.coroutines.Continuation<kotlin.String> operator=null
+            data: CONST String type=kotlin.String value='OK'
+    FUN public fun builder(/*0*/ coroutine c: Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit>): kotlin.Unit
+      BLOCK_BODY
+        CALL .resume type=kotlin.Unit operator=null
+          $this: CALL .invoke type=kotlin.coroutines.Continuation<kotlin.Unit> operator=INVOKE
+            $this: GET_VAR c type=Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit> operator=VARIABLE_AS_FUNCTION
+            p1: CALL .<init> type=Controller operator=null
+          data: GET_OBJECT Unit type=kotlin.Unit
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR var result: kotlin.String
+          CONST String type=kotlin.String value='fail'
+        VAR val lambda: Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit>
+          BLOCK type=Controller.() -> box.<anonymous>.<no name provided> operator=LAMBDA
+            FUN local final fun Controller.<anonymous>(): box.<anonymous>.<no name provided>
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  BLOCK type=box.<anonymous>.<no name provided> operator=OBJECT_LITERAL
+                    CLASS CLASS <no name provided>
+                      CONSTRUCTOR public constructor <no name provided>()
+                        BLOCK_BODY
+                          DELEGATING_CONSTRUCTOR_CALL Any
+                          INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+                      FUN public open override /*1*/ fun resume(/*0*/ data: kotlin.Any?): kotlin.Unit
+                        BLOCK_BODY
+                          WHEN type=kotlin.Unit operator=IF
+                            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                              arg0: GET_VAR data type=kotlin.Any? operator=null
+                              arg1: GET_OBJECT Unit type=kotlin.Unit
+                            then: BLOCK type=kotlin.Nothing operator=null
+                              CALL .suspendHere type=kotlin.Unit operator=null
+                                $this: $RECEIVER of: <anonymous> type=Controller
+                                x: THIS local final class <no name provided> : kotlin.coroutines.Continuation<kotlin.Any?> type=box.<anonymous>.<no name provided>
+                              RETURN type=kotlin.Nothing from=resume
+                          WHEN type=kotlin.Unit operator=IF
+                            if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+                              arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+                                arg0: GET_VAR data type=kotlin.Any? operator=null
+                                arg1: CONST String type=kotlin.String value='OK'
+                            then: BLOCK type=kotlin.Nothing operator=null
+                              THROW type=kotlin.Nothing
+                                CALL .<init> type=java.lang.RuntimeException operator=null
+                                  p0: STRING_CONCATENATION type=kotlin.String
+                                    CONST String type=kotlin.String value='fail: '
+                                    GET_VAR data type=kotlin.Any? operator=null
+                          SET_VAR result type=kotlin.Unit operator=EQ
+                            CONST String type=kotlin.String value='OK'
+                      FUN public open override /*1*/ fun resumeWithException(/*0*/ exception: kotlin.Throwable): kotlin.Nothing
+                        BLOCK_BODY
+                          THROW type=kotlin.Nothing
+                            GET_VAR exception type=kotlin.Throwable operator=null
+                    CALL .<init> type=box.<anonymous>.<no name provided> operator=OBJECT_LITERAL
+            CALLABLE_REFERENCE <anonymous> type=Controller.() -> box.<anonymous>.<no name provided> operator=LAMBDA
+        CALL .builder type=kotlin.Unit operator=null
+          c: GET_VAR lambda type=Controller.() -> kotlin.coroutines.Continuation<kotlin.Unit> operator=null
+        RETURN type=kotlin.Nothing from=box
+          GET_VAR result type=kotlin.String operator=null

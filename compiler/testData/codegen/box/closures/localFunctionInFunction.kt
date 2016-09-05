@@ -12,3 +12,4 @@ fun box(): String {
 
   return if (A().test() == 10) "OK" else "fail"
 }
+

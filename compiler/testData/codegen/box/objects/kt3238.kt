@@ -10,3 +10,5 @@ fun box() : String {
     val inner = cons.newInstance(*(arrayOfNulls<String>(0) as Array<String>))
     return "OK"
 }
+
+

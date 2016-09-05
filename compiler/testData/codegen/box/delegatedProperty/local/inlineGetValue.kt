@@ -10,3 +10,5 @@ fun box(): String {
     val OK: String by Delegate()
     return OK
 }
+
+

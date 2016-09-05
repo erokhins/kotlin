@@ -1,0 +1,142 @@
+MODULE <test-module>
+  FILE /callableVisibility.kt
+    CLASS CLASS Foo
+      CONSTRUCTOR public constructor Foo</*0*/ in T>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Foo
+      FUN public final fun publicFun(): kotlin.Unit
+        BLOCK_BODY
+      FUN protected final fun protectedFun(): kotlin.Unit
+        BLOCK_BODY
+      FUN internal final fun internalFun(): kotlin.Unit
+        BLOCK_BODY
+      FUN private final fun privateFun(): kotlin.Unit
+        BLOCK_BODY
+      FUN private/*private to this*/ final fun privateToThisFun(): T
+        BLOCK_BODY
+          BLOCK type=kotlin.Nothing operator=EXCLEXCL
+            VAR val tmp0_notnull: kotlin.Nothing?
+              CONST Null type=kotlin.Nothing? value='null'
+            WHEN type=kotlin.Nothing operator=null
+              if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: GET_VAR tmp0_notnull type=kotlin.Nothing? operator=null
+                arg1: CONST Null type=kotlin.Nothing? value='null'
+              then: CALL .THROW_NPE type=kotlin.Nothing operator=EXCLEXCL
+              else: GET_VAR tmp0_notnull type=kotlin.Nothing? operator=null
+      FUN public final fun getProtectedFun(): kotlin.reflect.KFunction0<kotlin.Unit>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getProtectedFun
+            CALLABLE_REFERENCE protectedFun type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+      FUN public final fun getPrivateFun(): kotlin.reflect.KFunction0<kotlin.Unit>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getPrivateFun
+            CALLABLE_REFERENCE privateFun type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+      FUN public final fun getPrivateToThisFun(): kotlin.reflect.KFunction<*>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getPrivateToThisFun
+            CALLABLE_REFERENCE privateToThisFun type=kotlin.reflect.KFunction0<T> operator=null
+      PROPERTY public final val publicVal: kotlin.Unit
+        EXPRESSION_BODY
+          GET_OBJECT Unit type=kotlin.Unit
+      PROPERTY protected final val protectedVar: kotlin.Unit
+        EXPRESSION_BODY
+          GET_OBJECT Unit type=kotlin.Unit
+      PROPERTY internal final val internalVal: kotlin.Unit
+        EXPRESSION_BODY
+          GET_OBJECT Unit type=kotlin.Unit
+      PROPERTY private final val privateVal: kotlin.Unit
+        EXPRESSION_BODY
+          GET_OBJECT Unit type=kotlin.Unit
+      PROPERTY private/*private to this*/ final val privateToThisVal: T? = null
+        EXPRESSION_BODY
+          CONST Null type=kotlin.Nothing? value='null'
+      FUN public final fun getProtectedVar(): kotlin.reflect.KProperty0<kotlin.Unit>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getProtectedVar
+            CALLABLE_REFERENCE protectedVar type=kotlin.reflect.KProperty0<kotlin.Unit> operator=null
+      FUN public final fun getPrivateVal(): kotlin.reflect.KProperty0<kotlin.Unit>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getPrivateVal
+            CALLABLE_REFERENCE privateVal type=kotlin.reflect.KProperty0<kotlin.Unit> operator=null
+      FUN public final fun getPrivateToThisVal(): kotlin.reflect.KProperty<*>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getPrivateToThisVal
+            CALLABLE_REFERENCE privateToThisVal type=kotlin.reflect.KProperty0<T?> operator=null
+      PROPERTY public final var publicVarPrivateSetter: kotlin.Unit
+        EXPRESSION_BODY
+          GET_OBJECT Unit type=kotlin.Unit
+        PROPERTY_SETTER private final fun <set-publicVarPrivateSetter>(/*0*/ <set-?>: kotlin.Unit): kotlin.Unit
+      FUN public final fun getPublicVarPrivateSetter(): kotlin.reflect.KMutableProperty0<kotlin.Unit>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=getPublicVarPrivateSetter
+            CALLABLE_REFERENCE publicVarPrivateSetter type=kotlin.reflect.KMutableProperty0<kotlin.Unit> operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val f: Foo<kotlin.String>
+          CALL .<init> type=Foo<kotlin.String> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_ENUM_VALUE PUBLIC type=kotlin.reflect.KVisibility
+          actual: CALL .<get-visibility> type=kotlin.reflect.KVisibility? operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE publicFun type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_ENUM_VALUE PROTECTED type=kotlin.reflect.KVisibility
+          actual: CALL .<get-visibility> type=kotlin.reflect.KVisibility? operator=GET_PROPERTY
+            $this: CALL .getProtectedFun type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+              $this: GET_VAR f type=Foo<kotlin.String> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_ENUM_VALUE INTERNAL type=kotlin.reflect.KVisibility
+          actual: CALL .<get-visibility> type=kotlin.reflect.KVisibility? operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE internalFun type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_ENUM_VALUE PRIVATE type=kotlin.reflect.KVisibility
+          actual: CALL .<get-visibility> type=kotlin.reflect.KVisibility? operator=GET_PROPERTY
+            $this: CALL .getPrivateFun type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+              $this: GET_VAR f type=Foo<kotlin.String> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_ENUM_VALUE PRIVATE type=kotlin.reflect.KVisibility
+          actual: CALL .<get-visibility> type=kotlin.reflect.KVisibility? operator=GET_PROPERTY
+            $this: CALL .getPrivateToThisFun type=kotlin.reflect.KFunction<*> operator=null
+              $this: GET_VAR f type=Foo<kotlin.String> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_ENUM_VALUE PUBLIC type=kotlin.reflect.KVisibility
+          actual: CALL .<get-visibility> type=kotlin.reflect.KVisibility? operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE publicVal type=kotlin.reflect.KProperty0<kotlin.Unit> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_ENUM_VALUE PROTECTED type=kotlin.reflect.KVisibility
+          actual: CALL .<get-visibility> type=kotlin.reflect.KVisibility? operator=GET_PROPERTY
+            $this: CALL .getProtectedVar type=kotlin.reflect.KProperty0<kotlin.Unit> operator=null
+              $this: GET_VAR f type=Foo<kotlin.String> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_ENUM_VALUE INTERNAL type=kotlin.reflect.KVisibility
+          actual: CALL .<get-visibility> type=kotlin.reflect.KVisibility? operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE internalVal type=kotlin.reflect.KProperty0<kotlin.Unit> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_ENUM_VALUE PRIVATE type=kotlin.reflect.KVisibility
+          actual: CALL .<get-visibility> type=kotlin.reflect.KVisibility? operator=GET_PROPERTY
+            $this: CALL .getPrivateVal type=kotlin.reflect.KProperty0<kotlin.Unit> operator=null
+              $this: GET_VAR f type=Foo<kotlin.String> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_ENUM_VALUE PRIVATE type=kotlin.reflect.KVisibility
+          actual: CALL .<get-visibility> type=kotlin.reflect.KVisibility? operator=GET_PROPERTY
+            $this: CALL .getPrivateToThisVal type=kotlin.reflect.KProperty<*> operator=null
+              $this: GET_VAR f type=Foo<kotlin.String> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_ENUM_VALUE PUBLIC type=kotlin.reflect.KVisibility
+          actual: CALL .<get-visibility> type=kotlin.reflect.KVisibility? operator=GET_PROPERTY
+            $this: CALL .getPublicVarPrivateSetter type=kotlin.reflect.KMutableProperty0<kotlin.Unit> operator=null
+              $this: GET_VAR f type=Foo<kotlin.String> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_ENUM_VALUE PUBLIC type=kotlin.reflect.KVisibility
+          actual: CALL .<get-visibility> type=kotlin.reflect.KVisibility? operator=GET_PROPERTY
+            $this: CALL .<get-getter> type=kotlin.reflect.KProperty0.Getter<kotlin.Unit> operator=GET_PROPERTY
+              $this: CALL .getPublicVarPrivateSetter type=kotlin.reflect.KMutableProperty0<kotlin.Unit> operator=null
+                $this: GET_VAR f type=Foo<kotlin.String> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_ENUM_VALUE PRIVATE type=kotlin.reflect.KVisibility
+          actual: CALL .<get-visibility> type=kotlin.reflect.KVisibility? operator=GET_PROPERTY
+            $this: CALL .<get-setter> type=kotlin.reflect.KMutableProperty0.Setter<kotlin.Unit> operator=GET_PROPERTY
+              $this: CALL .getPublicVarPrivateSetter type=kotlin.reflect.KMutableProperty0<kotlin.Unit> operator=null
+                $this: GET_VAR f type=Foo<kotlin.String> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -7,3 +7,4 @@ fun box(): String {
     val outer = Outer()
     return "OK"
 }
+

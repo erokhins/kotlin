@@ -3,3 +3,4 @@ fun box(): String {
     val x = "" is Nothing
     return "OK"
 }
+

@@ -1,0 +1,44 @@
+MODULE <test-module>
+  FILE /kt785.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public final var x: kotlin.Int
+        EXPRESSION_BODY
+          CONST Int type=kotlin.Int value='0'
+      PROPERTY public final var z: () -> kotlin.Int
+        EXPRESSION_BODY
+          BLOCK type=() -> kotlin.Int operator=LAMBDA
+            FUN local final fun <anonymous>(): kotlin.Int
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  BLOCK type=kotlin.Int operator=POSTFIX_INCR
+                    VAR val tmp0_this: A
+                      THIS public final class A type=A
+                    BLOCK type=kotlin.Int operator=POSTFIX_INCR
+                      VAR val tmp1: kotlin.Int
+                        CALL .<get-x> type=kotlin.Int operator=POSTFIX_INCR
+                          $this: GET_VAR tmp0_this type=A operator=null
+                      CALL .<set-x> type=kotlin.Unit operator=POSTFIX_INCR
+                        $this: GET_VAR tmp0_this type=A operator=null
+                        <set-?>: CALL .inc type=kotlin.Int operator=POSTFIX_INCR
+                          $this: GET_VAR tmp1 type=kotlin.Int operator=null
+                      GET_VAR tmp1 type=kotlin.Int operator=null
+            CALLABLE_REFERENCE <anonymous> type=() -> kotlin.Int operator=LAMBDA
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val a: A
+          CALL .<init> type=A operator=null
+        CALL .invoke type=kotlin.Int operator=INVOKE
+          $this: CALL .<get-z> type=() -> kotlin.Int operator=GET_PROPERTY
+            $this: GET_VAR a type=A operator=null
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CALL .<get-x> type=kotlin.Int operator=GET_PROPERTY
+                $this: GET_VAR a type=A operator=null
+              arg1: CONST Int type=kotlin.Int value='1'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='fail'

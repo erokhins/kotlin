@@ -15,3 +15,5 @@ class C {
 fun box(): String {
     return C().bar()
 }
+
+

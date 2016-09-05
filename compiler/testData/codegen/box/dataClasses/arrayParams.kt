@@ -8,3 +8,5 @@ fun box(): String {
     val (x, y) = foo(a, b)
     return if (a == x && b == y) "OK" else "Fail"
 }
+
+

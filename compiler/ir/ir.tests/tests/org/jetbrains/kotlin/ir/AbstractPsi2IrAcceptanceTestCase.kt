@@ -29,5 +29,7 @@ abstract class AbstractPsi2IrAcceptanceTestCase : AbstractIrGeneratorTestCase() 
                 .replace(".kt", ".txt")
         val expectedFile = File(expectedPath)
         KotlinTestUtils.assertEqualsToFile(expectedFile, irModuleDump)
+        val text = wholeFile.readText()
+        wholeFile.writeText(text + "\n\n")
     }
 }

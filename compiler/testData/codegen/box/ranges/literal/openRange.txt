@@ -1,0 +1,216 @@
+MODULE <test-module>
+  FILE /openRange.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val list1: java.util.ArrayList<kotlin.Int>
+          CALL .<init> type=java.util.ArrayList<kotlin.Int> operator=null
+        BLOCK type=kotlin.Unit operator=FOR_LOOP
+          VAR val tmp0_iterator: kotlin.collections.IntIterator
+            CALL .iterator type=kotlin.collections.IntIterator operator=FOR_LOOP_ITERATOR
+              $this: CALL .until type=kotlin.ranges.IntRange operator=null
+                $receiver: CONST Int type=kotlin.Int value='1'
+                to: CONST Int type=kotlin.Int value='5'
+          WHILE label=null operator=FOR_LOOP_INNER_WHILE
+            condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+              $this: GET_VAR tmp0_iterator type=kotlin.collections.IntIterator operator=null
+            body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+              VAR val i: kotlin.Int
+                CALL .next type=kotlin.Int operator=FOR_LOOP_NEXT
+                  $this: GET_VAR tmp0_iterator type=kotlin.collections.IntIterator operator=null
+              BLOCK type=kotlin.Unit operator=null
+                CALL .add type=kotlin.Boolean operator=null
+                  $this: GET_VAR list1 type=java.util.ArrayList<kotlin.Int> operator=null
+                  element: GET_VAR i type=kotlin.Int operator=null
+                WHEN type=kotlin.Unit operator=IF
+                  if: CALL .GT0 type=kotlin.Boolean operator=GT
+                    arg0: CALL .compareTo type=kotlin.Int operator=GT
+                      $this: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                        $this: GET_VAR list1 type=java.util.ArrayList<kotlin.Int> operator=null
+                      other: CONST Int type=kotlin.Int value='23'
+                  then: BREAK label=null loop.label=null depth=0
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR list1 type=java.util.ArrayList<kotlin.Int> operator=null
+              arg1: CALL .listOf type=kotlin.collections.List<kotlin.Int> operator=null
+                elements: VARARG type=Array<out Int> varargElementType=Int
+                  CONST Int type=kotlin.Int value='1'
+                  CONST Int type=kotlin.Int value='2'
+                  CONST Int type=kotlin.Int value='3'
+                  CONST Int type=kotlin.Int value='4'
+          then: BLOCK type=kotlin.Nothing operator=null
+            RETURN type=kotlin.Nothing from=box
+              STRING_CONCATENATION type=kotlin.String
+                CONST String type=kotlin.String value='Wrong elements for 1 until 5: '
+                GET_VAR list1 type=java.util.ArrayList<kotlin.Int> operator=null
+        VAR val list2: java.util.ArrayList<kotlin.Int>
+          CALL .<init> type=java.util.ArrayList<kotlin.Int> operator=null
+        BLOCK type=kotlin.Unit operator=FOR_LOOP
+          VAR val tmp1_iterator: kotlin.collections.IntIterator
+            CALL .iterator type=kotlin.collections.IntIterator operator=FOR_LOOP_ITERATOR
+              $this: CALL .until type=kotlin.ranges.IntRange operator=null
+                $receiver: CALL .toByte type=kotlin.Byte operator=null
+                  $this: CONST Int type=kotlin.Int value='1'
+                to: CALL .toByte type=kotlin.Byte operator=null
+                  $this: CONST Int type=kotlin.Int value='5'
+          WHILE label=null operator=FOR_LOOP_INNER_WHILE
+            condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+              $this: GET_VAR tmp1_iterator type=kotlin.collections.IntIterator operator=null
+            body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+              VAR val i: kotlin.Int
+                CALL .next type=kotlin.Int operator=FOR_LOOP_NEXT
+                  $this: GET_VAR tmp1_iterator type=kotlin.collections.IntIterator operator=null
+              BLOCK type=kotlin.Unit operator=null
+                CALL .add type=kotlin.Boolean operator=null
+                  $this: GET_VAR list2 type=java.util.ArrayList<kotlin.Int> operator=null
+                  element: GET_VAR i type=kotlin.Int operator=null
+                WHEN type=kotlin.Unit operator=IF
+                  if: CALL .GT0 type=kotlin.Boolean operator=GT
+                    arg0: CALL .compareTo type=kotlin.Int operator=GT
+                      $this: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                        $this: GET_VAR list2 type=java.util.ArrayList<kotlin.Int> operator=null
+                      other: CONST Int type=kotlin.Int value='23'
+                  then: BREAK label=null loop.label=null depth=0
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR list2 type=java.util.ArrayList<kotlin.Int> operator=null
+              arg1: CALL .listOf type=kotlin.collections.List<kotlin.Int> operator=null
+                elements: VARARG type=Array<out Int> varargElementType=Int
+                  CONST Int type=kotlin.Int value='1'
+                  CONST Int type=kotlin.Int value='2'
+                  CONST Int type=kotlin.Int value='3'
+                  CONST Int type=kotlin.Int value='4'
+          then: BLOCK type=kotlin.Nothing operator=null
+            RETURN type=kotlin.Nothing from=box
+              STRING_CONCATENATION type=kotlin.String
+                CONST String type=kotlin.String value='Wrong elements for 1.toByte() until 5.toByte(): '
+                GET_VAR list2 type=java.util.ArrayList<kotlin.Int> operator=null
+        VAR val list3: java.util.ArrayList<kotlin.Int>
+          CALL .<init> type=java.util.ArrayList<kotlin.Int> operator=null
+        BLOCK type=kotlin.Unit operator=FOR_LOOP
+          VAR val tmp2_iterator: kotlin.collections.IntIterator
+            CALL .iterator type=kotlin.collections.IntIterator operator=FOR_LOOP_ITERATOR
+              $this: CALL .until type=kotlin.ranges.IntRange operator=null
+                $receiver: CALL .toShort type=kotlin.Short operator=null
+                  $this: CONST Int type=kotlin.Int value='1'
+                to: CALL .toShort type=kotlin.Short operator=null
+                  $this: CONST Int type=kotlin.Int value='5'
+          WHILE label=null operator=FOR_LOOP_INNER_WHILE
+            condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+              $this: GET_VAR tmp2_iterator type=kotlin.collections.IntIterator operator=null
+            body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+              VAR val i: kotlin.Int
+                CALL .next type=kotlin.Int operator=FOR_LOOP_NEXT
+                  $this: GET_VAR tmp2_iterator type=kotlin.collections.IntIterator operator=null
+              BLOCK type=kotlin.Unit operator=null
+                CALL .add type=kotlin.Boolean operator=null
+                  $this: GET_VAR list3 type=java.util.ArrayList<kotlin.Int> operator=null
+                  element: GET_VAR i type=kotlin.Int operator=null
+                WHEN type=kotlin.Unit operator=IF
+                  if: CALL .GT0 type=kotlin.Boolean operator=GT
+                    arg0: CALL .compareTo type=kotlin.Int operator=GT
+                      $this: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                        $this: GET_VAR list3 type=java.util.ArrayList<kotlin.Int> operator=null
+                      other: CONST Int type=kotlin.Int value='23'
+                  then: BREAK label=null loop.label=null depth=0
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR list3 type=java.util.ArrayList<kotlin.Int> operator=null
+              arg1: CALL .listOf type=kotlin.collections.List<kotlin.Int> operator=null
+                elements: VARARG type=Array<out Int> varargElementType=Int
+                  CONST Int type=kotlin.Int value='1'
+                  CONST Int type=kotlin.Int value='2'
+                  CONST Int type=kotlin.Int value='3'
+                  CONST Int type=kotlin.Int value='4'
+          then: BLOCK type=kotlin.Nothing operator=null
+            RETURN type=kotlin.Nothing from=box
+              STRING_CONCATENATION type=kotlin.String
+                CONST String type=kotlin.String value='Wrong elements for 1.toShort() until 5.toShort(): '
+                GET_VAR list3 type=java.util.ArrayList<kotlin.Int> operator=null
+        VAR val list4: java.util.ArrayList<kotlin.Long>
+          CALL .<init> type=java.util.ArrayList<kotlin.Long> operator=null
+        BLOCK type=kotlin.Unit operator=FOR_LOOP
+          VAR val tmp3_iterator: kotlin.collections.LongIterator
+            CALL .iterator type=kotlin.collections.LongIterator operator=FOR_LOOP_ITERATOR
+              $this: CALL .until type=kotlin.ranges.LongRange operator=null
+                $receiver: CALL .toLong type=kotlin.Long operator=null
+                  $this: CONST Int type=kotlin.Int value='1'
+                to: CALL .toLong type=kotlin.Long operator=null
+                  $this: CONST Int type=kotlin.Int value='5'
+          WHILE label=null operator=FOR_LOOP_INNER_WHILE
+            condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+              $this: GET_VAR tmp3_iterator type=kotlin.collections.LongIterator operator=null
+            body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+              VAR val i: kotlin.Long
+                CALL .next type=kotlin.Long operator=FOR_LOOP_NEXT
+                  $this: GET_VAR tmp3_iterator type=kotlin.collections.LongIterator operator=null
+              BLOCK type=kotlin.Unit operator=null
+                CALL .add type=kotlin.Boolean operator=null
+                  $this: GET_VAR list4 type=java.util.ArrayList<kotlin.Long> operator=null
+                  element: GET_VAR i type=kotlin.Long operator=null
+                WHEN type=kotlin.Unit operator=IF
+                  if: CALL .GT0 type=kotlin.Boolean operator=GT
+                    arg0: CALL .compareTo type=kotlin.Int operator=GT
+                      $this: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                        $this: GET_VAR list4 type=java.util.ArrayList<kotlin.Long> operator=null
+                      other: CONST Int type=kotlin.Int value='23'
+                  then: BREAK label=null loop.label=null depth=0
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR list4 type=java.util.ArrayList<kotlin.Long> operator=null
+              arg1: CALL .listOf type=kotlin.collections.List<kotlin.Long> operator=null
+                elements: VARARG type=Array<out Long> varargElementType=Long
+                  CONST Long type=kotlin.Long value='1'
+                  CONST Long type=kotlin.Long value='2'
+                  CONST Long type=kotlin.Long value='3'
+                  CONST Long type=kotlin.Long value='4'
+          then: BLOCK type=kotlin.Nothing operator=null
+            RETURN type=kotlin.Nothing from=box
+              STRING_CONCATENATION type=kotlin.String
+                CONST String type=kotlin.String value='Wrong elements for 1.toLong() until 5.toLong(): '
+                GET_VAR list4 type=java.util.ArrayList<kotlin.Long> operator=null
+        VAR val list5: java.util.ArrayList<kotlin.Char>
+          CALL .<init> type=java.util.ArrayList<kotlin.Char> operator=null
+        BLOCK type=kotlin.Unit operator=FOR_LOOP
+          VAR val tmp4_iterator: kotlin.collections.CharIterator
+            CALL .iterator type=kotlin.collections.CharIterator operator=FOR_LOOP_ITERATOR
+              $this: CALL .until type=kotlin.ranges.CharRange operator=null
+                $receiver: CONST Char type=kotlin.Char value='a'
+                to: CONST Char type=kotlin.Char value='d'
+          WHILE label=null operator=FOR_LOOP_INNER_WHILE
+            condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+              $this: GET_VAR tmp4_iterator type=kotlin.collections.CharIterator operator=null
+            body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+              VAR val i: kotlin.Char
+                CALL .next type=kotlin.Char operator=FOR_LOOP_NEXT
+                  $this: GET_VAR tmp4_iterator type=kotlin.collections.CharIterator operator=null
+              BLOCK type=kotlin.Unit operator=null
+                CALL .add type=kotlin.Boolean operator=null
+                  $this: GET_VAR list5 type=java.util.ArrayList<kotlin.Char> operator=null
+                  element: GET_VAR i type=kotlin.Char operator=null
+                WHEN type=kotlin.Unit operator=IF
+                  if: CALL .GT0 type=kotlin.Boolean operator=GT
+                    arg0: CALL .compareTo type=kotlin.Int operator=GT
+                      $this: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                        $this: GET_VAR list5 type=java.util.ArrayList<kotlin.Char> operator=null
+                      other: CONST Int type=kotlin.Int value='23'
+                  then: BREAK label=null loop.label=null depth=0
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR list5 type=java.util.ArrayList<kotlin.Char> operator=null
+              arg1: CALL .listOf type=kotlin.collections.List<kotlin.Char> operator=null
+                elements: VARARG type=Array<out Char> varargElementType=Char
+                  CONST Char type=kotlin.Char value='a'
+                  CONST Char type=kotlin.Char value='b'
+                  CONST Char type=kotlin.Char value='c'
+          then: BLOCK type=kotlin.Nothing operator=null
+            RETURN type=kotlin.Nothing from=box
+              STRING_CONCATENATION type=kotlin.String
+                CONST String type=kotlin.String value='Wrong elements for 'a' until 'd': '
+                GET_VAR list5 type=java.util.ArrayList<kotlin.Char> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

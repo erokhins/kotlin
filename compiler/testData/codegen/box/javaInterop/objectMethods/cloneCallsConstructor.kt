@@ -9,3 +9,5 @@ fun box(): String {
     if (b === a) return "Fail identity"
     return "OK"
 }
+
+

@@ -1,0 +1,81 @@
+MODULE <test-module>
+  FILE /extensionArray.kt
+    FUN public fun checkLess(/*0*/ x: kotlin.Array<kotlin.Int>, /*1*/ y: kotlin.Array<kotlin.Int>): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=checkLess
+          WHEN type=kotlin.String operator=WHEN
+            if: CALL .GTEQ0 type=kotlin.Boolean operator=GTEQ
+              arg0: CALL .compareTo type=kotlin.Int operator=GTEQ
+                $receiver: GET_VAR x type=kotlin.Array<kotlin.Int> operator=null
+                other: GET_VAR y type=kotlin.Array<kotlin.Int> operator=null
+            then: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail '
+              GET_VAR x type=kotlin.Array<kotlin.Int> operator=null
+              CONST String type=kotlin.String value=' >= '
+              GET_VAR y type=kotlin.Array<kotlin.Int> operator=null
+            if: CALL .not type=kotlin.Boolean operator=EXCL
+              $this: CALL .LT0 type=kotlin.Boolean operator=LT
+                arg0: CALL .compareTo type=kotlin.Int operator=LT
+                  $receiver: GET_VAR x type=kotlin.Array<kotlin.Int> operator=null
+                  other: GET_VAR y type=kotlin.Array<kotlin.Int> operator=null
+            then: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail !('
+              GET_VAR x type=kotlin.Array<kotlin.Int> operator=null
+              CONST String type=kotlin.String value=' < '
+              GET_VAR y type=kotlin.Array<kotlin.Int> operator=null
+              CONST String type=kotlin.String value=')'
+            if: CALL .not type=kotlin.Boolean operator=EXCL
+              $this: CALL .LTEQ0 type=kotlin.Boolean operator=LTEQ
+                arg0: CALL .compareTo type=kotlin.Int operator=LTEQ
+                  $receiver: GET_VAR x type=kotlin.Array<kotlin.Int> operator=null
+                  other: GET_VAR y type=kotlin.Array<kotlin.Int> operator=null
+            then: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail !('
+              GET_VAR x type=kotlin.Array<kotlin.Int> operator=null
+              CONST String type=kotlin.String value=' <= '
+              GET_VAR y type=kotlin.Array<kotlin.Int> operator=null
+              CONST String type=kotlin.String value=')'
+            if: CALL .GT0 type=kotlin.Boolean operator=GT
+              arg0: CALL .compareTo type=kotlin.Int operator=GT
+                $receiver: GET_VAR x type=kotlin.Array<kotlin.Int> operator=null
+                other: GET_VAR y type=kotlin.Array<kotlin.Int> operator=null
+            then: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail '
+              GET_VAR x type=kotlin.Array<kotlin.Int> operator=null
+              CONST String type=kotlin.String value=' > '
+              GET_VAR y type=kotlin.Array<kotlin.Int> operator=null
+            if: CALL .GTEQ0 type=kotlin.Boolean operator=GTEQ
+              arg0: CALL .compareTo type=kotlin.Int operator=GTEQ
+                $this: CALL .compareTo type=kotlin.Int operator=null
+                  $receiver: GET_VAR x type=kotlin.Array<kotlin.Int> operator=null
+                  other: GET_VAR y type=kotlin.Array<kotlin.Int> operator=null
+                other: CONST Int type=kotlin.Int value='0'
+            then: STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='Fail '
+              GET_VAR x type=kotlin.Array<kotlin.Int> operator=null
+              CONST String type=kotlin.String value='.compareTo('
+              GET_VAR y type=kotlin.Array<kotlin.Int> operator=null
+              CONST String type=kotlin.String value=') >= 0'
+            else: CONST String type=kotlin.String value='OK'
+    FUN public operator fun kotlin.Array<kotlin.Int>.compareTo(/*0*/ other: kotlin.Array<kotlin.Int>): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=compareTo
+          CALL .minus type=kotlin.Int operator=MINUS
+            $this: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+              $this: $RECEIVER of: compareTo type=kotlin.Array<kotlin.Int>
+            other: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+              $this: GET_VAR other type=kotlin.Array<kotlin.Int> operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val a: kotlin.Array<kotlin.Int>
+          TYPE_OP operator=CAST typeOperand=kotlin.Array<kotlin.Int>
+            CALL .arrayOfNulls type=kotlin.Array<kotlin.Int?> operator=null
+              size: CONST Int type=kotlin.Int value='0'
+        VAR val b: kotlin.Array<kotlin.Int>
+          TYPE_OP operator=CAST typeOperand=kotlin.Array<kotlin.Int>
+            CALL .arrayOfNulls type=kotlin.Array<kotlin.Int?> operator=null
+              size: CONST Int type=kotlin.Int value='1'
+        RETURN type=kotlin.Nothing from=box
+          CALL .checkLess type=kotlin.String operator=null
+            x: GET_VAR a type=kotlin.Array<kotlin.Int> operator=null
+            y: GET_VAR b type=kotlin.Array<kotlin.Int> operator=null

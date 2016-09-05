@@ -1,0 +1,45 @@
+MODULE <test-module>
+  FILE /kt9711_2.kt
+    CLASS ENUM_CLASS IssueState
+      CONSTRUCTOR private constructor IssueState()
+        BLOCK_BODY
+          ENUM_CONSTRUCTOR_CALL Enum super
+          INSTANCE_INITIALIZER_CALL classDescriptor=IssueState
+      ENUM_ENTRY enum entry FIXED
+        init: ENUM_CONSTRUCTOR_CALL FIXED FIXED
+        class: CLASS ENUM_ENTRY FIXED
+          CONSTRUCTOR private constructor FIXED()
+            BLOCK_BODY
+              ENUM_CONSTRUCTOR_CALL IssueState super
+              INSTANCE_INITIALIZER_CALL classDescriptor=FIXED
+          FUN public open override /*1*/ fun ToString(): kotlin.String
+            BLOCK_BODY
+              RETURN type=kotlin.Nothing from=ToString
+                CALL .<get-k> type=kotlin.String operator=GET_PROPERTY
+                  $this: CALL .<init> type=IssueState.FIXED.D operator=null
+          FUN public final fun s(): kotlin.String
+            BLOCK_BODY
+              RETURN type=kotlin.Nothing from=s
+                CONST String type=kotlin.String value='OK'
+          CLASS CLASS D
+            CONSTRUCTOR public constructor D()
+              BLOCK_BODY
+                DELEGATING_CONSTRUCTOR_CALL Any
+                INSTANCE_INITIALIZER_CALL classDescriptor=D
+            PROPERTY public final val k: kotlin.String
+              EXPRESSION_BODY
+                CALL .s type=kotlin.String operator=null
+                  $this: THIS enum entry FIXED type=IssueState.FIXED
+      FUN public open fun ToString(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=ToString
+            CONST String type=kotlin.String value='fail'
+      FUN public final /*synthesized*/ fun values(): kotlin.Array<IssueState>
+        SYNTHETIC_BODY kind=ENUM_VALUES
+      FUN public final /*synthesized*/ fun valueOf(/*0*/ value: kotlin.String): IssueState
+        SYNTHETIC_BODY kind=ENUM_VALUEOF
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .ToString type=kotlin.String operator=null
+            $this: GET_ENUM_VALUE FIXED type=IssueState

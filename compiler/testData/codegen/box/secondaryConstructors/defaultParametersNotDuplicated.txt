@@ -1,0 +1,73 @@
+MODULE <test-module>
+  FILE /defaultParametersNotDuplicated.kt
+    PROPERTY public var global: kotlin.Int
+      EXPRESSION_BODY
+        CONST Int type=kotlin.Int value='0'
+    FUN public fun sideEffect(): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=sideEffect
+          BLOCK type=kotlin.Int operator=POSTFIX_INCR
+            BLOCK type=kotlin.Int operator=POSTFIX_INCR
+              VAR val tmp0: kotlin.Int
+                CALL .<get-global> type=kotlin.Int operator=POSTFIX_INCR
+              CALL .<set-global> type=kotlin.Unit operator=POSTFIX_INCR
+                <set-?>: CALL .inc type=kotlin.Int operator=POSTFIX_INCR
+                  $this: GET_VAR tmp0 type=kotlin.Int operator=null
+              GET_VAR tmp0 type=kotlin.Int operator=null
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A(/*0*/ x: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD x type=kotlin.Unit operator=null
+            receiver: THIS public final class A type=A
+            value: GET_VAR x type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public final val x: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR x type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      CONSTRUCTOR public constructor A(/*0*/ y: kotlin.Int = ..., /*1*/ z: (kotlin.Int) -> kotlin.Int = ...)
+        y: EXPRESSION_BODY
+          CALL .sideEffect type=kotlin.Int operator=null
+        z: EXPRESSION_BODY
+          BLOCK type=(kotlin.Int) -> kotlin.Int operator=LAMBDA
+            FUN local final fun <anonymous>(/*0*/ it: kotlin.Int): kotlin.Int
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .plus type=kotlin.Int operator=PLUS
+                    $this: GET_VAR it type=kotlin.Int operator=null
+                    other: CALL .sideEffect type=kotlin.Int operator=null
+            CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> kotlin.Int operator=LAMBDA
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL A
+            x: STRING_CONCATENATION type=kotlin.String
+              GET_VAR y type=kotlin.Int operator=null
+              CONST String type=kotlin.String value=':'
+              CALL .invoke type=kotlin.Int operator=INVOKE
+                $this: GET_VAR z type=(kotlin.Int) -> kotlin.Int operator=VARIABLE_AS_FUNCTION
+                p1: GET_VAR y type=kotlin.Int operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR var a: A
+          CALL .<init> type=A operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-x> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR a type=A operator=null
+              arg1: CONST String type=kotlin.String value='0:1'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='failed1: '
+              CALL .<get-x> type=kotlin.String operator=GET_PROPERTY
+                $this: GET_VAR a type=A operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-global> type=kotlin.Int operator=GET_PROPERTY
+              arg1: CONST Int type=kotlin.Int value='2'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='failed2: '
+              CALL .<get-global> type=kotlin.Int operator=GET_PROPERTY
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

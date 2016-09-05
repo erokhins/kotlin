@@ -5,3 +5,5 @@ fun foo(s: String): String {
 }
 
 fun box(): String = foo("OK")
+
+

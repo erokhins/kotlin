@@ -35,3 +35,5 @@ fun runSlowly(f: () -> String): String {
 fun box(): String {
     return KotlinExtender.test()
 }
+
+

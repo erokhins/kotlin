@@ -4,3 +4,5 @@ fun box(): String {
     val a = A(Unit)
     return if (a.component1() is Unit) "OK" else "Fail ${a.component1()}"
 }
+
+

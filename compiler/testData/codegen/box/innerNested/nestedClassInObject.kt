@@ -8,3 +8,5 @@ fun box(): String {
     val c = A.C<String>()
     return "OK"
 }
+
+

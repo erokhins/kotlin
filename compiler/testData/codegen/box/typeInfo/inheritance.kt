@@ -9,3 +9,5 @@ class B<T> (val e: T) : A<T>() {
 fun box() : String {
     return if(A<String>().plus("239").add().e == "239" ) "OK" else "fail"
 }
+
+

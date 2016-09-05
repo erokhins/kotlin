@@ -1,0 +1,91 @@
+MODULE <test-module>
+  FILE /constructors.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A(/*0*/ d: kotlin.Double, /*1*/ s: kotlin.String, /*2*/ parent: A?)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      CLASS CLASS Nested
+        CONSTRUCTOR public constructor Nested(/*0*/ a: A)
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Nested
+      CLASS CLASS Inner
+        CONSTRUCTOR public constructor Inner(/*0*/ nested: A.Nested)
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Inner
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .listOf type=kotlin.collections.List<java.lang.Class<out kotlin.Any!>!> operator=null
+            elements: VARARG type=Array<out (java.lang.Class<out (kotlin.Any..kotlin.Any?)>..java.lang.Class<out (kotlin.Any..kotlin.Any?)>?)> varargElementType=(java.lang.Class<out (kotlin.Any..kotlin.Any?)>..java.lang.Class<out (kotlin.Any..kotlin.Any?)>?)
+              GET_BACKING_FIELD TYPE type=java.lang.Class<kotlin.Double!>! operator=GET_PROPERTY
+              CALL .<get-java> type=java.lang.Class<kotlin.String> operator=GET_PROPERTY
+                $receiver: CLASS_REFERENCE String type=kotlin.reflect.KClass<kotlin.String>
+              CALL .<get-java> type=java.lang.Class<A> operator=GET_PROPERTY
+                $receiver: CLASS_REFERENCE A type=kotlin.reflect.KClass<A>
+          actual: CALL .map type=kotlin.collections.List<java.lang.reflect.Type> operator=null
+            $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE <init> type=kotlin.reflect.KFunction3<kotlin.Double, kotlin.String, A?, A> operator=null
+            transform: BLOCK type=(kotlin.reflect.KParameter) -> java.lang.reflect.Type operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KParameter): java.lang.reflect.Type
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+                      $receiver: CALL .<get-type> type=kotlin.reflect.KType operator=GET_PROPERTY
+                        $this: GET_VAR it type=kotlin.reflect.KParameter operator=null
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KParameter) -> java.lang.reflect.Type operator=LAMBDA
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .listOf type=kotlin.collections.List<java.lang.Class<A>> operator=null
+            element: CALL .<get-java> type=java.lang.Class<A> operator=GET_PROPERTY
+              $receiver: CLASS_REFERENCE A type=kotlin.reflect.KClass<A>
+          actual: CALL .map type=kotlin.collections.List<java.lang.reflect.Type> operator=null
+            $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE <init> type=kotlin.reflect.KFunction1<A, A.Nested> operator=null
+            transform: BLOCK type=(kotlin.reflect.KParameter) -> java.lang.reflect.Type operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KParameter): java.lang.reflect.Type
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+                      $receiver: CALL .<get-type> type=kotlin.reflect.KType operator=GET_PROPERTY
+                        $this: GET_VAR it type=kotlin.reflect.KParameter operator=null
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KParameter) -> java.lang.reflect.Type operator=LAMBDA
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .listOf type=kotlin.collections.List<java.lang.Class<out kotlin.Any>> operator=null
+            elements: VARARG type=Array<out Class<out Any>> varargElementType=Class<out Any>
+              CALL .<get-java> type=java.lang.Class<A> operator=GET_PROPERTY
+                $receiver: CLASS_REFERENCE A type=kotlin.reflect.KClass<A>
+              CALL .<get-java> type=java.lang.Class<A.Nested> operator=GET_PROPERTY
+                $receiver: CLASS_REFERENCE Nested type=kotlin.reflect.KClass<A.Nested>
+          actual: CALL .map type=kotlin.collections.List<java.lang.reflect.Type> operator=null
+            $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE <init> type=kotlin.reflect.KFunction2<A, A.Nested, A.Inner> operator=null
+            transform: BLOCK type=(kotlin.reflect.KParameter) -> java.lang.reflect.Type operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KParameter): java.lang.reflect.Type
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+                      $receiver: CALL .<get-type> type=kotlin.reflect.KType operator=GET_PROPERTY
+                        $this: GET_VAR it type=kotlin.reflect.KParameter operator=null
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KParameter) -> java.lang.reflect.Type operator=LAMBDA
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .<get-java> type=java.lang.Class<A> operator=GET_PROPERTY
+            $receiver: CLASS_REFERENCE A type=kotlin.reflect.KClass<A>
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE <init> type=kotlin.reflect.KFunction3<kotlin.Double, kotlin.String, A?, A> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .<get-java> type=java.lang.Class<A.Nested> operator=GET_PROPERTY
+            $receiver: CLASS_REFERENCE Nested type=kotlin.reflect.KClass<A.Nested>
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE <init> type=kotlin.reflect.KFunction1<A, A.Nested> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .<get-java> type=java.lang.Class<A.Inner> operator=GET_PROPERTY
+            $receiver: CLASS_REFERENCE Inner type=kotlin.reflect.KClass<A.Inner>
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE <init> type=kotlin.reflect.KFunction2<A, A.Nested, A.Inner> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

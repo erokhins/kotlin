@@ -21,3 +21,4 @@ fun box(): String {
     val player2 = SimpleGame().getPlayer("OK")
     return player2!!.name
 }
+

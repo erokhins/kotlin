@@ -5,3 +5,5 @@ fun box(): String {
 fun justPrint(value: Int): String {
     return if (value > 0) "OK" else "Fail $value"
 }
+
+

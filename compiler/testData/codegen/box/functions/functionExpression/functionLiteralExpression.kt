@@ -25,3 +25,5 @@ fun box() : String {
   if(  (fooT2<String>("mama"))("papa") != "mamapapa")  return "test 9 failed";
   return "OK"
 }
+
+

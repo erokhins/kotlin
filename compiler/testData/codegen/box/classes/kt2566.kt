@@ -13,3 +13,5 @@ class C : I, B() {
 }
 
 fun box() = C().foo()
+
+

@@ -13,3 +13,5 @@ fun box(): String {
 
     return b.foo(x) + b.foo(y)
 }
+
+

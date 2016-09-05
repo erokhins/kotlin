@@ -10,3 +10,5 @@ class Test
 fun box(): String {
     return Test::class.java.getAnnotation(A::class.java).value
 }
+
+

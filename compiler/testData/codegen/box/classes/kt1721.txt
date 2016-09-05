@@ -1,0 +1,31 @@
+MODULE <test-module>
+  FILE /kt1721.kt
+    CLASS CLASS T
+      CONSTRUCTOR public constructor T(/*0*/ f: () -> kotlin.Any?)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD f type=kotlin.Unit operator=null
+            receiver: THIS public final class T type=T
+            value: GET_VAR f type=() -> kotlin.Any? operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=T
+      PROPERTY public final val f: () -> kotlin.Any?
+        EXPRESSION_BODY
+          GET_VAR f type=() -> kotlin.Any? operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public final fun call(): kotlin.Any?
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=call
+            CALL .invoke type=kotlin.Any? operator=INVOKE
+              $this: CALL .<get-f> type=() -> kotlin.Any? operator=GET_PROPERTY
+                $this: THIS public final class T type=T
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          TYPE_OP operator=CAST typeOperand=kotlin.String
+            CALL .call type=kotlin.Any? operator=null
+              $this: CALL .<init> type=T operator=null
+                f: BLOCK type=() -> kotlin.String operator=LAMBDA
+                  FUN local final fun <anonymous>(): kotlin.String
+                    BLOCK_BODY
+                      RETURN type=kotlin.Nothing from=<anonymous>
+                        CONST String type=kotlin.String value='OK'
+                  CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA

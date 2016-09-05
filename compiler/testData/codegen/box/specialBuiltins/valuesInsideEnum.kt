@@ -6,3 +6,5 @@ enum class Variants {
 }
 
 fun box() = Variants.valueStr
+
+

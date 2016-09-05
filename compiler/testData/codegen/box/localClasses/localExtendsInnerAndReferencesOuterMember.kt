@@ -12,3 +12,5 @@ class A {
 }
 
 fun box() = A().box()
+
+

@@ -23,3 +23,5 @@ fun box(): String {
     val v3 = v1 + v2
     return if (v3.contents.size == 2) "OK" else "fail"
 }
+
+

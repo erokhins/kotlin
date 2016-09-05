@@ -15,3 +15,4 @@ class Outer {
 fun box(): String {
     return Outer.Nested().fn()
 }
+

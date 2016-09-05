@@ -1,0 +1,34 @@
+MODULE <test-module>
+  FILE /topLevelFunctions.kt
+    FUN public fun free(/*0*/ s: kotlin.String): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=free
+          CALL .<get-length> type=kotlin.Int operator=GET_PROPERTY
+            $this: GET_VAR s type=kotlin.String operator=null
+    FUN public fun kotlin.Any.extension(): kotlin.Unit
+      BLOCK_BODY
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_BACKING_FIELD TYPE type=java.lang.Class<kotlin.Int!>! operator=GET_PROPERTY
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+              $this: CALLABLE_REFERENCE free type=kotlin.reflect.KFunction1<kotlin.String, kotlin.Int> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .<get-java> type=java.lang.Class<kotlin.String> operator=GET_PROPERTY
+            $receiver: CLASS_REFERENCE String type=kotlin.reflect.KClass<kotlin.String>
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .<get-type> type=kotlin.reflect.KType operator=GET_PROPERTY
+              $this: CALL .single type=kotlin.reflect.KParameter operator=null
+                $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+                  $this: CALLABLE_REFERENCE free type=kotlin.reflect.KFunction1<kotlin.String, kotlin.Int> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CALL .<get-java> type=java.lang.Class<kotlin.Any> operator=GET_PROPERTY
+            $receiver: CLASS_REFERENCE Any type=kotlin.reflect.KClass<kotlin.Any>
+          actual: CALL .<get-javaType> type=java.lang.reflect.Type operator=GET_PROPERTY
+            $receiver: CALL .<get-type> type=kotlin.reflect.KType operator=GET_PROPERTY
+              $this: CALL .single type=kotlin.reflect.KParameter operator=null
+                $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+                  $this: CALLABLE_REFERENCE extension type=kotlin.reflect.KFunction1<kotlin.Any, kotlin.Unit> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

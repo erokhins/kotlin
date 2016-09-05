@@ -9,3 +9,5 @@ fun box() : String {
   RunnableFunctionWrapper({ res = "OK" }).run()
   return res
 }
+
+

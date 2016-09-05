@@ -1,0 +1,36 @@
+MODULE <test-module>
+  FILE /primitive.kt
+    FUN public fun kotlin.Int.foo(): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo
+          CONST Int type=kotlin.Int value='239'
+    FUN public fun kotlin.Long.bar(): kotlin.Long
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=bar
+          CALL .toLong type=kotlin.Long operator=null
+            $this: CONST Int type=kotlin.Int value='239'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        BLOCK type=kotlin.Int? operator=SAFE_CALL
+          VAR val tmp0_safe_receiver: kotlin.Int
+            CONST Int type=kotlin.Int value='42'
+          WHEN type=kotlin.Int? operator=SAFE_CALL
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: GET_VAR tmp0_safe_receiver type=kotlin.Int operator=null
+              arg1: CONST Null type=kotlin.Nothing? value='null'
+            then: CONST Null type=kotlin.Nothing? value='null'
+            else: CALL .foo type=kotlin.Int operator=null
+              $this: GET_VAR tmp0_safe_receiver type=kotlin.Int operator=null
+        BLOCK type=kotlin.Long? operator=SAFE_CALL
+          VAR val tmp1_safe_receiver: kotlin.Long
+            CALL .toLong type=kotlin.Long operator=null
+              $this: CONST Int type=kotlin.Int value='42'
+          WHEN type=kotlin.Long? operator=SAFE_CALL
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: GET_VAR tmp1_safe_receiver type=kotlin.Long operator=null
+              arg1: CONST Null type=kotlin.Nothing? value='null'
+            then: CONST Null type=kotlin.Nothing? value='null'
+            else: CALL .bar type=kotlin.Long operator=null
+              $this: GET_VAR tmp1_safe_receiver type=kotlin.Long operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

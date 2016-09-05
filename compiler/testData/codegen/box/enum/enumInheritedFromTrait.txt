@@ -1,0 +1,43 @@
+MODULE <test-module>
+  FILE /enumInheritedFromTrait.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .plus type=kotlin.String operator=PLUS
+            $this: CALL .f type=kotlin.String operator=null
+              $this: GET_ENUM_VALUE E1 type=test.MyEnum
+            other: CALL .f type=kotlin.String operator=null
+              $this: GET_ENUM_VALUE E2 type=test.MyEnum
+    CLASS ENUM_CLASS MyEnum
+      CONSTRUCTOR private constructor MyEnum()
+        BLOCK_BODY
+          ENUM_CONSTRUCTOR_CALL Enum super
+          INSTANCE_INITIALIZER_CALL classDescriptor=MyEnum
+      ENUM_ENTRY enum entry E1
+        init: ENUM_CONSTRUCTOR_CALL E1 E1
+        class: CLASS ENUM_ENTRY E1
+          CONSTRUCTOR private constructor E1()
+            BLOCK_BODY
+              ENUM_CONSTRUCTOR_CALL MyEnum super
+              INSTANCE_INITIALIZER_CALL classDescriptor=E1
+          FUN public open override /*1*/ fun f(): kotlin.String
+            BLOCK_BODY
+              RETURN type=kotlin.Nothing from=f
+                CONST String type=kotlin.String value='O'
+      ENUM_ENTRY enum entry E2
+        init: ENUM_CONSTRUCTOR_CALL E2 E2
+        class: CLASS ENUM_ENTRY E2
+          CONSTRUCTOR private constructor E2()
+            BLOCK_BODY
+              ENUM_CONSTRUCTOR_CALL MyEnum super
+              INSTANCE_INITIALIZER_CALL classDescriptor=E2
+          FUN public open override /*1*/ fun f(): kotlin.String
+            BLOCK_BODY
+              RETURN type=kotlin.Nothing from=f
+                CONST String type=kotlin.String value='K'
+      FUN public final /*synthesized*/ fun values(): kotlin.Array<test.MyEnum>
+        SYNTHETIC_BODY kind=ENUM_VALUES
+      FUN public final /*synthesized*/ fun valueOf(/*0*/ value: kotlin.String): test.MyEnum
+        SYNTHETIC_BODY kind=ENUM_VALUEOF
+    CLASS INTERFACE T
+      FUN public abstract fun f(): kotlin.String

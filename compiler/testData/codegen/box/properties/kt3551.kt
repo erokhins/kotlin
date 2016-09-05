@@ -21,3 +21,5 @@ fun box() : String {
     val id = Identifier.init(true)
     return if (id.getValue() == false) return "OK" else "fail"
 }
+
+

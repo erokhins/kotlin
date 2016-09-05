@@ -13,3 +13,4 @@ fun box(): String {
     val inner = Outer.Nested().bar()
     return inner.foo()
 }
+

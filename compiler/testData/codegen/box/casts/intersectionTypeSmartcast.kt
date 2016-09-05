@@ -25,3 +25,4 @@ fun bar(x: Any?): String {
 }
 
 fun box(): String = bar(object : A, B { override fun foo() = "OK" })
+

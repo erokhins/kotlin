@@ -6,3 +6,5 @@ class Outer {
 }
 
 fun box() = "${Outer.Nested.O}${Outer.Nested.K}"
+
+

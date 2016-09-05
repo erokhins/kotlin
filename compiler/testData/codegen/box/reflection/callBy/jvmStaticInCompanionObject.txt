@@ -1,0 +1,84 @@
+MODULE <test-module>
+  FILE /jvmStaticInCompanionObject.kt
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      CLASS OBJECT Companion
+        CONSTRUCTOR private constructor Companion()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Companion
+        FUN @kotlin.jvm.JvmStatic() public final fun foo(/*0*/ a: kotlin.String, /*1*/ b: kotlin.String = ...): kotlin.String
+          b: EXPRESSION_BODY
+            CONST String type=kotlin.String value='b'
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=foo
+              CALL .plus type=kotlin.String operator=PLUS
+                $this: GET_VAR a type=kotlin.String operator=null
+                other: GET_VAR b type=kotlin.String operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val f: kotlin.reflect.KCallable<*>
+          CALL .single type=kotlin.reflect.KCallable<*> operator=null
+            $receiver: CALL .<get-members> type=kotlin.collections.Collection<kotlin.reflect.KCallable<*>> operator=GET_PROPERTY
+              $this: CLASS_REFERENCE Companion type=kotlin.reflect.KClass<C.Companion>
+            predicate: BLOCK type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KCallable<*>): kotlin.Boolean
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                      arg0: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+                        $this: GET_VAR it type=kotlin.reflect.KCallable<*> operator=null
+                      arg1: CONST String type=kotlin.String value='foo'
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+        TRY_CATCH type=kotlin.Unit
+          try: BLOCK type=kotlin.Nothing operator=null
+            CALL .callBy type=kotlin.Any? operator=null
+              $this: GET_VAR f type=kotlin.reflect.KCallable<*> operator=null
+              args: CALL .mapOf type=kotlin.collections.Map<kotlin.reflect.KParameter, kotlin.String> operator=null
+                pair: CALL .to type=kotlin.Pair<kotlin.reflect.KParameter, kotlin.String> operator=null
+                  $receiver: CALL .single type=kotlin.reflect.KParameter operator=null
+                    $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+                      $this: GET_VAR f type=kotlin.reflect.KCallable<*> operator=null
+                    predicate: BLOCK type=(kotlin.reflect.KParameter) -> kotlin.Boolean operator=LAMBDA
+                      FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KParameter): kotlin.Boolean
+                        BLOCK_BODY
+                          RETURN type=kotlin.Nothing from=<anonymous>
+                            CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                              arg0: CALL .<get-name> type=kotlin.String? operator=GET_PROPERTY
+                                $this: GET_VAR it type=kotlin.reflect.KParameter operator=null
+                              arg1: CONST String type=kotlin.String value='a'
+                      CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KParameter) -> kotlin.Boolean operator=LAMBDA
+                  that: CONST String type=kotlin.String value='a'
+            RETURN type=kotlin.Nothing from=box
+              CONST String type=kotlin.String value='Fail: IllegalArgumentException should have been thrown'
+          catch e: BLOCK type=kotlin.Unit operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='ab'
+          actual: CALL .callBy type=kotlin.Any? operator=null
+            $this: GET_VAR f type=kotlin.reflect.KCallable<*> operator=null
+            args: CALL .mapOf type=kotlin.collections.Map<kotlin.reflect.KParameter, kotlin.Any> operator=null
+              pairs: VARARG type=Array<out Pair<KParameter, Any>> varargElementType=Pair<KParameter, Any>
+                CALL .to type=kotlin.Pair<kotlin.reflect.KParameter, C.Companion> operator=null
+                  $receiver: CALL .first type=kotlin.reflect.KParameter operator=null
+                    $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+                      $this: GET_VAR f type=kotlin.reflect.KCallable<*> operator=null
+                  that: GET_OBJECT Companion type=C.Companion
+                CALL .to type=kotlin.Pair<kotlin.reflect.KParameter, kotlin.String> operator=null
+                  $receiver: CALL .single type=kotlin.reflect.KParameter operator=null
+                    $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+                      $this: GET_VAR f type=kotlin.reflect.KCallable<*> operator=null
+                    predicate: BLOCK type=(kotlin.reflect.KParameter) -> kotlin.Boolean operator=LAMBDA
+                      FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KParameter): kotlin.Boolean
+                        BLOCK_BODY
+                          RETURN type=kotlin.Nothing from=<anonymous>
+                            CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                              arg0: CALL .<get-name> type=kotlin.String? operator=GET_PROPERTY
+                                $this: GET_VAR it type=kotlin.reflect.KParameter operator=null
+                              arg1: CONST String type=kotlin.String value='a'
+                      CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KParameter) -> kotlin.Boolean operator=LAMBDA
+                  that: CONST String type=kotlin.String value='a'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -1,0 +1,40 @@
+MODULE <test-module>
+  FILE /initializerBlockDImpl.kt
+    CLASS CLASS World
+      CONSTRUCTOR public constructor World()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=World
+      PROPERTY public final val items: java.util.ArrayList<World.Item>
+        EXPRESSION_BODY
+          CALL .<init> type=java.util.ArrayList<World.Item> operator=null
+      CLASS CLASS Item
+        CONSTRUCTOR public constructor Item()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=Item
+        ANONYMOUS_INITIALIZER Item
+          BLOCK_BODY
+            CALL .add type=kotlin.Boolean operator=null
+              $this: CALL .<get-items> type=java.util.ArrayList<World.Item> operator=GET_PROPERTY
+                $this: THIS public final class World type=World
+              element: THIS public final inner class Item type=World.Item
+      PROPERTY public final val foo: World.Item
+        EXPRESSION_BODY
+          CALL .<init> type=World.Item operator=null
+            $this: THIS public final class World type=World
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val w: World
+          CALL .<init> type=World operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-size> type=kotlin.Int operator=GET_PROPERTY
+                $this: CALL .<get-items> type=java.util.ArrayList<World.Item> operator=GET_PROPERTY
+                  $this: GET_VAR w type=World operator=null
+              arg1: CONST Int type=kotlin.Int value='1'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

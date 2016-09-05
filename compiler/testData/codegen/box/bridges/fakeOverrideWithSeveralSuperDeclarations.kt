@@ -28,3 +28,5 @@ fun box(): String {
     result += d1.foo() as Int
     return if (result == 5 * 42) "OK" else "Fail: $result"
 }
+
+

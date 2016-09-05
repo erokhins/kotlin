@@ -1,0 +1,59 @@
+MODULE <test-module>
+  FILE /kt3450getAndInvoke.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A(/*0*/ s: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD s type=kotlin.Unit operator=null
+            receiver: THIS public final class A type=A
+            value: GET_VAR s type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public final val s: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR s type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN public final operator fun get(/*0*/ i: kotlin.Int): A
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=get
+            CALL .<init> type=A operator=null
+              s: STRING_CONCATENATION type=kotlin.String
+                CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+                  $this: THIS public final class A type=A
+                CONST String type=kotlin.String value=' + '
+                GET_VAR i type=kotlin.Int operator=null
+      FUN public final operator fun invoke(/*0*/ builder: A.() -> kotlin.String): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=invoke
+            CALL .invoke type=kotlin.String operator=INVOKE
+              $this: GET_VAR builder type=A.() -> kotlin.String operator=VARIABLE_AS_FUNCTION
+              $receiver: THIS public final class A type=A
+    FUN public fun x(/*0*/ y: kotlin.String): A
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=x
+          CALL .<init> type=A operator=null
+            s: GET_VAR y type=kotlin.String operator=null
+    FUN public fun foo(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo
+          CALL .invoke type=kotlin.String operator=null
+            $this: CALL .get type=A operator=GET_ARRAY_ELEMENT
+              $this: CALL .x type=A operator=null
+                y: CONST String type=kotlin.String value='aaa'
+              i: CONST Int type=kotlin.Int value='42'
+            builder: BLOCK type=A.() -> kotlin.String operator=LAMBDA
+              FUN local final fun A.<anonymous>(): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    STRING_CONCATENATION type=kotlin.String
+                      CALL .<get-s> type=kotlin.String operator=GET_PROPERTY
+                        $this: $RECEIVER of: <anonymous> type=A
+                      CONST String type=kotlin.String value='!!'
+              CALLABLE_REFERENCE <anonymous> type=A.() -> kotlin.String operator=LAMBDA
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: CALL .foo type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='aaa + 42!!'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='fail'

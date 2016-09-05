@@ -1,0 +1,65 @@
+MODULE <test-module>
+  FILE /typeEqualsHashCode.kt
+    FUN public fun unit(/*0*/ p: kotlin.Unit): kotlin.Unit
+      BLOCK_BODY
+    FUN public fun nullable(/*0*/ s: kotlin.String): kotlin.String?
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=nullable
+          GET_VAR s type=kotlin.String operator=null
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public final fun </*0*/ T> typeParam(/*0*/ t: T): T
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=typeParam
+            GET_VAR t type=T operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        FUN local final fun check(/*0*/ t1: kotlin.reflect.KType, /*1*/ t2: kotlin.reflect.KType): kotlin.Unit
+          BLOCK_BODY
+            CALL .assertEquals type=kotlin.Unit operator=null
+              expected: GET_VAR t1 type=kotlin.reflect.KType operator=null
+              actual: GET_VAR t2 type=kotlin.reflect.KType operator=null
+            CALL .assertEquals type=kotlin.Unit operator=null
+              expected: CALL .hashCode type=kotlin.Int operator=null
+                $this: GET_VAR t1 type=kotlin.reflect.KType operator=null
+              actual: CALL .hashCode type=kotlin.Int operator=null
+                $this: GET_VAR t2 type=kotlin.reflect.KType operator=null
+        CALL .check type=kotlin.Unit operator=null
+          t1: CALL .<get-type> type=kotlin.reflect.KType operator=GET_PROPERTY
+            $this: CALL .single type=kotlin.reflect.KParameter operator=null
+              $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+                $this: CALLABLE_REFERENCE unit type=kotlin.reflect.KFunction1<kotlin.Unit, kotlin.Unit> operator=null
+          t2: CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE unit type=kotlin.reflect.KFunction1<kotlin.Unit, kotlin.Unit> operator=null
+        CALL .assertNotEquals type=kotlin.Unit operator=null
+          illegal: CALL .<get-type> type=kotlin.reflect.KType operator=GET_PROPERTY
+            $this: CALL .single type=kotlin.reflect.KParameter operator=null
+              $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+                $this: CALLABLE_REFERENCE nullable type=kotlin.reflect.KFunction1<kotlin.String, kotlin.String?> operator=null
+          actual: CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+            $this: CALLABLE_REFERENCE nullable type=kotlin.reflect.KFunction1<kotlin.String, kotlin.String?> operator=null
+        VAR val typeParam: kotlin.reflect.KCallable<*>
+          CALL .single type=kotlin.reflect.KCallable<*> operator=null
+            $receiver: CALL .<get-members> type=kotlin.collections.Collection<kotlin.reflect.KCallable<*>> operator=GET_PROPERTY
+              $this: CLASS_REFERENCE A type=kotlin.reflect.KClass<A>
+            predicate: BLOCK type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KCallable<*>): kotlin.Boolean
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                      arg0: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+                        $this: GET_VAR it type=kotlin.reflect.KCallable<*> operator=null
+                      arg1: CONST String type=kotlin.String value='typeParam'
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+        CALL .check type=kotlin.Unit operator=null
+          t1: CALL .<get-type> type=kotlin.reflect.KType operator=GET_PROPERTY
+            $this: CALL .last type=kotlin.reflect.KParameter operator=null
+              $receiver: CALL .<get-parameters> type=kotlin.collections.List<kotlin.reflect.KParameter> operator=GET_PROPERTY
+                $this: GET_VAR typeParam type=kotlin.reflect.KCallable<*> operator=null
+          t2: CALL .<get-returnType> type=kotlin.reflect.KType operator=GET_PROPERTY
+            $this: GET_VAR typeParam type=kotlin.reflect.KCallable<*> operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

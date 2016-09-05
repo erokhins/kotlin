@@ -1,0 +1,29 @@
+MODULE <test-module>
+  FILE /traitImplMethodWithClassReceiver.kt
+    CLASS INTERFACE T
+      FUN public open fun foo(): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            CONST String type=kotlin.String value='OK'
+    CLASS CLASS B
+      CONSTRUCTOR public constructor B()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=B
+      CLASS CLASS C
+        CONSTRUCTOR public constructor C()
+          BLOCK_BODY
+            DELEGATING_CONSTRUCTOR_CALL Any
+            INSTANCE_INITIALIZER_CALL classDescriptor=C
+        FUN public final fun bar(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=bar
+              CALL .invoke type=kotlin.String operator=null
+                $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction1<T, kotlin.String> operator=null
+                p1: THIS public final class B : T type=B
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .bar type=kotlin.String operator=null
+            $this: CALL .<init> type=B.C operator=null
+              $this: CALL .<init> type=B operator=null

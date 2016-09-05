@@ -6,3 +6,5 @@ fun stringConcat(n : Int) : String? {
 }
 
 fun box() = if(stringConcat(3) == "LOL LOL LOL ") "OK" else "fail"
+
+

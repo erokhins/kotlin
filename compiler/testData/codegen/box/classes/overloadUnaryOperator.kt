@@ -26,3 +26,5 @@ fun box(): String {
     val v2 = -v1
     return if (v2[0] == "bar" && v2[1] == "foo") "OK" else "fail"
 }
+
+

@@ -1,0 +1,59 @@
+MODULE <test-module>
+  FILE /reifiedInlineFunOfObject.kt
+    FUN public fun foo(/*0*/ block: () -> kotlin.String): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo
+          CALL .invoke type=kotlin.String operator=INVOKE
+            $this: GET_VAR block type=() -> kotlin.String operator=VARIABLE_AS_FUNCTION
+    CLASS INTERFACE A
+      FUN public abstract fun f(): kotlin.String
+      FUN public abstract fun g(): kotlin.String
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val x: A
+          BLOCK type=box.<no name provided> operator=OBJECT_LITERAL
+            CLASS CLASS <no name provided>
+              CONSTRUCTOR public constructor <no name provided>()
+                BLOCK_BODY
+                  DELEGATING_CONSTRUCTOR_CALL Any
+                  INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+              FUN private final inline fun </*0*/ reified T : kotlin.Any> localClassName(): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=localClassName
+                    TYPE_OP operator=IMPLICIT_NOTNULL typeOperand=kotlin.String
+                      CALL .getName type=kotlin.String! operator=null
+                        $this: CALL .<get-java> type=java.lang.Class<T> operator=GET_PROPERTY
+                          $receiver: CLASS_REFERENCE T type=kotlin.reflect.KClass<T>
+              FUN public open override /*1*/ fun f(): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=f
+                    CALL .foo type=kotlin.String operator=null
+                      block: BLOCK type=() -> kotlin.String operator=LAMBDA
+                        FUN local final fun <anonymous>(): kotlin.String
+                          BLOCK_BODY
+                            RETURN type=kotlin.Nothing from=<anonymous>
+                              CALL .localClassName type=kotlin.String operator=null
+                                $this: THIS local final class <no name provided> : A type=box.<no name provided>
+                        CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+              FUN public open override /*1*/ fun g(): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=g
+                    CALL .foo type=kotlin.String operator=null
+                      block: BLOCK type=() -> kotlin.String operator=LAMBDA
+                        FUN local final fun <anonymous>(): kotlin.String
+                          BLOCK_BODY
+                            RETURN type=kotlin.Nothing from=<anonymous>
+                              CALL .localClassName type=kotlin.String operator=null
+                                $this: THIS local final class <no name provided> : A type=box.<no name provided>
+                        CALLABLE_REFERENCE <anonymous> type=() -> kotlin.String operator=LAMBDA
+            CALL .<init> type=box.<no name provided> operator=OBJECT_LITERAL
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='java.lang.String'
+          actual: CALL .f type=kotlin.String operator=null
+            $this: GET_VAR x type=A operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='java.lang.Integer'
+          actual: CALL .g type=kotlin.String operator=null
+            $this: GET_VAR x type=A operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

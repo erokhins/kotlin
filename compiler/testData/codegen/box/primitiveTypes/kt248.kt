@@ -5,3 +5,5 @@ fun box() : String {
     val s = "s" as String    //ok
     return "OK"
 }
+
+

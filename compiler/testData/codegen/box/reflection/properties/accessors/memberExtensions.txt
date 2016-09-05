@@ -1,0 +1,60 @@
+MODULE <test-module>
+  FILE /memberExtensions.kt
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C(/*0*/ state: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD state type=kotlin.Unit operator=null
+            receiver: THIS public final class C type=C
+            value: GET_VAR state type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      PROPERTY public final var state: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR state type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final var kotlin.String.prop: kotlin.String
+        PROPERTY_GETTER public final fun kotlin.String.<get-prop>(): kotlin.String
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=<get-prop>
+              CALL .toString type=kotlin.String operator=null
+                $this: CALL .<get-length> type=kotlin.Int operator=GET_PROPERTY
+                  $this: $RECEIVER of: prop type=kotlin.String
+        PROPERTY_SETTER public final fun kotlin.String.<set-prop>(/*0*/ value: kotlin.String): kotlin.Unit
+          BLOCK_BODY
+            CALL .<set-state> type=kotlin.Unit operator=EQ
+              $this: THIS public final class C type=C
+              <set-?>: CALL .plus type=kotlin.String operator=PLUS
+                $this: $RECEIVER of: prop type=kotlin.String
+                other: GET_VAR value type=kotlin.String operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val prop: kotlin.reflect.KMutableProperty2<C, kotlin.String, kotlin.String>
+          TYPE_OP operator=CAST typeOperand=kotlin.reflect.KMutableProperty2<C, kotlin.String, kotlin.String>
+            CALL .single type=kotlin.reflect.KProperty2<C, *, *> operator=null
+              $receiver: CALL .<get-memberExtensionProperties> type=kotlin.collections.Collection<kotlin.reflect.KProperty2<C, *, *>> operator=GET_PROPERTY
+                $receiver: CLASS_REFERENCE C type=kotlin.reflect.KClass<C>
+        VAR val c: C
+          CALL .<init> type=C operator=null
+            state: CONST String type=kotlin.String value=''
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='3'
+          actual: CALL .invoke type=kotlin.String operator=null
+            $this: CALL .<get-getter> type=kotlin.reflect.KProperty2.Getter<C, kotlin.String, kotlin.String> operator=GET_PROPERTY
+              $this: GET_VAR prop type=kotlin.reflect.KMutableProperty2<C, kotlin.String, kotlin.String> operator=null
+            p1: GET_VAR c type=C operator=null
+            p2: CONST String type=kotlin.String value='abc'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='1'
+          actual: CALL .invoke type=kotlin.String operator=INVOKE
+            $this: CALL .<get-getter> type=kotlin.reflect.KProperty2.Getter<C, kotlin.String, kotlin.String> operator=GET_PROPERTY
+              $this: GET_VAR prop type=kotlin.reflect.KMutableProperty2<C, kotlin.String, kotlin.String> operator=null
+            p1: GET_VAR c type=C operator=null
+            p2: CONST String type=kotlin.String value='d'
+        CALL .invoke type=kotlin.Unit operator=INVOKE
+          $this: CALL .<get-setter> type=kotlin.reflect.KMutableProperty2.Setter<C, kotlin.String, kotlin.String> operator=GET_PROPERTY
+            $this: GET_VAR prop type=kotlin.reflect.KMutableProperty2<C, kotlin.String, kotlin.String> operator=null
+          p1: GET_VAR c type=C operator=null
+          p2: CONST String type=kotlin.String value='O'
+          p3: CONST String type=kotlin.String value='K'
+        RETURN type=kotlin.Nothing from=box
+          CALL .<get-state> type=kotlin.String operator=GET_PROPERTY
+            $this: GET_VAR c type=C operator=null

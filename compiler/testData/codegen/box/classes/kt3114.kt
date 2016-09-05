@@ -11,3 +11,4 @@ fun box() : String {
   KeySpan("1").matches("3")
   return "OK"
 }
+

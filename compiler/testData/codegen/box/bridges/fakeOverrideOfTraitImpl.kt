@@ -29,3 +29,5 @@ fun box(): String {
     d1.foo()
     return if (result == "D3D3D3D3") "OK" else "Fail: $result"
 }
+
+

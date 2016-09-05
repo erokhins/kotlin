@@ -21,3 +21,5 @@ fun box(): String {
     B().test()
     return "OK"
 }
+
+

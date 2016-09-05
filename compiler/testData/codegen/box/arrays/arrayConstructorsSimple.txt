@@ -1,0 +1,94 @@
+MODULE <test-module>
+  FILE /arrayConstructorsSimple.kt
+    FUN public fun simpleIntArray(): kotlin.Array<kotlin.Int>
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=simpleIntArray
+          CALL .<init> type=kotlin.Array<kotlin.Int> operator=null
+            size: CONST Int type=kotlin.Int value='3'
+            init: BLOCK type=(kotlin.Int) -> kotlin.Int operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.Int): kotlin.Int
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    GET_VAR it type=kotlin.Int operator=null
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> kotlin.Int operator=LAMBDA
+    FUN public fun simpleDoubleArray(): kotlin.Array<kotlin.Double>
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=simpleDoubleArray
+          CALL .<init> type=kotlin.Array<kotlin.Double> operator=null
+            size: CONST Int type=kotlin.Int value='3'
+            init: BLOCK type=(kotlin.Int) -> kotlin.Double operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.Int): kotlin.Double
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .plus type=kotlin.Double operator=PLUS
+                      $this: CALL .toDouble type=kotlin.Double operator=null
+                        $this: GET_VAR it type=kotlin.Int operator=null
+                      other: CONST Double type=kotlin.Double value='0.1'
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> kotlin.Double operator=LAMBDA
+    FUN public fun simpleStringArray(): kotlin.Array<kotlin.String>
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=simpleStringArray
+          CALL .<init> type=kotlin.Array<kotlin.String> operator=null
+            size: CONST Int type=kotlin.Int value='3'
+            init: BLOCK type=(kotlin.Int) -> kotlin.String operator=LAMBDA
+              FUN local final fun <anonymous>(/*0*/ it: kotlin.Int): kotlin.String
+                BLOCK_BODY
+                  RETURN type=kotlin.Nothing from=<anonymous>
+                    CALL .toString type=kotlin.String operator=null
+                      $this: GET_VAR it type=kotlin.Int operator=null
+              CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> kotlin.String operator=LAMBDA
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val ia: kotlin.Array<kotlin.Int>
+          CALL .simpleIntArray type=kotlin.Array<kotlin.Int> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Int type=kotlin.Int value='0'
+          actual: CALL .get type=kotlin.Int operator=GET_ARRAY_ELEMENT
+            $this: GET_VAR ia type=kotlin.Array<kotlin.Int> operator=null
+            index: CONST Int type=kotlin.Int value='0'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Int type=kotlin.Int value='1'
+          actual: CALL .get type=kotlin.Int operator=GET_ARRAY_ELEMENT
+            $this: GET_VAR ia type=kotlin.Array<kotlin.Int> operator=null
+            index: CONST Int type=kotlin.Int value='1'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Int type=kotlin.Int value='2'
+          actual: CALL .get type=kotlin.Int operator=GET_ARRAY_ELEMENT
+            $this: GET_VAR ia type=kotlin.Array<kotlin.Int> operator=null
+            index: CONST Int type=kotlin.Int value='2'
+        VAR val da: kotlin.Array<kotlin.Double>
+          CALL .simpleDoubleArray type=kotlin.Array<kotlin.Double> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Double type=kotlin.Double value='0.1'
+          actual: CALL .get type=kotlin.Double operator=GET_ARRAY_ELEMENT
+            $this: GET_VAR da type=kotlin.Array<kotlin.Double> operator=null
+            index: CONST Int type=kotlin.Int value='0'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Double type=kotlin.Double value='1.1'
+          actual: CALL .get type=kotlin.Double operator=GET_ARRAY_ELEMENT
+            $this: GET_VAR da type=kotlin.Array<kotlin.Double> operator=null
+            index: CONST Int type=kotlin.Int value='1'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Double type=kotlin.Double value='2.1'
+          actual: CALL .get type=kotlin.Double operator=GET_ARRAY_ELEMENT
+            $this: GET_VAR da type=kotlin.Array<kotlin.Double> operator=null
+            index: CONST Int type=kotlin.Int value='2'
+        VAR val sa: kotlin.Array<kotlin.String>
+          CALL .simpleStringArray type=kotlin.Array<kotlin.String> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='0'
+          actual: CALL .get type=kotlin.String operator=GET_ARRAY_ELEMENT
+            $this: GET_VAR sa type=kotlin.Array<kotlin.String> operator=null
+            index: CONST Int type=kotlin.Int value='0'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='1'
+          actual: CALL .get type=kotlin.String operator=GET_ARRAY_ELEMENT
+            $this: GET_VAR sa type=kotlin.Array<kotlin.String> operator=null
+            index: CONST Int type=kotlin.Int value='1'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST String type=kotlin.String value='2'
+          actual: CALL .get type=kotlin.String operator=GET_ARRAY_ELEMENT
+            $this: GET_VAR sa type=kotlin.Array<kotlin.String> operator=null
+            index: CONST Int type=kotlin.Int value='2'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

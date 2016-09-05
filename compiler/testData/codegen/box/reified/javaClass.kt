@@ -12,3 +12,5 @@ fun box(): String {
     assertEquals("java.lang.Object", javaClassName<Any>())
     return "OK"
 }
+
+

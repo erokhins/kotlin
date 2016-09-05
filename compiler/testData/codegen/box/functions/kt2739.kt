@@ -8,3 +8,5 @@ fun box(): String {
     val v = foo(Pair(1))
     return if (v == null) "OK" else "fail"
 }
+
+

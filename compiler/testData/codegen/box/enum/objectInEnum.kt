@@ -18,3 +18,5 @@ fun box(): String {
     if (E.SUBCLASS.bar() != 2) return "Fail 2"
     return "OK"
 }
+
+

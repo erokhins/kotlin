@@ -6,3 +6,4 @@ fun box(): String {
     val stringArray = arrayOf("OK", "FAIL")
     return stringArray.get(0)
 }
+

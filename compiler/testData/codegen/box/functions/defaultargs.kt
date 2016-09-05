@@ -10,3 +10,5 @@ fun box() : String {
     if(C().foo() != 240) return "fail"
     return "OK"
 }
+
+

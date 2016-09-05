@@ -1,0 +1,25 @@
+MODULE <test-module>
+  FILE /is.kt
+    FUN public fun typeName(/*0*/ a: kotlin.Any?): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=typeName
+          BLOCK type=kotlin.String operator=WHEN
+            VAR val tmp0_subject: kotlin.Any?
+              GET_VAR a type=kotlin.Any? operator=null
+            WHEN type=kotlin.String operator=WHEN
+              if: TYPE_OP operator=INSTANCEOF typeOperand=java.util.ArrayList<*>
+                GET_VAR tmp0_subject type=kotlin.Any? operator=null
+              then: CONST String type=kotlin.String value='array list'
+              else: CONST String type=kotlin.String value='no idea'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .typeName type=kotlin.String operator=null
+                a: CALL .<init> type=java.util.ArrayList<kotlin.Int> operator=null
+              arg1: CONST String type=kotlin.String value='array list'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='array list failed'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

@@ -1,0 +1,70 @@
+MODULE <test-module>
+  FILE /switchOptimizationMultipleConditions.kt
+    FUN public fun foo(/*0*/ x: kotlin.Int): kotlin.Int
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo
+          BLOCK type=kotlin.Int operator=WHEN
+            VAR val tmp0_subject: kotlin.Int
+              GET_VAR x type=kotlin.Int operator=null
+            WHEN type=kotlin.Int operator=WHEN
+              if: WHEN type=kotlin.Boolean operator=WHEN_COMMA
+                if: WHEN type=kotlin.Boolean operator=WHEN_COMMA
+                  if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                    arg0: GET_VAR tmp0_subject type=kotlin.Int operator=null
+                    arg1: CONST Int type=kotlin.Int value='1'
+                  then: CONST Boolean type=kotlin.Boolean value='true'
+                  else: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                    arg0: GET_VAR tmp0_subject type=kotlin.Int operator=null
+                    arg1: CONST Int type=kotlin.Int value='2'
+                then: CONST Boolean type=kotlin.Boolean value='true'
+                else: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_subject type=kotlin.Int operator=null
+                  arg1: CONST Int type=kotlin.Int value='3'
+              then: CONST Int type=kotlin.Int value='1'
+              if: WHEN type=kotlin.Boolean operator=WHEN_COMMA
+                if: WHEN type=kotlin.Boolean operator=WHEN_COMMA
+                  if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                    arg0: GET_VAR tmp0_subject type=kotlin.Int operator=null
+                    arg1: CONST Int type=kotlin.Int value='4'
+                  then: CONST Boolean type=kotlin.Boolean value='true'
+                  else: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                    arg0: GET_VAR tmp0_subject type=kotlin.Int operator=null
+                    arg1: CONST Int type=kotlin.Int value='5'
+                then: CONST Boolean type=kotlin.Boolean value='true'
+                else: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_subject type=kotlin.Int operator=null
+                  arg1: CONST Int type=kotlin.Int value='6'
+              then: CONST Int type=kotlin.Int value='2'
+              if: WHEN type=kotlin.Boolean operator=WHEN_COMMA
+                if: WHEN type=kotlin.Boolean operator=WHEN_COMMA
+                  if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                    arg0: GET_VAR tmp0_subject type=kotlin.Int operator=null
+                    arg1: CONST Int type=kotlin.Int value='7'
+                  then: CONST Boolean type=kotlin.Boolean value='true'
+                  else: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                    arg0: GET_VAR tmp0_subject type=kotlin.Int operator=null
+                    arg1: CONST Int type=kotlin.Int value='8'
+                then: CONST Boolean type=kotlin.Boolean value='true'
+                else: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                  arg0: GET_VAR tmp0_subject type=kotlin.Int operator=null
+                  arg1: CONST Int type=kotlin.Int value='9'
+              then: CONST Int type=kotlin.Int value='3'
+              else: CONST Int type=kotlin.Int value='4'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR var result: kotlin.String
+          CALL .joinToString type=kotlin.String operator=null
+            $receiver: CALL .map type=kotlin.collections.List<kotlin.Int> operator=null
+              $receiver: CALL .rangeTo type=kotlin.ranges.IntRange operator=RANGE
+                $this: CONST Int type=kotlin.Int value='0'
+                other: CONST Int type=kotlin.Int value='10'
+              transform: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction1<kotlin.Int, kotlin.Int> operator=null
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR result type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='4, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4'
+          then: RETURN type=kotlin.Nothing from=box
+            GET_VAR result type=kotlin.String operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

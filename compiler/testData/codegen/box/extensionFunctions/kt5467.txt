@@ -1,0 +1,43 @@
+MODULE <test-module>
+  FILE /kt5467.kt
+    FUN public fun kotlin.String.foo(): kotlin.String
+      BLOCK_BODY
+        FUN local final fun kotlin.Int.bar(): kotlin.String
+          BLOCK_BODY
+            FUN local final fun kotlin.Long.baz(): kotlin.String
+              BLOCK_BODY
+                VAR val x: kotlin.String
+                  $RECEIVER of: foo type=kotlin.String
+                VAR val y: kotlin.Int
+                  $RECEIVER of: bar type=kotlin.Int
+                VAR val z: kotlin.Long
+                  $RECEIVER of: baz type=kotlin.Long
+                RETURN type=kotlin.Nothing from=baz
+                  STRING_CONCATENATION type=kotlin.String
+                    GET_VAR x type=kotlin.String operator=null
+                    CONST String type=kotlin.String value=' '
+                    GET_VAR y type=kotlin.Int operator=null
+                    CONST String type=kotlin.String value=' '
+                    GET_VAR z type=kotlin.Long operator=null
+            RETURN type=kotlin.Nothing from=bar
+              CALL .baz type=kotlin.String operator=null
+                $receiver: CONST Long type=kotlin.Long value='0'
+        RETURN type=kotlin.Nothing from=foo
+          CALL .bar type=kotlin.String operator=null
+            $receiver: CONST Int type=kotlin.Int value='42'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR val result: kotlin.String
+          CALL .foo type=kotlin.String operator=null
+            $receiver: CONST String type=kotlin.String value='OK'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR result type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='OK 42 0'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail: '
+              GET_VAR result type=kotlin.String operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

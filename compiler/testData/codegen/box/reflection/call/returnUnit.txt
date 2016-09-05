@@ -1,0 +1,68 @@
+MODULE <test-module>
+  FILE /returnUnit.kt
+    FUN public fun foo(): kotlin.Unit
+      BLOCK_BODY
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      FUN public final fun bar(): kotlin.Unit
+        BLOCK_BODY
+    CLASS OBJECT O
+      CONSTRUCTOR private constructor O()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=O
+      FUN @kotlin.jvm.JvmStatic() public final fun baz(): kotlin.Unit
+        BLOCK_BODY
+    FUN public fun nullableUnit(/*0*/ unit: kotlin.Boolean): kotlin.Unit?
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=nullableUnit
+          WHEN type=kotlin.Unit? operator=IF
+            if: GET_VAR unit type=kotlin.Boolean operator=null
+            then: GET_OBJECT Unit type=kotlin.Unit
+            else: CONST Null type=kotlin.Nothing? value='null'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_OBJECT Unit type=kotlin.Unit
+          actual: CALL .call type=kotlin.Unit operator=null
+            $this: CALLABLE_REFERENCE foo type=kotlin.reflect.KFunction0<kotlin.Unit> operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_OBJECT Unit type=kotlin.Unit
+          actual: CALL .call type=kotlin.Unit operator=null
+            $this: CALLABLE_REFERENCE bar type=kotlin.reflect.KFunction1<A, kotlin.Unit> operator=null
+            args: VARARG type=Array<out Any?> varargElementType=Any?
+              CALL .<init> type=A operator=null
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_OBJECT Unit type=kotlin.Unit
+          actual: CALL .call type=kotlin.Any? operator=null
+            $this: CALL .single type=kotlin.reflect.KCallable<*> operator=null
+              $receiver: CALL .<get-members> type=kotlin.collections.Collection<kotlin.reflect.KCallable<*>> operator=GET_PROPERTY
+                $this: CLASS_REFERENCE O type=kotlin.reflect.KClass<O>
+              predicate: BLOCK type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+                FUN local final fun <anonymous>(/*0*/ it: kotlin.reflect.KCallable<*>): kotlin.Boolean
+                  BLOCK_BODY
+                    RETURN type=kotlin.Nothing from=<anonymous>
+                      CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                        arg0: CALL .<get-name> type=kotlin.String operator=GET_PROPERTY
+                          $this: GET_VAR it type=kotlin.reflect.KCallable<*> operator=null
+                        arg1: CONST String type=kotlin.String value='baz'
+                CALLABLE_REFERENCE <anonymous> type=(kotlin.reflect.KCallable<*>) -> kotlin.Boolean operator=LAMBDA
+            args: VARARG type=Array<out Any?> varargElementType=Any?
+              GET_OBJECT O type=O
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: GET_OBJECT Unit type=kotlin.Unit
+          actual: CALL .call type=kotlin.Unit? operator=null
+            $this: CALLABLE_REFERENCE nullableUnit type=kotlin.reflect.KFunction1<kotlin.Boolean, kotlin.Unit?> operator=null
+            args: VARARG type=Array<out Any?> varargElementType=Any?
+              CONST Boolean type=kotlin.Boolean value='true'
+        CALL .assertEquals type=kotlin.Unit operator=null
+          expected: CONST Null type=kotlin.Nothing? value='null'
+          actual: CALL .call type=kotlin.Unit? operator=null
+            $this: CALLABLE_REFERENCE nullableUnit type=kotlin.reflect.KFunction1<kotlin.Boolean, kotlin.Unit?> operator=null
+            args: VARARG type=Array<out Any?> varargElementType=Any?
+              CONST Boolean type=kotlin.Boolean value='false'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

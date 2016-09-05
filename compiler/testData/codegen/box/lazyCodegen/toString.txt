@@ -1,0 +1,30 @@
+MODULE <test-module>
+  FILE /toString.kt
+    CLASS CLASS A
+      CONSTRUCTOR public constructor A(/*0*/ p: kotlin.String)
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          SET_BACKING_FIELD p type=kotlin.Unit operator=null
+            receiver: THIS public final class A type=A
+            value: GET_VAR p type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+          INSTANCE_INITIALIZER_CALL classDescriptor=A
+      PROPERTY public final val p: kotlin.String
+        EXPRESSION_BODY
+          GET_VAR p type=kotlin.String operator=INITIALIZE_PROPERTY_FROM_PARAMETER
+      PROPERTY public final val _kind: kotlin.String
+        EXPRESSION_BODY
+          CALL .<get-p> type=kotlin.String operator=GET_PROPERTY
+            $this: THIS public final class A type=A
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: CALL .<get-_kind> type=kotlin.String operator=GET_PROPERTY
+                $this: CALL .<init> type=A operator=null
+                  p: CONST String type=kotlin.String value='OK'
+              arg1: CONST String type=kotlin.String value='OK'
+          then: RETURN type=kotlin.Nothing from=box
+            CONST String type=kotlin.String value='fail'
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

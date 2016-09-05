@@ -1,0 +1,31 @@
+MODULE <test-module>
+  FILE /covariantOverrideGeneric.kt
+    CLASS CLASS Foo
+      CONSTRUCTOR public constructor Foo()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=Foo
+      FUN public open fun foo(/*0*/ x: kotlin.CharSequence = ...): kotlin.CharSequence
+        x: EXPRESSION_BODY
+          CONST String type=kotlin.String value='O'
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            GET_VAR x type=kotlin.CharSequence operator=null
+    CLASS CLASS Bar
+      CONSTRUCTOR public constructor Bar</*0*/ T : kotlin.String>()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Foo
+          INSTANCE_INITIALIZER_CALL classDescriptor=Bar
+      FUN public open override /*1*/ fun foo(/*0*/ x: kotlin.CharSequence = ...): T
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=foo
+            TYPE_OP operator=CAST typeOperand=T
+              CALL .plus type=kotlin.String operator=PLUS
+                $this: CALL .toString type=kotlin.String operator=null
+                  $this: GET_VAR x type=kotlin.CharSequence operator=null
+                other: CONST String type=kotlin.String value='K'
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=box
+          CALL .foo type=kotlin.String operator=null
+            $this: CALL .<init> type=Bar<kotlin.String> operator=null

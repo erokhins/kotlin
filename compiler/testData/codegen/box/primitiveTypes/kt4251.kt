@@ -3,3 +3,5 @@ fun box(): String {
     val result = a!! < 'b'
     return if (result) "OK" else "Fail"
 }
+
+

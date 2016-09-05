@@ -6,3 +6,4 @@ class A() {
 }
 
 fun box() = if (A().foo() == 42) "OK" else "fail"
+

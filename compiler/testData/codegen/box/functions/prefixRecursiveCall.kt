@@ -6,3 +6,4 @@ operator fun String.unaryPlus() : String {
 }
 
 fun box() : String = if (+"11" == "done") "OK" else "FAIL"
+

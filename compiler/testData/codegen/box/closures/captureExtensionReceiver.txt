@@ -1,0 +1,118 @@
+MODULE <test-module>
+  FILE /captureExtensionReceiver.kt
+    CLASS INTERFACE B
+      PROPERTY public abstract val bar: T
+    FUN public fun kotlin.String.foo(): B<kotlin.String>
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from=foo
+          BLOCK type=foo.<no name provided> operator=OBJECT_LITERAL
+            CLASS CLASS <no name provided>
+              CONSTRUCTOR public constructor <no name provided>()
+                BLOCK_BODY
+                  DELEGATING_CONSTRUCTOR_CALL Any
+                  INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+              PROPERTY public open override /*1*/ val bar: kotlin.String
+                EXPRESSION_BODY
+                  CALL .toString type=kotlin.String operator=null
+                    $this: CALL .<get-length> type=kotlin.Int operator=GET_PROPERTY
+                      $this: $RECEIVER of: foo type=kotlin.String
+            CALL .<init> type=foo.<no name provided> operator=OBJECT_LITERAL
+    CLASS CLASS C
+      CONSTRUCTOR public constructor C()
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL Any
+          INSTANCE_INITIALIZER_CALL classDescriptor=C
+      FUN public final fun kotlin.String.extension(): kotlin.Int
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=extension
+            CALL .<get-length> type=kotlin.Int operator=GET_PROPERTY
+              $this: $RECEIVER of: extension type=kotlin.String
+      FUN public final fun kotlin.String.fooInClass(): B<kotlin.String>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=fooInClass
+            BLOCK type=C.fooInClass.<no name provided> operator=OBJECT_LITERAL
+              CLASS CLASS <no name provided>
+                CONSTRUCTOR public constructor <no name provided>()
+                  BLOCK_BODY
+                    DELEGATING_CONSTRUCTOR_CALL Any
+                    INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+                PROPERTY public open override /*1*/ val bar: kotlin.String
+                  EXPRESSION_BODY
+                    CALL .toString type=kotlin.String operator=null
+                      $this: CALL .extension type=kotlin.Int operator=null
+                        $this: THIS public final class C type=C
+                        $receiver: $RECEIVER of: fooInClass type=kotlin.String
+              CALL .<init> type=C.fooInClass.<no name provided> operator=OBJECT_LITERAL
+      FUN public final fun kotlin.String.fooInClassNoReceiver(): B<kotlin.String>
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=fooInClassNoReceiver
+            BLOCK type=C.fooInClassNoReceiver.<no name provided> operator=OBJECT_LITERAL
+              CLASS CLASS <no name provided>
+                CONSTRUCTOR public constructor <no name provided>()
+                  BLOCK_BODY
+                    DELEGATING_CONSTRUCTOR_CALL Any
+                    INSTANCE_INITIALIZER_CALL classDescriptor=<no name provided>
+                PROPERTY public open override /*1*/ val bar: kotlin.String
+                  EXPRESSION_BODY
+                    CALL .toString type=kotlin.String operator=null
+                      $this: CALL .extension type=kotlin.Int operator=null
+                        $this: THIS public final class C type=C
+                        $receiver: CONST String type=kotlin.String value='123'
+              CALL .<init> type=C.fooInClassNoReceiver.<no name provided> operator=OBJECT_LITERAL
+      FUN public final fun fooInClass(/*0*/ s: kotlin.String): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=fooInClass
+            CALL .<get-bar> type=kotlin.String operator=GET_PROPERTY
+              $this: CALL .fooInClass type=B<kotlin.String> operator=null
+                $this: THIS public final class C type=C
+                $receiver: GET_VAR s type=kotlin.String operator=null
+      FUN public final fun fooInClassNoReceiver(/*0*/ s: kotlin.String): kotlin.String
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from=fooInClassNoReceiver
+            CALL .<get-bar> type=kotlin.String operator=GET_PROPERTY
+              $this: CALL .fooInClassNoReceiver type=B<kotlin.String> operator=null
+                $this: THIS public final class C type=C
+                $receiver: GET_VAR s type=kotlin.String operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR var result: kotlin.String
+          CALL .<get-bar> type=kotlin.String operator=GET_PROPERTY
+            $this: CALL .foo type=B<kotlin.String> operator=null
+              $receiver: CONST String type=kotlin.String value='Hello, world!'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR result type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='13'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 1: '
+              GET_VAR result type=kotlin.String operator=null
+        SET_VAR result type=kotlin.Unit operator=EQ
+          CALL .fooInClass type=kotlin.String operator=null
+            $this: CALL .<init> type=C operator=null
+            s: CONST String type=kotlin.String value='Hello, world!'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR result type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='13'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 2: '
+              GET_VAR result type=kotlin.String operator=null
+        SET_VAR result type=kotlin.Unit operator=EQ
+          CALL .fooInClassNoReceiver type=kotlin.String operator=null
+            $this: CALL .<init> type=C operator=null
+            s: CONST String type=kotlin.String value='Hello, world!'
+        WHEN type=kotlin.Unit operator=IF
+          if: CALL .NOT type=kotlin.Boolean operator=EXCLEQ
+            arg0: CALL .EQEQ type=kotlin.Boolean operator=EXCLEQ
+              arg0: GET_VAR result type=kotlin.String operator=null
+              arg1: CONST String type=kotlin.String value='3'
+          then: RETURN type=kotlin.Nothing from=box
+            STRING_CONCATENATION type=kotlin.String
+              CONST String type=kotlin.String value='fail 3: '
+              GET_VAR result type=kotlin.String operator=null
+        RETURN type=kotlin.Nothing from=box
+          CONST String type=kotlin.String value='OK'

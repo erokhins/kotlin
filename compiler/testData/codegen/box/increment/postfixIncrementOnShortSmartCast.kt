@@ -6,3 +6,5 @@ public fun box() : String {
 
     return if (j!!.toInt() == 10 && i!!.toInt() == 11) "OK" else "fail j = $j i = $i"
 }
+
+

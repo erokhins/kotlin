@@ -1,0 +1,22 @@
+MODULE <test-module>
+  FILE /extensionToPrimitive.kt
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        FUN local final fun kotlin.Int.is42With(/*0*/ that: kotlin.Int): kotlin.Boolean
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from=is42With
+              CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+                arg0: CALL .plus type=kotlin.Int operator=PLUS
+                  $this: $RECEIVER of: is42With type=kotlin.Int
+                  other: CALL .times type=kotlin.Int operator=MUL
+                    $this: CONST Int type=kotlin.Int value='2'
+                    other: GET_VAR that type=kotlin.Int operator=null
+                arg1: CONST Int type=kotlin.Int value='42'
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .invoke type=kotlin.Boolean operator=null
+              $this: CALLABLE_REFERENCE is42With type=kotlin.reflect.KFunction2<kotlin.Int, kotlin.Int, kotlin.Boolean> operator=null
+              p1: CONST Int type=kotlin.Int value='16'
+              p2: CONST Int type=kotlin.Int value='13'
+            then: CONST String type=kotlin.String value='OK'
+            else: CONST String type=kotlin.String value='Fail'

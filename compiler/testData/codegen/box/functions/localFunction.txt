@@ -1,0 +1,103 @@
+MODULE <test-module>
+  FILE /localFunction.kt
+    FUN public fun kotlin.ranges.IntRange.forEach(/*0*/ body: (kotlin.Int) -> kotlin.Unit): kotlin.Unit
+      BLOCK_BODY
+        BLOCK type=kotlin.Unit operator=FOR_LOOP
+          VAR val tmp0_iterator: kotlin.collections.IntIterator
+            CALL .iterator type=kotlin.collections.IntIterator operator=FOR_LOOP_ITERATOR
+              $this: $RECEIVER of: forEach type=kotlin.ranges.IntRange
+          WHILE label=null operator=FOR_LOOP_INNER_WHILE
+            condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+              $this: GET_VAR tmp0_iterator type=kotlin.collections.IntIterator operator=null
+            body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+              VAR val i: kotlin.Int
+                CALL .next type=kotlin.Int operator=FOR_LOOP_NEXT
+                  $this: GET_VAR tmp0_iterator type=kotlin.collections.IntIterator operator=null
+              BLOCK type=kotlin.Unit operator=null
+                CALL .invoke type=kotlin.Unit operator=INVOKE
+                  $this: GET_VAR body type=(kotlin.Int) -> kotlin.Unit operator=VARIABLE_AS_FUNCTION
+                  p1: GET_VAR i type=kotlin.Int operator=null
+    FUN public fun box(): kotlin.String
+      BLOCK_BODY
+        VAR var seed: kotlin.Int
+          CONST Int type=kotlin.Int value='0'
+        FUN local final fun local(/*0*/ x: kotlin.Int): kotlin.Unit
+          BLOCK_BODY
+            FUN local final fun deep(): kotlin.Unit
+              BLOCK_BODY
+                SET_VAR seed type=kotlin.Unit operator=PLUSEQ
+                  CALL .plus type=kotlin.Int operator=PLUSEQ
+                    $this: GET_VAR seed type=kotlin.Int operator=PLUSEQ
+                    other: GET_VAR x type=kotlin.Int operator=null
+            FUN local final fun deep2(/*0*/ x: kotlin.Int): kotlin.Unit
+              BLOCK_BODY
+                SET_VAR seed type=kotlin.Unit operator=PLUSEQ
+                  CALL .plus type=kotlin.Int operator=PLUSEQ
+                    $this: GET_VAR seed type=kotlin.Int operator=PLUSEQ
+                    other: GET_VAR x type=kotlin.Int operator=null
+            FUN local final fun kotlin.Int.iter(): kotlin.Unit
+              BLOCK_BODY
+                SET_VAR seed type=kotlin.Unit operator=PLUSEQ
+                  CALL .plus type=kotlin.Int operator=PLUSEQ
+                    $this: GET_VAR seed type=kotlin.Int operator=PLUSEQ
+                    other: $RECEIVER of: iter type=kotlin.Int
+            CALL .deep type=kotlin.Unit operator=null
+            CALL .deep2 type=kotlin.Unit operator=null
+              x: CALL .unaryMinus type=kotlin.Int operator=UMINUS
+                $this: GET_VAR x type=kotlin.Int operator=null
+            CALL .iter type=kotlin.Unit operator=null
+              $receiver: GET_VAR x type=kotlin.Int operator=null
+            SET_VAR seed type=kotlin.Unit operator=PLUSEQ
+              CALL .plus type=kotlin.Int operator=PLUSEQ
+                $this: GET_VAR seed type=kotlin.Int operator=PLUSEQ
+                other: GET_VAR x type=kotlin.Int operator=null
+        BLOCK type=kotlin.Unit operator=FOR_LOOP
+          VAR val tmp0_iterator: kotlin.collections.IntIterator
+            CALL .iterator type=kotlin.collections.IntIterator operator=FOR_LOOP_ITERATOR
+              $this: CALL .rangeTo type=kotlin.ranges.IntRange operator=RANGE
+                $this: CONST Int type=kotlin.Int value='1'
+                other: CONST Int type=kotlin.Int value='5'
+          WHILE label=null operator=FOR_LOOP_INNER_WHILE
+            condition: CALL .hasNext type=kotlin.Boolean operator=FOR_LOOP_HAS_NEXT
+              $this: GET_VAR tmp0_iterator type=kotlin.collections.IntIterator operator=null
+            body: BLOCK type=kotlin.Unit operator=FOR_LOOP_INNER_WHILE
+              VAR val i: kotlin.Int
+                CALL .next type=kotlin.Int operator=FOR_LOOP_NEXT
+                  $this: GET_VAR tmp0_iterator type=kotlin.collections.IntIterator operator=null
+              BLOCK type=kotlin.Unit operator=null
+                FUN local final fun kotlin.Int.iter(): kotlin.Unit
+                  BLOCK_BODY
+                    SET_VAR seed type=kotlin.Unit operator=PLUSEQ
+                      CALL .plus type=kotlin.Int operator=PLUSEQ
+                        $this: GET_VAR seed type=kotlin.Int operator=PLUSEQ
+                        other: $RECEIVER of: iter type=kotlin.Int
+                CALL .local type=kotlin.Unit operator=null
+                  x: GET_VAR i type=kotlin.Int operator=null
+                CALL .iter type=kotlin.Unit operator=null
+                  $receiver: CALL .unaryMinus type=kotlin.Int operator=UMINUS
+                    $this: GET_VAR i type=kotlin.Int operator=null
+        FUN local final fun local2(/*0*/ y: kotlin.Int): kotlin.Unit
+          BLOCK_BODY
+            SET_VAR seed type=kotlin.Unit operator=PLUSEQ
+              CALL .plus type=kotlin.Int operator=PLUSEQ
+                $this: GET_VAR seed type=kotlin.Int operator=PLUSEQ
+                other: GET_VAR y type=kotlin.Int operator=null
+        CALL .forEach type=kotlin.Unit operator=null
+          $receiver: CALL .rangeTo type=kotlin.ranges.IntRange operator=RANGE
+            $this: CONST Int type=kotlin.Int value='1'
+            other: CONST Int type=kotlin.Int value='5'
+          body: BLOCK type=(kotlin.Int) -> kotlin.Unit operator=LAMBDA
+            FUN local final fun <anonymous>(/*0*/ it: kotlin.Int): kotlin.Unit
+              BLOCK_BODY
+                RETURN type=kotlin.Nothing from=<anonymous>
+                  CALL .local2 type=kotlin.Unit operator=null
+                    y: GET_VAR it type=kotlin.Int operator=null
+            CALLABLE_REFERENCE <anonymous> type=(kotlin.Int) -> kotlin.Unit operator=LAMBDA
+        RETURN type=kotlin.Nothing from=box
+          WHEN type=kotlin.String operator=IF
+            if: CALL .EQEQ type=kotlin.Boolean operator=EQEQ
+              arg0: GET_VAR seed type=kotlin.Int operator=null
+              arg1: CONST Int type=kotlin.Int value='30'
+            then: CONST String type=kotlin.String value='OK'
+            else: CALL .toString type=kotlin.String operator=null
+              $this: GET_VAR seed type=kotlin.Int operator=null

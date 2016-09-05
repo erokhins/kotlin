@@ -8,3 +8,5 @@ fun box(): String {
     Foo.s.param
     return "OK"
 }
+
+
