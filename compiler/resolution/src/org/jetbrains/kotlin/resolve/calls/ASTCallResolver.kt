@@ -34,20 +34,15 @@ import org.jetbrains.kotlin.types.UnwrappedType
 import org.jetbrains.kotlin.utils.singletonOrEmptyList
 import java.util.*
 
-interface IsDescriptorFromSourcePredicate: (CallableDescriptor) -> Boolean
-
-class Components
-
-
 
 class ASTCallResolver(
         private val towerResolver: TowerResolver,
         private val astCallCompleter: ASTCallCompleter,
         builtIns: KotlinBuiltIns, // component
         specificityComparator: TypeSpecificityComparator,
-        isFromSource: (CallableDescriptor) -> Boolean // component
+        isDescriptorFromSourcePredicate: IsDescriptorFromSourcePredicate // component
 ) {
-    private val overloadingConflictResolver = createOverloadingConflictResolver(builtIns, specificityComparator, isFromSource)
+    private val overloadingConflictResolver = createOverloadingConflictResolver(builtIns, specificityComparator, isDescriptorFromSourcePredicate)
 
     fun <D : CallableDescriptor> resolveCall(
             contextForCall: ImplicitContextForCall,
@@ -77,50 +72,52 @@ class ASTCallResolver(
     @Suppress("UNCHECKED_CAST")
     private fun <D : CallableDescriptor> getConflictResolver() =
             overloadingConflictResolver as OverloadingConflictResolver<NewResolutionCandidate<D>>
-}
 
-
-private fun createOverloadingConflictResolver(
-        builtIns: KotlinBuiltIns,
-        specificityComparator: TypeSpecificityComparator,
-        isFromSource: (CallableDescriptor) -> Boolean
-) = OverloadingConflictResolver<NewResolutionCandidate<*>>(builtIns, specificityComparator, {
-    if (it is VariableAsFunctionResolutionCandidate) {
-        it.invokeCandidate.descriptorWithFreshTypes
-    }
-    else {
-        (it as SimpleResolutionCandidate).descriptorWithFreshTypes
-    }
-}, ::SimpleConstraintSystemImpl, ::createFlatSignature, { (it as? VariableAsFunctionResolutionCandidate)?.resolvedVariable }, isFromSource)
-
-private fun createFlatSignature(candidate: NewResolutionCandidate<*>): FlatSignature<NewResolutionCandidate<*>> {
-    val simpleCandidate = (candidate as? VariableAsFunctionResolutionCandidate)?.invokeCandidate ?: (candidate as SimpleResolutionCandidate<*>)
-
-    val originalDescriptor = simpleCandidate.descriptorWithFreshTypes.original
-    val originalValueParameters = originalDescriptor.valueParameters
-
-    var numDefaults = 0
-    val valueArgumentToParameterType = HashMap<CallArgument, KotlinType>()
-    for ((valueParameter, resolvedValueArgument) in simpleCandidate.argumentMappingByOriginal) {
-        if (resolvedValueArgument is ResolvedCallArgument.DefaultArgument) {
-            numDefaults++
-        }
-        else {
-            val originalValueParameter = originalValueParameters[valueParameter.index]
-            val parameterType = originalValueParameter.argumentValueType
-            for (valueArgument in resolvedValueArgument.arguments) {
-                valueArgumentToParameterType[valueArgument] = parameterType
+    companion object {
+        private fun createOverloadingConflictResolver(
+                builtIns: KotlinBuiltIns,
+                specificityComparator: TypeSpecificityComparator,
+                isDescriptorFromSourcePredicate: IsDescriptorFromSourcePredicate
+        ) = OverloadingConflictResolver<NewResolutionCandidate<*>>(builtIns, specificityComparator, {
+            if (it is VariableAsFunctionResolutionCandidate) {
+                it.invokeCandidate.descriptorWithFreshTypes
             }
+            else {
+                (it as SimpleResolutionCandidate).descriptorWithFreshTypes
+            }
+        }, ::SimpleConstraintSystemImpl, Companion::createFlatSignature, { (it as? VariableAsFunctionResolutionCandidate)?.resolvedVariable }, isDescriptorFromSourcePredicate)
+
+        private fun createFlatSignature(candidate: NewResolutionCandidate<*>): FlatSignature<NewResolutionCandidate<*>> {
+            val simpleCandidate = (candidate as? VariableAsFunctionResolutionCandidate)?.invokeCandidate ?: (candidate as SimpleResolutionCandidate<*>)
+
+            val originalDescriptor = simpleCandidate.descriptorWithFreshTypes.original
+            val originalValueParameters = originalDescriptor.valueParameters
+
+            var numDefaults = 0
+            val valueArgumentToParameterType = HashMap<CallArgument, KotlinType>()
+            for ((valueParameter, resolvedValueArgument) in simpleCandidate.argumentMappingByOriginal) {
+                if (resolvedValueArgument is ResolvedCallArgument.DefaultArgument) {
+                    numDefaults++
+                }
+                else {
+                    val originalValueParameter = originalValueParameters[valueParameter.index]
+                    val parameterType = originalValueParameter.argumentValueType
+                    for (valueArgument in resolvedValueArgument.arguments) {
+                        valueArgumentToParameterType[valueArgument] = parameterType
+                    }
+                }
+            }
+
+            return FlatSignature(candidate,
+                                 originalDescriptor.typeParameters,
+                                 valueParameterTypes = originalDescriptor.extensionReceiverTypeOrEmpty() +
+                                                       simpleCandidate.astCall.argumentsInParenthesis.map { valueArgumentToParameterType[it] } +
+                                                       simpleCandidate.astCall.externalArgument?.let { valueArgumentToParameterType[it] }.singletonOrEmptyList(),
+                                 hasExtensionReceiver = originalDescriptor.extensionReceiverParameter != null,
+                                 hasVarargs = originalDescriptor.valueParameters.any { it.varargElementType != null },
+                                 numDefaults = numDefaults)
+
         }
     }
-
-    return FlatSignature(candidate,
-                         originalDescriptor.typeParameters,
-                         valueParameterTypes = originalDescriptor.extensionReceiverTypeOrEmpty() +
-                                               simpleCandidate.astCall.argumentsInParenthesis.map { valueArgumentToParameterType[it] } +
-                                               simpleCandidate.astCall.externalArgument?.let { valueArgumentToParameterType[it] }.singletonOrEmptyList(),
-                         hasExtensionReceiver = originalDescriptor.extensionReceiverParameter != null,
-                         hasVarargs = originalDescriptor.valueParameters.any { it.varargElementType != null },
-                         numDefaults = numDefaults)
-
 }
+

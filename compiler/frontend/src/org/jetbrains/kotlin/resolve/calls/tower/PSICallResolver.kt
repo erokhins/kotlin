@@ -16,7 +16,6 @@
 
 package org.jetbrains.kotlin.resolve.calls.tower
 
-import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.config.LanguageFeature
 import org.jetbrains.kotlin.config.LanguageFeatureSettings
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
@@ -27,7 +26,10 @@ import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.incremental.components.LookupLocation
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
-import org.jetbrains.kotlin.resolve.*
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.ModifierCheckerCore
+import org.jetbrains.kotlin.resolve.TemporaryBindingTrace
+import org.jetbrains.kotlin.resolve.TypeResolver
 import org.jetbrains.kotlin.resolve.calls.*
 import org.jetbrains.kotlin.resolve.calls.callResolverUtil.ResolveArgumentsMode
 import org.jetbrains.kotlin.resolve.calls.callUtil.createLookupLocation
@@ -48,7 +50,6 @@ import org.jetbrains.kotlin.resolve.scopes.LexicalScope
 import org.jetbrains.kotlin.resolve.scopes.MemberScope
 import org.jetbrains.kotlin.resolve.scopes.SyntheticScopes
 import org.jetbrains.kotlin.resolve.scopes.receivers.*
-import org.jetbrains.kotlin.types.CommonSupertypeWrapper
 import org.jetbrains.kotlin.types.DeferredType
 import org.jetbrains.kotlin.types.TypeUtils
 import org.jetbrains.kotlin.types.UnwrappedType
@@ -69,16 +70,9 @@ class PSICallResolver(
         private val typeArgumentsToParametersMapper: TypeArgumentsToParametersMapper,
         private val callableReferenceResolver: CallableReferenceResolver,
         private val astToResolvedCallTransformer: ASTToResolvedCallTransformer,
-        towerResolver: TowerResolver,
-        astCallCompleter: ASTCallCompleter,
-        builtIns: KotlinBuiltIns,
-        specificityComparator: TypeSpecificityComparator
+        private val astCallResolver: ASTCallResolver
 ) {
     val useNewInference = languageFeatureSettings.supportsFeature(LanguageFeature.CommonConstraintSystem)
-
-    private val astCallResolver: ASTCallResolver = ASTCallResolver(towerResolver, astCallCompleter, builtIns, specificityComparator) {
-        DescriptorToSourceUtils.descriptorToDeclaration(it) != null
-    }
 
     fun <D : CallableDescriptor> runResolutionAndInference(
             context: BasicCallResolutionContext,
@@ -91,7 +85,7 @@ class PSICallResolver(
         val factoryProviderForInvoke = FactoryProviderForInvoke(context, astCall)
 
         val contextForCall = ImplicitContextForCall(argumentsToParametersMapper, typeArgumentsToParametersMapper,
-                                                    CommonSupertypeWrapper, callableReferenceResolver, scopeTower, factoryProviderForInvoke)
+                                                    CommonSupertypeCalculatorImpl, callableReferenceResolver, scopeTower, factoryProviderForInvoke)
         factoryProviderForInvoke.contextForCall = contextForCall
 
         val expectedType = context.expectedType.unwrap()

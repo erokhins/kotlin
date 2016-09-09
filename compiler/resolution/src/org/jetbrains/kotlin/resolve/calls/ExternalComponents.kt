@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package org.jetbrains.kotlin.types
+package org.jetbrains.kotlin.resolve.calls
 
-import org.jetbrains.kotlin.resolve.calls.inference.CommonSupertypeCalculator
+import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.types.UnwrappedType
 
-object CommonSupertypeWrapper: CommonSupertypeCalculator {
-    override fun commonSupertype(types: Collection<UnwrappedType>): UnwrappedType {
-        return CommonSupertypes.commonSupertypeForNonDenotableTypes(types)!!.unwrap()
-    }
-}
+interface IsDescriptorFromSourcePredicate: (CallableDescriptor) -> Boolean
+
+interface CommonSupertypeCalculator: (Collection<UnwrappedType>) -> UnwrappedType

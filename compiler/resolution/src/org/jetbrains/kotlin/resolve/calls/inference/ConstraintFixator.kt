@@ -16,11 +16,12 @@
 
 package org.jetbrains.kotlin.resolve.calls.inference
 
+import org.jetbrains.kotlin.resolve.calls.CommonSupertypeCalculator
 import org.jetbrains.kotlin.types.UnwrappedType
 import org.jetbrains.kotlin.types.checker.intersectTypes
 import org.jetbrains.kotlin.types.singleBestRepresentative
 
-class ConstraintFixator(val commonSupertype: CommonSupertypeCalculator) {
+class ConstraintFixator(val commonSupertypeCalculator: CommonSupertypeCalculator) {
     interface FixationContext {
         fun isProperType(type: UnwrappedType): Boolean
     }
@@ -31,7 +32,7 @@ class ConstraintFixator(val commonSupertype: CommonSupertypeCalculator) {
         if (direction == ResolveDirection.TO_SUBTYPE) {
             val lowerConstraints = variableWithConstraints.constraints.filter { it.kind == ConstraintKind.LOWER && isProperType(it.type) }
             if (lowerConstraints.isNotEmpty()) {
-                return commonSupertype.commonSupertype(lowerConstraints.map { it.type })
+                return commonSupertypeCalculator(lowerConstraints.map { it.type })
             }
         }
 
