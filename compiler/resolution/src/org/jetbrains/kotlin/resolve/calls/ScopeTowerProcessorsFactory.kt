@@ -29,6 +29,7 @@ import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValueWithSmartCastI
 typealias NewFactoryProviderForInvoke = CandidateFactoryProviderForInvoke<NewResolutionCandidate<FunctionDescriptor>, SimpleResolutionCandidate<VariableDescriptor>>
 typealias NewProcessor<D> = ScopeTowerProcessor<NewResolutionCandidate<D>>
 
+// CallContext
 class ImplicitContextForCall(
         val argumentsToParametersMapper: ArgumentsToParametersMapper,
         val typeArgumentsToParametersMapper: TypeArgumentsToParametersMapper,
@@ -41,6 +42,7 @@ class ImplicitContextForCall(
 sealed class ASTCallKind<D : CallableDescriptor>(vararg resolutionPart: ResolutionPart<D>) {
     val resolutionSequence = resolutionPart.asList()
 
+    // move outside and add parameter factoryProviderForInvoke
     abstract fun createProcessor(contextForCall: ImplicitContextForCall, call: ASTCall): NewProcessor<D>
 
     object VARIABLE : ASTCallKind<VariableDescriptor>(
@@ -76,14 +78,16 @@ sealed class ASTCallKind<D : CallableDescriptor>(vararg resolutionPart: Resoluti
     }
 }
 
-class ApplyTowerDiagnostics(val towerDiagnostics: List<ResolutionDiagnostic>): ResolutionPart<CallableDescriptor> {
+class ReportTowerDiagnostics(val towerDiagnostics: List<ResolutionDiagnostic>): ResolutionPart<CallableDescriptor> {
     override fun SimpleResolutionCandidate<CallableDescriptor>.process() = towerDiagnostics
 }
 
+
+
 class NewCandidateFactory<D : CallableDescriptor>(
         val contextForCall: ImplicitContextForCall,
-        val astCall: ASTCall,
-        private val resolutionSequence: List<ResolutionPart<D>>
+        val astCall: ASTCall, // move to context
+        private val resolutionSequence: List<ResolutionPart<D>> // move to context
 ) : CandidateFactory<D, SimpleResolutionCandidate<D>> {
 
     // todo: try something else, because current method is ugly and unstable
@@ -107,7 +111,7 @@ class NewCandidateFactory<D : CallableDescriptor>(
             resolutionSequence
         }
         else {
-            listOf(ApplyTowerDiagnostics(towerCandidate.diagnostics)) + resolutionSequence
+            listOf(ReportTowerDiagnostics(towerCandidate.diagnostics)) + resolutionSequence
         }
         return SimpleResolutionCandidate(contextForCall, contextForCall.scopeTower.lexicalScope.ownerDescriptor, astCall,
                                          explicitReceiverKind, dispatchArgumentReceiver, extensionArgumentReceiver,

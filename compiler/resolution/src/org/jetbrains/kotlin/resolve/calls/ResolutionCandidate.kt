@@ -86,7 +86,7 @@ class SimpleResolutionCandidate<out D : CallableDescriptor>(
         val dispatchReceiverArgument: SimpleCallArgument?,
         val extensionReceiver: SimpleCallArgument?,
         val candidateDescriptor: D,
-        resolutionSequence: List<ResolutionPart<D>>
+        resolutionSequence: List<ResolutionPart<D>> //
 ) : AbstractSimpleResolutionCandidate<D>(implicitContextForCall, resolutionSequence) {
     val csBuilder: ConstraintSystemBuilder = NewConstraintSystemBuilderImpl(ConstraintFixator(implicitContextForCall.commonSupertypeCalculator))
 

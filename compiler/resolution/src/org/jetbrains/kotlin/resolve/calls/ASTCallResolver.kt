@@ -34,12 +34,18 @@ import org.jetbrains.kotlin.types.UnwrappedType
 import org.jetbrains.kotlin.utils.singletonOrEmptyList
 import java.util.*
 
+interface IsDescriptorFromSourcePredicate: (CallableDescriptor) -> Boolean
+
+class Components
+
+
+
 class ASTCallResolver(
         private val towerResolver: TowerResolver,
         private val astCallCompleter: ASTCallCompleter,
-        builtIns: KotlinBuiltIns,
+        builtIns: KotlinBuiltIns, // component
         specificityComparator: TypeSpecificityComparator,
-        isFromSource: (CallableDescriptor) -> Boolean
+        isFromSource: (CallableDescriptor) -> Boolean // component
 ) {
     private val overloadingConflictResolver = createOverloadingConflictResolver(builtIns, specificityComparator, isFromSource)
 
@@ -47,7 +53,7 @@ class ASTCallResolver(
             contextForCall: ImplicitContextForCall,
             astCall: ASTCall,
             astCallKind: ASTCallKind<D>,
-            lambdaAnalyzer: LambdaAnalyzer,
+            lambdaAnalyzer: LambdaAnalyzer, // move to context
             expectedType: UnwrappedType? // if this type is not null, it means that we should compete this call.
     ): Collection<BaseResolvedCall<D>> {
         val processor = astCallKind.createProcessor(contextForCall, astCall)

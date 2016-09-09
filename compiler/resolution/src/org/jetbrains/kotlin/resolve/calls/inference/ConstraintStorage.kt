@@ -231,8 +231,8 @@ class ConstraintStorage : ConstraintIncorporator.IncorporationContext, Constrain
         }
     }
 
-    // todo: may be here is some constraint which we can simplify.
-    // for example, we can delete all constraints which contains fixed types
+    // todo: maybe there is some constraint which we can simplify.
+    // for example, we can delete all constraints that contain fixed types
     fun fixVariable(variable: NewTypeVariable, resultType: UnwrappedType) {
         addEqualityConstraint(variable.defaultType, resultType, FixVariableConstraintPosition(variable))
         fixedTypeVariables[variable.freshTypeConstructor] = resultType

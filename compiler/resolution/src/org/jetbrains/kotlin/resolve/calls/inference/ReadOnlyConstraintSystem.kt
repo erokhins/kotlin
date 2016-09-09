@@ -101,7 +101,7 @@ interface ConstraintSystemBuilder {
     val hasContradiction: Boolean
     val typeVariables: Map<TypeConstructor, VariableWithConstraints>
 
-    // If hasContradiction then this list should contains some diagnostic about problem
+    // If hasContradiction then this list should contain some diagnostic about problem
     val diagnostics: List<CallDiagnostic>
 
     fun registerVariable(variable: NewTypeVariable)
@@ -114,8 +114,11 @@ interface ConstraintSystemBuilder {
 
     fun addIfIsCompatibleSubtypeConstraint(lowerType: UnwrappedType, upperType: UnwrappedType, position: ConstraintPosition): Boolean
 
+
+
+
     /**
-     * This function remove variables for which we know exact type.
+     * This function removes variables for which we know exact type.
      * @return substitutor from typeVariable to result
      */
     fun simplify(): TypeSubstitutor
