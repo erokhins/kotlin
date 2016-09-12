@@ -18,6 +18,7 @@ package org.jetbrains.kotlin.resolve.calls.tower
 
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.Call
+import org.jetbrains.kotlin.resolve.calls.ASTCallKind
 import org.jetbrains.kotlin.resolve.calls.CallTransformer
 import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo
@@ -45,6 +46,7 @@ abstract class PSIASTCall : ASTCall {
 }
 
 class ASTCallImpl(
+        override val callKind: ASTCallKind,
         override val psiCall: Call,
         override val tracingStrategy: TracingStrategy,
         override val explicitReceiver: ReceiverCallArgument?,
@@ -61,6 +63,7 @@ class CallForVariable(
         override val explicitReceiver: ReceiverCallArgument?,
         override val name: Name
 ) : PSIASTCall() {
+    override val callKind: ASTCallKind get() = ASTCallKind.VARIABLE
     override val typeArguments: List<TypeArgument> get() = emptyList()
     override val argumentsInParenthesis: List<CallArgument> get() = emptyList()
     override val externalArgument: CallArgument? get() = null
@@ -83,6 +86,7 @@ class CallForInvoke(
         override val explicitReceiver: SimpleCallArgument,
         override val dispatchReceiverForInvokeExtension: SimpleCallArgument?
 ) : PSIASTCall() {
+    override val callKind: ASTCallKind get() = ASTCallKind.FUNCTION
     override val name: Name get() = OperatorNameConventions.INVOKE
     override val typeArguments: List<TypeArgument> get() = baseCall.typeArguments
     override val argumentsInParenthesis: List<CallArgument> get() = baseCall.argumentsInParenthesis

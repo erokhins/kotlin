@@ -16,8 +16,9 @@
 
 package org.jetbrains.kotlin.resolve.calls
 
-import org.jetbrains.kotlin.descriptors.*
-import org.jetbrains.kotlin.resolve.calls.inference.ConstraintFixator
+import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
+import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.resolve.calls.inference.ConstraintSystemBuilder
 import org.jetbrains.kotlin.resolve.calls.inference.NewConstraintSystemBuilderImpl
 import org.jetbrains.kotlin.resolve.calls.model.ASTCall
@@ -35,16 +36,15 @@ interface ResolutionPart {
     fun SimpleResolutionCandidate.process(): List<CallDiagnostic>
 }
 
-sealed class NewResolutionCandidate(val implicitContextForCall: ImplicitContextForCall) : Candidate {
+sealed class NewResolutionCandidate() : Candidate {
     abstract val astCall: ASTCall
 
     abstract val lastCall: SimpleResolutionCandidate
 }
 
 sealed class AbstractSimpleResolutionCandidate(
-        implicitContextForCall: ImplicitContextForCall,
-        private val resolutionSequence: List<ResolutionPart>
-) : NewResolutionCandidate(implicitContextForCall) {
+        initialDiagnostics: Collection<CallDiagnostic> = emptyList()
+) : NewResolutionCandidate() {
     override val isSuccessful: Boolean
         get() {
             process(stopOnFirstError = true)
@@ -68,42 +68,49 @@ sealed class AbstractSimpleResolutionCandidate(
 
     private fun process(stopOnFirstError: Boolean) {
         while (step < resolutionSequence.size && (!stopOnFirstError || !hasErrors)) {
-            val diagnostics = resolutionSequence[step].run { self().process() }
+            addDiagnostics(resolutionSequence[step].run { lastCall.process() })
             step++
-            hasErrors = diagnostics.any { !it.candidateApplicability.isSuccess }
-            this.diagnostics.addAll(diagnostics)
         }
     }
 
-    protected abstract fun self(): SimpleResolutionCandidate
+    private fun addDiagnostics(diagnostics: Collection<CallDiagnostic>) {
+        hasErrors = hasErrors || diagnostics.any { !it.candidateApplicability.isSuccess }
+        this.diagnostics.addAll(diagnostics)
+    }
+
+    init {
+        addDiagnostics(initialDiagnostics)
+    }
+
+    abstract val resolutionSequence: List<ResolutionPart>
 }
 
 class SimpleResolutionCandidate(
-        implicitContextForCall: ImplicitContextForCall,
-        val containingDescriptor: DeclarationDescriptor,
-        override val astCall: ASTCall,
+        val callContext: CallContext,
         val explicitReceiverKind: ExplicitReceiverKind,
         val dispatchReceiverArgument: SimpleCallArgument?,
         val extensionReceiver: SimpleCallArgument?,
         val candidateDescriptor: CallableDescriptor,
-        resolutionSequence: List<ResolutionPart> //
-) : AbstractSimpleResolutionCandidate(implicitContextForCall, resolutionSequence) {
-    val csBuilder: ConstraintSystemBuilder = NewConstraintSystemBuilderImpl(ConstraintFixator(implicitContextForCall.commonSupertypeCalculator))
+        initialDiagnostics: Collection<CallDiagnostic>
+) : AbstractSimpleResolutionCandidate(initialDiagnostics) {
+    val csBuilder: ConstraintSystemBuilder = NewConstraintSystemBuilderImpl(callContext.c.constraintFixator)
 
     lateinit var typeArgumentMappingByOriginal: TypeArgumentsToParametersMapper.TypeArgumentsMapping
     lateinit var argumentMappingByOriginal: Map<ValueParameterDescriptor, ResolvedCallArgument>
     lateinit var descriptorWithFreshTypes: CallableDescriptor
 
-    override fun self() = this
     override val lastCall: SimpleResolutionCandidate get() = this
+    override val astCall: ASTCall get() = callContext.astCall
+    override val resolutionSequence: List<ResolutionPart> get() = astCall.callKind.resolutionSequence
 }
+
+val SimpleResolutionCandidate.containingDescriptor: DeclarationDescriptor get() = callContext.scopeTower.lexicalScope.ownerDescriptor
 
 class VariableAsFunctionResolutionCandidate(
         override val astCall: ASTCall,
-        implicitContextForCall: ImplicitContextForCall,
         val resolvedVariable: SimpleResolutionCandidate,
         val invokeCandidate: SimpleResolutionCandidate
-) : NewResolutionCandidate(implicitContextForCall) {
+) : NewResolutionCandidate() {
     override val isSuccessful: Boolean get() = resolvedVariable.isSuccessful && invokeCandidate.isSuccessful
     override val status: ResolutionCandidateStatus
         get() = ResolutionCandidateStatus(resolvedVariable.status.diagnostics + invokeCandidate.status.diagnostics)

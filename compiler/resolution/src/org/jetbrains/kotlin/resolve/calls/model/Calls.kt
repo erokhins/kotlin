@@ -16,17 +16,15 @@
 
 package org.jetbrains.kotlin.resolve.calls.model
 
-import org.jetbrains.kotlin.descriptors.CallableDescriptor
-import org.jetbrains.kotlin.descriptors.FunctionDescriptor
-import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.resolve.calls.ASTCallKind
 import org.jetbrains.kotlin.resolve.calls.ArgumentsToParametersMapper
 import org.jetbrains.kotlin.resolve.calls.BaseResolvedCall
 import org.jetbrains.kotlin.resolve.calls.MockReceiverForCallableReference
 import org.jetbrains.kotlin.resolve.calls.inference.LambdaNewTypeVariable
-import org.jetbrains.kotlin.resolve.calls.inference.ReadOnlyConstraintSystem
 import org.jetbrains.kotlin.resolve.calls.inference.NewTypeVariable
+import org.jetbrains.kotlin.resolve.calls.inference.ReadOnlyConstraintSystem
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.resolve.calls.tower.CandidateWithBoundDispatchReceiver
 import org.jetbrains.kotlin.resolve.calls.util.createFunctionType
@@ -40,6 +38,7 @@ import org.jetbrains.kotlin.types.UnwrappedType
 import org.jetbrains.kotlin.types.checker.intersectWrappedTypes
 import org.jetbrains.kotlin.types.typeUtil.builtIns
 import org.jetbrains.kotlin.utils.addToStdlib.check
+import java.lang.UnsupportedOperationException
 
 
 /*sealed*/ interface CallArgument {
@@ -151,6 +150,8 @@ interface SimpleTypeArgument: TypeArgument {
 }
 
 interface ASTCall {
+    val callKind: ASTCallKind
+
     val explicitReceiver: ReceiverCallArgument?
 
     // a.(foo)() -- (foo) is dispatchReceiverForInvoke
@@ -271,6 +272,7 @@ fun ASTCall.getExplicitExtensionReceiver(explicitReceiverKind: ExplicitReceiverK
 }
 
 object ThrowableASTCall : ASTCall {
+    override val callKind: ASTCallKind get() = throw UnsupportedOperationException()
     override val explicitReceiver: ReceiverCallArgument? get() = throw UnsupportedOperationException()
     override val name: Name get() = throw UnsupportedOperationException()
     override val typeArguments: List<TypeArgument> get() = throw UnsupportedOperationException()

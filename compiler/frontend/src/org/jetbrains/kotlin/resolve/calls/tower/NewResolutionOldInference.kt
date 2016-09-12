@@ -65,7 +65,7 @@ class NewResolutionOldInference(
         private val syntheticConstructorsProvider: SyntheticConstructorsProvider
 ) {
 
-    sealed class ResolutionKind<D : CallableDescriptor>(val astKind: ASTCallKind = ASTCallKind.Unsupported()) {
+    sealed class ResolutionKind<D : CallableDescriptor>(val astKind: ASTCallKind = ASTCallKind.UNSUPPORTED) {
         abstract internal fun createTowerProcessor(
                 outer: NewResolutionOldInference,
                 name: Name,

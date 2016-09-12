@@ -66,9 +66,7 @@ class PSICallResolver(
         private val languageFeatureSettings: LanguageFeatureSettings,
         private val dynamicCallableDescriptors: DynamicCallableDescriptors,
         private val syntheticScopes: SyntheticScopes,
-        private val argumentsToParametersMapper: ArgumentsToParametersMapper,
-        private val typeArgumentsToParametersMapper: TypeArgumentsToParametersMapper,
-        private val callableReferenceResolver: CallableReferenceResolver,
+        private val astResolverComponents: CallContextComponents,
         private val astToResolvedCallTransformer: ASTToResolvedCallTransformer,
         private val astCallResolver: ASTCallResolver
 ) {
@@ -80,13 +78,12 @@ class PSICallResolver(
             resolutionKind: NewResolutionOldInference.ResolutionKind<D>,
             tracingStrategy: TracingStrategy
     ) : OverloadResolutionResults<D> {
-        val astCall = toASTCall(context, context.call, name, tracingStrategy)
+        val astCall = toASTCall(context, resolutionKind.astKind, context.call, name, tracingStrategy)
         val scopeTower = ASTScopeTower(context)
-        val factoryProviderForInvoke = FactoryProviderForInvoke(context, astCall)
+        val lambdaAnalyzer = LambdaAnalyzerImpl(expressionTypingServices, context.trace)
 
-        val contextForCall = ImplicitContextForCall(argumentsToParametersMapper, typeArgumentsToParametersMapper,
-                                                    CommonSupertypeCalculatorImpl, callableReferenceResolver, scopeTower, factoryProviderForInvoke)
-        factoryProviderForInvoke.contextForCall = contextForCall
+        val callContext = CallContext(astResolverComponents, scopeTower, astCall, lambdaAnalyzer)
+        val factoryProviderForInvoke = FactoryProviderForInvoke(context, callContext)
 
         val expectedType = context.expectedType.unwrap()
 
@@ -98,8 +95,7 @@ class PSICallResolver(
             if (expectedType.isError) TypeUtils.NO_EXPECTED_TYPE else expectedType
         }
 
-        val lambdaAnalyzer = LambdaAnalyzerImpl(expressionTypingServices, context.trace)
-        val result = astCallResolver.resolveCall(contextForCall, astCall, resolutionKind.astKind, lambdaAnalyzer, transformedExpectedType)
+        val result = astCallResolver.resolveCall(callContext, transformedExpectedType, factoryProviderForInvoke)
         if (result.isEmpty() && reportAdditionalDiagnosticIfNoCandidates(context, scopeTower, resolutionKind.astKind, astCall)) {
             return OverloadResolutionResultsImpl.nameNotFound()
         }
@@ -189,9 +185,9 @@ class PSICallResolver(
 
     private inner class FactoryProviderForInvoke(
             val context: BasicCallResolutionContext,
-            val astCall: ASTCallImpl
-    ) : NewFactoryProviderForInvoke {
-        lateinit var contextForCall: ImplicitContextForCall
+            val callContext: CallContext
+    ) : CandidateFactoryProviderForInvoke<NewResolutionCandidate> {
+        val astCall: ASTCallImpl get() = callContext.astCall as ASTCallImpl
 
         init {
             assert(astCall.dispatchReceiverForInvokeExtension == null) { astCall }
@@ -208,13 +204,13 @@ class PSICallResolver(
                 "VariableAsFunction candidate is not allowed here: $invoke"
             }
 
-            return VariableAsFunctionResolutionCandidate(astCall, contextForCall, variable as SimpleResolutionCandidate, invoke as SimpleResolutionCandidate)
+            return VariableAsFunctionResolutionCandidate(astCall, variable as SimpleResolutionCandidate, invoke as SimpleResolutionCandidate)
         }
 
         override fun factoryForVariable(stripExplicitReceiver: Boolean): CandidateFactory<SimpleResolutionCandidate> {
             val explicitReceiver = if (stripExplicitReceiver) null else astCall.explicitReceiver
             val variableCall = CallForVariable(astCall, explicitReceiver, astCall.name)
-            return NewCandidateFactory(contextForCall, variableCall, ASTCallKind.VARIABLE.resolutionSequence)
+            return callContext.replaceCall(variableCall)
         }
 
         override fun factoryForInvoke(variable: NewResolutionCandidate, useExplicitReceiver: Boolean):
@@ -238,7 +234,7 @@ class PSICallResolver(
                 CallForInvoke(astCall, variableCallArgument, null)
             }
 
-            return variableCallArgument.receiver to NewCandidateFactory(contextForCall, callForInvoke, ASTCallKind.FUNCTION.resolutionSequence)
+            return variableCallArgument.receiver to callContext.replaceCall(callForInvoke)
         }
 
         // todo: create special check that there is no invoke on variable
@@ -267,7 +263,13 @@ class PSICallResolver(
     }
 
 
-    private fun toASTCall(context: BasicCallResolutionContext, oldCall: Call, name: Name, tracingStrategy: TracingStrategy): ASTCallImpl {
+    private fun toASTCall(
+            context: BasicCallResolutionContext,
+            astCallKind: ASTCallKind,
+            oldCall: Call,
+            name: Name,
+            tracingStrategy: TracingStrategy
+    ): ASTCallImpl {
         val resolvedExplicitReceiver = resolveExplicitReceiver(context, oldCall.explicitReceiver, oldCall.isSafeCall())
         val resolvedTypeArguments = resolveTypeArguments(context, oldCall.typeArguments)
 
@@ -301,7 +303,7 @@ class PSICallResolver(
         val astExternalArgument = externalArgument?.let { resolveValueArgument(context, dataFlowInfoAfterArgumentsInParenthesis, it) }
         val resultDataFlowInfo = astExternalArgument?.dataFlowInfoAfterThisArgument ?: dataFlowInfoAfterArgumentsInParenthesis
 
-        return ASTCallImpl(oldCall, tracingStrategy, resolvedExplicitReceiver, name, resolvedTypeArguments, resolvedArgumentsInParenthesis,
+        return ASTCallImpl(astCallKind, oldCall, tracingStrategy, resolvedExplicitReceiver, name, resolvedTypeArguments, resolvedArgumentsInParenthesis,
                            astExternalArgument, context.dataFlowInfo, resultDataFlowInfo)
     }
 

@@ -54,7 +54,7 @@ internal object CheckArguments : ResolutionPart {
                             is ExpressionArgument -> checkExpressionArgument(argument, expectedType)
                             is SubCallArgument -> checkSubCallArgument(argument, expectedType)
                             is LambdaArgument -> processLambdaArgument(argument, expectedType)
-                            is CallableReferenceArgument -> processCallableReferenceArgument(implicitContextForCall, argument, expectedType)
+                            is CallableReferenceArgument -> processCallableReferenceArgument(callContext.c, argument, expectedType)
                             else -> error("Incorrect argument type: $argument, ${argument.javaClass.canonicalName}.")
                         }
 
@@ -144,7 +144,7 @@ internal object CheckArguments : ResolutionPart {
     }
 
     fun SimpleResolutionCandidate.processCallableReferenceArgument(
-            implicitContextForCall: ImplicitContextForCall,
+            c: CallContextComponents,
             argument: CallableReferenceArgument,
             expectedType: UnwrappedType
     ): CallDiagnostic? {
@@ -168,7 +168,7 @@ internal object CheckArguments : ResolutionPart {
         when (descriptor) {
             is FunctionDescriptor -> {
                 // todo store resolved
-                val resolvedFunctionReference = implicitContextForCall.callableReferenceResolver.resolveFunctionReference(
+                val resolvedFunctionReference = c.callableReferenceResolver.resolveFunctionReference(
                         argument, astCall, expectedType)
 
                 csBuilder.addSubtypeConstraint(resolvedFunctionReference.reflectionType, expectedType, position)
@@ -179,7 +179,7 @@ internal object CheckArguments : ResolutionPart {
             is PropertyDescriptor -> {
 
                 // todo store resolved
-                val resolvedPropertyReference = implicitContextForCall.callableReferenceResolver.resolvePropertyReference(descriptor,
+                val resolvedPropertyReference = c.callableReferenceResolver.resolvePropertyReference(descriptor,
                         argument, astCall, containingDescriptor)
                 csBuilder.addSubtypeConstraint(resolvedPropertyReference.reflectionType, expectedType, position)
             }

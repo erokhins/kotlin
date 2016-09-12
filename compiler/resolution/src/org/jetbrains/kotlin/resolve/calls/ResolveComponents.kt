@@ -43,7 +43,7 @@ internal object CheckVisibility : ResolutionPart {
 
 internal object MapTypeArguments : ResolutionPart {
     override fun SimpleResolutionCandidate.process(): List<CallDiagnostic> {
-        typeArgumentMappingByOriginal = implicitContextForCall.typeArgumentsToParametersMapper.mapTypeArguments(astCall, candidateDescriptor.original)
+        typeArgumentMappingByOriginal = callContext.c.typeArgumentsToParametersMapper.mapTypeArguments(astCall, candidateDescriptor.original)
         return typeArgumentMappingByOriginal.diagnostics
     }
 }
@@ -60,7 +60,7 @@ internal object NoTypeArguments : ResolutionPart {
 
 internal object MapArguments : ResolutionPart {
     override fun SimpleResolutionCandidate.process(): List<CallDiagnostic> {
-        val mapping = implicitContextForCall.argumentsToParametersMapper.mapArguments(astCall, candidateDescriptor.original)
+        val mapping = callContext.c.argumentsToParametersMapper.mapArguments(astCall, candidateDescriptor.original)
         argumentMappingByOriginal = mapping.parameterToCallArgumentMap
         return mapping.diagnostics
     }

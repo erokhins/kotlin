@@ -19,7 +19,6 @@ package org.jetbrains.kotlin.resolve.calls
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.resolve.calls.context.CheckArgumentTypesMode
 import org.jetbrains.kotlin.resolve.calls.inference.SimpleConstraintSystemImpl
-import org.jetbrains.kotlin.resolve.calls.model.ASTCall
 import org.jetbrains.kotlin.resolve.calls.model.CallArgument
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallArgument
 import org.jetbrains.kotlin.resolve.calls.results.FlatSignature
@@ -27,37 +26,51 @@ import org.jetbrains.kotlin.resolve.calls.results.FlatSignature.Companion.argume
 import org.jetbrains.kotlin.resolve.calls.results.FlatSignature.Companion.extensionReceiverTypeOrEmpty
 import org.jetbrains.kotlin.resolve.calls.results.OverloadingConflictResolver
 import org.jetbrains.kotlin.resolve.calls.results.TypeSpecificityComparator
+import org.jetbrains.kotlin.resolve.calls.tower.CandidateFactoryProviderForInvoke
 import org.jetbrains.kotlin.resolve.calls.tower.TowerResolver
+import org.jetbrains.kotlin.resolve.calls.tower.createFunctionProcessor
+import org.jetbrains.kotlin.resolve.calls.tower.createVariableAndObjectProcessor
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.UnwrappedType
 import org.jetbrains.kotlin.utils.singletonOrEmptyList
+import java.lang.UnsupportedOperationException
 import java.util.*
 
 
 class ASTCallResolver(
         private val towerResolver: TowerResolver,
         private val astCallCompleter: ASTCallCompleter,
-        builtIns: KotlinBuiltIns, // component
+        builtIns: KotlinBuiltIns,
         specificityComparator: TypeSpecificityComparator,
-        isDescriptorFromSourcePredicate: IsDescriptorFromSourcePredicate // component
+        isDescriptorFromSourcePredicate: IsDescriptorFromSourcePredicate
 ) {
     private val overloadingConflictResolver = createOverloadingConflictResolver(builtIns, specificityComparator, isDescriptorFromSourcePredicate)
 
     fun resolveCall(
-            contextForCall: ImplicitContextForCall,
-            astCall: ASTCall,
-            astCallKind: ASTCallKind,
-            lambdaAnalyzer: LambdaAnalyzer, // move to context
-            expectedType: UnwrappedType? // if this type is not null, it means that we should compete this call.
+            callContext: CallContext,
+            expectedType: UnwrappedType?,
+            factoryProviderForInvoke: CandidateFactoryProviderForInvoke<NewResolutionCandidate>
     ): Collection<BaseResolvedCall> {
-        val processor = astCallKind.createProcessor(contextForCall, astCall)
-        val candidates = towerResolver.runResolve(contextForCall.scopeTower, processor, useOrder = astCallKind !is ASTCallKind.Unsupported)
+        val call = callContext.astCall
+        val scopeTower = callContext.scopeTower
+
+        val processor = when(callContext.astCall.callKind) {
+            ASTCallKind.VARIABLE -> {
+                createVariableAndObjectProcessor(scopeTower, call.name, callContext, call.explicitReceiver?.receiver)
+            }
+            ASTCallKind.FUNCTION -> {
+                createFunctionProcessor(scopeTower, call.name, callContext, factoryProviderForInvoke, call.explicitReceiver?.receiver)
+            }
+            ASTCallKind.UNSUPPORTED -> throw UnsupportedOperationException()
+        }
+
+        val candidates = towerResolver.runResolve(scopeTower, processor, useOrder = call.callKind != ASTCallKind.UNSUPPORTED)
         val maximallySpecificCandidates = overloadingConflictResolver.chooseMaximallySpecificCandidates(candidates,
                                                                    CheckArgumentTypesMode.CHECK_VALUE_ARGUMENTS,
                                                                    discriminateGenerics = true, // todo
-                                                                   isDebuggerContext = contextForCall.scopeTower.isDebuggerContext)
+                                                                   isDebuggerContext = scopeTower.isDebuggerContext)
         val singleResult = maximallySpecificCandidates.singleOrNull()?.let {
-            astCallCompleter.completeCallIfNecessary(it, expectedType, lambdaAnalyzer)
+            astCallCompleter.completeCallIfNecessary(it, expectedType, callContext.lambdaAnalyzer)
         }
         if (singleResult != null) {
             return listOf(singleResult)
