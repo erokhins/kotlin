@@ -22,9 +22,6 @@ import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.resolve.calls.tower.*
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValueWithSmartCastInfo
 
-
-typealias NewProcessor = ScopeTowerProcessor<NewResolutionCandidate>
-
 class CallContextComponents(
         val argumentsToParametersMapper: ArgumentsToParametersMapper,
         val typeArgumentsToParametersMapper: TypeArgumentsToParametersMapper,
@@ -62,9 +59,6 @@ class CallContext(
 
     fun replaceCall(newCall: ASTCall) = CallContext(c, scopeTower, newCall, lambdaAnalyzer)
 }
-
-
-
 
 enum class ASTCallKind(vararg resolutionPart: ResolutionPart) {
     VARIABLE(

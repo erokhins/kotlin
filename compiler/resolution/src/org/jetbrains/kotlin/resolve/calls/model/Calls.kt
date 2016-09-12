@@ -21,7 +21,6 @@ import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.resolve.calls.ASTCallKind
 import org.jetbrains.kotlin.resolve.calls.ArgumentsToParametersMapper
 import org.jetbrains.kotlin.resolve.calls.BaseResolvedCall
-import org.jetbrains.kotlin.resolve.calls.MockReceiverForCallableReference
 import org.jetbrains.kotlin.resolve.calls.inference.LambdaNewTypeVariable
 import org.jetbrains.kotlin.resolve.calls.inference.NewTypeVariable
 import org.jetbrains.kotlin.resolve.calls.inference.ReadOnlyConstraintSystem
@@ -183,16 +182,29 @@ fun ASTCall.checkCallInvariants() {
     (explicitReceiver as? SimpleCallArgument)?.checkReceiverInvariants()
     dispatchReceiverForInvokeExtension?.checkReceiverInvariants()
 
-    assert(externalArgument == null || !externalArgument!!.isSpread) {
-        "External argument cannot nave spread element: $externalArgument"
+    if (callKind != ASTCallKind.FUNCTION) {
+        assert(externalArgument == null) {
+            "External argument is not allowed not for function call: $externalArgument."
+        }
+        assert(argumentsInParenthesis.isEmpty()) {
+            "Arguments in parenthesis should be empty for not function call: $this "
+        }
+        assert(dispatchReceiverForInvokeExtension == null) {
+            "Dispatch receiver for invoke should be null for not function call: $dispatchReceiverForInvokeExtension"
+        }
     }
+    else {
+        assert(externalArgument == null || !externalArgument!!.isSpread) {
+            "External argument cannot nave spread element: $externalArgument"
+        }
 
-    assert(externalArgument?.argumentName == null) {
-        "Illegal external argument with name: $externalArgument"
-    }
+        assert(externalArgument?.argumentName == null) {
+            "Illegal external argument with name: $externalArgument"
+        }
 
-    assert(dispatchReceiverForInvokeExtension == null || !dispatchReceiverForInvokeExtension!!.isSafeCall) {
-        "Dispatch receiver for invoke cannot be safe: $dispatchReceiverForInvokeExtension"
+        assert(dispatchReceiverForInvokeExtension == null || !dispatchReceiverForInvokeExtension!!.isSafeCall) {
+            "Dispatch receiver for invoke cannot be safe: $dispatchReceiverForInvokeExtension"
+        }
     }
 }
 
@@ -279,3 +291,13 @@ object ThrowableASTCall : ASTCall {
     override val argumentsInParenthesis: List<CallArgument> get() = throw UnsupportedOperationException()
     override val externalArgument: CallArgument? get() = throw UnsupportedOperationException()
 }
+
+class MockReceiverForCallableReference(val lhsOrDeclaredType: UnwrappedType) : ReceiverValue {
+    override fun getType() = lhsOrDeclaredType
+}
+
+val ChosenCallableReferenceDescriptor.dispatchNotBoundReceiver : UnwrappedType?
+    get() = (candidate.dispatchReceiver?.receiverValue as? MockReceiverForCallableReference)?.lhsOrDeclaredType
+
+val ChosenCallableReferenceDescriptor.extensionNotBoundReceiver : UnwrappedType?
+    get() = (extensionReceiver as? MockReceiverForCallableReference)?.lhsOrDeclaredType

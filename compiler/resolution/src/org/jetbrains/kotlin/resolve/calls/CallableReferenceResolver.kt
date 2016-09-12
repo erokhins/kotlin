@@ -34,17 +34,6 @@ import org.jetbrains.kotlin.utils.addToStdlib.check
 import java.util.*
 
 
-class MockReceiverForCallableReference(val lhsOrDeclaredType: UnwrappedType) : ReceiverValue {
-    override fun getType(): KotlinType = lhsOrDeclaredType
-}
-
-val ChosenCallableReferenceDescriptor.dispatchNotBoundReceiver : UnwrappedType?
-    get() = (candidate.dispatchReceiver?.receiverValue as? MockReceiverForCallableReference)?.lhsOrDeclaredType
-
-val ChosenCallableReferenceDescriptor.extensionNotBoundReceiver : UnwrappedType?
-    get() = (extensionReceiver as? MockReceiverForCallableReference)?.lhsOrDeclaredType
-
-
 class CallableReferenceResolver(
         val reflectionTypes: ReflectionTypes,
         val argumentsToParametersMapper: ArgumentsToParametersMapper
@@ -75,7 +64,7 @@ class CallableReferenceResolver(
             return functionReference.candidate.descriptor.valueParameters.map { it.varargElementType?.unwrap() ?: it.type.unwrap() } to null
         }
 
-        val fakeArguments = (0..(argumentCount-1)).map { FakeArgumentForCallableReference(functionReference, it) }
+        val fakeArguments = (0..(argumentCount - 1)).map { FakeArgumentForCallableReference(functionReference, it) }
 
         val argumentsToParametersMapping = argumentsToParametersMapper.mapArguments(fakeArguments, null, functionReference.candidate.descriptor)
         val parameters = Array<UnwrappedType?>(argumentCount) { null }
@@ -118,7 +107,7 @@ class CallableReferenceResolver(
         val unitExpectedType = functionType?.let(::getReturnTypeFromFunctionType)?.check { it.upperIfFlexible().isUnit() }
         // coercion to unit
         val returnType = unitExpectedType ?: functionReference.candidate.descriptor.returnType
-                          ?: ErrorUtils.createErrorType("Error return type")
+                         ?: ErrorUtils.createErrorType("Error return type")
 
         val kFunctionType = reflectionTypes.getKFunctionType(Annotations.EMPTY, null, parameterTypes, returnType)
 
