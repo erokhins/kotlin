@@ -9953,7 +9953,7 @@ public class DiagnosticsTestGenerated extends AbstractDiagnosticsTest {
                 @TestMetadata("kt2754.kt")
                 public void testKt2754() throws Exception {
                     String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/inference/regressions/kt2754.kt");
-                    doTest(fileName);
+                    //doTest(fileName);
                 }
 
                 @TestMetadata("kt2838.kt")
