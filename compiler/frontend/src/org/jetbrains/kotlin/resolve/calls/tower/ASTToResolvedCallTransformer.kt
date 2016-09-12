@@ -38,11 +38,11 @@ import java.util.*
 class ASTToResolvedCallTransformer {
 
     fun <D : CallableDescriptor> transformAndReport(
-            baseResolvedCall: BaseResolvedCall<D>,
+            baseResolvedCall: BaseResolvedCall,
             trace: BindingTrace? // if trace is not null then all information will be reported to this trace
     ): ResolvedCall<D> {
         if (baseResolvedCall is BaseResolvedCall.CompletedResolvedCall) {
-            baseResolvedCall.allInnerCalls.forEach { transformAndReportCompletedCall(it, trace) }
+            baseResolvedCall.allInnerCalls.forEach { transformAndReportCompletedCall<D>(it, trace) }
             return transformAndReportCompletedCall(baseResolvedCall.completedCall, trace)
         }
 
@@ -53,7 +53,7 @@ class ASTToResolvedCallTransformer {
     }
 
     private fun <D: CallableDescriptor> transformAndReportCompletedCall(
-            completedCall: CompletedCall<D>,
+            completedCall: CompletedCall,
             trace: BindingTrace?
     ): ResolvedCall<D> {
         fun <C> C.runIfTraceNotNull(action: (BindingTrace, C)-> Unit): C {
@@ -64,7 +64,7 @@ class ASTToResolvedCallTransformer {
         return when (completedCall) {
             is CompletedCall.Simple -> {
                 completedCall.runIfTraceNotNull(this::reportCallDiagnostic)
-                NewResolvedCallImpl(completedCall).runIfTraceNotNull(this::bindResolvedCall)
+                NewResolvedCallImpl<D>(completedCall).runIfTraceNotNull(this::bindResolvedCall)
             }
             is CompletedCall.VariableAsFunction -> {
                 completedCall.variableCall.runIfTraceNotNull(this::reportCallDiagnostic)
@@ -98,7 +98,7 @@ class ASTToResolvedCallTransformer {
         variableAsFunction.functionCall.astCall.psiAstCall.tracingStrategy.bindReference(trace, variableAsFunction.functionCall)
     }
 
-    private fun reportCallDiagnostic(trace: BindingTrace, completedCall: CompletedCall.Simple<*>) {
+    private fun reportCallDiagnostic(trace: BindingTrace, completedCall: CompletedCall.Simple) {
         // todo
     }
 }
@@ -187,7 +187,7 @@ sealed class NewAbstractResolvedCall<D : CallableDescriptor>(): ResolvedCall<D> 
 }
 
 class NewResolvedCallImpl<D : CallableDescriptor>(
-        val completedCall: CompletedCall.Simple<D>
+        val completedCall: CompletedCall.Simple
 ): NewAbstractResolvedCall<D>() {
     override val astCall: ASTCall get() = completedCall.astCall
 
@@ -196,8 +196,8 @@ class NewResolvedCallImpl<D : CallableDescriptor>(
     override val argumentMappingByOriginal: Map<ValueParameterDescriptor, ResolvedCallArgument>
         get() = completedCall.argumentMappingByOriginal
 
-    override fun getCandidateDescriptor(): D = completedCall.candidateDescriptor
-    override fun getResultingDescriptor(): D = completedCall.resultingDescriptor
+    override fun getCandidateDescriptor(): D = completedCall.candidateDescriptor as D
+    override fun getResultingDescriptor(): D = completedCall.resultingDescriptor as D
     override fun getExtensionReceiver(): ReceiverValue? = completedCall.extensionReceiver?.receiverValue
     override fun getDispatchReceiver(): ReceiverValue? = completedCall.dispatchReceiver?.receiverValue
     override fun getExplicitReceiverKind(): ExplicitReceiverKind = completedCall.explicitReceiverKind
@@ -221,10 +221,10 @@ class NewVariableAsFunctionResolvedCallImpl(
         override val functionCall: NewResolvedCallImpl<FunctionDescriptor>
 ): VariableAsFunctionResolvedCall, ResolvedCall<FunctionDescriptor> by functionCall
 
-class StubOnlyResolvedCall<D : CallableDescriptor>(val candidate: SimpleResolutionCandidate<D>): NewAbstractResolvedCall<D>() {
+class StubOnlyResolvedCall<D : CallableDescriptor>(val candidate: SimpleResolutionCandidate): NewAbstractResolvedCall<D>() {
     override fun getStatus() = ResolutionStatus.UNKNOWN_STATUS
 
-    override fun getCandidateDescriptor(): D = candidate.candidateDescriptor
+    override fun getCandidateDescriptor(): D = candidate.candidateDescriptor as D
     override fun getResultingDescriptor(): D = candidateDescriptor
     override fun getExtensionReceiver() = candidate.extensionReceiver?.receiver?.receiverValue
     override fun getDispatchReceiver() = candidate.dispatchReceiverArgument?.receiver?.receiverValue

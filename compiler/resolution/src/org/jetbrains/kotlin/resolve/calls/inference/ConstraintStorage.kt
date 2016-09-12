@@ -144,7 +144,7 @@ class ConstraintStorage : ConstraintIncorporator.IncorporationContext, Constrain
     override val errors: MutableList<CallDiagnostic> = ArrayList()
     override val fixedTypeVariables: MutableMap<TypeConstructor, UnwrappedType> = HashMap()
     override val lambdaArguments: MutableList<ResolvedLambdaArgument> = ArrayList()
-    override val innerCalls: MutableList<BaseResolvedCall.OnlyResolvedCall<*>> = ArrayList()
+    override val innerCalls: MutableList<BaseResolvedCall.OnlyResolvedCall> = ArrayList()
 
     private fun updateAllowedTypeDepth(initialType: UnwrappedType) {
         allowedTypeDepth = Math.max(allowedTypeDepth, initialType.typeDepth() + ALLOWED_DEPTH_DELTA_FOR_INCORPORATION)
@@ -158,7 +158,7 @@ class ConstraintStorage : ConstraintIncorporator.IncorporationContext, Constrain
         notFixedTypeVariables[variable.freshTypeConstructor] = MutableVariableWithConstraints(variable)
     }
 
-    fun addInnerCall(innerCall: BaseResolvedCall.OnlyResolvedCall<*>) {
+    fun addInnerCall(innerCall: BaseResolvedCall.OnlyResolvedCall) {
         addSubsystem(innerCall.candidate.lastCall.csBuilder.build())
         innerCalls.add(innerCall)
     }

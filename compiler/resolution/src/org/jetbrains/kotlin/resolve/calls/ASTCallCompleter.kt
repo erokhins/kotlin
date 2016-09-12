@@ -17,11 +17,12 @@
 package org.jetbrains.kotlin.resolve.calls
 
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
-import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
-import org.jetbrains.kotlin.descriptors.VariableDescriptor
 import org.jetbrains.kotlin.resolve.calls.inference.*
-import org.jetbrains.kotlin.resolve.calls.model.*
+import org.jetbrains.kotlin.resolve.calls.model.ASTCall
+import org.jetbrains.kotlin.resolve.calls.model.LambdaArgument
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallArgument
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedLambdaArgument
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.resolve.calls.tower.ResolutionCandidateStatus
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValueWithSmartCastInfo
@@ -39,45 +40,45 @@ interface LambdaAnalyzer {
             receiverType: UnwrappedType?,
             parameters: List<UnwrappedType>,
             expectedReturnType: UnwrappedType? // null means, that return type is not proper i.e. it depends on some type variables
-    ): List<BaseResolvedCall<*>>
+    ): List<BaseResolvedCall>
 }
 
-sealed class CompletedCall<out D : CallableDescriptor> {
-    abstract val lastCall: Simple<D>
+sealed class CompletedCall {
+    abstract val lastCall: Simple
 
-    class Simple<out D : CallableDescriptor>(
+    class Simple(
             val astCall: ASTCall,
-            val candidateDescriptor: D,
-            val resultingDescriptor: D,
+            val candidateDescriptor: CallableDescriptor,
+            val resultingDescriptor: CallableDescriptor,
             val resolutionStatus: ResolutionCandidateStatus,
             val explicitReceiverKind: ExplicitReceiverKind,
             val dispatchReceiver: ReceiverValueWithSmartCastInfo?,
             val extensionReceiver: ReceiverValueWithSmartCastInfo?,
             val typeArguments: List<UnwrappedType>,
             val argumentMappingByOriginal: Map<ValueParameterDescriptor, ResolvedCallArgument>
-    ): CompletedCall<D>() {
-        override val lastCall: Simple<D> get() = this
+    ): CompletedCall() {
+        override val lastCall: Simple get() = this
     }
 
     class VariableAsFunction(
             val astCall: ASTCall,
-            val variableCall: Simple<VariableDescriptor>,
-            val invokeCall: Simple<FunctionDescriptor>
-    ): CompletedCall<FunctionDescriptor>() {
-        override val lastCall: Simple<FunctionDescriptor> get() = invokeCall
+            val variableCall: Simple,
+            val invokeCall: Simple
+    ): CompletedCall() {
+        override val lastCall: Simple get() = invokeCall
     }
 }
 
-sealed class BaseResolvedCall<out D : CallableDescriptor> {
+sealed class BaseResolvedCall {
 
-    class CompletedResolvedCall<out D : CallableDescriptor>(
-            val completedCall: CompletedCall<D>,
-            val allInnerCalls: Collection<CompletedCall<*>>
-    ): BaseResolvedCall<D>()
+    class CompletedResolvedCall(
+            val completedCall: CompletedCall,
+            val allInnerCalls: Collection<CompletedCall>
+    ): BaseResolvedCall()
 
-    class OnlyResolvedCall<out D : CallableDescriptor>(
-            val candidate: NewResolutionCandidate<D>
-    ) : BaseResolvedCall<D>() {
+    class OnlyResolvedCall(
+            val candidate: NewResolutionCandidate
+    ) : BaseResolvedCall() {
         val currentReturnType: UnwrappedType = candidate.lastCall.descriptorWithFreshTypes.returnTypeOrNothing
     }
 }
@@ -86,14 +87,14 @@ class ASTCallCompleter(
         val constraintFixator: ConstraintFixator
 ) {
 
-    fun <D : CallableDescriptor> transformWhenAmbiguity(candidate: NewResolutionCandidate<D>): BaseResolvedCall<D> =
+    fun transformWhenAmbiguity(candidate: NewResolutionCandidate): BaseResolvedCall =
             toCompletedBaseResolvedCall(candidate)
 
-    fun <D : CallableDescriptor> completeCallIfNecessary(
-            candidate: NewResolutionCandidate<D>,
+    fun completeCallIfNecessary(
+            candidate: NewResolutionCandidate,
             expectedType: UnwrappedType?,
             lambdaAnalyzer: LambdaAnalyzer
-    ): BaseResolvedCall<D> {
+    ): BaseResolvedCall {
         val topLevelCall =
                 if (candidate is VariableAsFunctionResolutionCandidate) {
                     candidate.invokeCandidate
@@ -110,9 +111,9 @@ class ASTCallCompleter(
         return BaseResolvedCall.OnlyResolvedCall(candidate)
     }
 
-    private fun <D : CallableDescriptor> toCompletedBaseResolvedCall(
-            candidate: NewResolutionCandidate<D>
-    ): BaseResolvedCall.CompletedResolvedCall<D> {
+    private fun toCompletedBaseResolvedCall(
+            candidate: NewResolutionCandidate
+    ): BaseResolvedCall.CompletedResolvedCall {
         val currentSubstitutor = candidate.lastCall.csBuilder.build().buildCurrentSubstitutor()
         val completedCall = candidate.toCompletedCall(currentSubstitutor)
         val competedCalls = candidate.lastCall.csBuilder.build().innerCalls.map {
@@ -121,27 +122,25 @@ class ASTCallCompleter(
         return BaseResolvedCall.CompletedResolvedCall(completedCall, competedCalls)
     }
 
-    private fun <D : CallableDescriptor> NewResolutionCandidate<D>.toCompletedCall(substitutor: TypeSubstitutor): CompletedCall<D> {
+    private fun NewResolutionCandidate.toCompletedCall(substitutor: TypeSubstitutor): CompletedCall {
         if (this is VariableAsFunctionResolutionCandidate) {
             val variable = resolvedVariable.toCompletedCall(substitutor)
             val invoke = invokeCandidate.toCompletedCall(substitutor)
 
-            @Suppress("UNCHECKED_CAST")
-            return CompletedCall.VariableAsFunction(astCall, variable, invoke) as CompletedCall<D>
+            return CompletedCall.VariableAsFunction(astCall, variable, invoke)
         }
         return (this as SimpleResolutionCandidate).toCompletedCall(substitutor)
     }
 
-    @Suppress("UNCHECKED_CAST")
-    private fun <D : CallableDescriptor> SimpleResolutionCandidate<D>.toCompletedCall(substitutor: TypeSubstitutor): CompletedCall.Simple<D> {
-        val resultingDescriptor = descriptorWithFreshTypes.substitute(substitutor) as D
+    private fun SimpleResolutionCandidate.toCompletedCall(substitutor: TypeSubstitutor): CompletedCall.Simple {
+        val resultingDescriptor = descriptorWithFreshTypes.substitute(substitutor)!!
         val typeArguments = descriptorWithFreshTypes.typeParameters.map { substitutor.safeSubstitute(it.defaultType, Variance.INVARIANT).unwrap() }
         return CompletedCall.Simple(astCall, candidateDescriptor, resultingDescriptor, status, explicitReceiverKind,
                              dispatchReceiverArgument?.receiver, extensionReceiver?.receiver, typeArguments, argumentMappingByOriginal)
     }
 
     // true if we should complete this call
-    private fun SimpleResolutionCandidate<*>.prepareForCompletion(expectedType: UnwrappedType?): Boolean {
+    private fun SimpleResolutionCandidate.prepareForCompletion(expectedType: UnwrappedType?): Boolean {
         val returnType = descriptorWithFreshTypes.returnType?.unwrap() ?: return false
         if (expectedType != null && expectedType !== TypeUtils.NO_EXPECTED_TYPE) {
             csBuilder.addSubtypeConstraint(returnType, expectedType, ExpectedTypeConstraintPosition(astCall))
@@ -150,14 +149,14 @@ class ASTCallCompleter(
         return expectedType != null || !returnType.contains { csBuilder.typeVariables.containsKey(it.constructor) }
     }
 
-    private fun SimpleResolutionCandidate<*>.competeCall(lambdaAnalyzer: LambdaAnalyzer) {
+    private fun SimpleResolutionCandidate.competeCall(lambdaAnalyzer: LambdaAnalyzer) {
         while (!oneStepToEndOrLambda(lambdaAnalyzer)) {
             // do nothing
         }
     }
 
     // true if it is end
-    private fun SimpleResolutionCandidate<*>.oneStepToEndOrLambda(lambdaAnalyzer: LambdaAnalyzer): Boolean {
+    private fun SimpleResolutionCandidate.oneStepToEndOrLambda(lambdaAnalyzer: LambdaAnalyzer): Boolean {
         val constraintStorage = csBuilder.startCompletion()
         if (constraintStorage.errors.isNotEmpty()) return true
 

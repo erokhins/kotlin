@@ -83,7 +83,7 @@ interface ReadOnlyConstraintSystem {
     val errors: List<CallDiagnostic>
     val fixedTypeVariables: Map<TypeConstructor, UnwrappedType>
     val lambdaArguments: List<ResolvedLambdaArgument>
-    val innerCalls: List<BaseResolvedCall.OnlyResolvedCall<*>>
+    val innerCalls: List<BaseResolvedCall.OnlyResolvedCall>
 
     object EmptyConstraintSystem : ReadOnlyConstraintSystem {
         override val allTypeVariables: Map<TypeConstructor, NewTypeVariable> get() = emptyMap()
@@ -93,7 +93,7 @@ interface ReadOnlyConstraintSystem {
         override val errors: List<CallDiagnostic> get() = emptyList()
         override val fixedTypeVariables: Map<TypeConstructor, UnwrappedType> get() = emptyMap()
         override val lambdaArguments: List<ResolvedLambdaArgument> get() = emptyList()
-        override val innerCalls: List<BaseResolvedCall.OnlyResolvedCall<*>> get() = emptyList()
+        override val innerCalls: List<BaseResolvedCall.OnlyResolvedCall> get() = emptyList()
     }
 }
 
@@ -109,7 +109,7 @@ interface ConstraintSystemBuilder {
     fun addSubtypeConstraint(lowerType: UnwrappedType, upperType: UnwrappedType, position: ConstraintPosition)
     fun addEqualityConstraint(a: UnwrappedType, b: UnwrappedType, position: ConstraintPosition)
 
-    fun addInnerCall(innerCall: BaseResolvedCall.OnlyResolvedCall<*>)
+    fun addInnerCall(innerCall: BaseResolvedCall.OnlyResolvedCall)
     fun addLambdaArgument(resolvedLambdaArgument: ResolvedLambdaArgument)
 
     fun addIfIsCompatibleSubtypeConstraint(lowerType: UnwrappedType, upperType: UnwrappedType, position: ConstraintPosition): Boolean

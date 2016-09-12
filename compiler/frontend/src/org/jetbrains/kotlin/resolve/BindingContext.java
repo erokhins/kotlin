@@ -122,8 +122,8 @@ public interface BindingContext {
             new BasicWritableSlice<KtReferenceExpression, ClassDescriptor>(DO_NOTHING);
 
     WritableSlice<Call, ResolvedCall<?>> RESOLVED_CALL = new BasicWritableSlice<Call, ResolvedCall<?>>(DO_NOTHING);
-    WritableSlice<Call, BaseResolvedCall.OnlyResolvedCall<?>> ONLY_RESOLVED_CALL =
-            new BasicWritableSlice<Call, BaseResolvedCall.OnlyResolvedCall<?>>(DO_NOTHING);
+    WritableSlice<Call, BaseResolvedCall.OnlyResolvedCall> ONLY_RESOLVED_CALL =
+            new BasicWritableSlice<Call, BaseResolvedCall.OnlyResolvedCall>(DO_NOTHING);
     WritableSlice<Call, TailRecursionKind> TAIL_RECURSION_CALL = Slices.createSimpleSlice();
     WritableSlice<KtElement, ConstraintSystemCompleter> CONSTRAINT_SYSTEM_COMPLETER = new BasicWritableSlice<KtElement, ConstraintSystemCompleter>(DO_NOTHING);
     WritableSlice<KtElement, Call> CALL = new BasicWritableSlice<KtElement, Call>(DO_NOTHING);

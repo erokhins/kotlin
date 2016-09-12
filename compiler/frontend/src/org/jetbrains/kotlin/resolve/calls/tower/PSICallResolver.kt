@@ -109,7 +109,7 @@ class PSICallResolver(
 
     private fun <D : CallableDescriptor> convertToOverloadResolutionResults(
             context: BasicCallResolutionContext,
-            result: Collection<BaseResolvedCall<D>>,
+            result: Collection<BaseResolvedCall>,
             tracingStrategy: TracingStrategy
     ): OverloadResolutionResults<D> {
         val trace = context.trace
@@ -120,11 +120,11 @@ class PSICallResolver(
             }
             1 -> {
                 val singleCandidate = result.single()
-                val resolvedCall = astToResolvedCallTransformer.transformAndReport(singleCandidate, trace)
+                val resolvedCall = astToResolvedCallTransformer.transformAndReport<D>(singleCandidate, trace)
                 return SingleOverloadResolutionResult(resolvedCall)
             }
             else -> {
-                val resolvedCalls = result.map { astToResolvedCallTransformer.transformAndReport(it, trace = null) }
+                val resolvedCalls = result.map { astToResolvedCallTransformer.transformAndReport<D>(it, trace = null) }
                 tracingStrategy.recordAmbiguity(trace, resolvedCalls)
                 if(resolvedCalls.first().status == ResolutionStatus.INCOMPLETE_TYPE_INFERENCE) {
                     tracingStrategy.cannotCompleteResolve(trace, resolvedCalls)
@@ -141,7 +141,7 @@ class PSICallResolver(
     private fun reportAdditionalDiagnosticIfNoCandidates(
             context: BasicCallResolutionContext,
             scopeTower: ImplicitScopeTower,
-            kind: ASTCallKind<*>,
+            kind: ASTCallKind,
             astCall: ASTCall
     ): Boolean {
         val reference = context.call.calleeExpression as? KtReferenceExpression ?: return false
@@ -198,25 +198,31 @@ class PSICallResolver(
         }
 
         override fun transformCandidate(
-                variable: SimpleResolutionCandidate<VariableDescriptor>,
-                invoke: NewResolutionCandidate<FunctionDescriptor>
+                variable: NewResolutionCandidate,
+                invoke: NewResolutionCandidate
         ): VariableAsFunctionResolutionCandidate {
+            assert(variable is SimpleResolutionCandidate) {
+                "VariableAsFunction variable is not allowed here: $variable"
+            }
             assert(invoke is SimpleResolutionCandidate) {
                 "VariableAsFunction candidate is not allowed here: $invoke"
             }
 
-            return VariableAsFunctionResolutionCandidate(astCall, contextForCall, variable, invoke as SimpleResolutionCandidate)
+            return VariableAsFunctionResolutionCandidate(astCall, contextForCall, variable as SimpleResolutionCandidate, invoke as SimpleResolutionCandidate)
         }
 
-        override fun factoryForVariable(stripExplicitReceiver: Boolean): CandidateFactory<VariableDescriptor, SimpleResolutionCandidate<VariableDescriptor>> {
+        override fun factoryForVariable(stripExplicitReceiver: Boolean): CandidateFactory<SimpleResolutionCandidate> {
             val explicitReceiver = if (stripExplicitReceiver) null else astCall.explicitReceiver
             val variableCall = CallForVariable(astCall, explicitReceiver, astCall.name)
-            return NewCandidateFactory<VariableDescriptor>(contextForCall, variableCall, ASTCallKind.VARIABLE.resolutionSequence)
+            return NewCandidateFactory(contextForCall, variableCall, ASTCallKind.VARIABLE.resolutionSequence)
         }
 
-        override fun factoryForInvoke(variable: SimpleResolutionCandidate<VariableDescriptor>, useExplicitReceiver: Boolean):
-                Pair<ReceiverValueWithSmartCastInfo, CandidateFactory<FunctionDescriptor, NewResolutionCandidate<FunctionDescriptor>>>? {
-            if (isRecursiveVariableResolution(variable)) return null
+        override fun factoryForInvoke(variable: NewResolutionCandidate, useExplicitReceiver: Boolean):
+                Pair<ReceiverValueWithSmartCastInfo, CandidateFactory<NewResolutionCandidate>>? {
+            assert(variable is SimpleResolutionCandidate) {
+                "VariableAsFunction variable is not allowed here: $variable"
+            }
+            if (isRecursiveVariableResolution(variable as SimpleResolutionCandidate)) return null
 
             assert(variable.isSuccessful) {
                 "Variable call should be successful: $variable " +
@@ -236,23 +242,23 @@ class PSICallResolver(
         }
 
         // todo: create special check that there is no invoke on variable
-        private fun isRecursiveVariableResolution(variable: SimpleResolutionCandidate<VariableDescriptor>): Boolean {
-            val variableType = variable.candidateDescriptor.type
+        private fun isRecursiveVariableResolution(variable: SimpleResolutionCandidate): Boolean {
+            val variableType = variable.candidateDescriptor.returnType
             return variableType is DeferredType && variableType.isComputing
         }
 
         // todo: review
-        private fun createReceiverCallArgument(variable: SimpleResolutionCandidate<VariableDescriptor>): ExpressionArgument =
+        private fun createReceiverCallArgument(variable: SimpleResolutionCandidate): ExpressionArgument =
                 ReceiverExpressionArgument(createReceiverValueWithSmartCastInfo(variable))
 
         // todo: decrease hacks count
-        private fun createReceiverValueWithSmartCastInfo(variable: SimpleResolutionCandidate<VariableDescriptor>): ReceiverValueWithSmartCastInfo {
+        private fun createReceiverValueWithSmartCastInfo(variable: SimpleResolutionCandidate): ReceiverValueWithSmartCastInfo {
             val callForVariable = variable.astCall as CallForVariable
             val calleeExpression = callForVariable.baseCall.psiCall.calleeExpression as? KtReferenceExpression ?:
                                    error("Unexpected call : ${callForVariable.baseCall.psiCall}")
 
             val temporaryTrace = TemporaryBindingTrace.create(context.trace, "Context for resolve candidate")
-            val variableReceiver = ExpressionReceiver.create(calleeExpression, variable.descriptorWithFreshTypes.type, temporaryTrace.bindingContext)
+            val variableReceiver = ExpressionReceiver.create(calleeExpression, variable.descriptorWithFreshTypes.returnType!!, temporaryTrace.bindingContext)
 
             temporaryTrace.record(BindingContext.REFERENCE_TARGET, calleeExpression, variable.descriptorWithFreshTypes)
             val dataFlowValue = DataFlowValueFactory.createDataFlowValue(variableReceiver, temporaryTrace.bindingContext, context.scope.ownerDescriptor)

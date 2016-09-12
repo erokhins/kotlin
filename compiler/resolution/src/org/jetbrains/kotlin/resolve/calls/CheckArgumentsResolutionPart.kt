@@ -32,8 +32,8 @@ import org.jetbrains.kotlin.utils.SmartList
 import org.jetbrains.kotlin.utils.addIfNotNull
 import java.lang.UnsupportedOperationException
 
-internal object CheckArguments : ResolutionPart<FunctionDescriptor> {
-    override fun SimpleResolutionCandidate<FunctionDescriptor>.process(): List<CallDiagnostic> {
+internal object CheckArguments : ResolutionPart {
+    override fun SimpleResolutionCandidate.process(): List<CallDiagnostic> {
         val diagnostics = SmartList<CallDiagnostic>()
         for (parameterDescriptor in descriptorWithFreshTypes.valueParameters) {
             // error was reported in ArgumentsToParametersMapper
@@ -102,7 +102,7 @@ internal object CheckArguments : ResolutionPart<FunctionDescriptor> {
         return createFreshType()
     }
 
-    fun SimpleResolutionCandidate<*>.processLambdaArgument(
+    fun SimpleResolutionCandidate.processLambdaArgument(
             argument: LambdaArgument,
             expectedType: UnwrappedType
     ): CallDiagnostic? {
@@ -143,14 +143,14 @@ internal object CheckArguments : ResolutionPart<FunctionDescriptor> {
         return null
     }
 
-    fun SimpleResolutionCandidate<*>.processCallableReferenceArgument(
+    fun SimpleResolutionCandidate.processCallableReferenceArgument(
             implicitContextForCall: ImplicitContextForCall,
             argument: CallableReferenceArgument,
             expectedType: UnwrappedType
     ): CallDiagnostic? {
         val position = ArgumentConstraintPosition(argument)
 
-        if (argument !is ChosenCallableReferenceDescriptor<*>) {
+        if (argument !is ChosenCallableReferenceDescriptor) {
             val lhsType = argument.lhsType
             if (lhsType != null) {
                 // todo: case with two receivers
@@ -167,12 +167,9 @@ internal object CheckArguments : ResolutionPart<FunctionDescriptor> {
         val descriptor = argument.candidate.descriptor
         when (descriptor) {
             is FunctionDescriptor -> {
-                @Suppress("UNCHECKED_CAST")
-                val functionReference = argument as ChosenCallableReferenceDescriptor<FunctionDescriptor>
-
                 // todo store resolved
                 val resolvedFunctionReference = implicitContextForCall.callableReferenceResolver.resolveFunctionReference(
-                        functionReference, astCall, expectedType)
+                        argument, astCall, expectedType)
 
                 csBuilder.addSubtypeConstraint(resolvedFunctionReference.reflectionType, expectedType, position)
                 return resolvedFunctionReference.argumentsMapping?.diagnostics?.let {
@@ -180,12 +177,10 @@ internal object CheckArguments : ResolutionPart<FunctionDescriptor> {
                 }
             }
             is PropertyDescriptor -> {
-                @Suppress("UNCHECKED_CAST")
-                val propertyReference = argument as ChosenCallableReferenceDescriptor<PropertyDescriptor>
 
                 // todo store resolved
-                val resolvedPropertyReference = implicitContextForCall.callableReferenceResolver.resolvePropertyReference(
-                        propertyReference, astCall, containingDescriptor)
+                val resolvedPropertyReference = implicitContextForCall.callableReferenceResolver.resolvePropertyReference(descriptor,
+                        argument, astCall, containingDescriptor)
                 csBuilder.addSubtypeConstraint(resolvedPropertyReference.reflectionType, expectedType, position)
             }
             else -> throw UnsupportedOperationException("Callable reference resolved to an unsupported descriptor: $descriptor")
@@ -194,11 +189,11 @@ internal object CheckArguments : ResolutionPart<FunctionDescriptor> {
     }
 
 
-    fun SimpleResolutionCandidate<*>.checkExpressionArgument(
+    fun SimpleResolutionCandidate.checkExpressionArgument(
             expressionArgument: ExpressionArgument,
             expectedType: UnwrappedType
     ): CallDiagnostic? {
-        fun SimpleResolutionCandidate<*>.unstableSmartCast(
+        fun SimpleResolutionCandidate.unstableSmartCast(
                 unstableType: UnwrappedType?, expectedType: UnwrappedType, position: ArgumentConstraintPosition
         ): CallDiagnostic? {
             if (unstableType != null) {
@@ -230,7 +225,7 @@ internal object CheckArguments : ResolutionPart<FunctionDescriptor> {
         return null
     }
 
-    fun SimpleResolutionCandidate<*>.checkSubCallArgument(
+    fun SimpleResolutionCandidate.checkSubCallArgument(
             subCallArgument: SubCallArgument,
             expectedType: UnwrappedType
     ): CallDiagnostic? {
@@ -255,11 +250,11 @@ internal object CheckArguments : ResolutionPart<FunctionDescriptor> {
     }
 }
 
-internal fun SimpleResolutionCandidate<*>.checkExpressionArgument(
+internal fun SimpleResolutionCandidate.checkExpressionArgument(
         expressionArgument: ExpressionArgument,
         expectedType: UnwrappedType
 ): CallDiagnostic? {
-    fun SimpleResolutionCandidate<*>.unstableSmartCast(
+    fun SimpleResolutionCandidate.unstableSmartCast(
             unstableType: UnwrappedType?, expectedType: UnwrappedType, position: ArgumentConstraintPosition
     ): CallDiagnostic? {
         if (unstableType != null) {
@@ -291,7 +286,7 @@ internal fun SimpleResolutionCandidate<*>.checkExpressionArgument(
     return null
 }
 
-internal fun SimpleResolutionCandidate<*>.checkSubCallArgument(
+internal fun SimpleResolutionCandidate.checkSubCallArgument(
         subCallArgument: SubCallArgument,
         expectedType: UnwrappedType
 ): CallDiagnostic? {

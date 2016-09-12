@@ -62,7 +62,7 @@ class QualifierReceiverCallArgument(override val receiver: QualifierReceiver): R
 }
 
 class FakeArgumentForCallableReference(
-        val callableReference: ChosenCallableReferenceDescriptor<FunctionDescriptor>,
+        val callableReference: ChosenCallableReferenceDescriptor,
         val index: Int
 ) : CallArgument {
     override val isSpread: Boolean get() = false
@@ -101,7 +101,7 @@ class ReceiverExpressionArgument(
 }
 
 interface SubCallArgument : SimpleCallArgument {
-    val resolvedCall: BaseResolvedCall.OnlyResolvedCall<*>
+    val resolvedCall: BaseResolvedCall.OnlyResolvedCall
 }
 
 interface LambdaArgument : CallArgument {
@@ -135,8 +135,8 @@ interface CallableReferenceArgument : CallArgument {
     val constraintSystem: ReadOnlyConstraintSystem
 }
 
-interface ChosenCallableReferenceDescriptor<out D : CallableDescriptor> : CallableReferenceArgument {
-    val candidate: CandidateWithBoundDispatchReceiver<D>
+interface ChosenCallableReferenceDescriptor : CallableReferenceArgument {
+    val candidate: CandidateWithBoundDispatchReceiver
 
     val extensionReceiver: ReceiverValue?
 }
@@ -241,7 +241,7 @@ class ResolvedLambdaArgument(
 
 class ResolvedPropertyReference(
         val outerCall: ASTCall,
-        val argument: ChosenCallableReferenceDescriptor<PropertyDescriptor>,
+        val argument: ChosenCallableReferenceDescriptor,
         val reflectionType: UnwrappedType
 ) {
     val boundDispatchReceiver: ReceiverValue? get() = argument.candidate.dispatchReceiver?.receiverValue?.check { it !is MockReceiverForCallableReference }
@@ -250,7 +250,7 @@ class ResolvedPropertyReference(
 
 class ResolvedFunctionReference(
         val outerCall: ASTCall,
-        val argument: ChosenCallableReferenceDescriptor<FunctionDescriptor>,
+        val argument: ChosenCallableReferenceDescriptor,
         val reflectionType: UnwrappedType,
         val argumentsMapping: ArgumentsToParametersMapper.ArgumentMapping?
 ) {

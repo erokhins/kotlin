@@ -44,7 +44,7 @@ class LambdaAnalyzerImpl(
             receiverType: UnwrappedType?,
             parameters: List<UnwrappedType>,
             expectedReturnType: UnwrappedType?
-    ): List<BaseResolvedCall<*>> {
+    ): List<BaseResolvedCall> {
         val psiCallArgument = lambdaArgument.psiCallArgument
         val outerCallContext = (psiCallArgument as? LambdaArgumentIml)?.outerCallContext ?:
                                (psiCallArgument as FunctionExpressionImpl).outerCallContext

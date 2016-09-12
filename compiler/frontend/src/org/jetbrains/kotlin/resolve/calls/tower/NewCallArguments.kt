@@ -98,7 +98,7 @@ class SubCallArgumentImpl(
         override val valueArgument: ValueArgument,
         override val dataFlowInfoAfterThisArgument: DataFlowInfo,
         override val receiver: ReceiverValueWithSmartCastInfo,
-        override val resolvedCall: BaseResolvedCall.OnlyResolvedCall<*>
+        override val resolvedCall: BaseResolvedCall.OnlyResolvedCall
 ): PSICallArgument(), SubCallArgument {
     override val isSpread: Boolean get() = valueArgument.getSpreadElement() != null
     override val argumentName: Name? get() = valueArgument.getArgumentName()?.asName

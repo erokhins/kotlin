@@ -31,20 +31,20 @@ import org.jetbrains.kotlin.resolve.calls.tower.isSuccess
 import java.util.*
 
 
-interface ResolutionPart<in D : CallableDescriptor> {
-    fun SimpleResolutionCandidate<D>.process(): List<CallDiagnostic>
+interface ResolutionPart {
+    fun SimpleResolutionCandidate.process(): List<CallDiagnostic>
 }
 
-sealed class NewResolutionCandidate<out D : CallableDescriptor>(val implicitContextForCall: ImplicitContextForCall) : Candidate {
+sealed class NewResolutionCandidate(val implicitContextForCall: ImplicitContextForCall) : Candidate {
     abstract val astCall: ASTCall
 
-    abstract val lastCall: SimpleResolutionCandidate<D>
+    abstract val lastCall: SimpleResolutionCandidate
 }
 
-sealed class AbstractSimpleResolutionCandidate<out D : CallableDescriptor>(
+sealed class AbstractSimpleResolutionCandidate(
         implicitContextForCall: ImplicitContextForCall,
-        private val resolutionSequence: List<ResolutionPart<D>>
-) : NewResolutionCandidate<D>(implicitContextForCall) {
+        private val resolutionSequence: List<ResolutionPart>
+) : NewResolutionCandidate(implicitContextForCall) {
     override val isSuccessful: Boolean
         get() {
             process(stopOnFirstError = true)
@@ -75,38 +75,38 @@ sealed class AbstractSimpleResolutionCandidate<out D : CallableDescriptor>(
         }
     }
 
-    protected abstract fun self(): SimpleResolutionCandidate<D>
+    protected abstract fun self(): SimpleResolutionCandidate
 }
 
-class SimpleResolutionCandidate<out D : CallableDescriptor>(
+class SimpleResolutionCandidate(
         implicitContextForCall: ImplicitContextForCall,
         val containingDescriptor: DeclarationDescriptor,
         override val astCall: ASTCall,
         val explicitReceiverKind: ExplicitReceiverKind,
         val dispatchReceiverArgument: SimpleCallArgument?,
         val extensionReceiver: SimpleCallArgument?,
-        val candidateDescriptor: D,
-        resolutionSequence: List<ResolutionPart<D>> //
-) : AbstractSimpleResolutionCandidate<D>(implicitContextForCall, resolutionSequence) {
+        val candidateDescriptor: CallableDescriptor,
+        resolutionSequence: List<ResolutionPart> //
+) : AbstractSimpleResolutionCandidate(implicitContextForCall, resolutionSequence) {
     val csBuilder: ConstraintSystemBuilder = NewConstraintSystemBuilderImpl(ConstraintFixator(implicitContextForCall.commonSupertypeCalculator))
 
     lateinit var typeArgumentMappingByOriginal: TypeArgumentsToParametersMapper.TypeArgumentsMapping
     lateinit var argumentMappingByOriginal: Map<ValueParameterDescriptor, ResolvedCallArgument>
-    lateinit var descriptorWithFreshTypes: @UnsafeVariance D
+    lateinit var descriptorWithFreshTypes: CallableDescriptor
 
     override fun self() = this
-    override val lastCall: SimpleResolutionCandidate<D> get() = this
+    override val lastCall: SimpleResolutionCandidate get() = this
 }
 
 class VariableAsFunctionResolutionCandidate(
         override val astCall: ASTCall,
         implicitContextForCall: ImplicitContextForCall,
-        val resolvedVariable: SimpleResolutionCandidate<VariableDescriptor>,
-        val invokeCandidate: SimpleResolutionCandidate<FunctionDescriptor>
-) : NewResolutionCandidate<FunctionDescriptor>(implicitContextForCall) {
+        val resolvedVariable: SimpleResolutionCandidate,
+        val invokeCandidate: SimpleResolutionCandidate
+) : NewResolutionCandidate(implicitContextForCall) {
     override val isSuccessful: Boolean get() = resolvedVariable.isSuccessful && invokeCandidate.isSuccessful
     override val status: ResolutionCandidateStatus
         get() = ResolutionCandidateStatus(resolvedVariable.status.diagnostics + invokeCandidate.status.diagnostics)
 
-    override val lastCall: SimpleResolutionCandidate<FunctionDescriptor> get() = invokeCandidate
+    override val lastCall: SimpleResolutionCandidate get() = invokeCandidate
 }

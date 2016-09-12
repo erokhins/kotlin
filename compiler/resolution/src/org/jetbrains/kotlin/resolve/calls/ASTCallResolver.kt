@@ -17,7 +17,6 @@
 package org.jetbrains.kotlin.resolve.calls
 
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
-import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.resolve.calls.context.CheckArgumentTypesMode
 import org.jetbrains.kotlin.resolve.calls.inference.SimpleConstraintSystemImpl
 import org.jetbrains.kotlin.resolve.calls.model.ASTCall
@@ -44,16 +43,16 @@ class ASTCallResolver(
 ) {
     private val overloadingConflictResolver = createOverloadingConflictResolver(builtIns, specificityComparator, isDescriptorFromSourcePredicate)
 
-    fun <D : CallableDescriptor> resolveCall(
+    fun resolveCall(
             contextForCall: ImplicitContextForCall,
             astCall: ASTCall,
-            astCallKind: ASTCallKind<D>,
+            astCallKind: ASTCallKind,
             lambdaAnalyzer: LambdaAnalyzer, // move to context
             expectedType: UnwrappedType? // if this type is not null, it means that we should compete this call.
-    ): Collection<BaseResolvedCall<D>> {
+    ): Collection<BaseResolvedCall> {
         val processor = astCallKind.createProcessor(contextForCall, astCall)
         val candidates = towerResolver.runResolve(contextForCall.scopeTower, processor, useOrder = astCallKind !is ASTCallKind.Unsupported)
-        val maximallySpecificCandidates = getConflictResolver<D>().chooseMaximallySpecificCandidates(candidates,
+        val maximallySpecificCandidates = overloadingConflictResolver.chooseMaximallySpecificCandidates(candidates,
                                                                    CheckArgumentTypesMode.CHECK_VALUE_ARGUMENTS,
                                                                    discriminateGenerics = true, // todo
                                                                    isDebuggerContext = contextForCall.scopeTower.isDebuggerContext)
@@ -69,16 +68,12 @@ class ASTCallResolver(
         }
     }
 
-    @Suppress("UNCHECKED_CAST")
-    private fun <D : CallableDescriptor> getConflictResolver() =
-            overloadingConflictResolver as OverloadingConflictResolver<NewResolutionCandidate<D>>
-
     companion object {
         private fun createOverloadingConflictResolver(
                 builtIns: KotlinBuiltIns,
                 specificityComparator: TypeSpecificityComparator,
                 isDescriptorFromSourcePredicate: IsDescriptorFromSourcePredicate
-        ) = OverloadingConflictResolver<NewResolutionCandidate<*>>(builtIns, specificityComparator, {
+        ) = OverloadingConflictResolver<NewResolutionCandidate>(builtIns, specificityComparator, {
             if (it is VariableAsFunctionResolutionCandidate) {
                 it.invokeCandidate.descriptorWithFreshTypes
             }
@@ -87,8 +82,8 @@ class ASTCallResolver(
             }
         }, ::SimpleConstraintSystemImpl, Companion::createFlatSignature, { (it as? VariableAsFunctionResolutionCandidate)?.resolvedVariable }, isDescriptorFromSourcePredicate)
 
-        private fun createFlatSignature(candidate: NewResolutionCandidate<*>): FlatSignature<NewResolutionCandidate<*>> {
-            val simpleCandidate = (candidate as? VariableAsFunctionResolutionCandidate)?.invokeCandidate ?: (candidate as SimpleResolutionCandidate<*>)
+        private fun createFlatSignature(candidate: NewResolutionCandidate): FlatSignature<NewResolutionCandidate> {
+            val simpleCandidate = (candidate as? VariableAsFunctionResolutionCandidate)?.invokeCandidate ?: (candidate as SimpleResolutionCandidate)
 
             val originalDescriptor = simpleCandidate.descriptorWithFreshTypes.original
             val originalValueParameters = originalDescriptor.valueParameters

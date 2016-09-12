@@ -19,10 +19,7 @@ package org.jetbrains.kotlin.resolve.calls
 import org.jetbrains.kotlin.builtins.ReflectionTypes
 import org.jetbrains.kotlin.builtins.getReturnTypeFromFunctionType
 import org.jetbrains.kotlin.builtins.isFunctionType
-import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
-import org.jetbrains.kotlin.descriptors.FunctionDescriptor
-import org.jetbrains.kotlin.descriptors.PropertyDescriptor
-import org.jetbrains.kotlin.descriptors.Visibilities
+import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
@@ -41,10 +38,10 @@ class MockReceiverForCallableReference(val lhsOrDeclaredType: UnwrappedType) : R
     override fun getType(): KotlinType = lhsOrDeclaredType
 }
 
-val ChosenCallableReferenceDescriptor<*>.dispatchNotBoundReceiver : UnwrappedType?
+val ChosenCallableReferenceDescriptor.dispatchNotBoundReceiver : UnwrappedType?
     get() = (candidate.dispatchReceiver?.receiverValue as? MockReceiverForCallableReference)?.lhsOrDeclaredType
 
-val ChosenCallableReferenceDescriptor<*>.extensionNotBoundReceiver : UnwrappedType?
+val ChosenCallableReferenceDescriptor.extensionNotBoundReceiver : UnwrappedType?
     get() = (extensionReceiver as? MockReceiverForCallableReference)?.lhsOrDeclaredType
 
 
@@ -54,12 +51,11 @@ class CallableReferenceResolver(
 ) {
 
     fun resolvePropertyReference(
-            propertyReference: ChosenCallableReferenceDescriptor<PropertyDescriptor>,
+            descriptor: PropertyDescriptor,
+            propertyReference: ChosenCallableReferenceDescriptor,
             outerCall: ASTCall,
             scopeOwnerDescriptor: DeclarationDescriptor
     ): ResolvedPropertyReference {
-        val descriptor = propertyReference.candidate.descriptor
-
         val mutable = descriptor.isVar && run {
             val setter = descriptor.setter
             setter == null || Visibilities.isVisible(propertyReference.candidate.dispatchReceiver?.receiverValue, setter, scopeOwnerDescriptor)
@@ -72,7 +68,7 @@ class CallableReferenceResolver(
     }
 
     private fun createFakeArgumentsAndMapArguments(
-            functionReference: ChosenCallableReferenceDescriptor<FunctionDescriptor>,
+            functionReference: ChosenCallableReferenceDescriptor,
             argumentCount: Int?
     ): Pair<List<UnwrappedType>, ArgumentsToParametersMapper.ArgumentMapping?> {
         if (argumentCount == null) {
@@ -95,7 +91,7 @@ class CallableReferenceResolver(
     }
 
     fun resolveFunctionReference(
-            functionReference: ChosenCallableReferenceDescriptor<FunctionDescriptor>,
+            functionReference: ChosenCallableReferenceDescriptor,
             outerCall: ASTCall,
             expectedType: UnwrappedType
     ): ResolvedFunctionReference {

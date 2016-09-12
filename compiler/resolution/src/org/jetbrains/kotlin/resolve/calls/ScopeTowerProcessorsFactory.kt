@@ -25,8 +25,8 @@ import org.jetbrains.kotlin.resolve.calls.tower.*
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValueWithSmartCastInfo
 
 
-typealias NewFactoryProviderForInvoke = CandidateFactoryProviderForInvoke<NewResolutionCandidate<FunctionDescriptor>, SimpleResolutionCandidate<VariableDescriptor>>
-typealias NewProcessor<D> = ScopeTowerProcessor<NewResolutionCandidate<D>>
+typealias NewFactoryProviderForInvoke = CandidateFactoryProviderForInvoke<NewResolutionCandidate>
+typealias NewProcessor = ScopeTowerProcessor<NewResolutionCandidate>
 
 // CallContext
 class ImplicitContextForCall(
@@ -38,13 +38,13 @@ class ImplicitContextForCall(
         val factoryProviderForInvoke: NewFactoryProviderForInvoke
 )
 
-sealed class ASTCallKind<D : CallableDescriptor>(vararg resolutionPart: ResolutionPart<D>) {
+sealed class ASTCallKind(vararg resolutionPart: ResolutionPart) {
     val resolutionSequence = resolutionPart.asList()
 
     // move outside and add parameter factoryProviderForInvoke
-    abstract fun createProcessor(contextForCall: ImplicitContextForCall, call: ASTCall): NewProcessor<D>
+    abstract fun createProcessor(contextForCall: ImplicitContextForCall, call: ASTCall): NewProcessor
 
-    object VARIABLE : ASTCallKind<VariableDescriptor>(
+    object VARIABLE : ASTCallKind(
             CheckVisibility,
             NoTypeArguments,
             NoArguments,
@@ -52,12 +52,12 @@ sealed class ASTCallKind<D : CallableDescriptor>(vararg resolutionPart: Resoluti
             CheckExplicitReceiverKindConsistency,
             CheckReceivers
     ) {
-        override fun createProcessor(contextForCall: ImplicitContextForCall, call: ASTCall): NewProcessor<VariableDescriptor> =
+        override fun createProcessor(contextForCall: ImplicitContextForCall, call: ASTCall): NewProcessor =
                 createVariableAndObjectProcessor(contextForCall.scopeTower, call.name, NewCandidateFactory(contextForCall, call, resolutionSequence),
                                                  call.explicitReceiver?.receiver)
     }
 
-    object FUNCTION : ASTCallKind<FunctionDescriptor>(
+    object FUNCTION : ASTCallKind(
             CheckVisibility,
             MapTypeArguments,
             MapArguments,
@@ -66,28 +66,28 @@ sealed class ASTCallKind<D : CallableDescriptor>(vararg resolutionPart: Resoluti
             CheckReceivers,
             CheckArguments
     ) {
-        override fun createProcessor(contextForCall: ImplicitContextForCall, call: ASTCall): NewProcessor<FunctionDescriptor> =
+        override fun createProcessor(contextForCall: ImplicitContextForCall, call: ASTCall): NewProcessor =
                 createFunctionProcessor(contextForCall.scopeTower, call.name, NewCandidateFactory(contextForCall, call, resolutionSequence),
                                         contextForCall.factoryProviderForInvoke, call.explicitReceiver?.receiver)
     }
 
-    class Unsupported<D : CallableDescriptor>() : ASTCallKind<D>() {
-        override fun createProcessor(contextForCall: ImplicitContextForCall, call: ASTCall): NewProcessor<D> =
+    class Unsupported() : ASTCallKind() {
+        override fun createProcessor(contextForCall: ImplicitContextForCall, call: ASTCall): NewProcessor =
                 TODO("not implemented")
     }
 }
 
-class ReportTowerDiagnostics(val towerDiagnostics: List<ResolutionDiagnostic>): ResolutionPart<CallableDescriptor> {
-    override fun SimpleResolutionCandidate<CallableDescriptor>.process() = towerDiagnostics
+class ReportTowerDiagnostics(val towerDiagnostics: List<ResolutionDiagnostic>): ResolutionPart {
+    override fun SimpleResolutionCandidate.process() = towerDiagnostics
 }
 
 
 
-class NewCandidateFactory<D : CallableDescriptor>(
+class NewCandidateFactory(
         val contextForCall: ImplicitContextForCall,
         val astCall: ASTCall, // move to context
-        private val resolutionSequence: List<ResolutionPart<D>> // move to context
-) : CandidateFactory<D, SimpleResolutionCandidate<D>> {
+        private val resolutionSequence: List<ResolutionPart> // move to context
+) : CandidateFactory<SimpleResolutionCandidate> {
 
     // todo: try something else, because current method is ugly and unstable
     private fun createReceiverArgument(
@@ -98,10 +98,10 @@ class NewCandidateFactory<D : CallableDescriptor>(
             fromResolution?.let { ReceiverExpressionArgument(it, isSafeCall = false) } // only explicit receiver can be smart cast
 
     override fun createCandidate(
-            towerCandidate: CandidateWithBoundDispatchReceiver<D>,
+            towerCandidate: CandidateWithBoundDispatchReceiver,
             explicitReceiverKind: ExplicitReceiverKind,
             extensionReceiver: ReceiverValueWithSmartCastInfo?
-    ): SimpleResolutionCandidate<D> {
+    ): SimpleResolutionCandidate {
         val dispatchArgumentReceiver = createReceiverArgument(astCall.getExplicitDispatchReceiver(explicitReceiverKind),
                                                               towerCandidate.dispatchReceiver)
         val extensionArgumentReceiver = createReceiverArgument(astCall.getExplicitExtensionReceiver(explicitReceiverKind), extensionReceiver)

@@ -44,7 +44,7 @@ class NewConstraintSystemBuilderImpl(val constraintFixator: ConstraintFixator) :
     override fun addEqualityConstraint(a: UnwrappedType, b: UnwrappedType, position: ConstraintPosition) =
             storage.addEqualityConstraint(a, b, position)
 
-    override fun addInnerCall(innerCall: BaseResolvedCall.OnlyResolvedCall<*>) {
+    override fun addInnerCall(innerCall: BaseResolvedCall.OnlyResolvedCall) {
         storage.addInnerCall(innerCall)
     }
 

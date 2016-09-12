@@ -31,8 +31,8 @@ import org.jetbrains.kotlin.types.UnwrappedType
 import org.jetbrains.kotlin.types.typeUtil.asTypeProjection
 
 
-internal object CheckVisibility : ResolutionPart<CallableDescriptor> {
-    override fun SimpleResolutionCandidate<CallableDescriptor>.process(): List<CallDiagnostic> {
+internal object CheckVisibility : ResolutionPart {
+    override fun SimpleResolutionCandidate.process(): List<CallDiagnostic> {
 
         val invisibleMember = Visibilities.findInvisibleMember(
                 dispatchReceiverArgument?.receiver?.receiverValue, candidateDescriptor, containingDescriptor) ?: return emptyList()
@@ -41,15 +41,15 @@ internal object CheckVisibility : ResolutionPart<CallableDescriptor> {
     }
 }
 
-internal object MapTypeArguments : ResolutionPart<CallableDescriptor> {
-    override fun SimpleResolutionCandidate<CallableDescriptor>.process(): List<CallDiagnostic> {
+internal object MapTypeArguments : ResolutionPart {
+    override fun SimpleResolutionCandidate.process(): List<CallDiagnostic> {
         typeArgumentMappingByOriginal = implicitContextForCall.typeArgumentsToParametersMapper.mapTypeArguments(astCall, candidateDescriptor.original)
         return typeArgumentMappingByOriginal.diagnostics
     }
 }
 
-internal object NoTypeArguments : ResolutionPart<CallableDescriptor> {
-    override fun SimpleResolutionCandidate<CallableDescriptor>.process(): List<CallDiagnostic> {
+internal object NoTypeArguments : ResolutionPart {
+    override fun SimpleResolutionCandidate.process(): List<CallDiagnostic> {
         assert(astCall.typeArguments.isEmpty()) {
             "Variable call cannot has explicit type arguments: ${astCall.typeArguments}. Call: $astCall"
         }
@@ -58,16 +58,16 @@ internal object NoTypeArguments : ResolutionPart<CallableDescriptor> {
     }
 }
 
-internal object MapArguments : ResolutionPart<FunctionDescriptor> {
-    override fun SimpleResolutionCandidate<FunctionDescriptor>.process(): List<CallDiagnostic> {
+internal object MapArguments : ResolutionPart {
+    override fun SimpleResolutionCandidate.process(): List<CallDiagnostic> {
         val mapping = implicitContextForCall.argumentsToParametersMapper.mapArguments(astCall, candidateDescriptor.original)
         argumentMappingByOriginal = mapping.parameterToCallArgumentMap
         return mapping.diagnostics
     }
 }
 
-internal object NoArguments : ResolutionPart<VariableDescriptor> {
-    override fun SimpleResolutionCandidate<VariableDescriptor>.process(): List<CallDiagnostic> {
+internal object NoArguments : ResolutionPart {
+    override fun SimpleResolutionCandidate.process(): List<CallDiagnostic> {
         assert(astCall.argumentsInParenthesis.isEmpty()) {
             "Variable call cannot has arguments: ${astCall.argumentsInParenthesis}. Call: $astCall"
         }
@@ -79,8 +79,8 @@ internal object NoArguments : ResolutionPart<VariableDescriptor> {
     }
 }
 
-internal object CreteDescriptorWithFreshTypeVariables : ResolutionPart<CallableDescriptor> {
-    override fun SimpleResolutionCandidate<CallableDescriptor>.process(): List<CallDiagnostic> {
+internal object CreteDescriptorWithFreshTypeVariables : ResolutionPart {
+    override fun SimpleResolutionCandidate.process(): List<CallDiagnostic> {
         if (candidateDescriptor.typeParameters.isEmpty()) {
             descriptorWithFreshTypes = candidateDescriptor
             return emptyList()
@@ -149,13 +149,13 @@ internal object CreteDescriptorWithFreshTypeVariables : ResolutionPart<CallableD
     }
 }
 
-internal object CheckExplicitReceiverKindConsistency : ResolutionPart<CallableDescriptor> {
-    private fun SimpleResolutionCandidate<*>.hasError(): Nothing =
+internal object CheckExplicitReceiverKindConsistency : ResolutionPart {
+    private fun SimpleResolutionCandidate.hasError(): Nothing =
             error("Inconsistent call: $astCall. \n" +
                   "Candidate: $candidateDescriptor, explicitReceiverKind: $explicitReceiverKind.\n" +
                   "Explicit receiver: ${astCall.explicitReceiver}, dispatchReceiverForInvokeExtension: ${astCall.dispatchReceiverForInvokeExtension}")
 
-    override fun SimpleResolutionCandidate<CallableDescriptor>.process(): List<CallDiagnostic> {
+    override fun SimpleResolutionCandidate.process(): List<CallDiagnostic> {
         when (explicitReceiverKind) {
             NO_EXPLICIT_RECEIVER -> if (astCall.explicitReceiver is SimpleCallArgument || astCall.dispatchReceiverForInvokeExtension != null) hasError()
             DISPATCH_RECEIVER, EXTENSION_RECEIVER ->    if (astCall.explicitReceiver == null || astCall.dispatchReceiverForInvokeExtension != null) hasError()
@@ -165,8 +165,8 @@ internal object CheckExplicitReceiverKindConsistency : ResolutionPart<CallableDe
     }
 }
 
-internal object CheckReceivers : ResolutionPart<CallableDescriptor> {
-    fun SimpleResolutionCandidate<*>.checkReceiver(
+internal object CheckReceivers : ResolutionPart {
+    fun SimpleResolutionCandidate.checkReceiver(
             receiverArgument: SimpleCallArgument?,
             receiverParameter: ReceiverParameterDescriptor?
     ): CallDiagnostic? {
@@ -184,7 +184,7 @@ internal object CheckReceivers : ResolutionPart<CallableDescriptor> {
         }
     }
 
-    override fun SimpleResolutionCandidate<CallableDescriptor>.process() =
+    override fun SimpleResolutionCandidate.process() =
             listOfNotNull(checkReceiver(dispatchReceiverArgument, descriptorWithFreshTypes.dispatchReceiverParameter),
                           checkReceiver(extensionReceiver, descriptorWithFreshTypes.extensionReceiverParameter))
 }
