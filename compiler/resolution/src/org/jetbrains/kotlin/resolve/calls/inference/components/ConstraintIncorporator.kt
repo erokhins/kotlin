@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-package org.jetbrains.kotlin.resolve.calls.inference
+package org.jetbrains.kotlin.resolve.calls.inference.components
 
+import org.jetbrains.kotlin.resolve.calls.inference.ApproximationBounds
+import org.jetbrains.kotlin.resolve.calls.inference.model.*
+import org.jetbrains.kotlin.resolve.calls.inference.safeApproximateCapturedTypes
 import org.jetbrains.kotlin.types.*
 import org.jetbrains.kotlin.types.checker.CaptureStatus
 import org.jetbrains.kotlin.types.checker.NewCapturedType
@@ -27,79 +30,80 @@ import org.jetbrains.kotlin.utils.addIfNotNull
 import java.util.*
 
 // todo problem: intersection types in constrains: A <: Number, B <: Inv<A & Any> =>? B <: Inv<out Number & Any>
-object ConstraintIncorporator {
+class ConstraintIncorporator {
 
-    interface IncorporationContext {
+    interface Context {
         val allTypeVariablesWithConstraints: Collection<VariableWithConstraints>
 
         fun getTypeVariable(typeConstructor: TypeConstructor): NewTypeVariable?
 
         fun getConstraintsForVariable(typeVariable: NewTypeVariable): Collection<Constraint>
 
-        fun newIncorporatedConstraint(lowerType: UnwrappedType, upperType: UnwrappedType, position: IncorporationConstraintPosition)
+        fun addNewIncorporatedConstraint(lowerType: UnwrappedType, upperType: UnwrappedType, position: IncorporationConstraintPosition)
     }
 
     // \alpha is typeVariable, \beta -- other type variable registered in ConstraintStorage
-    fun IncorporationContext.incorporate(typeVariable: NewTypeVariable, constraint: Constraint, position: IncorporationConstraintPosition) {
+    fun incorporate(c: Context, typeVariable: NewTypeVariable, constraint: Constraint, position: IncorporationConstraintPosition) {
         // we shouldn't incorporate recursive constraint -- It is too dangerous
         if (constraint.type.contains { it.constructor == typeVariable.freshTypeConstructor }) return
 
-        directWithVariable(typeVariable, constraint, position)
-        otherInsideMyConstraint(typeVariable, constraint, position)
-        insideOtherConstraint(typeVariable, constraint, position)
+        directWithVariable(c, typeVariable, constraint, position)
+        otherInsideMyConstraint(c, typeVariable, constraint, position)
+        insideOtherConstraint(c, typeVariable, constraint, position)
     }
 
     // A <:(=) \alpha <:(=) B => A <: B
-    private fun IncorporationContext.directWithVariable(typeVariable: NewTypeVariable, constraint: Constraint, position: IncorporationConstraintPosition) {
+    private fun directWithVariable(c: Context, typeVariable: NewTypeVariable, constraint: Constraint, position: IncorporationConstraintPosition) {
         // \alpha <: constraint.type
         if (constraint.kind != ConstraintKind.LOWER) {
-            getConstraintsForVariable(typeVariable).toMutableList().forEach {
+            c.getConstraintsForVariable(typeVariable).toMutableList().forEach {
                 if (it.kind != ConstraintKind.UPPER) {
-                    newIncorporatedConstraint(it.type, constraint.type, position)
+                    c.addNewIncorporatedConstraint(it.type, constraint.type, position)
                 }
             }
         }
 
         // constraint.type <: \alpha
         if (constraint.kind != ConstraintKind.UPPER) {
-            getConstraintsForVariable(typeVariable).toMutableList().forEach {
+            c.getConstraintsForVariable(typeVariable).toMutableList().forEach {
                 if (it.kind != ConstraintKind.LOWER) {
-                    newIncorporatedConstraint(constraint.type, it.type, position)
+                    c.addNewIncorporatedConstraint(constraint.type, it.type, position)
                 }
             }
         }
     }
 
     // \alpha <: Inv<\beta>, \beta <: Number => \alpha <: Inv<out Number>
-    private fun IncorporationContext.otherInsideMyConstraint(typeVariable: NewTypeVariable, constraint: Constraint, position: IncorporationConstraintPosition) {
+    private fun otherInsideMyConstraint(c: Context, typeVariable: NewTypeVariable, constraint: Constraint, position: IncorporationConstraintPosition) {
         val otherInMyConstraint = SmartSet.create<NewTypeVariable>()
         constraint.type.contains {
-            otherInMyConstraint.addIfNotNull(getTypeVariable(it.constructor))
+            otherInMyConstraint.addIfNotNull(c.getTypeVariable(it.constructor))
             false
         }
 
         for (otherTypeVariable in otherInMyConstraint) {
             // to avoid ConcurrentModificationException
-            val otherConstraints = ArrayList(getConstraintsForVariable(otherTypeVariable))
+            val otherConstraints = ArrayList(c.getConstraintsForVariable(otherTypeVariable))
             for (otherConstraint in otherConstraints) {
-                generateNewConstraint(typeVariable, constraint, otherTypeVariable, otherConstraint, position)
+                generateNewConstraint(c, typeVariable, constraint, otherTypeVariable, otherConstraint, position)
             }
         }
     }
 
     // \alpha <: Number, \beta <: Inv<\alpha> => \beta <: Inv<out Number>
-    private fun IncorporationContext.insideOtherConstraint(typeVariable: NewTypeVariable, constraint: Constraint, position: IncorporationConstraintPosition) {
-        for (typeVariableWithConstraint in allTypeVariablesWithConstraints) {
+    private fun insideOtherConstraint(c: Context, typeVariable: NewTypeVariable, constraint: Constraint, position: IncorporationConstraintPosition) {
+        for (typeVariableWithConstraint in c.allTypeVariablesWithConstraints) {
             val constraintsWhichConstraintMyVariable = typeVariableWithConstraint.constraints.filter {
                 it.type.contains { it.constructor == typeVariable.freshTypeConstructor }
             }
             constraintsWhichConstraintMyVariable.forEach {
-                generateNewConstraint(typeVariableWithConstraint.typeVariable, it, typeVariable, constraint, position)
+                generateNewConstraint(c, typeVariableWithConstraint.typeVariable, it, typeVariable, constraint, position)
             }
         }
     }
 
-    private fun IncorporationContext.generateNewConstraint(
+    private fun generateNewConstraint(
+            c: Context,
             targetVariable: NewTypeVariable,
             baseConstraint: Constraint,
             otherVariable: NewTypeVariable,
@@ -107,7 +111,7 @@ object ConstraintIncorporator {
             position: IncorporationConstraintPosition
     ) {
         val approximationBounds = when (otherConstraint.kind){
-            ConstraintKind.EQUALITY-> {
+            ConstraintKind.EQUALITY -> {
                 val substitutedType = baseConstraint.type.substitute(otherVariable, otherConstraint.type.asTypeProjection())
                 ApproximationBounds(substitutedType, substitutedType)
             }
@@ -134,10 +138,10 @@ object ConstraintIncorporator {
         }
 
         if (baseConstraint.kind != ConstraintKind.UPPER) {
-            newIncorporatedConstraint(approximationBounds.lower, targetVariable.defaultType, position)
+            c.addNewIncorporatedConstraint(approximationBounds.lower, targetVariable.defaultType, position)
         }
         if (baseConstraint.kind != ConstraintKind.LOWER) {
-            newIncorporatedConstraint(targetVariable.defaultType, approximationBounds.upper, position)
+            c.addNewIncorporatedConstraint(targetVariable.defaultType, approximationBounds.upper, position)
         }
     }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.jetbrains.kotlin.resolve.calls.inference
+package org.jetbrains.kotlin.resolve.calls.inference.components
 
 import org.jetbrains.kotlin.types.*
 import org.jetbrains.kotlin.types.checker.*

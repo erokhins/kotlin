@@ -21,81 +21,13 @@ import org.jetbrains.kotlin.descriptors.ClassifierDescriptor
 import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.resolve.calls.BaseResolvedCall
+import org.jetbrains.kotlin.resolve.calls.inference.model.ConstraintStorage
+import org.jetbrains.kotlin.resolve.calls.inference.model.VariableWithConstraints
 import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.resolve.descriptorUtil.builtIns
 import org.jetbrains.kotlin.types.*
 
-class TypeVariableTypeConstructor(private val builtIns: KotlinBuiltIns, val debugName: String): TypeConstructor {
-    override val annotations: Annotations get() = Annotations.EMPTY
 
-    override fun getParameters(): List<TypeParameterDescriptor> = emptyList()
-    override fun getSupertypes(): Collection<KotlinType> = emptyList()
-    override fun isFinal(): Boolean = true
-    override fun isDenotable(): Boolean = false
-    override fun getDeclarationDescriptor(): ClassifierDescriptor? = null
-
-    override fun getBuiltIns() = builtIns
-
-    override fun toString() = "TypeVariable($debugName)"
-}
-
-// todo add name
-sealed class NewTypeVariable(builtIns: KotlinBuiltIns, name: String) {
-    val freshTypeConstructor: TypeConstructor = TypeVariableTypeConstructor(builtIns, name)
-    val defaultType: SimpleType = KotlinTypeFactory.simpleType(Annotations.EMPTY, freshTypeConstructor, emptyList(),
-                                                               nullable = false, memberScope = ErrorUtils.createErrorScope("Type variable", true))
-
-    override fun toString() = freshTypeConstructor.toString()
-}
-
-class SimpleNewTypeVariable(
-        val call: ASTCall,
-        val originalTypeParameter: TypeParameterDescriptor
-) : NewTypeVariable(originalTypeParameter.builtIns, originalTypeParameter.name.identifier)
-
-class LambdaNewTypeVariable(
-        val outerCall: ASTCall,
-        val lambdaArgument: LambdaArgument,
-        val kind: Kind,
-        builtIns: KotlinBuiltIns
-) : NewTypeVariable(builtIns, createDebugName(lambdaArgument, kind)) {
-    enum class Kind {
-        RECEIVER,
-        PARAMETER,
-        RETURN_TYPE
-    }
-}
-
-private fun createDebugName(lambdaArgument: LambdaArgument, kind: LambdaNewTypeVariable.Kind): String {
-    val text = lambdaArgument.toString().let { it.substring(0..(Math.min(20, it.lastIndex))) }
-    return when (kind) {
-        LambdaNewTypeVariable.Kind.RECEIVER -> "().$text"
-        LambdaNewTypeVariable.Kind.PARAMETER -> "(P) in $text"
-        LambdaNewTypeVariable.Kind.RETURN_TYPE -> "$text -> R"
-    }
-}
-
-interface ReadOnlyConstraintSystem {
-    val allTypeVariables: Map<TypeConstructor, NewTypeVariable>
-    val notFixedTypeVariables: Map<TypeConstructor, VariableWithConstraints>
-    val initialConstraints: List<InitialConstraint>
-    val allowedTypeDepth: Int
-    val errors: List<CallDiagnostic>
-    val fixedTypeVariables: Map<TypeConstructor, UnwrappedType>
-    val lambdaArguments: List<ResolvedLambdaArgument>
-    val innerCalls: List<BaseResolvedCall.OnlyResolvedCall>
-
-    object EmptyConstraintSystem : ReadOnlyConstraintSystem {
-        override val allTypeVariables: Map<TypeConstructor, NewTypeVariable> get() = emptyMap()
-        override val notFixedTypeVariables: Map<TypeConstructor, VariableWithConstraints> get() = emptyMap()
-        override val initialConstraints: List<InitialConstraint> get() = emptyList()
-        override val allowedTypeDepth: Int get() = 1
-        override val errors: List<CallDiagnostic> get() = emptyList()
-        override val fixedTypeVariables: Map<TypeConstructor, UnwrappedType> get() = emptyMap()
-        override val lambdaArguments: List<ResolvedLambdaArgument> get() = emptyList()
-        override val innerCalls: List<BaseResolvedCall.OnlyResolvedCall> get() = emptyList()
-    }
-}
 
 interface ConstraintSystemBuilder {
     val hasContradiction: Boolean
@@ -123,18 +55,7 @@ interface ConstraintSystemBuilder {
      */
     fun simplify(): TypeSubstitutor
 
-    fun build(): ReadOnlyConstraintSystem // return immutable copy of constraint system
+    fun build(): ConstraintStorage // return immutable copy of constraint system
 
-    fun startCompletion(): ConstraintStorage
+    fun startCompletion(): MutableConstraintStorage
 }
-
-sealed class ConstraintPosition
-
-class ExplicitTypeParameterConstraintPosition(val typeArgument: SimpleTypeArgument) : ConstraintPosition()
-class ExpectedTypeConstraintPosition(val topLevelCall: ASTCall) : ConstraintPosition()
-class DeclaredUpperBoundConstraintPosition(val typeParameterDescriptor: TypeParameterDescriptor) : ConstraintPosition()
-class ArgumentConstraintPosition(val argument: CallArgument) : ConstraintPosition()
-class FixVariableConstraintPosition(val variable: NewTypeVariable) : ConstraintPosition()
-class IncorporationConstraintPosition(val from: ConstraintPosition) : ConstraintPosition()
-
-object SimpleConstraintSystemConstraintPosition : ConstraintPosition()

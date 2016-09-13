@@ -16,6 +16,9 @@
 
 package org.jetbrains.kotlin.resolve.calls.inference
 
+import org.jetbrains.kotlin.resolve.calls.inference.model.Constraint
+import org.jetbrains.kotlin.resolve.calls.inference.model.ConstraintKind
+import org.jetbrains.kotlin.resolve.calls.inference.model.ResolveDirection
 import org.jetbrains.kotlin.resolve.calls.model.LambdaArgument
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedLambdaArgument
 import org.jetbrains.kotlin.types.FlexibleType
@@ -31,12 +34,12 @@ import java.util.*
 data class NodeWithDirection(val variable: NewTypeVariable, val direction: ResolveDirection)
 
 fun computeCompletionOrder(
-        constraintStorage: ConstraintStorage,
+        constraintStorage: MutableConstraintStorage,
         topReturnType: UnwrappedType
 ): List<NodeWithDirection> = SystemCompleter(constraintStorage, constraintStorage.lambdaArguments.associateBy { it.argument }).getCompletionOrder(topReturnType)
 
 private class SystemCompleter(
-        val constraintStorage: ConstraintStorage,
+        val constraintStorage: MutableConstraintStorage,
         // order of lambda arguments is essential
         val allLambdaArguments: Map<LambdaArgument, ResolvedLambdaArgument>
 ) {

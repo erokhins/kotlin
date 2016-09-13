@@ -93,7 +93,7 @@ class SimpleResolutionCandidate(
         val candidateDescriptor: CallableDescriptor,
         initialDiagnostics: Collection<CallDiagnostic>
 ) : AbstractSimpleResolutionCandidate(initialDiagnostics) {
-    val csBuilder: ConstraintSystemBuilder = NewConstraintSystemBuilderImpl(callContext.c.constraintFixator)
+    val csBuilder: ConstraintSystemBuilder = NewConstraintSystemBuilderImpl(callContext.c.resultTypeResolver)
 
     lateinit var typeArgumentMappingByOriginal: TypeArgumentsToParametersMapper.TypeArgumentsMapping
     lateinit var argumentMappingByOriginal: Map<ValueParameterDescriptor, ResolvedCallArgument>

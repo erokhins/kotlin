@@ -16,7 +16,7 @@
 
 package org.jetbrains.kotlin.resolve.calls
 
-import org.jetbrains.kotlin.resolve.calls.inference.ConstraintFixator
+import org.jetbrains.kotlin.resolve.calls.inference.components.ResultTypeResolver
 import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.resolve.calls.tower.*
@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValueWithSmartCastI
 class CallContextComponents(
         val argumentsToParametersMapper: ArgumentsToParametersMapper,
         val typeArgumentsToParametersMapper: TypeArgumentsToParametersMapper,
-        val constraintFixator: ConstraintFixator,
+        val resultTypeResolver: ResultTypeResolver,
         val callableReferenceResolver: CallableReferenceResolver
 )
 

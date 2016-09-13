@@ -18,6 +18,10 @@ package org.jetbrains.kotlin.resolve.calls.inference
 
 import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor
 import org.jetbrains.kotlin.resolve.calls.BaseResolvedCall
+import org.jetbrains.kotlin.resolve.calls.inference.components.ResultTypeResolver
+import org.jetbrains.kotlin.resolve.calls.inference.model.Constraint
+import org.jetbrains.kotlin.resolve.calls.inference.model.ConstraintStorage
+import org.jetbrains.kotlin.resolve.calls.inference.model.VariableWithConstraints
 import org.jetbrains.kotlin.resolve.calls.model.CallDiagnostic
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedLambdaArgument
 import org.jetbrains.kotlin.resolve.calls.model.ThrowableASTCall
@@ -29,8 +33,8 @@ import org.jetbrains.kotlin.types.UnwrappedType
 import org.jetbrains.kotlin.types.typeUtil.asTypeProjection
 import java.util.*
 
-class NewConstraintSystemBuilderImpl(val constraintFixator: ConstraintFixator) : ConstraintSystemBuilder {
-    val storage = ConstraintStorage()
+class NewConstraintSystemBuilderImpl(val resultTypeResolver: ResultTypeResolver) : ConstraintSystemBuilder {
+    val storage = MutableConstraintStorage()
 
     override val hasContradiction: Boolean get() = storage.errors.isNotEmpty()
     override val diagnostics: List<CallDiagnostic> get() = storage.errors
@@ -73,7 +77,7 @@ class NewConstraintSystemBuilderImpl(val constraintFixator: ConstraintFixator) :
         val fixedVariables = LinkedHashMap<NewTypeVariable, UnwrappedType>()
 
         for (variableWithConstrains in storage.notFixedTypeVariables.values) {
-            val resultType = with(constraintFixator) {
+            val resultType = with(resultTypeResolver) {
                 storage.findResultIfThereIsEqualsConstraint(variableWithConstrains, allowedFixToNotProperType = false)
             }
             if (resultType != null) {
@@ -96,26 +100,6 @@ class NewConstraintSystemBuilderImpl(val constraintFixator: ConstraintFixator) :
     }
 
     // todo add some assertions(we should call this method twice, for example. Also we should do not modify anything after this methods)
-    override fun build(): ReadOnlyConstraintSystem = storage
-    override fun startCompletion(): ConstraintStorage = storage
-}
-
-class SimpleConstraintSystemImpl : SimpleConstraintSystem {
-    val storage = ConstraintStorage()
-
-    override fun registerTypeVariables(typeParameters: Collection<TypeParameterDescriptor>): TypeSubstitutor {
-        val substitutionMap = typeParameters.associate {
-            val variable = SimpleNewTypeVariable(ThrowableASTCall, it)
-            storage.registerVariable(variable)
-
-            it.defaultType.constructor to variable.defaultType.asTypeProjection()
-        }
-        return TypeConstructorSubstitution.createByConstructorsMap(substitutionMap).buildSubstitutor()
-    }
-
-    override fun addSubtypeConstraint(subType: UnwrappedType, superType: UnwrappedType) {
-        storage.addSubtypeConstraint(subType, superType, SimpleConstraintSystemConstraintPosition)
-    }
-
-   override fun hasContradiction() = storage.errors.isNotEmpty()
+    override fun build(): ConstraintStorage = storage
+    override fun startCompletion(): MutableConstraintStorage = storage
 }

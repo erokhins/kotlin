@@ -37,7 +37,7 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
 import org.jetbrains.kotlin.resolve.calls.callUtil.isSafeCall
 import org.jetbrains.kotlin.resolve.calls.context.BasicCallResolutionContext
 import org.jetbrains.kotlin.resolve.calls.context.ContextDependency
-import org.jetbrains.kotlin.resolve.calls.inference.ReadOnlyConstraintSystem
+import org.jetbrains.kotlin.resolve.calls.inference.model.ConstraintStorage
 import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.resolve.calls.results.*
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo
@@ -399,7 +399,7 @@ class PSICallResolver(
             // todo ChosenCallableReferenceDescriptor
             val argument = CallableReferenceArgumentImpl(valueArgument, newDataFlowInfo,
                                                          ktExpression, argumentName, (lhsResult as? DoubleColonLHS.Type)?.type?.unwrap(),
-                                                         ReadOnlyConstraintSystem.EmptyConstraintSystem) // todo
+                                                         ConstraintStorage.Empty) // todo
 
             return argument
         }

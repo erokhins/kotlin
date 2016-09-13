@@ -17,137 +17,41 @@
 package org.jetbrains.kotlin.resolve.calls.inference
 
 import org.jetbrains.kotlin.resolve.calls.BaseResolvedCall
+import org.jetbrains.kotlin.resolve.calls.inference.components.ResultTypeResolver
+import org.jetbrains.kotlin.resolve.calls.inference.components.ConstraintIncorporator
+import org.jetbrains.kotlin.resolve.calls.inference.components.TypeCheckerContextForConstraintSystem
+import org.jetbrains.kotlin.resolve.calls.inference.model.*
 import org.jetbrains.kotlin.resolve.calls.model.CallDiagnostic
 import org.jetbrains.kotlin.resolve.calls.model.DiagnosticReporter
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedLambdaArgument
 import org.jetbrains.kotlin.resolve.calls.tower.ResolutionCandidateApplicability
-import org.jetbrains.kotlin.types.*
+import org.jetbrains.kotlin.types.FlexibleType
+import org.jetbrains.kotlin.types.SimpleType
+import org.jetbrains.kotlin.types.TypeConstructor
+import org.jetbrains.kotlin.types.UnwrappedType
 import org.jetbrains.kotlin.types.checker.CaptureStatus
 import org.jetbrains.kotlin.types.checker.NewCapturedType
 import org.jetbrains.kotlin.types.checker.NewKotlinTypeChecker
+import org.jetbrains.kotlin.types.checker.NewKotlinTypeChecker.isSubtypeOf
 import org.jetbrains.kotlin.types.typeUtil.contains
 import java.util.*
 
-enum class ConstraintKind {
-    LOWER,
-    UPPER,
-    EQUALITY
-}
-
-enum class ResolveDirection {
-    TO_SUBTYPE,
-    TO_SUPERTYPE,
-    UNKNOWN
-}
 
 
 
-class Constraint(
-        val kind: ConstraintKind,
-        val type: UnwrappedType, // flexible types here is allowed
-        val position: ConstraintPosition,
-        val typeHashCode: Int = type.hashCode()
-) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other?.javaClass != javaClass) return false
 
-        other as Constraint
-
-        if (typeHashCode != other.typeHashCode) return false
-        if (kind != other.kind) return false
-        if (type != other.type) return false
-        if (position != other.position) return false
-
-        return true
-    }
-
-    override fun hashCode() = typeHashCode
-}
-
-interface VariableWithConstraints {
-    val typeVariable: NewTypeVariable
-    val constraints: List<Constraint>
-}
-
-class MutableVariableWithConstraints(
-        override val typeVariable: NewTypeVariable,
-        constraints: Collection<Constraint> = emptyList()
-) : VariableWithConstraints {
-    override val constraints: List<Constraint> get() = mutableConstraints
-    private val mutableConstraints = MyArrayList(constraints)
-
-    // return constraint, if this constraint is new
-    fun addConstraint(constraintKind: ConstraintKind, type: UnwrappedType, position: ConstraintPosition): Constraint? {
-        val typeHashCode = type.hashCode()
-        val previousConstraints = constraintsWithType(typeHashCode, type)
-        if (previousConstraints.any { newConstraintIsUseless(it.kind, constraintKind) }) {
-            return null
-        }
-
-        val constraint = Constraint(constraintKind, type, position, typeHashCode)
-        mutableConstraints.add(constraint)
-        return constraint
-    }
-
-    fun removeLastConstraints(shouldRemove: (Constraint) -> Boolean) {
-        mutableConstraints.removeLast(shouldRemove)
-    }
-
-    private fun newConstraintIsUseless(oldKind: ConstraintKind, newKind: ConstraintKind) =
-            when (oldKind) {
-                ConstraintKind.EQUALITY -> true
-                ConstraintKind.LOWER -> newKind == ConstraintKind.LOWER
-                ConstraintKind.UPPER -> newKind == ConstraintKind.UPPER
-            }
-
-    private fun constraintsWithType(typeHashCode: Int, type: UnwrappedType) =
-            constraints.filter { it.typeHashCode == typeHashCode && it.type == type }
-
-    private class MyArrayList<E>(c: Collection<E>): ArrayList<E>(c) {
-        fun removeLast(predicate: (E) -> Boolean) {
-            val newSize = indexOfLast { !predicate(it) } + 1
-
-            if (newSize != size) {
-                removeRange(newSize, size)
-            }
-        }
-    }
-}
-
-class InitialConstraint(
-        val subType: UnwrappedType,
-        val superType: UnwrappedType,
-        val constraintKind: ConstraintKind,
-        val position: ConstraintPosition
-)
-
-private const val ALLOWED_DEPTH_DELTA_FOR_INCORPORATION = 3
-
-class NewConstraintError(val lowerType: UnwrappedType, val upperType: UnwrappedType, val position: ConstraintPosition):
-        CallDiagnostic(ResolutionCandidateApplicability.INAPPLICABLE) {
-    override fun report(reporter: DiagnosticReporter) = TODO() // todo
-}
-class CapturedTypeFromSubtyping(val typeVariable: NewTypeVariable, val constraintType: UnwrappedType, val position: ConstraintPosition) :
-        CallDiagnostic(ResolutionCandidateApplicability.INAPPLICABLE) {
-    override fun report(reporter: DiagnosticReporter) = TODO() // todo
-}
-class NotEnoughInformationForTypeParameter(val typeVariable: NewTypeVariable) : CallDiagnostic(ResolutionCandidateApplicability.INAPPLICABLE) {
-    override fun report(reporter: DiagnosticReporter) = TODO("not implemented") // todo
-}
-
-class ConstraintStorage : ConstraintIncorporator.IncorporationContext, ConstraintFixator.FixationContext, ReadOnlyConstraintSystem {
+class MutableConstraintStorage : ConstraintIncorporator.Context, ResultTypeResolver.Context, ConstraintStorage {
     override val allTypeVariables: MutableMap<TypeConstructor, NewTypeVariable> = HashMap()
     override val notFixedTypeVariables: MutableMap<TypeConstructor, MutableVariableWithConstraints> = HashMap()
     override val initialConstraints: MutableList<InitialConstraint> = ArrayList()
-    override var allowedTypeDepth: Int = 1 + ALLOWED_DEPTH_DELTA_FOR_INCORPORATION
+    override var maxTypeDepthFromInitialConstraints: Int = 1 + ALLOWED_DEPTH_DELTA_FOR_INCORPORATION
     override val errors: MutableList<CallDiagnostic> = ArrayList()
     override val fixedTypeVariables: MutableMap<TypeConstructor, UnwrappedType> = HashMap()
     override val lambdaArguments: MutableList<ResolvedLambdaArgument> = ArrayList()
     override val innerCalls: MutableList<BaseResolvedCall.OnlyResolvedCall> = ArrayList()
 
     private fun updateAllowedTypeDepth(initialType: UnwrappedType) {
-        allowedTypeDepth = Math.max(allowedTypeDepth, initialType.typeDepth() + ALLOWED_DEPTH_DELTA_FOR_INCORPORATION)
+        maxTypeDepthFromInitialConstraints = Math.max(maxTypeDepthFromInitialConstraints, initialType.typeDepth() + ALLOWED_DEPTH_DELTA_FOR_INCORPORATION)
     }
 
     fun registerVariable(variable: NewTypeVariable) {
@@ -163,18 +67,18 @@ class ConstraintStorage : ConstraintIncorporator.IncorporationContext, Constrain
         innerCalls.add(innerCall)
     }
 
-    private fun addSubsystem(otherSystem: ReadOnlyConstraintSystem) {
-        for ((variable, constraints) in otherSystem.notFixedTypeVariables) {
+    private fun addSubsystem(otherStorage: ConstraintStorage) {
+        for ((variable, constraints) in otherStorage.notFixedTypeVariables) {
             notFixedTypeVariables[variable] = MutableVariableWithConstraints(constraints.typeVariable, constraints.constraints)
         }
-        initialConstraints.addAll(otherSystem.initialConstraints)
-        allowedTypeDepth = Math.max(allowedTypeDepth, otherSystem.allowedTypeDepth)
+        initialConstraints.addAll(otherStorage.initialConstraints)
+        maxTypeDepthFromInitialConstraints = Math.max(maxTypeDepthFromInitialConstraints, otherStorage.maxTypeDepthFromInitialConstraints)
 
         // todo may be we should check instead that otherSystem.errors is empty
-        errors.addAll(otherSystem.errors)
-        fixedTypeVariables.putAll(otherSystem.fixedTypeVariables)
-        lambdaArguments.addAll(otherSystem.lambdaArguments)
-        allTypeVariables.putAll(otherSystem.allTypeVariables)
+        errors.addAll(otherStorage.errors)
+        fixedTypeVariables.putAll(otherStorage.fixedTypeVariables)
+        lambdaArguments.addAll(otherStorage.lambdaArguments)
+        allTypeVariables.putAll(otherStorage.allTypeVariables)
     }
 
     override val allTypeVariablesWithConstraints: Collection<MutableVariableWithConstraints>
@@ -188,7 +92,7 @@ class ConstraintStorage : ConstraintIncorporator.IncorporationContext, Constrain
 
     override fun getTypeVariable(typeConstructor: TypeConstructor): NewTypeVariable? = allTypeVariables[typeConstructor]
 
-    override fun newIncorporatedConstraint(lowerType: UnwrappedType, upperType: UnwrappedType, position: IncorporationConstraintPosition) =
+    override fun addNewIncorporatedConstraint(lowerType: UnwrappedType, upperType: UnwrappedType, position: IncorporationConstraintPosition) =
             newConstraint(lowerType, upperType, position)
 
     override fun isProperType(type: UnwrappedType) =
@@ -222,7 +126,7 @@ class ConstraintStorage : ConstraintIncorporator.IncorporationContext, Constrain
     }
 
     fun incorporateNewConstraint(typeVariable: NewTypeVariable, constraint: Constraint, position: ConstraintPosition) {
-        if (constraint.type.typeDepth() > allowedTypeDepth) return
+        if (constraint.type.typeDepth() > maxTypeDepthFromInitialConstraints) return
 
         val newPosition = if (position is IncorporationConstraintPosition) position else IncorporationConstraintPosition(position)
 
@@ -261,7 +165,7 @@ class ConstraintStorage : ConstraintIncorporator.IncorporationContext, Constrain
                 return
             }
 
-            if (type.typeDepth() > allowedTypeDepth) return
+            if (type.typeDepth() > maxTypeDepthFromInitialConstraints) return
 
             val addedConstraint = variableWithConstrains.addConstraint(kind, type, position) ?: return
 
@@ -269,18 +173,4 @@ class ConstraintStorage : ConstraintIncorporator.IncorporationContext, Constrain
         }
     }
 
-}
-
-fun UnwrappedType.typeDepth() =
-    when (this) {
-        is SimpleType -> typeDepth()
-        is FlexibleType -> Math.max(lowerBound.typeDepth(), upperBound.typeDepth())
-    }
-
-fun SimpleType.typeDepth(): Int {
-    val maxInArguments = arguments.asSequence().map {
-        if (it.isStarProjection) 1 else it.type.unwrap().typeDepth()
-    }.max() ?: 0
-
-    return maxInArguments + 1
 }

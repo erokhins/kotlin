@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.ValueArgument
 import org.jetbrains.kotlin.resolve.calls.BaseResolvedCall
 import org.jetbrains.kotlin.resolve.calls.context.BasicCallResolutionContext
-import org.jetbrains.kotlin.resolve.calls.inference.ReadOnlyConstraintSystem
+import org.jetbrains.kotlin.resolve.calls.inference.model.ConstraintStorage
 import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValueWithSmartCastInfo
@@ -91,7 +91,7 @@ class CallableReferenceArgumentImpl(
         val ktCallableReferenceExpression: KtCallableReferenceExpression,
         override val argumentName: Name?,
         override val lhsType: UnwrappedType?,
-        override val constraintSystem: ReadOnlyConstraintSystem
+        val constraintStorage: ConstraintStorage
 ) : CallableReferenceArgument, PSICallArgument()
 
 class SubCallArgumentImpl(

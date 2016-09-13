@@ -17,12 +17,15 @@
 package org.jetbrains.kotlin.resolve.calls.inference
 
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.resolve.calls.inference.model.ConstraintStorage
 import org.jetbrains.kotlin.resolve.descriptorUtil.builtIns
 import org.jetbrains.kotlin.types.TypeConstructorSubstitution
+import org.jetbrains.kotlin.types.TypeSubstitutor
 import org.jetbrains.kotlin.types.UnwrappedType
+import org.jetbrains.kotlin.types.Variance
 import org.jetbrains.kotlin.types.typeUtil.asTypeProjection
 
-fun ReadOnlyConstraintSystem.buildCurrentSubstitutor() = TypeConstructorSubstitution.createByConstructorsMap(fixedTypeVariables.entries.associate {
+fun ConstraintStorage.buildCurrentSubstitutor() = TypeConstructorSubstitution.createByConstructorsMap(fixedTypeVariables.entries.associate {
     it.key to it.value.asTypeProjection()
 }).buildSubstitutor()
 
@@ -32,3 +35,12 @@ val CallableDescriptor.returnTypeOrNothing: UnwrappedType
 
         return builtIns.nothingType
     }
+
+fun TypeSubstitutor.substitute(type: UnwrappedType): UnwrappedType = safeSubstitute(type, Variance.INVARIANT).unwrap()
+
+// todo move from here
+enum class ResolveDirection {
+    TO_SUBTYPE,
+    TO_SUPERTYPE,
+    UNKNOWN
+}

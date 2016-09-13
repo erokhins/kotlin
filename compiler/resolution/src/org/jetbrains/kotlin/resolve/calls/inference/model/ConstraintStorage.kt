@@ -1,0 +1,101 @@
+/*
+ * Copyright 2010-2016 JetBrains s.r.o.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.jetbrains.kotlin.resolve.calls.inference.model
+
+import org.jetbrains.kotlin.resolve.calls.BaseResolvedCall
+import org.jetbrains.kotlin.resolve.calls.inference.substitute
+import org.jetbrains.kotlin.resolve.calls.model.CallDiagnostic
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedLambdaArgument
+import org.jetbrains.kotlin.types.TypeConstructor
+import org.jetbrains.kotlin.types.TypeSubstitutor
+import org.jetbrains.kotlin.types.UnwrappedType
+import org.jetbrains.kotlin.types.checker.KotlinTypeChecker
+
+
+interface ConstraintStorage {
+    val allTypeVariables: Map<TypeConstructor, NewTypeVariable>
+    val notFixedTypeVariables: Map<TypeConstructor, VariableWithConstraints>
+    val initialConstraints: List<InitialConstraint>
+    val maxTypeDepthFromInitialConstraints: Int
+    val errors: List<CallDiagnostic>
+    val fixedTypeVariables: Map<TypeConstructor, UnwrappedType>
+    val lambdaArguments: List<ResolvedLambdaArgument>
+    val innerCalls: List<BaseResolvedCall.OnlyResolvedCall>
+
+    object Empty : ConstraintStorage {
+        override val allTypeVariables: Map<TypeConstructor, NewTypeVariable> get() = emptyMap()
+        override val notFixedTypeVariables: Map<TypeConstructor, VariableWithConstraints> get() = emptyMap()
+        override val initialConstraints: List<InitialConstraint> get() = emptyList()
+        override val maxTypeDepthFromInitialConstraints: Int get() = 1
+        override val errors: List<CallDiagnostic> get() = emptyList()
+        override val fixedTypeVariables: Map<TypeConstructor, UnwrappedType> get() = emptyMap()
+        override val lambdaArguments: List<ResolvedLambdaArgument> get() = emptyList()
+        override val innerCalls: List<BaseResolvedCall.OnlyResolvedCall> get() = emptyList()
+    }
+}
+
+enum class ConstraintKind {
+    LOWER,
+    UPPER,
+    EQUALITY
+}
+
+class Constraint(
+        val kind: ConstraintKind,
+        val type: UnwrappedType, // flexible types here is allowed
+        val position: ConstraintPosition,
+        val typeHashCode: Int = type.hashCode()
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other?.javaClass != javaClass) return false
+
+        other as Constraint
+
+        if (typeHashCode != other.typeHashCode) return false
+        if (kind != other.kind) return false
+        if (position != other.position) return false
+        if (type != other.type) return false
+
+        return true
+    }
+
+    override fun hashCode() = typeHashCode
+}
+
+interface VariableWithConstraints {
+    val typeVariable: NewTypeVariable
+    val constraints: List<Constraint>
+}
+
+class InitialConstraint(
+        val a: UnwrappedType,
+        val b: UnwrappedType,
+        val constraintKind: ConstraintKind, // see [checkConstraint]
+        val position: ConstraintPosition
+)
+
+fun InitialConstraint.checkConstraint(substitutor: TypeSubstitutor): Boolean {
+    val newA = substitutor.substitute(a)
+    val newB = substitutor.substitute(a)
+    val typeChecker = KotlinTypeChecker.DEFAULT
+    return when (constraintKind) {
+        ConstraintKind.EQUALITY -> typeChecker.equalTypes(newA, newB)
+        ConstraintKind.UPPER -> typeChecker.isSubtypeOf(newA, newB)
+        ConstraintKind.LOWER -> typeChecker.isSubtypeOf(newB, newA)
+    }
+}

@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.resolve.calls.ArgumentsToParametersMapper
 import org.jetbrains.kotlin.resolve.calls.BaseResolvedCall
 import org.jetbrains.kotlin.resolve.calls.inference.LambdaNewTypeVariable
 import org.jetbrains.kotlin.resolve.calls.inference.NewTypeVariable
-import org.jetbrains.kotlin.resolve.calls.inference.ReadOnlyConstraintSystem
+import org.jetbrains.kotlin.resolve.calls.inference.model.ConstraintStorage
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.resolve.calls.tower.CandidateWithBoundDispatchReceiver
 import org.jetbrains.kotlin.resolve.calls.util.createFunctionType
@@ -130,7 +130,7 @@ interface CallableReferenceArgument : CallArgument {
     // Foo::bar lhsType = Foo. For a::bar where a is expression, this type is null
     val lhsType: UnwrappedType?
 
-    val constraintSystem: ReadOnlyConstraintSystem
+    val constraintStorage: ConstraintStorage
 }
 
 interface ChosenCallableReferenceDescriptor : CallableReferenceArgument {

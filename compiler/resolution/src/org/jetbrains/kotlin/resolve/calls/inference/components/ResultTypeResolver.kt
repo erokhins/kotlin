@@ -14,30 +14,33 @@
  * limitations under the License.
  */
 
-package org.jetbrains.kotlin.resolve.calls.inference
+package org.jetbrains.kotlin.resolve.calls.inference.components
 
 import org.jetbrains.kotlin.resolve.calls.CommonSupertypeCalculator
+import org.jetbrains.kotlin.resolve.calls.inference.ResolveDirection
+import org.jetbrains.kotlin.resolve.calls.inference.model.ConstraintKind
+import org.jetbrains.kotlin.resolve.calls.inference.model.VariableWithConstraints
 import org.jetbrains.kotlin.types.UnwrappedType
 import org.jetbrains.kotlin.types.checker.intersectTypes
 import org.jetbrains.kotlin.types.singleBestRepresentative
 
-class ConstraintFixator(val commonSupertypeCalculator: CommonSupertypeCalculator) {
-    interface FixationContext {
+class ResultTypeResolver(val commonSupertypeCalculator: CommonSupertypeCalculator) {
+    interface Context {
         fun isProperType(type: UnwrappedType): Boolean
     }
 
-    fun FixationContext.findResultType(variableWithConstraints: VariableWithConstraints, direction: ResolveDirection): UnwrappedType? {
-        findResultIfThereIsEqualsConstraint(variableWithConstraints, allowedFixToNotProperType = false)?.let { return it }
+    fun findResultType(c: Context, variableWithConstraints: VariableWithConstraints, direction: ResolveDirection): UnwrappedType? {
+        findResultIfThereIsEqualsConstraint(c, variableWithConstraints, allowedFixToNotProperType = false)?.let { return it }
 
         if (direction == ResolveDirection.TO_SUBTYPE) {
-            val lowerConstraints = variableWithConstraints.constraints.filter { it.kind == ConstraintKind.LOWER && isProperType(it.type) }
+            val lowerConstraints = variableWithConstraints.constraints.filter { it.kind == ConstraintKind.LOWER && c.isProperType(it.type) }
             if (lowerConstraints.isNotEmpty()) {
                 return commonSupertypeCalculator(lowerConstraints.map { it.type })
             }
         }
 
         // direction != TO_SUBTYPE or there is no LOWER bounds
-        val upperConstraints = variableWithConstraints.constraints.filter { it.kind == ConstraintKind.UPPER && isProperType(it.type) }
+        val upperConstraints = variableWithConstraints.constraints.filter { it.kind == ConstraintKind.UPPER && c.isProperType(it.type) }
         if (upperConstraints.isNotEmpty()) {
             return intersectTypes(upperConstraints.map { it.type })
         }
@@ -45,12 +48,13 @@ class ConstraintFixator(val commonSupertypeCalculator: CommonSupertypeCalculator
         return null
     }
 
-    fun FixationContext.findResultIfThereIsEqualsConstraint(
+    fun findResultIfThereIsEqualsConstraint(
+            c: Context,
             variableWithConstraints: VariableWithConstraints,
             allowedFixToNotProperType: Boolean = false
     ): UnwrappedType? {
         val properEqualsConstraint = variableWithConstraints.constraints.filter {
-            it.kind == ConstraintKind.EQUALITY && isProperType(it.type)
+            it.kind == ConstraintKind.EQUALITY && c.isProperType(it.type)
         }
 
         if (properEqualsConstraint.isNotEmpty()) {

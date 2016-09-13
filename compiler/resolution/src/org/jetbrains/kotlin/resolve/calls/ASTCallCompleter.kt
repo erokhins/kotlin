@@ -19,6 +19,7 @@ package org.jetbrains.kotlin.resolve.calls
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.resolve.calls.inference.*
+import org.jetbrains.kotlin.resolve.calls.inference.components.ResultTypeResolver
 import org.jetbrains.kotlin.resolve.calls.model.ASTCall
 import org.jetbrains.kotlin.resolve.calls.model.LambdaArgument
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallArgument
@@ -84,7 +85,7 @@ sealed class BaseResolvedCall {
 }
 
 class ASTCallCompleter(
-        val constraintFixator: ConstraintFixator
+        val resultTypeResolver: ResultTypeResolver
 ) {
 
     fun transformWhenAmbiguity(candidate: NewResolutionCandidate): BaseResolvedCall =
@@ -179,7 +180,7 @@ class ASTCallCompleter(
 
             val variableWithConstraint = constraintStorage.notFixedTypeVariables[variable.freshTypeConstructor]
                                          ?: error("Incorrect type variable: $variable")
-            val resultType = with(constraintFixator) {
+            val resultType = with(resultTypeResolver) {
                 constraintStorage.findResultType(variableWithConstraint, direction)
             }
             if (resultType == null) {
@@ -191,7 +192,7 @@ class ASTCallCompleter(
         return true
     }
 
-    private fun ConstraintStorage.analyzeLambda(lambdaAnalyzer: LambdaAnalyzer, topLevelCall: ASTCall, lambda: ResolvedLambdaArgument) {
+    private fun MutableConstraintStorage.analyzeLambda(lambdaAnalyzer: LambdaAnalyzer, topLevelCall: ASTCall, lambda: ResolvedLambdaArgument) {
         val currentSubstitutor = buildCurrentSubstitutor()
         fun substitute(type: UnwrappedType) = currentSubstitutor.safeSubstitute(type, Variance.INVARIANT).unwrap()
 
@@ -218,7 +219,7 @@ class ASTCallCompleter(
         }
     }
 
-    private fun ConstraintStorage.canWeAnalyzeIt(lambda: ResolvedLambdaArgument): Boolean {
+    private fun MutableConstraintStorage.canWeAnalyzeIt(lambda: ResolvedLambdaArgument): Boolean {
         if (lambda.analyzed) return false
         lambda.receiver?.let {
             if (!canBeProper(it)) return false
@@ -227,7 +228,7 @@ class ASTCallCompleter(
     }
 
     // type can contains type variables but for all of them we should know resultType
-    private fun ConstraintStorage.canBeProper(type: UnwrappedType) = !type.contains {
+    private fun MutableConstraintStorage.canBeProper(type: UnwrappedType) = !type.contains {
         notFixedTypeVariables.containsKey(it.constructor)
     }
 }
