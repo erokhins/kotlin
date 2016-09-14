@@ -31,18 +31,16 @@ class MutableVariableWithConstraints(
     override val constraints: List<Constraint> get() = mutableConstraints
     private val mutableConstraints = MyArrayList(constraints)
 
-    // return constraint, if this constraint is new
-    fun addConstraint(constraintKind: ConstraintKind, type: UnwrappedType, position: ConstraintPosition): Constraint? {
-        val constraint = Constraint(constraintKind, type, position)
-
+    // return true, if this constraint is new
+    fun addConstraint(constraint: Constraint): Boolean {
         if (constraints.any {
             it.typeHashCode == constraint.typeHashCode && newConstraintIsUseless(it.kind, constraint.kind) && it.type == constraint.type
         }) {
-            return null
+            return false
         }
 
         mutableConstraints.add(constraint)
-        return constraint
+        return true
     }
 
     fun removeLastConstraints(shouldRemove: (Constraint) -> Boolean) {

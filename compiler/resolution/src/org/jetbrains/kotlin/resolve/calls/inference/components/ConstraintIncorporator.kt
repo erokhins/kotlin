@@ -35,6 +35,7 @@ class ConstraintIncorporator {
     interface Context {
         val allTypeVariablesWithConstraints: Collection<VariableWithConstraints>
 
+        // if such type variable is fixed then it is error
         fun getTypeVariable(typeConstructor: TypeConstructor): NewTypeVariable?
 
         fun getConstraintsForVariable(typeVariable: NewTypeVariable): Collection<Constraint>
@@ -56,7 +57,7 @@ class ConstraintIncorporator {
     private fun directWithVariable(c: Context, typeVariable: NewTypeVariable, constraint: Constraint, position: IncorporationConstraintPosition) {
         // \alpha <: constraint.type
         if (constraint.kind != ConstraintKind.LOWER) {
-            c.getConstraintsForVariable(typeVariable).toMutableList().forEach {
+            c.getConstraintsForVariable(typeVariable).forEach {
                 if (it.kind != ConstraintKind.UPPER) {
                     c.addNewIncorporatedConstraint(it.type, constraint.type, position)
                 }
@@ -65,7 +66,7 @@ class ConstraintIncorporator {
 
         // constraint.type <: \alpha
         if (constraint.kind != ConstraintKind.UPPER) {
-            c.getConstraintsForVariable(typeVariable).toMutableList().forEach {
+            c.getConstraintsForVariable(typeVariable).forEach {
                 if (it.kind != ConstraintKind.LOWER) {
                     c.addNewIncorporatedConstraint(constraint.type, it.type, position)
                 }

@@ -25,6 +25,27 @@ import org.jetbrains.kotlin.types.TypeSubstitutor
 import org.jetbrains.kotlin.types.UnwrappedType
 import org.jetbrains.kotlin.types.checker.KotlinTypeChecker
 
+/**
+ * Every type variable can be in the following states:
+ *  - not fixed => there is several constraints for this type variable(possible no one).
+ *      for this type variable we have VariableWithConstraints in map notFixedTypeVariables
+ *  - fixed to proper type or not proper type. For such type variable there is no VariableWithConstraints in notFixedTypeVariables.
+ *      Also we should guaranty that there is no other constraints in other VariableWithConstraints which depends on this fixed type variable.
+ *
+ *  Note: fixedTypeVariables can contains a proper and not proper type.
+ *
+ *  Fixing procedure(to proper types). First of all we should determinate fixing order.
+ *  After it, for every type variable we do the following:
+ *  - determinate result proper type
+ *  - add equality constraint, for example: T = Int
+ *  - run incorporation and generate all new constraints
+ *  - after is we remove VariableWithConstraints for type variable T from map notFixedTypeVariables
+ *  - also we remove all constraint in other variable which contains T
+ *  - add result type to fixedTypeVariables.
+ *
+ *  Note fixing procedure to not proper type the same. The only difference in determination result type.
+ *
+ */
 
 interface ConstraintStorage {
     val allTypeVariables: Map<TypeConstructor, NewTypeVariable>
