@@ -16,9 +16,8 @@
 
 package org.jetbrains.kotlin.resolve.calls.inference.components
 
-import org.jetbrains.kotlin.resolve.calls.inference.ApproximationBounds
+import org.jetbrains.kotlin.resolve.calls.inference.CapturedTypeApproximator
 import org.jetbrains.kotlin.resolve.calls.inference.model.*
-import org.jetbrains.kotlin.resolve.calls.inference.safeApproximateCapturedTypes
 import org.jetbrains.kotlin.types.*
 import org.jetbrains.kotlin.types.checker.CaptureStatus
 import org.jetbrains.kotlin.types.checker.NewCapturedType
@@ -30,7 +29,7 @@ import org.jetbrains.kotlin.utils.addIfNotNull
 import java.util.*
 
 // todo problem: intersection types in constrains: A <: Number, B <: Inv<A & Any> =>? B <: Inv<out Number & Any>
-class ConstraintIncorporator {
+class ConstraintIncorporator(val capturedTypeApproximator: CapturedTypeApproximator) {
 
     interface Context {
         val allTypeVariablesWithConstraints: Collection<VariableWithConstraints>
@@ -111,10 +110,10 @@ class ConstraintIncorporator {
             otherConstraint: Constraint,
             position: IncorporationConstraintPosition
     ) {
-        val approximationBounds = when (otherConstraint.kind){
+        val approximationBounds = when (otherConstraint.kind) {
             ConstraintKind.EQUALITY -> {
-                val substitutedType = baseConstraint.type.substitute(otherVariable, otherConstraint.type.asTypeProjection())
-                ApproximationBounds(substitutedType, substitutedType)
+                val substitutedType = baseConstraint.type.substitute(otherVariable, otherConstraint.type)
+                CapturedTypeApproximator.ApproximationBounds(substitutedType, substitutedType)
             }
             ConstraintKind.UPPER -> {
                 val newCapturedTypeConstructor = NewCapturedTypeConstructor(TypeProjectionImpl(Variance.OUT_VARIANCE, otherConstraint.type),
@@ -122,7 +121,8 @@ class ConstraintIncorporator {
                 val temporaryCapturedType = NewCapturedType(CaptureStatus.FOR_INCORPORATION,
                                                             newCapturedTypeConstructor,
                                                             lowerType = null)
-                baseConstraint.type.substitute(otherVariable, temporaryCapturedType.asTypeProjection()).safeApproximateCapturedTypes {
+                val typeForApproximation = baseConstraint.type.substitute(otherVariable, temporaryCapturedType)
+                capturedTypeApproximator.safeApproximateCapturedTypes(typeForApproximation) {
                     it.captureStatus == CaptureStatus.FOR_INCORPORATION
                 }
             }
@@ -132,7 +132,8 @@ class ConstraintIncorporator {
                 val temporaryCapturedType = NewCapturedType(CaptureStatus.FOR_INCORPORATION,
                                                             newCapturedTypeConstructor,
                                                             lowerType = otherConstraint.type)
-                baseConstraint.type.substitute(otherVariable, temporaryCapturedType.asTypeProjection()).safeApproximateCapturedTypes {
+                val typeForApproximation = baseConstraint.type.substitute(otherVariable, temporaryCapturedType)
+                capturedTypeApproximator.safeApproximateCapturedTypes(typeForApproximation) {
                     it.captureStatus == CaptureStatus.FOR_INCORPORATION
                 }
             }
@@ -146,8 +147,8 @@ class ConstraintIncorporator {
         }
     }
 
-    private fun UnwrappedType.substitute(typeVariable: NewTypeVariable, value: TypeProjection): UnwrappedType {
-        val substitutor = TypeSubstitutor.create(mapOf(typeVariable.freshTypeConstructor to value))
+    private fun UnwrappedType.substitute(typeVariable: NewTypeVariable, value: UnwrappedType): UnwrappedType {
+        val substitutor = TypeSubstitutor.create(mapOf(typeVariable.freshTypeConstructor to value.asTypeProjection()))
         val type = substitutor.substitute(this, Variance.INVARIANT) ?: error("Impossible to substitute in $this: $typeVariable -> $value")
         return type.unwrap()
     }
