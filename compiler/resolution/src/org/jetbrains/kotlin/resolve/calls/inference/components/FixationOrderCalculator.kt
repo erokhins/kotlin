@@ -16,8 +16,10 @@
 
 package org.jetbrains.kotlin.resolve.calls.inference.components
 
-import org.jetbrains.kotlin.resolve.calls.inference.ResolveDirection
-import org.jetbrains.kotlin.resolve.calls.inference.model.*
+import org.jetbrains.kotlin.resolve.calls.inference.model.Constraint
+import org.jetbrains.kotlin.resolve.calls.inference.model.ConstraintKind
+import org.jetbrains.kotlin.resolve.calls.inference.model.LambdaTypeVariable
+import org.jetbrains.kotlin.resolve.calls.inference.model.VariableWithConstraints
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedLambdaArgument
 import org.jetbrains.kotlin.types.*
 import org.jetbrains.kotlin.types.checker.NewKotlinTypeChecker
@@ -27,6 +29,11 @@ import org.jetbrains.kotlin.utils.SmartList
 import java.util.*
 
 class FixationOrderCalculator {
+    enum class ResolveDirection {
+        TO_SUBTYPE,
+        TO_SUPERTYPE,
+        UNKNOWN
+    }
 
     data class NodeWithDirection(val variableWithConstraints: VariableWithConstraints, val direction: ResolveDirection)
 
@@ -40,9 +47,9 @@ class FixationOrderCalculator {
     fun computeCompletionOrder(
             c: Context,
             topReturnType: UnwrappedType
-    ): List<NodeWithDirection> = SystemCompleter(c).getCompletionOrder(topReturnType)
+    ): List<NodeWithDirection> = DependencyGraph(c).getCompletionOrder(topReturnType)
 
-    private class SystemCompleter(val c: Context) {
+    private class DependencyGraph(val c: Context) {
         private val directions = HashMap<Variable, ResolveDirection>()
 
         // first in the list -- first fix
@@ -125,7 +132,6 @@ class FixationOrderCalculator {
             for (constraint in variableWithConstraints.constraints) {
                 if (!isInterestingConstraint(direction, constraint)) continue
 
-                // todo check
                 if (include2 || !c.notFixedTypeVariables.containsKey(constraint.type.constructor)) { // because we collect only type 1 of edges
                     constraint.type.visitType(direction) { variable, direction ->
                         result.add(NodeWithDirection(variable, direction))

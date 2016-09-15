@@ -14,33 +14,40 @@
  * limitations under the License.
  */
 
-package org.jetbrains.kotlin.resolve.calls
+package org.jetbrains.kotlin.resolve.calls.components
 
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
-import org.jetbrains.kotlin.resolve.calls.model.CallArgument
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallArgument
+import org.jetbrains.kotlin.resolve.calls.inference.SimpleConstraintSystemImpl
+import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.resolve.calls.results.FlatSignature
 import org.jetbrains.kotlin.resolve.calls.results.FlatSignature.Companion.argumentValueType
 import org.jetbrains.kotlin.resolve.calls.results.FlatSignature.Companion.extensionReceiverTypeOrEmpty
 import org.jetbrains.kotlin.resolve.calls.results.OverloadingConflictResolver
+import org.jetbrains.kotlin.resolve.calls.results.TypeSpecificityComparator
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.utils.singletonOrEmptyList
-import org.jetbrains.kotlin.resolve.calls.inference.SimpleConstraintSystemImpl
-import org.jetbrains.kotlin.resolve.calls.results.TypeSpecificityComparator
 import java.util.*
 
 class NewOverloadingConflictResolver(
         builtIns: KotlinBuiltIns,
         specificityComparator: TypeSpecificityComparator,
         isDescriptorFromSourcePredicate: IsDescriptorFromSourcePredicate
-): OverloadingConflictResolver<NewResolutionCandidate>(builtIns, specificityComparator, {
+) : OverloadingConflictResolver<NewResolutionCandidate>(
+        builtIns,
+        specificityComparator,
+        {
             if (it is VariableAsFunctionResolutionCandidate) {
                 it.invokeCandidate.descriptorWithFreshTypes
             }
             else {
                 (it as SimpleResolutionCandidate).descriptorWithFreshTypes
             }
-        }, ::SimpleConstraintSystemImpl, Companion::createFlatSignature, { (it as? VariableAsFunctionResolutionCandidate)?.resolvedVariable }, isDescriptorFromSourcePredicate) {
+        },
+        ::SimpleConstraintSystemImpl,
+        Companion::createFlatSignature,
+        { (it as? VariableAsFunctionResolutionCandidate)?.resolvedVariable },
+        isDescriptorFromSourcePredicate
+) {
 
     companion object {
         private fun createFlatSignature(candidate: NewResolutionCandidate): FlatSignature<NewResolutionCandidate> {

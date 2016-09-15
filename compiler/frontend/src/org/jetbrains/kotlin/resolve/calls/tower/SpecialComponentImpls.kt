@@ -18,8 +18,8 @@ package org.jetbrains.kotlin.resolve.calls.tower
 
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
-import org.jetbrains.kotlin.resolve.calls.CommonSupertypeCalculator
-import org.jetbrains.kotlin.resolve.calls.IsDescriptorFromSourcePredicate
+import org.jetbrains.kotlin.resolve.calls.components.CommonSupertypeCalculator
+import org.jetbrains.kotlin.resolve.calls.components.IsDescriptorFromSourcePredicate
 import org.jetbrains.kotlin.types.CommonSupertypes
 import org.jetbrains.kotlin.types.UnwrappedType
 

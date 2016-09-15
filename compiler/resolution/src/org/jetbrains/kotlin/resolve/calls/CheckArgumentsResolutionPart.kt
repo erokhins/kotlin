@@ -21,8 +21,8 @@ import org.jetbrains.kotlin.builtins.isExtensionFunctionType
 import org.jetbrains.kotlin.builtins.isFunctionType
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
-import org.jetbrains.kotlin.resolve.calls.inference.ArgumentConstraintPosition
-import org.jetbrains.kotlin.resolve.calls.inference.LambdaNewTypeVariable
+import org.jetbrains.kotlin.resolve.calls.inference.model.ArgumentConstraintPosition
+import org.jetbrains.kotlin.resolve.calls.inference.model.LambdaTypeVariable
 import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.resolve.calls.tower.isSuccess
 import org.jetbrains.kotlin.types.UnwrappedType
@@ -121,17 +121,17 @@ internal object CheckArguments : ResolutionPart {
         }
 
         val builtIns = expectedType.builtIns
-        val freshVariables = SmartList<LambdaNewTypeVariable>()
+        val freshVariables = SmartList<LambdaTypeVariable>()
         val receiver = computeReceiver(argument, expectedType) {
-            LambdaNewTypeVariable(astCall, argument, LambdaNewTypeVariable.Kind.RECEIVER, builtIns).apply { freshVariables.add(this) }.defaultType
+            LambdaTypeVariable(argument, LambdaTypeVariable.Kind.RECEIVER, builtIns).apply { freshVariables.add(this) }.defaultType
         }
 
         val parameters = computeParameterTypes(argument, expectedType) {
-            LambdaNewTypeVariable(astCall, argument, LambdaNewTypeVariable.Kind.PARAMETER, builtIns).apply { freshVariables.add(this) }.defaultType
+            LambdaTypeVariable(argument, LambdaTypeVariable.Kind.PARAMETER, builtIns).apply { freshVariables.add(this) }.defaultType
         }
 
         val returnType = computeReturnType(argument) {
-            LambdaNewTypeVariable(astCall, argument, LambdaNewTypeVariable.Kind.RETURN_TYPE, builtIns).apply { freshVariables.add(this) }.defaultType
+            LambdaTypeVariable(argument, LambdaTypeVariable.Kind.RETURN_TYPE, builtIns).apply { freshVariables.add(this) }.defaultType
         }
 
         val resolvedArgument = ResolvedLambdaArgument(astCall, argument, freshVariables, receiver, parameters, returnType)

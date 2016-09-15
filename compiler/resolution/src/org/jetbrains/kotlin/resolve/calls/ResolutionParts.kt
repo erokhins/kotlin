@@ -16,18 +16,22 @@
 
 package org.jetbrains.kotlin.resolve.calls
 
-import org.jetbrains.kotlin.descriptors.*
-import org.jetbrains.kotlin.resolve.calls.TypeArgumentsToParametersMapper.TypeArgumentsMapping.NoExplicitArguments
-import org.jetbrains.kotlin.resolve.calls.inference.DeclaredUpperBoundConstraintPosition
-import org.jetbrains.kotlin.resolve.calls.inference.ExplicitTypeParameterConstraintPosition
-import org.jetbrains.kotlin.resolve.calls.inference.SimpleNewTypeVariable
+import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.descriptors.ReceiverParameterDescriptor
+import org.jetbrains.kotlin.descriptors.Visibilities
+import org.jetbrains.kotlin.resolve.calls.components.TypeArgumentsToParametersMapper.TypeArgumentsMapping.NoExplicitArguments
+import org.jetbrains.kotlin.resolve.calls.inference.model.DeclaredUpperBoundConstraintPosition
+import org.jetbrains.kotlin.resolve.calls.inference.model.ExplicitTypeParameterConstraintPosition
+import org.jetbrains.kotlin.resolve.calls.inference.model.TypeVariableFromCallableDescriptor
 import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind.*
 import org.jetbrains.kotlin.resolve.calls.tower.ResolutionCandidateApplicability
 import org.jetbrains.kotlin.resolve.calls.tower.ResolutionCandidateApplicability.IMPOSSIBLE_TO_GENERATE
 import org.jetbrains.kotlin.resolve.calls.tower.VisibilityError
 import org.jetbrains.kotlin.types.IndexedParametersSubstitution
+import org.jetbrains.kotlin.types.TypeSubstitutor
 import org.jetbrains.kotlin.types.UnwrappedType
+import org.jetbrains.kotlin.types.Variance
 import org.jetbrains.kotlin.types.typeUtil.asTypeProjection
 
 
@@ -87,7 +91,7 @@ internal object CreteDescriptorWithFreshTypeVariables : ResolutionPart {
         }
         val typeParameters = candidateDescriptor.typeParameters
 
-        val freshTypeVariables = typeParameters.map { SimpleNewTypeVariable(astCall, it) }
+        val freshTypeVariables = typeParameters.map { TypeVariableFromCallableDescriptor(astCall, it) }
         val toFreshVariables = IndexedParametersSubstitution(typeParameters,
                                                              freshTypeVariables.map { it.defaultType.asTypeProjection() }).buildSubstitutor()
 
@@ -158,7 +162,7 @@ internal object CheckExplicitReceiverKindConsistency : ResolutionPart {
     override fun SimpleResolutionCandidate.process(): List<CallDiagnostic> {
         when (explicitReceiverKind) {
             NO_EXPLICIT_RECEIVER -> if (astCall.explicitReceiver is SimpleCallArgument || astCall.dispatchReceiverForInvokeExtension != null) hasError()
-            DISPATCH_RECEIVER, EXTENSION_RECEIVER ->    if (astCall.explicitReceiver == null || astCall.dispatchReceiverForInvokeExtension != null) hasError()
+            DISPATCH_RECEIVER, EXTENSION_RECEIVER -> if (astCall.explicitReceiver == null || astCall.dispatchReceiverForInvokeExtension != null) hasError()
             BOTH_RECEIVERS -> if (astCall.explicitReceiver == null || astCall.dispatchReceiverForInvokeExtension == null) hasError()
         }
         return emptyList()
@@ -166,7 +170,7 @@ internal object CheckExplicitReceiverKindConsistency : ResolutionPart {
 }
 
 internal object CheckReceivers : ResolutionPart {
-    fun SimpleResolutionCandidate.checkReceiver(
+    private fun SimpleResolutionCandidate.checkReceiver(
             receiverArgument: SimpleCallArgument?,
             receiverParameter: ReceiverParameterDescriptor?
     ): CallDiagnostic? {
@@ -184,10 +188,19 @@ internal object CheckReceivers : ResolutionPart {
         }
     }
 
+    private fun incorrectReceiver(callReceiver: SimpleCallArgument): Nothing =
+            error("Incorrect receiver type: $callReceiver. Class name: ${callReceiver.javaClass.canonicalName}")
+
     override fun SimpleResolutionCandidate.process() =
             listOfNotNull(checkReceiver(dispatchReceiverArgument, descriptorWithFreshTypes.dispatchReceiverParameter),
                           checkReceiver(extensionReceiver, descriptorWithFreshTypes.extensionReceiverParameter))
 }
+
+
+fun <D : CallableDescriptor> D.safeSubstitute(substitutor: TypeSubstitutor): D =
+        @Suppress("UNCHECKED_CAST") (substitute(substitutor) as D)
+
+fun UnwrappedType.substitute(substitutor: TypeSubstitutor): UnwrappedType = substitutor.substitute(this, Variance.INVARIANT)!!.unwrap()
 
 
 class UnstableSmartCast(val expressionArgument: ExpressionArgument, val targetType: UnwrappedType) :

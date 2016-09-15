@@ -17,6 +17,7 @@
 package org.jetbrains.kotlin.resolve.calls
 
 import org.jetbrains.kotlin.resolve.calls.context.CheckArgumentTypesMode
+import org.jetbrains.kotlin.resolve.calls.model.NewResolutionCandidate
 import org.jetbrains.kotlin.resolve.calls.tower.CandidateFactoryProviderForInvoke
 import org.jetbrains.kotlin.resolve.calls.tower.TowerResolver
 import org.jetbrains.kotlin.resolve.calls.tower.createFunctionProcessor
@@ -28,7 +29,7 @@ import java.lang.UnsupportedOperationException
 class ASTCallResolver(
         private val towerResolver: TowerResolver,
         private val astCallCompleter: ASTCallCompleter,
-        private val overloadingConflictResolver: NewOverloadingConflictResolver
+        private val overloadingConflictResolver: org.jetbrains.kotlin.resolve.calls.components.NewOverloadingConflictResolver
 ) {
 
     fun resolveCall(

@@ -14,20 +14,11 @@
  * limitations under the License.
  */
 
-package org.jetbrains.kotlin.resolve.calls
+package org.jetbrains.kotlin.resolve.calls.components
 
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
-import org.jetbrains.kotlin.resolve.calls.model.SimpleCallArgument
-import org.jetbrains.kotlin.types.TypeSubstitutor
 import org.jetbrains.kotlin.types.UnwrappedType
-import org.jetbrains.kotlin.types.Variance
 
+interface IsDescriptorFromSourcePredicate: (CallableDescriptor) -> Boolean
 
-fun <D : CallableDescriptor> D.safeSubstitute(substitutor: TypeSubstitutor): D =
-        @Suppress("UNCHECKED_CAST") (substitute(substitutor) as D)
-
-fun UnwrappedType.substitute(substitutor: TypeSubstitutor): UnwrappedType = substitutor.substitute(this, Variance.INVARIANT)!!.unwrap()
-
-
-fun incorrectReceiver(callReceiver: SimpleCallArgument): Nothing =
-        error("Incorrect receiver type: $callReceiver. Class name: ${callReceiver.javaClass.canonicalName}")
+interface CommonSupertypeCalculator: (Collection<UnwrappedType>) -> UnwrappedType

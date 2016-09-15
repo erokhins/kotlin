@@ -38,9 +38,3 @@ val CallableDescriptor.returnTypeOrNothing: UnwrappedType
 
 fun TypeSubstitutor.substitute(type: UnwrappedType): UnwrappedType = safeSubstitute(type, Variance.INVARIANT).unwrap()
 
-// todo move from here
-enum class ResolveDirection {
-    TO_SUBTYPE,
-    TO_SUPERTYPE,
-    UNKNOWN
-}
