@@ -16,20 +16,89 @@
 
 package org.jetbrains.kotlin.resolve.calls.model
 
-sealed class ResolvedCallArgument() {
-    abstract val arguments: List<CallArgument>
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.resolve.calls.BaseResolvedCall
+import org.jetbrains.kotlin.resolve.calls.inference.model.ConstraintStorage
+import org.jetbrains.kotlin.resolve.calls.tower.CandidateWithBoundDispatchReceiver
+import org.jetbrains.kotlin.resolve.scopes.receivers.DetailedReceiver
+import org.jetbrains.kotlin.resolve.scopes.receivers.QualifierReceiver
+import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
+import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValueWithSmartCastInfo
+import org.jetbrains.kotlin.types.UnwrappedType
 
-    object DefaultArgument : ResolvedCallArgument() {
-        override val arguments: List<CallArgument>
-            get() = emptyList()
 
-    }
+interface ReceiverCallArgument {
+    val receiver: DetailedReceiver
+}
 
-    class SimpleArgument(val callArgument: CallArgument): ResolvedCallArgument() {
-        override val arguments: List<CallArgument>
-            get() = listOf(callArgument)
+class QualifierReceiverCallArgument(override val receiver: QualifierReceiver) : ReceiverCallArgument {
+    override fun toString() = "$receiver"
+}
 
-    }
+interface CallArgument {
+    val isSpread: Boolean
+    val argumentName: Name?
+}
 
-    class VarargArgument(override val arguments: List<CallArgument>): ResolvedCallArgument()
+interface SimpleCallArgument : CallArgument, ReceiverCallArgument {
+    override val receiver: ReceiverValueWithSmartCastInfo
+
+    val isSafeCall: Boolean
+}
+
+interface ExpressionArgument : SimpleCallArgument {
+    val type: UnwrappedType // with all smart casts if stable
+
+    val unstableType: UnwrappedType? // if expression is not stable and has smart casts, then we create this type
+}
+
+interface SubCallArgument : SimpleCallArgument {
+    val resolvedCall: BaseResolvedCall.OnlyResolvedCall
+}
+
+interface LambdaArgument : CallArgument {
+    override val isSpread: Boolean
+        get() = false
+
+    /**
+     * parametersTypes == null means, that there is no declared arguments
+     * null inside array means that this type is not declared explicitly
+     */
+    val parametersTypes: Array<UnwrappedType?>?
+}
+
+interface FunctionExpression : LambdaArgument {
+    override val parametersTypes: Array<UnwrappedType?>
+
+    // null means that there function can not have receiver
+    val receiverType: UnwrappedType?
+
+    // null means that return type is not declared, for fun(){ ... } returnType == Unit
+    val returnType: UnwrappedType?
+}
+
+interface CallableReferenceArgument : CallArgument {
+    override val isSpread: Boolean
+        get() = false
+
+    // Foo::bar lhsType = Foo. For a::bar where a is expression, this type is null
+    val lhsType: UnwrappedType?
+
+    val constraintStorage: ConstraintStorage
+}
+
+interface ChosenCallableReferenceDescriptor : CallableReferenceArgument {
+    val candidate: CandidateWithBoundDispatchReceiver
+
+    val extensionReceiver: ReceiverValue?
+}
+
+
+interface TypeArgument
+
+// todo allow '_' in frontend
+object TypeArgumentPlaceholder : TypeArgument
+
+interface SimpleTypeArgument: TypeArgument {
+    val type: UnwrappedType
 }

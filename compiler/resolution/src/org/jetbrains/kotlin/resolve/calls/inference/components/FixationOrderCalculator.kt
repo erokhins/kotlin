@@ -16,17 +16,10 @@
 
 package org.jetbrains.kotlin.resolve.calls.inference.components
 
-import org.jetbrains.kotlin.resolve.calls.inference.MutableConstraintStorage
 import org.jetbrains.kotlin.resolve.calls.inference.ResolveDirection
-import org.jetbrains.kotlin.resolve.calls.inference.model.Constraint
-import org.jetbrains.kotlin.resolve.calls.inference.model.ConstraintKind
-import org.jetbrains.kotlin.resolve.calls.inference.model.NewTypeVariable
-import org.jetbrains.kotlin.resolve.calls.model.LambdaArgument
+import org.jetbrains.kotlin.resolve.calls.inference.model.*
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedLambdaArgument
-import org.jetbrains.kotlin.types.FlexibleType
-import org.jetbrains.kotlin.types.SimpleType
-import org.jetbrains.kotlin.types.UnwrappedType
-import org.jetbrains.kotlin.types.Variance
+import org.jetbrains.kotlin.types.*
 import org.jetbrains.kotlin.types.checker.NewKotlinTypeChecker
 import org.jetbrains.kotlin.types.checker.isIntersectionType
 import org.jetbrains.kotlin.utils.DFS
@@ -35,23 +28,22 @@ import java.util.*
 
 class FixationOrderCalculator {
 
-    data class NodeWithDirection(val variable: NewTypeVariable, val direction: ResolveDirection)
+    data class NodeWithDirection(val variableWithConstraints: VariableWithConstraints, val direction: ResolveDirection)
 
     interface Context {
-
+        val notFixedTypeVariables: Map<TypeConstructor, VariableWithConstraints>
+        val lambdaArguments: List<ResolvedLambdaArgument>
     }
 
-    fun computeCompletionOrder(
-            constraintStorage: MutableConstraintStorage,
-            topReturnType: UnwrappedType
-    ): List<NodeWithDirection> = SystemCompleter(constraintStorage, constraintStorage.lambdaArguments.associateBy { it.argument }).getCompletionOrder(topReturnType)
+    private typealias Variable = VariableWithConstraints
 
-    private class SystemCompleter(
-            val constraintStorage: MutableConstraintStorage,
-            // order of lambda arguments is essential
-            val allLambdaArguments: Map<LambdaArgument, ResolvedLambdaArgument>
-    ) {
-        private val directions = HashMap<NewTypeVariable, ResolveDirection>()
+    fun computeCompletionOrder(
+            c: Context,
+            topReturnType: UnwrappedType
+    ): List<NodeWithDirection> = SystemCompleter(c).getCompletionOrder(topReturnType)
+
+    private class SystemCompleter(val c: Context) {
+        private val directions = HashMap<Variable, ResolveDirection>()
 
         // first in the list -- first fix
         fun getCompletionOrder(topReturnType: UnwrappedType): List<NodeWithDirection> {
@@ -60,9 +52,9 @@ class FixationOrderCalculator {
             return topologicalOrderWith0Priority().map { NodeWithDirection(it, directions[it] ?: ResolveDirection.UNKNOWN) }
         }
 
-        private fun topologicalOrderWith0Priority(): List<NewTypeVariable> {
-            val handler = object : DFS.CollectingNodeHandler<NewTypeVariable, NewTypeVariable, LinkedHashSet<NewTypeVariable>>(LinkedHashSet()) {
-                override fun afterChildren(current: NewTypeVariable) {
+        private fun topologicalOrderWith0Priority(): List<Variable> {
+            val handler = object : DFS.CollectingNodeHandler<Variable, Variable, LinkedHashSet<Variable>>(LinkedHashSet()) {
+                override fun afterChildren(current: Variable) {
                     // we have guaranty that from end of 0 edge there is no other edges with priority 0
                     result.addAll(get0Edges(current))
 
@@ -70,27 +62,29 @@ class FixationOrderCalculator {
                 }
             }
 
-            for (typeVariableWithConstraints in constraintStorage.allTypeVariablesWithConstraints) {
-                DFS.doDfs(typeVariableWithConstraints.typeVariable, DFS.Neighbors(this::getEdges), DFS.VisitedWithSet<NewTypeVariable>(), handler)
+            for (typeVariable in c.notFixedTypeVariables.values) {
+                DFS.doDfs(typeVariable, DFS.Neighbors(this::getEdges), DFS.VisitedWithSet<Variable>(), handler)
             }
             return handler.result().toList()
         }
 
 
         private fun setupDirections(topReturnType: UnwrappedType) {
-            topReturnType.visitType(ResolveDirection.TO_SUBTYPE) { variable, direction ->
-                enterToNode(variable, direction)
+            topReturnType.visitType(ResolveDirection.TO_SUBTYPE) { variableWithConstraints, direction ->
+                enterToNode(variableWithConstraints, direction)
             }
-            for (resolvedLambdaArgument in allLambdaArguments.values) {
+            for (resolvedLambdaArgument in c.lambdaArguments) {
                 inner@ for (typeVariable in resolvedLambdaArgument.myTypeVariables) {
-                    if (typeVariable.kind == LambdaNewTypeVariable.Kind.RETURN_TYPE) continue@inner
+                    if (typeVariable.kind == LambdaTypeVariable.Kind.RETURN_TYPE) continue@inner
 
-                    enterToNode(typeVariable, ResolveDirection.TO_SUBTYPE)
+                    c.notFixedTypeVariables[typeVariable.freshTypeConstructor]?.let {
+                        enterToNode(it, ResolveDirection.TO_SUBTYPE)
+                    }
                 }
             }
         }
 
-        private fun enterToNode(variable: NewTypeVariable, direction: ResolveDirection) {
+        private fun enterToNode(variable: Variable, direction: ResolveDirection) {
             if (direction == ResolveDirection.UNKNOWN) return
 
             val previous = directions[variable]
@@ -108,9 +102,9 @@ class FixationOrderCalculator {
             }
         }
 
-        private fun getEdges(variable: NewTypeVariable): List<NewTypeVariable> {
+        private fun getEdges(variable: Variable): List<Variable> {
             val direction = directions[variable] ?: ResolveDirection.UNKNOWN
-            return get12Edges(variable, direction).map(NodeWithDirection::variable) + get0Edges(variable)
+            return get12Edges(variable, direction).map(NodeWithDirection::variableWithConstraints) + get0Edges(variable)
         }
 
         /**
@@ -120,7 +114,7 @@ class FixationOrderCalculator {
          *      1 -- \alpha <: Inv<\beta> or \alpha >: Pair<Inv<\beta & Any>, Int> ot \alpha <: \beta & Any
          *      2 -- \alpha <: \beta or \alpha >: \beta?
          */
-        private fun get12Edges(variable: NewTypeVariable, direction: ResolveDirection, include2: Boolean = true): List<NodeWithDirection> {
+        private fun get12Edges(variableWithConstraints: Variable, direction: ResolveDirection, include2: Boolean = true): List<NodeWithDirection> {
             fun isInterestingConstraint(direction: ResolveDirection, constraint: Constraint): Boolean {
                 return (direction == ResolveDirection.TO_SUBTYPE && constraint.kind == ConstraintKind.UPPER) ||
                        (direction == ResolveDirection.TO_SUPERTYPE && constraint.kind == ConstraintKind.LOWER)
@@ -128,10 +122,11 @@ class FixationOrderCalculator {
 
             val result = SmartList<NodeWithDirection>()
 
-            for (constraint in constraintStorage.getConstraintsForVariable(variable)) {
+            for (constraint in variableWithConstraints.constraints) {
                 if (!isInterestingConstraint(direction, constraint)) continue
 
-                if (include2 || constraintStorage.getTypeVariable(constraint.type.constructor) == null) { // because we collect only type 1 of edges
+                // todo check
+                if (include2 || !c.notFixedTypeVariables.containsKey(constraint.type.constructor)) { // because we collect only type 1 of edges
                     constraint.type.visitType(direction) { variable, direction ->
                         result.add(NodeWithDirection(variable, direction))
                     }
@@ -141,17 +136,21 @@ class FixationOrderCalculator {
             return result
         }
 
-        private fun get0Edges(variable: NewTypeVariable): List<NewTypeVariable> {
-            if (variable !is LambdaNewTypeVariable || variable.kind != LambdaNewTypeVariable.Kind.RETURN_TYPE) return emptyList()
+        private fun get0Edges(variable: Variable): List<Variable> {
+            val typeVariable = variable.typeVariable
+            if (typeVariable !is LambdaTypeVariable || typeVariable.kind != LambdaTypeVariable.Kind.RETURN_TYPE) return emptyList()
 
-            val resolvedLambdaArgument = allLambdaArguments[variable.lambdaArgument] ?:
-                                         error("Missing resolved lambda argument for ${variable.lambdaArgument}")
+            val resolvedLambdaArgument = c.lambdaArguments.find { it.argument == typeVariable.lambdaArgument } ?:
+                                         error("Missing resolved lambda argument for ${typeVariable.lambdaArgument}")
 
-            return resolvedLambdaArgument.myTypeVariables.filter { it.kind != LambdaNewTypeVariable.Kind.RETURN_TYPE }
+            return resolvedLambdaArgument.myTypeVariables.mapNotNull {
+                if (it.kind == LambdaTypeVariable.Kind.RETURN_TYPE) return@mapNotNull null
+                c.notFixedTypeVariables[it.freshTypeConstructor]
+            }
         }
 
 
-        private fun UnwrappedType.visitType(startDirection: ResolveDirection, action: (typeVariable: NewTypeVariable, direction: ResolveDirection) -> Unit) =
+        private fun UnwrappedType.visitType(startDirection: ResolveDirection, action: (variable: Variable, direction: ResolveDirection) -> Unit) =
                 when (this) {
                     is SimpleType -> visitType(startDirection, action)
                     is FlexibleType -> {
@@ -160,7 +159,7 @@ class FixationOrderCalculator {
                     }
                 }
 
-        private fun SimpleType.visitType(startDirection: ResolveDirection, action: (typeVariable: NewTypeVariable, direction: ResolveDirection) -> Unit) {
+        private fun SimpleType.visitType(startDirection: ResolveDirection, action: (variable: Variable, direction: ResolveDirection) -> Unit) {
             if (isIntersectionType) {
                 constructor.supertypes.forEach {
                     it.unwrap().visitType(startDirection, action)
@@ -169,7 +168,7 @@ class FixationOrderCalculator {
             }
 
             if (arguments.isEmpty()) {
-                constraintStorage.getTypeVariable(constructor)?.let {
+                c.notFixedTypeVariables[constructor]?.let {
                     action(it, startDirection)
                 }
                 return

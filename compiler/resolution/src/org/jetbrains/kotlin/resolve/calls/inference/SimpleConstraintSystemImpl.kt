@@ -17,14 +17,20 @@
 package org.jetbrains.kotlin.resolve.calls.inference
 
 import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.resolve.calls.ASTCallKind
 import org.jetbrains.kotlin.resolve.calls.inference.model.SimpleConstraintSystemConstraintPosition
 import org.jetbrains.kotlin.resolve.calls.inference.model.TypeVariableFromCallableDescriptor
-import org.jetbrains.kotlin.resolve.calls.model.ThrowableASTCall
+import org.jetbrains.kotlin.resolve.calls.model.ASTCall
+import org.jetbrains.kotlin.resolve.calls.model.CallArgument
+import org.jetbrains.kotlin.resolve.calls.model.ReceiverCallArgument
+import org.jetbrains.kotlin.resolve.calls.model.TypeArgument
 import org.jetbrains.kotlin.resolve.calls.results.SimpleConstraintSystem
 import org.jetbrains.kotlin.types.TypeConstructorSubstitution
 import org.jetbrains.kotlin.types.TypeSubstitutor
 import org.jetbrains.kotlin.types.UnwrappedType
 import org.jetbrains.kotlin.types.typeUtil.asTypeProjection
+import java.lang.UnsupportedOperationException
 
 
 class SimpleConstraintSystemImpl : SimpleConstraintSystem {
@@ -45,4 +51,14 @@ class SimpleConstraintSystemImpl : SimpleConstraintSystem {
     }
 
     override fun hasContradiction() = storage.errors.isNotEmpty()
+
+
+    private object ThrowableASTCall : ASTCall {
+        override val callKind: ASTCallKind get() = throw UnsupportedOperationException()
+        override val explicitReceiver: ReceiverCallArgument? get() = throw UnsupportedOperationException()
+        override val name: Name get() = throw UnsupportedOperationException()
+        override val typeArguments: List<TypeArgument> get() = throw UnsupportedOperationException()
+        override val argumentsInParenthesis: List<CallArgument> get() = throw UnsupportedOperationException()
+        override val externalArgument: CallArgument? get() = throw UnsupportedOperationException()
+    }
 }
