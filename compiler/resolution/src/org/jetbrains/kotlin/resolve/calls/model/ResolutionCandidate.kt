@@ -41,6 +41,7 @@ sealed class NewResolutionCandidate() : Candidate {
 }
 
 sealed class AbstractSimpleResolutionCandidate(
+        val constraintSystem: NewConstraintSystem,
         initialDiagnostics: Collection<CallDiagnostic> = emptyList()
 ) : NewResolutionCandidate() {
     override val isSuccessful: Boolean
@@ -55,7 +56,7 @@ sealed class AbstractSimpleResolutionCandidate(
         get() {
             if (_status == null) {
                 process(stopOnFirstError = false)
-                _status = ResolutionCandidateStatus(diagnostics + constraintSystemDiagnostics)
+                _status = ResolutionCandidateStatus(diagnostics + constraintSystem.diagnostics)
             }
             return _status!!
         }
@@ -73,7 +74,7 @@ sealed class AbstractSimpleResolutionCandidate(
 
     private fun addDiagnostics(diagnostics: Collection<CallDiagnostic>) {
         hasErrors = hasErrors || diagnostics.any { !it.candidateApplicability.isSuccess } ||
-                    constraintSystemDiagnostics.any { !it.candidateApplicability.isSuccess }
+                    constraintSystem.diagnostics.any { !it.candidateApplicability.isSuccess }
         this.diagnostics.addAll(diagnostics)
     }
 
@@ -81,8 +82,8 @@ sealed class AbstractSimpleResolutionCandidate(
         addDiagnostics(initialDiagnostics)
     }
 
+
     abstract val resolutionSequence: List<ResolutionPart>
-    abstract val constraintSystemDiagnostics: List<CallDiagnostic>
 }
 
 class SimpleResolutionCandidate(
@@ -91,11 +92,10 @@ class SimpleResolutionCandidate(
         val dispatchReceiverArgument: SimpleCallArgument?,
         val extensionReceiver: SimpleCallArgument?,
         val candidateDescriptor: CallableDescriptor,
-        val constraintSystem: NewConstraintSystem,
+        constraintSystem: NewConstraintSystem,
         initialDiagnostics: Collection<CallDiagnostic>
-) : AbstractSimpleResolutionCandidate(initialDiagnostics) {
+) : AbstractSimpleResolutionCandidate(constraintSystem, initialDiagnostics) {
     val csBuilder: ConstraintSystemBuilder get() = constraintSystem.getBuilder()
-    override val constraintSystemDiagnostics: List<CallDiagnostic> get() = constraintSystem.diagnostics
 
     lateinit var typeArgumentMappingByOriginal: TypeArgumentsToParametersMapper.TypeArgumentsMapping
     lateinit var argumentMappingByOriginal: Map<ValueParameterDescriptor, ResolvedCallArgument>
