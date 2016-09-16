@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.utils.SmartSet
 import org.jetbrains.kotlin.utils.addToStdlib.check
 import java.util.*
 
-open class TypeCheckerContext(val errorTypeEqualsToAnything: Boolean) {
+open class TypeCheckerContext(val errorTypeEqualsToAnything: Boolean, val allowedTypeVariable: Boolean = true) {
     protected var argumentsDepth = 0
 
     private var supertypesLocked = false
@@ -113,4 +113,6 @@ open class TypeCheckerContext(val errorTypeEqualsToAnything: Boolean) {
                     substitutor.safeSubstitute(type.lowerIfFlexible(), Variance.INVARIANT).asSimpleType()
         }
     }
+
+    val UnwrappedType.isAllowedTypeVariable: Boolean get() = allowedTypeVariable && constructor is NewTypeVariableConstructor
 }

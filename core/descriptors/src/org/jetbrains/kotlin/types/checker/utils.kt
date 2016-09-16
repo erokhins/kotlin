@@ -85,3 +85,5 @@ fun findCorrespondingSupertype(
 }
 
 private fun KotlinType.approximate() = approximateCapturedTypes(this).upper
+
+interface NewTypeVariableConstructor
