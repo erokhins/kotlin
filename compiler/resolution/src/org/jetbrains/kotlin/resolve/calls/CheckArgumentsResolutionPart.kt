@@ -201,6 +201,7 @@ internal object CheckArguments : ResolutionPart {
                     return UnstableSmartCast(expressionArgument, unstableType)
                 }
             }
+            csBuilder.addSubtypeConstraint(expressionArgument.type, expectedType, position)
             return null
         }
 
@@ -208,7 +209,7 @@ internal object CheckArguments : ResolutionPart {
         val position = ArgumentConstraintPosition(expressionArgument)
         if (expressionArgument.isSafeCall) {
             if (!csBuilder.addIfIsCompatibleSubtypeConstraint(expressionArgument.type, expectedNullableType, position)) {
-                unstableSmartCast(expressionArgument.unstableType, expectedNullableType, position)?.let { return it }
+                return unstableSmartCast(expressionArgument.unstableType, expectedNullableType, position)?.let { return it }
             }
             return null
         }
@@ -218,7 +219,7 @@ internal object CheckArguments : ResolutionPart {
                 return UnsafeCallError(expressionArgument)
             }
             else {
-                unstableSmartCast(expressionArgument.unstableType, expectedType, position)?.let { return it }
+                return unstableSmartCast(expressionArgument.unstableType, expectedType, position)?.let { return it }
             }
         }
 

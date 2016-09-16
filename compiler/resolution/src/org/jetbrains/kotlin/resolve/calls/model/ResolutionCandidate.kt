@@ -19,6 +19,7 @@ package org.jetbrains.kotlin.resolve.calls.model
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
+import org.jetbrains.kotlin.renderer.DescriptorRenderer
 import org.jetbrains.kotlin.resolve.calls.CallContext
 import org.jetbrains.kotlin.resolve.calls.components.TypeArgumentsToParametersMapper
 import org.jetbrains.kotlin.resolve.calls.inference.ConstraintSystemBuilder
@@ -47,7 +48,7 @@ sealed class AbstractSimpleResolutionCandidate(
     override val isSuccessful: Boolean
         get() {
             process(stopOnFirstError = true)
-            return hasErrors
+            return !hasErrors
         }
 
     private var _status: ResolutionCandidateStatus? = null
@@ -62,8 +63,11 @@ sealed class AbstractSimpleResolutionCandidate(
         }
 
     private val diagnostics = ArrayList<CallDiagnostic>()
-    private var step = 0
-    private var hasErrors = false
+    protected var step = 0
+        private set
+
+    protected var hasErrors = false
+        private set
 
     private fun process(stopOnFirstError: Boolean) {
         while (step < resolutionSequence.size && (!stopOnFirstError || !hasErrors)) {
@@ -104,6 +108,13 @@ class SimpleResolutionCandidate(
     override val lastCall: SimpleResolutionCandidate get() = this
     override val astCall: ASTCall get() = callContext.astCall
     override val resolutionSequence: List<ResolutionPart> get() = astCall.callKind.resolutionSequence
+
+    override fun toString(): String {
+        val descriptor = DescriptorRenderer.COMPACT.render(candidateDescriptor)
+        val okOrFail = if (hasErrors) "FAIL" else "OK"
+        val step = "$step/${resolutionSequence.size}"
+        return "$okOrFail($step): $descriptor"
+    }
 }
 
 val SimpleResolutionCandidate.containingDescriptor: DeclarationDescriptor get() = callContext.scopeTower.lexicalScope.ownerDescriptor
