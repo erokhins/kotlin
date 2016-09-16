@@ -42,11 +42,10 @@ internal object CheckArguments : ResolutionPart {
 
                 val expectedType =
                         if (argument.isSpread) {
-                            // error was reported in ArgumentsToParametersMapper
-                            parameterDescriptor.varargElementType?.unwrap() ?: continue
+                            parameterDescriptor.type.unwrap()
                         }
                         else {
-                            parameterDescriptor.type.unwrap()
+                            parameterDescriptor.varargElementType?.unwrap() ?: parameterDescriptor.type.unwrap()
                         }
 
                 val diagnostic =
