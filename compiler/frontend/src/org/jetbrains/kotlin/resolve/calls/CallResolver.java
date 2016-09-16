@@ -519,7 +519,7 @@ public class CallResolver {
         Call call = context.call;
         tracing.bindCall(context.trace, call);
 
-        if (PSICallResolver.getUseNewInference() && !(resolutionTask.resolutionKind instanceof GivenCandidates)) {
+        if (PSICallResolver.getUseNewInference() && (resolutionTask.resolutionKind.getAstKind() != ASTCallKind.UNSUPPORTED)) {
             assert resolutionTask.name != null;
             return PSICallResolver.runResolutionAndInference(context, resolutionTask.name, resolutionTask.resolutionKind, tracing);
         }
