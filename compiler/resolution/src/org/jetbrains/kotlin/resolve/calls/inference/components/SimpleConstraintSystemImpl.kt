@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package org.jetbrains.kotlin.resolve.calls.inference
+package org.jetbrains.kotlin.resolve.calls.inference.components
 
 import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.resolve.calls.ASTCallKind
+import org.jetbrains.kotlin.resolve.calls.CallContextComponents
+import org.jetbrains.kotlin.resolve.calls.inference.ConstraintSystemBuilder
+import org.jetbrains.kotlin.resolve.calls.inference.model.NewConstraintSystemImpl
 import org.jetbrains.kotlin.resolve.calls.inference.model.SimpleConstraintSystemConstraintPosition
 import org.jetbrains.kotlin.resolve.calls.inference.model.TypeVariableFromCallableDescriptor
 import org.jetbrains.kotlin.resolve.calls.model.ASTCall
@@ -33,13 +36,13 @@ import org.jetbrains.kotlin.types.typeUtil.asTypeProjection
 import java.lang.UnsupportedOperationException
 
 
-class SimpleConstraintSystemImpl : SimpleConstraintSystem {
-    val storage = MutableConstraintStorage()
+class SimpleConstraintSystemImpl(callComponents: CallContextComponents) : SimpleConstraintSystem {
+    val csBuilder: ConstraintSystemBuilder = NewConstraintSystemImpl(callComponents).getBuilder()
 
     override fun registerTypeVariables(typeParameters: Collection<TypeParameterDescriptor>): TypeSubstitutor {
         val substitutionMap = typeParameters.associate {
             val variable = TypeVariableFromCallableDescriptor(ThrowableASTCall, it)
-            storage.registerVariable(variable)
+            csBuilder.registerVariable(variable)
 
             it.defaultType.constructor to variable.defaultType.asTypeProjection()
         }
@@ -47,11 +50,10 @@ class SimpleConstraintSystemImpl : SimpleConstraintSystem {
     }
 
     override fun addSubtypeConstraint(subType: UnwrappedType, superType: UnwrappedType) {
-        storage.addSubtypeConstraint(subType, superType, SimpleConstraintSystemConstraintPosition)
+        csBuilder.addSubtypeConstraint(subType, superType, SimpleConstraintSystemConstraintPosition)
     }
 
-    override fun hasContradiction() = storage.errors.isNotEmpty()
-
+    override fun hasContradiction() = csBuilder.hasContradiction
 
     private object ThrowableASTCall : ASTCall {
         override val callKind: ASTCallKind get() = throw UnsupportedOperationException()

@@ -112,7 +112,7 @@ internal object CreteDescriptorWithFreshTypeVariables : ResolutionPart {
         // bad function -- error on declaration side
         if (csBuilder.hasContradiction) {
             descriptorWithFreshTypes = candidateDescriptor
-            return csBuilder.diagnostics
+            return emptyList()
         }
 
         // optimization
@@ -149,7 +149,7 @@ internal object CreteDescriptorWithFreshTypeVariables : ResolutionPart {
         // todo optimize -- composite substitutions before run safeSubstitute
         descriptorWithFreshTypes = candidateDescriptor.safeSubstitute(toFreshVariables).safeSubstitute(toFixedTypeParameters)
 
-        return csBuilder.diagnostics
+        return emptyList()
     }
 }
 

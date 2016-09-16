@@ -22,11 +22,7 @@ import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.resolve.calls.CallContext
 import org.jetbrains.kotlin.resolve.calls.components.TypeArgumentsToParametersMapper
 import org.jetbrains.kotlin.resolve.calls.inference.ConstraintSystemBuilder
-import org.jetbrains.kotlin.resolve.calls.inference.NewConstraintSystemBuilderImpl
-import org.jetbrains.kotlin.resolve.calls.model.ASTCall
-import org.jetbrains.kotlin.resolve.calls.model.CallDiagnostic
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCallArgument
-import org.jetbrains.kotlin.resolve.calls.model.SimpleCallArgument
+import org.jetbrains.kotlin.resolve.calls.inference.NewConstraintSystem
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.resolve.calls.tower.Candidate
 import org.jetbrains.kotlin.resolve.calls.tower.ResolutionCandidateStatus
@@ -59,7 +55,7 @@ sealed class AbstractSimpleResolutionCandidate(
         get() {
             if (_status == null) {
                 process(stopOnFirstError = false)
-                _status = ResolutionCandidateStatus(diagnostics)
+                _status = ResolutionCandidateStatus(diagnostics + constraintSystemDiagnostics)
             }
             return _status!!
         }
@@ -76,7 +72,8 @@ sealed class AbstractSimpleResolutionCandidate(
     }
 
     private fun addDiagnostics(diagnostics: Collection<CallDiagnostic>) {
-        hasErrors = hasErrors || diagnostics.any { !it.candidateApplicability.isSuccess }
+        hasErrors = hasErrors || diagnostics.any { !it.candidateApplicability.isSuccess } ||
+                    constraintSystemDiagnostics.any { !it.candidateApplicability.isSuccess }
         this.diagnostics.addAll(diagnostics)
     }
 
@@ -85,6 +82,7 @@ sealed class AbstractSimpleResolutionCandidate(
     }
 
     abstract val resolutionSequence: List<ResolutionPart>
+    abstract val constraintSystemDiagnostics: List<CallDiagnostic>
 }
 
 class SimpleResolutionCandidate(
@@ -93,9 +91,11 @@ class SimpleResolutionCandidate(
         val dispatchReceiverArgument: SimpleCallArgument?,
         val extensionReceiver: SimpleCallArgument?,
         val candidateDescriptor: CallableDescriptor,
+        val constraintSystem: NewConstraintSystem,
         initialDiagnostics: Collection<CallDiagnostic>
 ) : AbstractSimpleResolutionCandidate(initialDiagnostics) {
-    val csBuilder: ConstraintSystemBuilder = NewConstraintSystemBuilderImpl(callContext.c.resultTypeResolver)
+    val csBuilder: ConstraintSystemBuilder get() = constraintSystem.getBuilder()
+    override val constraintSystemDiagnostics: List<CallDiagnostic> get() = constraintSystem.diagnostics
 
     lateinit var typeArgumentMappingByOriginal: TypeArgumentsToParametersMapper.TypeArgumentsMapping
     lateinit var argumentMappingByOriginal: Map<ValueParameterDescriptor, ResolvedCallArgument>

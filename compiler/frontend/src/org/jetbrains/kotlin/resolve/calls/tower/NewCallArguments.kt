@@ -91,7 +91,7 @@ class CallableReferenceArgumentImpl(
         val ktCallableReferenceExpression: KtCallableReferenceExpression,
         override val argumentName: Name?,
         override val lhsType: UnwrappedType?,
-        val constraintStorage: ConstraintStorage
+        override val constraintStorage: ConstraintStorage
 ) : CallableReferenceArgument, PSICallArgument()
 
 class SubCallArgumentImpl(

@@ -19,7 +19,9 @@ package org.jetbrains.kotlin.resolve.calls
 import org.jetbrains.kotlin.resolve.calls.components.ArgumentsToParametersMapper
 import org.jetbrains.kotlin.resolve.calls.components.CallableReferenceResolver
 import org.jetbrains.kotlin.resolve.calls.components.TypeArgumentsToParametersMapper
+import org.jetbrains.kotlin.resolve.calls.inference.components.ConstraintInjector
 import org.jetbrains.kotlin.resolve.calls.inference.components.ResultTypeResolver
+import org.jetbrains.kotlin.resolve.calls.inference.model.NewConstraintSystemImpl
 import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.resolve.calls.tower.*
@@ -29,7 +31,8 @@ class CallContextComponents(
         val argumentsToParametersMapper: ArgumentsToParametersMapper,
         val typeArgumentsToParametersMapper: TypeArgumentsToParametersMapper,
         val resultTypeResolver: ResultTypeResolver,
-        val callableReferenceResolver: CallableReferenceResolver
+        val callableReferenceResolver: CallableReferenceResolver,
+        val constraintInjector: ConstraintInjector
 )
 
 class CallContext(
@@ -57,7 +60,7 @@ class CallContext(
         val extensionArgumentReceiver = createReceiverArgument(astCall.getExplicitExtensionReceiver(explicitReceiverKind), extensionReceiver)
 
         return SimpleResolutionCandidate(this, explicitReceiverKind, dispatchArgumentReceiver, extensionArgumentReceiver,
-                                         towerCandidate.descriptor, towerCandidate.diagnostics)
+                                         towerCandidate.descriptor, NewConstraintSystemImpl(c), towerCandidate.diagnostics)
     }
 
     fun replaceCall(newCall: ASTCall) = CallContext(c, scopeTower, newCall, lambdaAnalyzer)

@@ -47,6 +47,13 @@ class MutableVariableWithConstraints(
         mutableConstraints.removeLast(shouldRemove)
     }
 
+    // todo optimize it!
+    fun removeConstrains(shouldRemove: (Constraint) -> Boolean) {
+        val newConstraints = mutableConstraints.filter { !shouldRemove(it) }
+        mutableConstraints.clear()
+        mutableConstraints.addAll(newConstraints)
+    }
+
     private fun newConstraintIsUseless(oldKind: ConstraintKind, newKind: ConstraintKind) =
             when (oldKind) {
                 ConstraintKind.EQUALITY -> true

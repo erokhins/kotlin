@@ -18,21 +18,14 @@ package org.jetbrains.kotlin.resolve.calls.inference
 
 import org.jetbrains.kotlin.resolve.calls.BaseResolvedCall
 import org.jetbrains.kotlin.resolve.calls.inference.model.ConstraintPosition
-import org.jetbrains.kotlin.resolve.calls.inference.model.ConstraintStorage
 import org.jetbrains.kotlin.resolve.calls.inference.model.NewTypeVariable
-import org.jetbrains.kotlin.resolve.calls.inference.model.VariableWithConstraints
-import org.jetbrains.kotlin.resolve.calls.model.CallDiagnostic
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedLambdaArgument
-import org.jetbrains.kotlin.types.TypeConstructor
 import org.jetbrains.kotlin.types.TypeSubstitutor
 import org.jetbrains.kotlin.types.UnwrappedType
 
 
 interface ConstraintSystemBuilder {
     val hasContradiction: Boolean
-
-    // If hasContradiction then this list should contain some diagnostic about problem
-    val diagnostics: List<CallDiagnostic>
 
     fun registerVariable(variable: NewTypeVariable)
 
@@ -44,16 +37,11 @@ interface ConstraintSystemBuilder {
 
     fun addIfIsCompatibleSubtypeConstraint(lowerType: UnwrappedType, upperType: UnwrappedType, position: ConstraintPosition): Boolean
 
-
-
+    fun isProperType(type: UnwrappedType): Boolean
 
     /**
      * This function removes variables for which we know exact type.
      * @return substitutor from typeVariable to result
      */
     fun simplify(): TypeSubstitutor
-
-    fun build(): ConstraintStorage // return immutable copy of constraint system
-
-    fun startCompletion(): MutableConstraintStorage
 }

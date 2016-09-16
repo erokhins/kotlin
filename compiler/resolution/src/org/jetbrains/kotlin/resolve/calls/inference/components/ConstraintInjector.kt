@@ -34,21 +34,22 @@ class ConstraintInjector(val constraintIncorporator: ConstraintIncorporator) {
     interface Context {
         val allTypeVariables: Map<TypeConstructor, NewTypeVariable>
 
-        val initialConstraints: MutableList<InitialConstraint>
         var maxTypeDepthFromInitialConstraints: Int
         val notFixedTypeVariables: MutableMap<TypeConstructor, MutableVariableWithConstraints>
-        val errors: MutableList<CallDiagnostic>
+
+        fun addInitialConstraint(initialConstraint: InitialConstraint)
+        fun addError(error: CallDiagnostic)
     }
 
     fun addInitialSubtypeConstraint(c: Context, lowerType: UnwrappedType, upperType: UnwrappedType, position: ConstraintPosition) {
-        c.initialConstraints.add(InitialConstraint(lowerType, upperType, ConstraintKind.UPPER, position))
+        c.addInitialConstraint(InitialConstraint(lowerType, upperType, ConstraintKind.UPPER, position))
         updateAllowedTypeDepth(c, lowerType)
         updateAllowedTypeDepth(c, upperType)
         addSubTypeConstraintAndIncorporateIt(c, lowerType, upperType, position)
     }
 
     fun addInitialEqualityConstraint(c: Context, a: UnwrappedType, b: UnwrappedType, position: ConstraintPosition) {
-        c.initialConstraints.add(InitialConstraint(a, b, ConstraintKind.EQUALITY, position))
+        c.addInitialConstraint(InitialConstraint(a, b, ConstraintKind.EQUALITY, position))
         updateAllowedTypeDepth(c, a)
         updateAllowedTypeDepth(c, b)
         addSubTypeConstraintAndIncorporateIt(c, a, b, position)
@@ -105,7 +106,7 @@ class ConstraintInjector(val constraintIncorporator: ConstraintIncorporator) {
             with(NewKotlinTypeChecker) {
                 if (!isSubtypeOf(lowerType, upperType)) {
                     // todo improve error reporting -- add information about base types
-                    c.errors.add(NewConstraintError(lowerType, upperType, position))
+                    c.addError(NewConstraintError(lowerType, upperType, position))
                 }
             }
         }
@@ -129,7 +130,7 @@ class ConstraintInjector(val constraintIncorporator: ConstraintIncorporator) {
                 }
                 captureStatus != null && captureStatus != CaptureStatus.FROM_EXPRESSION
             }) {
-                c.errors.add(CapturedTypeFromSubtyping(typeVariable, type, position))
+                c.addError(CapturedTypeFromSubtyping(typeVariable, type, position))
                 return
             }
 

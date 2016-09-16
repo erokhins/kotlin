@@ -18,10 +18,11 @@ package org.jetbrains.kotlin.resolve.calls
 
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
-import org.jetbrains.kotlin.resolve.calls.inference.*
+import org.jetbrains.kotlin.resolve.calls.inference.components.ConstraintInjector
+import org.jetbrains.kotlin.resolve.calls.inference.components.FixationOrderCalculator
 import org.jetbrains.kotlin.resolve.calls.inference.components.ResultTypeResolver
-import org.jetbrains.kotlin.resolve.calls.inference.model.ArgumentConstraintPosition
-import org.jetbrains.kotlin.resolve.calls.inference.model.ExpectedTypeConstraintPosition
+import org.jetbrains.kotlin.resolve.calls.inference.model.*
+import org.jetbrains.kotlin.resolve.calls.inference.returnTypeOrNothing
 import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.resolve.calls.tower.ResolutionCandidateStatus
@@ -30,7 +31,6 @@ import org.jetbrains.kotlin.types.TypeSubstitutor
 import org.jetbrains.kotlin.types.TypeUtils
 import org.jetbrains.kotlin.types.UnwrappedType
 import org.jetbrains.kotlin.types.Variance
-import org.jetbrains.kotlin.types.typeUtil.contains
 import org.jetbrains.kotlin.utils.addToStdlib.check
 
 interface LambdaAnalyzer {
@@ -84,11 +84,30 @@ sealed class BaseResolvedCall {
 }
 
 class ASTCallCompleter(
-        val resultTypeResolver: ResultTypeResolver
+        val resultTypeResolver: ResultTypeResolver,
+        val constraintInjector: ConstraintInjector,
+        val fixationOrderCalculator: FixationOrderCalculator
 ) {
+    interface Context {
+        val innerCalls: List<BaseResolvedCall.OnlyResolvedCall>
+        val hasContradiction: Boolean
+        fun buildCurrentSubstitutor(): TypeSubstitutor
+        val lambdaArguments: List<ResolvedLambdaArgument>
+
+        // type can be proper if it not contains not fixed type variables
+        fun canBeProper(type: UnwrappedType): Boolean
+        fun asFixationOrderCalculatorContext(): FixationOrderCalculator.Context
+        fun asResultTypeResolverContext(): ResultTypeResolver.Context
+
+        // mutable operations
+        fun asConstraintInjectorContext(): ConstraintInjector.Context
+        fun addError(error: CallDiagnostic)
+        fun addInnerCall(innerCall: BaseResolvedCall.OnlyResolvedCall)
+        fun fixVariable(variable: NewTypeVariable, resultType: UnwrappedType)
+    }
 
     fun transformWhenAmbiguity(candidate: NewResolutionCandidate): BaseResolvedCall =
-            toCompletedBaseResolvedCall(candidate)
+            toCompletedBaseResolvedCall(candidate.lastCall.constraintSystem.asCallCompleterContext(), candidate)
 
     fun completeCallIfNecessary(
             candidate: NewResolutionCandidate,
@@ -104,19 +123,22 @@ class ASTCallCompleter(
                 }
 
         if (topLevelCall.prepareForCompletion(expectedType)) {
-            topLevelCall.competeCall(lambdaAnalyzer)
-            return toCompletedBaseResolvedCall(candidate)
+            val c = candidate.lastCall.constraintSystem.asCallCompleterContext()
+
+            topLevelCall.competeCall(c, lambdaAnalyzer)
+            return toCompletedBaseResolvedCall(c, candidate)
         }
 
         return BaseResolvedCall.OnlyResolvedCall(candidate)
     }
 
     private fun toCompletedBaseResolvedCall(
+            c: Context,
             candidate: NewResolutionCandidate
     ): BaseResolvedCall.CompletedResolvedCall {
-        val currentSubstitutor = candidate.lastCall.csBuilder.build().buildCurrentSubstitutor()
+        val currentSubstitutor = c.buildCurrentSubstitutor()
         val completedCall = candidate.toCompletedCall(currentSubstitutor)
-        val competedCalls = candidate.lastCall.csBuilder.build().innerCalls.map {
+        val competedCalls = c.innerCalls.map {
             it.candidate.toCompletedCall(currentSubstitutor)
         }
         return BaseResolvedCall.CompletedResolvedCall(completedCall, competedCalls)
@@ -146,88 +168,82 @@ class ASTCallCompleter(
             csBuilder.addSubtypeConstraint(returnType, expectedType, ExpectedTypeConstraintPosition(astCall))
         }
 
-        return expectedType != null || !returnType.contains { csBuilder.typeVariables.containsKey(it.constructor) }
+        return expectedType != null || csBuilder.isProperType(returnType)
     }
 
-    private fun SimpleResolutionCandidate.competeCall(lambdaAnalyzer: LambdaAnalyzer) {
-        while (!oneStepToEndOrLambda(lambdaAnalyzer)) {
-            // do nothing
+    private fun SimpleResolutionCandidate.competeCall(c: Context, lambdaAnalyzer: LambdaAnalyzer) {
+        while (!oneStepToEndOrLambda(c, lambdaAnalyzer)) {
+            // do nothing -- be happy
         }
     }
 
-    // true if it is end
-    private fun SimpleResolutionCandidate.oneStepToEndOrLambda(lambdaAnalyzer: LambdaAnalyzer): Boolean {
-        val constraintStorage = csBuilder.startCompletion()
-        if (constraintStorage.errors.isNotEmpty()) return true
+    // true if it is the end (happy or not)
+    private fun SimpleResolutionCandidate.oneStepToEndOrLambda(c: Context, lambdaAnalyzer: LambdaAnalyzer): Boolean {
+        if (c.hasContradiction) return true
 
-        for (lambda in constraintStorage.lambdaArguments) {
-            if (constraintStorage.canWeAnalyzeIt(lambda)) {
-                constraintStorage.analyzeLambda(lambdaAnalyzer, astCall, lambda)
+        for (lambda in c.lambdaArguments) {
+            if (canWeAnalyzeIt(c, lambda)) {
+                analyzeLambda(c, lambdaAnalyzer, astCall, lambda)
             }
         }
 
-        val completionOrder = computeCompletionOrder(constraintStorage, descriptorWithFreshTypes.returnTypeOrNothing)
-        for ((variable, direction) in completionOrder) {
-            if (constraintStorage.errors.isNotEmpty()) return true
-            if (variable is LambdaNewTypeVariable) {
-                val resolvedLambda = constraintStorage.lambdaArguments.find { it.argument == variable.lambdaArgument } ?: return true
-                if (constraintStorage.canWeAnalyzeIt(resolvedLambda)) {
-                    constraintStorage.analyzeLambda(lambdaAnalyzer, astCall, resolvedLambda)
+        val completionOrder = fixationOrderCalculator.computeCompletionOrder(c.asFixationOrderCalculatorContext(), descriptorWithFreshTypes.returnTypeOrNothing)
+        for ((variableWithConstraints, direction) in completionOrder) {
+            if (c.hasContradiction) return true
+
+            val variable = variableWithConstraints.typeVariable
+            if (variable is LambdaTypeVariable) {
+                val resolvedLambda = c.lambdaArguments.find { it.argument == variable.lambdaArgument } ?: return true
+                if (canWeAnalyzeIt(c, resolvedLambda)) {
+                    analyzeLambda(c, lambdaAnalyzer, astCall, resolvedLambda)
                     return false
                 }
             }
 
-            val variableWithConstraint = constraintStorage.notFixedTypeVariables[variable.freshTypeConstructor]
-                                         ?: error("Incorrect type variable: $variable")
-            val resultType = with(resultTypeResolver) {
-                constraintStorage.findResultType(variableWithConstraint, direction)
-            }
+            val resultType = resultTypeResolver.findResultType(c.asResultTypeResolverContext(), variableWithConstraints, direction)
             if (resultType == null) {
-                constraintStorage.errors.add(NotEnoughInformationForTypeParameter(variable))
+                c.addError(NotEnoughInformationForTypeParameter(variable))
                 break
             }
-            constraintStorage.fixVariable(variable, resultType)
+            c.fixVariable(variable, resultType)
         }
         return true
     }
 
-    private fun MutableConstraintStorage.analyzeLambda(lambdaAnalyzer: LambdaAnalyzer, topLevelCall: ASTCall, lambda: ResolvedLambdaArgument) {
-        val currentSubstitutor = buildCurrentSubstitutor()
+    private fun analyzeLambda(c: Context, lambdaAnalyzer: LambdaAnalyzer, topLevelCall: ASTCall, lambda: ResolvedLambdaArgument) {
+        val currentSubstitutor = c.buildCurrentSubstitutor()
         fun substitute(type: UnwrappedType) = currentSubstitutor.safeSubstitute(type, Variance.INVARIANT).unwrap()
 
         val receiver = lambda.receiver?.let(::substitute)
         val parameters = lambda.parameters.map(::substitute)
-        val expectedType = lambda.returnType.check { canBeProper(it) }?.let(::substitute)
+        val expectedType = lambda.returnType.check { c.canBeProper(it) }?.let(::substitute)
         val callsFromLambda = lambdaAnalyzer.analyzeAndGetRelatedCalls(topLevelCall, lambda.argument, receiver, parameters, expectedType)
         lambda.analyzed = true
 
+        val injectorContext = c.asConstraintInjectorContext()
         val position = ArgumentConstraintPosition(lambda.argument)
         for (innerCall in callsFromLambda) {
             when (innerCall) {
                 is BaseResolvedCall.CompletedResolvedCall -> {
                     val returnType = innerCall.completedCall.lastCall.resultingDescriptor.returnTypeOrNothing
-                    addSubtypeConstraint(returnType, lambda.returnType, position)
+                    constraintInjector.addInitialSubtypeConstraint(injectorContext, returnType, lambda.returnType, position)
                 }
                 is BaseResolvedCall.OnlyResolvedCall -> {
                     // todo register call
                     val returnType = innerCall.candidate.lastCall.descriptorWithFreshTypes.returnTypeOrNothing
-                    addInnerCall(innerCall)
-                    addSubtypeConstraint(returnType, lambda.returnType, position)
+                    c.addInnerCall(innerCall)
+                    constraintInjector.addInitialSubtypeConstraint(injectorContext, returnType, lambda.returnType, position)
                 }
             }
         }
     }
 
-    private fun MutableConstraintStorage.canWeAnalyzeIt(lambda: ResolvedLambdaArgument): Boolean {
+    private fun canWeAnalyzeIt(c: Context, lambda: ResolvedLambdaArgument): Boolean {
         if (lambda.analyzed) return false
         lambda.receiver?.let {
-            if (!canBeProper(it)) return false
+            if (!c.canBeProper(it)) return false
         }
-        return lambda.parameters.all { canBeProper(it) }
+        return lambda.parameters.all { c.canBeProper(it) }
     }
 
-    // type can contains type variables but for all of them we should know resultType
-    private fun MutableConstraintStorage.canBeProper(type: UnwrappedType) = !type.contains {
-        notFixedTypeVariables.containsKey(it.constructor)
-    }
 }

@@ -17,7 +17,8 @@
 package org.jetbrains.kotlin.resolve.calls.components
 
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
-import org.jetbrains.kotlin.resolve.calls.inference.SimpleConstraintSystemImpl
+import org.jetbrains.kotlin.resolve.calls.CallContextComponents
+import org.jetbrains.kotlin.resolve.calls.inference.components.SimpleConstraintSystemImpl
 import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.resolve.calls.results.FlatSignature
 import org.jetbrains.kotlin.resolve.calls.results.FlatSignature.Companion.argumentValueType
@@ -31,7 +32,8 @@ import java.util.*
 class NewOverloadingConflictResolver(
         builtIns: KotlinBuiltIns,
         specificityComparator: TypeSpecificityComparator,
-        isDescriptorFromSourcePredicate: IsDescriptorFromSourcePredicate
+        isDescriptorFromSourcePredicate: IsDescriptorFromSourcePredicate,
+        callComponents: CallContextComponents
 ) : OverloadingConflictResolver<NewResolutionCandidate>(
         builtIns,
         specificityComparator,
@@ -43,7 +45,7 @@ class NewOverloadingConflictResolver(
                 (it as SimpleResolutionCandidate).descriptorWithFreshTypes
             }
         },
-        ::SimpleConstraintSystemImpl,
+        { SimpleConstraintSystemImpl(callComponents) },
         Companion::createFlatSignature,
         { (it as? VariableAsFunctionResolutionCandidate)?.resolvedVariable },
         isDescriptorFromSourcePredicate
