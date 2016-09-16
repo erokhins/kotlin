@@ -63,7 +63,7 @@ class LambdaAnalyzerImpl(
 
         val lastExpression: KtExpression?
         if (psiCallArgument is LambdaArgumentIml) {
-            lastExpression = psiCallArgument.ktLambdaExpression.bodyExpression?.statements?.last()
+            lastExpression = psiCallArgument.ktLambdaExpression.bodyExpression?.statements?.lastOrNull()
         }
         else {
             lastExpression = (psiCallArgument as FunctionExpressionImpl).ktFunction.bodyExpression?.lastBlockStatementOrThis()
