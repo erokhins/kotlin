@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.builtins.isExtensionFunctionType
 import org.jetbrains.kotlin.builtins.isFunctionType
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
+import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.resolve.calls.inference.model.ArgumentConstraintPosition
 import org.jetbrains.kotlin.resolve.calls.inference.model.LambdaTypeVariable
 import org.jetbrains.kotlin.resolve.calls.model.*
@@ -40,13 +41,7 @@ internal object CheckArguments : ResolutionPart {
             val resolvedCallArgument = argumentMappingByOriginal[parameterDescriptor.original] ?: continue
             for (argument in resolvedCallArgument.arguments) {
 
-                val expectedType =
-                        if (argument.isSpread) {
-                            parameterDescriptor.type.unwrap()
-                        }
-                        else {
-                            parameterDescriptor.varargElementType?.unwrap() ?: parameterDescriptor.type.unwrap()
-                        }
+                val expectedType = argument.getExpectedType(parameterDescriptor)
 
                 val diagnostic =
                         when (argument) {
@@ -186,68 +181,6 @@ internal object CheckArguments : ResolutionPart {
         }
         return null
     }
-
-
-    fun SimpleResolutionCandidate.checkExpressionArgument(
-            expressionArgument: ExpressionArgument,
-            expectedType: UnwrappedType
-    ): CallDiagnostic? {
-        fun SimpleResolutionCandidate.unstableSmartCast(
-                unstableType: UnwrappedType?, expectedType: UnwrappedType, position: ArgumentConstraintPosition
-        ): CallDiagnostic? {
-            if (unstableType != null) {
-                if (csBuilder.addIfIsCompatibleSubtypeConstraint(unstableType, expectedType, position)) {
-                    return UnstableSmartCast(expressionArgument, unstableType)
-                }
-            }
-            csBuilder.addSubtypeConstraint(expressionArgument.type, expectedType, position)
-            return null
-        }
-
-        val expectedNullableType = expectedType.makeNullableAsSpecified(true)
-        val position = ArgumentConstraintPosition(expressionArgument)
-        if (expressionArgument.isSafeCall) {
-            if (!csBuilder.addIfIsCompatibleSubtypeConstraint(expressionArgument.type, expectedNullableType, position)) {
-                return unstableSmartCast(expressionArgument.unstableType, expectedNullableType, position)?.let { return it }
-            }
-            return null
-        }
-
-        if (!csBuilder.addIfIsCompatibleSubtypeConstraint(expressionArgument.type, expectedType, position)) {
-            if (csBuilder.addIfIsCompatibleSubtypeConstraint(expressionArgument.type, expectedNullableType, position)) {
-                return UnsafeCallError(expressionArgument)
-            }
-            else {
-                return unstableSmartCast(expressionArgument.unstableType, expectedType, position)?.let { return it }
-            }
-        }
-
-        return null
-    }
-
-    fun SimpleResolutionCandidate.checkSubCallArgument(
-            subCallArgument: SubCallArgument,
-            expectedType: UnwrappedType
-    ): CallDiagnostic? {
-        val resolvedCall = subCallArgument.resolvedCall
-        val expectedNullableType = expectedType.makeNullableAsSpecified(true)
-        val position = ArgumentConstraintPosition(subCallArgument)
-
-        csBuilder.addInnerCall(resolvedCall)
-
-        if (subCallArgument.isSafeCall) {
-            csBuilder.addSubtypeConstraint(resolvedCall.currentReturnType, expectedNullableType, position)
-            return null
-        }
-
-        if (!csBuilder.addIfIsCompatibleSubtypeConstraint(resolvedCall.currentReturnType, expectedType, position) &&
-            csBuilder.addIfIsCompatibleSubtypeConstraint(resolvedCall.currentReturnType, expectedNullableType, position)
-        ) {
-            return UnsafeCallError(subCallArgument)
-        }
-
-        return null
-    }
 }
 
 internal fun SimpleResolutionCandidate.checkExpressionArgument(
@@ -262,6 +195,7 @@ internal fun SimpleResolutionCandidate.checkExpressionArgument(
                 return UnstableSmartCast(expressionArgument, unstableType)
             }
         }
+        csBuilder.addSubtypeConstraint(expressionArgument.type, expectedType, position)
         return null
     }
 
@@ -269,7 +203,7 @@ internal fun SimpleResolutionCandidate.checkExpressionArgument(
     val position = ArgumentConstraintPosition(expressionArgument)
     if (expressionArgument.isSafeCall) {
         if (!csBuilder.addIfIsCompatibleSubtypeConstraint(expressionArgument.type, expectedNullableType, position)) {
-            unstableSmartCast(expressionArgument.unstableType, expectedNullableType, position)?.let { return it }
+            return unstableSmartCast(expressionArgument.unstableType, expectedNullableType, position)?.let { return it }
         }
         return null
     }
@@ -279,7 +213,7 @@ internal fun SimpleResolutionCandidate.checkExpressionArgument(
             return UnsafeCallError(expressionArgument)
         }
         else {
-            unstableSmartCast(expressionArgument.unstableType, expectedType, position)?.let { return it }
+            return unstableSmartCast(expressionArgument.unstableType, expectedType, position)?.let { return it }
         }
     }
 
@@ -309,3 +243,11 @@ internal fun SimpleResolutionCandidate.checkSubCallArgument(
 
     return null
 }
+
+internal fun CallArgument.getExpectedType(parameter: ValueParameterDescriptor) =
+        if (this.isSpread) {
+            parameter.type.unwrap()
+        }
+        else {
+            parameter.varargElementType?.unwrap() ?: parameter.type.unwrap()
+        }

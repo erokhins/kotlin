@@ -19,6 +19,7 @@ package org.jetbrains.kotlin.resolve.calls
 import org.jetbrains.kotlin.resolve.calls.components.NewOverloadingConflictResolver
 import org.jetbrains.kotlin.resolve.calls.context.CheckArgumentTypesMode
 import org.jetbrains.kotlin.resolve.calls.model.NewResolutionCandidate
+import org.jetbrains.kotlin.resolve.calls.model.checkCallInvariants
 import org.jetbrains.kotlin.resolve.calls.tower.CandidateFactoryProviderForInvoke
 import org.jetbrains.kotlin.resolve.calls.tower.TowerResolver
 import org.jetbrains.kotlin.resolve.calls.tower.createFunctionProcessor
@@ -40,6 +41,8 @@ class ASTCallResolver(
     ): Collection<BaseResolvedCall> {
         val call = callContext.astCall
         val scopeTower = callContext.scopeTower
+
+        call.checkCallInvariants()
 
         val processor = when(callContext.astCall.callKind) {
             ASTCallKind.VARIABLE -> {
