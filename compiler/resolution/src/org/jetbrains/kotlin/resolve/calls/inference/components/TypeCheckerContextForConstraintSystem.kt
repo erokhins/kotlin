@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.types.checker.*
 import org.jetbrains.kotlin.types.typeUtil.builtIns
 import org.jetbrains.kotlin.utils.addToStdlib.check
 
-abstract class TypeCheckerContextForConstraintSystem : TypeCheckerContext(errorTypeEqualsToAnything = true) {
+abstract class TypeCheckerContextForConstraintSystem : TypeCheckerContext(errorTypeEqualsToAnything = true, allowedTypeVariable = false) {
 
     abstract fun isMyTypeVariable(type: SimpleType): Boolean
 

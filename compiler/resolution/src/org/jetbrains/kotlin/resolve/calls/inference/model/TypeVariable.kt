@@ -24,9 +24,10 @@ import org.jetbrains.kotlin.resolve.calls.model.ASTCall
 import org.jetbrains.kotlin.resolve.calls.model.LambdaArgument
 import org.jetbrains.kotlin.resolve.descriptorUtil.builtIns
 import org.jetbrains.kotlin.types.*
+import org.jetbrains.kotlin.types.checker.NewTypeVariableConstructor
 
 
-class TypeVariableTypeConstructor(private val builtIns: KotlinBuiltIns, val debugName: String): TypeConstructor {
+class TypeVariableTypeConstructor(private val builtIns: KotlinBuiltIns, val debugName: String): TypeConstructor, NewTypeVariableConstructor {
     override val annotations: Annotations get() = Annotations.EMPTY
 
     override fun getParameters(): List<TypeParameterDescriptor> = emptyList()
