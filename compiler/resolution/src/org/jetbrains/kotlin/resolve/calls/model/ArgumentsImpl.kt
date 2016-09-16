@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValueWithSmartCastInfo
 import org.jetbrains.kotlin.types.UnwrappedType
 import org.jetbrains.kotlin.types.checker.intersectWrappedTypes
+import org.jetbrains.kotlin.utils.addToStdlib.check
 
 
 class FakeArgumentForCallableReference(
@@ -47,7 +48,7 @@ class ReceiverExpressionArgument(
             type = collectedType
         }
         else {
-            unstableType = collectedType
+            unstableType = collectedType.check { receiver.possibleTypes.isNotEmpty() }
             type = receiver.receiverValue.type.unwrap()
         }
     }

@@ -234,7 +234,7 @@ class NewConstraintSystemImpl(val callComponents: CallContextComponents):
 
     override fun canBeProper(type: UnwrappedType): Boolean {
         checkState(State.COMPLETION)
-        return !type.contains { storage.fixedTypeVariables.containsKey(it.constructor) }
+        return !type.contains { storage.notFixedTypeVariables.containsKey(it.constructor) }
     }
 
     override fun buildCurrentSubstitutor(): TypeSubstitutor {
