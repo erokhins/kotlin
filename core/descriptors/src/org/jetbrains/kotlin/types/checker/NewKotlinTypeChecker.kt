@@ -172,7 +172,9 @@ object NewKotlinTypeChecker : KotlinTypeChecker {
         }
 
     private fun TypeCheckerContext.isSubtypeOfForSingleClassifierType(subType: SimpleType, superType: SimpleType): Boolean {
-        assert(subType.isSingleClassifierType || subType.isIntersectionType) { "Not singleClassifierType and not intersection subType: $subType" }
+        assert(subType.isSingleClassifierType || subType.isIntersectionType) {
+            "Not singleClassifierType and not intersection subType: $subType"
+        }
         assert(superType.isSingleClassifierType) { "Not singleClassifierType superType: $superType" }
 
         if (!NullabilityChecker.isPossibleSubtype(this, subType, superType)) return false

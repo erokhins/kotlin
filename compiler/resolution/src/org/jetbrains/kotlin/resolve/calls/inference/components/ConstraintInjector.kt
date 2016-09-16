@@ -104,7 +104,7 @@ class ConstraintInjector(val constraintIncorporator: ConstraintIncorporator) {
 
         fun runIsSubtypeOf(lowerType: UnwrappedType, upperType: UnwrappedType) {
             with(NewKotlinTypeChecker) {
-                if (!isSubtypeOf(lowerType, upperType)) {
+                if (!this@TypeCheckerContext.isSubtypeOf(lowerType, upperType)) {
                     // todo improve error reporting -- add information about base types
                     c.addError(NewConstraintError(lowerType, upperType, position))
                 }

@@ -215,7 +215,7 @@ class NewConstraintSystemImpl(val callComponents: CallContextComponents):
     override fun fixVariable(variable: NewTypeVariable, resultType: UnwrappedType) {
         checkState(State.BUILDING, State.COMPLETION)
 
-        addEqualityConstraint(variable.defaultType, resultType, FixVariableConstraintPosition(variable))
+        callComponents.constraintInjector.addInitialSubtypeConstraint(this, variable.defaultType, resultType, FixVariableConstraintPosition(variable))
         notFixedTypeVariables.remove(variable.freshTypeConstructor)
 
         for (variableWithConstraint in notFixedTypeVariables.values) {
