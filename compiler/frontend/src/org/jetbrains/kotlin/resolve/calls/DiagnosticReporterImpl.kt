@@ -52,7 +52,7 @@ object CallDiagnosticToDiagnostic {
     }
 
     init {
-        put(Errors.UNSAFE_CALL, UnsafeCallDiagnostic::class.java, UnsafeCallDiagnostic::receiverType)
+//        put(Errors.UNSAFE_CALL, UnsafeCallDiagnostic::class.java, UnsafeCallDiagnostic::receiverType)
         put(Errors.TYPE_MISMATCH, TypeMismatchDiagnostic::class.java, TypeMismatchDiagnostic::expectedType, TypeMismatchDiagnostic::actualType)
     }
 
@@ -69,21 +69,6 @@ object CallDiagnosticToDiagnostic {
 }
 
 abstract class DiagnosticReporterImpl(private val bindingTrace: BindingTrace, private val call: Call) : DiagnosticReporter {
-    override fun onCallOperationNode(diagnostic: CallDiagnostic) {
-        val t = call.callOperationNode?.let {
-            CallDiagnosticToDiagnostic.toDiagnostic(it.psi, diagnostic)
-        }
-        if (t != null) {
-            bindingTrace.report(t)
-        }
-        else {
-            when (diagnostic.javaClass) {
-                UnsafeCallDiagnostic::class.java -> {
-                    // todo
-                }
-            }
-        }
-    }
 
     override fun onCallArgument(callArgument: CallArgument, diagnostic: CallDiagnostic) {
         val d = CallDiagnosticToDiagnostic.toDiagnostic((callArgument as ValueArgument).asElement(), diagnostic)

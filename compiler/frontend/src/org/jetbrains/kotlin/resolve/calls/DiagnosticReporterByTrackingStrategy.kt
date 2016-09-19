@@ -39,10 +39,6 @@ class DiagnosticReporterByTrackingStrategy(
 
     }
 
-    override fun onCallOperationNode(diagnostic: CallDiagnostic) {
-
-    }
-
     override fun onCall(diagnostic: CallDiagnostic) {
 
     }
@@ -60,7 +56,12 @@ class DiagnosticReporterByTrackingStrategy(
     }
 
     override fun onCallReceiver(callReceiver: SimpleCallArgument, diagnostic: CallDiagnostic) {
-
+        when (diagnostic.javaClass) {
+            UnsafeCallError::class.java -> {
+                val implicitInvokeCheck = (callReceiver as? ReceiverExpressionArgument)?.isVariableReceiverForInvoke ?: false
+                tracingStrategy.unsafeCall(trace, callReceiver.receiver.receiverValue.type, implicitInvokeCheck)
+            }
+        }
     }
 
     override fun onCallArgument(callArgument: CallArgument, diagnostic: CallDiagnostic) {

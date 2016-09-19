@@ -33,7 +33,8 @@ class FakeArgumentForCallableReference(
 
 class ReceiverExpressionArgument(
         override val receiver: ReceiverValueWithSmartCastInfo,
-        override val isSafeCall: Boolean = false
+        override val isSafeCall: Boolean = false,
+        val isVariableReceiverForInvoke: Boolean = false
 ) : ExpressionArgument {
     override val isSpread: Boolean get() = false
     override val argumentName: Name? get() = null

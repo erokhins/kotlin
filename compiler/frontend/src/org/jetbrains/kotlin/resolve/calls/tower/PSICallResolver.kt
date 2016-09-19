@@ -245,7 +245,7 @@ class PSICallResolver(
 
         // todo: review
         private fun createReceiverCallArgument(variable: SimpleResolutionCandidate): ExpressionArgument =
-                ReceiverExpressionArgument(createReceiverValueWithSmartCastInfo(variable))
+                ReceiverExpressionArgument(createReceiverValueWithSmartCastInfo(variable), isVariableReceiverForInvoke = true)
 
         // todo: decrease hacks count
         private fun createReceiverValueWithSmartCastInfo(variable: SimpleResolutionCandidate): ReceiverValueWithSmartCastInfo {

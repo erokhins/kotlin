@@ -18,7 +18,6 @@ package org.jetbrains.kotlin.resolve.calls.model
 
 import org.jetbrains.kotlin.resolve.calls.tower.ResolutionCandidateApplicability
 import org.jetbrains.kotlin.resolve.calls.tower.ResolutionCandidateApplicability.INAPPLICABLE
-import org.jetbrains.kotlin.resolve.calls.tower.ResolutionCandidateApplicability.MAY_THROW_RUNTIME_ERROR
 import org.jetbrains.kotlin.types.KotlinType
 
 abstract class CallDiagnostic(val candidateApplicability: ResolutionCandidateApplicability) {
@@ -28,7 +27,6 @@ abstract class CallDiagnostic(val candidateApplicability: ResolutionCandidateApp
 interface DiagnosticReporter {
     fun onExplicitReceiver(diagnostic: CallDiagnostic)
 
-    fun onCallOperationNode(diagnostic: CallDiagnostic)
     fun onCall(diagnostic: CallDiagnostic)
 
     fun onTypeArguments(diagnostic: CallDiagnostic)
@@ -43,10 +41,6 @@ interface DiagnosticReporter {
     fun onCallArgumentName(callArgument: CallArgument, diagnostic: CallDiagnostic)
     fun onCallArgumentSpread(callArgument: CallArgument, diagnostic: CallDiagnostic)
 
-}
-
-class UnsafeCallDiagnostic(val receiverType: KotlinType): CallDiagnostic(MAY_THROW_RUNTIME_ERROR) {
-    override fun report(reporter: DiagnosticReporter) = reporter.onCallOperationNode(this)
 }
 
 class TypeMismatchDiagnostic(
