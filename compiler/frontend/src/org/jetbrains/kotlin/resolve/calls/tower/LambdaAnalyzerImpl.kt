@@ -20,9 +20,11 @@ import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingTrace
 import org.jetbrains.kotlin.resolve.calls.BaseResolvedCall
 import org.jetbrains.kotlin.resolve.calls.LambdaAnalyzer
+import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.context.ContextDependency
 import org.jetbrains.kotlin.resolve.calls.model.ASTCall
@@ -56,7 +58,7 @@ class LambdaAnalyzerImpl(
                            expectedReturnType ?: TypeUtils.NO_EXPECTED_TYPE)
 
         val actualContext = outerCallContext.replaceBindingTrace(trace).
-                replaceContextDependency(ContextDependency.INDEPENDENT).replaceExpectedType(expectedType)
+                replaceContextDependency(ContextDependency.DEPENDENT).replaceExpectedType(expectedType)
 
 
         val type = expressionTypingServices.getTypeInfo(expression, actualContext).type?.unwrap() ?: return emptyList()
@@ -70,6 +72,13 @@ class LambdaAnalyzerImpl(
         }
 
         val deparentesized = KtPsiUtil.deparenthesize(lastExpression)
+        val call = deparentesized?.getCall(trace.bindingContext) ?: return emptyList()
+        val onlyResolvedCall = trace[BindingContext.ONLY_RESOLVED_CALL, call]
+
+        if (onlyResolvedCall != null) {
+            return listOf(onlyResolvedCall)
+        }
+
         val resolvedCall = deparentesized.getResolvedCall(trace.bindingContext) ?: return emptyList()
         val completedCall = if (resolvedCall is NewResolvedCallImpl) {
             resolvedCall.completedCall

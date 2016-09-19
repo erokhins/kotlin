@@ -273,7 +273,7 @@ class PSICallResolver(
         val resolvedExplicitReceiver = resolveExplicitReceiver(context, oldCall.explicitReceiver, oldCall.isSafeCall())
         val resolvedTypeArguments = resolveTypeArguments(context, oldCall.typeArguments)
 
-        val argumentsInParenthesis = if (oldCall.callType != Call.CallType.ARRAY_SET_METHOD) {
+        val argumentsInParenthesis = if (oldCall.callType != Call.CallType.ARRAY_SET_METHOD && oldCall.functionLiteralArguments.isEmpty()) {
             oldCall.valueArguments
         }
         else {

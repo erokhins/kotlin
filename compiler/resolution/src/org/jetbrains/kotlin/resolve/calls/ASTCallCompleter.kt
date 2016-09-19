@@ -236,10 +236,10 @@ class ASTCallCompleter(
     private fun SimpleResolutionCandidate.oneStepToEndOrLambda(c: Context, lambdaAnalyzer: LambdaAnalyzer): Boolean {
         if (c.hasContradiction) return true
 
-        for (lambda in c.lambdaArguments) {
-            if (canWeAnalyzeIt(c, lambda)) {
-                analyzeLambda(c, lambdaAnalyzer, astCall, lambda)
-            }
+        val lambda = c.lambdaArguments.find { canWeAnalyzeIt(c, it) }
+        if (lambda != null) {
+            analyzeLambda(c, lambdaAnalyzer, astCall, lambda)
+            return false
         }
 
         val completionOrder = fixationOrderCalculator.computeCompletionOrder(c.asFixationOrderCalculatorContext(), descriptorWithFreshTypes.returnTypeOrNothing)
