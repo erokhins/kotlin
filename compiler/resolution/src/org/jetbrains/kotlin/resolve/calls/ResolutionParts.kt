@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.resolve.calls.inference.model.DeclaredUpperBoundCons
 import org.jetbrains.kotlin.resolve.calls.inference.model.ExplicitTypeParameterConstraintPosition
 import org.jetbrains.kotlin.resolve.calls.inference.model.TypeVariableFromCallableDescriptor
 import org.jetbrains.kotlin.resolve.calls.model.*
+import org.jetbrains.kotlin.resolve.calls.smartcasts.getReceiverValueWithSmartCast
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind.*
 import org.jetbrains.kotlin.resolve.calls.tower.ResolutionCandidateApplicability
 import org.jetbrains.kotlin.resolve.calls.tower.ResolutionCandidateApplicability.IMPOSSIBLE_TO_GENERATE
@@ -37,9 +38,15 @@ import org.jetbrains.kotlin.types.typeUtil.asTypeProjection
 
 internal object CheckVisibility : ResolutionPart {
     override fun SimpleResolutionCandidate.process(): List<CallDiagnostic> {
+        val receiverValue = dispatchReceiverArgument?.receiver?.receiverValue
+        val invisibleMember = Visibilities.findInvisibleMember(receiverValue, candidateDescriptor, containingDescriptor) ?: return emptyList()
 
-        val invisibleMember = Visibilities.findInvisibleMember(
-                dispatchReceiverArgument?.receiver?.receiverValue, candidateDescriptor, containingDescriptor) ?: return emptyList()
+        if (dispatchReceiverArgument is ExpressionArgument) {
+            val smartCastReceiver = getReceiverValueWithSmartCast(receiverValue, dispatchReceiverArgument.type)
+            if (Visibilities.findInvisibleMember(smartCastReceiver, candidateDescriptor, containingDescriptor) == null) {
+                return listOf(SmartCastDiagnostic(dispatchReceiverArgument, dispatchReceiverArgument.type))
+            }
+        }
 
         return listOf(VisibilityError(invisibleMember))
     }

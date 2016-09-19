@@ -88,7 +88,12 @@ abstract class ResolutionDiagnostic(candidateApplicability: ResolutionCandidateA
 }
 
 // todo error for this access from nested class
-class VisibilityError(val invisibleMember: DeclarationDescriptorWithVisibility): ResolutionDiagnostic(RUNTIME_ERROR)
+class VisibilityError(val invisibleMember: DeclarationDescriptorWithVisibility): ResolutionDiagnostic(RUNTIME_ERROR) {
+    override fun report(reporter: DiagnosticReporter) {
+        reporter.onCall(this)
+    }
+}
+
 class NestedClassViaInstanceReference(val classDescriptor: ClassDescriptor): ResolutionDiagnostic(IMPOSSIBLE_TO_GENERATE)
 class InnerClassViaStaticReference(val classDescriptor: ClassDescriptor): ResolutionDiagnostic(IMPOSSIBLE_TO_GENERATE)
 class UnsupportedInnerClassCall(val message: String): ResolutionDiagnostic(IMPOSSIBLE_TO_GENERATE)

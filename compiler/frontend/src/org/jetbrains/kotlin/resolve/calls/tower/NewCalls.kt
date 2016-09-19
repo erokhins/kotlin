@@ -27,8 +27,6 @@ import org.jetbrains.kotlin.resolve.calls.tasks.TracingStrategyForInvoke
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.util.OperatorNameConventions
 
-val USE_NEW_TYPE_INFERENCE = true
-
 val ASTCall.psiAstCall: PSIASTCall get() {
     assert(this is PSIASTCall) {
         "Incorrect ASTCAll: $this. Java class: ${javaClass.canonicalName}"

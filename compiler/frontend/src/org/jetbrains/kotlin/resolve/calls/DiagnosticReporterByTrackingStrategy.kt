@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.resolve.calls.smartcasts.SmartCastManager
 import org.jetbrains.kotlin.resolve.calls.tasks.TracingStrategy
 import org.jetbrains.kotlin.resolve.calls.tower.ExpressionArgumentImpl
 import org.jetbrains.kotlin.resolve.calls.tower.PSIASTCall
+import org.jetbrains.kotlin.resolve.calls.tower.VisibilityError
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 
 class DiagnosticReporterByTrackingStrategy(
@@ -40,7 +41,9 @@ class DiagnosticReporterByTrackingStrategy(
     }
 
     override fun onCall(diagnostic: CallDiagnostic) {
-
+        when (diagnostic.javaClass) {
+            VisibilityError::class.java -> tracingStrategy.invisibleMember(trace, (diagnostic as VisibilityError).invisibleMember)
+        }
     }
 
     override fun onTypeArguments(diagnostic: CallDiagnostic) {
