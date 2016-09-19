@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.types.CommonSupertypes
 import org.jetbrains.kotlin.types.UnwrappedType
 
 object CommonSupertypeCalculatorImpl : CommonSupertypeCalculator {
-    override fun invoke(p1: Collection<UnwrappedType>): UnwrappedType = CommonSupertypes.commonSupertypeForNonDenotableTypes(p1)!!.unwrap()
+    override fun invoke(p1: Collection<UnwrappedType>): UnwrappedType = CommonSupertypes.commonSupertype(p1).unwrap()
 }
 
 object IsDescriptorFromSourcePredicateImpl: IsDescriptorFromSourcePredicate {
