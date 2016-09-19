@@ -116,11 +116,11 @@ class PSICallResolver(
             }
             1 -> {
                 val singleCandidate = result.single()
-                val resolvedCall = astToResolvedCallTransformer.transformAndReport<D>(singleCandidate, trace)
+                val resolvedCall = astToResolvedCallTransformer.transformAndReport<D>(singleCandidate, context, trace)
                 return SingleOverloadResolutionResult(resolvedCall)
             }
             else -> {
-                val resolvedCalls = result.map { astToResolvedCallTransformer.transformAndReport<D>(it, trace = null) }
+                val resolvedCalls = result.map { astToResolvedCallTransformer.transformAndReport<D>(it, context, trace = null) }
                 tracingStrategy.recordAmbiguity(trace, resolvedCalls)
                 if(resolvedCalls.first().status == ResolutionStatus.INCOMPLETE_TYPE_INFERENCE) {
                     tracingStrategy.cannotCompleteResolve(trace, resolvedCalls)

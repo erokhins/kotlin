@@ -23,7 +23,8 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingTrace
 import org.jetbrains.kotlin.resolve.calls.BaseResolvedCall
 import org.jetbrains.kotlin.resolve.calls.CompletedCall
-import org.jetbrains.kotlin.resolve.calls.model.SimpleResolutionCandidate
+import org.jetbrains.kotlin.resolve.calls.DiagnosticReporterByTrackingStrategy
+import org.jetbrains.kotlin.resolve.calls.context.BasicCallResolutionContext
 import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.resolve.calls.results.ResolutionStatus
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo
@@ -39,11 +40,12 @@ class ASTToResolvedCallTransformer {
 
     fun <D : CallableDescriptor> transformAndReport(
             baseResolvedCall: BaseResolvedCall,
+            context: BasicCallResolutionContext,
             trace: BindingTrace? // if trace is not null then all information will be reported to this trace
     ): ResolvedCall<D> {
         if (baseResolvedCall is BaseResolvedCall.CompletedResolvedCall) {
-            baseResolvedCall.allInnerCalls.forEach { transformAndReportCompletedCall<D>(it, trace) }
-            return transformAndReportCompletedCall(baseResolvedCall.completedCall, trace)
+            baseResolvedCall.allInnerCalls.forEach { transformAndReportCompletedCall<D>(it, context, trace) }
+            return transformAndReportCompletedCall(baseResolvedCall.completedCall, context,  trace)
         }
 
         val onlyResolvedCall = (baseResolvedCall as BaseResolvedCall.OnlyResolvedCall)
@@ -54,20 +56,19 @@ class ASTToResolvedCallTransformer {
 
     private fun <D: CallableDescriptor> transformAndReportCompletedCall(
             completedCall: CompletedCall,
+            context: BasicCallResolutionContext,
             trace: BindingTrace?
     ): ResolvedCall<D> {
-        fun <C> C.runIfTraceNotNull(action: (BindingTrace, C)-> Unit): C {
-            if (trace != null) action(trace, this)
+        fun <C> C.runIfTraceNotNull(action: (BasicCallResolutionContext, BindingTrace, C)-> Unit): C {
+            if (trace != null) action(context, trace, this)
             return this
         }
 
         return when (completedCall) {
             is CompletedCall.Simple -> {
-                completedCall.runIfTraceNotNull(this::reportCallDiagnostic)
                 NewResolvedCallImpl<D>(completedCall).runIfTraceNotNull(this::bindResolvedCall)
             }
             is CompletedCall.VariableAsFunction -> {
-                completedCall.variableCall.runIfTraceNotNull(this::reportCallDiagnostic)
                 val resolvedCall = NewVariableAsFunctionResolvedCallImpl(
                         completedCall,
                         NewResolvedCallImpl(completedCall.variableCall),
@@ -80,17 +81,17 @@ class ASTToResolvedCallTransformer {
         }
     }
 
-    private fun bindResolvedCall(trace: BindingTrace, simpleResolvedCall: NewResolvedCallImpl<*>) {
-        reportCallDiagnostic(trace, simpleResolvedCall.completedCall)
+    private fun bindResolvedCall(context: BasicCallResolutionContext, trace: BindingTrace, simpleResolvedCall: NewResolvedCallImpl<*>) {
+        reportCallDiagnostic(context, trace, simpleResolvedCall.completedCall)
         val tracing = simpleResolvedCall.completedCall.astCall.psiAstCall.tracingStrategy
 
         tracing.bindReference(trace, simpleResolvedCall)
         tracing.bindResolvedCall(trace, simpleResolvedCall)
     }
 
-    private fun bindResolvedCall(trace: BindingTrace, variableAsFunction: NewVariableAsFunctionResolvedCallImpl) {
-        reportCallDiagnostic(trace, variableAsFunction.variableCall.completedCall)
-        reportCallDiagnostic(trace, variableAsFunction.functionCall.completedCall)
+    private fun bindResolvedCall(context: BasicCallResolutionContext, trace: BindingTrace, variableAsFunction: NewVariableAsFunctionResolvedCallImpl) {
+        reportCallDiagnostic(context, trace, variableAsFunction.variableCall.completedCall)
+        reportCallDiagnostic(context, trace, variableAsFunction.functionCall.completedCall)
 
         val outerTracingStrategy = variableAsFunction.completedCall.astCall.psiAstCall.tracingStrategy
         outerTracingStrategy.bindReference(trace, variableAsFunction.variableCall)
@@ -98,8 +99,15 @@ class ASTToResolvedCallTransformer {
         variableAsFunction.functionCall.astCall.psiAstCall.tracingStrategy.bindReference(trace, variableAsFunction.functionCall)
     }
 
-    private fun reportCallDiagnostic(trace: BindingTrace, completedCall: CompletedCall.Simple) {
-        // todo
+    private fun reportCallDiagnostic(
+            context: BasicCallResolutionContext,
+            trace: BindingTrace,
+            completedCall: CompletedCall.Simple
+    ) {
+        val diagnosticReporter = DiagnosticReporterByTrackingStrategy(context, trace, completedCall.astCall.psiAstCall)
+        for (diagnostic in completedCall.resolutionStatus.diagnostics) {
+            diagnostic.report(diagnosticReporter)
+        }
     }
 }
 
