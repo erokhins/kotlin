@@ -84,7 +84,11 @@ class DiagnosticReporterByTrackingStrategy(
     private fun reportSmartCast(smartCastDiagnostic: SmartCastDiagnostic) {
         val expressionArgument = smartCastDiagnostic.expressionArgument
         if (expressionArgument is ExpressionArgumentImpl) {
-            expressionArgument.valueArgument
+            val argumentExpression = expressionArgument.valueArgument.getArgumentExpression()
+            val dataFlowValue = DataFlowValueFactory.createDataFlowValue(expressionArgument.receiver.receiverValue, context)
+            SmartCastManager.checkAndRecordPossibleCast(
+                    dataFlowValue, smartCastDiagnostic.smartCastType, argumentExpression, context, call,
+                    recordExpressionType = true)
         }
         else if(expressionArgument is ReceiverExpressionArgument) {
             val receiverValue = expressionArgument.receiver.receiverValue
