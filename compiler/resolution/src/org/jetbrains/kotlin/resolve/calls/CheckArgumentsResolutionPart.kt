@@ -45,16 +45,15 @@ internal object CheckArguments : ResolutionPart {
 
                 val diagnostic =
                         when (argument) {
-                            is ExpressionArgument -> checkExpressionArgument(argument, expectedType)
-                            is SubCallArgument -> checkSubCallArgument(argument, expectedType)
+                            is ExpressionArgument -> checkExpressionArgument(argument, expectedType, isReceiver = false)
+                            is SubCallArgument -> checkSubCallArgument(argument, expectedType, isReceiver = false)
                             is LambdaArgument -> processLambdaArgument(argument, expectedType)
                             is CallableReferenceArgument -> processCallableReferenceArgument(callContext.c, argument, expectedType)
                             else -> error("Incorrect argument type: $argument, ${argument.javaClass.canonicalName}.")
                         }
+                diagnostics.addIfNotNull(diagnostic)
 
                 if (diagnostic != null && !diagnostic.candidateApplicability.isSuccess) break
-
-                diagnostics.addIfNotNull(diagnostic)
             }
         }
         return diagnostics
@@ -185,7 +184,8 @@ internal object CheckArguments : ResolutionPart {
 
 internal fun SimpleResolutionCandidate.checkExpressionArgument(
         expressionArgument: ExpressionArgument,
-        expectedType: UnwrappedType
+        expectedType: UnwrappedType,
+        isReceiver: Boolean
 ): CallDiagnostic? {
     fun SimpleResolutionCandidate.unstableSmartCast(
             unstableType: UnwrappedType?, expectedType: UnwrappedType, position: ArgumentConstraintPosition
@@ -209,7 +209,7 @@ internal fun SimpleResolutionCandidate.checkExpressionArgument(
     }
 
     if (!csBuilder.addIfIsCompatibleSubtypeConstraint(expressionArgument.type, expectedType, position)) {
-        if (csBuilder.addIfIsCompatibleSubtypeConstraint(expressionArgument.type, expectedNullableType, position)) {
+        if (isReceiver && csBuilder.addIfIsCompatibleSubtypeConstraint(expressionArgument.type, expectedNullableType, position)) {
             return UnsafeCallError(expressionArgument)
         }
         else {
@@ -222,7 +222,8 @@ internal fun SimpleResolutionCandidate.checkExpressionArgument(
 
 internal fun SimpleResolutionCandidate.checkSubCallArgument(
         subCallArgument: SubCallArgument,
-        expectedType: UnwrappedType
+        expectedType: UnwrappedType,
+        isReceiver: Boolean
 ): CallDiagnostic? {
     val resolvedCall = subCallArgument.resolvedCall
     val expectedNullableType = expectedType.makeNullableAsSpecified(true)
@@ -235,12 +236,13 @@ internal fun SimpleResolutionCandidate.checkSubCallArgument(
         return null
     }
 
-    if (!csBuilder.addIfIsCompatibleSubtypeConstraint(resolvedCall.currentReturnType, expectedType, position) &&
+    if (isReceiver && !csBuilder.addIfIsCompatibleSubtypeConstraint(resolvedCall.currentReturnType, expectedType, position) &&
         csBuilder.addIfIsCompatibleSubtypeConstraint(resolvedCall.currentReturnType, expectedNullableType, position)
     ) {
         return UnsafeCallError(subCallArgument)
     }
 
+    csBuilder.addSubtypeConstraint(resolvedCall.currentReturnType, expectedType, position)
     return null
 }
 

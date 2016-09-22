@@ -111,7 +111,7 @@ class DiagnosticReporterByTrackingStrategy(
                 val constraintError = diagnostic as NewConstraintError
                 (constraintError.position as ArgumentConstraintPosition)?.let {
                     val expression = it.argument.psiCallArgument.valueArgument.getArgumentExpression() ?: return
-                    Errors.TYPE_MISMATCH.on(expression, constraintError.upperType, constraintError.lowerType)
+                    trace.report(Errors.TYPE_MISMATCH.on(expression, constraintError.upperType, constraintError.lowerType))
                 }
             }
         }

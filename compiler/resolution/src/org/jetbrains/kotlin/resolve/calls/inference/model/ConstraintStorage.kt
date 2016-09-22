@@ -110,7 +110,17 @@ class InitialConstraint(
         val b: UnwrappedType,
         val constraintKind: ConstraintKind, // see [checkConstraint]
         val position: ConstraintPosition
-)
+) {
+    override fun toString(): String {
+        val sign =
+        when (constraintKind) {
+            ConstraintKind.EQUALITY -> "=="
+            ConstraintKind.LOWER -> ":>"
+            ConstraintKind.UPPER -> "<:"
+        }
+        return "$a $sign $b from $position"
+    }
+}
 
 fun InitialConstraint.checkConstraint(substitutor: TypeSubstitutor): Boolean {
     val newA = substitutor.substitute(a)
