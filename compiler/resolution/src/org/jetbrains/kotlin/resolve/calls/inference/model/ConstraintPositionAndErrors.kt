@@ -24,13 +24,25 @@ import org.jetbrains.kotlin.types.UnwrappedType
 
 sealed class ConstraintPosition
 
-class ExplicitTypeParameterConstraintPosition(val typeArgument: SimpleTypeArgument) : ConstraintPosition()
-class ExpectedTypeConstraintPosition(val topLevelCall: ASTCall) : ConstraintPosition()
-class DeclaredUpperBoundConstraintPosition(val typeParameterDescriptor: TypeParameterDescriptor) : ConstraintPosition()
-class ArgumentConstraintPosition(val argument: CallArgument) : ConstraintPosition()
-class FixVariableConstraintPosition(val variable: NewTypeVariable) : ConstraintPosition()
+class ExplicitTypeParameterConstraintPosition(val typeArgument: SimpleTypeArgument) : ConstraintPosition() {
+    override fun toString() = "TypeParameter $typeArgument"
+}
+class ExpectedTypeConstraintPosition(val topLevelCall: ASTCall) : ConstraintPosition() {
+    override fun toString() = "ExpectedType for call $topLevelCall"
+}
+class DeclaredUpperBoundConstraintPosition(val typeParameterDescriptor: TypeParameterDescriptor) : ConstraintPosition() {
+    override fun toString() = "DeclaredUpperBound ${typeParameterDescriptor.name} from ${typeParameterDescriptor.containingDeclaration}"
+}
+class ArgumentConstraintPosition(val argument: CallArgument) : ConstraintPosition() {
+    override fun toString() = "Argument $argument"
+}
+class FixVariableConstraintPosition(val variable: NewTypeVariable) : ConstraintPosition() {
+    override fun toString() = "Fix variable $variable"
+}
 
-class IncorporationConstraintPosition(val from: ConstraintPosition) : ConstraintPosition()
+class IncorporationConstraintPosition(val from: ConstraintPosition) : ConstraintPosition() {
+    override fun toString() = "Incorporate $from"
+}
 
 @Deprecated("Should be used only in SimpleConstraintSystemImpl")
 object SimpleConstraintSystemConstraintPosition : ConstraintPosition()

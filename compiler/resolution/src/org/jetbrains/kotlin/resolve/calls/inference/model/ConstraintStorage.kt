@@ -96,6 +96,8 @@ class Constraint(
     }
 
     override fun hashCode() = typeHashCode
+
+    override fun toString() = "$kind($type) from $position"
 }
 
 interface VariableWithConstraints {
