@@ -18,6 +18,7 @@ package org.jetbrains.kotlin.types.checker
 
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.types.*
+import java.util.*
 
 fun intersectWrappedTypes(types: Collection<KotlinType>) = intersectTypes(types.map { it.unwrap() })
 
@@ -60,7 +61,42 @@ fun intersectTypes(types: List<UnwrappedType>): UnwrappedType {
 // types.size >= 2
 // It is incorrect see to nullability here, because of KT-12684
 private fun intersectTypes(types: List<SimpleType>): SimpleType {
-    val constructor = IntersectionTypeConstructor(types)
-    return KotlinTypeFactory.simpleType(Annotations.EMPTY, constructor, listOf(), false, constructor.createScopeForKotlinType())
+    return TypeIntersector.intersectTypes(types)
 }
 
+object TypeIntersector {
+
+    internal fun intersectTypes(types: List<SimpleType>): SimpleType {
+        assert(types.size > 1) {
+            "Size should be at least 2, but it is ${types.size}"
+        }
+        val inputTypes = ArrayList<SimpleType>()
+        for (type in types) {
+            if (type.constructor is IntersectionTypeConstructor) {
+                inputTypes.addAll(type.constructor.supertypes.map { it.upperIfFlexible() })
+            }
+            else {
+                inputTypes.add(type)
+            }
+        }
+        return intersectTypesWithoutIntersectionType(inputTypes)
+    }
+
+    private fun intersectTypesWithoutIntersectionType(types: List<SimpleType>): SimpleType {
+        val shouldWeMarkAllNullable = types.any { it.isMarkedNullable } && types.none { NullabilityChecker.isSubtypeOfAny(it) }
+        val correctedNullability = types.mapTo(LinkedHashSet()) {
+            if (shouldWeMarkAllNullable) it.makeNullableAsSpecified(true) else it
+        }
+        val filteredSupertypes = correctedNullability.filterNot { upper ->
+            correctedNullability.any { upper != it && NewKotlinTypeChecker.isSubtypeOf(it, upper) }
+        }
+
+        assert(filteredSupertypes.isNotEmpty()) {
+            "This collections cannot be empty! correctedNullability types: $correctedNullability"
+        }
+        if (filteredSupertypes.size < 2) return filteredSupertypes.first()
+
+        val constructor = IntersectionTypeConstructor(filteredSupertypes)
+        return KotlinTypeFactory.simpleType(Annotations.EMPTY, constructor, listOf(), false, constructor.createScopeForKotlinType())
+    }
+}
