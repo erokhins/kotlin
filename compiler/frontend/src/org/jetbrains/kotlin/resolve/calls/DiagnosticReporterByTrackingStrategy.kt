@@ -16,9 +16,14 @@
 
 package org.jetbrains.kotlin.resolve.calls
 
+import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.Call
 import org.jetbrains.kotlin.resolve.BindingTrace
 import org.jetbrains.kotlin.resolve.calls.context.BasicCallResolutionContext
+import org.jetbrains.kotlin.resolve.calls.inference.model.ArgumentConstraintPosition
+import org.jetbrains.kotlin.resolve.calls.inference.model.ConstraintPosition
+import org.jetbrains.kotlin.resolve.calls.inference.model.NewConstraintError
+import org.jetbrains.kotlin.resolve.calls.inference.model.NewTypeVariable
 import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactory
 import org.jetbrains.kotlin.resolve.calls.smartcasts.SmartCastManager
@@ -26,6 +31,7 @@ import org.jetbrains.kotlin.resolve.calls.tasks.TracingStrategy
 import org.jetbrains.kotlin.resolve.calls.tower.ExpressionArgumentImpl
 import org.jetbrains.kotlin.resolve.calls.tower.PSIASTCall
 import org.jetbrains.kotlin.resolve.calls.tower.VisibilityError
+import org.jetbrains.kotlin.resolve.calls.tower.psiCallArgument
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 
 class DiagnosticReporterByTrackingStrategy(
@@ -96,6 +102,18 @@ class DiagnosticReporterByTrackingStrategy(
             SmartCastManager.checkAndRecordPossibleCast(
                     dataFlowValue, smartCastDiagnostic.smartCastType, (receiverValue as? ExpressionReceiver)?.expression, context, call,
                     recordExpressionType = true)
+        }
+    }
+
+    override fun constraintError(diagnostic: CallDiagnostic) {
+        when (diagnostic.javaClass) {
+            NewConstraintError::class.java -> {
+                val constraintError = diagnostic as NewConstraintError
+                (constraintError.position as ArgumentConstraintPosition)?.let {
+                    val expression = it.argument.psiCallArgument.valueArgument.getArgumentExpression() ?: return
+                    Errors.TYPE_MISMATCH.on(expression, constraintError.upperType, constraintError.lowerType)
+                }
+            }
         }
     }
 }

@@ -50,14 +50,14 @@ object SimpleConstraintSystemConstraintPosition : ConstraintPosition()
 
 class NewConstraintError(val lowerType: UnwrappedType, val upperType: UnwrappedType, val position: ConstraintPosition):
         CallDiagnostic(ResolutionCandidateApplicability.INAPPLICABLE) {
-    override fun report(reporter: DiagnosticReporter) = TODO() // todo
+    override fun report(reporter: DiagnosticReporter) = reporter.constraintError(this)
 }
 
 class CapturedTypeFromSubtyping(val typeVariable: NewTypeVariable, val constraintType: UnwrappedType, val position: ConstraintPosition) :
         CallDiagnostic(ResolutionCandidateApplicability.INAPPLICABLE) {
-    override fun report(reporter: DiagnosticReporter) = TODO() // todo
+    override fun report(reporter: DiagnosticReporter) = reporter.constraintError(this)
 }
 
 class NotEnoughInformationForTypeParameter(val typeVariable: NewTypeVariable) : CallDiagnostic(ResolutionCandidateApplicability.INAPPLICABLE) {
-    override fun report(reporter: DiagnosticReporter) = TODO() // todo
+    override fun report(reporter: DiagnosticReporter) = reporter.constraintError(this)
 }

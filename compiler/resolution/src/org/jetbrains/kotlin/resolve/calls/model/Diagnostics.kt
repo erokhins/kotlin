@@ -16,6 +16,8 @@
 
 package org.jetbrains.kotlin.resolve.calls.model
 
+import org.jetbrains.kotlin.resolve.calls.inference.model.ConstraintPosition
+import org.jetbrains.kotlin.resolve.calls.inference.model.NewTypeVariable
 import org.jetbrains.kotlin.resolve.calls.tower.ResolutionCandidateApplicability
 import org.jetbrains.kotlin.resolve.calls.tower.ResolutionCandidateApplicability.INAPPLICABLE
 import org.jetbrains.kotlin.types.KotlinType
@@ -41,6 +43,7 @@ interface DiagnosticReporter {
     fun onCallArgumentName(callArgument: CallArgument, diagnostic: CallDiagnostic)
     fun onCallArgumentSpread(callArgument: CallArgument, diagnostic: CallDiagnostic)
 
+    fun constraintError(diagnostic: CallDiagnostic)
 }
 
 class TypeMismatchDiagnostic(
