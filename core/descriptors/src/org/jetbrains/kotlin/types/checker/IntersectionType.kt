@@ -83,20 +83,22 @@ object TypeIntersector {
     }
 
     private fun intersectTypesWithoutIntersectionType(types: List<SimpleType>): SimpleType {
+        val filteredSupertypes = types.filterNot { upper ->
+            types.any { upper != it && NewKotlinTypeChecker.isSubtypeOf(it, upper) }
+        }
+
+        assert(filteredSupertypes.isNotEmpty()) {
+            "This collections cannot be empty! correctedNullability types: $types"
+        }
+
+        if (filteredSupertypes.size < 2) return filteredSupertypes.first()
+
         val shouldWeMarkAllNullable = types.any { it.isMarkedNullable } && types.none { NullabilityChecker.isSubtypeOfAny(it) }
         val correctedNullability = types.mapTo(LinkedHashSet()) {
             if (shouldWeMarkAllNullable) it.makeNullableAsSpecified(true) else it
         }
-        val filteredSupertypes = correctedNullability.filterNot { upper ->
-            correctedNullability.any { upper != it && NewKotlinTypeChecker.isSubtypeOf(it, upper) }
-        }
 
-        assert(filteredSupertypes.isNotEmpty()) {
-            "This collections cannot be empty! correctedNullability types: $correctedNullability"
-        }
-        if (filteredSupertypes.size < 2) return filteredSupertypes.first()
-
-        val constructor = IntersectionTypeConstructor(filteredSupertypes)
+        val constructor = IntersectionTypeConstructor(correctedNullability as Collection<KotlinType>)
         return KotlinTypeFactory.simpleType(Annotations.EMPTY, constructor, listOf(), false, constructor.createScopeForKotlinType())
     }
 }
