@@ -22,6 +22,7 @@ import org.jetbrains.kotlin.builtins.isFunctionType
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
+import org.jetbrains.kotlin.resolve.calls.inference.ConstraintSystemBuilder
 import org.jetbrains.kotlin.resolve.calls.inference.model.ArgumentConstraintPosition
 import org.jetbrains.kotlin.resolve.calls.inference.model.LambdaTypeVariable
 import org.jetbrains.kotlin.resolve.calls.model.*
@@ -41,22 +42,28 @@ internal object CheckArguments : ResolutionPart {
             val resolvedCallArgument = argumentMappingByOriginal[parameterDescriptor.original] ?: continue
             for (argument in resolvedCallArgument.arguments) {
 
-                val expectedType = argument.getExpectedType(parameterDescriptor)
-
-                val diagnostic =
-                        when (argument) {
-                            is ExpressionArgument -> checkExpressionArgument(argument, expectedType, isReceiver = false)
-                            is SubCallArgument -> checkSubCallArgument(argument, expectedType, isReceiver = false)
-                            is LambdaArgument -> processLambdaArgument(argument, expectedType)
-                            is CallableReferenceArgument -> processCallableReferenceArgument(callContext.c, argument, expectedType)
-                            else -> error("Incorrect argument type: $argument, ${argument.javaClass.canonicalName}.")
-                        }
+                val diagnostic = checkArgument(callContext, csBuilder, argument, argument.getExpectedType(parameterDescriptor))
                 diagnostics.addIfNotNull(diagnostic)
 
                 if (diagnostic != null && !diagnostic.candidateApplicability.isSuccess) break
             }
         }
         return diagnostics
+    }
+
+    fun checkArgument(
+            callContext: CallContext,
+            csBuilder: ConstraintSystemBuilder,
+            argument: CallArgument,
+            expectedType: UnwrappedType
+    ): CallDiagnostic? {
+        return when (argument) {
+            is ExpressionArgument -> checkExpressionArgument(csBuilder, argument, expectedType, isReceiver = false)
+            is SubCallArgument -> checkSubCallArgument(csBuilder, argument, expectedType, isReceiver = false)
+            is LambdaArgument -> processLambdaArgument(callContext.astCall, csBuilder, argument, expectedType)
+            is CallableReferenceArgument -> processCallableReferenceArgument(callContext, csBuilder, argument, expectedType)
+            else -> error("Incorrect argument type: $argument, ${argument.javaClass.canonicalName}.")
+        }
     }
 
     inline fun computeParameterTypes(
@@ -95,7 +102,9 @@ internal object CheckArguments : ResolutionPart {
         return createFreshType()
     }
 
-    fun SimpleResolutionCandidate.processLambdaArgument(
+    fun processLambdaArgument(
+            astCall: ASTCall,
+            csBuilder: ConstraintSystemBuilder,
             argument: LambdaArgument,
             expectedType: UnwrappedType
     ): CallDiagnostic? {
@@ -136,8 +145,9 @@ internal object CheckArguments : ResolutionPart {
         return null
     }
 
-    fun SimpleResolutionCandidate.processCallableReferenceArgument(
-            c: CallContextComponents,
+    fun processCallableReferenceArgument(
+            callContext: CallContext,
+            csBuilder: ConstraintSystemBuilder,
             argument: CallableReferenceArgument,
             expectedType: UnwrappedType
     ): CallDiagnostic? {
@@ -161,8 +171,8 @@ internal object CheckArguments : ResolutionPart {
         when (descriptor) {
             is FunctionDescriptor -> {
                 // todo store resolved
-                val resolvedFunctionReference = c.callableReferenceResolver.resolveFunctionReference(
-                        argument, astCall, expectedType)
+                val resolvedFunctionReference = callContext.c.callableReferenceResolver.resolveFunctionReference(
+                        argument, callContext.astCall, expectedType)
 
                 csBuilder.addSubtypeConstraint(resolvedFunctionReference.reflectionType, expectedType, position)
                 return resolvedFunctionReference.argumentsMapping?.diagnostics?.let {
@@ -172,8 +182,8 @@ internal object CheckArguments : ResolutionPart {
             is PropertyDescriptor -> {
 
                 // todo store resolved
-                val resolvedPropertyReference = c.callableReferenceResolver.resolvePropertyReference(descriptor,
-                        argument, astCall, containingDescriptor)
+                val resolvedPropertyReference = callContext.c.callableReferenceResolver.resolvePropertyReference(descriptor,
+                        argument, callContext.astCall, callContext.scopeTower.lexicalScope.ownerDescriptor)
                 csBuilder.addSubtypeConstraint(resolvedPropertyReference.reflectionType, expectedType, position)
             }
             else -> throw UnsupportedOperationException("Callable reference resolved to an unsupported descriptor: $descriptor")
@@ -182,12 +192,13 @@ internal object CheckArguments : ResolutionPart {
     }
 }
 
-internal fun SimpleResolutionCandidate.checkExpressionArgument(
+internal fun checkExpressionArgument(
+        csBuilder: ConstraintSystemBuilder,
         expressionArgument: ExpressionArgument,
         expectedType: UnwrappedType,
         isReceiver: Boolean
 ): CallDiagnostic? {
-    fun SimpleResolutionCandidate.unstableSmartCastOrSubtypeError(
+    fun unstableSmartCastOrSubtypeError(
             unstableType: UnwrappedType?, expectedType: UnwrappedType, position: ArgumentConstraintPosition
     ): CallDiagnostic? {
         if (unstableType != null) {
@@ -229,7 +240,8 @@ internal fun SimpleResolutionCandidate.checkExpressionArgument(
     return null
 }
 
-internal fun SimpleResolutionCandidate.checkSubCallArgument(
+internal fun checkSubCallArgument(
+        csBuilder: ConstraintSystemBuilder,
         subCallArgument: SubCallArgument,
         expectedType: UnwrappedType,
         isReceiver: Boolean

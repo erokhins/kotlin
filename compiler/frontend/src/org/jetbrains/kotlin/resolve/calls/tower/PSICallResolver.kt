@@ -32,7 +32,6 @@ import org.jetbrains.kotlin.resolve.calls.*
 import org.jetbrains.kotlin.resolve.calls.BaseResolvedCall.OnlyResolvedCall
 import org.jetbrains.kotlin.resolve.calls.callResolverUtil.ResolveArgumentsMode
 import org.jetbrains.kotlin.resolve.calls.callUtil.createLookupLocation
-import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
 import org.jetbrains.kotlin.resolve.calls.callUtil.isSafeCall
 import org.jetbrains.kotlin.resolve.calls.context.BasicCallResolutionContext
 import org.jetbrains.kotlin.resolve.calls.context.ContextDependency
@@ -405,21 +404,7 @@ class PSICallResolver(
         }
 
         val typeInfo = expressionTypingServices.getTypeInfo(ktExpression, context)
-        val type = typeInfo.type ?: return parseErrorArgument
-
-        val onlyResolvedCall = ktExpression.getCall(context.trace.bindingContext)?.let {
-            context.trace.get(BindingContext.ONLY_RESOLVED_CALL, it)
-        }
-        val receiverToCast = context.transformToReceiverWithSmartCastInfo(
-                ExpressionReceiver.create(ktExpression, type, context.trace.bindingContext)
-        )
-
-        return if (onlyResolvedCall == null) {
-            ExpressionArgumentImpl(valueArgument, typeInfo.dataFlowInfo, receiverToCast)
-        }
-        else {
-            SubCallArgumentImpl(valueArgument, typeInfo.dataFlowInfo, receiverToCast, onlyResolvedCall)
-        }
+        return createSimplePSICallArgument(context, valueArgument, typeInfo) ?: parseErrorArgument
     }
 
     private fun checkNoSpread(context: BasicCallResolutionContext, valueArgument: ValueArgument) {

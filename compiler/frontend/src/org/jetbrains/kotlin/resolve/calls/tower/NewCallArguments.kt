@@ -19,7 +19,9 @@ package org.jetbrains.kotlin.resolve.calls.tower
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.BaseResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
 import org.jetbrains.kotlin.resolve.calls.context.BasicCallResolutionContext
 import org.jetbrains.kotlin.resolve.calls.inference.model.ConstraintStorage
 import org.jetbrains.kotlin.resolve.calls.model.*
@@ -30,6 +32,7 @@ import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValueWithSmartCastI
 import org.jetbrains.kotlin.resolve.scopes.receivers.TransientReceiver
 import org.jetbrains.kotlin.types.UnwrappedType
 import org.jetbrains.kotlin.types.checker.intersectWrappedTypes
+import org.jetbrains.kotlin.types.expressions.KotlinTypeInfo
 
 class SimpleTypeArgumentImpl(override val type: UnwrappedType): SimpleTypeArgument
 
@@ -134,4 +137,26 @@ class ExpressionArgumentImpl(
             type = receiver.receiverValue.type.unwrap()
         }
     }
+}
+
+internal fun createSimplePSICallArgument(
+        context: BasicCallResolutionContext,
+        valueArgument: ValueArgument,
+        typeInfo: KotlinTypeInfo
+): PSICallArgument? {
+    val ktExpression = KtPsiUtil.deparenthesize(valueArgument.getArgumentExpression()) ?: return null
+    val onlyResolvedCall = ktExpression.getCall(context.trace.bindingContext)?.let {
+        context.trace.bindingContext.get(BindingContext.ONLY_RESOLVED_CALL, it)
+    }
+    val receiverToCast = context.transformToReceiverWithSmartCastInfo(
+            ExpressionReceiver.create(ktExpression, typeInfo.type?.unwrap() ?: return null, context.trace.bindingContext)
+    )
+
+    return if (onlyResolvedCall == null) {
+        ExpressionArgumentImpl(valueArgument, typeInfo.dataFlowInfo, receiverToCast)
+    }
+    else {
+        SubCallArgumentImpl(valueArgument, typeInfo.dataFlowInfo, receiverToCast, onlyResolvedCall)
+    }
+
 }

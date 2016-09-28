@@ -16,8 +16,10 @@
 
 package org.jetbrains.kotlin.resolve.calls.model
 
+import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValueWithSmartCastInfo
+import org.jetbrains.kotlin.resolve.scopes.receivers.TransientReceiver
 import org.jetbrains.kotlin.types.UnwrappedType
 import org.jetbrains.kotlin.types.checker.intersectWrappedTypes
 import org.jetbrains.kotlin.utils.addToStdlib.check
@@ -55,4 +57,13 @@ class ReceiverExpressionArgument(
     }
 
     override fun toString() = "$receiver" + if(isSafeCall) "?" else ""
+}
+
+class EmptyLabeledReturn(builtIns: KotlinBuiltIns) : ExpressionArgument {
+    override val isSpread: Boolean get() = false
+    override val argumentName: Name? get() = null
+    override val receiver = ReceiverValueWithSmartCastInfo(TransientReceiver(builtIns.unitType), emptySet(), true)
+    override val isSafeCall: Boolean get() = false
+    override val type: UnwrappedType get() = receiver.receiverValue.type.unwrap()
+    override val unstableType: UnwrappedType? get() = null
 }

@@ -20,15 +20,13 @@ import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingTrace
-import org.jetbrains.kotlin.resolve.calls.BaseResolvedCall
 import org.jetbrains.kotlin.resolve.calls.LambdaAnalyzer
-import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.context.ContextDependency
 import org.jetbrains.kotlin.resolve.calls.model.ASTCall
+import org.jetbrains.kotlin.resolve.calls.model.CallArgument
 import org.jetbrains.kotlin.resolve.calls.model.LambdaArgument
+import org.jetbrains.kotlin.resolve.calls.util.CallMaker
 import org.jetbrains.kotlin.resolve.calls.util.createFunctionType
 import org.jetbrains.kotlin.resolve.descriptorUtil.builtIns
 import org.jetbrains.kotlin.types.TypeUtils
@@ -46,7 +44,7 @@ class LambdaAnalyzerImpl(
             receiverType: UnwrappedType?,
             parameters: List<UnwrappedType>,
             expectedReturnType: UnwrappedType?
-    ): List<BaseResolvedCall> {
+    ): List<CallArgument> {
         val psiCallArgument = lambdaArgument.psiCallArgument
         val outerCallContext = (psiCallArgument as? LambdaArgumentIml)?.outerCallContext ?:
                                (psiCallArgument as FunctionExpressionImpl).outerCallContext
@@ -61,7 +59,7 @@ class LambdaAnalyzerImpl(
                 replaceContextDependency(ContextDependency.DEPENDENT).replaceExpectedType(expectedType)
 
 
-        val type = expressionTypingServices.getTypeInfo(expression, actualContext).type?.unwrap() ?: return emptyList()
+        val typeInfo = expressionTypingServices.getTypeInfo(expression, actualContext)
 
         val lastExpression: KtExpression?
         if (psiCallArgument is LambdaArgumentIml) {
@@ -71,27 +69,9 @@ class LambdaAnalyzerImpl(
             lastExpression = (psiCallArgument as FunctionExpressionImpl).ktFunction.bodyExpression?.lastBlockStatementOrThis()
         }
 
-        val deparentesized = KtPsiUtil.deparenthesize(lastExpression)
-        val call = deparentesized?.getCall(trace.bindingContext) ?: return emptyList()
-        val onlyResolvedCall = trace[BindingContext.ONLY_RESOLVED_CALL, call]
+        val deparentesized = KtPsiUtil.deparenthesize(lastExpression) ?: return emptyList()
+        val simpleArgument = createSimplePSICallArgument(actualContext, CallMaker.makeExternalValueArgument(deparentesized), typeInfo)
 
-        if (onlyResolvedCall != null) {
-            return listOf(onlyResolvedCall)
-        }
-
-        val resolvedCall = deparentesized.getResolvedCall(trace.bindingContext) ?: return emptyList()
-        val completedCall = if (resolvedCall is NewResolvedCallImpl) {
-            resolvedCall.completedCall
-        }
-        else if (resolvedCall is NewVariableAsFunctionResolvedCallImpl) {
-            resolvedCall.completedCall
-        }
-        else null
-        if (completedCall != null) {
-            return listOf(BaseResolvedCall.CompletedResolvedCall(completedCall, emptyList()))
-        }
-
-        // todo other cases
-        return emptyList()
+        return listOfNotNull(simpleArgument)
     }
 }

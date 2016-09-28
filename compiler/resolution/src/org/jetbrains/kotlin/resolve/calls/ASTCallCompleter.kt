@@ -19,6 +19,7 @@ package org.jetbrains.kotlin.resolve.calls
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ReceiverParameterDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
+import org.jetbrains.kotlin.resolve.calls.inference.ConstraintSystemBuilder
 import org.jetbrains.kotlin.resolve.calls.inference.components.ConstraintInjector
 import org.jetbrains.kotlin.resolve.calls.inference.components.FixationOrderCalculator
 import org.jetbrains.kotlin.resolve.calls.inference.components.ResultTypeResolver
@@ -42,7 +43,7 @@ interface LambdaAnalyzer {
             receiverType: UnwrappedType?,
             parameters: List<UnwrappedType>,
             expectedReturnType: UnwrappedType? // null means, that return type is not proper i.e. it depends on some type variables
-    ): List<BaseResolvedCall>
+    ): List<CallArgument>
 }
 
 sealed class CompletedCall {
@@ -104,8 +105,8 @@ class ASTCallCompleter(
         // mutable operations
         fun asConstraintInjectorContext(): ConstraintInjector.Context
         fun addError(error: CallDiagnostic)
-        fun addInnerCall(innerCall: BaseResolvedCall.OnlyResolvedCall)
         fun fixVariable(variable: NewTypeVariable, resultType: UnwrappedType)
+        fun getBuilder(): ConstraintSystemBuilder
     }
 
     fun transformWhenAmbiguity(candidate: NewResolutionCandidate): BaseResolvedCall =
@@ -242,7 +243,7 @@ class ASTCallCompleter(
 
         val lambda = c.lambdaArguments.find { canWeAnalyzeIt(c, it) }
         if (lambda != null) {
-            analyzeLambda(c, lambdaAnalyzer, astCall, lambda)
+            analyzeLambda(c, lambdaAnalyzer, callContext, lambda)
             return false
         }
 
@@ -254,7 +255,7 @@ class ASTCallCompleter(
             if (variable is LambdaTypeVariable) {
                 val resolvedLambda = c.lambdaArguments.find { it.argument == variable.lambdaArgument } ?: return true
                 if (canWeAnalyzeIt(c, resolvedLambda)) {
-                    analyzeLambda(c, lambdaAnalyzer, astCall, resolvedLambda)
+                    analyzeLambda(c, lambdaAnalyzer, callContext, resolvedLambda)
                     return false
                 }
             }
@@ -269,32 +270,31 @@ class ASTCallCompleter(
         return true
     }
 
-    private fun analyzeLambda(c: Context, lambdaAnalyzer: LambdaAnalyzer, topLevelCall: ASTCall, lambda: ResolvedLambdaArgument) {
+    private fun analyzeLambda(c: Context, lambdaAnalyzer: LambdaAnalyzer, topLevelCallContext: CallContext, lambda: ResolvedLambdaArgument) {
         val currentSubstitutor = c.buildCurrentSubstitutor()
         fun substitute(type: UnwrappedType) = currentSubstitutor.safeSubstitute(type, Variance.INVARIANT).unwrap()
 
         val receiver = lambda.receiver?.let(::substitute)
         val parameters = lambda.parameters.map(::substitute)
         val expectedType = lambda.returnType.check { c.canBeProper(it) }?.let(::substitute)
-        val callsFromLambda = lambdaAnalyzer.analyzeAndGetRelatedCalls(topLevelCall, lambda.argument, receiver, parameters, expectedType)
+        val callsFromLambda = lambdaAnalyzer.analyzeAndGetRelatedCalls(topLevelCallContext.astCall, lambda.argument, receiver, parameters, expectedType)
         lambda.analyzed = true
 
-        val injectorContext = c.asConstraintInjectorContext()
-        val position = ArgumentConstraintPosition(lambda.argument)
         for (innerCall in callsFromLambda) {
-            when (innerCall) {
-                is BaseResolvedCall.CompletedResolvedCall -> {
-                    val returnType = innerCall.completedCall.lastCall.resultingDescriptor.returnTypeOrNothing
-                    constraintInjector.addInitialSubtypeConstraint(injectorContext, returnType, lambda.returnType, position)
-                }
-                is BaseResolvedCall.OnlyResolvedCall -> {
-                    // todo register call
-                    val returnType = innerCall.candidate.lastCall.descriptorWithFreshTypes.returnTypeOrNothing
-                    c.addInnerCall(innerCall)
-                    constraintInjector.addInitialSubtypeConstraint(injectorContext, returnType, lambda.returnType, position)
-                }
-            }
+            CheckArguments.checkArgument(topLevelCallContext, c.getBuilder(), innerCall, lambda.returnType)
         }
+//            when (innerCall) {
+//                is BaseResolvedCall.CompletedResolvedCall -> {
+//                    val returnType = innerCall.completedCall.lastCall.resultingDescriptor.returnTypeOrNothing
+//                    constraintInjector.addInitialSubtypeConstraint(injectorContext, returnType, lambda.returnType, position)
+//                }
+//                is BaseResolvedCall.OnlyResolvedCall -> {
+//                    // todo register call
+//                    val returnType = innerCall.candidate.lastCall.descriptorWithFreshTypes.returnTypeOrNothing
+//                    c.addInnerCall(innerCall)
+//                    constraintInjector.addInitialSubtypeConstraint(injectorContext, returnType, lambda.returnType, position)
+//                }
+//            }
     }
 
     private fun canWeAnalyzeIt(c: Context, lambda: ResolvedLambdaArgument): Boolean {

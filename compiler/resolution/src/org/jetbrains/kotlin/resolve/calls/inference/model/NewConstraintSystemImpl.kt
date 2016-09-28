@@ -60,7 +60,7 @@ class NewConstraintSystemImpl(val callComponents: CallContextComponents):
     override val diagnostics: List<CallDiagnostic>
         get() = storage.errors
 
-    override fun getBuilder() = apply { checkState(State.BUILDING) }
+    override fun getBuilder() = apply { checkState(State.BUILDING, State.COMPLETION) }
 
     override fun asConstraintInjectorContext() = apply { checkState(State.BUILDING, State.COMPLETION) }
 
@@ -78,25 +78,25 @@ class NewConstraintSystemImpl(val callComponents: CallContextComponents):
 
     // ConstraintSystemBuilder
     override fun registerVariable(variable: NewTypeVariable) {
-        checkState(State.BUILDING)
+        checkState(State.BUILDING, State.COMPLETION)
 
         storage.allTypeVariables[variable.freshTypeConstructor] = variable
         storage.notFixedTypeVariables[variable.freshTypeConstructor] = MutableVariableWithConstraints(variable)
     }
 
     override fun addSubtypeConstraint(lowerType: UnwrappedType, upperType: UnwrappedType, position: ConstraintPosition) =
-            callComponents.constraintInjector.addInitialSubtypeConstraint(apply { checkState(State.BUILDING) }, lowerType, upperType, position)
+            callComponents.constraintInjector.addInitialSubtypeConstraint(apply { checkState(State.BUILDING, State.COMPLETION) }, lowerType, upperType, position)
 
     override fun addEqualityConstraint(a: UnwrappedType, b: UnwrappedType, position: ConstraintPosition) =
-            callComponents.constraintInjector.addInitialEqualityConstraint(apply { checkState(State.BUILDING) }, a, b, position)
+            callComponents.constraintInjector.addInitialEqualityConstraint(apply { checkState(State.BUILDING, State.COMPLETION) }, a, b, position)
 
     override fun addLambdaArgument(resolvedLambdaArgument: ResolvedLambdaArgument) {
-        checkState(State.BUILDING)
+        checkState(State.BUILDING, State.COMPLETION)
         storage.lambdaArguments.add(resolvedLambdaArgument)
     }
 
     override fun addIfIsCompatibleSubtypeConstraint(lowerType: UnwrappedType, upperType: UnwrappedType, position: ConstraintPosition): Boolean {
-        checkState(State.BUILDING)
+        checkState(State.BUILDING, State.COMPLETION)
 
         if (hasContradiction) return false
         addSubtypeConstraint(lowerType, upperType, position)

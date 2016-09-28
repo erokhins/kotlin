@@ -189,8 +189,8 @@ internal object CheckReceivers : ResolutionPart {
         val expectedType = receiverParameter.type.unwrap()
 
         return when (receiverArgument) {
-            is ExpressionArgument -> checkExpressionArgument(receiverArgument, expectedType, isReceiver = true)
-            is SubCallArgument -> checkSubCallArgument(receiverArgument, expectedType, isReceiver = true)
+            is ExpressionArgument -> checkExpressionArgument(csBuilder, receiverArgument, expectedType, isReceiver = true)
+            is SubCallArgument -> checkSubCallArgument(csBuilder, receiverArgument, expectedType, isReceiver = true)
             else -> incorrectReceiver(receiverArgument)
         }
     }
