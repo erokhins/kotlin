@@ -35,6 +35,9 @@ interface ASTCall {
     val argumentsInParenthesis: List<CallArgument>
 
     val externalArgument: CallArgument?
+
+    val isInfixCall: Boolean
+    val isOperatorCall: Boolean
 }
 
 private fun SimpleCallArgument.checkReceiverInvariants() {

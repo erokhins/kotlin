@@ -72,6 +72,8 @@ class CallContext(
 enum class ASTCallKind(vararg resolutionPart: ResolutionPart) {
     VARIABLE(
             CheckVisibility,
+            CheckInfixResolutionPart,
+            CheckOperatorResolutionPart,
             NoTypeArguments,
             NoArguments,
             CreteDescriptorWithFreshTypeVariables,
@@ -80,6 +82,8 @@ enum class ASTCallKind(vararg resolutionPart: ResolutionPart) {
     ),
     FUNCTION(
             CheckVisibility,
+            CheckInfixResolutionPart,
+            CheckOperatorResolutionPart,
             MapTypeArguments,
             MapArguments,
             CreteDescriptorWithFreshTypeVariables,

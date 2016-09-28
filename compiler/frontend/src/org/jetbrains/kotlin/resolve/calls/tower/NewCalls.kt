@@ -20,6 +20,8 @@ import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.Call
 import org.jetbrains.kotlin.resolve.calls.ASTCallKind
 import org.jetbrains.kotlin.resolve.calls.CallTransformer
+import org.jetbrains.kotlin.resolve.calls.callResolverUtil.isConventionCall
+import org.jetbrains.kotlin.resolve.calls.callResolverUtil.isInfixCall
 import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo
 import org.jetbrains.kotlin.resolve.calls.tasks.TracingStrategy
@@ -54,7 +56,10 @@ class ASTCallImpl(
         override val externalArgument: CallArgument?,
         override val startingDataFlowInfo: DataFlowInfo,
         override val resultDataFlowInfo: DataFlowInfo
-) : PSIASTCall()
+) : PSIASTCall() {
+    override val isInfixCall: Boolean get() = isInfixCall(psiCall)
+    override val isOperatorCall: Boolean get() = isConventionCall(psiCall)
+}
 
 class CallForVariable(
         val baseCall: ASTCallImpl,
@@ -71,6 +76,9 @@ class CallForVariable(
 
     override val tracingStrategy: TracingStrategy get() = baseCall.tracingStrategy
     override val psiCall: Call
+
+    override val isInfixCall: Boolean get() = false
+    override val isOperatorCall: Boolean get() = false
 
     init {
         psiCall = CallTransformer.stripCallArguments(baseCall.psiCall).let {
@@ -94,6 +102,9 @@ class CallForInvoke(
     override val resultDataFlowInfo: DataFlowInfo get() = baseCall.resultDataFlowInfo
     override val psiCall: Call
     override val tracingStrategy: TracingStrategy
+
+    override val isInfixCall: Boolean get() = false
+    override val isOperatorCall: Boolean get() = true
 
     init {
         val variableReceiver = dispatchReceiverForInvokeExtension ?: explicitReceiver

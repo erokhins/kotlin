@@ -62,5 +62,7 @@ class SimpleConstraintSystemImpl(callComponents: CallContextComponents) : Simple
         override val typeArguments: List<TypeArgument> get() = throw UnsupportedOperationException()
         override val argumentsInParenthesis: List<CallArgument> get() = throw UnsupportedOperationException()
         override val externalArgument: CallArgument? get() = throw UnsupportedOperationException()
+        override val isInfixCall: Boolean get() = throw UnsupportedOperationException()
+        override val isOperatorCall: Boolean get() = throw UnsupportedOperationException()
     }
 }
