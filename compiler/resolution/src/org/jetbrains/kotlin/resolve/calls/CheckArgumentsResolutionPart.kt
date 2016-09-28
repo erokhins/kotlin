@@ -187,7 +187,7 @@ internal fun SimpleResolutionCandidate.checkExpressionArgument(
         expectedType: UnwrappedType,
         isReceiver: Boolean
 ): CallDiagnostic? {
-    fun SimpleResolutionCandidate.unstableSmartCast(
+    fun SimpleResolutionCandidate.unstableSmartCastOrSubtypeError(
             unstableType: UnwrappedType?, expectedType: UnwrappedType, position: ArgumentConstraintPosition
     ): CallDiagnostic? {
         if (unstableType != null) {
@@ -203,17 +203,26 @@ internal fun SimpleResolutionCandidate.checkExpressionArgument(
     val position = ArgumentConstraintPosition(expressionArgument)
     if (expressionArgument.isSafeCall) {
         if (!csBuilder.addIfIsCompatibleSubtypeConstraint(expressionArgument.type, expectedNullableType, position)) {
-            return unstableSmartCast(expressionArgument.unstableType, expectedNullableType, position)?.let { return it }
+            return unstableSmartCastOrSubtypeError(expressionArgument.unstableType, expectedNullableType, position)?.let { return it }
         }
         return null
     }
 
     if (!csBuilder.addIfIsCompatibleSubtypeConstraint(expressionArgument.type, expectedType, position)) {
-        if (isReceiver && csBuilder.addIfIsCompatibleSubtypeConstraint(expressionArgument.type, expectedNullableType, position)) {
+        if (!isReceiver) {
+            return unstableSmartCastOrSubtypeError(expressionArgument.unstableType, expectedType, position)?.let { return it }
+        }
+
+        val unstableType = expressionArgument.unstableType
+        if (unstableType != null && csBuilder.addIfIsCompatibleSubtypeConstraint(unstableType, expectedType, position)) {
+            return UnstableSmartCast(expressionArgument, unstableType)
+        }
+        else if (csBuilder.addIfIsCompatibleSubtypeConstraint(expressionArgument.type, expectedNullableType, position)) {
             return UnsafeCallError(expressionArgument)
         }
         else {
-            return unstableSmartCast(expressionArgument.unstableType, expectedType, position)?.let { return it }
+            csBuilder.addSubtypeConstraint(expressionArgument.type, expectedType, position)
+            return null
         }
     }
 

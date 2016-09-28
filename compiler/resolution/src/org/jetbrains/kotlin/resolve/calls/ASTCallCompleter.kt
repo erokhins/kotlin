@@ -193,6 +193,10 @@ class ASTCallCompleter(
             candidate.status.diagnostics.filterIsInstance<UnsafeCallError>().none {
                 it.receiver == receiver
             }
+            &&
+            candidate.status.diagnostics.filterIsInstance<UnstableSmartCast>().none {
+                it.expressionArgument == receiver
+            }
         }
     }
 

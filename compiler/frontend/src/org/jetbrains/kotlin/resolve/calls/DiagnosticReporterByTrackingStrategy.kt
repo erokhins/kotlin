@@ -73,6 +73,7 @@ class DiagnosticReporterByTrackingStrategy(
     override fun onCallArgument(callArgument: CallArgument, diagnostic: CallDiagnostic) {
         when (diagnostic.javaClass) {
             SmartCastDiagnostic::class.java -> reportSmartCast(diagnostic as SmartCastDiagnostic)
+            UnstableSmartCast::class.java -> reportUnstableSmartCast(diagnostic as UnstableSmartCast)
         }
     }
 
@@ -100,6 +101,11 @@ class DiagnosticReporterByTrackingStrategy(
                     dataFlowValue, smartCastDiagnostic.smartCastType, (receiverValue as? ExpressionReceiver)?.expression, context, call,
                     recordExpressionType = true)
         }
+    }
+
+    private fun reportUnstableSmartCast(unstableSmartCast: UnstableSmartCast) {
+        // todo hack -- remove it after removing SmartCastManager
+        reportSmartCast(SmartCastDiagnostic(unstableSmartCast.expressionArgument, unstableSmartCast.targetType))
     }
 
     override fun constraintError(diagnostic: CallDiagnostic) {
