@@ -17,11 +17,11 @@
 package org.jetbrains.kotlin.resolve.calls.components
 
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.descriptors.CallableMemberDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.resolve.calls.model.*
-import org.jetbrains.kotlin.resolve.calls.tower.ResolutionCandidateApplicability
-import org.jetbrains.kotlin.resolve.calls.tower.ResolutionCandidateApplicability.INAPPLICABLE
+import org.jetbrains.kotlin.resolve.calls.tower.ResolutionCandidateApplicability.*
 import org.jetbrains.kotlin.resolve.descriptorUtil.hasDefaultValue
 import java.util.*
 
@@ -135,26 +135,48 @@ class ArgumentsToParametersMapper {
         private fun processNamedArgument(argument: CallArgument, name: Name) {
             if (!descriptor.hasStableParameterNames()) {
                 addDiagnostic(NamedArgumentNotAllowed(argument, descriptor))
-                return
             }
 
-            val parameter = getParameterByName(name)
-            if (parameter == null) {
-                addDiagnostic(NameNotFound(argument, descriptor))
-                return
-            }
+            val parameter = findParameterByName(argument, name) ?: return
+
+            addDiagnostic(NamedArgumentReference(argument, parameter))
 
             result[parameter.original]?.let {
                 addDiagnostic(ArgumentPassedTwice(argument, parameter, it))
                 return
             }
 
-            parameter.getOverriddenParameterWithOtherName()?.let {
-                addDiagnostic(NameForAmbiguousParameter(argument, parameter, it))
-            }
-
             result[parameter.original] = ResolvedCallArgument.SimpleArgument(argument)
         }
+
+        private fun findParameterByName(argument: CallArgument, name: Name): ValueParameterDescriptor? {
+            val parameter = getParameterByName(name)
+
+            if (descriptor is CallableMemberDescriptor && descriptor.kind == CallableMemberDescriptor.Kind.FAKE_OVERRIDE) {
+                if (parameter == null) {
+                    for (valueParameter in descriptor.valueParameters) {
+                        val matchedParameter = valueParameter.overriddenDescriptors.firstOrNull {
+                            it.containingDeclaration.hasStableParameterNames() && it.name == name
+                        }
+                        if (matchedParameter != null) {
+                            addDiagnostic(NamedArgumentReference(argument, valueParameter))
+                            addDiagnostic(NameForAmbiguousParameter(argument, valueParameter, matchedParameter))
+                            return matchedParameter
+                        }
+                    }
+                }
+                else {
+                    parameter.getOverriddenParameterWithOtherName()?.let {
+                        addDiagnostic(NameForAmbiguousParameter(argument, parameter, it))
+                    }
+                }
+            }
+
+            if (parameter == null) addDiagnostic(NameNotFound(argument, descriptor))
+
+            return parameter
+        }
+
 
         fun processArgumentsInParenthesis(arguments: List<CallArgument>) {
             for (argument in arguments) {
@@ -221,6 +243,9 @@ class ArgumentsToParametersMapper {
                     if (parameter.hasDefaultValue()) {
                         result[parameter.original] = ResolvedCallArgument.DefaultArgument
                     }
+                    else if (parameter.isVararg) {
+                        result[parameter.original] = ResolvedCallArgument.VarargArgument(emptyList())
+                    }
                     else {
                         addDiagnostic(NoValueForParameter(parameter, descriptor))
                     }
@@ -280,12 +305,19 @@ class NameForAmbiguousParameter(
         val argument: CallArgument,
         val parameterDescriptor: ValueParameterDescriptor,
         val overriddenParameterWithOtherName: ValueParameterDescriptor
-) : CallDiagnostic(ResolutionCandidateApplicability.CONVENTION_ERROR) {
+) : CallDiagnostic(CONVENTION_ERROR) {
+    override fun report(reporter: DiagnosticReporter) = reporter.onCallArgumentName(argument, this)
+}
+
+class NamedArgumentReference(
+        val argument: CallArgument,
+        val parameterDescriptor: ValueParameterDescriptor
+) : CallDiagnostic(RESOLVED) {
     override fun report(reporter: DiagnosticReporter) = reporter.onCallArgumentName(argument, this)
 }
 
 val ValueParameterDescriptor.isVararg: Boolean get() = varargElementType != null
 
 fun ValueParameterDescriptor.getOverriddenParameterWithOtherName() = overriddenDescriptors.firstOrNull {
-    it.hasStableParameterNames() && it.name != name
+    it.containingDeclaration.hasStableParameterNames() && it.name != name
 }

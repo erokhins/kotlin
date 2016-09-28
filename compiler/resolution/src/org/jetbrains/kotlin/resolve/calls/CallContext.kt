@@ -82,8 +82,6 @@ enum class ASTCallKind(vararg resolutionPart: ResolutionPart) {
     ),
     FUNCTION(
             CheckVisibility,
-            CheckInfixResolutionPart,
-            CheckOperatorResolutionPart,
             MapTypeArguments,
             MapArguments,
             CreteDescriptorWithFreshTypeVariables,

@@ -16,9 +16,14 @@
 
 package org.jetbrains.kotlin.resolve.calls
 
+import org.jetbrains.kotlin.builtins.functions.FunctionInvokeDescriptor
 import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.diagnostics.Errors.*
+import org.jetbrains.kotlin.diagnostics.Errors.BadNamedArgumentsTarget.*
 import org.jetbrains.kotlin.psi.Call
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingTrace
+import org.jetbrains.kotlin.resolve.calls.components.*
 import org.jetbrains.kotlin.resolve.calls.context.BasicCallResolutionContext
 import org.jetbrains.kotlin.resolve.calls.inference.model.ArgumentConstraintPosition
 import org.jetbrains.kotlin.resolve.calls.inference.model.ConstraintPosition
@@ -46,6 +51,7 @@ class DiagnosticReporterByTrackingStrategy(
     override fun onCall(diagnostic: CallDiagnostic) {
         when (diagnostic.javaClass) {
             VisibilityError::class.java -> tracingStrategy.invisibleMember(trace, (diagnostic as VisibilityError).invisibleMember)
+            NoValueForParameter::class.java -> tracingStrategy.noValueForParameter(trace, (diagnostic as NoValueForParameter).parameterDescriptor)
         }
     }
 
@@ -78,7 +84,20 @@ class DiagnosticReporterByTrackingStrategy(
     }
 
     override fun onCallArgumentName(callArgument: CallArgument, diagnostic: CallDiagnostic) {
+        val nameReference = callArgument.psiCallArgument.valueArgument.getArgumentName()?.referenceExpression ?:
+                           error("Argument name should be null for argument: $callArgument")
+        when (diagnostic.javaClass) {
+            NamedArgumentReference::class.java ->
+                trace.record(BindingContext.REFERENCE_TARGET, nameReference, (diagnostic as NamedArgumentReference).parameterDescriptor)
+            NameForAmbiguousParameter::class.java -> trace.report(NAME_FOR_AMBIGUOUS_PARAMETER.on(nameReference))
+            NameNotFound::class.java -> trace.report(NAMED_PARAMETER_NOT_FOUND.on(nameReference, nameReference))
 
+            NamedArgumentNotAllowed::class.java -> trace.report(NAMED_ARGUMENTS_NOT_ALLOWED.on(
+                    nameReference,
+                    if ((diagnostic as NamedArgumentNotAllowed).descriptor is FunctionInvokeDescriptor) INVOKE_ON_FUNCTION_TYPE else NON_KOTLIN_FUNCTION
+            ))
+
+        }
     }
 
     override fun onCallArgumentSpread(callArgument: CallArgument, diagnostic: CallDiagnostic) {
