@@ -16,6 +16,8 @@
 
 package org.jetbrains.kotlin.resolve.calls.tower
 
+import org.jetbrains.kotlin.builtins.getReturnTypeFromFunctionType
+import org.jetbrains.kotlin.builtins.isFunctionType
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil
@@ -32,6 +34,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.builtIns
 import org.jetbrains.kotlin.types.TypeUtils
 import org.jetbrains.kotlin.types.UnwrappedType
 import org.jetbrains.kotlin.types.expressions.ExpressionTypingServices
+import org.jetbrains.kotlin.types.expressions.KotlinTypeInfo
 
 class LambdaAnalyzerImpl(
         val expressionTypingServices: ExpressionTypingServices,
@@ -59,7 +62,11 @@ class LambdaAnalyzerImpl(
                 replaceContextDependency(ContextDependency.DEPENDENT).replaceExpectedType(expectedType)
 
 
-        val typeInfo = expressionTypingServices.getTypeInfo(expression, actualContext)
+        val functionTypeInfo = expressionTypingServices.getTypeInfo(expression, actualContext)
+        val lastExpressionType = functionTypeInfo.type?.let {
+            if (it.isFunctionType) getReturnTypeFromFunctionType(it) else it
+        }
+        val lastExpressionTypeInfo = KotlinTypeInfo(lastExpressionType, functionTypeInfo.dataFlowInfo)
 
         val lastExpression: KtExpression?
         if (psiCallArgument is LambdaArgumentIml) {
@@ -70,7 +77,8 @@ class LambdaAnalyzerImpl(
         }
 
         val deparentesized = KtPsiUtil.deparenthesize(lastExpression) ?: return emptyList()
-        val simpleArgument = createSimplePSICallArgument(actualContext, CallMaker.makeExternalValueArgument(deparentesized), typeInfo)
+
+        val simpleArgument = createSimplePSICallArgument(actualContext, CallMaker.makeExternalValueArgument(deparentesized), lastExpressionTypeInfo)
 
         return listOfNotNull(simpleArgument)
     }

@@ -118,7 +118,9 @@ abstract class TypeCheckerContextForConstraintSystem : TypeCheckerContext(errorT
         fun correctSubType(subType: SimpleType) = subType.isSingleClassifierType || subType.isIntersectionType || isMyTypeVariable(subType)
         fun correctSuperType(superType: SimpleType) = superType.isSingleClassifierType || isMyTypeVariable(superType)
 
-        assert(subType.bothBounds(::correctSubType)) { "Not singleClassifierType and not intersection subType: $subType" }
+        assert(subType.bothBounds(::correctSubType)) {
+            "Not singleClassifierType and not intersection subType: $subType"
+        }
         assert(superType.bothBounds(::correctSuperType)) {
             "Not singleClassifierType superType: $superType"
         }
