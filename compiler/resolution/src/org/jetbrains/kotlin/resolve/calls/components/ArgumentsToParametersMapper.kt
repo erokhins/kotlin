@@ -103,7 +103,7 @@ class ArgumentsToParametersMapper {
         private fun completeVarargPositionArguments() {
             assert(state == State.VARARG_POSITION) { "Incorrect state: $state" }
             val parameter = parameters[currentParameterIndex]
-            result.put(parameter, ResolvedCallArgument.VarargArgument(varargArguments!!))
+            result.put(parameter.original, ResolvedCallArgument.VarargArgument(varargArguments!!))
         }
 
         // return true, if it was mapped to vararg parameter
@@ -122,7 +122,7 @@ class ArgumentsToParametersMapper {
             if (!parameter.isVararg) {
                 currentParameterIndex++
 
-                result.put(parameter, ResolvedCallArgument.SimpleArgument(argument))
+                result.put(parameter.original, ResolvedCallArgument.SimpleArgument(argument))
                 return false
             }
             // all position arguments will be mapped to current vararg parameter
@@ -144,7 +144,7 @@ class ArgumentsToParametersMapper {
                 return
             }
 
-            result[parameter]?.let {
+            result[parameter.original]?.let {
                 addDiagnostic(ArgumentPassedTwice(argument, parameter, it))
                 return
             }
@@ -153,7 +153,7 @@ class ArgumentsToParametersMapper {
                 addDiagnostic(NameForAmbiguousParameter(argument, parameter, it))
             }
 
-            result[parameter] = ResolvedCallArgument.SimpleArgument(argument)
+            result[parameter.original] = ResolvedCallArgument.SimpleArgument(argument)
         }
 
         fun processArgumentsInParenthesis(arguments: List<CallArgument>) {
@@ -188,7 +188,7 @@ class ArgumentsToParametersMapper {
                 return
             }
 
-            val previousOccurrence = result[lastParameter]
+            val previousOccurrence = result[lastParameter.original]
             if (previousOccurrence != null) {
                 addDiagnostic(ArgumentPassedTwice(externalArgument, lastParameter, previousOccurrence))
                 return
@@ -199,7 +199,7 @@ class ArgumentsToParametersMapper {
                 return
             }
 
-            result[lastParameter] = ResolvedCallArgument.SimpleArgument(externalArgument)
+            result[lastParameter.original] = ResolvedCallArgument.SimpleArgument(externalArgument)
         }
 
         fun processDefaultsAndRunChecks() {
@@ -217,9 +217,9 @@ class ArgumentsToParametersMapper {
             }
 
             for (parameter in parameters) {
-                if (!result.containsKey(parameter)) {
+                if (!result.containsKey(parameter.original)) {
                     if (parameter.hasDefaultValue()) {
-                        result[parameter] = ResolvedCallArgument.DefaultArgument
+                        result[parameter.original] = ResolvedCallArgument.DefaultArgument
                     }
                     else {
                         addDiagnostic(NoValueForParameter(parameter, descriptor))
