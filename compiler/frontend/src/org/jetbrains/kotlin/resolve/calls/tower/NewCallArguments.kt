@@ -18,15 +18,14 @@ package org.jetbrains.kotlin.resolve.calls.tower
 
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.name.Name
-import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
-import org.jetbrains.kotlin.psi.KtLambdaExpression
-import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.ValueArgument
+import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.calls.BaseResolvedCall
 import org.jetbrains.kotlin.resolve.calls.context.BasicCallResolutionContext
 import org.jetbrains.kotlin.resolve.calls.inference.model.ConstraintStorage
 import org.jetbrains.kotlin.resolve.calls.model.*
+import org.jetbrains.kotlin.resolve.calls.model.LambdaArgument
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo
+import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValueWithSmartCastInfo
 import org.jetbrains.kotlin.resolve.scopes.receivers.TransientReceiver
 import org.jetbrains.kotlin.types.UnwrappedType
@@ -48,6 +47,13 @@ val CallArgument.psiCallArgument: PSICallArgument get() {
         "Incorrect CallArgument: $this. Java class: ${javaClass.canonicalName}"
     }
     return this as PSICallArgument
+}
+
+val CallArgument.psiExpression: KtExpression? get() {
+    if (this is ReceiverExpressionArgument) {
+        return (receiver.receiverValue as? ExpressionReceiver)?.expression
+    }
+    return psiCallArgument.valueArgument.getArgumentExpression()
 }
 
 class ParseErrorArgument(

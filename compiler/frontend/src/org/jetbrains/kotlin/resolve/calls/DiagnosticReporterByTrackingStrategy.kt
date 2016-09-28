@@ -28,10 +28,7 @@ import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactory
 import org.jetbrains.kotlin.resolve.calls.smartcasts.SmartCastManager
 import org.jetbrains.kotlin.resolve.calls.tasks.TracingStrategy
-import org.jetbrains.kotlin.resolve.calls.tower.ExpressionArgumentImpl
-import org.jetbrains.kotlin.resolve.calls.tower.PSIASTCall
-import org.jetbrains.kotlin.resolve.calls.tower.VisibilityError
-import org.jetbrains.kotlin.resolve.calls.tower.psiCallArgument
+import org.jetbrains.kotlin.resolve.calls.tower.*
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 
 class DiagnosticReporterByTrackingStrategy(
@@ -109,8 +106,8 @@ class DiagnosticReporterByTrackingStrategy(
         when (diagnostic.javaClass) {
             NewConstraintError::class.java -> {
                 val constraintError = diagnostic as NewConstraintError
-                (constraintError.position as ArgumentConstraintPosition)?.let {
-                    val expression = it.argument.psiCallArgument.valueArgument.getArgumentExpression() ?: return
+                (constraintError.position as? ArgumentConstraintPosition)?.let {
+                    val expression = it.argument.psiExpression ?: return
                     trace.report(Errors.TYPE_MISMATCH.on(expression, constraintError.upperType, constraintError.lowerType))
                 }
             }
