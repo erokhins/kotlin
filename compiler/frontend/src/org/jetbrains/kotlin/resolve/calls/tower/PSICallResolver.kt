@@ -16,8 +16,7 @@
 
 package org.jetbrains.kotlin.resolve.calls.tower
 
-import org.jetbrains.kotlin.config.LanguageFeature
-import org.jetbrains.kotlin.config.LanguageFeatureSettings
+import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ReceiverParameterDescriptor
 import org.jetbrains.kotlin.diagnostics.Errors
@@ -46,6 +45,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.builtIns
 import org.jetbrains.kotlin.resolve.lazy.ForceResolveUtil
 import org.jetbrains.kotlin.resolve.scopes.LexicalScope
 import org.jetbrains.kotlin.resolve.scopes.MemberScope
+import org.jetbrains.kotlin.resolve.scopes.SyntheticConstructorsProvider
 import org.jetbrains.kotlin.resolve.scopes.SyntheticScopes
 import org.jetbrains.kotlin.resolve.scopes.receivers.*
 import org.jetbrains.kotlin.types.DeferredType
@@ -62,14 +62,15 @@ class PSICallResolver(
         private val typeResolver: TypeResolver,
         private val expressionTypingServices: ExpressionTypingServices,
         private val doubleColonExpressionResolver: DoubleColonExpressionResolver,
-        private val languageFeatureSettings: LanguageFeatureSettings,
+        private val languageVersionSettings: LanguageVersionSettings,
+        private val syntheticConstructorsProvider: SyntheticConstructorsProvider,
         private val dynamicCallableDescriptors: DynamicCallableDescriptors,
         private val syntheticScopes: SyntheticScopes,
         private val astResolverComponents: CallContextComponents,
         private val astToResolvedCallTransformer: ASTToResolvedCallTransformer,
         private val astCallResolver: ASTCallResolver
 ) {
-    val useNewInference = languageFeatureSettings.supportsFeature(LanguageFeature.CommonConstraintSystem)
+    val useNewInference = USE_NEW_INFERENCE
 
     fun <D : CallableDescriptor> runResolutionAndInference(
             context: BasicCallResolutionContext,
@@ -169,6 +170,7 @@ class PSICallResolver(
         override val location: LookupLocation = context.call.createLookupLocation()
 
         override val syntheticScopes: SyntheticScopes get() = this@PSICallResolver.syntheticScopes
+        override val syntheticConstructorsProvider: SyntheticConstructorsProvider get() = this@PSICallResolver.syntheticConstructorsProvider
         override val isDebuggerContext: Boolean get() = context.isDebuggerContext
         override val lexicalScope: LexicalScope get() = context.scope
         private val cache = HashMap<ReceiverParameterDescriptor, ReceiverValueWithSmartCastInfo>()
@@ -327,11 +329,10 @@ class PSICallResolver(
 
     private fun resolveTypeArguments(context: BasicCallResolutionContext, typeArguments: List<KtTypeProjection>): List<TypeArgument> =
             typeArguments.map { projection ->
-                ModifierCheckerCore.check(projection, context.trace, null, languageFeatureSettings)
+                ModifierCheckerCore.check(projection, context.trace, null, languageVersionSettings)
 
                 if (projection.projectionKind != KtProjectionKind.NONE &&
-                    !(projection.projectionKind == KtProjectionKind.STAR &&
-                      languageFeatureSettings.supportsFeature(LanguageFeature.PlaceholderInTypeParameters))
+                    !(projection.projectionKind == KtProjectionKind.STAR) // todo: languageFeature
                 ) {
                     context.trace.report(Errors.PROJECTION_ON_NON_CLASS_TYPE_ARGUMENT.on(projection))
                 }

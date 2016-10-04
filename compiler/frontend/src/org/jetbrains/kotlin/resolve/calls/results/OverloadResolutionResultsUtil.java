@@ -19,8 +19,8 @@ package org.jetbrains.kotlin.resolve.calls.results;
 import com.google.common.collect.Lists;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.kotlin.config.LanguageFeature;
 import org.jetbrains.kotlin.descriptors.CallableDescriptor;
+import org.jetbrains.kotlin.resolve.calls.CallContextKt;
 import org.jetbrains.kotlin.resolve.calls.context.ContextDependency;
 import org.jetbrains.kotlin.resolve.calls.model.MutableResolvedCall;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
@@ -54,7 +54,7 @@ public class OverloadResolutionResultsUtil {
     ) {
         if (results.isSingleResult() && contextDependency == ContextDependency.INDEPENDENT) {
             ResolvedCall<D> resultingCall = results.getResultingCall();
-            if (LanguageFeature.CommonConstraintSystem.getSinceVersion() == null) {
+            if (!CallContextKt.getUSE_NEW_INFERENCE()) {
                 if (!((MutableResolvedCall<D>) resultingCall).hasInferredReturnType()) {
                     return null;
                 }

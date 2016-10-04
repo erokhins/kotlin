@@ -16,7 +16,7 @@
 
 package org.jetbrains.kotlin.resolve.calls.tower
 
-import org.jetbrains.kotlin.config.LanguageFeatureSettings
+import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.psi.Call
 import org.jetbrains.kotlin.psi.ValueArgument
@@ -42,7 +42,7 @@ import java.util.*
 
 class ASTToResolvedCallTransformer(
         private val callCheckers: Iterable<CallChecker>,
-        private val languageFeatureSettings: LanguageFeatureSettings
+        private val languageFeatureSettings: LanguageVersionSettings
 ) {
 
     fun <D : CallableDescriptor> transformAndReport(
