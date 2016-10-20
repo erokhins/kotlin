@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.psi.KtExpression;
 import org.jetbrains.kotlin.resolve.BindingTrace;
 import org.jetbrains.kotlin.resolve.StatementFilter;
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo;
+import org.jetbrains.kotlin.resolve.calls.tower.ResolutionCallback;
 import org.jetbrains.kotlin.resolve.scopes.LexicalScope;
 import org.jetbrains.kotlin.types.KotlinType;
 import org.jetbrains.kotlin.types.TypeUtils;
@@ -70,6 +71,9 @@ public abstract class ResolutionContext<Context extends ResolutionContext<Contex
     @NotNull
     public final Function1<KtExpression, KtExpression> expressionContextProvider;
 
+    @NotNull
+    public final ResolutionCallback resolutionCallback;
+
     public static final Function1<KtExpression, KtExpression> DEFAULT_EXPRESSION_CONTEXT_PROVIDER = new Function1<KtExpression, KtExpression>() {
         @Override
         public KtExpression invoke(KtExpression expression) {
@@ -89,7 +93,8 @@ public abstract class ResolutionContext<Context extends ResolutionContext<Contex
             boolean isDebuggerContext,
             boolean collectAllCandidates,
             @NotNull CallPosition callPosition,
-            @NotNull Function1<KtExpression, KtExpression> expressionContextProvider
+            @NotNull Function1<KtExpression, KtExpression> expressionContextProvider,
+            @NotNull ResolutionCallback resolutionCallback
     ) {
         this.trace = trace;
         this.scope = scope;
@@ -103,6 +108,7 @@ public abstract class ResolutionContext<Context extends ResolutionContext<Contex
         this.collectAllCandidates = collectAllCandidates;
         this.callPosition = callPosition;
         this.expressionContextProvider = expressionContextProvider;
+        this.resolutionCallback = resolutionCallback;
     }
 
     protected abstract Context create(
@@ -115,7 +121,8 @@ public abstract class ResolutionContext<Context extends ResolutionContext<Contex
             @NotNull StatementFilter statementFilter,
             boolean collectAllCandidates,
             @NotNull CallPosition callPosition,
-            @NotNull Function1<KtExpression, KtExpression> expressionContextProvider
+            @NotNull Function1<KtExpression, KtExpression> expressionContextProvider,
+            @NotNull ResolutionCallback resolutionCallback
     );
 
     @NotNull
@@ -128,14 +135,14 @@ public abstract class ResolutionContext<Context extends ResolutionContext<Contex
     public Context replaceBindingTrace(@NotNull BindingTrace trace) {
         if (this.trace == trace) return self();
         return create(trace, scope, dataFlowInfo, expectedType, contextDependency, resolutionResultsCache, statementFilter,
-                      collectAllCandidates, callPosition, expressionContextProvider);
+                      collectAllCandidates, callPosition, expressionContextProvider, resolutionCallback);
     }
 
     @NotNull
     public Context replaceDataFlowInfo(@NotNull DataFlowInfo newDataFlowInfo) {
         if (newDataFlowInfo == dataFlowInfo) return self();
         return create(trace, scope, newDataFlowInfo, expectedType, contextDependency, resolutionResultsCache, statementFilter,
-                      collectAllCandidates, callPosition, expressionContextProvider);
+                      collectAllCandidates, callPosition, expressionContextProvider, resolutionCallback);
     }
 
     @NotNull
@@ -143,28 +150,28 @@ public abstract class ResolutionContext<Context extends ResolutionContext<Contex
         if (newExpectedType == null) return replaceExpectedType(TypeUtils.NO_EXPECTED_TYPE);
         if (expectedType == newExpectedType) return self();
         return create(trace, scope, dataFlowInfo, newExpectedType, contextDependency, resolutionResultsCache, statementFilter,
-                      collectAllCandidates, callPosition, expressionContextProvider);
+                      collectAllCandidates, callPosition, expressionContextProvider, resolutionCallback);
     }
 
     @NotNull
     public Context replaceScope(@NotNull LexicalScope newScope) {
         if (newScope == scope) return self();
         return create(trace, newScope, dataFlowInfo, expectedType, contextDependency, resolutionResultsCache, statementFilter,
-                      collectAllCandidates, callPosition, expressionContextProvider);
+                      collectAllCandidates, callPosition, expressionContextProvider, resolutionCallback);
     }
 
     @NotNull
     public Context replaceContextDependency(@NotNull ContextDependency newContextDependency) {
         if (newContextDependency == contextDependency) return self();
         return create(trace, scope, dataFlowInfo, expectedType, newContextDependency, resolutionResultsCache, statementFilter,
-                      collectAllCandidates, callPosition, expressionContextProvider);
+                      collectAllCandidates, callPosition, expressionContextProvider, resolutionCallback);
     }
 
     @NotNull
     public Context replaceResolutionResultsCache(@NotNull ResolutionResultsCache newResolutionResultsCache) {
         if (newResolutionResultsCache == resolutionResultsCache) return self();
         return create(trace, scope, dataFlowInfo, expectedType, contextDependency, newResolutionResultsCache, statementFilter,
-                      collectAllCandidates, callPosition, expressionContextProvider);
+                      collectAllCandidates, callPosition, expressionContextProvider, resolutionCallback);
     }
 
     @NotNull
@@ -175,25 +182,31 @@ public abstract class ResolutionContext<Context extends ResolutionContext<Contex
     @NotNull
     public Context replaceCollectAllCandidates(boolean newCollectAllCandidates) {
         return create(trace, scope, dataFlowInfo, expectedType, contextDependency, resolutionResultsCache, statementFilter,
-                      newCollectAllCandidates, callPosition, expressionContextProvider);
+                      newCollectAllCandidates, callPosition, expressionContextProvider, resolutionCallback);
     }
 
     @NotNull
     public Context replaceStatementFilter(@NotNull StatementFilter statementFilter) {
         return create(trace, scope, dataFlowInfo, expectedType, contextDependency, resolutionResultsCache, statementFilter,
-                      collectAllCandidates, callPosition, expressionContextProvider);
+                      collectAllCandidates, callPosition, expressionContextProvider, resolutionCallback);
     }
 
     @NotNull
     public Context replaceCallPosition(@NotNull CallPosition callPosition) {
         return create(trace, scope, dataFlowInfo, expectedType, contextDependency, resolutionResultsCache, statementFilter,
-                      collectAllCandidates, callPosition, expressionContextProvider);
+                      collectAllCandidates, callPosition, expressionContextProvider, resolutionCallback);
     }
 
     @NotNull
     public Context replaceExpressionContextProvider(@NotNull Function1<KtExpression, KtExpression> expressionContextProvider) {
         return create(trace, scope, dataFlowInfo, expectedType, contextDependency, resolutionResultsCache, statementFilter,
-                      collectAllCandidates, callPosition, expressionContextProvider);
+                      collectAllCandidates, callPosition, expressionContextProvider, resolutionCallback);
+    }
+
+    @NotNull
+    public Context replaceResolutionCallback(@NotNull ResolutionCallback resolutionCallback) {
+        return create(trace, scope, dataFlowInfo, expectedType, contextDependency, resolutionResultsCache, statementFilter,
+                      collectAllCandidates, callPosition, expressionContextProvider, resolutionCallback);
     }
 
     @Nullable

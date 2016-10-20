@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.resolve.StatementFilter;
 import org.jetbrains.kotlin.resolve.calls.model.DataFlowInfoForArgumentsImpl;
 import org.jetbrains.kotlin.resolve.calls.model.MutableDataFlowInfoForArguments;
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo;
+import org.jetbrains.kotlin.resolve.calls.tower.ResolutionCallback;
 import org.jetbrains.kotlin.resolve.scopes.LexicalScope;
 import org.jetbrains.kotlin.types.KotlinType;
 
@@ -53,10 +54,12 @@ public abstract class CallResolutionContext<Context extends CallResolutionContex
             boolean isDebuggerContext,
             boolean collectAllCandidates,
             @NotNull CallPosition callPosition,
-            @NotNull Function1<KtExpression, KtExpression> expressionContextProvider
+            @NotNull Function1<KtExpression, KtExpression> expressionContextProvider,
+            @NotNull ResolutionCallback resolutionCallback
     ) {
         super(trace, scope, expectedType, dataFlowInfo, contextDependency, resolutionResultsCache,
-              statementFilter, isAnnotationContext, isDebuggerContext, collectAllCandidates, callPosition, expressionContextProvider);
+              statementFilter, isAnnotationContext, isDebuggerContext, collectAllCandidates, callPosition, expressionContextProvider,
+              resolutionCallback);
         this.call = call;
         this.checkArguments = checkArguments;
         if (dataFlowInfoForArguments != null) {

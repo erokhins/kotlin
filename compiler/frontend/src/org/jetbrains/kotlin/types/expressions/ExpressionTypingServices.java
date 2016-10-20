@@ -266,9 +266,11 @@ public class ExpressionTypingServices {
             }
             KtExpression statementExpression = (KtExpression) statement;
             if (!iterator.hasNext()) {
+                ExpressionTypingContext contextForLastExpression = newContext.replaceExpectedType(context.expectedType);
                 result = getTypeOfLastExpressionInBlock(
-                        statementExpression, newContext.replaceExpectedType(context.expectedType), coercionStrategyForLastExpression,
+                        statementExpression, contextForLastExpression, coercionStrategyForLastExpression,
                         blockLevelVisitor);
+                contextForLastExpression.resolutionCallback.lastStatement(contextForLastExpression, statementExpression, result);
             }
             else {
                 result = blockLevelVisitor

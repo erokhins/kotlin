@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.resolve.BindingTrace;
 import org.jetbrains.kotlin.resolve.StatementFilter;
 import org.jetbrains.kotlin.resolve.calls.model.MutableDataFlowInfoForArguments;
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo;
+import org.jetbrains.kotlin.resolve.calls.tower.ResolutionCallback;
 import org.jetbrains.kotlin.resolve.scopes.LexicalScope;
 import org.jetbrains.kotlin.types.KotlinType;
 
@@ -44,11 +45,12 @@ public class BasicCallResolutionContext extends CallResolutionContext<BasicCallR
             boolean isDebuggerContext,
             boolean collectAllCandidates,
             @NotNull CallPosition callPosition,
-            @NotNull Function1<KtExpression, KtExpression> expressionContextProvider
+            @NotNull Function1<KtExpression, KtExpression> expressionContextProvider,
+            @NotNull ResolutionCallback resolutionCallback
     ) {
         super(trace, scope, call, expectedType, dataFlowInfo, contextDependency, checkArguments, resolutionResultsCache,
               dataFlowInfoForArguments, statementFilter, isAnnotationContext, isDebuggerContext, collectAllCandidates,
-              callPosition, expressionContextProvider);
+              callPosition, expressionContextProvider, resolutionCallback);
     }
 
     @NotNull
@@ -65,7 +67,7 @@ public class BasicCallResolutionContext extends CallResolutionContext<BasicCallR
         return new BasicCallResolutionContext(trace, scope, call, expectedType, dataFlowInfo, contextDependency, checkArguments,
                                               new ResolutionResultsCacheImpl(), null,
                                               StatementFilter.NONE, isAnnotationContext, false, false,
-                                              CallPosition.Unknown.INSTANCE, DEFAULT_EXPRESSION_CONTEXT_PROVIDER);
+                                              CallPosition.Unknown.INSTANCE, DEFAULT_EXPRESSION_CONTEXT_PROVIDER, ResolutionCallback.Empty.INSTANCE);
     }
 
     @NotNull
@@ -77,7 +79,7 @@ public class BasicCallResolutionContext extends CallResolutionContext<BasicCallR
                 context.trace, context.scope, call, context.expectedType, context.dataFlowInfo, context.contextDependency, checkArguments,
                 context.resolutionResultsCache, dataFlowInfoForArguments,
                 context.statementFilter, context.isAnnotationContext, context.isDebuggerContext, context.collectAllCandidates,
-                context.callPosition, context.expressionContextProvider);
+                context.callPosition, context.expressionContextProvider, context.resolutionCallback);
     }
 
     @NotNull
@@ -98,12 +100,13 @@ public class BasicCallResolutionContext extends CallResolutionContext<BasicCallR
             @NotNull StatementFilter statementFilter,
             boolean collectAllCandidates,
             @NotNull CallPosition callPosition,
-            @NotNull Function1<KtExpression, KtExpression> expressionContextProvider
+            @NotNull Function1<KtExpression, KtExpression> expressionContextProvider,
+            @NotNull ResolutionCallback resolutionCallback
     ) {
         return new BasicCallResolutionContext(
                 trace, scope, call, expectedType, dataFlowInfo, contextDependency, checkArguments, resolutionResultsCache,
                 dataFlowInfoForArguments, statementFilter, isAnnotationContext, isDebuggerContext, collectAllCandidates,
-                callPosition, expressionContextProvider);
+                callPosition, expressionContextProvider, resolutionCallback);
     }
 
     @NotNull
@@ -111,6 +114,6 @@ public class BasicCallResolutionContext extends CallResolutionContext<BasicCallR
         return new BasicCallResolutionContext(
                 trace, scope, newCall, expectedType, dataFlowInfo, contextDependency, checkArguments, resolutionResultsCache,
                 dataFlowInfoForArguments, statementFilter, isAnnotationContext, isDebuggerContext, collectAllCandidates,
-                callPosition, expressionContextProvider);
+                callPosition, expressionContextProvider, resolutionCallback);
     }
 }
