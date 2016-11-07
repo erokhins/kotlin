@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.BaseResolvedCall
 import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
 import org.jetbrains.kotlin.resolve.calls.context.BasicCallResolutionContext
+import org.jetbrains.kotlin.resolve.calls.context.ResolutionContext
 import org.jetbrains.kotlin.resolve.calls.inference.model.ConstraintStorage
 import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.resolve.calls.model.LambdaArgument
@@ -156,7 +157,7 @@ class ExpressionArgumentImpl(
 }
 
 internal fun createSimplePSICallArgument(
-        context: BasicCallResolutionContext,
+        context: ResolutionContext<*>,
         valueArgument: ValueArgument,
         typeInfo: KotlinTypeInfo
 ): PSICallArgument? {

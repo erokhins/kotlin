@@ -604,9 +604,11 @@ public class ControlStructureTypingVisitor extends ExpressionTypingVisitor {
         }
 
         if (returnedExpression != null) {
-            KotlinTypeInfo result = facade.getTypeInfo(returnedExpression, context.replaceExpectedType(expectedType).replaceScope(context.scope)
-                    .replaceContextDependency(context.resolutionCallback.getContextDependencyForReturnExpression(expression)));
-            context.resolutionCallback.returnStatement(context, expression, result);
+            ExpressionTypingContext contextForReturnedExpression = context.replaceExpectedType(expectedType).replaceScope(context.scope)
+                    .replaceContextDependency(context.resolutionCallback.getContextDependencyForReturnExpression(context, expression));
+            KotlinTypeInfo result = facade.getTypeInfo(returnedExpression,
+                                                       contextForReturnedExpression);
+            context.resolutionCallback.returnStatement(contextForReturnedExpression, expression, result);
         }
         else {
             // for lambda with implicit return type Unit

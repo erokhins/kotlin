@@ -24,18 +24,18 @@ import org.jetbrains.kotlin.types.expressions.KotlinTypeInfo
 
 interface ResolutionCallback {
     object Empty: ResolutionCallback {
-        override fun getContextDependencyForReturnExpression(returnExpression: KtReturnExpression) = ContextDependency.INDEPENDENT
-        override fun returnStatement(context: ResolutionContext<*>, returnExpression: KtReturnExpression, typeInfoForReturnExpression: KotlinTypeInfo) {}
+        override fun getContextDependencyForReturnExpression(context: ResolutionContext<*>, returnExpression: KtReturnExpression) = ContextDependency.INDEPENDENT
+        override fun returnStatement(context: ResolutionContext<*>, returnExpression: KtReturnExpression, typeInfoForReturnedExpression: KotlinTypeInfo) {}
         override fun lastStatement(context: ResolutionContext<*>, expression: KtExpression, typeInfo: KotlinTypeInfo) {}
     }
 
     fun returnStatement(
             context: ResolutionContext<*>,
             returnExpression: KtReturnExpression,
-            typeInfoForReturnExpression: KotlinTypeInfo
+            typeInfoForReturnedExpression: KotlinTypeInfo
     )
 
-    fun getContextDependencyForReturnExpression(returnExpression: KtReturnExpression): ContextDependency
+    fun getContextDependencyForReturnExpression(context: ResolutionContext<*>, returnExpression: KtReturnExpression): ContextDependency
 
     fun lastStatement(
             context: ResolutionContext<*>,

@@ -21,10 +21,13 @@ import org.jetbrains.kotlin.builtins.isFunctionType
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil
+import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingTrace
 import org.jetbrains.kotlin.resolve.calls.LambdaAnalyzer
 import org.jetbrains.kotlin.resolve.calls.context.ContextDependency
+import org.jetbrains.kotlin.resolve.calls.context.ResolutionContext
 import org.jetbrains.kotlin.resolve.calls.model.ASTCall
 import org.jetbrains.kotlin.resolve.calls.model.CallArgument
 import org.jetbrains.kotlin.resolve.calls.model.LambdaArgument
@@ -35,6 +38,7 @@ import org.jetbrains.kotlin.types.TypeUtils
 import org.jetbrains.kotlin.types.UnwrappedType
 import org.jetbrains.kotlin.types.expressions.ExpressionTypingServices
 import org.jetbrains.kotlin.types.expressions.KotlinTypeInfo
+import org.jetbrains.kotlin.utils.SmartList
 
 class LambdaAnalyzerImpl(
         val expressionTypingServices: ExpressionTypingServices,
@@ -58,28 +62,56 @@ class LambdaAnalyzerImpl(
         val expectedType = createFunctionType(builtIns, Annotations.EMPTY, receiverType, parameters,
                            null, expectedReturnType ?: TypeUtils.NO_EXPECTED_TYPE)
 
-        val actualContext = outerCallContext.replaceBindingTrace(trace).
-                replaceContextDependency(ContextDependency.DEPENDENT).replaceExpectedType(expectedType)
+        val lastExpression = getLastExpression(lambdaArgument)
+        val resultList = SmartList<CallArgument>()
+        val callbacks = object : ResolutionCallback {
 
+            fun isMyReturnExpression(
+                    context: ResolutionContext<*>,
+                    returnExpression: KtReturnExpression
+            ): Boolean {
+                // todo support FunctionExpression
+                return (psiCallArgument is LambdaArgumentIml) &&
+                       returnExpression.getTargetLabel()?.let { context.trace.get(BindingContext.LABEL_TARGET, it) } ==
+                               psiCallArgument.ktLambdaExpression.functionLiteral
+            }
 
-        val functionTypeInfo = expressionTypingServices.getTypeInfo(expression, actualContext)
-        val lastExpressionType = functionTypeInfo.type?.let {
-            if (it.isFunctionType) it.getReturnTypeFromFunctionType() else it
+            override fun getContextDependencyForReturnExpression(
+                    context: ResolutionContext<*>,
+                    returnExpression: KtReturnExpression
+            ) = if (isMyReturnExpression(context, returnExpression)) ContextDependency.DEPENDENT else ContextDependency.INDEPENDENT
+
+            override fun returnStatement(
+                    context: ResolutionContext<*>,
+                    returnExpression: KtReturnExpression,
+                    typeInfoForReturnedExpression: KotlinTypeInfo
+            ) {
+                // todo support empty expression(add Unit as SimpleArgument)
+                val returnedExpression = returnExpression.returnedExpression ?: return
+                if (!isMyReturnExpression(context, returnExpression)) return
+                resultList.add(createSimplePSICallArgument(context, CallMaker.makeExternalValueArgument(returnedExpression), typeInfoForReturnedExpression))
+            }
+
+            override fun lastStatement(context: ResolutionContext<*>, expression: KtExpression, typeInfo: KotlinTypeInfo) {
+                if (expression != lastExpression) return
+                resultList.add(createSimplePSICallArgument(context, CallMaker.makeExternalValueArgument(expression), typeInfo))
+            }
         }
-        val lastExpressionTypeInfo = KotlinTypeInfo(lastExpressionType, functionTypeInfo.dataFlowInfo)
 
-        val lastExpression: KtExpression?
-        if (psiCallArgument is LambdaArgumentIml) {
-            lastExpression = psiCallArgument.ktLambdaExpression.bodyExpression?.statements?.lastOrNull()
+        val actualContext = outerCallContext.replaceBindingTrace(trace).
+                replaceContextDependency(ContextDependency.DEPENDENT).replaceExpectedType(expectedType).replaceResolutionCallback(callbacks)
+
+        expressionTypingServices.getTypeInfo(expression, actualContext)
+        return resultList
+    }
+
+    private fun getLastExpression(lambdaArgument: LambdaArgument): KtExpression? {
+        val psiCallArgument = lambdaArgument.psiCallArgument
+        return if (psiCallArgument is LambdaArgumentIml) {
+            psiCallArgument.ktLambdaExpression.bodyExpression?.statements?.lastOrNull()
         }
         else {
-            lastExpression = (psiCallArgument as FunctionExpressionImpl).ktFunction.bodyExpression?.lastBlockStatementOrThis()
+            (psiCallArgument as FunctionExpressionImpl).ktFunction.bodyExpression?.lastBlockStatementOrThis()
         }
-
-        val deparentesized = KtPsiUtil.deparenthesize(lastExpression) ?: return emptyList()
-
-        val simpleArgument = createSimplePSICallArgument(actualContext, CallMaker.makeExternalValueArgument(deparentesized), lastExpressionTypeInfo)
-
-        return listOfNotNull(simpleArgument)
     }
 }
