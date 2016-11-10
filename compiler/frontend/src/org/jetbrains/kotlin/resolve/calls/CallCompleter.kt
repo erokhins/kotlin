@@ -37,11 +37,8 @@ import org.jetbrains.kotlin.resolve.calls.context.BasicCallResolutionContext
 import org.jetbrains.kotlin.resolve.calls.context.CallCandidateResolutionContext
 import org.jetbrains.kotlin.resolve.calls.context.CallPosition
 import org.jetbrains.kotlin.resolve.calls.context.CheckArgumentTypesMode
-import org.jetbrains.kotlin.resolve.calls.inference.ConstraintSystem
-import org.jetbrains.kotlin.resolve.calls.inference.InferenceErrorData
+import org.jetbrains.kotlin.resolve.calls.inference.*
 import org.jetbrains.kotlin.resolve.calls.inference.constraintPosition.ConstraintPositionKind.*
-import org.jetbrains.kotlin.resolve.calls.inference.filterConstraintsOut
-import org.jetbrains.kotlin.resolve.calls.inference.toHandle
 import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.resolve.calls.resolvedCallUtil.makeNullableTypeIfSafeReceiver
 import org.jetbrains.kotlin.resolve.calls.results.OverloadResolutionResultsImpl
@@ -63,7 +60,8 @@ class CallCompleter(
         private val callCheckers: Iterable<CallChecker>,
         private val builtIns: KotlinBuiltIns,
         private val fakeCallResolver: FakeCallResolver,
-        private val languageVersionSettings: LanguageVersionSettings
+        private val languageVersionSettings: LanguageVersionSettings,
+        private val coroutineInferenceSupport: CoroutineInferenceSupport
 ) {
     fun <D : CallableDescriptor> completeCall(
             context: BasicCallResolutionContext,
@@ -315,6 +313,7 @@ class CallCompleter(
         // but they should be analyzed when the expected type is known (during the call completion).
         ArgumentTypeResolver.getFunctionLiteralArgumentIfAny(expression, context)?.let { functionLiteralArgument ->
             argumentTypeResolver.getFunctionLiteralTypeInfo(expression, functionLiteralArgument, context, RESOLVE_FUNCTION_ARGUMENTS)
+            coroutineInferenceSupport.recheckCallToController(context, functionLiteralArgument)
         }
 
         // While the expected type is not known, (possibly overloaded) callable references can have placeholder types
