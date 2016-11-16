@@ -47,8 +47,12 @@ import org.jetbrains.kotlin.types.*
 import org.jetbrains.kotlin.types.TypeUtils.DONT_CARE
 import org.jetbrains.kotlin.types.checker.KotlinTypeChecker
 import org.jetbrains.kotlin.types.expressions.ExpressionTypingUtils
+import org.jetbrains.kotlin.types.typeUtil.asTypeProjection
 
-class GenericCandidateResolver(private val argumentTypeResolver: ArgumentTypeResolver) {
+class GenericCandidateResolver(
+        private val argumentTypeResolver: ArgumentTypeResolver,
+        private val coroutineInferenceSupport: CoroutineInferenceSupport
+) {
     fun <D : CallableDescriptor> inferTypeArguments(context: CallCandidateResolutionContext<D>): ResolutionStatus {
         val candidateCall = context.candidateCall
         val candidate = candidateCall.candidateDescriptor
@@ -255,6 +259,11 @@ class GenericCandidateResolver(private val argumentTypeResolver: ArgumentTypeRes
 
         val effectiveExpectedType = getEffectiveExpectedType(valueParameterDescriptor, valueArgument)
 
+        if (isCoroutineCall(valueParameterDescriptor, valueArgument)) {
+            coroutineInferenceSupport.analyzeCoroutine(functionLiteral, valueArgument, valueParameterDescriptor, constraintSystem, context, effectiveExpectedType)
+            return
+        }
+
         val currentSubstitutor = constraintSystem.build().currentSubstitutor
         val newSubstitution = object : DelegatedTypeSubstitution(currentSubstitutor.substitution) {
             override fun approximateContravariantCapturedTypes() = true
@@ -303,6 +312,7 @@ class GenericCandidateResolver(private val argumentTypeResolver: ArgumentTypeRes
         val type = argumentTypeResolver.getFunctionLiteralTypeInfo(argumentExpression, functionLiteral, newContext, RESOLVE_FUNCTION_ARGUMENTS).type
         constraintSystem.addSubtypeConstraint(type, effectiveExpectedTypeInSystem, position)
     }
+
 
     private fun <D : CallableDescriptor> addConstraintForCallableReference(
             callableReference: KtCallableReferenceExpression,
