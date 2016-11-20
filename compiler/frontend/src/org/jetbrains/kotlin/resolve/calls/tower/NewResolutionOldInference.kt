@@ -169,7 +169,9 @@ class NewResolutionOldInference(
             }
         }
 
-        return convertToOverloadResults(candidates, tracing, context)
+        val overloadResults = convertToOverloadResults(candidates, tracing, context)
+        coroutineInferenceSupport.checkCoroutineCalls(context, tracing, overloadResults)
+        return overloadResults
     }
 
     fun <D : CallableDescriptor> runResolutionForGivenCandidates(
