@@ -37,6 +37,8 @@ import org.jetbrains.kotlin.resolve.calls.context.ContextDependency
 import org.jetbrains.kotlin.resolve.calls.inference.constraintPosition.ConstraintPositionKind
 import org.jetbrains.kotlin.resolve.calls.model.ArgumentMatch
 import org.jetbrains.kotlin.resolve.calls.model.MutableResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.isReallySuccess
 import org.jetbrains.kotlin.resolve.calls.results.OverloadResolutionResultsImpl
 import org.jetbrains.kotlin.resolve.calls.tasks.TracingStrategy
 import org.jetbrains.kotlin.resolve.descriptorUtil.builtIns
@@ -69,6 +71,7 @@ class TypeTemplate(
 class CoroutineInferenceData(val controllerType: TypeConstructor) {
     val csBuilder = ConstraintSystemBuilderImpl()
     val typeTemplates = HashMap<TypeVariable, TypeTemplate>()
+    val innerCalls = ArrayList<ResolvedCall<*>>()
 
     fun getTypeTemplate(typeVariable: TypeVariable) =
             typeTemplates.getOrPut(typeVariable) {
@@ -79,9 +82,9 @@ class CoroutineInferenceData(val controllerType: TypeConstructor) {
         csBuilder.registerTypeVariables(CallHandle.NONE, typeTemplates.keys.map { it.freshTypeParameter })
     }
 
-    fun addMemberCall(resolvedCall: MutableResolvedCall<*>) {}
-    fun addExtensionCall(resolvedCall: MutableResolvedCall<*>) {}
+    fun addInnerCall(resolvedCall: MutableResolvedCall<*>) {
 
+    }
     fun toNewVariableType(type: KotlinType): KotlinType {
         return (type.unwrap() as? TypeTemplate)?.typeVariable?.freshTypeParameter?.let { typeVariable ->
             csBuilder.typeVariableSubstitutors[CallHandle.NONE]?.substitution?.get(typeVariable.defaultType)?.type
@@ -89,8 +92,6 @@ class CoroutineInferenceData(val controllerType: TypeConstructor) {
     }
 
     fun addConstraint(subType: KotlinType, superType: KotlinType) {
-
-
         csBuilder.addSubtypeConstraint(toNewVariableType(subType), toNewVariableType(superType), ConstraintPositionKind.SPECIAL.position())
     }
 
@@ -157,21 +158,24 @@ class CoroutineInferenceSupport(
             tracingStrategy: TracingStrategy,
             overloadResults: OverloadResolutionResultsImpl<*>
     ) {
-        if(!overloadResults.isResultWithCoroutineInference()) return
+        val inferenceData = overloadResults.getCoroutineInferenceData() ?: return
+        val resultingCall = overloadResults.resultingCall
 
         forceInferenceForArguments(context) { _: ValueArgument, _: KotlinType -> /* do nothing */ }
 
         callCompleter.completeCall(context, overloadResults, tracingStrategy)
+        if (!resultingCall.isReallySuccess()) return
 
         forceInferenceForArguments(context) {
             valueArgument: ValueArgument, kotlinType: KotlinType ->
-            val argumentMatch = overloadResults.resultingCall.getArgumentMapping(valueArgument) as? ArgumentMatch
+            val argumentMatch = resultingCall.getArgumentMapping(valueArgument) as? ArgumentMatch
                                 ?: return@forceInferenceForArguments
 
             with(NewKotlinTypeChecker) {
                 CoroutineTypeCheckerContext().isSubtypeOf(kotlinType.unwrap(), argumentMatch.valueParameter.type.unwrap())
             }
         }
+        inferenceData.addInnerCall(resultingCall)
     }
 
     class CoroutineTypeCheckerContext : TypeCheckerContext(errorTypeEqualsToAnything = true) {
@@ -210,14 +214,21 @@ class CoroutineInferenceSupport(
 
 }
 
-fun OverloadResolutionResultsImpl<*>.isResultWithCoroutineInference() =
-        isSingleResult && resultingCall.status.possibleTransformToSuccess() &&
-        resultingCall.isCallWithAdditionalCoroutineInference
+fun OverloadResolutionResultsImpl<*>.isResultWithCoroutineInference() = getCoroutineInferenceData() != null
 
-val MutableResolvedCall<out CallableDescriptor>.isCallWithAdditionalCoroutineInference: Boolean get() {
-    fun isCoroutineReceiver(receiverValue: ReceiverValue?): Boolean {
-        if (receiverValue == null) return false
-        return receiverValue.type.contains { it is TypeTemplate }
+fun OverloadResolutionResultsImpl<*>.getCoroutineInferenceData(): CoroutineInferenceData? {
+    if (!isSingleResult || !resultingCall.status.possibleTransformToSuccess()) return null
+    return resultingCall.coroutineInferenceData
+}
+
+val MutableResolvedCall<out CallableDescriptor>.coroutineInferenceData: CoroutineInferenceData? get() {
+    fun getData(receiverValue: ReceiverValue?): CoroutineInferenceData? {
+        var coroutineInferenceData: CoroutineInferenceData? = null
+        receiverValue?.type?.contains {
+            (it as? TypeTemplate)?.coroutineInferenceData?.let { coroutineInferenceData = it }
+            false
+        }
+        return coroutineInferenceData
     }
-    return isCoroutineReceiver(dispatchReceiver) || isCoroutineReceiver(extensionReceiver)
+    return getData(dispatchReceiver) ?: getData(extensionReceiver)
 }
