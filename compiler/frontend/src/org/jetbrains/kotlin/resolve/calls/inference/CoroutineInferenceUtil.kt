@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.ValueArgument
 import org.jetbrains.kotlin.renderer.DescriptorRenderer
 import org.jetbrains.kotlin.renderer.DescriptorRendererOptions
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.ArgumentTypeResolver
 import org.jetbrains.kotlin.resolve.calls.ArgumentTypeResolver.getCallableReferenceExpressionIfAny
 import org.jetbrains.kotlin.resolve.calls.ArgumentTypeResolver.getFunctionLiteralArgumentIfAny
@@ -151,6 +152,11 @@ class CoroutineInferenceSupport(
         val type = argumentTypeResolver.getFunctionLiteralTypeInfo(argumentExpression, functionLiteral, newContext, RESOLVE_FUNCTION_ARGUMENTS).type
 
         inferenceData.reportInferenceResult(csBuilder)
+        context.trace.record(BindingContext.COROUTINE_INFERENCE_DATA, functionLiteral, inferenceData)
+    }
+
+    fun recheckCallToController(context: CallResolutionContext<*>, functionLiteral: KtFunction) {
+
     }
 
     fun checkCoroutineCalls(
