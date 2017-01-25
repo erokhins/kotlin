@@ -58,7 +58,7 @@ class DelegationChecker : DeclarationChecker {
     }
 
     private fun checkDescriptor(
-            classDeclaration: KtDeclaration,
+            classDeclaration: KtClassOrObject,
             delegatedDescriptor: CallableMemberDescriptor,
             delegatedToDescriptor: CallableMemberDescriptor,
             diagnosticHolder: DiagnosticSink
