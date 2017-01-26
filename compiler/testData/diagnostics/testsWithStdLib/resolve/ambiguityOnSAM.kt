@@ -26,7 +26,7 @@ public class A {
 
 // FILE: 1.kt
 fun test1(a: A, r: Runnable, v: A.MyRunnable, o: Any) {
-    a.<!OVERLOAD_RESOLUTION_AMBIGUITY!>foo1<!> {  }
+    a.foo1 {  } checkType { _<Char>() }
 
     a.foo1(r) checkType { _<String>() }
     a.foo1(v) checkType { _<Int>() }

@@ -118,6 +118,21 @@ class OverloadingConflictResolver<C : Any>(
         return result
     }
 
+    // null means ambiguity between variables
+    private fun findMaximallySpecificVariableAsFunctionCalls(candidates: Set<C>, isDebuggerContext: Boolean): Set<C>? {
+        val variableCalls = candidates.mapTo(newResolvedCallSet(candidates.size)) {
+            getVariableCandidates(it) ?: throw AssertionError("Regular call among variable-as-function calls: $it")
+        }
+
+        val maxSpecificVariableCalls = chooseMaximallySpecificCandidates(variableCalls, CheckArgumentTypesMode.CHECK_VALUE_ARGUMENTS,
+                                                                         isDebuggerContext = isDebuggerContext, discriminateGenerics = false)
+
+        val maxSpecificVariableCall = maxSpecificVariableCalls.singleOrNull() ?: return null
+        return candidates.filterTo(newResolvedCallSet(2)) {
+            getVariableCandidates(it)!!.resultingDescriptor == maxSpecificVariableCall.resultingDescriptor
+        }
+    }
+
     private fun findMaximallySpecific(
             candidates: Set<C>,
             checkArgumentsMode: CheckArgumentTypesMode,
@@ -146,13 +161,15 @@ class OverloadingConflictResolver<C : Any>(
             discriminateGenerics: Boolean,
             isDebuggerContext: Boolean
     ): C? {
-        findMaximallySpecificCall(candidates, discriminateGenerics, isDebuggerContext)?.let { return it }
+        val filteredCandidates = uniquifyCandidatesSet(candidates)
+        if (filteredCandidates.size <= 1) return filteredCandidates.singleOrNull()
+        val notBadCandidatesByParameterTypes = notBadCandidatesByParameterTypes(filteredCandidates, discriminateGenerics)
 
-        val realMembers = candidates.filterNotTo(mutableSetOf()) { createFlatSignature(it).isSyntheticMember }
+        val bestCandidatesByParameterTypes = bestCandidatesByParameterTypes(notBadCandidatesByParameterTypes, discriminateGenerics)
+        choseSpecificByShapeCall(bestCandidatesByParameterTypes, isDebuggerContext).let { return it }
 
-        if (realMembers.none { it.resultingDescriptor.hasFunctionOrFunctionNValueParameters() }) return null
-
-        return findMaximallySpecificCall(realMembers, discriminateGenerics, isDebuggerContext)
+        val realMembers = notBadCandidatesByParameterTypes.filterNotTo(mutableSetOf()) { it.isSyntheticMember }
+        return choseSpecificByShapeCall(bestCandidatesByParameterTypes(realMembers, discriminateGenerics), isDebuggerContext)
     }
 
     private fun CallableDescriptor.hasFunctionOrFunctionNValueParameters() = valueParameters.any {
@@ -162,48 +179,41 @@ class OverloadingConflictResolver<C : Any>(
     private val DeclarationDescriptor.isFunctionOrFunctionN
         get() = fqNameSafe == KotlinBuiltIns.FQ_NAMES.function || getFunctionalClassKind() == FunctionClassDescriptor.Kind.Function
 
-
-    // null means ambiguity between variables
-    private fun findMaximallySpecificVariableAsFunctionCalls(candidates: Set<C>, isDebuggerContext: Boolean): Set<C>? {
-        val variableCalls = candidates.mapTo(newResolvedCallSet(candidates.size)) {
-            getVariableCandidates(it) ?: throw AssertionError("Regular call among variable-as-function calls: $it")
-        }
-
-        val maxSpecificVariableCalls = chooseMaximallySpecificCandidates(variableCalls, CheckArgumentTypesMode.CHECK_VALUE_ARGUMENTS,
-                                                                        isDebuggerContext = isDebuggerContext, discriminateGenerics = false)
-
-        val maxSpecificVariableCall = maxSpecificVariableCalls.singleOrNull() ?: return null
-        return candidates.filterTo(newResolvedCallSet(2)) {
-            getVariableCandidates(it)!!.resultingDescriptor == maxSpecificVariableCall.resultingDescriptor
-        }
-    }
-
-    private fun findMaximallySpecificCall(
-            candidates: Set<C>,
-            discriminateGenerics: Boolean,
+    private fun choseSpecificByShapeCall(
+            bestCandidatesByParameterTypes: Collection<FlatSignature<C>>,
             isDebuggerContext: Boolean
     ): C? {
-        val filteredCandidates = uniquifyCandidatesSet(candidates)
+        return bestCandidatesByParameterTypes.exactMaxWith {
+            call1, call2 ->
+            isOfNotLessSpecificShape(call1, call2) && isOfNotLessSpecificVisibilityForDebugger(call1, call2, isDebuggerContext)
+        }?.origin
+    }
 
-        if (filteredCandidates.size <= 1) return filteredCandidates.singleOrNull()
-
-        val conflictingCandidates = filteredCandidates.map {
-            candidateCall ->
-            createFlatSignature(candidateCall)
-        }
-
-        val bestCandidatesByParameterTypes = conflictingCandidates.filter {
+    private fun bestCandidatesByParameterTypes(
+            conflictingCandidates: Collection<FlatSignature<C>>,
+            discriminateGenerics: Boolean
+    ): Collection<FlatSignature<C>> {
+        return conflictingCandidates.filter {
             candidate ->
             isMostSpecific(candidate, conflictingCandidates) {
                 call1, call2 ->
                 isNotLessSpecificCallWithArgumentMapping(call1, call2, discriminateGenerics)
             }
         }
+    }
+    private fun notBadCandidatesByParameterTypes(filteredCandidates: Set<C>, discriminateGenerics: Boolean): Collection<FlatSignature<C>> {
+        val conflictingCandidates = filteredCandidates.map {
+            candidateCall ->
+            createFlatSignature(candidateCall)
+        }
 
-        return bestCandidatesByParameterTypes.exactMaxWith {
-            call1, call2 ->
-            isOfNotLessSpecificShape(call1, call2) && isOfNotLessSpecificVisibilityForDebugger(call1, call2, isDebuggerContext)
-        }?.origin
+        return conflictingCandidates.filterNot {
+            candidate ->
+            conflictingCandidates.all { other ->
+                candidate !== other && isNotLessSpecificCallWithArgumentMapping(other, candidate, discriminateGenerics) &&
+                !isNotLessSpecificCallWithArgumentMapping(candidate, other, discriminateGenerics)
+            }
+        }
     }
 
     private inline fun <C : Any> Collection<C>.exactMaxWith(isNotWorse: (C, C) -> Boolean): C? {
