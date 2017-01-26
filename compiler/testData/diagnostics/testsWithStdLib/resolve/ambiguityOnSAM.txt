@@ -1,0 +1,31 @@
+package
+
+public fun test1(/*0*/ a: A, /*1*/ r: java.lang.Runnable, /*2*/ v: A.MyRunnable, /*3*/ o: kotlin.Any): kotlin.Unit
+public fun test2(/*0*/ a: A, /*1*/ r: java.lang.Runnable, /*2*/ v: () -> kotlin.Unit, /*3*/ o: kotlin.Any): kotlin.Unit
+public fun test3(/*0*/ a: A, /*1*/ r: java.lang.Runnable, /*2*/ v: kotlin.Function<kotlin.Unit>, /*3*/ o: kotlin.Any): kotlin.Unit
+
+public open class A {
+    public constructor A()
+    public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open fun foo1(/*0*/ c: A.MyRunnable!): kotlin.Int
+    public open fun foo1(/*0*/ r: java.lang.Runnable!): kotlin.String!
+    public open fun foo1(/*0*/ o: kotlin.Any!): kotlin.Char
+    public open fun foo2(/*0*/ c: (() -> kotlin.Unit!)!): kotlin.Int
+    public open fun foo2(/*0*/ r: java.lang.Runnable!): kotlin.String!
+    public open fun foo2(/*0*/ o: kotlin.Any!): kotlin.Char
+    public open fun foo3(/*0*/ r: java.lang.Runnable!): kotlin.String!
+    public open fun foo3(/*0*/ o: kotlin.Any!): kotlin.Char
+    public open fun foo3(/*0*/ c: kotlin.Function<kotlin.Unit!>!): kotlin.Int
+    public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+    public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+
+    public interface MyRunnable {
+        public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+        public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+        public abstract fun run(): kotlin.Unit
+        public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+    }
+
+    // Static members
+    public final /*synthesized*/ fun MyRunnable(/*0*/ function: () -> kotlin.Unit): A.MyRunnable
+}

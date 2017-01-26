@@ -1160,6 +1160,18 @@ public class DiagnosticsTestWithStdLibGenerated extends AbstractDiagnosticsTestW
             KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/diagnostics/testsWithStdLib/resolve"), Pattern.compile("^(.+)\\.kt$"), TargetBackend.ANY, true);
         }
 
+        @TestMetadata("ambiguityOnSAM.kt")
+        public void testAmbiguityOnSAM() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/testsWithStdLib/resolve/ambiguityOnSAM.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("ambiguityOnSAMWithoutObject.kt")
+        public void testAmbiguityOnSAMWithoutObject() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/testsWithStdLib/resolve/ambiguityOnSAMWithoutObject.kt");
+            doTest(fileName);
+        }
+
         @TestMetadata("hidesMembers.kt")
         public void testHidesMembers() throws Exception {
             String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/testsWithStdLib/resolve/hidesMembers.kt");

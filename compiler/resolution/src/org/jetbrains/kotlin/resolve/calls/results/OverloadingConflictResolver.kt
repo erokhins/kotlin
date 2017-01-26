@@ -19,12 +19,16 @@ package org.jetbrains.kotlin.resolve.calls.results
 import gnu.trove.THashSet
 import gnu.trove.TObjectHashingStrategy
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
+import org.jetbrains.kotlin.builtins.functions.FunctionClassDescriptor
+import org.jetbrains.kotlin.builtins.getFunctionalClassKind
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.ScriptDescriptor
 import org.jetbrains.kotlin.descriptors.Visibilities
 import org.jetbrains.kotlin.resolve.DescriptorEquivalenceForOverrides
 import org.jetbrains.kotlin.resolve.OverridingUtil
 import org.jetbrains.kotlin.resolve.calls.context.CheckArgumentTypesMode
+import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.descriptorUtil.varargParameterPosition
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.TypeUtils
@@ -132,12 +136,32 @@ class OverloadingConflictResolver<C : Any>(
                     }.singleOrNull()
 
                 CheckArgumentTypesMode.CHECK_VALUE_ARGUMENTS ->
-                    findMaximallySpecificCall(candidates, discriminateGenerics, isDebuggerContext)
-                    ?: findMaximallySpecificCall(
-                            candidates.filterNotTo(mutableSetOf()) { createFlatSignature(it).isSyntheticMember },
-                            discriminateGenerics, isDebuggerContext
-                    )
+                    findMaximallySpecificConsideringSyntheticMembers(candidates, discriminateGenerics, isDebuggerContext)
             }
+
+    // now synthetic members is SAM adapters
+    // see https://jetbrains.quip.com/gromAL3nwxHv
+    private fun findMaximallySpecificConsideringSyntheticMembers(
+            candidates: Set<C>,
+            discriminateGenerics: Boolean,
+            isDebuggerContext: Boolean
+    ): C? {
+        findMaximallySpecificCall(candidates, discriminateGenerics, isDebuggerContext)?.let { return it }
+
+        val realMembers = candidates.filterNotTo(mutableSetOf()) { createFlatSignature(it).isSyntheticMember }
+
+        if (realMembers.none { it.resultingDescriptor.hasFunctionOrFunctionNValueParameters() }) return null
+
+        return findMaximallySpecificCall(realMembers, discriminateGenerics, isDebuggerContext)
+    }
+
+    private fun CallableDescriptor.hasFunctionOrFunctionNValueParameters() = valueParameters.any {
+        it.original.type.constructor.declarationDescriptor?.isFunctionOrFunctionN == true
+    }
+
+    private val DeclarationDescriptor.isFunctionOrFunctionN
+        get() = fqNameSafe == KotlinBuiltIns.FQ_NAMES.function || getFunctionalClassKind() == FunctionClassDescriptor.Kind.Function
+
 
     // null means ambiguity between variables
     private fun findMaximallySpecificVariableAsFunctionCalls(candidates: Set<C>, isDebuggerContext: Boolean): Set<C>? {
