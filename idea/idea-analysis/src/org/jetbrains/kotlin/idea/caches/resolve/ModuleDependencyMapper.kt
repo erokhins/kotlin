@@ -35,7 +35,6 @@ import org.jetbrains.kotlin.idea.project.TargetPlatformDetector
 import org.jetbrains.kotlin.load.java.structure.JavaClass
 import org.jetbrains.kotlin.load.java.structure.impl.JavaClassImpl
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.resolve.MultiTargetPlatform
 import org.jetbrains.kotlin.resolve.jvm.JvmPlatformParameters
 
 fun createModuleResolverProvider(
@@ -60,39 +59,34 @@ fun createModuleResolverProvider(
 
     val modulesToCreateResolversFor = allModuleInfos.filter(moduleFilter)
 
-    fun createResolverForProject(): ResolverForProject<IdeaModuleInfo> {
-        val modulesContent = { module: IdeaModuleInfo ->
-            ModuleContent(syntheticFilesByModule[module] ?: listOf(), module.contentScope())
-        }
-
-        val jvmPlatformParameters = JvmPlatformParameters {
-            javaClass: JavaClass ->
-            val psiClass = (javaClass as JavaClassImpl).psi
-            psiClass.getNullableModuleInfo()
-        }
-
-        val resolverForProject = analyzerFacade.setupResolverForProject(
-                debugName, globalContext.withProject(project), modulesToCreateResolversFor, modulesContent,
-                jvmPlatformParameters, IdeaEnvironment, builtIns,
-                delegateResolver, { m, c -> IDEPackagePartProvider(c.moduleContentScope) },
-                sdk?.let { SdkInfo(project, it) },
-                modulePlatforms = { moduleInfo ->
-                    val module = (moduleInfo as? ModuleSourceInfo)?.module
-                    module?.let { TargetPlatformDetector.getPlatform(module).multiTargetPlatform }
-                },
-                moduleSources = { moduleInfo ->
-                    when (moduleInfo) {
-                        is ModuleProductionSourceInfo -> SourceKind.PRODUCTION
-                        is ModuleTestSourceInfo -> SourceKind.TEST
-                        else -> SourceKind.NONE
-                    }
-                }
-
-        )
-        return resolverForProject
+    val modulesContent = { module: IdeaModuleInfo ->
+        ModuleContent(syntheticFilesByModule[module] ?: listOf(), module.contentScope())
     }
 
-    val resolverForProject = createResolverForProject()
+    val jvmPlatformParameters = JvmPlatformParameters {
+        javaClass: JavaClass ->
+        val psiClass = (javaClass as JavaClassImpl).psi
+        psiClass.getNullableModuleInfo()
+    }
+
+    val resolverForProject = analyzerFacade.setupResolverForProject(
+            debugName, globalContext.withProject(project), modulesToCreateResolversFor, modulesContent,
+            jvmPlatformParameters, IdeaEnvironment, builtIns,
+            delegateResolver, { _, c -> IDEPackagePartProvider(c.moduleContentScope) },
+            sdk?.let { SdkInfo(project, it) },
+            modulePlatforms = { moduleInfo ->
+                val module = (moduleInfo as? ModuleSourceInfo)?.module
+                module?.let { TargetPlatformDetector.getPlatform(module).multiTargetPlatform }
+            },
+            moduleSources = { moduleInfo ->
+                when (moduleInfo) {
+                    is ModuleProductionSourceInfo -> SourceKind.PRODUCTION
+                    is ModuleTestSourceInfo -> SourceKind.TEST
+                    else -> SourceKind.NONE
+                }
+            }
+
+    )
 
     return ModuleResolverProviderImpl(
             resolverForProject,
