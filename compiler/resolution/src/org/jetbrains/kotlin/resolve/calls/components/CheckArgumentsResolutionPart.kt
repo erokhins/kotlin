@@ -19,10 +19,9 @@ package org.jetbrains.kotlin.resolve.calls.components
 import org.jetbrains.kotlin.builtins.getValueParameterTypesFromFunctionType
 import org.jetbrains.kotlin.builtins.isExtensionFunctionType
 import org.jetbrains.kotlin.builtins.isFunctionType
-import org.jetbrains.kotlin.descriptors.FunctionDescriptor
-import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
+import org.jetbrains.kotlin.resolve.calls.components.CreateDescriptorWithFreshTypeVariables.createToFreshVariableSubstitutorAndAddInitialConstraints
 import org.jetbrains.kotlin.resolve.calls.inference.ConstraintSystemBuilder
 import org.jetbrains.kotlin.resolve.calls.inference.addSubtypeConstraintIfCompatible
 import org.jetbrains.kotlin.resolve.calls.inference.model.ArgumentConstraintPosition
@@ -39,7 +38,6 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
 import org.jetbrains.kotlin.types.upperIfFlexible
 import org.jetbrains.kotlin.utils.SmartList
 import org.jetbrains.kotlin.utils.addIfNotNull
-import java.lang.UnsupportedOperationException
 
 internal object CheckArguments : ResolutionPart {
     override fun SimpleKotlinResolutionCandidate.process(): List<KotlinCallDiagnostic> {
@@ -49,7 +47,8 @@ internal object CheckArguments : ResolutionPart {
             val resolvedCallArgument = argumentMappingByOriginal[parameterDescriptor.original] ?: continue
             for (argument in resolvedCallArgument.arguments) {
 
-                val diagnostic = checkArgument(callContext, kotlinCall, csBuilder, argument, argument.getExpectedType(parameterDescriptor))
+                val diagnostic = checkArgument(callContext, kotlinCall, csBuilder, argument, argument.getExpectedType(parameterDescriptor),
+                                               postponeCallableReferenceArguments)
                 diagnostics.addIfNotNull(diagnostic)
 
                 if (diagnostic != null && !diagnostic.candidateApplicability.isSuccess) break
@@ -63,13 +62,23 @@ internal object CheckArguments : ResolutionPart {
             kotlinCall: KotlinCall,
             csBuilder: ConstraintSystemBuilder,
             argument: KotlinCallArgument,
-            expectedType: UnwrappedType
+            expectedType: UnwrappedType,
+            postponeCallableReferenceArguments: MutableList<PostponeCallableReferenceArgument>? = null
     ): KotlinCallDiagnostic? {
         return when (argument) {
             is ExpressionKotlinCallArgument -> checkExpressionArgument(csBuilder, argument, expectedType, isReceiver = false)
             is SubKotlinCallArgument -> checkSubCallArgument(csBuilder, argument, expectedType, isReceiver = false)
             is LambdaKotlinCallArgument -> processLambdaArgument(kotlinCall, csBuilder, argument, expectedType)
-            is CallableReferenceKotlinCallArgument -> processCallableReferenceArgument(callContext, kotlinCall, csBuilder, argument, expectedType)
+            is CallableReferenceKotlinCallArgument -> {
+                if (postponeCallableReferenceArguments == null) {
+                    processCallableReferenceArgument(callContext, kotlinCall, csBuilder, argument, expectedType)
+                }
+                else {
+                    // callable reference resolution will be run after choosing single descriptor
+                    postponeCallableReferenceArguments.add(PostponeCallableReferenceArgument(argument, expectedType))
+                    null
+                }
+            }
             else -> error("Incorrect argument type: $argument, ${argument.javaClass.canonicalName}.")
         }
     }
@@ -160,43 +169,27 @@ internal object CheckArguments : ResolutionPart {
             argument: CallableReferenceKotlinCallArgument,
             expectedType: UnwrappedType
     ): KotlinCallDiagnostic? {
-        val position = ArgumentConstraintPosition(argument)
-
-        if (argument !is ChosenCallableReferenceDescriptor) {
-            val lhsType = argument.lhsType
-            if (lhsType != null) {
-                // todo: case with two receivers
-                val expectedReceiverType = expectedType.supertypes().firstOrNull { it.isFunctionType }?.arguments?.first()?.type?.unwrap()
-                if (expectedReceiverType != null) {
-                    // (lhsType) -> .. <: (expectedReceiverType) -> ... => expectedReceiverType <: lhsType
-                    csBuilder.addSubtypeConstraint(expectedReceiverType, lhsType, position)
-                }
-            }
-
-            return null
+        val subLHSCall = ((argument.lhsResult as? LHSResult.Expression)?.lshCallArgument as? SubKotlinCallArgument)
+        if (subLHSCall != null) {
+            csBuilder.addInnerCall(subLHSCall.resolvedCall)
+        }
+        val candidates = callContext.callableReferenceResolver.runRLSResolution(callContext, argument, expectedType) { checkCallableReference ->
+            csBuilder.runTransaction { checkCallableReference(this); false }
+        }
+        val chosenCandidate = when (candidates.size) {
+            0 -> return NoneCallableReferenceCandidates(argument)
+            1 -> candidates.single()
+            else -> return CallableReferenceCandidatesAmbiguity(argument, candidates)
         }
 
-        val descriptor = argument.candidate.descriptor
-        when (descriptor) {
-            is FunctionDescriptor -> {
-                // todo store resolved
-                val resolvedFunctionReference = callContext.callableReferenceResolver.resolveFunctionReference(
-                        argument, kotlinCall, expectedType)
 
-                csBuilder.addSubtypeConstraint(resolvedFunctionReference.reflectionType, expectedType, position)
-                return resolvedFunctionReference.argumentsMapping?.diagnostics?.let {
-                    ErrorCallableMapping(resolvedFunctionReference)
-                }
-            }
-            is PropertyDescriptor -> {
+        val toFreshSubstitutor = createToFreshVariableSubstitutorAndAddInitialConstraints(chosenCandidate.candidate, csBuilder, kotlinCall = null)
+        val reflectionType = toFreshSubstitutor.safeSubstitute(chosenCandidate.reflectionCandidateType)
+        csBuilder.addSubtypeConstraint(reflectionType, expectedType, ArgumentConstraintPosition(argument))
 
-                // todo store resolved
-                val resolvedPropertyReference = callContext.callableReferenceResolver.resolvePropertyReference(descriptor,
-                                                                                                                 argument, kotlinCall, callContext.scopeTower.lexicalScope.ownerDescriptor)
-                csBuilder.addSubtypeConstraint(resolvedPropertyReference.reflectionType, expectedType, position)
-            }
-            else -> throw UnsupportedOperationException("Callable reference resolved to an unsupported descriptor: $descriptor")
-        }
+        val resolvedCallableReference = ResolvedCallableReferenceArgument(kotlinCall, argument, toFreshSubstitutor.freshVariables, chosenCandidate)
+        csBuilder.addCallableReferenceArgument(resolvedCallableReference)
+
         return null
     }
 }
