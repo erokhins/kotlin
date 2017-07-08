@@ -81,30 +81,43 @@ class ParseErrorKotlinCallArgument(
         get() = dataFlowInfoAfterThisArgument
 }
 
-class LambdaKotlinCallArgumentImpl(
+abstract class PSILambdaKotlinCallArgument(
         val outerCallContext: BasicCallResolutionContext,
         override val valueArgument: ValueArgument,
         override val dataFlowInfoBeforeThisArgument: DataFlowInfo,
-        val ktLambdaExpression: KtLambdaExpression,
-        override val argumentName: Name?,
-        override val parametersTypes: Array<UnwrappedType?>?
+        override val argumentName: Name?
 ) : LambdaKotlinCallArgument, PSIKotlinCallArgument() {
     override val dataFlowInfoAfterThisArgument: DataFlowInfo
         get() = dataFlowInfoBeforeThisArgument
+
+    abstract val ktFunction: KtFunction
+    abstract val expression: KtExpression
+    lateinit var lambdaInitialDataFlowInfo: DataFlowInfo
+}
+
+class LambdaKotlinCallArgumentImpl(
+        outerCallContext: BasicCallResolutionContext,
+        valueArgument: ValueArgument,
+        dataFlowInfoBeforeThisArgument: DataFlowInfo,
+        argumentName: Name?,
+        val ktLambdaExpression: KtLambdaExpression,
+        override val parametersTypes: Array<UnwrappedType?>?
+) : PSILambdaKotlinCallArgument(outerCallContext, valueArgument, dataFlowInfoBeforeThisArgument, argumentName) {
+    override val ktFunction get() = ktLambdaExpression.functionLiteral
+    override val expression get() = ktLambdaExpression
 }
 
 class FunctionExpressionImpl(
-        val outerCallContext: BasicCallResolutionContext,
-        override val valueArgument: ValueArgument,
-        override val dataFlowInfoBeforeThisArgument: DataFlowInfo,
-        val ktFunction: KtNamedFunction,
-        override val argumentName: Name?,
+        outerCallContext: BasicCallResolutionContext,
+        valueArgument: ValueArgument,
+        dataFlowInfoBeforeThisArgument: DataFlowInfo,
+        argumentName: Name?,
+        override val ktFunction: KtNamedFunction,
         override val receiverType: UnwrappedType?,
         override val parametersTypes: Array<UnwrappedType?>,
         override val returnType: UnwrappedType?
-) : FunctionExpression, PSIKotlinCallArgument() {
-    override val dataFlowInfoAfterThisArgument: DataFlowInfo
-        get() = dataFlowInfoBeforeThisArgument
+) : FunctionExpression, PSILambdaKotlinCallArgument(outerCallContext, valueArgument, dataFlowInfoBeforeThisArgument, argumentName) {
+    override val expression get() = ktFunction
 }
 
 class CallableReferenceKotlinCallArgumentImpl(
@@ -170,6 +183,13 @@ class EmptyLabeledReturn(
     override val receiver = ReceiverValueWithSmartCastInfo(TransientReceiver(builtIns.unitType), emptySet(), true)
     override val isSafeCall: Boolean get() = false
 }
+
+internal fun KotlinCallArgument.setResultDataFlowInfoIfRelevant(resultDataFlowInfo: DataFlowInfo) {
+    if (this is PSILambdaKotlinCallArgument) {
+        lambdaInitialDataFlowInfo = resultDataFlowInfo
+    }
+}
+
 
 // context here is context for value argument analysis
 internal fun createSimplePSICallArgument(
