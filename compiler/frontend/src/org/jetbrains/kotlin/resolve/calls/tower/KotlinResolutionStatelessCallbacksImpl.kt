@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.resolve.calls.callResolverUtil.isConventionCall
 import org.jetbrains.kotlin.resolve.calls.callResolverUtil.isInfixCall
 import org.jetbrains.kotlin.resolve.calls.callResolverUtil.isSuperOrDelegatingConstructorCall
 import org.jetbrains.kotlin.resolve.calls.components.KotlinResolutionStatelessCallbacks
+import org.jetbrains.kotlin.resolve.calls.model.CallableReferenceKotlinCallArgument
 import org.jetbrains.kotlin.resolve.calls.model.KotlinCall
 import org.jetbrains.kotlin.resolve.isHiddenInResolution
 
@@ -45,4 +46,7 @@ class KotlinResolutionStatelessCallbacksImpl(
 
     override fun isHiddenInResolution(descriptor: DeclarationDescriptor, kotlinCall: KotlinCall) =
             descriptor.isHiddenInResolution(languageVersionSettings, isSuperOrDelegatingConstructorCall(kotlinCall))
+
+    override fun getScopeTowerForCallableReferenceArgument(argument: CallableReferenceKotlinCallArgument): ImplicitScopeTower =
+            (argument as CallableReferenceKotlinCallArgumentImpl).scopeTowerForResolution
 }

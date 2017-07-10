@@ -559,7 +559,7 @@ class PSICallResolver(
                 }
             }
 
-            return CallableReferenceKotlinCallArgumentImpl(valueArgument, startDataFlowInfo, newDataFlowInfo,
+            return CallableReferenceKotlinCallArgumentImpl(ASTScopeTower(context), valueArgument, startDataFlowInfo, newDataFlowInfo,
                                                            ktExpression, argumentName, lhsNewResult, name)
         }
 

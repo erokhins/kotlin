@@ -61,12 +61,13 @@ class CallableReferenceResolver(
 ) {
 
     fun processCallableReferenceArgument(
-            scopeTower: ImplicitScopeTower,
             csBuilder: ConstraintSystemBuilder,
             postponedArgument: PostponedCallableReferenceArgument
     ): KotlinCallDiagnostic? {
         val argument = postponedArgument.argument
         val expectedType = postponedArgument.expectedType
+
+        val scopeTower = callComponents.statelessCallbacks.getScopeTowerForCallableReferenceArgument(argument)
 
         val subLHSCall = ((argument.lhsResult as? LHSResult.Expression)?.lshCallArgument as? SubKotlinCallArgument)
         if (subLHSCall != null) {
