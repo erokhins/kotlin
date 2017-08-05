@@ -64,7 +64,7 @@ class CallableReferenceResolver(
     fun processCallableReferenceArgument(
             csBuilder: ConstraintSystemBuilder,
             postponedArgument: PostponedCallableReferenceArgument
-    ): KotlinCallDiagnostic? {
+    ): Collection<KotlinCallDiagnostic> {
         postponedArgument.analyzed = true
 
         val argument = postponedArgument.argument
@@ -80,9 +80,9 @@ class CallableReferenceResolver(
             csBuilder.runTransaction { checkCallableReference(this); false }
         }
         val chosenCandidate = when (candidates.size) {
-            0 -> return NoneCallableReferenceCandidates(argument)
+            0 -> return listOf(NoneCallableReferenceCandidates(argument))
             1 -> candidates.single()
-            else -> return CallableReferenceCandidatesAmbiguity(argument, candidates)
+            else -> return listOf(CallableReferenceCandidatesAmbiguity(argument, candidates))
         }
         val (toFreshSubstitutor, diagnostic) = with(chosenCandidate) {
             csBuilder.checkCallableReference(argument, dispatchReceiver, extensionReceiver, candidate,
@@ -93,7 +93,7 @@ class CallableReferenceResolver(
         postponedArgument.myTypeVariables = toFreshSubstitutor.freshVariables
         postponedArgument.callableResolutionCandidate = chosenCandidate
 
-        return diagnostic
+        return listOfNotNull(diagnostic)
     }
 
 

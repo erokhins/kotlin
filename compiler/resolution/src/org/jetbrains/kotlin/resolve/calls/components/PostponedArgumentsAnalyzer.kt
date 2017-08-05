@@ -19,12 +19,11 @@ package org.jetbrains.kotlin.resolve.calls.components
 import org.jetbrains.kotlin.resolve.calls.inference.ConstraintSystemBuilder
 import org.jetbrains.kotlin.resolve.calls.inference.components.NewTypeSubstitutor
 import org.jetbrains.kotlin.resolve.calls.inference.model.LambdaArgumentConstraintPosition
-import org.jetbrains.kotlin.resolve.calls.model.PostponedCallableReferenceArgument
-import org.jetbrains.kotlin.resolve.calls.model.PostponedCollectionLiteralArgument
-import org.jetbrains.kotlin.resolve.calls.model.PostponedKotlinCallArgument
-import org.jetbrains.kotlin.resolve.calls.model.PostponedLambdaArgument
+import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.types.UnwrappedType
 import org.jetbrains.kotlin.types.typeUtil.builtIns
+import org.jetbrains.kotlin.utils.SmartList
+import org.jetbrains.kotlin.utils.addIfNotNull
 
 class PostponedArgumentsAnalyzer(
         private val callableReferenceResolver: CallableReferenceResolver
@@ -37,17 +36,20 @@ class PostponedArgumentsAnalyzer(
 
         // mutable operations
         fun getBuilder(): ConstraintSystemBuilder
+        fun addError(error: KotlinCallDiagnostic)
     }
 
     fun analyze(c: Context, resolutionCallbacks: KotlinResolutionCallbacks, argument: PostponedKotlinCallArgument) {
-        when (argument) {
+        val diagnostics = when (argument) {
             is PostponedLambdaArgument -> analyzeLambda(c, resolutionCallbacks, argument)
             is PostponedCallableReferenceArgument -> callableReferenceResolver.processCallableReferenceArgument(c.getBuilder(), argument)
             is PostponedCollectionLiteralArgument -> TODO("Not supported")
         }
+        diagnostics.forEach { c.addError(it) }
     }
 
-    private fun analyzeLambda(c: Context, resolutionCallbacks: KotlinResolutionCallbacks, lambda: PostponedLambdaArgument) {
+    private fun analyzeLambda(c: Context, resolutionCallbacks: KotlinResolutionCallbacks, lambda: PostponedLambdaArgument): Collection<KotlinCallDiagnostic> {
+        val diagnostics = SmartList<KotlinCallDiagnostic>()
         val currentSubstitutor = c.buildCurrentSubstitutor()
         fun substitute(type: UnwrappedType) = currentSubstitutor.safeSubstitute(type)
 
@@ -58,12 +60,13 @@ class PostponedArgumentsAnalyzer(
         lambda.resultArguments = resolutionCallbacks.analyzeAndGetLambdaResultArguments(lambda.argument, lambda.isSuspend, receiver, parameters, expectedType)
 
         for (resultLambdaArgument in lambda.resultArguments) {
-            checkSimpleArgument(c.getBuilder(), resultLambdaArgument, lambda.returnType.let(::substitute))
+            diagnostics.addIfNotNull(checkSimpleArgument(c.getBuilder(), resultLambdaArgument, lambda.returnType.let(::substitute)))
         }
 
         if (lambda.resultArguments.isEmpty()) {
             val unitType = lambda.returnType.builtIns.unitType
             c.getBuilder().addSubtypeConstraint(lambda.returnType.let(::substitute), unitType, LambdaArgumentConstraintPosition(lambda))
         }
+        return diagnostics
     }
 }

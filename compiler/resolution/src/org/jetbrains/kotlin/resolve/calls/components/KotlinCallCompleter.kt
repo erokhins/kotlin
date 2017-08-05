@@ -102,8 +102,10 @@ class KotlinCallCompleter(
                     postponedArgument.finalReturnType = currentSubstitutor.safeSubstitute(postponedArgument.returnType)
                 }
                 is PostponedCallableReferenceArgument -> {
-                    val resultTypeParameters = postponedArgument.myTypeVariables.map { currentSubstitutor.safeSubstitute(it.defaultType) }
-                    resolutionCallbacks.completeCallableReference(postponedArgument, resultTypeParameters)
+                    if (postponedArgument.analyzedAndThereIsResult) {
+                        val resultTypeParameters = postponedArgument.myTypeVariables.map { currentSubstitutor.safeSubstitute(it.defaultType) }
+                        resolutionCallbacks.completeCallableReference(postponedArgument, resultTypeParameters)
+                    }
                 }
                 is PostponedCollectionLiteralArgument -> {
                     resolutionCallbacks.completeCollectionLiteralCalls(postponedArgument)
