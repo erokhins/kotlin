@@ -25,11 +25,25 @@ import org.jetbrains.kotlin.types.UnwrappedType
 import org.jetbrains.kotlin.types.typeUtil.builtIns
 import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
+fun resolveKtPrimitive(
+        csBuilder: ConstraintSystemBuilder,
+        argument: KotlinCallArgument,
+        expectedType: UnwrappedType?,
+        diagnosticsHolder: KotlinDiagnosticsHolder,
+        isReceiver: Boolean
+): ResolvedKtPrimitive = when (argument) {
+    is SimpleKotlinCallArgument -> checkSimpleArgument(csBuilder, argument, expectedType, diagnosticsHolder, isReceiver)
+    is LambdaKotlinCallArgument -> preprocessLambdaArgument(csBuilder, argument, expectedType)
+    is CallableReferenceKotlinCallArgument -> preprocessCallableReference(csBuilder, argument, expectedType)
+    is CollectionLiteralKotlinCallArgument -> preprocessCollectionLiteralArgument(csBuilder, argument, expectedType)
+    else -> unexpectedArgument(argument)
+}
+
 fun createPostponedArgumentAndPerformInitialChecks(
         csBuilder: ConstraintSystemBuilder,
         argument: PostponableKotlinCallArgument,
         expectedType: UnwrappedType
-): KotlinCallDiagnostic? {
+): ResolvedKtPrimitive? {
     val (postponedArgument, diagnostic) =  when (argument) {
         is LambdaKotlinCallArgument -> preprocessLambdaArgument(csBuilder, argument, expectedType)
         is CallableReferenceKotlinCallArgument -> preprocessCallableReference(csBuilder, argument, expectedType)

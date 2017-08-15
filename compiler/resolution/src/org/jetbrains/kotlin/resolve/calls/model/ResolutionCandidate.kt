@@ -33,7 +33,9 @@ import org.jetbrains.kotlin.types.TypeSubstitutor
 
 
 abstract class ResolutionPart {
-    abstract fun KotlinResolutionCandidate.process()
+    abstract fun KotlinResolutionCandidate.process(workIndex: Int)
+
+    open fun KotlinResolutionCandidate.workCount(): Int = 1
 
     // helper functions
     protected inline val KotlinResolutionCandidate.candidateDescriptor get() = resolvedCall.candidateDescriptor
@@ -61,8 +63,10 @@ class KotlinResolutionCandidate(
     private var newSystem: NewConstraintSystemImpl? = null
     private val diagnostics = arrayListOf<KotlinCallDiagnostic>()
     private var currentApplicability = ResolutionCandidateApplicability.RESOLVED
+    internal var subKtPrimitives: MutableList<ResolvedKtPrimitive> = arrayListOf()
 
     private val resolutionSequence: List<ResolutionPart> get() = resolvedCall.ktPrimitive.callKind.resolutionSequence
+    private val stepCount = resolutionSequence.sumBy { it.run { workCount() } }
     private var step = 0
 
     fun getSystem(): NewConstraintSystem {
@@ -80,24 +84,54 @@ class KotlinResolutionCandidate(
         currentApplicability = maxOf(diagnostic.candidateApplicability, currentApplicability)
     }
 
-    private fun process(stopOnFirstError: Boolean) {
-        while (step < resolutionSequence.size) {
+    fun addResolvedKtPrimitive(resolvedKtPrimitive: ResolvedKtPrimitive) {
+        subKtPrimitives.add(resolvedKtPrimitive)
+    }
+
+    private fun processParts(stopOnFirstError: Boolean) {
+        if (stopOnFirstError && step > 0) return // error already happened
+        if (step == stepCount) return
+
+        var partIndex = 0
+        var workStep = step
+        while (workStep > 0) {
+            val workCount = resolutionSequence[partIndex].run { workCount() }
+            if (workStep >= workCount) {
+                partIndex++
+                workStep -= workCount
+            }
+        }
+        if (partIndex < resolutionSequence.size) {
+            processPart(resolutionSequence[partIndex], stopOnFirstError, workStep)
+            partIndex++
+        }
+
+        while (partIndex < resolutionSequence.size) {
             if (stopOnFirstError && !currentApplicability.isSuccess) break
 
-            resolutionSequence[step].run { this@KotlinResolutionCandidate.process() }
+            processPart(resolutionSequence[partIndex], stopOnFirstError)
+            partIndex++
+        }
+    }
+
+    private fun processPart(part: ResolutionPart, stopOnFirstError: Boolean, startWorkIndex: Int = 0) {
+        for (workIndex in startWorkIndex until (part.run { workCount() })) {
+            if (stopOnFirstError && !currentApplicability.isSuccess) break
+
+            part.run { process(workIndex) }
             step++
         }
     }
 
     override val isSuccessful: Boolean
         get() {
-            process(stopOnFirstError = true)
+            processParts(stopOnFirstError = true)
             return currentApplicability.isSuccess
         }
 
     override val resultingApplicability: ResolutionCandidateApplicability
         get() {
-            process(stopOnFirstError = false)
+            processParts(stopOnFirstError = false)
             if (csBuilder.hasContradiction) {
                 return maxOf(ResolutionCandidateApplicability.INAPPLICABLE, currentApplicability)
             }
@@ -107,7 +141,7 @@ class KotlinResolutionCandidate(
     override fun toString(): String {
         val descriptor = DescriptorRenderer.COMPACT.render(resolvedCall.candidateDescriptor)
         val okOrFail = if (currentApplicability.isSuccess) "OK" else "FAIL"
-        val step = "$step/${resolutionSequence.size}"
+        val step = "$step/${stepCount}"
         return "$okOrFail($step): $descriptor"
     }
 }

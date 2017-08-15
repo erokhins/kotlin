@@ -135,7 +135,7 @@ enum class KotlinCallKind(vararg resolutionPart: ResolutionPart) {
             CheckAbstractSuperCallPart,
             NoTypeArguments,
             NoArguments,
-            CreateDescriptorWithFreshTypeVariables,
+            CreateFreshVariablesSubstitutor,
             CheckExplicitReceiverKindConsistency,
             CheckReceivers
     ),
@@ -147,10 +147,11 @@ enum class KotlinCallKind(vararg resolutionPart: ResolutionPart) {
             MapTypeArguments,
             MapArguments,
             ArgumentsToCandidateParameterDescriptor,
-            CreateDescriptorWithFreshTypeVariables,
+            CreateFreshVariablesSubstitutor,
             CheckExplicitReceiverKindConsistency,
             CheckReceivers,
-            CheckArguments
+            CheckArguments,
+            CheckExternalArgument
     ),
     UNSUPPORTED();
 
