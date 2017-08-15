@@ -146,6 +146,7 @@ enum class KotlinCallKind(vararg resolutionPart: ResolutionPart) {
             CheckAbstractSuperCallPart,
             MapTypeArguments,
             MapArguments,
+            ArgumentsToCandidateParameterDescriptor,
             CreateDescriptorWithFreshTypeVariables,
             CheckExplicitReceiverKindConsistency,
             CheckReceivers,

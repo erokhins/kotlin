@@ -93,6 +93,19 @@ internal object MapArguments : ResolutionPart() {
     }
 }
 
+internal object ArgumentsToCandidateParameterDescriptor : ResolutionPart() {
+    override fun KotlinResolutionCandidate.process() {
+        val map = hashMapOf<KotlinCallArgument, ValueParameterDescriptor>()
+        for ((originalValueParameter, resolvedCallArgument) in resolvedCall.argumentMappingByOriginal) {
+            val valueParameter = candidateDescriptor.valueParameters.getOrNull(originalValueParameter.index) ?: continue
+            for (argument in resolvedCallArgument.arguments) {
+                map[argument] = valueParameter
+            }
+        }
+        resolvedCall.argumentToCandidateParameter = map
+    }
+}
+
 internal object NoArguments : ResolutionPart() {
     override fun KotlinResolutionCandidate.process() {
         assert(kotlinCall.argumentsInParenthesis.isEmpty()) {
@@ -102,8 +115,10 @@ internal object NoArguments : ResolutionPart() {
             "Variable call cannot has external argument: ${kotlinCall.externalArgument}. Call: $kotlinCall"
         }
         resolvedCall.argumentMappingByOriginal = emptyMap()
+        resolvedCall.argumentToCandidateParameter = emptyMap()
     }
 }
+
 
 internal object CreateDescriptorWithFreshTypeVariables : ResolutionPart() {
     override fun KotlinResolutionCandidate.process() {
@@ -201,7 +216,7 @@ internal object CheckReceivers : ResolutionPart() {
         val expectedNotSubstitutedType = receiverParameter.type.unwrap()
         val expectedType = resolvedCall.substitutor.safeSubstitute(expectedNotSubstitutedType)
 
-        val diagnostic = checkSimpleArgument(csBuilder, receiverArgument, expectedType, isReceiver = true)
+        val diagnostic = checkSimpleArgument(csBuilder, receiverArgument, expectedType, this, isReceiver = true)
         if (diagnostic != null) addDiagnostic(diagnostic)
     }
 
@@ -228,6 +243,8 @@ internal object CheckArguments : ResolutionPart() {
                 }
 
                 if (diagnostic != null) addDiagnostic(diagnostic)
+
+                // todo seems like we should'n stop on first error?
                 if (diagnostic != null && !diagnostic.candidateApplicability.isSuccess) break
             }
         }

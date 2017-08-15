@@ -68,3 +68,4 @@ class ResolvedKtCallableReference (
 ) : ResolvedKtPrimitive() {
 }
 
+class ResolvedKtExpression(override val ktPrimitive: ExpressionKotlinCallArgument) : ResolvedKtPrimitive()

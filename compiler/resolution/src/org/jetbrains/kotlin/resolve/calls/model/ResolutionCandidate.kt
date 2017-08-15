@@ -40,6 +40,13 @@ abstract class ResolutionPart {
     protected inline val KotlinResolutionCandidate.kotlinCall get() = resolvedCall.ktPrimitive
 }
 
+interface KotlinDiagnosticsHolder {
+    fun addDiagnostic(diagnostic: KotlinCallDiagnostic)
+}
+
+fun KotlinDiagnosticsHolder.addDiagnosticIfNotNull(diagnostic: KotlinCallDiagnostic?) {
+    diagnostic?.let { addDiagnostic(it) }
+}
 /**
  * baseSystem contains all information from arguments, i.e. it is union of all system of arguments
  * Also by convention we suppose that baseSystem has no contradiction
@@ -50,7 +57,7 @@ class KotlinResolutionCandidate(
         private val baseSystem: ConstraintStorage,
         val resolvedCall: MutableResolvedKtCall,
         val knownTypeParametersResultingSubstitutor: TypeSubstitutor? = null
-) : Candidate {
+) : Candidate, KotlinDiagnosticsHolder {
     private var newSystem: NewConstraintSystemImpl? = null
     private val diagnostics = arrayListOf<KotlinCallDiagnostic>()
     private var currentApplicability = ResolutionCandidateApplicability.RESOLVED
@@ -68,7 +75,7 @@ class KotlinResolutionCandidate(
 
     val csBuilder get() = getSystem().getBuilder()
 
-    fun addDiagnostic(diagnostic: KotlinCallDiagnostic) {
+    override fun addDiagnostic(diagnostic: KotlinCallDiagnostic) {
         diagnostics.add(diagnostic)
         currentApplicability = maxOf(diagnostic.candidateApplicability, currentApplicability)
     }
@@ -107,7 +114,7 @@ class KotlinResolutionCandidate(
 
 class MutableResolvedKtCall(
         override val ktPrimitive: KotlinCall,
-        override val candidateDescriptor: CallableDescriptor,
+        override val candidateDescriptor: CallableDescriptor, // original candidate descriptor
         override val explicitReceiverKind: ExplicitReceiverKind,
         override val dispatchReceiverArgument: SimpleKotlinCallArgument?,
         override val extensionReceiverArgument: SimpleKotlinCallArgument?
@@ -115,6 +122,7 @@ class MutableResolvedKtCall(
     override lateinit var typeArgumentMappingByOriginal: TypeArgumentsToParametersMapper.TypeArgumentsMapping
     override lateinit var argumentMappingByOriginal: Map<ValueParameterDescriptor, ResolvedCallArgument>
     override lateinit var substitutor: FreshVariableNewTypeSubstitutor
+    lateinit var argumentToCandidateParameter: Map<KotlinCallArgument, ValueParameterDescriptor>
 }
 
 open class SimpleKotlinResolutionCandidate(
