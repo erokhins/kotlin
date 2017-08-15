@@ -19,6 +19,7 @@ package org.jetbrains.kotlin.resolve.calls.model
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.resolve.DescriptorUtils
+import org.jetbrains.kotlin.resolve.calls.inference.model.ConstraintStorage
 import org.jetbrains.kotlin.resolve.scopes.receivers.DetailedReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.QualifierReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValueWithSmartCastInfo
@@ -26,12 +27,15 @@ import org.jetbrains.kotlin.resolve.scopes.receivers.TransientReceiver
 import org.jetbrains.kotlin.types.UnwrappedType
 
 
-interface ReceiverKotlinCallArgument {
+interface ReceiverKotlinCallArgument : KotlinCallArgument {
     val receiver: DetailedReceiver
 }
 
 class QualifierReceiverKotlinCallArgument(override val receiver: QualifierReceiver) : ReceiverKotlinCallArgument {
     override fun toString() = "$receiver"
+
+    override val isSpread get() = false
+    override val argumentName: Name? get() = null
 }
 
 interface KotlinCallArgument {
@@ -52,6 +56,7 @@ interface ExpressionKotlinCallArgument : SimpleKotlinCallArgument, KtPrimitive
 interface SubKotlinCallArgument : SimpleKotlinCallArgument {
     val resolvedCall: ResolvedKotlinCall.OnlyResolvedKotlinCall
     val resolvedKtCall: ResolvedKtCall
+    val subSystem: ConstraintStorage
 }
 
 interface LambdaKotlinCallArgument : PostponableKotlinCallArgument {

@@ -46,11 +46,10 @@ abstract class ResolutionPart {
  */
 class KotlinResolutionCandidate(
         val callComponents: KotlinCallComponents,
-        val resolvedCall: MutableResolvedKtCall,
-        val knownTypeParametersResultingSubstitutor: TypeSubstitutor?,
         val scopeTower: ImplicitScopeTower,
         private val baseSystem: ConstraintStorage,
-        initialDiagnostics: Collection<KotlinCallDiagnostic>
+        val resolvedCall: MutableResolvedKtCall,
+        val knownTypeParametersResultingSubstitutor: TypeSubstitutor? = null
 ) : Candidate {
     private var newSystem: NewConstraintSystemImpl? = null
     private val diagnostics = arrayListOf<KotlinCallDiagnostic>()
@@ -58,10 +57,6 @@ class KotlinResolutionCandidate(
 
     private val resolutionSequence: List<ResolutionPart> get() = resolvedCall.ktPrimitive.callKind.resolutionSequence
     private var step = 0
-
-    init {
-        initialDiagnostics.forEach(this::addDiagnostic)
-    }
 
     fun getSystem(): NewConstraintSystem {
         if (newSystem == null) {
