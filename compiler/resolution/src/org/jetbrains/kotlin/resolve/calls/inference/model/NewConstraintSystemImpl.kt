@@ -194,7 +194,10 @@ class NewConstraintSystemImpl(val constraintInjector: ConstraintInjector, val re
         checkState(State.BUILDING, State.COMPLETION)
         storage.innerCalls.add(innerCall)
 
-        val otherSystem = innerCall.candidate.lastCall.constraintSystem.asReadOnlyStorage()
+        addOtherSystem(innerCall.candidate.lastCall.constraintSystem.asReadOnlyStorage())
+    }
+
+    fun addOtherSystem(otherSystem: ConstraintStorage) {
         storage.allTypeVariables.putAll(otherSystem.allTypeVariables)
         for ((variable, constraints) in otherSystem.notFixedTypeVariables) {
             notFixedTypeVariables[variable] = MutableVariableWithConstraints(constraints.typeVariable, constraints.constraints)

@@ -39,7 +39,7 @@ interface KotlinCallArgument {
     val argumentName: Name?
 }
 
-interface PostponableKotlinCallArgument : KotlinCallArgument
+interface PostponableKotlinCallArgument : KotlinCallArgument, KtPrimitive
 
 interface SimpleKotlinCallArgument : KotlinCallArgument, ReceiverKotlinCallArgument {
     override val receiver: ReceiverValueWithSmartCastInfo
@@ -47,10 +47,11 @@ interface SimpleKotlinCallArgument : KotlinCallArgument, ReceiverKotlinCallArgum
     val isSafeCall: Boolean
 }
 
-interface ExpressionKotlinCallArgument : SimpleKotlinCallArgument
+interface ExpressionKotlinCallArgument : SimpleKotlinCallArgument, KtPrimitive
 
 interface SubKotlinCallArgument : SimpleKotlinCallArgument {
     val resolvedCall: ResolvedKotlinCall.OnlyResolvedKotlinCall
+    val resolvedKtCall: ResolvedKtCall
 }
 
 interface LambdaKotlinCallArgument : PostponableKotlinCallArgument {

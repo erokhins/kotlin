@@ -19,7 +19,7 @@ package org.jetbrains.kotlin.resolve.calls.model
 import org.jetbrains.kotlin.name.Name
 
 
-interface KotlinCall {
+interface KotlinCall : KtPrimitive {
     val callKind: KotlinCallKind
 
     val explicitReceiver: ReceiverKotlinCallArgument?
