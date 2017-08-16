@@ -72,6 +72,9 @@ class CallableReferenceCandidate(
 ) : Candidate {
     override val resultingApplicability = getResultApplicability(diagnostics)
     override val isSuccessful get() = resultingApplicability.isSuccess
+
+    var freshSubstitutor: FreshVariableNewTypeSubstitutor? = null
+        internal set
 }
 
 /**

@@ -30,7 +30,7 @@ import org.jetbrains.kotlin.types.typeUtil.asTypeProjection
 
 
 class SimpleConstraintSystemImpl(constraintInjector: ConstraintInjector, resultTypeResolver: ResultTypeResolver) : SimpleConstraintSystem {
-    val csBuilder: ConstraintSystemBuilder = NewConstraintSystemImpl(constraintInjector, resultTypeResolver).getBuilder()
+    val csBuilder: ConstraintSystemBuilder = NewConstraintSystemImpl(constraintInjector).getBuilder()
 
     override fun registerTypeVariables(typeParameters: Collection<TypeParameterDescriptor>): TypeSubstitutor {
         val substitutionMap = typeParameters.associate {

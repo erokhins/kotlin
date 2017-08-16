@@ -44,6 +44,16 @@ abstract class ResolutionPart {
 
 interface KotlinDiagnosticsHolder {
     fun addDiagnostic(diagnostic: KotlinCallDiagnostic)
+
+    class SimpleHolder : KotlinDiagnosticsHolder {
+        private val diagnostics = arrayListOf<KotlinCallDiagnostic>()
+
+        override fun addDiagnostic(diagnostic: KotlinCallDiagnostic) {
+            diagnostics.add(diagnostic)
+        }
+
+        fun getDiagnostics(): List<KotlinCallDiagnostic> = diagnostics
+    }
 }
 
 fun KotlinDiagnosticsHolder.addDiagnosticIfNotNull(diagnostic: KotlinCallDiagnostic?) {
@@ -71,7 +81,7 @@ class KotlinResolutionCandidate(
 
     fun getSystem(): NewConstraintSystem {
         if (newSystem == null) {
-            newSystem = NewConstraintSystemImpl(callComponents.constraintInjector, callComponents.resultTypeResolver)
+            newSystem = NewConstraintSystemImpl(callComponents.constraintInjector, callComponents.builtIns)
             newSystem!!.addOtherSystem(baseSystem)
         }
         return newSystem!!
@@ -141,7 +151,7 @@ class KotlinResolutionCandidate(
     override fun toString(): String {
         val descriptor = DescriptorRenderer.COMPACT.render(resolvedCall.candidateDescriptor)
         val okOrFail = if (currentApplicability.isSuccess) "OK" else "FAIL"
-        val step = "$step/${stepCount}"
+        val step = "$step/$stepCount"
         return "$okOrFail($step): $descriptor"
     }
 }
@@ -158,15 +168,3 @@ class MutableResolvedKtCall(
     override lateinit var substitutor: FreshVariableNewTypeSubstitutor
     lateinit var argumentToCandidateParameter: Map<KotlinCallArgument, ValueParameterDescriptor>
 }
-
-open class SimpleKotlinResolutionCandidate(
-        val callComponents: KotlinCallComponents,
-        val scopeTower: ImplicitScopeTower,
-        override val kotlinCall: KotlinCall,
-        val explicitReceiverKind: ExplicitReceiverKind,
-        val dispatchReceiverArgument: SimpleKotlinCallArgument?,
-        val extensionReceiver: SimpleKotlinCallArgument?,
-        val candidateDescriptor: CallableDescriptor,
-        val knownTypeParametersResultingSubstitutor: TypeSubstitutor?,
-        initialDiagnostics: Collection<KotlinCallDiagnostic>
-)

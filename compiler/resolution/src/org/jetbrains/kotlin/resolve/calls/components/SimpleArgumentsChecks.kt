@@ -35,7 +35,7 @@ import org.jetbrains.kotlin.types.upperIfFlexible
 fun checkSimpleArgument(
         csBuilder: ConstraintSystemBuilder,
         argument: SimpleKotlinCallArgument,
-        expectedType: UnwrappedType,
+        expectedType: UnwrappedType?,
         diagnosticsHolder: KotlinDiagnosticsHolder,
         isReceiver: Boolean
 ): ResolvedKtPrimitive = when (argument) {
@@ -47,14 +47,15 @@ fun checkSimpleArgument(
 private fun checkExpressionArgument(
         csBuilder: ConstraintSystemBuilder,
         expressionArgument: ExpressionKotlinCallArgument,
-        expectedType: UnwrappedType,
+        expectedType: UnwrappedType?,
         diagnosticsHolder: KotlinDiagnosticsHolder,
         isReceiver: Boolean
 ): ResolvedKtPrimitive {
+    val resolvedKtExpression = ResolvedKtExpression(expressionArgument)
+    if (expectedType == null) return resolvedKtExpression
+
     // todo run this approximation only once for call
     val argumentType = captureFromTypeParameterUpperBoundIfNeeded(expressionArgument.receiver.stableType, expectedType)
-
-    val resolvedKtExpression = ResolvedKtExpression(expressionArgument)
 
     fun unstableSmartCastOrSubtypeError(
             unstableType: UnwrappedType?, actualExpectedType: UnwrappedType, position: ConstraintPosition
@@ -134,11 +135,13 @@ private fun captureFromTypeParameterUpperBoundIfNeeded(argumentType: UnwrappedTy
 private fun checkSubCallArgument(
         csBuilder: ConstraintSystemBuilder,
         subCallArgument: SubKotlinCallArgument,
-        expectedType: UnwrappedType,
+        expectedType: UnwrappedType?,
         diagnosticsHolder: KotlinDiagnosticsHolder,
         isReceiver: Boolean
 ): ResolvedKtPrimitive {
     val resolvedKtCall = subCallArgument.resolvedKtCall
+
+    if (expectedType == null) return resolvedKtCall
 
     val expectedNullableType = expectedType.makeNullableAsSpecified(true)
     val position = ArgumentConstraintPosition(subCallArgument)

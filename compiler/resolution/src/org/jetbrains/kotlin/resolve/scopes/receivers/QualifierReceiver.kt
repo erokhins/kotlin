@@ -53,3 +53,7 @@ fun ReceiverValueWithSmartCastInfo.prepareReceiverRegardingCaptureTypes(): Recei
 
     return ReceiverValueWithSmartCastInfo(newReceiver, newPossibleTypes, isStable)
 }
+
+fun f(x: List<String>) {
+    x += ""
+}

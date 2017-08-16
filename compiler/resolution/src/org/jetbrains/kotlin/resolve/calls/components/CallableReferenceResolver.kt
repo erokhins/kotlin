@@ -30,7 +30,8 @@ import org.jetbrains.kotlin.resolve.calls.results.TypeSpecificityComparator
 import org.jetbrains.kotlin.resolve.calls.tower.ImplicitScopeTower
 import org.jetbrains.kotlin.resolve.calls.tower.TowerResolver
 import org.jetbrains.kotlin.types.UnwrappedType
-import org.jetbrains.kotlin.utils.addToStdlib.safeAs
+import org.jetbrains.kotlin.utils.SmartList
+import org.jetbrains.kotlin.utils.addIfNotNull
 
 
 class CallableReferenceOverloadConflictResolver(
@@ -63,39 +64,50 @@ class CallableReferenceResolver(
 
     fun processCallableReferenceArgument(
             csBuilder: ConstraintSystemBuilder,
-            postponedArgument: PostponedCallableReferenceArgument
-    ): KotlinCallDiagnostic? {
-        postponedArgument.analyzed = true
-
-        val argument = postponedArgument.argument
-        val expectedType = csBuilder.buildCurrentSubstitutor().safeSubstitute(postponedArgument.expectedType)
-
-        val subLHSCall = argument.lhsResult.safeAs<LHSResult.Expression>()?.lshCallArgument.safeAs<SubKotlinCallArgument>()
-        if (subLHSCall != null) {
-            csBuilder.addInnerCall(subLHSCall.resolvedCall)
-        }
+            resolvedKtCallableReference: ResolvedKtCallableReference
+    ) {
+        val argument = resolvedKtCallableReference.ktPrimitive
+        val expectedType = resolvedKtCallableReference.expectedType?.let { csBuilder.buildCurrentSubstitutor().safeSubstitute(it) }
 
         val scopeTower = callComponents.statelessCallbacks.getScopeTowerForCallableReferenceArgument(argument)
         val candidates = runRHSResolution(scopeTower, argument, expectedType) { checkCallableReference ->
             csBuilder.runTransaction { checkCallableReference(this); false }
         }
-        val chosenCandidate = when (candidates.size) {
-            0 -> return NoneCallableReferenceCandidates(argument)
-            1 -> candidates.single()
-            else -> return CallableReferenceCandidatesAmbiguity(argument, candidates)
+        val diagnostics = SmartList<KotlinCallDiagnostic>()
+
+        val chosenCandidate = candidates.singleOrNull()
+        if (chosenCandidate != null) {
+            val (toFreshSubstitutor, diagnostic) = with(chosenCandidate) {
+                csBuilder.checkCallableReference(argument, dispatchReceiver, extensionReceiver, candidate,
+                                                 reflectionCandidateType, expectedType, scopeTower.lexicalScope.ownerDescriptor)
+            }
+            diagnostics.addIfNotNull(diagnostic)
+            chosenCandidate.freshSubstitutor = toFreshSubstitutor
         }
-        val (toFreshSubstitutor, diagnostic) = with(chosenCandidate) {
-            csBuilder.checkCallableReference(argument, dispatchReceiver, extensionReceiver, candidate,
-                                             reflectionCandidateType, expectedType, scopeTower.lexicalScope.ownerDescriptor)
+        else {
+            if (candidates.isEmpty()) {
+                diagnostics.add(NoneCallableReferenceCandidates(argument))
+            }
+            else {
+                diagnostics.add(CallableReferenceCandidatesAmbiguity(argument, candidates))
+            }
         }
 
-        postponedArgument.analyzedAndThereIsResult = true
-        postponedArgument.myTypeVariables = toFreshSubstitutor.freshVariables
-        postponedArgument.callableResolutionCandidate = chosenCandidate
+        // todo -- create this inside CallableReferencesCandidateFactory
+        val subKtArguments = listOfNotNull(buildResolvedKtArgument(argument.lhsResult))
 
-        return diagnostic
+        resolvedKtCallableReference.setAnalyzedResults(chosenCandidate, subKtArguments, diagnostics)
     }
 
+    private fun buildResolvedKtArgument(lhsResult: LHSResult): ResolvedKtPrimitive? {
+        if (lhsResult !is LHSResult.Expression) return null
+        val lshCallArgument = lhsResult.lshCallArgument
+        return when(lshCallArgument) {
+            is SubKotlinCallArgument -> lshCallArgument.resolvedKtCall
+            is ExpressionKotlinCallArgument -> ResolvedKtExpression(lshCallArgument)
+            else -> unexpectedArgument(lshCallArgument)
+        }
+    }
 
     private fun runRHSResolution(
             scopeTower: ImplicitScopeTower,

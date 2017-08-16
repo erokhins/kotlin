@@ -16,6 +16,7 @@
 
 package org.jetbrains.kotlin.resolve.calls.inference.model
 
+import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.resolve.calls.components.KotlinCallCompleter
 import org.jetbrains.kotlin.resolve.calls.components.PostponedArgumentsAnalyzer
 import org.jetbrains.kotlin.resolve.calls.inference.*
@@ -30,9 +31,11 @@ import org.jetbrains.kotlin.types.TypeConstructor
 import org.jetbrains.kotlin.types.UnwrappedType
 import org.jetbrains.kotlin.types.typeUtil.contains
 import org.jetbrains.kotlin.utils.SmartList
-import java.util.*
 
-class NewConstraintSystemImpl(val constraintInjector: ConstraintInjector, val resultTypeResolver: ResultTypeResolver):
+class NewConstraintSystemImpl(
+        private val constraintInjector: ConstraintInjector,
+        override val builtIns: KotlinBuiltIns
+):
         NewConstraintSystem,
         ConstraintSystemBuilder,
         ConstraintInjector.Context,
@@ -150,54 +153,11 @@ class NewConstraintSystemImpl(val constraintInjector: ConstraintInjector, val re
         return false
     }
 
-    override fun addPostponedArgument(postponedArgument: PostponedKotlinCallArgument) {
-        checkState(State.BUILDING, State.COMPLETION)
-        storage.postponedArguments.add(postponedArgument)
-    }
-
-    private fun getVariablesForFixation(): Map<NewTypeVariable, UnwrappedType> {
-        val fixedVariables = LinkedHashMap<NewTypeVariable, UnwrappedType>()
-
-        for (variableWithConstrains in storage.notFixedTypeVariables.values) {
-            val resultType = resultTypeResolver.findResultIfThereIsEqualsConstraint(
-                    apply { checkState(State.BUILDING) },
-                    variableWithConstrains,
-                    allowedFixToNotProperType = false
-            )
-            if (resultType != null) {
-                fixedVariables[variableWithConstrains.typeVariable] = resultType
-            }
-        }
-        return fixedVariables
-    }
-
-    override fun simplify(): NewTypeSubstitutor {
-        checkState(State.BUILDING)
-
-        var fixedVariables = getVariablesForFixation()
-        while (fixedVariables.isNotEmpty()) {
-            for ((variable, resultType) in fixedVariables) {
-                fixVariable(variable, resultType)
-            }
-            fixedVariables = getVariablesForFixation()
-        }
-
-        return storage.buildCurrentSubstitutor()
-    }
-
     // ConstraintSystemBuilder, KotlinConstraintSystemCompleter.Context
     override val hasContradiction: Boolean
         get() = diagnostics.any { !it.candidateApplicability.isSuccess }.apply { checkState(State.BUILDING, State.COMPLETION, State.TRANSACTION) }
 
-    // ConstraintSystemBuilder
-    override fun addInnerCall(innerCall: ResolvedKotlinCall.OnlyResolvedKotlinCall) {
-        checkState(State.BUILDING, State.COMPLETION)
-        storage.innerCalls.add(innerCall)
-
-        addOtherSystem(innerCall.candidate.lastCall.constraintSystem.asReadOnlyStorage())
-    }
-
-    fun addOtherSystem(otherSystem: ConstraintStorage) {
+    override fun addOtherSystem(otherSystem: ConstraintStorage) {
         storage.allTypeVariables.putAll(otherSystem.allTypeVariables)
         for ((variable, constraints) in otherSystem.notFixedTypeVariables) {
             notFixedTypeVariables[variable] = MutableVariableWithConstraints(constraints.typeVariable, constraints.constraints)
@@ -209,7 +169,6 @@ class NewConstraintSystemImpl(val constraintInjector: ConstraintInjector, val re
         storage.postponedArguments.addAll(otherSystem.postponedArguments)
         storage.innerCalls.addAll(otherSystem.innerCalls)
     }
-
 
     // ResultTypeResolver.Context, ConstraintSystemBuilder
     override fun isProperType(type: UnwrappedType): Boolean {

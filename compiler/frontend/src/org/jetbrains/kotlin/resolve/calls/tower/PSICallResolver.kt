@@ -117,12 +117,12 @@ class PSICallResolver(
         val resolutionCallbacks = createResolutionCallbacks(context)
 
         val givenCandidates = resolutionCandidates.map {
-            GivenCandidate(scopeTower, it.descriptor as FunctionDescriptor,
+            GivenCandidate(it.descriptor as FunctionDescriptor,
                            it.dispatchReceiver?.let { context.transformToReceiverWithSmartCastInfo(it) },
                            it.knownTypeParametersResultingSubstitutor)
         }
 
-        val result = kotlinCallResolver.resolveGivenCandidates(resolutionCallbacks, kotlinCall, calculateExpectedType(context), givenCandidates)
+        val result = kotlinCallResolver.resolveGivenCandidates(scopeTower, resolutionCallbacks, kotlinCall, calculateExpectedType(context), givenCandidates)
         return convertToOverloadResolutionResults(context, result, tracingStrategy)
 
     }

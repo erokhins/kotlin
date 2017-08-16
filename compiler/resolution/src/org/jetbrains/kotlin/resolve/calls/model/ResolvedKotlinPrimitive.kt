@@ -18,6 +18,7 @@ package org.jetbrains.kotlin.resolve.calls.model
 
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
+import org.jetbrains.kotlin.resolve.calls.components.CallableReferenceCandidate
 import org.jetbrains.kotlin.resolve.calls.components.TypeArgumentsToParametersMapper
 import org.jetbrains.kotlin.resolve.calls.inference.components.FreshVariableNewTypeSubstitutor
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
@@ -39,10 +40,23 @@ enum class ResolvedKtPrimitiveState {
 sealed class ResolvedKtPrimitive {
     abstract val ktPrimitive: KtPrimitive
 
-    val state: ResolvedKtPrimitiveState = ResolvedKtPrimitiveState.INITIAL
+    var state: ResolvedKtPrimitiveState = ResolvedKtPrimitiveState.INITIAL
+        private set
 
-    val subKtPrimitives = arrayListOf<ResolvedKtPrimitive>()
-    val diagnostics = arrayListOf<KotlinCallDiagnostic>()
+    lateinit var subKtPrimitives: List<ResolvedKtPrimitive>
+        private set
+    lateinit var diagnostics: Collection<KotlinCallDiagnostic>
+        private set
+
+    fun setAnalyzedResults(subKtPrimitives: List<ResolvedKtPrimitive>, diagnostics: Collection<KotlinCallDiagnostic>) {
+        assert(state == ResolvedKtPrimitiveState.INITIAL) {
+            "Unsupported state: $state for $ktPrimitive"
+        }
+
+        state = ResolvedKtPrimitiveState.ADDITIONAL_ANALYSIS_PERFORMED
+        this.subKtPrimitives = subKtPrimitives
+        this.diagnostics = diagnostics
+    }
 }
 
 abstract class ResolvedKtCall : ResolvedKtPrimitive() {
@@ -62,10 +76,43 @@ class ErrorResolvedKtCall(
         val candidates: Collection<ResolvedKtCall>
 ) : ResolvedKtPrimitive()
 
-class ResolvedKtCallableReference (
+
+class ResolvedKtExpression(override val ktPrimitive: ExpressionKotlinCallArgument) : ResolvedKtPrimitive() {
+    init {
+        setAnalyzedResults(listOf(), listOf())
+    }
+}
+
+class ResolvedKtLambda(
+        override val ktPrimitive: LambdaKotlinCallArgument,
+        val isSuspend: Boolean,
+        val receiver: UnwrappedType?,
+        val parameters: List<UnwrappedType>,
+        val returnType: UnwrappedType
+) : ResolvedKtPrimitive()
+
+class ResolvedKtCallableReference(
         override val ktPrimitive: CallableReferenceKotlinCallArgument,
         val expectedType: UnwrappedType?
 ) : ResolvedKtPrimitive() {
+    var candidate: CallableReferenceCandidate? = null
+        private set
+
+    fun setAnalyzedResults(
+            candidate: CallableReferenceCandidate?,
+            subKtPrimitives: List<ResolvedKtPrimitive>,
+            diagnostics: Collection<KotlinCallDiagnostic>
+    ) {
+        this.candidate = candidate
+        setAnalyzedResults(subKtPrimitives, diagnostics)
+    }
 }
 
-class ResolvedKtExpression(override val ktPrimitive: ExpressionKotlinCallArgument) : ResolvedKtPrimitive()
+class ResolvedKtCollectionLiteral(
+        override val ktPrimitive: CollectionLiteralKotlinCallArgument,
+        val expectedType: UnwrappedType?
+) : ResolvedKtPrimitive() {
+    init {
+        setAnalyzedResults(listOf(), listOf())
+    }
+}
