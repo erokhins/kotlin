@@ -121,7 +121,7 @@ class KotlinResolutionCandidate(
             partIndex++
         }
         if (step == stepCount) {
-            resolvedCall.setAnalyzedResults(subKtPrimitives, diagnostics)
+            resolvedCall.setAnalyzedResults(subKtPrimitives, diagnostics + getSystem().diagnostics)
         }
     }
 
@@ -166,7 +166,7 @@ class KotlinResolutionCandidate(
     }
 }
 
-open class MutableResolvedKtCall(
+class MutableResolvedKtCall(
         override val ktPrimitive: KotlinCall,
         override val candidateDescriptor: CallableDescriptor, // original candidate descriptor
         override val explicitReceiverKind: ExplicitReceiverKind,
@@ -181,5 +181,7 @@ open class MutableResolvedKtCall(
     override public fun setAnalyzedResults(subKtPrimitives: List<ResolvedKtPrimitive>, diagnostics: Collection<KotlinCallDiagnostic>) {
         super.setAnalyzedResults(subKtPrimitives, diagnostics)
     }
+
+    override fun toString(): String = "$candidateDescriptor for $ktPrimitive"
 }
 

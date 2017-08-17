@@ -101,7 +101,8 @@ class KotlinToResolvedCallTransformer(
 
     fun <D : CallableDescriptor> createStubResolvedCallAndWriteItToTrace(candidate: ResolvedKtCall, trace: BindingTrace): ResolvedCall<D> {
         val result = onlyTransform<D>(candidate)
-        val tracing = candidate.ktPrimitive.psiKotlinCall.tracingStrategy
+        val psiKotlinCall = candidate.ktPrimitive.psiKotlinCall
+        val tracing = psiKotlinCall.safeAs<PSIKotlinCallForInvoke>()?.baseCall?.tracingStrategy ?: psiKotlinCall.tracingStrategy
 
         tracing.bindReference(trace, result)
         tracing.bindResolvedCall(trace, result)

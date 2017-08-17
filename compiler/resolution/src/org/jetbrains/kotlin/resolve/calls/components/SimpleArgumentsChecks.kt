@@ -144,7 +144,7 @@ private fun checkSubCallArgument(
     if (expectedType == null) return subCallResult
 
     val expectedNullableType = expectedType.makeNullableAsSpecified(true)
-    val position = ArgumentConstraintPosition(subCallArgument)
+    val position = if (isReceiver) ReceiverConstraintPosition(subCallArgument) else ArgumentConstraintPosition(subCallArgument)
 
     // subArgument cannot has stable smartcast
     // return type can contains fixed type variables
