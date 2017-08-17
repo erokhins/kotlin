@@ -58,7 +58,7 @@ fun ConstraintSystemBuilder.addSubtypeConstraintIfCompatible(lowerType: Unwrappe
 
 fun PostponedArgumentsAnalyzer.Context.addSubsystemForArgument(argument: KotlinCallArgument?) {
     when (argument) {
-        is SubKotlinCallArgument -> addOtherSystem(argument.subSystem)
+        is SubKotlinCallArgument -> addOtherSystem(argument.callResult.constraintSystem)
         is CallableReferenceKotlinCallArgument -> {
             addSubsystemForArgument(argument.lhsResult.safeAs<LHSResult.Expression>()?.lshCallArgument)
         }

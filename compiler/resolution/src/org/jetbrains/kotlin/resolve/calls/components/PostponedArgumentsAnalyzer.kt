@@ -71,6 +71,6 @@ class PostponedArgumentsAnalyzer(
             c.getBuilder().addSubtypeConstraint(lambda.returnType.let(::substitute), unitType, LambdaArgumentConstraintPosition(lambda))
         }
 
-        lambda.setAnalyzedResults(subResolvedKtPrimitives, diagnosticHolder.getDiagnostics())
+        lambda.setAnalyzedResults(resultArguments, subResolvedKtPrimitives, diagnosticHolder.getDiagnostics())
     }
 }

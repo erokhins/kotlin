@@ -54,7 +54,7 @@ sealed class ResolvedKtPrimitive {
     lateinit var diagnostics: Collection<KotlinCallDiagnostic>
         private set
 
-    fun setAnalyzedResults(subKtPrimitives: List<ResolvedKtPrimitive>, diagnostics: Collection<KotlinCallDiagnostic>) {
+    protected open fun setAnalyzedResults(subKtPrimitives: List<ResolvedKtPrimitive>, diagnostics: Collection<KotlinCallDiagnostic>) {
         assert(state == ResolvedKtPrimitiveState.INITIAL) {
             "Unsupported state: $state for $ktPrimitive"
         }
@@ -98,9 +98,20 @@ class ResolvedKtLambda(
         val returnType: UnwrappedType,
         val typeVariableForLambdaReturnType: TypeVariableForLambdaReturnType?
 ) : PostponedResolveKtPrimitive() {
+    lateinit var resultArguments: List<KotlinCallArgument>
+        private set
+
+    fun setAnalyzedResults(
+            resultArguments: List<KotlinCallArgument>,
+            subKtPrimitives: List<ResolvedKtPrimitive>,
+            diagnostics: Collection<KotlinCallDiagnostic>
+    ) {
+        this.resultArguments = resultArguments
+        setAnalyzedResults(subKtPrimitives, diagnostics)
+    }
+
     override val inputTypes: Collection<UnwrappedType> get() = receiver?.let { parameters + it } ?: parameters
     override val outputType: UnwrappedType get() = returnType
-
 }
 
 class ResolvedKtCallableReference(
@@ -144,7 +155,6 @@ class ResolvedKtCollectionLiteral(
     }
 }
 
-
 class CallResolutionResult(
         val type: Type,
         val resultCall: ResolvedKtCall?,
@@ -162,4 +172,6 @@ class CallResolutionResult(
     init {
         setAnalyzedResults(listOfNotNull(resultCall), diagnostics)
     }
+
+    override fun toString() = "$type, resultCall = $resultCall, (${diagnostics.joinToString()})"
 }

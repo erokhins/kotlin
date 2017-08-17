@@ -31,6 +31,7 @@ interface KotlinResolutionStatelessCallbacks {
     fun isHiddenInResolution(descriptor: DeclarationDescriptor, kotlinCall: KotlinCall): Boolean
     fun isSuperExpression(receiver: SimpleKotlinCallArgument?): Boolean
     fun getScopeTowerForCallableReferenceArgument(argument: CallableReferenceKotlinCallArgument): ImplicitScopeTower
+    fun getVariableCandidateIfInvoke(functionCall: KotlinCall): KotlinResolutionCandidate?
 }
 
 // This components hold state (trace). Work with this carefully.

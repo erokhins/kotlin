@@ -43,6 +43,18 @@ private fun SimpleKotlinCallArgument.checkReceiverInvariants() {
     assert(argumentName == null) {
         "Argument name should be null for receiver: $this, but it is $argumentName"
     }
+    checkReceiverInvariants()
+}
+
+private fun KotlinCallArgument.checkArgumentInvariants() {
+    if (this is SubKotlinCallArgument) {
+        assert(callResult.type == CallResolutionResult.Type.PARTIAL) {
+            "SubCall should has type PARTIAL: $callResult"
+        }
+        assert(callResult.resultCall != null) {
+            "SubCall should has resultCall: $callResult"
+        }
+    }
 }
 
 fun KotlinCall.checkCallInvariants() {
@@ -52,6 +64,8 @@ fun KotlinCall.checkCallInvariants() {
 
     (explicitReceiver as? SimpleKotlinCallArgument)?.checkReceiverInvariants()
     dispatchReceiverForInvokeExtension?.checkReceiverInvariants()
+    argumentsInParenthesis.forEach(KotlinCallArgument::checkArgumentInvariants)
+    externalArgument?.checkArgumentInvariants()
 
     if (callKind != KotlinCallKind.FUNCTION) {
         assert(externalArgument == null) {

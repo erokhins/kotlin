@@ -156,13 +156,13 @@ object AbstractSuperCall : KotlinCallDiagnostic(RUNTIME_ERROR) {
 }
 
 // candidates result
-class NoneCandidates(val kotlinCall: KotlinCall) : KotlinCallDiagnostic(INAPPLICABLE) {
+class NoneCandidatesCallDiagnostic(val kotlinCall: KotlinCall) : KotlinCallDiagnostic(INAPPLICABLE) {
     override fun report(reporter: DiagnosticReporter) {
         reporter.onCall(this)
     }
 }
 
-class ManyCandidates(
+class ManyCandidatesCallDiagnostic(
         val kotlinCall: KotlinCall,
         val candidates: Collection<KotlinResolutionCandidate>
 ) : KotlinCallDiagnostic(INAPPLICABLE) {

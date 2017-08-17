@@ -41,10 +41,10 @@ class KotlinCallCompleter(
     ): CallResolutionResult {
         val diagnosticHolder = KotlinDiagnosticsHolder.SimpleHolder()
         if (candidates.isEmpty()) {
-            diagnosticHolder.addDiagnostic(NoneCandidates(factory.kotlinCall))
+            diagnosticHolder.addDiagnostic(NoneCandidatesCallDiagnostic(factory.kotlinCall))
         }
         if (candidates.size > 1) {
-            diagnosticHolder.addDiagnostic(ManyCandidates(factory.kotlinCall, candidates))
+            diagnosticHolder.addDiagnostic(ManyCandidatesCallDiagnostic(factory.kotlinCall, candidates))
         }
         val candidate = candidates.singleOrNull()
         if (candidate == null || candidate.csBuilder.hasContradiction) {

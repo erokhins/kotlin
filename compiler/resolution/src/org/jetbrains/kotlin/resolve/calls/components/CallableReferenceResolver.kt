@@ -101,7 +101,7 @@ class CallableReferenceResolver(
         if (lhsResult !is LHSResult.Expression) return null
         val lshCallArgument = lhsResult.lshCallArgument
         return when(lshCallArgument) {
-            is SubKotlinCallArgument -> lshCallArgument.resolvedKtCall
+            is SubKotlinCallArgument -> lshCallArgument.callResult
             is ExpressionKotlinCallArgument -> ResolvedKtExpression(lshCallArgument)
             else -> unexpectedArgument(lshCallArgument)
         }

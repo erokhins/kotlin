@@ -136,19 +136,26 @@ class KotlinResolutionCandidate(
         return false
     }
 
+    val variableCandidateIfInvoke: KotlinResolutionCandidate?
+        get() = callComponents.statelessCallbacks.getVariableCandidateIfInvoke(resolvedCall.ktPrimitive)
+
+    private val variableApplicability
+        get() = variableCandidateIfInvoke?.resultingApplicability ?: ResolutionCandidateApplicability.RESOLVED
+
     override val isSuccessful: Boolean
         get() {
             processParts(stopOnFirstError = true)
-            return currentApplicability.isSuccess
+            return currentApplicability.isSuccess && variableApplicability.isSuccess
         }
 
     override val resultingApplicability: ResolutionCandidateApplicability
         get() {
             processParts(stopOnFirstError = false)
+            val applicability = maxOf(variableApplicability, currentApplicability)
             if (csBuilder.hasContradiction) {
-                return maxOf(ResolutionCandidateApplicability.INAPPLICABLE, currentApplicability)
+                return maxOf(ResolutionCandidateApplicability.INAPPLICABLE, applicability)
             }
-            return currentApplicability
+            return applicability
         }
 
     override fun toString(): String {
@@ -170,20 +177,9 @@ open class MutableResolvedKtCall(
     override lateinit var argumentMappingByOriginal: Map<ValueParameterDescriptor, ResolvedCallArgument>
     override lateinit var substitutor: FreshVariableNewTypeSubstitutor
     lateinit var argumentToCandidateParameter: Map<KotlinCallArgument, ValueParameterDescriptor>
-}
 
-class ErrorMutableResolvedKtCall(
-        ktPrimitive: KotlinCall,
-        candidateDescriptor: CallableDescriptor, // original candidate descriptor
-        explicitReceiverKind: ExplicitReceiverKind,
-        dispatchReceiverArgument: SimpleKotlinCallArgument?,
-        extensionReceiverArgument: SimpleKotlinCallArgument?
-) : MutableResolvedKtCall(ktPrimitive, candidateDescriptor, explicitReceiverKind, dispatchReceiverArgument, extensionReceiverArgument) {
-
-    init {
-        typeArgumentMappingByOriginal = TypeArgumentsToParametersMapper.TypeArgumentsMapping.NoExplicitArguments
-        argumentMappingByOriginal = emptyMap()
-        substitutor = FreshVariableNewTypeSubstitutor.Empty
-        argumentToCandidateParameter = emptyMap()
+    override public fun setAnalyzedResults(subKtPrimitives: List<ResolvedKtPrimitive>, diagnostics: Collection<KotlinCallDiagnostic>) {
+        super.setAnalyzedResults(subKtPrimitives, diagnostics)
     }
 }
+

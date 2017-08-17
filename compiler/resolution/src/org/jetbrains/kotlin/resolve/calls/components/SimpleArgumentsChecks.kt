@@ -139,9 +139,9 @@ private fun checkSubCallArgument(
         diagnosticsHolder: KotlinDiagnosticsHolder,
         isReceiver: Boolean
 ): ResolvedKtPrimitive {
-    val resolvedKtCall = subCallArgument.resolvedKtCall
+    val subCallResult = subCallArgument.callResult
 
-    if (expectedType == null) return resolvedKtCall
+    if (expectedType == null) return subCallResult
 
     val expectedNullableType = expectedType.makeNullableAsSpecified(true)
     val position = ArgumentConstraintPosition(subCallArgument)
@@ -151,17 +151,17 @@ private fun checkSubCallArgument(
     val currentReturnType = csBuilder.buildCurrentSubstitutor().safeSubstitute(subCallArgument.receiver.receiverValue.type.unwrap())
     if (subCallArgument.isSafeCall) {
         csBuilder.addSubtypeConstraint(currentReturnType, expectedNullableType, position)
-        return resolvedKtCall
+        return subCallResult
     }
 
     if (isReceiver && !csBuilder.addSubtypeConstraintIfCompatible(currentReturnType, expectedType, position) &&
         csBuilder.addSubtypeConstraintIfCompatible(currentReturnType, expectedNullableType, position)
             ) {
         diagnosticsHolder.addDiagnostic(UnsafeCallError(subCallArgument))
-        return resolvedKtCall
+        return subCallResult
     }
 
     csBuilder.addSubtypeConstraint(currentReturnType, expectedType, position)
-    return resolvedKtCall
+    return subCallResult
 }
 

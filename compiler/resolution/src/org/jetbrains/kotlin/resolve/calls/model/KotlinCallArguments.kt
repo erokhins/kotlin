@@ -54,8 +54,7 @@ interface SimpleKotlinCallArgument : KotlinCallArgument, ReceiverKotlinCallArgum
 interface ExpressionKotlinCallArgument : SimpleKotlinCallArgument, KtPrimitive
 
 interface SubKotlinCallArgument : SimpleKotlinCallArgument {
-    val resolvedKtCall: ResolvedKtCall
-    val subSystem: ConstraintStorage
+    val callResult: CallResolutionResult
 }
 
 interface LambdaKotlinCallArgument : PostponableKotlinCallArgument {
