@@ -21,7 +21,6 @@ import org.jetbrains.kotlin.resolve.calls.context.CheckArgumentTypesMode
 import org.jetbrains.kotlin.resolve.calls.inference.ConstraintSystemBuilder
 import org.jetbrains.kotlin.resolve.calls.inference.ConstraintSystemOperation
 import org.jetbrains.kotlin.resolve.calls.inference.components.ConstraintInjector
-import org.jetbrains.kotlin.resolve.calls.inference.components.ResultTypeResolver
 import org.jetbrains.kotlin.resolve.calls.inference.components.SimpleConstraintSystemImpl
 import org.jetbrains.kotlin.resolve.calls.model.*
 import org.jetbrains.kotlin.resolve.calls.results.FlatSignature
@@ -38,13 +37,12 @@ class CallableReferenceOverloadConflictResolver(
         builtIns: KotlinBuiltIns,
         specificityComparator: TypeSpecificityComparator,
         statelessCallbacks: KotlinResolutionStatelessCallbacks,
-        constraintInjector: ConstraintInjector,
-        typeResolver: ResultTypeResolver
+        constraintInjector: ConstraintInjector
 ) : OverloadingConflictResolver<CallableReferenceCandidate>(
         builtIns,
         specificityComparator,
         { it.candidate },
-        { SimpleConstraintSystemImpl(constraintInjector, typeResolver) },
+        { SimpleConstraintSystemImpl(constraintInjector, builtIns) },
         Companion::createFlatSignature,
         { null },
         { statelessCallbacks.isDescriptorFromSource(it) }

@@ -16,11 +16,17 @@
 
 package org.jetbrains.kotlin.resolve.calls.model
 
+import org.jetbrains.kotlin.builtins.getReceiverTypeFromFunctionType
+import org.jetbrains.kotlin.builtins.getReturnTypeFromFunctionType
+import org.jetbrains.kotlin.builtins.getValueParameterTypesFromFunctionType
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.resolve.calls.components.CallableReferenceCandidate
 import org.jetbrains.kotlin.resolve.calls.components.TypeArgumentsToParametersMapper
+import org.jetbrains.kotlin.resolve.calls.components.getFunctionTypeFromCallableReferenceExpectedType
 import org.jetbrains.kotlin.resolve.calls.inference.components.FreshVariableNewTypeSubstitutor
+import org.jetbrains.kotlin.resolve.calls.inference.model.ConstraintStorage
+import org.jetbrains.kotlin.resolve.calls.inference.model.TypeVariableForLambdaReturnType
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.types.UnwrappedType
 
@@ -38,7 +44,7 @@ enum class ResolvedKtPrimitiveState {
 }
 
 sealed class ResolvedKtPrimitive {
-    abstract val ktPrimitive: KtPrimitive
+    abstract val ktPrimitive: KtPrimitive? // some additional elements can have no ktPrimitive
 
     var state: ResolvedKtPrimitiveState = ResolvedKtPrimitiveState.INITIAL
         private set
@@ -70,11 +76,6 @@ abstract class ResolvedKtCall : ResolvedKtPrimitive() {
     abstract val substitutor: FreshVariableNewTypeSubstitutor
 }
 
-// if no candidates or >2 candidates or candidate constraint system contains errors
-class ErrorResolvedKtCall(
-        override val ktPrimitive: KotlinCall,
-        val candidates: Collection<ResolvedKtCall>
-) : ResolvedKtPrimitive()
 
 
 class ResolvedKtExpression(override val ktPrimitive: ExpressionKotlinCallArgument) : ResolvedKtPrimitive() {
@@ -82,19 +83,30 @@ class ResolvedKtExpression(override val ktPrimitive: ExpressionKotlinCallArgumen
         setAnalyzedResults(listOf(), listOf())
     }
 }
+sealed class PostponedResolveKtPrimitive : ResolvedKtPrimitive() {
+    val analyzed get() = state == ResolvedKtPrimitiveState.ADDITIONAL_ANALYSIS_PERFORMED
+
+    abstract val inputTypes: Collection<UnwrappedType>
+    abstract val outputType: UnwrappedType?
+}
 
 class ResolvedKtLambda(
         override val ktPrimitive: LambdaKotlinCallArgument,
         val isSuspend: Boolean,
         val receiver: UnwrappedType?,
         val parameters: List<UnwrappedType>,
-        val returnType: UnwrappedType
-) : ResolvedKtPrimitive()
+        val returnType: UnwrappedType,
+        val typeVariableForLambdaReturnType: TypeVariableForLambdaReturnType?
+) : PostponedResolveKtPrimitive() {
+    override val inputTypes: Collection<UnwrappedType> get() = receiver?.let { parameters + it } ?: parameters
+    override val outputType: UnwrappedType get() = returnType
+
+}
 
 class ResolvedKtCallableReference(
         override val ktPrimitive: CallableReferenceKotlinCallArgument,
         val expectedType: UnwrappedType?
-) : ResolvedKtPrimitive() {
+) : PostponedResolveKtPrimitive() {
     var candidate: CallableReferenceCandidate? = null
         private set
 
@@ -106,6 +118,21 @@ class ResolvedKtCallableReference(
         this.candidate = candidate
         setAnalyzedResults(subKtPrimitives, diagnostics)
     }
+
+    override val inputTypes: Collection<UnwrappedType>
+        get() {
+            val functionType = getFunctionTypeFromCallableReferenceExpectedType(expectedType) ?: return emptyList()
+            val parameters = functionType.getValueParameterTypesFromFunctionType().map { it.type.unwrap() }
+            val receiver = functionType.getReceiverTypeFromFunctionType()?.unwrap()
+            return receiver?.let { parameters + it } ?: parameters
+        }
+
+    override val outputType: UnwrappedType?
+        get() {
+            val functionType = getFunctionTypeFromCallableReferenceExpectedType(expectedType) ?: return null
+            return functionType.getReturnTypeFromFunctionType().unwrap()
+        }
+
 }
 
 class ResolvedKtCollectionLiteral(
@@ -114,5 +141,25 @@ class ResolvedKtCollectionLiteral(
 ) : ResolvedKtPrimitive() {
     init {
         setAnalyzedResults(listOf(), listOf())
+    }
+}
+
+
+class CallResolutionResult(
+        val type: Type,
+        val resultCall: ResolvedKtCall?,
+        diagnostics: List<KotlinCallDiagnostic>,
+        val constraintSystem: ConstraintStorage
+) : ResolvedKtPrimitive() {
+    override val ktPrimitive: KtPrimitive? get() = null
+
+    enum class Type {
+        COMPLETED, // resultSubstitutor possible create use constraintSystem
+        PARTIAL,
+        ERROR // if resultCall == null it means that there is errors NoneCandidates or ManyCandidates
+    }
+
+    init {
+        setAnalyzedResults(listOfNotNull(resultCall), diagnostics)
     }
 }

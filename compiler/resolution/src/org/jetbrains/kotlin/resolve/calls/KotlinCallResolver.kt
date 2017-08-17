@@ -68,7 +68,7 @@ class KotlinCallResolver(
         kotlinCall.checkCallInvariants()
         val candidateFactory = SimpleCandidateFactory(callComponents, scopeTower, kotlinCall)
 
-        val resolutionCandidates = givenCandidates.map { candidateFactory.createCandidate(it) }
+        val resolutionCandidates = givenCandidates.map { candidateFactory.createCandidate(it).forceResolution() }
         val candidates = towerResolver.runWithEmptyTowerData(KnownResultProcessor(resolutionCandidates),
                                                              TowerResolver.SuccessfulResultCollector(),
                                                              useOrder = true)

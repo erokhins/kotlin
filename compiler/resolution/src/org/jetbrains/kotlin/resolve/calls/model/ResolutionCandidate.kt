@@ -68,14 +68,14 @@ class KotlinResolutionCandidate(
         val scopeTower: ImplicitScopeTower,
         private val baseSystem: ConstraintStorage,
         val resolvedCall: MutableResolvedKtCall,
-        val knownTypeParametersResultingSubstitutor: TypeSubstitutor? = null
+        val knownTypeParametersResultingSubstitutor: TypeSubstitutor? = null,
+        private val resolutionSequence: List<ResolutionPart> = resolvedCall.ktPrimitive.callKind.resolutionSequence
 ) : Candidate, KotlinDiagnosticsHolder {
     private var newSystem: NewConstraintSystemImpl? = null
     private val diagnostics = arrayListOf<KotlinCallDiagnostic>()
     private var currentApplicability = ResolutionCandidateApplicability.RESOLVED
-    internal var subKtPrimitives: MutableList<ResolvedKtPrimitive> = arrayListOf()
+    private var subKtPrimitives: MutableList<ResolvedKtPrimitive> = arrayListOf()
 
-    private val resolutionSequence: List<ResolutionPart> get() = resolvedCall.ktPrimitive.callKind.resolutionSequence
     private val stepCount = resolutionSequence.sumBy { it.run { workCount() } }
     private var step = 0
 
@@ -112,25 +112,28 @@ class KotlinResolutionCandidate(
             }
         }
         if (partIndex < resolutionSequence.size) {
-            processPart(resolutionSequence[partIndex], stopOnFirstError, workStep)
+            if (processPart(resolutionSequence[partIndex], stopOnFirstError, workStep)) return
             partIndex++
         }
 
         while (partIndex < resolutionSequence.size) {
-            if (stopOnFirstError && !currentApplicability.isSuccess) break
-
-            processPart(resolutionSequence[partIndex], stopOnFirstError)
+            if (processPart(resolutionSequence[partIndex], stopOnFirstError)) return
             partIndex++
+        }
+        if (step == stepCount) {
+            resolvedCall.setAnalyzedResults(subKtPrimitives, diagnostics)
         }
     }
 
-    private fun processPart(part: ResolutionPart, stopOnFirstError: Boolean, startWorkIndex: Int = 0) {
+    // true if part was interrupted
+    private fun processPart(part: ResolutionPart, stopOnFirstError: Boolean, startWorkIndex: Int = 0): Boolean {
         for (workIndex in startWorkIndex until (part.run { workCount() })) {
-            if (stopOnFirstError && !currentApplicability.isSuccess) break
+            if (stopOnFirstError && !currentApplicability.isSuccess) return true
 
             part.run { process(workIndex) }
             step++
         }
+        return false
     }
 
     override val isSuccessful: Boolean
@@ -156,7 +159,7 @@ class KotlinResolutionCandidate(
     }
 }
 
-class MutableResolvedKtCall(
+open class MutableResolvedKtCall(
         override val ktPrimitive: KotlinCall,
         override val candidateDescriptor: CallableDescriptor, // original candidate descriptor
         override val explicitReceiverKind: ExplicitReceiverKind,
@@ -167,4 +170,20 @@ class MutableResolvedKtCall(
     override lateinit var argumentMappingByOriginal: Map<ValueParameterDescriptor, ResolvedCallArgument>
     override lateinit var substitutor: FreshVariableNewTypeSubstitutor
     lateinit var argumentToCandidateParameter: Map<KotlinCallArgument, ValueParameterDescriptor>
+}
+
+class ErrorMutableResolvedKtCall(
+        ktPrimitive: KotlinCall,
+        candidateDescriptor: CallableDescriptor, // original candidate descriptor
+        explicitReceiverKind: ExplicitReceiverKind,
+        dispatchReceiverArgument: SimpleKotlinCallArgument?,
+        extensionReceiverArgument: SimpleKotlinCallArgument?
+) : MutableResolvedKtCall(ktPrimitive, candidateDescriptor, explicitReceiverKind, dispatchReceiverArgument, extensionReceiverArgument) {
+
+    init {
+        typeArgumentMappingByOriginal = TypeArgumentsToParametersMapper.TypeArgumentsMapping.NoExplicitArguments
+        argumentMappingByOriginal = emptyMap()
+        substitutor = FreshVariableNewTypeSubstitutor.Empty
+        argumentToCandidateParameter = emptyMap()
+    }
 }

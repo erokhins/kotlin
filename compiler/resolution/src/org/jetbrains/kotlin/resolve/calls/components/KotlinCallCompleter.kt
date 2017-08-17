@@ -122,7 +122,7 @@ class KotlinCallCompleter(
         return (this as SimpleKotlinResolutionCandidate).toCompletedCall(substitutor, isTopLevel)
     }
 
-    private fun SimpleKotlinResolutionCandidate.toCompletedCall(substitutor: NewTypeSubstitutor, isTopLevel: Boolean): CompletedKotlinCall.Simple {
+    private fun KotlinResolutionCandidate.toCompletedCall(substitutor: NewTypeSubstitutor, isTopLevel: Boolean): CompletedKotlinCall.Simple {
         val containsCapturedTypes = descriptorWithFreshTypes.returnType?.contains { it is NewCapturedType } ?: false
         val resultingDescriptor = when {
             descriptorWithFreshTypes is FunctionDescriptor ||
@@ -145,7 +145,7 @@ class KotlinCallCompleter(
     }
 
     private fun computeDiagnostics(
-            candidate: SimpleKotlinResolutionCandidate,
+            candidate: KotlinResolutionCandidate,
             resultingDescriptor: CallableDescriptor,
             isTopLevel: Boolean
     ): List<KotlinCallDiagnostic> {
@@ -158,10 +158,11 @@ class KotlinCallCompleter(
     }
 
     // true if we should complete this call
-    private fun SimpleKotlinResolutionCandidate.prepareForCompletion(expectedType: UnwrappedType?): ConstraintSystemCompletionMode {
-        val returnType = descriptorWithFreshTypes.returnType?.unwrap() ?: return ConstraintSystemCompletionMode.PARTIAL
+    private fun KotlinResolutionCandidate.prepareForCompletion(expectedType: UnwrappedType?): ConstraintSystemCompletionMode {
+        val unsubstitutedReturnType = resolvedCall.candidateDescriptor.returnType?.unwrap() ?: return ConstraintSystemCompletionMode.PARTIAL
+        val returnType = csBuilder.buildCurrentSubstitutor().safeSubstitute(unsubstitutedReturnType)
         if (expectedType != null && !TypeUtils.noExpectedType(expectedType)) {
-            csBuilder.addSubtypeConstraint(returnType, expectedType, ExpectedTypeConstraintPosition(kotlinCall))
+            csBuilder.addSubtypeConstraint(returnType, expectedType, ExpectedTypeConstraintPosition(resolvedCall.ktPrimitive))
         }
 
         return if (expectedType != null || csBuilder.isProperType(returnType)) {

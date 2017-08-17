@@ -53,6 +53,7 @@ private fun preprocessLambdaArgument(
     val receiverType: UnwrappedType? // null means that there is no receiver
     val parameters: List<UnwrappedType>
     val returnType: UnwrappedType
+    val typeVariable = TypeVariableForLambdaReturnType(argument, builtIns, "_L")
 
     if (expectedType?.isBuiltinFunctionalType == true) {
         receiverType = if (argument is FunctionExpression) argument.receiverType else expectedType.getReceiverTypeFromFunctionType()?.unwrap()
@@ -76,27 +77,20 @@ private fun preprocessLambdaArgument(
         parameters = argument.parametersTypes?.map { it ?: builtIns.nothingType } ?: emptyList()
         returnType = argument.safeAs<FunctionExpression>()?.returnType ?:
                      expectedType?.arguments?.singleOrNull()?.type?.unwrap()?.takeIf { isFunctionSupertype } ?:
-                     createFreshTypeVariableForLambdaReturnType(csBuilder, argument, builtIns)
+                     typeVariable.defaultType
 
         // what about case where expected type is type variable? In old TY such cases was not supported. => do nothing for now. todo design
     }
+
+    val newTypeVariableUsed = returnType == typeVariable.defaultType
+    if (newTypeVariableUsed) csBuilder.registerVariable(typeVariable)
 
     if (expectedType != null) {
         val lambdaType = createFunctionType(returnType.builtIns, Annotations.EMPTY, receiverType, parameters, null, returnType, isSuspend)
         csBuilder.addSubtypeConstraint(lambdaType, expectedType, ArgumentConstraintPosition(argument))
     }
 
-    return ResolvedKtLambda(argument, isSuspend, receiverType, parameters, returnType)
-}
-
-private fun createFreshTypeVariableForLambdaReturnType(
-        csBuilder: ConstraintSystemBuilder,
-        argument: LambdaKotlinCallArgument,
-        builtIns: KotlinBuiltIns
-): UnwrappedType {
-    val typeVariable = TypeVariableForLambdaReturnType(argument, builtIns, "_L")
-    csBuilder.registerVariable(typeVariable)
-    return typeVariable.defaultType
+    return ResolvedKtLambda(argument, isSuspend, receiverType, parameters, returnType, typeVariable.takeIf { newTypeVariableUsed })
 }
 
 private fun preprocessCallableReference(

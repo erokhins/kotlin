@@ -31,6 +31,7 @@ import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind.*
 import org.jetbrains.kotlin.resolve.calls.tower.InfixCallNoInfixModifier
 import org.jetbrains.kotlin.resolve.calls.tower.InvokeConventionCallNoOperatorModifier
 import org.jetbrains.kotlin.resolve.calls.tower.VisibilityError
+import org.jetbrains.kotlin.types.ErrorUtils
 
 internal object CheckInstantiationOfAbstractClass : ResolutionPart() {
     override fun KotlinResolutionCandidate.process(workIndex: Int) {
@@ -282,6 +283,29 @@ internal object CheckAbstractSuperCallPart : ResolutionPart() {
             if (candidateDescriptor is MemberDescriptor && candidateDescriptor.modality == Modality.ABSTRACT) {
                 addDiagnostic(AbstractSuperCall)
             }
+        }
+    }
+}
+
+internal object ErrorDescriptorResolutionPart : ResolutionPart() {
+    override fun KotlinResolutionCandidate.process(workIndex: Int) {
+        assert(ErrorUtils.isError(candidateDescriptor)) {
+            "Should be error descriptor: $candidateDescriptor"
+        }
+        resolvedCall.typeArgumentMappingByOriginal = TypeArgumentsToParametersMapper.TypeArgumentsMapping.NoExplicitArguments
+        resolvedCall.argumentMappingByOriginal = emptyMap()
+        resolvedCall.substitutor = FreshVariableNewTypeSubstitutor.Empty
+        resolvedCall.argumentToCandidateParameter = emptyMap()
+
+        kotlinCall.explicitReceiver?.let {
+            resolveKotlinArgument(it, null, isReceiver = true)
+        }
+        for (argument in kotlinCall.argumentsInParenthesis) {
+            resolveKotlinArgument(argument, null, isReceiver = true)
+        }
+
+        kotlinCall.externalArgument?.let {
+            resolveKotlinArgument(it, null, isReceiver = true)
         }
     }
 }

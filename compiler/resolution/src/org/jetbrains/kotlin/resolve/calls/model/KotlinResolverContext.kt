@@ -44,11 +44,11 @@ class KotlinCallComponents(
 )
 
 class SimpleCandidateFactory(
-        private val callComponents: KotlinCallComponents,
-        private val scopeTower: ImplicitScopeTower,
-        private val kotlinCall: KotlinCall
+        val callComponents: KotlinCallComponents,
+        val scopeTower: ImplicitScopeTower,
+        val kotlinCall: KotlinCall
 ): CandidateFactory<KotlinResolutionCandidate> {
-    private val baseSystem: ConstraintStorage
+    val baseSystem: ConstraintStorage
 
     init {
         val baseSystem = NewConstraintSystemImpl(callComponents.constraintInjector, callComponents.builtIns)
@@ -111,12 +111,12 @@ class SimpleCandidateFactory(
             initialDiagnostics: Collection<KotlinCallDiagnostic>,
             knownSubstitutor: TypeSubstitutor?
     ): KotlinResolutionCandidate {
-        if (ErrorUtils.isError(descriptor)) {
-            TODO()
-        }
-
         val resolvedKtCall = MutableResolvedKtCall(kotlinCall, descriptor, explicitReceiverKind,
                                                    dispatchArgumentReceiver, extensionArgumentReceiver)
+
+        if (ErrorUtils.isError(descriptor)) {
+            return KotlinResolutionCandidate(callComponents, scopeTower, baseSystem, resolvedKtCall, knownSubstitutor, listOf(ErrorDescriptorResolutionPart))
+        }
 
         val candidate = KotlinResolutionCandidate(callComponents, scopeTower, baseSystem, resolvedKtCall, knownSubstitutor)
 
@@ -138,6 +138,23 @@ class SimpleCandidateFactory(
 
         return candidate
     }
+
+    fun createErrorCandidate(): KotlinResolutionCandidate {
+        val errorScope = ErrorUtils.createErrorScope("Error resolution candidate for call $kotlinCall")
+        val errorDescriptor = if (kotlinCall.callKind == KotlinCallKind.VARIABLE) {
+            errorScope.getContributedVariables(kotlinCall.name, scopeTower.location)
+        }
+        else {
+            errorScope.getContributedFunctions(kotlinCall.name, scopeTower.location)
+        }.first()
+
+        val dispatchReceiver = createReceiverArgument(kotlinCall.explicitReceiver, fromResolution = null)
+        val explicitReceiverKind = if (dispatchReceiver == null) ExplicitReceiverKind.NO_EXPLICIT_RECEIVER else ExplicitReceiverKind.DISPATCH_RECEIVER
+
+        return createCandidate(errorDescriptor, explicitReceiverKind, dispatchReceiver, extensionArgumentReceiver = null,
+                               initialDiagnostics = listOf(), knownSubstitutor = null)
+    }
+
 }
 
 enum class KotlinCallKind(vararg resolutionPart: ResolutionPart) {
