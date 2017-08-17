@@ -56,8 +56,9 @@ class KotlinConstraintSystemCompleter(
             if (analyzePostponeArgumentIfPossible(c, topLevelPrimitive, analyze)) continue
 
             val allTypeVariables = getOrderedAllTypeVariables(c, topLevelPrimitive)
+            val postponedKtPrimitives = getOrderedNotAnalyzedPostponedArguments(topLevelPrimitive)
             val variableForFixation = variableFixationFinder.findFirstVariableForFixation(
-                    c, allTypeVariables, getOrderedNotAnalyzedPostponedArguments(topLevelPrimitive), completionMode, topLevelType)
+                    c, allTypeVariables, postponedKtPrimitives, completionMode, topLevelType)
 
             if (shouldWeForceCallableReferenceResolution(completionMode, variableForFixation)) {
                 if (forceCallableReferenceResolution(topLevelPrimitive, analyze)) continue
@@ -67,7 +68,7 @@ class KotlinConstraintSystemCompleter(
                 if (variableForFixation.hasProperConstraint || completionMode == ConstraintSystemCompletionMode.FULL) {
                     val variableWithConstraints = c.notFixedTypeVariables[variableForFixation.variable]!!
 
-                    fixVariable(c, topLevelType, variableWithConstraints)
+                    fixVariable(c, topLevelType, variableWithConstraints, postponedKtPrimitives)
 
                     if (!variableForFixation.hasProperConstraint) {
                         c.addError(NotEnoughInformationForTypeParameter(variableWithConstraints.typeVariable))
@@ -162,9 +163,10 @@ class KotlinConstraintSystemCompleter(
     private fun fixVariable(
             c: Context,
             topLevelType: UnwrappedType,
-            variableWithConstraints: VariableWithConstraints
+            variableWithConstraints: VariableWithConstraints,
+            postponedResolveKtPrimitives: List<PostponedResolveKtPrimitive>
     ) {
-        val direction = TypeVariableDirectionCalculator(c, topLevelType).getDirection(variableWithConstraints)
+        val direction = TypeVariableDirectionCalculator(c, postponedResolveKtPrimitives, topLevelType).getDirection(variableWithConstraints)
 
         val resultType = resultTypeResolver.findResultType(c, variableWithConstraints, direction)
 

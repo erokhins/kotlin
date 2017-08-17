@@ -17,16 +17,14 @@
 package org.jetbrains.kotlin.resolve.calls.inference.model
 
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
-import org.jetbrains.kotlin.resolve.calls.components.KotlinCallCompleter
 import org.jetbrains.kotlin.resolve.calls.components.PostponedArgumentsAnalyzer
 import org.jetbrains.kotlin.resolve.calls.inference.*
-import org.jetbrains.kotlin.resolve.calls.inference.components.*
+import org.jetbrains.kotlin.resolve.calls.inference.components.ConstraintInjector
+import org.jetbrains.kotlin.resolve.calls.inference.components.KotlinConstraintSystemCompleter
+import org.jetbrains.kotlin.resolve.calls.inference.components.NewTypeSubstitutor
+import org.jetbrains.kotlin.resolve.calls.inference.components.ResultTypeResolver
 import org.jetbrains.kotlin.resolve.calls.model.KotlinCallDiagnostic
-import org.jetbrains.kotlin.resolve.calls.model.PostponedKotlinCallArgument
-import org.jetbrains.kotlin.resolve.calls.model.PostponedLambdaArgument
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedKotlinCall
 import org.jetbrains.kotlin.resolve.calls.tower.isSuccess
-import org.jetbrains.kotlin.types.ErrorUtils
 import org.jetbrains.kotlin.types.TypeConstructor
 import org.jetbrains.kotlin.types.UnwrappedType
 import org.jetbrains.kotlin.types.typeUtil.contains
@@ -40,7 +38,6 @@ class NewConstraintSystemImpl(
         ConstraintSystemBuilder,
         ConstraintInjector.Context,
         ResultTypeResolver.Context,
-        KotlinCallCompleter.Context,
         KotlinConstraintSystemCompleter.Context,
         PostponedArgumentsAnalyzer.Context
 {
@@ -70,12 +67,6 @@ class NewConstraintSystemImpl(
         checkState(State.BUILDING, State.FREEZED)
         state = State.FREEZED
         return storage
-    }
-
-    override fun asCallCompleterContext(): KotlinCallCompleter.Context {
-        checkState(State.BUILDING, State.COMPLETION)
-        state = State.COMPLETION
-        return this
     }
 
     override fun asConstraintSystemCompleterContext() = apply { checkState(State.BUILDING) }
@@ -166,8 +157,6 @@ class NewConstraintSystemImpl(
         storage.maxTypeDepthFromInitialConstraints = Math.max(storage.maxTypeDepthFromInitialConstraints, otherSystem.maxTypeDepthFromInitialConstraints)
         storage.errors.addAll(otherSystem.errors)
         storage.fixedTypeVariables.putAll(otherSystem.fixedTypeVariables)
-        storage.postponedArguments.addAll(otherSystem.postponedArguments)
-        storage.innerCalls.addAll(otherSystem.innerCalls)
     }
 
     // ResultTypeResolver.Context, ConstraintSystemBuilder
@@ -208,16 +197,6 @@ class NewConstraintSystemImpl(
         storage.errors.add(error)
     }
 
-    //  KotlinCallCompleter.Context, FixationOrderCalculator.Context
-    override val lambdaArguments: List<PostponedLambdaArgument> get() {
-        checkState(State.BUILDING, State.COMPLETION)
-        return storage.postponedArguments.filterIsInstance<PostponedLambdaArgument>()
-    }
-
-    // FixationOrderCalculator.Context, KotlinCallCompleter.Context, KotlinConstraintSystemCompleter.Context
-    override val postponedArguments: List<PostponedKotlinCallArgument>
-        get() = storage.postponedArguments.apply { checkState(State.BUILDING, State.COMPLETION) }
-
     // KotlinConstraintSystemCompleter.Context
     override fun fixVariable(variable: NewTypeVariable, resultType: UnwrappedType) {
         checkState(State.BUILDING, State.COMPLETION)
@@ -234,12 +213,6 @@ class NewConstraintSystemImpl(
         storage.fixedTypeVariables[variable.freshTypeConstructor] = resultType
     }
 
-    // KotlinCallCompleter.Context
-    override val innerCalls: List<ResolvedKotlinCall.OnlyResolvedKotlinCall> get() {
-        checkState(State.COMPLETION)
-        return storage.innerCalls
-    }
-
     // KotlinConstraintSystemCompleter.Context, PostponedArgumentsAnalyzer.Context
     override fun canBeProper(type: UnwrappedType): Boolean {
         checkState(State.BUILDING, State.COMPLETION)
@@ -250,18 +223,5 @@ class NewConstraintSystemImpl(
     override fun buildCurrentSubstitutor(): NewTypeSubstitutor {
         checkState(State.BUILDING, State.COMPLETION)
         return storage.buildCurrentSubstitutor()
-    }
-
-    // KotlinCallCompleter.Context
-    override fun buildResultingSubstitutor(): NewTypeSubstitutor {
-        checkState(State.COMPLETION)
-        val currentSubstitutorMap = storage.fixedTypeVariables.entries.associate {
-            it.key to it.value
-        }
-        val uninferredSubstitutorMap = storage.notFixedTypeVariables.entries.associate { (freshTypeConstructor, typeVariable) ->
-            freshTypeConstructor to ErrorUtils.createErrorTypeWithCustomConstructor("Uninferred type", typeVariable.typeVariable.freshTypeConstructor)
-        }
-
-        return NewTypeSubstitutorByConstructorMap(currentSubstitutorMap + uninferredSubstitutorMap)
     }
 }

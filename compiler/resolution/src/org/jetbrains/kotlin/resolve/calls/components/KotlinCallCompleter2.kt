@@ -27,7 +27,8 @@ import org.jetbrains.kotlin.types.ErrorUtils
 import org.jetbrains.kotlin.types.TypeUtils
 import org.jetbrains.kotlin.types.UnwrappedType
 
-class KotlinCallCompleter2(
+class KotlinCallCompleter(
+        private val additionalDiagnosticReporter: AdditionalDiagnosticReporter,
         private val postponedArgumentsAnalyzer: PostponedArgumentsAnalyzer,
         private val kotlinConstraintSystemCompleter: KotlinConstraintSystemCompleter
 ) {

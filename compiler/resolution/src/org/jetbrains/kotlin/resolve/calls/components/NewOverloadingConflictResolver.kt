@@ -41,7 +41,7 @@ class NewOverloadingConflictResolver(
         },
         { SimpleConstraintSystemImpl(constraintInjector, builtIns) },
         Companion::createFlatSignature,
-        { (it as? VariableAsFunctionKotlinResolutionCandidate)?.resolvedVariable },
+        { null }, // variables should be fully resolved via KotlinCallResolver
         { statelessCallbacks.isDescriptorFromSource(it) }
 ) {
 

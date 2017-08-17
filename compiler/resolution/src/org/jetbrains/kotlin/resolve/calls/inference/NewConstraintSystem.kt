@@ -31,7 +31,6 @@ interface NewConstraintSystem {
 
     // after this method we shouldn't mutate system via ConstraintSystemBuilder
     fun asReadOnlyStorage(): ConstraintStorage
-    fun asCallCompleterContext(): KotlinCallCompleter.Context
     fun asConstraintSystemCompleterContext(): KotlinConstraintSystemCompleter.Context
     fun asPostponedArgumentsAnalyzerContext(): PostponedArgumentsAnalyzer.Context
 }

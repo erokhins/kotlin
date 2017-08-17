@@ -39,7 +39,7 @@ class KotlinCallResolver(
             kotlinCall: KotlinCall,
             expectedType: UnwrappedType?,
             factoryProviderForInvoke: CandidateFactoryProviderForInvoke<KotlinResolutionCandidate>
-    ): Collection<ResolvedKotlinCall> {
+    ): CallResolutionResult {
         kotlinCall.checkCallInvariants()
 
         val candidateFactory = SimpleCandidateFactory(callComponents, scopeTower, kotlinCall)
@@ -55,7 +55,7 @@ class KotlinCallResolver(
 
         val candidates = towerResolver.runResolve(scopeTower, processor, useOrder = kotlinCall.callKind != KotlinCallKind.UNSUPPORTED)
 
-        return choseMostSpecific(scopeTower, resolutionCallbacks, expectedType, candidates)
+        return choseMostSpecific(candidateFactory, resolutionCallbacks, expectedType, candidates)
     }
 
     fun resolveGivenCandidates(
@@ -64,7 +64,7 @@ class KotlinCallResolver(
             kotlinCall: KotlinCall,
             expectedType: UnwrappedType?,
             givenCandidates: Collection<GivenCandidate>
-    ): Collection<ResolvedKotlinCall> {
+    ): CallResolutionResult {
         kotlinCall.checkCallInvariants()
         val candidateFactory = SimpleCandidateFactory(callComponents, scopeTower, kotlinCall)
 
@@ -72,16 +72,16 @@ class KotlinCallResolver(
         val candidates = towerResolver.runWithEmptyTowerData(KnownResultProcessor(resolutionCandidates),
                                                              TowerResolver.SuccessfulResultCollector(),
                                                              useOrder = true)
-        return choseMostSpecific(scopeTower, resolutionCallbacks, expectedType, candidates)
+        return choseMostSpecific(candidateFactory, resolutionCallbacks, expectedType, candidates)
     }
 
     private fun choseMostSpecific(
-            scopeTower: ImplicitScopeTower,
+            candidateFactory: SimpleCandidateFactory,
             resolutionCallbacks: KotlinResolutionCallbacks,
             expectedType: UnwrappedType?,
             candidates: Collection<KotlinResolutionCandidate>
-    ): Collection<ResolvedKotlinCall> {
-        val isDebuggerContext = scopeTower.isDebuggerContext
+    ): CallResolutionResult {
+        val isDebuggerContext = candidateFactory.scopeTower.isDebuggerContext
 
         val maximallySpecificCandidates = overloadingConflictResolver.chooseMaximallySpecificCandidates(
                 candidates,
@@ -89,16 +89,7 @@ class KotlinCallResolver(
                 discriminateGenerics = true, // todo
                 isDebuggerContext = isDebuggerContext)
 
-        val singleResult = maximallySpecificCandidates.singleOrNull()?.let {
-            kotlinCallCompleter.completeCallIfNecessary(it, expectedType, resolutionCallbacks)
-        }
-        if (singleResult != null) {
-            return listOf(singleResult)
-        }
-
-        return maximallySpecificCandidates.map {
-            kotlinCallCompleter.transformWhenAmbiguity(it, resolutionCallbacks)
-        }
+        return kotlinCallCompleter.runCompletion(candidateFactory, maximallySpecificCandidates, expectedType, resolutionCallbacks)
     }
 }
 
