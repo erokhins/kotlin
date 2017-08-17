@@ -28,7 +28,6 @@ import org.jetbrains.kotlin.types.TypeUtils
 import org.jetbrains.kotlin.types.UnwrappedType
 
 class KotlinCallCompleter(
-        private val additionalDiagnosticReporter: AdditionalDiagnosticReporter,
         private val postponedArgumentsAnalyzer: PostponedArgumentsAnalyzer,
         private val kotlinConstraintSystemCompleter: KotlinConstraintSystemCompleter
 ) {
@@ -47,6 +46,10 @@ class KotlinCallCompleter(
             diagnosticHolder.addDiagnostic(ManyCandidatesCallDiagnostic(factory.kotlinCall, candidates))
         }
         val candidate = candidates.singleOrNull()
+
+        // this is needed at least for non-local return checker, because when we analyze lambda we should already bind descriptor for outer call
+        candidate?.resolvedCall?.let { resolutionCallbacks.bindStubResolvedCallForCandidate(it) }
+
         if (candidate == null || candidate.csBuilder.hasContradiction) {
             val candidateForCompletion = candidate ?: factory.createErrorCandidate().forceResolution()
             candidateForCompletion.prepareForCompletion(expectedType)
@@ -89,7 +92,7 @@ class KotlinCallCompleter(
     // true if we should complete this call
     private fun KotlinResolutionCandidate.prepareForCompletion(expectedType: UnwrappedType?): ConstraintSystemCompletionMode {
         val unsubstitutedReturnType = resolvedCall.candidateDescriptor.returnType?.unwrap() ?: return ConstraintSystemCompletionMode.PARTIAL
-        val returnType = csBuilder.buildCurrentSubstitutor().safeSubstitute(unsubstitutedReturnType)
+        val returnType = resolvedCall.substitutor.safeSubstitute(unsubstitutedReturnType)
         if (expectedType != null && !TypeUtils.noExpectedType(expectedType)) {
             csBuilder.addSubtypeConstraint(returnType, expectedType, ExpectedTypeConstraintPosition(resolvedCall.ktPrimitive))
         }

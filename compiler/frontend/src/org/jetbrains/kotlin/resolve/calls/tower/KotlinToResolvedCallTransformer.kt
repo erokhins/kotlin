@@ -30,6 +30,7 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.callUtil.isFakeElement
 import org.jetbrains.kotlin.resolve.calls.checkers.CallChecker
 import org.jetbrains.kotlin.resolve.calls.checkers.CallCheckerContext
+import org.jetbrains.kotlin.resolve.calls.components.AdditionalDiagnosticReporter
 import org.jetbrains.kotlin.resolve.calls.components.isVararg
 import org.jetbrains.kotlin.resolve.calls.context.BasicCallResolutionContext
 import org.jetbrains.kotlin.resolve.calls.context.CallPosition
@@ -64,7 +65,8 @@ class KotlinToResolvedCallTransformer(
         private val argumentTypeResolver: ArgumentTypeResolver,
         private val constantExpressionEvaluator: ConstantExpressionEvaluator,
         private val expressionTypingServices: ExpressionTypingServices,
-        private val doubleColonExpressionResolver: DoubleColonExpressionResolver
+        private val doubleColonExpressionResolver: DoubleColonExpressionResolver,
+        private val additionalDiagnosticReporter: AdditionalDiagnosticReporter
  ) {
 
     fun <D : CallableDescriptor> onlyTransform(
@@ -97,7 +99,7 @@ class KotlinToResolvedCallTransformer(
         }
     }
 
-    private fun <D : CallableDescriptor> createStubResolvedCallAndWriteItToTrace(candidate: ResolvedKtCall, trace: BindingTrace): ResolvedCall<D> {
+    fun <D : CallableDescriptor> createStubResolvedCallAndWriteItToTrace(candidate: ResolvedKtCall, trace: BindingTrace): ResolvedCall<D> {
         val result = onlyTransform<D>(candidate)
         val tracing = candidate.ktPrimitive.psiKotlinCall.tracingStrategy
 
@@ -261,7 +263,7 @@ class KotlinToResolvedCallTransformer(
     }
 
     private fun bindAndReport(context: BasicCallResolutionContext, trace: BindingTrace, simpleResolvedCall: NewResolvedCallImpl<*>) {
-        reportCallDiagnostic(context, trace, simpleResolvedCall.resolvedCall)
+        reportCallDiagnostic(context, trace, simpleResolvedCall.resolvedCall, simpleResolvedCall.resultingDescriptor)
         val tracing = simpleResolvedCall.resolvedCall.ktPrimitive.psiKotlinCall.tracingStrategy
 
         tracing.bindReference(trace, simpleResolvedCall)
@@ -269,8 +271,8 @@ class KotlinToResolvedCallTransformer(
     }
 
     private fun bindAndReport(context: BasicCallResolutionContext, trace: BindingTrace, variableAsFunction: NewVariableAsFunctionResolvedCallImpl) {
-        reportCallDiagnostic(context, trace, variableAsFunction.variableCall.resolvedCall)
-        reportCallDiagnostic(context, trace, variableAsFunction.functionCall.resolvedCall)
+        reportCallDiagnostic(context, trace, variableAsFunction.variableCall.resolvedCall, variableAsFunction.variableCall.resultingDescriptor)
+        reportCallDiagnostic(context, trace, variableAsFunction.functionCall.resolvedCall, variableAsFunction.functionCall.resultingDescriptor)
 
         val outerTracingStrategy = variableAsFunction.baseCall.tracingStrategy
         outerTracingStrategy.bindReference(trace, variableAsFunction.variableCall)
@@ -281,13 +283,17 @@ class KotlinToResolvedCallTransformer(
     private fun reportCallDiagnostic(
             context: BasicCallResolutionContext,
             trace: BindingTrace,
-            completedCall: ResolvedKtCall
+            completedCall: ResolvedKtCall,
+            resultingDescriptor: CallableDescriptor
     ) {
         val trackingTrace = TrackingBindingTrace(trace)
         val newContext = context.replaceBindingTrace(trackingTrace)
         val diagnosticReporter = DiagnosticReporterByTrackingStrategy(constantExpressionEvaluator, newContext, completedCall.ktPrimitive.psiKotlinCall)
 
-        for (diagnostic in completedCall.diagnostics) {
+        val diagnosticHolder = KotlinDiagnosticsHolder.SimpleHolder()
+        additionalDiagnosticReporter.reportAdditionalDiagnostics(completedCall, resultingDescriptor, diagnosticHolder)
+
+        for (diagnostic in completedCall.diagnostics + diagnosticHolder.getDiagnostics()) {
             trackingTrace.reported = false
             diagnostic.report(diagnosticReporter)
 

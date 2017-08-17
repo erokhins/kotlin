@@ -43,7 +43,7 @@ private fun SimpleKotlinCallArgument.checkReceiverInvariants() {
     assert(argumentName == null) {
         "Argument name should be null for receiver: $this, but it is $argumentName"
     }
-    checkReceiverInvariants()
+    checkArgumentInvariants()
 }
 
 private fun KotlinCallArgument.checkArgumentInvariants() {

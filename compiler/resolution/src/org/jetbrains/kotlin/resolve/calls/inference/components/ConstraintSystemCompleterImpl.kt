@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.types.TypeConstructor
 import org.jetbrains.kotlin.types.UnwrappedType
 import org.jetbrains.kotlin.utils.addIfNotNull
 import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstanceOrNull
+import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
 class KotlinConstraintSystemCompleter(
         private val resultTypeResolver: ResultTypeResolver,
@@ -117,7 +118,7 @@ class KotlinConstraintSystemCompleter(
 
     private fun getOrderedNotAnalyzedPostponedArguments(topLevelPrimitive: ResolvedKtPrimitive): List<PostponedResolveKtPrimitive> {
         fun ResolvedKtPrimitive.process(to: MutableList<PostponedResolveKtPrimitive>) {
-            to.addIfNotNull(this as? PostponedResolveKtPrimitive)
+            to.addIfNotNull(this.safeAs<PostponedResolveKtPrimitive>()?.takeUnless { it.analyzed })
 
             if (state == ResolvedKtPrimitiveState.ADDITIONAL_ANALYSIS_PERFORMED) {
                 subKtPrimitives.forEach { it.process(to) }

@@ -32,6 +32,7 @@ import org.jetbrains.kotlin.resolve.calls.tower.InfixCallNoInfixModifier
 import org.jetbrains.kotlin.resolve.calls.tower.InvokeConventionCallNoOperatorModifier
 import org.jetbrains.kotlin.resolve.calls.tower.VisibilityError
 import org.jetbrains.kotlin.types.ErrorUtils
+import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
 internal object CheckInstantiationOfAbstractClass : ResolutionPart() {
     override fun KotlinResolutionCandidate.process(workIndex: Int) {
@@ -297,7 +298,7 @@ internal object ErrorDescriptorResolutionPart : ResolutionPart() {
         resolvedCall.substitutor = FreshVariableNewTypeSubstitutor.Empty
         resolvedCall.argumentToCandidateParameter = emptyMap()
 
-        kotlinCall.explicitReceiver?.let {
+        kotlinCall.explicitReceiver?.safeAs<SimpleKotlinCallArgument>()?.let {
             resolveKotlinArgument(it, null, isReceiver = true)
         }
         for (argument in kotlinCall.argumentsInParenthesis) {

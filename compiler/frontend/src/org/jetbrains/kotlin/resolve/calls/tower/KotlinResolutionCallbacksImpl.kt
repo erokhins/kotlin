@@ -18,6 +18,7 @@ package org.jetbrains.kotlin.resolve.calls.tower
 
 import org.jetbrains.kotlin.builtins.createFunctionType
 import org.jetbrains.kotlin.config.LanguageVersionSettings
+import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil
@@ -30,6 +31,7 @@ import org.jetbrains.kotlin.resolve.calls.components.KotlinResolutionCallbacks
 import org.jetbrains.kotlin.resolve.calls.context.BasicCallResolutionContext
 import org.jetbrains.kotlin.resolve.calls.context.ContextDependency
 import org.jetbrains.kotlin.resolve.calls.model.LambdaKotlinCallArgument
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedKtCall
 import org.jetbrains.kotlin.resolve.calls.model.SimpleKotlinCallArgument
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo
 import org.jetbrains.kotlin.resolve.calls.util.CallMaker
@@ -48,7 +50,8 @@ class KotlinResolutionCallbacksImpl(
         val expressionTypingServices: ExpressionTypingServices,
         val typeApproximator: TypeApproximator,
         val argumentTypeResolver: ArgumentTypeResolver,
-        val languageVersionSettings: LanguageVersionSettings
+        val languageVersionSettings: LanguageVersionSettings,
+        val kotlinToResolvedCallTransformer: KotlinToResolvedCallTransformer
 ): KotlinResolutionCallbacks {
     val trace: BindingTrace = topLevelCallContext.trace
 
@@ -136,4 +139,9 @@ class KotlinResolutionCallbacksImpl(
 
         return KtPsiUtil.deparenthesize(lastExpression)
     }
+
+    override fun bindStubResolvedCallForCandidate(candidate: ResolvedKtCall) {
+        kotlinToResolvedCallTransformer.createStubResolvedCallAndWriteItToTrace<CallableDescriptor>(candidate, trace)
+    }
+
 }

@@ -151,7 +151,7 @@ class PSICallResolver(
 
     private fun createResolutionCallbacks(context: BasicCallResolutionContext) =
             KotlinResolutionCallbacksImpl(context, expressionTypingServices, typeApproximator,
-                                          argumentTypeResolver, languageVersionSettings)
+                                          argumentTypeResolver, languageVersionSettings, kotlinToResolvedCallTransformer)
 
     private fun calculateExpectedType(context: BasicCallResolutionContext): UnwrappedType? {
         val expectedType = context.expectedType.unwrap()

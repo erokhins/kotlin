@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.resolve.calls.model.KotlinCallDiagnostic
 
 interface NewConstraintSystem {
     val builtIns: KotlinBuiltIns
+    val hasContradiction: Boolean
     val diagnostics: List<KotlinCallDiagnostic>
 
     fun getBuilder(): ConstraintSystemBuilder

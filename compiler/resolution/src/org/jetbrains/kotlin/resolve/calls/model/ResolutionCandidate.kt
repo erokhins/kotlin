@@ -87,7 +87,7 @@ class KotlinResolutionCandidate(
         return newSystem!!
     }
 
-    val csBuilder get() = getSystem().getBuilder()
+    internal val csBuilder get() = getSystem().getBuilder()
 
     override fun addDiagnostic(diagnostic: KotlinCallDiagnostic) {
         diagnostics.add(diagnostic)
@@ -152,7 +152,7 @@ class KotlinResolutionCandidate(
         get() {
             processParts(stopOnFirstError = false)
             val applicability = maxOf(variableApplicability, currentApplicability)
-            if (csBuilder.hasContradiction) {
+            if (getSystem().hasContradiction) {
                 return maxOf(ResolutionCandidateApplicability.INAPPLICABLE, applicability)
             }
             return applicability

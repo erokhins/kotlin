@@ -146,7 +146,7 @@ class NewConstraintSystemImpl(
 
     // ConstraintSystemBuilder, KotlinConstraintSystemCompleter.Context
     override val hasContradiction: Boolean
-        get() = diagnostics.any { !it.candidateApplicability.isSuccess }.apply { checkState(State.BUILDING, State.COMPLETION, State.TRANSACTION) }
+        get() = diagnostics.any { !it.candidateApplicability.isSuccess }.apply { checkState(State.FREEZED, State.BUILDING, State.COMPLETION, State.TRANSACTION) }
 
     override fun addOtherSystem(otherSystem: ConstraintStorage) {
         storage.allTypeVariables.putAll(otherSystem.allTypeVariables)
