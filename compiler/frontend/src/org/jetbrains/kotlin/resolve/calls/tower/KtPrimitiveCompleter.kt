@@ -74,7 +74,7 @@ class KtPrimitiveCompleter(
     fun completeResolvedCall(resolvedKtCall: ResolvedKtCall): ResolvedCall<*>? {
         if (resolvedKtCall.ktPrimitive.psiKotlinCall is PSIKotlinCallForVariable) return null
 
-        val resolvedCall = kotlinToResolvedCallTransformer.transformToResolvedCall<CallableDescriptor>(resolvedKtCall, resultSubstitutor)
+        val resolvedCall = kotlinToResolvedCallTransformer.transformToResolvedCall<CallableDescriptor>(resolvedKtCall, true, resultSubstitutor)
         kotlinToResolvedCallTransformer.bindAndReport(topLevelCallContext, trace, resolvedCall)
         kotlinToResolvedCallTransformer.runCallCheckers(resolvedCall, callCheckerContext)
 

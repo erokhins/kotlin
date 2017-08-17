@@ -69,7 +69,7 @@ class KotlinToResolvedCallTransformer(
 
     fun <D : CallableDescriptor> onlyTransform(
             resolvedCall: ResolvedKtCall
-    ): ResolvedCall<D> = transformToResolvedCall(resolvedCall)
+    ): ResolvedCall<D> = transformToResolvedCall(resolvedCall, completed = false)
 
     fun <D : CallableDescriptor> transformAndReport(
             baseResolvedCall: CallResolutionResult,
@@ -108,18 +108,19 @@ class KotlinToResolvedCallTransformer(
 
     fun <D : CallableDescriptor> transformToResolvedCall(
             completedCall: ResolvedKtCall,
+            completed: Boolean,
             resultSubstitutor: NewTypeSubstitutor = FreshVariableNewTypeSubstitutor.Empty
     ): ResolvedCall<D> {
         val psiKotlinCall = completedCall.ktPrimitive.psiKotlinCall
         return if (psiKotlinCall is PSIKotlinCallForInvoke) {
             @Suppress("UNCHECKED_CAST")
             NewVariableAsFunctionResolvedCallImpl(
-                    NewResolvedCallImpl(psiKotlinCall.variableCall.resolvedCall, resultSubstitutor),
-                    NewResolvedCallImpl(completedCall, resultSubstitutor)
+                    NewResolvedCallImpl(psiKotlinCall.variableCall.resolvedCall, completed, resultSubstitutor),
+                    NewResolvedCallImpl(completedCall, completed, resultSubstitutor)
             ) as ResolvedCall<D>
         }
         else {
-            NewResolvedCallImpl(completedCall, resultSubstitutor)
+            NewResolvedCallImpl(completedCall, completed, resultSubstitutor)
         }
     }
 
@@ -400,7 +401,8 @@ sealed class NewAbstractResolvedCall<D : CallableDescriptor>(): ResolvedCall<D> 
 
 class NewResolvedCallImpl<D : CallableDescriptor>(
         val resolvedCall: ResolvedKtCall,
-        val substitutor: NewTypeSubstitutor
+        val completed: Boolean,
+        substitutor: NewTypeSubstitutor
 ): NewAbstractResolvedCall<D>() {
     private val resultingDescriptor = run {
         val candidateDescriptor = resolvedCall.candidateDescriptor
@@ -454,4 +456,14 @@ class NewVariableAsFunctionResolvedCallImpl(
         override val functionCall: NewResolvedCallImpl<FunctionDescriptor>
 ): VariableAsFunctionResolvedCall, ResolvedCall<FunctionDescriptor> by functionCall {
     val baseCall get() = functionCall.resolvedCall.ktPrimitive.psiKotlinCall.cast<PSIKotlinCallForInvoke>().baseCall
+}
+
+fun ResolvedCall<*>.isNewNotCompleted(): Boolean {
+    if (this is NewVariableAsFunctionResolvedCallImpl) {
+        return !functionCall.completed
+    }
+    if (this is NewResolvedCallImpl<*>) {
+        return !completed
+    }
+    return false
 }
