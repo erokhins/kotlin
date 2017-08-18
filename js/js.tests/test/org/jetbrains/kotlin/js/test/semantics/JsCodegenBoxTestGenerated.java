@@ -20738,6 +20738,12 @@ public class JsCodegenBoxTestGenerated extends AbstractJsCodegenBoxTest {
             throw new AssertionError("Looks like this test can be unmuted. Remove IGNORE_BACKEND directive for that.");
         }
 
+        @TestMetadata("noResolutionRecursion.kt")
+        public void testNoResolutionRecursion() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/regressions/noResolutionRecursion.kt");
+            doTest(fileName);
+        }
+
         @TestMetadata("nullabilityForCommonCapturedSupertypes.kt")
         public void testNullabilityForCommonCapturedSupertypes() throws Exception {
             String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/regressions/nullabilityForCommonCapturedSupertypes.kt");
